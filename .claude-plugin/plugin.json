@@ -1,0 +1,26 @@
+{
+  "name": "null-to-hero",
+  "version": "1.0.0",
+  "description": "From zero knowledge to hero website. Design + SEO skills that make Claude your expert co-pilot for building beautiful, high-ranking websites.",
+  "author": {
+    "name": "Marius Yvard",
+    "url": "https://lecvdemarius.netlify.app/"
+  },
+  "homepage": "https://lecvdemarius.netlify.app/",
+  "repository": "https://github.com/MariusYvard/NullToHero",
+  "license": "Apache-2.0",
+  "keywords": [
+    "design",
+    "seo",
+    "frontend",
+    "ui",
+    "ux",
+    "css",
+    "html",
+    "beginner-friendly",
+    "website",
+    "anti-patterns",
+    "schema",
+    "core-web-vitals"
+  ]
+}
