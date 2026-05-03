@@ -2,7 +2,7 @@
 
 **From zero knowledge to hero website.**
 
-NullToHero gives Claude a complete design + SEO vocabulary so anyone — even with no prior experience — can build websites that look professional and rank on Google.
+NullToHero gives Claude a complete design + SEO vocabulary so anyone, even with no prior experience, can build websites that look professional and rank on Google.
 
 3 skills · 34 commands · real browser preview · deterministic anti-pattern detector
 
