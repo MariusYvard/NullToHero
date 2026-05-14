@@ -77,7 +77,7 @@ Add motion systematically across these categories:
 - **Page transitions**: Crossfade between routes, shared element transitions
 - **Tab switching**: Slide indicator, content fade/slide
 - **Carousel/slider**: Smooth transforms, snap points, momentum
-- **Scroll effects**: Parallax layers, sticky headers with state changes, scroll progress indicators
+- **Scroll effects**: Parallax layers, sticky headers with state changes, scroll progress indicators. For any parallax work, load [parallax.md](parallax.md) before writing code.
 
 ### Feedback & Guidance
 - **Hover hints**: Tooltip fade-ins, cursor changes, element highlights

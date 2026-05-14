@@ -1,6 +1,6 @@
 # Animation Engineering
 
-*Deep technical reference for motion. Load alongside [motion-design.md](motion-design.md) for `/impeccable animate` work. Based on Emil Kowalski's design engineering philosophy — see [animations.dev](https://animations.dev/).*
+*Deep technical reference for motion. Load alongside [motion-design.md](motion-design.md) for `/impeccable animate` work, and [parallax.md](parallax.md) for scroll-driven multi-layer compositions. Based on Emil Kowalski's design engineering philosophy, see [animations.dev](https://animations.dev/).*
 
 ---
 

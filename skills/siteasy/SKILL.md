@@ -1,9 +1,9 @@
 ---
 name: siteasy
-description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
+description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
 version: 1.0.0
 user-invocable: true
-argument-hint: "[build|plan · audit|critique · animate|amplify|simplify|delight|layout|overdrive|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
+argument-hint: "[build|plan · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
 license: "Apache-2.0"
 allowed-tools:
   - Bash(npx impeccable *)
@@ -136,6 +136,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `adapt [target]` | Enhance | Mobile/tablet/desktop/print adaptation | [references/adapt.md](references/adapt.md) + [references/responsive-design.md](references/responsive-design.md) |
 | `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) |
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) |
+| `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 
 ## Running commands

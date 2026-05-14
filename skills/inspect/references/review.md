@@ -13,6 +13,18 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 - Animating keyboard-initiated actions
 - `scale(0)` as animation start → must be `scale(0.95)` minimum
 - Missing `@media (prefers-reduced-motion: reduce)` on any animation
+- Parallax section without `@media (prefers-reduced-motion: reduce)` neutralizer
+- Parallax layer using `background-attachment: fixed` (iOS Safari breakage)
+- Parallax scroll handler without `{ passive: true }`
+- Body text or interactive control inside a moving parallax layer
+- Multi-layer parallax active below 768px viewport
+- Animating `width`, `height`, `top`, `left`, or margin on a parallax layer
+
+**Parallax Core Web Vitals violations:**
+- LCP candidate occluded by a parallax layer without `fetchpriority="high"`
+- Layer image above 200 KB or not in AVIF/WebP
+- Layer container without explicit `aspect-ratio` or `width`/`height` (CLS risk)
+- `will-change: transform` declared permanently instead of toggled per active state
 
 **Accessibility violations:**
 - Interactive element with no accessible name (icon-only button, no `aria-label`)
@@ -52,6 +64,15 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 - Placeholder data ("John Doe", "Acme Corp") in shipped UI
 - AI copywriting clichés: "Elevate", "Seamless", "Unleash", "Next-Gen"
 
+**Parallax craft:**
+- No manual motion toggle exposed (WCAG 2.2.2 best practice)
+- Reduced-motion fallback differs in content from the animated version
+- Two competing parallax patterns layered in the same viewport
+- Lenis or equivalent running with `smoothTouch: true`
+- Mouse-driven parallax with no static fallback on touch
+- Adaptive intensity not wired to `navigator.connection`, battery, or hardware tier
+- Scroll-driven `animation-timeline` available but unused, falling back to JS handlers unnecessarily
+
 ### Tier 3 — Craft improvements
 
 - Missing stagger on list item reveals
@@ -65,6 +86,7 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 2. **Run** `npx impeccable --json [target]` if applicable
 3. **Scan** each tier in the checklist
 4. **Output** as Before/After table
+5. **If parallax is present** (`.parallax-*`, `animation-timeline`, GSAP `ScrollTrigger`, Lenis), also run `node skills/siteasy/scripts/parallax-audit.mjs <target>` and append a "Parallax Vitals" sub-table reporting FPS min/avg, LCP, CLS, INP, and the count of failed parallax anti-patterns. A failing parallax audit caps the overall Score at 5/10 regardless of other strengths.
 
 ## Output Format
 

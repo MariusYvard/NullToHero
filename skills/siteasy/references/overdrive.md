@@ -53,7 +53,7 @@ Organized by what you're trying to achieve, not by technology name.
 - **Spring physics** — natural motion with mass, tension, and damping instead of cubic-bezier. Libraries: motion (formerly Framer Motion), GSAP, or roll your own spring solver.
 
 ### Tie animation to scroll position
-- **Scroll-driven animations** (`animation-timeline: scroll()`) — CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Chrome/Edge/Safari; Firefox: flag only — always provide a static fallback)
+- **Scroll-driven animations** (`animation-timeline: scroll()`) — CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Chrome/Edge/Safari; Firefox: flag only, always provide a static fallback). For full multi-layer parallax, scrollytelling architecture, and AI-adaptive governance, load [parallax.md](parallax.md) first.
 
 ### Render beyond CSS
 - **WebGL** (all browsers) — shader effects, post-processing, particle systems. Libraries: Three.js, OGL (lightweight), regl. Use for effects CSS can't express.

@@ -47,7 +47,7 @@ Use CSS custom properties for cleaner stagger: `animation-delay: calc(var(--i, 0
 
 ## Reduced Motion
 
-This is not optional. Vestibular disorders affect ~35% of adults over 40.
+This is not optional. Vestibular disorders affect ~35% of adults over 40, and around 70 million people live with diagnosable vestibular conditions. For parallax-specific reduced-motion patterns plus the manual toggle required by WCAG 2.2.2, see [parallax.md](parallax.md).
 
 ```css
 @media (prefers-reduced-motion: reduce) {

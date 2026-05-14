@@ -21,6 +21,11 @@
     "website",
     "anti-patterns",
     "schema",
-    "core-web-vitals"
+    "core-web-vitals",
+    "parallax",
+    "scrollytelling",
+    "scroll-driven",
+    "accessibility",
+    "motion"
   ]
 }
