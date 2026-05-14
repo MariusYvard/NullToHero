@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "null-to-hero-marketplace",
+  "owner": {
+    "name": "Marius Yvard",
+    "email": "mariusyvard72@gmail.com",
+    "url": "https://lecvdemarius.netlify.app/"
+  },
+  "metadata": {
+    "description": "Null-to-Hero marketplace. Design, SEO and motion engineering plugins by Marius Yvard.",
+    "version": "1.1.0"
+  },
+  "plugins": [
+    {
+      "name": "null-to-hero",
+      "source": ".",
+      "description": "From zero knowledge to hero website. Design, SEO and parallax engineering skills that make Claude your expert co-pilot for building beautiful, high-ranking, motion-aware websites.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Marius Yvard",
+        "url": "https://lecvdemarius.netlify.app/"
+      },
+      "homepage": "https://lecvdemarius.netlify.app/",
+      "repository": "https://github.com/MariusYvard/NullToHero",
+      "license": "Apache-2.0",
+      "category": "design",
+      "keywords": [
+        "design",
+        "seo",
+        "frontend",
+        "ui",
+        "ux",
+        "css",
+        "html",
+        "parallax",
+        "scrollytelling",
+        "scroll-driven",
+        "accessibility",
+        "motion",
+        "anti-patterns",
+        "schema",
+        "core-web-vitals",
+        "beginner-friendly"
+      ],
+      "strict": false
+    }
+  ]
+}

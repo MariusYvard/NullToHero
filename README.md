@@ -1,5 +1,26 @@
 # NullToHero — Cowork Plugin
 
+## Install via marketplace
+
+This repo is also a Claude Code marketplace. Two install paths:
+
+**A. As a marketplace (recommended, supports auto-update)**
+
+```
+/plugin marketplace add MariusYvard/NullToHero
+/plugin install null-to-hero@null-to-hero-marketplace
+```
+
+Future releases pull automatically with `/plugin marketplace update null-to-hero-marketplace`.
+
+**B. As a direct plugin**
+
+```
+/plugin install MariusYvard/NullToHero
+```
+
+---
+
 **From zero knowledge to hero website.**
 
 NullToHero gives Claude a complete design + SEO vocabulary so anyone, even with no prior experience, can build websites that look professional and rank on Google.
