@@ -256,3 +256,9 @@ Test that optimizations worked:
 - **User perception**: Does it *feel* faster?
 
 Remember: Performance is a feature. Fast experiences feel more responsive, more polished, more professional. Optimize systematically, measure ruthlessly, and prioritize user-perceived performance.
+
+## Cross-References
+
+- Image format decision matrix and srcset patterns: [image-strategy.md](image-strategy.md)
+- Parallax-specific image rules: [parallax.md](parallax.md)
+- WCAG 2.2 performance-adjacent criteria: [wcag-2-2.md](wcag-2-2.md)

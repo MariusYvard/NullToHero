@@ -1,9 +1,9 @@
 ---
 name: siteasy
-description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
+description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
 version: 1.0.0
 user-invocable: true
-argument-hint: "[build|plan · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
+argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
 license: "Apache-2.0"
 allowed-tools:
   - Bash(npx impeccable *)
@@ -80,6 +80,7 @@ Dark vs. light is never a default. Write one sentence of physical scene: who use
 
 - Vary spacing for rhythm. Same padding everywhere is monotony.
 - Cards are the lazy answer. Use them only when they're truly the best affordance. Nested cards are always wrong.
+- Run a Gestalt audit on every composition (proximity, similarity, closure, continuity, figure-ground, common fate, symmetry). See [references/gestalt.md](references/gestalt.md).
 
 ### Motion
 
@@ -119,11 +120,14 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) |
 | `plan [feature]` | Build | Plan UX/UI before writing code | [references/shape.md](references/shape.md) |
 | `setup` | Build | Create PRODUCT.md and DESIGN.md context | [references/teach.md](references/teach.md) |
+| `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |
+| `ia [target]` | Build | Information architecture, card sorting, tree testing, navigation patterns | [references/information-architecture.md](references/information-architecture.md) |
+| `journey [persona]` | Build | Generate empathy maps, journey maps, or service blueprints from research | [references/journey-mapping.md](references/journey-mapping.md) |
 | `document` | Build | Generate DESIGN.md from existing project code | [references/document.md](references/document.md) |
 | `extract [target]` | Build | Pull reusable tokens and components into a design system | [references/extract.md](references/extract.md) |
 | `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) |
 | `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) |
-| `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) |
+| `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |
 | `polish [target]` | Refine | Final quality pass before shipping | [references/polish.md](references/polish.md) |
 | `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) |
 | `simplify [target]` | Refine | Reduce visual noise, tone down, strip to essence | [references/quieter.md](references/quieter.md) + [references/distill.md](references/distill.md) |

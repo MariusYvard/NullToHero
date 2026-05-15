@@ -418,3 +418,9 @@ Automated tools are a floor, not a ceiling. Keyboard and screen reader testing i
 8. Add `role="alert"` to dynamically injected error messages
 9. Test Tab order — does it follow visual reading order?
 10. Verify `<title>` is unique and descriptive on every page
+
+## Cross-References
+
+- WCAG 2.2 success criteria operational reference: [wcag-2-2.md](wcag-2-2.md)
+- Form-specific accessibility patterns: [form-patterns.md](form-patterns.md)
+- Vestibular accessibility for motion: [parallax.md](parallax.md)

@@ -34,6 +34,28 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 - `aria-hidden="true"` on an element that receives focus
 - Dynamic content inserted without `role="alert"` or `aria-live`
 
+**WCAG 2.2 violations:**
+- Focus indicator obscured by sticky header or floating element (2.4.11)
+- Interactive target under 24x24 CSS pixels without 24px clearance (2.5.8)
+- Drag interaction without a single-pointer alternative (2.5.7)
+- Login flow requires cognitive test without alternative (3.3.8)
+- Multi-step form re-asks information already provided (3.3.7)
+- Paste disabled on password or one-time-code fields
+
+**Image strategy violations:**
+- LCP image lazy-loaded or missing `fetchpriority="high"`
+- `<img>` missing explicit `width` and `height`
+- `srcset` declared without `sizes`
+- Hero image served only as JPEG/PNG with no AVIF/WebP alternative
+- Meaningful content delivered as `background-image` instead of `<img>`
+
+**Form pattern violations:**
+- Placeholder used as sole label
+- Submit button permanently disabled without surfacing missing fields
+- Validation firing on first keystroke
+- Standard input missing `autocomplete` attribute (email, tel, name, password)
+- Error message not linked to input via `aria-describedby`
+
 **Forbidden design patterns:**
 - `border-left`/`border-right` > 1px as colored accent stripe
 - `background-clip: text` gradient on non-hero type

@@ -82,3 +82,43 @@ Severity mapping:
 - `error`: parallax-on-text, parallax-no-reduced-motion, parallax-layout-animation, parallax-non-passive-scroll, parallax-lcp-occlusion, parallax-smoothtouch-enabled
 - `warning`: parallax-bg-attachment-fixed, parallax-no-toggle, parallax-mobile-leak, parallax-heavy-asset, parallax-text-contrast-drift, parallax-stacked-effects, parallax-will-change-leak
 - `info`: parallax-no-static-fallback
+
+## WCAG 2.2 Anti-Patterns
+
+Detect against the nine WCAG 2.2 success criteria. Cross-reference with `siteasy/references/wcag-2-2.md`.
+
+- **focus-obscured** — Sticky header, cookie banner, or floating CTA hides the keyboard focus indicator. Violates 2.4.11. Fix with `scroll-padding-top` or `scroll-margin` on focusable elements.
+- **target-size-below-24** — Interactive element under 24x24 CSS pixels without 24px clearance. Violates 2.5.8. Exceptions: inline text links, native controls, essential-size targets.
+- **drag-without-alternative** — Drag-and-drop interaction with no single-pointer alternative (button, click sequence). Violates 2.5.7.
+- **inaccessible-auth** — Login flow requires CAPTCHA, puzzle, or memory test without an alternative (magic link, OAuth, passkey, biometric). Violates 3.3.8. `user-select: none` or pasteblockers on password fields also fail.
+- **redundant-entry** — Multi-step form re-asks for information already provided in the same session without justification. Violates 3.3.7.
+- **inconsistent-help** — Help mechanisms appear in different relative order across pages. Violates 3.2.6.
+- **placeholder-as-label** — Placeholder used as the only label. Fails 2.5.3 (Label in Name) and 3.3.2 (Labels or Instructions). Also fails 1.4.3 (contrast in placeholder color is typically below 4.5:1).
+- **paste-disabled-password** — Password input with `onpaste="return false"`, `user-select: none`, or `autocomplete="off"`. Defeats password managers, fails 3.3.8.
+- **autocomplete-missing** — Form input matching a standard autocomplete value (email, tel, name, password) without the `autocomplete` attribute. Fails 1.3.5 (Identify Input Purpose).
+- **error-not-associated** — Error message not linked to its input via `aria-describedby`. Screen readers announce the input as invalid without the message.
+
+## Image Strategy Anti-Patterns
+
+Detect on any page serving images. Cross-reference with `siteasy/references/image-strategy.md`.
+
+- **img-missing-dimensions** — `<img>` without explicit `width` and `height` attributes. Causes CLS.
+- **lcp-image-lazy** — Largest Contentful Paint candidate has `loading="lazy"`. Defers the most important paint.
+- **lcp-image-no-priority** — LCP image without `fetchpriority="high"` or `<link rel="preload">`.
+- **srcset-without-sizes** — `srcset` with width descriptors but no `sizes` attribute. Browser falls back to 100vw.
+- **legacy-format-only** — Hero or content image served only as JPEG or PNG without AVIF/WebP alternatives.
+- **gif-animation** — Animated GIF over 200 KB. Convert to MP4 video.
+- **alt-attribute-missing** — `<img>` without `alt` attribute (different from empty `alt=""`).
+- **alt-not-descriptive** — `alt="image"`, `alt="photo"`, `alt="IMG_xxxx"`, or filename as alt.
+- **background-image-content** — Meaningful content (text overlays excepted) served as CSS `background-image` instead of `<img>`. Inaccessible.
+
+## Form Pattern Anti-Patterns
+
+Detect on any `<form>`. Cross-reference with `siteasy/references/form-patterns.md`.
+
+- **form-multi-column** — Independent fields side-by-side beyond the canonical pairs (first/last name, city/state/zip, expiry month/year).
+- **submit-permanently-disabled** — Submit button `disabled` until "valid" without surfacing what is missing.
+- **validation-on-keystroke** — Inline error fires on every keystroke from the first character.
+- **error-summary-only** — Errors listed only at top of form, no inline indication next to the offending field.
+- **inputmode-missing** — Numeric input without `inputmode="numeric"`. Mobile keyboard wrong.
+- **otp-split-inputs** — One-time-code entered across 6 separate `<input>` elements instead of a single field with `autocomplete="one-time-code"`.

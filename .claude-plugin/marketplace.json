@@ -9,8 +9,8 @@
     {
       "name": "null-to-hero",
       "source": "./",
-      "description": "From zero knowledge to hero website. Design, SEO and parallax engineering skills.",
-      "version": "1.1.0",
+      "description": "From zero knowledge to hero website. Design, SEO, parallax, Gestalt psychology, UX research, information architecture, WCAG 2.2, image strategy and accessible forms.",
+      "version": "1.2.0",
       "category": "design",
       "tags": [
         "design",
@@ -27,7 +27,14 @@
         "motion",
         "anti-patterns",
         "schema",
-        "core-web-vitals"
+        "core-web-vitals",
+        "gestalt",
+        "ux-research",
+        "information-architecture",
+        "wcag-2-2",
+        "image-strategy",
+        "form-patterns",
+        "journey-mapping"
       ]
     }
   ]
