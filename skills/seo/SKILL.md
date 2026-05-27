@@ -1,19 +1,19 @@
 ---
 name: seo
-description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, or optimize for AI search engines (ChatGPT, Perplexity, Google AI Overviews). Covers full site audits, single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, structured data (JSON-LD), E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, competitor comparison pages, semantic clustering, SXO, SEO drift monitoring, backlink analysis, and e-commerce SEO. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local business, hreflang, backlinks, or visibility."
-version: 1.3.0
+description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, generate a report, or export findings as PDF. Covers full site audits (parallel sub-agents), single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, structured data (JSON-LD), E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, competitor comparison pages, semantic clustering, SXO, SEO drift monitoring, backlink analysis, e-commerce SEO, and formatted report generation. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local business, hreflang, backlinks, report, PDF, deliverable, or visibility."
+version: 1.4.0
 user-invocable: true
 argument-hint: "[command] [url | business-type | keyword]"
 license: "Apache-2.0"
 ---
 
-Complete SEO toolkit for websites — from zero to ranking. Run a full audit, fix technical issues, generate schema markup, optimize content, get found by AI search engines, rank locally, scale content programmatically, and monitor your SEO over time.
+Complete SEO toolkit for websites — from zero to ranking. Run a full audit with parallel sub-agents, fix technical issues, generate schema markup, optimize content, get found by AI search engines, rank locally, scale content programmatically, monitor your SEO over time, and export polished reports.
 
 ## Commands
 
 | Command | What it does | Reference |
 |---------|-------------|-----------|
-| `audit [url]` | Full site SEO audit — crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md | [references/audit.md](references/audit.md) |
+| `audit [url]` | Full site SEO audit — 5 parallel sub-agents, scores 7 dimensions, outputs ACTION-PLAN.md | [references/audit.md](references/audit.md) + [agents/](agents/) |
 | `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, score | [references/page.md](references/page.md) |
 | `plan [business-type]` | Complete SEO strategy — architecture, content pillars, keyword plan, 4-phase roadmap | [references/plan.md](references/plan.md) + [references/plan-assets/](references/plan-assets/) |
 | `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering | [references/technical.md](references/technical.md) |
@@ -31,17 +31,39 @@ Complete SEO toolkit for websites — from zero to ranking. Run a full audit, fi
 | `drift [url]` | SEO drift monitoring — capture baseline, compare changes, track degradation over time | [references/drift.md](references/drift.md) |
 | `backlinks [url]` | Backlink profile analysis — link quality, anchor text, competitor gap (Moz, Bing, Common Crawl) | [references/backlinks.md](references/backlinks.md) |
 | `ecommerce [url]` | E-commerce SEO — product schema, category pages, marketplace visibility, faceted nav | [references/ecommerce.md](references/ecommerce.md) |
+| `report [url \| file \| generate]` | Format audit output as a client-ready Markdown report or export to PDF | [references/report.md](references/report.md) |
 
 ## How to run a command
 
 When the user invokes a command:
 1. Load the matching reference file using the Read tool
 2. Follow the instructions in that reference exactly
-3. If no command is specified:
+3. Every command that produces recommendations must also output an ACTION-PLAN using [references/action-plan.md](references/action-plan.md) as the template
+4. If no command is specified:
    - With a URL → default to `audit`
    - With a business type → default to `plan`
    - With a keyword → default to `cluster`
    - Otherwise ask: "Would you like a full audit, a single-page analysis, or an SEO strategy?"
+
+## Parallel audit orchestration (for `audit` command)
+
+When running `/seo audit [url]`, spawn 5 sub-agents in parallel using the Task tool:
+
+```
+Task 1: Read agents/audit-technical.md  → analyze technical dimension
+Task 2: Read agents/audit-content.md    → analyze content dimension
+Task 3: Read agents/audit-schema.md     → analyze schema dimension
+Task 4: Read agents/audit-geo.md        → analyze GEO dimension
+Task 5: Read agents/audit-performance.md → analyze performance dimension
+```
+
+Each agent returns a scored markdown section. Aggregate the results:
+- Collect all scores and compute weighted average
+- Merge all "Critical issues" lists, deduplicated
+- Merge all "Quick wins" lists, deduplicated
+- Build unified ACTION-PLAN using action-plan.md template
+
+If the Task tool is unavailable (e.g. running outside Claude Code), run each dimension sequentially using the same agent files.
 
 ## Quick reference
 
@@ -65,6 +87,7 @@ When the user invokes a command:
 | "SEO changes" / "track ranking drops" / "baseline" | `drift` |
 | "backlinks" / "link profile" / "link building" | `backlinks` |
 | "ecommerce SEO" / "product pages" / "category SEO" | `ecommerce` |
+| "generate report" / "export PDF" / "client deliverable" | `report` |
 
 ## Plan templates
 
@@ -78,9 +101,9 @@ The `plan` command uses industry-specific templates. Available in [references/pl
 
 ## Cross-command workflows
 
-**New site from scratch:** `plan` → build the site → `technical` → `schema` → `audit`
+**New site from scratch:** `plan` → build the site → `technical` → `schema` → `audit` → `report`
 
-**Existing site needs help:** `audit` → `technical` (fix blockers) → `content` → `geo`
+**Existing site needs help:** `audit` → `technical` (fix blockers) → `content` → `geo` → `report`
 
 **Page not ranking:** `page` → `content` → `schema`
 
@@ -97,3 +120,5 @@ The `plan` command uses industry-specific templates. Available in [references/pl
 **Competitive positioning:** `competitor-pages` → `cluster` → `sxo`
 
 **Ongoing monitoring:** `drift` (baseline) → build / fix → `drift` (compare)
+
+**Client deliverable:** any command → `report` → (optional) export as PDF
