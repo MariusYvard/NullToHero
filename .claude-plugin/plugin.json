@@ -1,6 +1,6 @@
 {
   "name": "null-to-hero",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "From zero knowledge to hero website. Design + SEO skills that make Claude your expert co-pilot for building beautiful, high-ranking websites.",
   "author": {
     "name": "Marius Yvard",
@@ -33,6 +33,16 @@
     "wcag-2-2",
     "image-strategy",
     "form-patterns",
-    "journey-mapping"
+    "journey-mapping",
+    "local-seo",
+    "hreflang",
+    "programmatic-seo",
+    "keyword-clustering",
+    "sxo",
+    "backlinks",
+    "ecommerce-seo",
+    "geo",
+    "ai-search",
+    "report"
   ]
 }
