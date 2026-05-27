@@ -1,6 +1,6 @@
 # NullToHero — Cowork Plugin
 
-> **v1.2.0** · 3 skills · 35 commands · 64 reference docs · real browser preview · deterministic anti-pattern detector
+> **v1.3.0** · 3 skills · 46 commands · 75 reference docs · real browser preview · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -27,25 +27,62 @@ Future releases pull automatically with `/plugin marketplace update null-to-hero
 /plugin install MariusYvard/NullToHero
 ```
 
+**C. Manual install (Unix/macOS/Linux)**
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)
+```
+
+**D. Manual install (Windows PowerShell)**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
 ---
 
-## What's new in 1.2.0
+## What's new in 1.3.0
 
-Design foundations layer added to siteasy and inspect.
+The SEO skill expands from 7 to 18 commands, the GEO command gains a weighted scoring model and two new subcommands, and the repo ships its first contributor tooling.
 
-- **Gestalt principles** — the seven cognitive laws governing layout perception, with a 7-question audit.
-- **UX research methodology** — qualitative and quantitative methods, the five-user rule, card sorting, tree testing, SUS, A/B testing, ethics.
-- **Information architecture** — findability vs discoverability, mental models, navigation patterns, 10-point IA audit.
-- **Journey mapping** — empathy maps, customer journey maps with emotion curves, service blueprints, user flows.
-- **WCAG 2.2 reference** — all nine new success criteria (focus not obscured, target size 24px, dragging movements, accessible authentication, redundant entry, consistent help) with code patterns.
-- **Image strategy** — AVIF/WebP/SVG decision matrix, modern `<picture>` pattern, srcset and sizes mechanics, LCP optimization, alt text rules.
-- **Form patterns** — single column layout, complete autocomplete vocabulary, validation timing, accessible authentication, one-time-code handling.
+### New SEO commands
 
-Three new commands in `/siteasy`: `research`, `ia`, `journey`. The `inspect` toolkit gains 25 new anti-pattern rules (WCAG 2.2, image strategy, forms).
 
-### Earlier additions (1.1.0)
+| Command | What it does |
+|---------|-------------|
+| `sitemap [url\|generate]` | XML sitemap validation and generation with industry templates |
+| `images [url]` | Image SEO audit — alt text, WebP/AVIF formats, lazy loading, CLS, LCP |
+| `local [url]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
+| `hreflang [url\|generate]` | Hreflang validation and generation for multilingual/multi-region sites |
+| `programmatic [url\|plan]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
+| `competitor-pages [url\|generate]` | "X vs Y" and "alternatives to X" pages with feature matrices and schema |
+| `cluster [keyword]` | Semantic keyword clustering by intent, gap analysis, pillar-and-cluster architecture |
+| `sxo [url]` | Search Experience Optimization — intent alignment, page-type matching, satisfaction signals |
+| `drift [url] baseline\|compare\|history` | SEO drift monitoring — capture baseline, detect changes, track history |
+| `backlinks [url]` | Backlink profile analysis via free sources (Moz, Bing, Common Crawl, GSC) |
+| `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
 
-- **Parallax engineering** — six effect typologies, three implementation paths (CSS perspective, native Scroll-Driven Animations, Lenis+GSAP), Core Web Vitals discipline, AI-adaptive governance, Playwright audit script.
+### GEO upgrades
+
+`/seo geo` now uses a weighted scoring model across 6 dimensions (citability 25 %, brand authority 20 %, content quality 20 %, technical 15 %, structured data 10 %, platform optimization 10 %) and reports platform subscores for Google AI Overviews, ChatGPT, Perplexity and Bing Copilot separately. Two new subcommands:
+
+- `geo quick [url]` — 60-second GEO snapshot with top 3 quick wins
+- `geo compare [url]` — delta tracking against a stored baseline
+
+The AI crawler list expands to 14 bots: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, PerplexityBot, CCBot, anthropic-ai, Bytespider, cohere-ai, Diffbot, AI2Bot, Applebot-Extended, FacebookBot, PetalBot.
+
+### Repo quality
+
+- `CHANGELOG.md` — full release history
+- `CONTRIBUTING.md` — contributor guide (reference format, quality standards, PR workflow)
+- `install.sh` / `install.ps1` — one-line installers for Unix and Windows
+- `tests/validate.js` — reference file integrity validator (`node tests/validate.js`)
+
+### Earlier additions
+
+**1.2.0** — Design foundations: Gestalt principles, UX research methodology, information architecture, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (`research`, `ia`, `journey`). 25 new anti-pattern rules.
+
+**1.1.0** — Parallax engineering reference and Playwright audit script. One new command (`parallax`). 14 new anti-pattern rules.
 
 ---
 
@@ -75,7 +112,7 @@ Build, polish, and ship production-grade interfaces.
 | `clarify [target]` | UX copy, error messages, button labels, empty states |
 | `onboard [target]` | First-run flows, empty states, feature discovery |
 | `delight [target]` | Micro-interactions, personality, satisfying feedback |
-| `launch [target]` | Production hardening + Core Web Vitals optimization |
+| `launch [target]` | Production hardening and Core Web Vitals optimization |
 | `overdrive [target]` | View Transitions API, WebGL, scroll-driven animations |
 | `parallax [target]` | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance |
 | `document` | Generate DESIGN.md from existing project code |
@@ -97,13 +134,30 @@ Get found on Google and AI search engines.
 | `technical [url]` | Robots.txt, sitemaps, Core Web Vitals, mobile, security headers, AI crawlers |
 | `schema [url]` | Detect, validate, and generate Schema.org JSON-LD |
 | `content [url]` | E-E-A-T, readability, keyword density, AI citation readiness |
-| `geo [url]` | Optimize for Google AI Overviews, ChatGPT, Perplexity, Bing Copilot |
+| `geo [url]` | Weighted GEO score — Google AIO, ChatGPT, Perplexity, Bing Copilot subscores |
+| `geo quick [url]` | 60-second GEO snapshot with top 3 quick wins |
+| `geo compare [url]` | GEO delta tracking against a stored baseline |
+| `sitemap [url\|generate]` | XML sitemap validation and generation |
+| `images [url]` | Image SEO — alt text, formats, lazy loading, CLS, LCP |
+| `local [url]` | Local SEO — GBP, NAP, citations, reviews, LocalBusiness schema |
+| `hreflang [url\|generate]` | Hreflang validation and generation |
+| `programmatic [url\|plan]` | Programmatic SEO with quality gates |
+| `competitor-pages [url\|generate]` | Comparison and alternatives pages with feature matrices |
+| `cluster [keyword]` | Semantic keyword clustering and content architecture |
+| `sxo [url]` | Search Experience Optimization — intent alignment and satisfaction signals |
+| `drift [url] baseline\|compare\|history` | SEO drift monitoring |
+| `backlinks [url]` | Backlink profile analysis |
+| `ecommerce [url]` | E-commerce SEO — products, categories, faceted navigation |
 
 **Cross-command workflows:**
 
-- New site: `plan` → build → `technical` → `schema` → `audit`
-- Existing site: `audit` → `technical` → `content` → `geo`
-- Page not ranking: `page` → `content` → `schema`
+- New site: `plan` → build → `technical` → `schema` → `sitemap` → `audit`
+- Existing site: `audit` → `technical` → `content` → `geo` → `backlinks`
+- Page not ranking: `page` → `content` → `schema` → `sxo`
+- Local business: `local` → `schema` → `geo`
+- Keyword strategy: `cluster` → `plan` → `programmatic`
+- Before redesign: `drift baseline` → redesign → `drift compare`
+- E-commerce: `ecommerce` → `schema` → `sitemap` → `images`
 
 ---
 
@@ -114,7 +168,7 @@ Three tools to run before every ship.
 | Command | What it does |
 |---------|-------------|
 | `detect [target]` | Deterministic anti-pattern scan — focus rings, touch targets, reduced-motion, parallax violations, WCAG 2.2, image strategy, forms |
-| `preview [target]` | Real Chromium screenshot — desktop + mobile, reads back visually, fixes bugs in a loop |
+| `preview [target]` | Real Chromium screenshot — desktop and mobile, reads back visually, fixes bugs in a loop |
 | `review [file]` | Design engineering code review — motion crimes, a11y violations, Before/After table with score |
 
 **Recommended pre-ship sequence:**
@@ -125,13 +179,11 @@ Three tools to run before every ship.
 /inspect review index.html
 ```
 
-For parallax sections, `inspect review` also runs the Playwright audit at `skills/siteasy/scripts/parallax-audit.mjs`, measuring FPS, LCP, CLS, INP, and reduced-motion compliance under desktop and Pixel 5 profiles.
-
 ---
 
 ## Knowledge Base
 
-NullToHero ships 64 reference documents that Claude loads on demand. Coverage by domain:
+NullToHero ships 75 reference documents that Claude loads on demand.
 
 ### Design fundamentals
 gestalt, cognitive-load, layout, typography, color-and-contrast, dark-mode-engineering, spatial-design, shape, polish, distill, bolder, quieter, amplify, simplify
@@ -151,8 +203,14 @@ optimize, image-strategy, responsive-design, adapt, harden, launch
 ### Systems and architecture
 component-patterns, creative-patterns, css-architecture, design-tokens, tokens, extract, brand, document
 
-### SEO
-audit, plan, technical, schema, content, page, geo, plan-assets (ecommerce, saas, local-service, publisher, agency, generic)
+### SEO — core
+audit, plan, technical, schema, content, page, geo
+
+### SEO — new in 1.3.0
+sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce
+
+### SEO — plan assets
+ecommerce-plan, saas, local-service, publisher, agency, generic
 
 ### Inspect
 detect, preview, review
@@ -167,6 +225,7 @@ detect, preview, review
 /siteasy setup          ← define brand, audience, tone
 /siteasy plan           ← plan UX before coding
 /seo plan               ← build SEO strategy in parallel
+/seo cluster            ← define keyword architecture
      ↓
 /siteasy build          ← build the interface
 /siteasy layout         ← fix spacing and rhythm
@@ -183,6 +242,9 @@ detect, preview, review
 /seo audit              ← full SEO check
 /seo technical          ← fix technical blockers
 /seo schema             ← add structured data
+/seo sitemap            ← generate and validate sitemap
+/seo images             ← image SEO pass
+/seo geo                ← AI search visibility
      ↓
 /siteasy launch         ← harden for production
 ```
@@ -200,16 +262,27 @@ NullToHero works best with two files in your project root:
 
 ## Requirements
 
-- **Node.js** — required for `/inspect preview`, `/inspect detect`, and the parallax audit script
-- **Playwright** — auto-installed on first `/inspect preview` or `parallax-audit.mjs` run
+- **Node.js** — required for `/inspect preview`, `/inspect detect`, and the validator (`tests/validate.js`)
+- **Playwright** — auto-installed on first `/inspect preview` run
 
 ---
 
 ## Release History
 
+- **1.3.0** (May 2026) — 11 new SEO commands (sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce). GEO upgraded with weighted scoring, platform subscores, `/geo quick`, `/geo compare`. Installer scripts, CHANGELOG, CONTRIBUTING, reference validator.
 - **1.2.0** (May 2026) — Design foundations: Gestalt, UX research, IA, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (research, ia, journey). 25 new anti-pattern rules.
 - **1.1.0** (May 2026) — Parallax engineering reference and audit script. One new command (parallax). 14 new anti-pattern rules.
-- **1.0.0** (initial release) — siteasy, seo, inspect skills with 31 commands and core references.
+- **1.0.0** (April 2026) — Initial release: siteasy, seo, inspect with 31 commands and core references.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add reference files, new commands, or bug fixes.
+
+```bash
+node tests/validate.js   # run before opening a PR
+```
 
 ---
 
