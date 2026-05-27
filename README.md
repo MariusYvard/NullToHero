@@ -1,6 +1,6 @@
 # NullToHero — Cowork Plugin
 
-> **v1.3.0** · 3 skills · 46 commands · 75 reference docs · real browser preview · deterministic anti-pattern detector
+> **v1.4.0** · 3 skills · 47 commands · 77 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -38,6 +38,26 @@ bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/
 ```powershell
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
+
+---
+
+## What's new in 1.4.0
+
+### Parallel audit sub-agents (C1)
+
+`/seo audit` now delegates each dimension to a dedicated sub-agent file in `skills/seo/agents/`. When the Task tool is available (Claude Code / Cowork), all 5 run in parallel — technical, content, schema, GEO, performance — then aggregate into a unified score and ACTION-PLAN. Sequential fallback when Task is unavailable.
+
+### Report export (C2)
+
+New `/seo report [url|file|generate]` command formats any audit output into a client-ready deliverable: Markdown with ASCII score gauges and color-coded tables, or PDF via the Cowork PDF skill.
+
+### Standardized ACTION-PLAN (C3)
+
+All `/seo` commands now produce action plans in a unified format: Quick Wins (< 1h), 1-Week Fixes, 1-Month Projects, Backlog. Template lives in `references/action-plan.md`.
+
+### File integrity validator
+
+`tests/validate.js` now checks minimum line counts per file (26 files tracked). A truncated rewrite fails the check immediately — run `node tests/validate.js` before every commit.
 
 ---
 
@@ -148,16 +168,18 @@ Get found on Google and AI search engines.
 | `drift [url] baseline\|compare\|history` | SEO drift monitoring |
 | `backlinks [url]` | Backlink profile analysis |
 | `ecommerce [url]` | E-commerce SEO — products, categories, faceted navigation |
+| `report [url\|file\|generate]` | Format audit output as Markdown deliverable or PDF |
 
 **Cross-command workflows:**
 
-- New site: `plan` → build → `technical` → `schema` → `sitemap` → `audit`
-- Existing site: `audit` → `technical` → `content` → `geo` → `backlinks`
+- New site: `plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`
+- Existing site: `audit` → `technical` → `content` → `geo` → `backlinks` → `report`
 - Page not ranking: `page` → `content` → `schema` → `sxo`
 - Local business: `local` → `schema` → `geo`
 - Keyword strategy: `cluster` → `plan` → `programmatic`
 - Before redesign: `drift baseline` → redesign → `drift compare`
 - E-commerce: `ecommerce` → `schema` → `sitemap` → `images`
+- Client deliverable: any command → `report` (Markdown) or `report` + PDF export
 
 ---
 
@@ -269,6 +291,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.4.0** (May 2026) — Group C: parallel sub-agents for `/seo audit` (5 agent files), `/seo report` command (Markdown + PDF export), standardized ACTION-PLAN template across all commands, file integrity checks in validator.
 - **1.3.0** (May 2026) — 11 new SEO commands (sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce). GEO upgraded with weighted scoring, platform subscores, `/geo quick`, `/geo compare`. Installer scripts, CHANGELOG, CONTRIBUTING, reference validator.
 - **1.2.0** (May 2026) — Design foundations: Gestalt, UX research, IA, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (research, ia, journey). 25 new anti-pattern rules.
 - **1.1.0** (May 2026) — Parallax engineering reference and audit script. One new command (parallax). 14 new anti-pattern rules.
