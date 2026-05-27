@@ -5,6 +5,21 @@ Format: [Semantic Versioning](https://semver.org)
 
 ---
 
+## [1.4.0] — 2026-05-27
+
+### Added — Group C: architecture, outputs, action plans
+
+- `/seo report [url|file|generate]` — format any audit output as a client-ready Markdown report or PDF (via Cowork PDF skill); score gauges, color-coded tables, executive summary
+- `skills/seo/references/action-plan.md` — standardized ACTION-PLAN output template (Quick Wins / 1-Week / 1-Month / Backlog) now used by all commands
+- `skills/seo/agents/` — 5 parallel sub-agent files for `/seo audit`: `audit-technical`, `audit-content`, `audit-schema`, `audit-geo`, `audit-performance`. When the Task tool is available, `/seo audit` now delegates each dimension in parallel; results are aggregated into a unified score and ACTION-PLAN
+
+### Changed
+
+- `skills/seo/SKILL.md` — version 1.4.0; parallel audit orchestration instructions added; `report` command added; cross-command workflow updated
+- `tests/validate.js` — 3 new checks: agent file presence and frontmatter (Check 5), per-file minimum line count integrity (Check 6), regex fix to detect hyphenated command names (`competitor-pages`, `cluster`). Running this before every commit catches truncated file rewrites automatically
+
+---
+
 ## [1.3.0] — 2026-05-27
 
 ### Added — SEO skill: 11 new commands
