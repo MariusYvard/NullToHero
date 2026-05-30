@@ -9,12 +9,14 @@
  *  3.  Referenced files exist
  *  4.  File integrity — minimum line counts (catches truncated rewrites)
  *  5.  Agent files exist and have valid frontmatter
- *  6.  Repo quality files present
- *  7.  seo command count meets minimum
+ *  6.  Repo quality files present (CHANGELOG.md absence = error)
+ *  7.  seo command count meets minimum (≥19) — error if not met
  *  8.  siteasy SKILL.md and all reference files exist with valid frontmatter
- *  9.  inspect SKILL.md and all reference files exist with valid frontmatter
- * 10.  Version consistency — plugin.json, marketplace.json, all SKILL.md must match
- * 11.  Large files warning — files over 500 KB in tools/ are flagged
+ *  9.  siteasy command→reference mapping (every declared command has a backing file)
+ * 10.  siteasy command count meets minimum (≥25)
+ * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
+ * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md must match
+ * 13.  Large files warning — files over 500 KB in tools/ (known exceptions excluded)
  */
 
 const fs   = require("fs");
@@ -55,6 +57,25 @@ function parseFrontmatter(content) {
     }
   });
   return fm;
+}
+
+/**
+ * Extract command→[refs] map from a SKILL.md Commands table.
+ * Handles multiple references per row (separated by " + ").
+ */
+function extractCommandRefs(skillContent) {
+  const map = {};
+  if (!skillContent) return map;
+  skillContent.split("\n").forEach(line => {
+    const cmdMatch = line.match(/^\| `([\w][\w-]*)/);
+    if (!cmdMatch) return;
+    const cmd = cmdMatch[1];
+    const refs = [...line.matchAll(/\[references\/([\w\-/.]+\.md)\]/g)].map(m => m[1]);
+    if (refs.length > 0) {
+      map[cmd] = refs;
+    }
+  });
+  return map;
 }
 
 // ─── Integrity thresholds ─────────────────────────────────────────────────────
@@ -260,19 +281,30 @@ Object.entries(FILE_INTEGRITY).forEach(([relPath, { minLines }]) => {
 
 section("7. seo command count");
 
-const expectedMinimum = 19; // v1.5.0
-const actual = Object.keys(commandReferenceMap).length;
-if (actual >= expectedMinimum) {
-  pass(`${actual} commands declared (minimum: ${expectedMinimum})`);
+const seoExpectedMinimum = 19; // v1.5.0
+const seoActual = Object.keys(commandReferenceMap).length;
+if (seoActual >= seoExpectedMinimum) {
+  pass(`${seoActual} commands declared (minimum: ${seoExpectedMinimum})`);
 } else {
-  warn(`Only ${actual} commands found in seo/SKILL.md (expected >= ${expectedMinimum})`);
+  fail(`Only ${seoActual} commands found in seo/SKILL.md (expected >= ${seoExpectedMinimum}) — add missing commands to the table`);
 }
 
 // ─── Check 8: Repo quality files ──────────────────────────────────────────────
 
 section("8. Repo quality files");
 
-["README.md", "CHANGELOG.md", "CONTRIBUTING.md", "ATTRIBUTION.md", "install.sh", "install.ps1"].forEach(file => {
+const REQUIRED_FILES  = ["README.md", "CHANGELOG.md"];
+const EXPECTED_FILES  = ["CONTRIBUTING.md", "ATTRIBUTION.md", "install.sh", "install.ps1"];
+
+REQUIRED_FILES.forEach(file => {
+  if (fs.existsSync(path.join(ROOT, file))) {
+    pass(`${file} present`);
+  } else {
+    fail(`${file} missing — this file is required`);
+  }
+});
+
+EXPECTED_FILES.forEach(file => {
   if (fs.existsSync(path.join(ROOT, file))) {
     pass(`${file} present`);
   } else {
@@ -280,7 +312,7 @@ section("8. Repo quality files");
   }
 });
 
-// ─── Check 9: siteasy skill ───────────────────────────────────────────────────
+// ─── Check 9: siteasy SKILL.md and references ─────────────────────────────────
 
 section("9. siteasy SKILL.md and references");
 
@@ -312,9 +344,42 @@ if (!fs.existsSync(SITEASY_REFS)) {
   });
 }
 
-// ─── Check 10: inspect skill ──────────────────────────────────────────────────
+// ─── Check 9b: siteasy command→reference mapping ──────────────────────────────
 
-section("10. inspect SKILL.md and references");
+section("9b. siteasy command→reference mapping");
+
+const siteasyCmdRefMap = extractCommandRefs(siteasySKILL);
+
+if (Object.keys(siteasyCmdRefMap).length === 0) {
+  warn("No commands with references found in siteasy/SKILL.md — check table formatting");
+} else {
+  Object.entries(siteasyCmdRefMap).forEach(([cmd, refs]) => {
+    refs.forEach(ref => {
+      const refPath = path.join(SITEASY_REFS, ref);
+      if (fs.existsSync(refPath)) {
+        pass(`siteasy '${cmd}' → references/${ref} ✓`);
+      } else {
+        fail(`siteasy '${cmd}' → references/${ref} NOT found`);
+      }
+    });
+  });
+}
+
+// ─── Check 10: siteasy command count ──────────────────────────────────────────
+
+section("10. siteasy command count");
+
+const siteasyCmdMinimum = 25; // v1.5.0
+const siteasyCmdCount   = Object.keys(siteasyCmdRefMap).length;
+if (siteasyCmdCount >= siteasyCmdMinimum) {
+  pass(`siteasy: ${siteasyCmdCount} commands declared (minimum: ${siteasyCmdMinimum})`);
+} else {
+  warn(`siteasy: only ${siteasyCmdCount} commands found in SKILL.md (expected >= ${siteasyCmdMinimum})`);
+}
+
+// ─── Check 11: inspect SKILL.md and references ────────────────────────────────
+
+section("11. inspect SKILL.md and references");
 
 const INSPECT_SKILL = path.join(ROOT, "skills", "inspect", "SKILL.md");
 const INSPECT_REFS  = path.join(ROOT, "skills", "inspect", "references");
@@ -344,9 +409,9 @@ if (!fs.existsSync(INSPECT_REFS)) {
   });
 }
 
-// ─── Check 11: Version consistency ────────────────────────────────────────────
+// ─── Check 12: Version consistency ────────────────────────────────────────────
 
-section("11. Version consistency (plugin.json / marketplace.json / SKILL.md)");
+section("12. Version consistency (plugin.json / marketplace.json / SKILL.md)");
 
 const versionSources = {};
 
@@ -391,11 +456,17 @@ if (versions.length > 0) {
   }
 }
 
-// ─── Check 12: Large files warning ────────────────────────────────────────────
+// ─── Check 13: Large files warning ────────────────────────────────────────────
 
-section("12. Large files (> 500 KB in tools/)");
+section("13. Large files (> 500 KB in tools/)");
 
 const SIZE_LIMIT = 500 * 1024;
+
+// Known exceptions — predating the 500 KB limit, kept for lookup coverage.
+// See CONTRIBUTING.md before adding new entries here.
+const LARGE_FILE_EXCEPTIONS = new Set([
+  "tools/design-system/data/google-fonts.csv",
+]);
 
 function scanDir(dir, root) {
   if (!fs.existsSync(dir)) return;
@@ -405,6 +476,7 @@ function scanDir(dir, root) {
     if (stat.isDirectory()) scanDir(full, root);
     else if (stat.size > SIZE_LIMIT) {
       const rel = full.slice(root.length + 1).split("\\").join("/");
+      if (LARGE_FILE_EXCEPTIONS.has(rel)) return; // known exception, skip
       warn(`${rel}: ${(stat.size / 1024).toFixed(0)} KB — consider offloading to a release asset`);
     }
   }
