@@ -55,7 +55,7 @@ Triage findings highest severity first: fix CRITICAL before HIGH, HIGH before ME
 
 ## Detection rules from data
 
-Beyond the deterministic scan, `detect` can read `tools/data/ux-guidelines.csv` for editable Do/Don't rules with good and bad code examples (25 rules) — extend coverage without changing code. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
+Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (25 rules) — extend coverage without changing code. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
 
 ## Quick start
 
