@@ -275,5 +275,3 @@ if (errors > 0) {
   console.log("✅  All checks passed.");
   process.exit(0);
 }
-0);
-}

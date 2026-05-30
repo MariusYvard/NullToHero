@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'."
-version: 1.0.0
+version: 1.5.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 license: "Apache-2.0"
@@ -35,6 +35,27 @@ Three quality-check tools in one — run before every ship.
 | "What does my site actually look like?" | `preview` |
 | "Review my code before I ship" | `review` |
 | Just built something with `/siteasy build` | `preview` → `detect` → `review` |
+
+## Severity order
+
+Triage findings highest severity first: fix CRITICAL before HIGH, HIGH before MEDIUM, MEDIUM before LOW. This mirrors the priority order `/siteasy` builds against, so detection and construction never disagree on what to fix first.
+
+| # | Category | Severity |
+|---|----------|----------|
+| 1 | Accessibility (contrast, focus rings, alt text, keyboard, aria-labels) | CRITICAL |
+| 2 | Touch and interaction (target size 44x44px, spacing, feedback) | CRITICAL |
+| 3 | Performance and Core Web Vitals (WebP/AVIF, lazy-load, CLS, LCP) | HIGH |
+| 4 | Structure and semantics (heading order, landmarks, valid HTML) | HIGH |
+| 5 | Layout and responsive (breakpoints, viewport, no horizontal scroll) | HIGH |
+| 6 | Typography and color (sizes, line-height, semantic tokens) | MEDIUM |
+| 7 | Motion (duration, meaning, prefers-reduced-motion) | MEDIUM |
+| 8 | Forms and feedback (labels, inline errors, autocomplete) | MEDIUM |
+| 9 | Navigation (back behavior, primary items, active state) | MEDIUM |
+| 10 | Data and charts (legends, tooltips, accessible encoding) | LOW |
+
+## Detection rules from data
+
+Beyond the deterministic scan, `detect` can read `tools/data/ux-guidelines.csv` for editable Do/Don't rules with good and bad code examples (25 rules) — extend coverage without changing code. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
 
 ## Quick start
 

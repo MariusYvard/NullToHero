@@ -1,0 +1,26 @@
+id,category,severity,rule,do,dont,good_code,bad_code
+1,Accessibility,critical,Text contrast,Body text must hit 4.5:1 against its background (3:1 for >=24px or bold >=19px),Ship gray-on-gray below 4.5:1,color: #1a1a1a on #ffffff,color: #999 on #fff
+2,Accessibility,critical,Visible focus,Keep a visible focus indicator on every interactive element,Remove the focus outline with no replacement,:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; },*:focus { outline: none; }
+3,Accessibility,critical,Icon-only buttons,Give icon-only controls an accessible name,Ship an icon button with no label,<button aria-label=\"Close\"><svg ...></button>,<button><svg ...></button>
+4,Accessibility,critical,Image alt text,Describe meaningful images; mark decorative ones empty,Omit the alt attribute,<img src=\"chart.png\" alt=\"Revenue up 12% in Q3\">,<img src=\"chart.png\">
+5,Accessibility,critical,Color is not the only signal,Pair color with text or an icon to convey state,Convey success or error by color alone,<span class=\"err\">! Invalid email</span>,<span style=\"color:red\"></span>
+6,Accessibility,important,Heading order,Use one h1 and never skip heading levels,Jump from h2 to h4 for styling,<h2>Section</h2><h3>Subsection</h3>,<h2>Section</h2><h4>Subsection</h4>
+7,Accessibility,important,Form labels,Associate every input with a real label,Use a placeholder as the only label,<label for=\"email\">Email</label><input id=\"email\">,<input placeholder=\"Email\">
+8,Touch,critical,Target size,Make tap targets at least 44x44px,Ship 24px tap targets on mobile,min-height: 44px; min-width: 44px;,height: 24px; width: 24px;
+9,Touch,critical,Target spacing,Leave >=8px between adjacent targets,Pack interactive elements edge to edge,gap: 8px;,gap: 0;
+10,Touch,important,Hover is not the only path,Expose actions without requiring hover,Hide primary actions behind hover only,.actions { opacity: 1; },.row:hover .actions { opacity: 1; } /* hidden otherwise */
+11,Performance,important,Modern image formats,Serve WebP or AVIF with fallbacks,Ship hero images as uncompressed PNG/JPG,<picture><source srcset=\"h.avif\" type=\"image/avif\"><img src=\"h.jpg\"></picture>,<img src=\"hero.png\"> <!-- 3MB -->
+12,Performance,important,Reserve media space,Set width/height or aspect-ratio to prevent CLS,Let images reflow layout on load,<img src=\"a.jpg\" width=\"800\" height=\"600\">,<img src=\"a.jpg\">
+13,Performance,important,Lazy-load below the fold,Defer offscreen images,Eager-load every image on the page,<img src=\"b.jpg\" loading=\"lazy\">,<img src=\"b.jpg\">
+14,Layout,important,No horizontal scroll,Keep content within the viewport width,Set fixed px widths wider than small screens,max-width: 100%;,width: 1200px;
+15,Layout,important,Allow zoom,Let users pinch-zoom,Disable zoom in the viewport meta,<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">,<meta name=\"viewport\" content=\"... user-scalable=no\">
+16,Typography,medium,Body size,Set base body text to >=16px,Use 12px body copy,font-size: 1rem;,font-size: 12px;
+17,Typography,medium,Line length,Cap measure around 65-75 characters,Let paragraphs run the full window width,max-width: 70ch;,max-width: none;
+18,Color,medium,Semantic tokens,Reference semantic tokens in components,Hardcode raw hex in components,color: var(--color-text);,color: #1a1a1a;
+19,Color,medium,Avoid pure black,Tint neutrals slightly toward the brand hue,Use #000 for large surfaces,background: oklch(0.15 0.01 270);,background: #000;
+20,Motion,medium,Duration,Keep UI feedback between 150 and 300ms,Animate UI feedback longer than 300ms,transition: transform 200ms ease-out;,transition: transform 800ms;
+21,Motion,medium,Respect reduced motion,Honor prefers-reduced-motion,Animate regardless of user preference,@media (prefers-reduced-motion: reduce) { * { animation: none; } },/* no reduced-motion handling */
+22,Motion,medium,Animate cheap properties,Animate transform and opacity,Animate width/height/top/left,transform: translateX(10px);,left: 10px; width: 200px;
+23,Forms,medium,Inline errors,Show errors next to the field,Show errors only at the top of the form,<input aria-describedby=\"e1\"><span id=\"e1\">Required</span>,<div class=\"errors-top\">3 errors</div>
+24,Navigation,medium,Active state,Indicate the current page or section,Render all nav links identically,<a aria-current=\"page\">Home</a>,<a>Home</a>
+25,Data,low,Chart encoding,Add labels or patterns beyond color,Encode chart series by color alone,<svg><title>Sales by region</title>...</svg>,<div class=\"bar\" style=\"background:red\"></div>

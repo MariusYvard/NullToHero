@@ -1,7 +1,7 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, generate a report, or export findings as PDF. Covers full site audits (parallel sub-agents), single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, structured data (JSON-LD), E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, competitor comparison pages, semantic clustering, SXO, SEO drift monitoring, backlink analysis, e-commerce SEO, and formatted report generation. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local business, hreflang, backlinks, report, PDF, deliverable, or visibility."
-version: 1.4.0
+version: 1.5.0
 user-invocable: true
 argument-hint: "[command] [url | business-type | keyword]"
 license: "Apache-2.0"

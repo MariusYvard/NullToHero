@@ -1,6 +1,6 @@
 # NullToHero — Cowork Plugin
 
-> **v1.4.0** · 3 skills · 47 commands · 77 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
+> **v1.5.0** · 3 skills · 47 commands · 82 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -63,7 +63,7 @@ All `/seo` commands now produce action plans in a unified format: Quick Wins (< 
 
 ## What's new in 1.3.0
 
-The SEO skill expands from 7 to 18 commands, the GEO command gains a weighted scoring model and two new subcommands, and the repo ships its first contributor tooling.
+The SEO skill expands from 7 to 19 commands, the GEO command gains a weighted scoring model and two new subcommands, and the repo ships its first contributor tooling.
 
 ### New SEO commands
 
@@ -205,7 +205,7 @@ Three tools to run before every ship.
 
 ## Knowledge Base
 
-NullToHero ships 75 reference documents that Claude loads on demand.
+NullToHero ships 82 reference documents that Claude loads on demand.
 
 ### Design fundamentals
 gestalt, cognitive-load, layout, typography, color-and-contrast, dark-mode-engineering, spatial-design, shape, polish, distill, bolder, quieter, amplify, simplify
@@ -291,6 +291,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.5.0** (May 2026) — Priority-and-severity model in siteasy and inspect, searchable reference index (`tools/`), editable `ux-guidelines.csv` for `/inspect`, GitHub Actions CI. Fixed a `validate.js` syntax error, aligned all skill versions, corrected reference-doc and command counts.
 - **1.4.0** (May 2026) — Group C: parallel sub-agents for `/seo audit` (5 agent files), `/seo report` command (Markdown + PDF export), standardized ACTION-PLAN template across all commands, file integrity checks in validator.
 - **1.3.0** (May 2026) — 11 new SEO commands (sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce). GEO upgraded with weighted scoring, platform subscores, `/geo quick`, `/geo compare`. Installer scripts, CHANGELOG, CONTRIBUTING, reference validator.
 - **1.2.0** (May 2026) — Design foundations: Gestalt, UX research, IA, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (research, ia, journey). 25 new anti-pattern rules.
@@ -299,16 +300,4 @@ NullToHero works best with two files in your project root:
 
 ---
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add reference files, new commands, or bug fixes.
-
-```bash
-node tests/validate.js   # run before opening a PR
-```
-
----
-
-## License
-
-Apache 2.0 — [github.com/MariusYvard/NullToHero](https://github.com/MariusYvard/NullToHero)
+##

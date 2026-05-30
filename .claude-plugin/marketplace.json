@@ -10,7 +10,7 @@
       "name": "null-to-hero",
       "source": "./",
       "description": "From zero knowledge to hero website. Design, SEO (19 commands), GEO for AI search, parallel audit sub-agents, report export, WCAG 2.2, image strategy, accessible forms, parallax, and motion.",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "category": "design",
       "tags": [
         "design",

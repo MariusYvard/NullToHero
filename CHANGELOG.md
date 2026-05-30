@@ -5,6 +5,26 @@ Format: [Semantic Versioning](https://semver.org)
 
 ---
 
+## [1.5.0] — 2026-05-30
+
+### Fixed
+
+- `tests/validate.js` — removed stray `0);` / `}` at end of file that was a syntax error; the validator crashed before running any check and now runs.
+- Skill versions now track the plugin: `skills/siteasy/SKILL.md` and `skills/inspect/SKILL.md` were stuck at 1.0.0; all three SKILL.md frontmatter versions are aligned to 1.5.0.
+- Counter reconciliation: README header reference-doc count corrected to the real total (82, was 77); Knowledge Base line corrected (was 75); "from 7 to 18 commands" corrected to 19 (matches marketplace.json "SEO (19 commands)").
+- Removed a duplicated `## Shared design laws` heading in `skills/siteasy/SKILL.md`.
+
+### Added
+
+- Priority-and-severity model: `skills/siteasy/SKILL.md` gains "When to apply" and a 1-10 "Priority order (severity)" table (accessibility first); `skills/inspect/SKILL.md` gains a matching "Category order" table so build-time and review-time triage in the same order.
+- Searchable reference index: `tools/build-index.mjs` and `tools/search-references.mjs` return the most relevant reference paths instead of loading large docs whole (addresses context-budget cost of live.md, document.md, parallax.md).
+- `tools/data/ux-guidelines.csv` — editable Do/Don't detection rules with good and bad code (25 rules), consumable by `/inspect`.
+- `tools/design-system/` — data-driven knowledge base across 16 technology stacks (react, nextjs, vue, svelte, astro, nuxtjs, nuxt-ui, angular, laravel, html-tailwind, shadcn, swiftui, react-native, flutter, jetpack-compose, threejs) plus a design system generator (`search.py --design-system`). Wired into `/siteasy` as the data-driven counterpart to `setup`. Copied from ui-ux-pro-max-skill (MIT); see ATTRIBUTION.md.
+- `.github/workflows/validate.yml` — runs `tests/validate.js` on push and pull request.
+- `ATTRIBUTION.md` — credits ui-ux-pro-max-skill (MIT) for the dataset schema and rule-model inspiration.
+
+---
+
 ## [1.4.0] — 2026-05-27
 
 ### Added — Group C: architecture, outputs, action plans
@@ -82,18 +102,4 @@ Format: [Semantic Versioning](https://semver.org)
 ### Added
 
 - Parallax engineering reference: 6 effect typologies, 3 implementation paths (CSS perspective, native Scroll-Driven Animations, Lenis+GSAP), Core Web Vitals discipline, AI-adaptive governance, Playwright audit script
-- `/siteasy parallax` command
-- 14 new anti-pattern rules in `/inspect detect`
-
----
-
-## [1.0.0] — 2026-04-01
-
-### Initial release
-
-- `/siteasy` — 24 commands for design, UX, motion, performance, and site architecture
-- `/seo` — 7 commands: audit, page, plan, technical, schema, content, geo
-- `/inspect` — 3 commands: detect, preview, review
-- 64 reference documents
-- Playwright-based browser preview
-- Deterministic anti-pattern detector
+- `/siteasy parallax` comm
