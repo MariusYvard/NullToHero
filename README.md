@@ -55,7 +55,7 @@ Three new tools live in `tools/`:
 |------|---------|
 | `build-index.mjs` | Builds a full-text index of all 82 reference docs |
 | `search-references.mjs` | CLI search across all references by keyword |
-| `data/ux-guidelines.csv` | 25 editable UX rules consumed by `/inspect detect` |
+| `data/inspect-rules.csv` | 25 editable UX rules consumed by `/inspect detect` |
 
 Run `node tools/build-index.mjs` once after install, then `node tools/search-references.mjs "motion"` to query.
 
