@@ -41,6 +41,41 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 ---
 
+## What's new in 1.5.0
+
+### Priority and severity model
+
+`/siteasy` and `/inspect` commands now attach a priority (P0–P3) and severity (critical/major/minor/cosmetic) label to every finding, so you know which issues to fix before shipping and which to backlog.
+
+### Searchable reference index
+
+Three new tools live in `tools/`:
+
+| File | Purpose |
+|------|---------|
+| `build-index.mjs` | Builds a full-text index of all 82 reference docs |
+| `search-references.mjs` | CLI search across all references by keyword |
+| `data/ux-guidelines.csv` | 25 editable UX rules consumed by `/inspect detect` |
+
+Run `node tools/build-index.mjs` once after install, then `node tools/search-references.mjs "motion"` to query.
+
+### Vendored design system
+
+`tools/design-system/` ships a searchable design system database (MIT license, see `ATTRIBUTION.md`): 14 CSV tables covering spacing, typography, color, and component patterns, 16 stack definitions, and a Python search API (`core.py`, `search.py`, `design_system.py`). The `/siteasy` skill wires into it automatically to pull context-relevant constraints during builds.
+
+### GitHub Actions CI
+
+`.github/workflows/validate.yml` runs `node tests/validate.js` on every push and pull request. A failed integrity check blocks the merge.
+
+### Housekeeping
+
+- All skill files and `plugin.json`/`marketplace.json` aligned to version 1.5.0
+- Fixed a syntax error in `tests/validate.js` (`0);` → `0,`)
+- Removed a duplicate `## Shared design laws` heading in the siteasy skill
+- Reference doc count corrected to 82 throughout
+
+---
+
 ## What's new in 1.4.0
 
 ### Parallel audit sub-agents (C1)
@@ -299,5 +334,3 @@ NullToHero works best with two files in your project root:
 - **1.0.0** (April 2026) — Initial release: siteasy, seo, inspect with 31 commands and core references.
 
 ---
-
-##
