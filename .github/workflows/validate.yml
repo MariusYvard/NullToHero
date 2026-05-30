@@ -13,5 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Build reference index
+        run: node tools/build-index.mjs
       - name: Run reference validator
         run: node tests/validate.js
