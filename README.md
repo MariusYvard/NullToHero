@@ -1,6 +1,8 @@
 # NullToHero — Cowork Plugin
 
-> **v1.5.0** · 3 skills · 47 commands · 77 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
+[![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
+
+> **v1.5.0** · 3 skills · 47 commands · 82 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -41,68 +43,27 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 ---
 
-## What's new in 1.4.0
+## What's new in 1.5.0
 
-### Parallel audit sub-agents (C1)
+### Design system generator
 
-`/seo audit` now delegates each dimension to a dedicated sub-agent file in `skills/seo/agents/`. When the Task tool is available (Claude Code / Cowork), all 5 run in parallel — technical, content, schema, GEO, performance — then aggregate into a unified score and ACTION-PLAN. Sequential fallback when Task is unavailable.
+`tools/design-system/` ships a data-driven knowledge base across 16 technology stacks (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, HTML+Tailwind, shadcn/ui, SwiftUI, React Native, Flutter, Jetpack Compose, Three.js, Nuxt UI). Claude can now generate a stack-specific design system scaffold without loading large reference files.
 
-### Report export (C2)
+### Searchable reference index
 
-New `/seo report [url|file|generate]` command formats any audit output into a client-ready deliverable: Markdown with ASCII score gauges and color-coded tables, or PDF via the Cowork PDF skill.
+`tools/build-index.mjs` pre-builds a lightweight index of all 82 reference documents. `tools/search-references.mjs` returns the most relevant reference path for a query — Claude loads only what it needs instead of the full doc set. This keeps context budget low on large projects.
 
-### Standardized ACTION-PLAN (C3)
+### Priority and severity model
 
-All `/seo` commands now produce action plans in a unified format: Quick Wins (< 1h), 1-Week Fixes, 1-Month Projects, Backlog. Template lives in `references/action-plan.md`.
+`/siteasy` and `/inspect` now share a 1–10 severity table (accessibility first, data/charts last). Build-time and review-time triage follow the same order — no more disagreement between what `/siteasy` builds and what `/inspect` flags.
 
-### File integrity validator
+### Validator upgrades
 
-`tests/validate.js` now checks minimum line counts per file (26 files tracked). A truncated rewrite fails the check immediately — run `node tests/validate.js` before every commit.
+`tests/validate.js` gains four new checks: siteasy command→reference mapping (every declared command must have a backing file), siteasy command count minimum, CHANGELOG.md absence treated as error, and `google-fonts.csv` excluded from the large-file warning. CI now runs `node tests/validate.js` even if the index build step fails (`continue-on-error` + `if: always()`).
 
----
+### 82 reference documents
 
-## What's new in 1.3.0
-
-The SEO skill expands from 7 to 18 commands, the GEO command gains a weighted scoring model and two new subcommands, and the repo ships its first contributor tooling.
-
-### New SEO commands
-
-
-| Command | What it does |
-|---------|-------------|
-| `sitemap [url\|generate]` | XML sitemap validation and generation with industry templates |
-| `images [url]` | Image SEO audit — alt text, WebP/AVIF formats, lazy loading, CLS, LCP |
-| `local [url]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
-| `hreflang [url\|generate]` | Hreflang validation and generation for multilingual/multi-region sites |
-| `programmatic [url\|plan]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
-| `competitor-pages [url\|generate]` | "X vs Y" and "alternatives to X" pages with feature matrices and schema |
-| `cluster [keyword]` | Semantic keyword clustering by intent, gap analysis, pillar-and-cluster architecture |
-| `sxo [url]` | Search Experience Optimization — intent alignment, page-type matching, satisfaction signals |
-| `drift [url] baseline\|compare\|history` | SEO drift monitoring — capture baseline, detect changes, track history |
-| `backlinks [url]` | Backlink profile analysis via free sources (Moz, Bing, Common Crawl, GSC) |
-| `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
-
-### GEO upgrades
-
-`/seo geo` now uses a weighted scoring model across 6 dimensions (citability 25 %, brand authority 20 %, content quality 20 %, technical 15 %, structured data 10 %, platform optimization 10 %) and reports platform subscores for Google AI Overviews, ChatGPT, Perplexity and Bing Copilot separately. Two new subcommands:
-
-- `geo quick [url]` — 60-second GEO snapshot with top 3 quick wins
-- `geo compare [url]` — delta tracking against a stored baseline
-
-The AI crawler list expands to 14 bots: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, PerplexityBot, CCBot, anthropic-ai, Bytespider, cohere-ai, Diffbot, AI2Bot, Applebot-Extended, FacebookBot, PetalBot.
-
-### Repo quality
-
-- `CHANGELOG.md` — full release history
-- `CONTRIBUTING.md` — contributor guide (reference format, quality standards, PR workflow)
-- `install.sh` / `install.ps1` — one-line installers for Unix and Windows
-- `tests/validate.js` — reference file integrity validator (`node tests/validate.js`)
-
-### Earlier additions
-
-**1.2.0** — Design foundations: Gestalt principles, UX research methodology, information architecture, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (`research`, `ia`, `journey`). 25 new anti-pattern rules.
-
-**1.1.0** — Parallax engineering reference and Playwright audit script. One new command (`parallax`). 14 new anti-pattern rules.
+Seven new reference documents ship in this release (design system schemas, inspect-rules.csv, ux-guidelines patterns). Full count: 82 documents across siteasy, seo and inspect.
 
 ---
 
@@ -205,7 +166,7 @@ Three tools to run before every ship.
 
 ## Knowledge Base
 
-NullToHero ships 75 reference documents that Claude loads on demand.
+NullToHero ships 82 reference documents that Claude loads on demand.
 
 ### Design fundamentals
 gestalt, cognitive-load, layout, typography, color-and-contrast, dark-mode-engineering, spatial-design, shape, polish, distill, bolder, quieter, amplify, simplify
@@ -291,6 +252,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.5.0** (May 2026) — Design system generator (16 stacks), searchable reference index, priority/severity model, validator upgrades, 82 reference docs.
 - **1.4.0** (May 2026) — Group C: parallel sub-agents for `/seo audit` (5 agent files), `/seo report` command (Markdown + PDF export), standardized ACTION-PLAN template across all commands, file integrity checks in validator.
 - **1.3.0** (May 2026) — 11 new SEO commands (sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce). GEO upgraded with weighted scoring, platform subscores, `/geo quick`, `/geo compare`. Installer scripts, CHANGELOG, CONTRIBUTING, reference validator.
 - **1.2.0** (May 2026) — Design foundations: Gestalt, UX research, IA, journey mapping, WCAG 2.2, image strategy, form patterns. Three new commands (research, ia, journey). 25 new anti-pattern rules.
@@ -312,3 +274,4 @@ node tests/validate.js   # run before opening a PR
 ## License
 
 Apache 2.0 — [github.com/MariusYvard/NullToHero](https://github.com/MariusYvard/NullToHero)
+
