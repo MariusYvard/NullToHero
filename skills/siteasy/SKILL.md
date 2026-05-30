@@ -1,1 +1,153 @@
-﻿
+﻿---
+name: siteasy
+description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
+version: 1.5.0
+user-invocable: true
+argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
+license: "Apache-2.0"
+allowed-tools:
+  - Bash(npx impeccable *)
+  - Bash(npx playwright *)
+  - Bash(node *)
+  - Bash(python3 -m http.server *)
+  - Bash(npx serve *)
+  - Bash(kill *)
+  - Read
+  - Write
+---
+
+Designs and iterates production-grade frontend interfaces. Real working code, committed design choices, exceptional craft. Accessible to beginners, powerful enough for experts.
+
+Good taste is trained, not innate — the ability to see beyond the obvious and recognize what elevates. Unseen details compound: when a feature works exactly as assumed, users proceed without a second thought. That is the goal.
+
+## Setup (non-optional)
+
+Before any design work or file edits, pass these gates. Skipping them produces generic output that ignores the project.
+
+| Gate | Required check | If fail |
+|---|---|---|
+| Context | PRODUCT.md and DESIGN.md are read from the workspace. | Use Read to look for PRODUCT.md; if missing, run `/siteasy setup` first. |
+| Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never synthesize PRODUCT.md from the user's prompt alone. |
+| Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
+| Craft | `/siteasy build` has a user-confirmed shape brief for this task. `setup` / PRODUCT.md never counts as shape. | Run `/siteasy plan` and wait for explicit brief confirmation. |
+| Mutation | All active gates above pass. | Do not edit files yet. |
+
+### 1. Context gathering
+
+Two files in the workspace or project root:
+
+- **PRODUCT.md** — required. Users, brand, tone, anti-references, strategic principles.
+- **DESIGN.md** — optional, strongly recommended. Colors, typography, elevation, components.
+
+Use the Read tool to check for these files. If already read in this session, don't re-read.
+
+If PRODUCT.md is missing, empty, or placeholder: run `/siteasy setup`, then resume. If the original task was `/siteasy build`, resume into `/siteasy plan` before any implementation.
+
+If DESIGN.md is missing: nudge once per session (*"Run `/siteasy document` for more on-brand output"*), then proceed.
+
+### 2. Register
+
+Every design task is **brand** (marketing, landing, campaign, portfolio — design IS the product) or **product** (app UI, admin, dashboard, tool — design SERVES the product).
+
+Identify before designing. Priority: (1) cue in the task itself; (2) the surface in focus; (3) `register` field in PRODUCT.md. First match wins.
+
+Load the matching reference: [references/brand.md](references/brand.md) or [references/product.md](references/product.md). The shared design laws below apply to both.
+
+## Shared design laws
+
+Apply to every design, both registers. Match implementation complexity to the aesthetic vision. Interpret creatively. Vary across projects — never converge on the same choices.
+
+### Color
+
+- Use OKLCH. Reduce chroma as lightness approaches 0 or 100.
+- Never use `#000` or `#fff`. Tint every neutral toward the brand hue (chroma 0.005–0.01).
+- Pick a **color strategy** before picking colors:
+  - **Restrained** — tinted neutrals + one accent ≤10%. Product default; brand minimalism.
+  - **Committed** — one saturated color carries 30–60% of the surface. Brand default for identity-driven pages.
+  - **Full palette** — 3–4 named roles, each used deliberately. Brand campaigns; data viz.
+  - **Drenched** — the surface IS the color. Brand heroes, campaign pages.
+
+### Theme
+
+Dark vs. light is never a default. Write one sentence of physical scene: who uses this, where, under what ambient light, in what mood. If the sentence doesn't force the answer, add detail until it does.
+
+### Typography
+
+- Cap body line length at 65–75ch.
+- Hierarchy through scale + weight contrast (≥1.25 ratio between steps).
+
+### Layout
+
+- Vary spacing for rhythm. Same padding everywhere is monotony.
+- Cards are the lazy answer. Use them only when they're truly the best affordance. Nested cards are always wrong.
+- Run a Gestalt audit on every composition (proximity, similarity, closure, continuity, figure-ground, common fate, symmetry). See [references/gestalt.md](references/gestalt.md).
+
+### Motion
+
+- Don't animate CSS layout properties.
+- Ease out with exponential curves (ease-out-quart / quint / expo). No bounce, no elastic.
+
+### Absolute bans
+
+Match-and-refuse. If you're about to write any of these, rewrite with different structure.
+
+- **Side-stripe borders.** `border-left` or `border-right` > 1px as a colored accent on cards, list items, callouts.
+- **Gradient text.** `background-clip: text` on anything other than display-only hero type.
+- **Glassmorphism as default.** Blurs and glass cards used decoratively.
+- **The hero-metric template.** Big number, small label, supporting stats, gradient accent.
+- **Identical card grids.** Same-sized cards with icon + heading + text, repeated endlessly.
+- **Centered hero, centered text, dark image.** Use an asymmetric split instead.
+- **Modal as first thought.** Exhaust inline / progressive alternatives first.
+- **Inter font.** Use Geist, Outfit, Cabinet Grotesk, or Satoshi.
+- **Serif fonts in software UIs or dashboards.**
+- **AI Purple/Blue gradient aesthetic.** Use neutral bases (Zinc/Slate) with singular, concrete accents.
+- **Pure black (#000) for large areas.** Use off-black with a hint of hue (chroma 0.005+).
+- **`transition: all`.** Always specify exact properties.
+- **`ease-in` on UI animations.** Use `ease-out` or a custom curve.
+- **Durations > 300ms on UI feedback.**
+- **Generic placeholder content.** "John Doe", "Acme Corp", "99.99%". Use realistic names, organic numbers (`47.2%`), and `picsum.photos/seed/{word}/width/height`.
+- **Emojis in code, markup, or UI copy.** Replace with proper icons (Radix, Phosphor) or SVG primitives.
+
+### Copy
+
+- Every word earns its place. No restated headings, no intros that repeat the title.
+- **No em dashes.** Use commas, colons, semicolons, or parentheses.
+
+## Commands
+
+| Command | Category | Description | Reference |
+|---|---|---|---|
+| `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) |
+| `plan [feature]` | Build | Plan UX/UI before writing code | [references/shape.md](references/shape.md) |
+| `setup` | Build | Create PRODUCT.md and DESIGN.md context | [references/teach.md](references/teach.md) |
+| `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |
+| `ia [target]` | Build | Information architecture, card sorting, tree testing, navigation patterns | [references/information-architecture.md](references/information-architecture.md) |
+| `journey [persona]` | Build | Generate empathy maps, journey maps, or service blueprints from research | [references/journey-mapping.md](references/journey-mapping.md) |
+| `document` | Build | Generate DESIGN.md from existing project code | [references/document.md](references/document.md) |
+| `extract [target]` | Build | Pull reusable tokens and components into a design system | [references/extract.md](references/extract.md) |
+| `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) |
+| `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) |
+| `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |
+| `polish [target]` | Refine | Final quality pass before shipping | [references/polish.md](references/polish.md) |
+| `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) |
+| `simplify [target]` | Refine | Reduce visual noise, tone down, strip to essence | [references/quieter.md](references/quieter.md) + [references/distill.md](references/distill.md) |
+| `clarify [target]` | Refine | UX copy, error messages, button labels, empty states | [references/clarify.md](references/clarify.md) |
+| `launch [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) |
+| `onboard [target]` | Refine | First-run flows, empty states, feature discovery, activation | [references/onboard.md](references/onboard.md) |
+| `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) |
+| `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
+| `layout [target]` | Enhance | Spacing systems, visual rhythm, grid tools | [references/layout.md](references/layout.md) |
+| `adapt [target]` | Enhance | Mobile/tablet/desktop/print adaptation | [references/adapt.md](references/adapt.md) + [references/responsive-design.md](references/responsive-design.md) |
+| `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) |
+| `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) |
+| `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
+| `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
+
+## Running commands
+
+When the user invokes a command:
+1. Load the matching reference file(s) listed in the table above using the Read tool
+2. Follow the instructions in that reference
+3. Apply the shared design laws above throughout
+
+If no command is specified, treat the request as `build` for new work, or `critique` for existing work.
