@@ -1,0 +1,40 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate
+        run: node tests/validate.js
+
+      - name: Build reference index
+        run: node tools/build-index.mjs
+
+      - name: Extract changelog entry
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk "/^## \\[$version\\]/,/^## \\[/" CHANGELOG.md | sed '$d' | tail -n +2 > release_notes.txt
+          echo "--- release notes ---"
+          cat release_notes.txt
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "NullToHero $GITHUB_REF_NAME" \
+            --notes-file release_notes.txt
