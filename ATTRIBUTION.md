@@ -1,15 +1,28 @@
 # Attribution
 
-NullToHero is licensed under Apache-2.0. It includes material adapted from third-party open-source projects, used here under their original licenses.
+NullToHero is built on the following open standards, tools and sources of knowledge.
 
-## ui-ux-pro-max-skill (MIT)
+## Standards and specifications
 
-https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+- **WCAG 2.2** — W3C Web Accessibility Guidelines. https://www.w3.org/TR/WCAG22/
+- **Schema.org** — Structured data vocabulary. https://schema.org/
+- **Core Web Vitals** — Google web performance metrics. https://web.dev/vitals/
+- **Scroll-Driven Animations** — W3C draft spec. https://drafts.csswg.org/scroll-animations-1/
 
-Copied verbatim (under MIT):
+## Tools referenced in skill docs
 
-- `tools/design-system/` — the data-driven knowledge base and generator: `scripts/core.py`, `scripts/search.py`, `scripts/design_system.py`, the 14 CSV files in `data/`, and the 16 stack CSV files in `data/stacks/`. Copied unmodified from ui-ux-pro-max-skill. The upstream MIT license is retained at `tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt`.
+- **Playwright** — Microsoft, Apache 2.0. https://playwright.dev/
+- **Lenis** — Studio Freight, MIT. https://github.com/studio-freight/lenis
+- **GSAP** — GreenSock, standard license. https://gsap.com/
 
-Inspired (concept and structure, not copied content):
+## Data sources referenced in SEO references
 
-- `tools/data/ux-guidelines.csv` — UX guideline dataset (Do/Don't pairs with good and bad code, 25 rules). Authored for NullToHero; its CSV schema (category, severity, do, dont, good/bad code) and t
+- **Google Search Central** — official crawling and indexing documentation. https://developers.google.com/search
+- **Bing Webmaster Tools** — Microsoft. https://www.bing.com/webmasters/
+- **Common Crawl** — open web crawl data. https://commoncrawl.org/
+- **Moz** — domain authority and backlink data. https://moz.com/
+
+## License
+
+NullToHero itself is licensed under Apache 2.0 (see [LICENSE](LICENSE)).
+All third-party content referenced above remains under its respective license.

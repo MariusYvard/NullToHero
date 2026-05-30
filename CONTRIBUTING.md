@@ -172,13 +172,11 @@ By contributing, you agree that your contribution will be licensed under Apache 
 
 NullToHero imposes a **500 KB** per-file soft limit tracked by `tests/validate.js` (Check 12). A warning fires for any file in `tools/` that exceeds this threshold.
 
-The one current exception is `tools/design-system/data/google-fonts.csv` (~745 KB), which predates this limit and is kept for font-lookup coverage. Do not add new files of comparable size without first opening an issue to discuss alternatives (compression, release asset, external download).
-
 If you need to add a large dataset:
 
 1. Open an issue explaining the use case and size.
 2. Consider a `tools/download-*.mjs` script that fetches the file from a GitHub release asset on demand instead of committing it.
 3. Do not commit files over 5 MB — GitHub will reject them and the PR will be stuck.
 
-`node tests/validate.js` warns on files above 500 KB but does not fail CI, to avoid breaking the google-fonts exception. Treat the warning as a prompt to discuss before merging.
+`node tests/validate.js` warns on files above 500 KB but does not fail CI. Treat the warning as a prompt to discuss before merging.
 
