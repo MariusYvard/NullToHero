@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'."
-version: 1.5.2
+version: 1.6.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 license: "Apache-2.0"
@@ -63,6 +63,10 @@ If no command is specified:
 - With a URL or file path → default to `preview`
 - With pasted code → default to `review`
 - Otherwise ask: "Do you want a screenshot, an anti-pattern scan, or a code review?"
+
+## Requirements
+
+The `detect` and `review` commands call the `impeccable` CLI through `npx`. It requires Node.js and is fetched on first run. Tested with impeccable 2.3.2. To pin the version and avoid drift from upstream flag changes, run `npx impeccable@2.3.2` instead of `npx impeccable`.
 
 ## Recommended pre-ship sequence
 

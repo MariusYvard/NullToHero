@@ -11,6 +11,7 @@ NullToHero is built on the following open standards, tools and sources of knowle
 
 ## Tools referenced in skill docs
 
+- **impeccable** — design skills and anti-pattern detection CLI by Paul Bakaus. https://impeccable.style/
 - **Playwright** — Microsoft, Apache 2.0. https://playwright.dev/
 - **Lenis** — Studio Freight, MIT. https://github.com/studio-freight/lenis
 - **GSAP** — GreenSock, standard license. https://gsap.com/

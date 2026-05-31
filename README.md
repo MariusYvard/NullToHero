@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.5.0** · 3 skills · 47 commands · 82 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
+> **v1.6.0** · 3 skills · 47 commands · 82 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -42,6 +42,16 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
 ---
+
+## What's new in 1.6.0
+
+### Modern CSS coverage
+
+`/siteasy` references now cover the View Transitions API (same-document and cross-document, with reduced-motion gating), container queries (`container-type`, `@container`, `cqi` units) and relational CSS (`:has()`, `color-mix()` token derivation).
+
+### Consistency and release hygiene
+
+Frontmatter added to all 56 siteasy and inspect reference files (validator now runs clean at 0 warnings). The version-consistency check covers `package.json`, and the release workflow's changelog extraction is fixed so tagged releases ship real notes. The `impeccable` CLI is credited and its tested version documented.
 
 ## What's new in 1.5.0
 
@@ -252,6 +262,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.6.0** (May 2026) — Modern CSS (View Transitions, container queries, `:has()`, `color-mix()`), full reference frontmatter (0 validator warnings), release-pipeline fixes (package.json tracking, changelog extraction), impeccable attribution.
 - **1.5.0** (May 2026) — Design system generator (16 stacks), searchable reference index, priority/severity model, validator upgrades, 82 reference docs.
 - **1.4.0** (May 2026) — Group C: parallel sub-agents for `/seo audit` (5 agent files), `/seo report` command (Markdown + PDF export), standardized ACTION-PLAN template across all commands, file integrity checks in validator.
 - **1.3.0** (May 2026) — 11 new SEO commands (sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce). GEO upgraded with weighted scoring, platform subscores, `/geo quick`, `/geo compare`. Installer scripts, CHANGELOG, CONTRIBUTING, reference validator.

@@ -11,6 +11,43 @@ Format: [Semantic Versioning](https://semver.org)
 
 ---
 
+## [1.6.0] — 2026-05-31
+
+### Added
+
+- `skills/siteasy/references/animation-engineering.md` — View Transitions API section (same-document and cross-document, element matching, reduced-motion gating)
+- `skills/siteasy/references/responsive-design.md` — container queries section (`container-type`, `@container`, `cqi` units)
+- `skills/siteasy/references/css-architecture.md` — `:has()` relational selection and `color-mix()` token derivation
+- Frontmatter (`name`, `description`, `version`) added to all 53 siteasy and 3 inspect reference files, clearing 56 validator warnings
+- `ATTRIBUTION.md` — credit for the `impeccable` CLI (Paul Bakaus)
+- Tested-version note for `impeccable` (2.3.2) in the inspect and siteasy SKILL.md
+
+### Fixed
+
+- `package.json` — version was stuck at 1.5.0 while all other manifests were ahead; now tracked by the validator
+- `tests/validate.js` — version consistency check (Check 12) now includes `package.json`
+- `.github/workflows/release.yml` — changelog extraction returned only the heading line (empty release notes on every tag); rewritten with a flag-based awk range
+
+---
+
+## [1.5.2] — 2026-05-30
+
+### Fixed
+
+- `skills/siteasy/SKILL.md` — stripped the UTF-8 BOM so Cowork can parse the frontmatter `description`. Without this, the skill description failed to load.
+- Version bumped to 1.5.2 across `plugin.json`, `marketplace.json` and all three `SKILL.md`.
+
+---
+
+## [1.5.1] — 2026-05-30
+
+### Fixed
+
+- `tests/validate.js` — `parseFrontmatter` now strips the UTF-8 BOM before matching, so BOM-prefixed reference files validate correctly.
+- `tests/validate.js` — lowered `FILE_INTEGRITY` minimum line thresholds to match actual file sizes, removing false truncation failures.
+
+---
+
 ## [1.5.0] — 2026-05-30
 
 ### Added
