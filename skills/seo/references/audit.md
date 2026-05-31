@@ -99,9 +99,9 @@ Citability score, structural improvements, authority signals
 
 | Need | Skill |
 |------|-------|
-| Deep technical audit | `/seo-technical` |
-| Content quality analysis | `/seo-content` |
-| Schema & structured data | `/seo-schema` |
-| AI search optimization | `/seo-geo` |
-| Single-page deep analysis | `/seo-page` |
-| Post-audit SEO strategy | `/seo-plan` |
+| Deep technical audit | `/seo technical` |
+| Content quality analysis | `/seo content` |
+| Schema & structured data | `/seo schema` |
+| AI search optimization | `/seo geo` |
+| Single-page deep analysis | `/seo page` |
+| Post-audit SEO strategy | `/seo plan` |

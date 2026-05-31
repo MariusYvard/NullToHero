@@ -38,7 +38,7 @@ If any of these are unclear from the codebase, STOP and call the AskUserQuestion
 
 **CRITICAL**: "Bolder" doesn't mean chaotic or garish. It means distinctive, memorable, and confident. Think intentional drama, not random chaos.
 
-**WARNING - AI SLOP TRAP**: When making things "bolder," AI defaults to the same tired tricks: cyan/purple gradients, glassmorphism, neon accents on dark backgrounds, gradient text on metrics. These are the OPPOSITE of bold. They're generic. Review ALL the DON'T guidelines from the parent impeccable skill (already loaded in this context) before proceeding. Bold means distinctive, not "more effects."
+**WARNING - AI SLOP TRAP**: When making things "bolder," AI defaults to the same tired tricks: cyan/purple gradients, glassmorphism, neon accents on dark backgrounds, gradient text on metrics. These are the OPPOSITE of bold. They're generic. Review ALL the DON'T guidelines from the parent siteasy skill (already loaded in this context) before proceeding. Bold means distinctive, not "more effects."
 
 ## Plan Amplification
 
