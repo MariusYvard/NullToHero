@@ -5,6 +5,15 @@ version: 1.6.0
 user-invocable: true
 argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|sxo|drift|backlinks|ecommerce|report] [url | business-type]"
 license: "Apache-2.0"
+allowed-tools:
+  - Read
+  - Write
+  - WebFetch
+  - Glob
+  - Grep
+  - Task
+  - Bash(node *)
+  - Bash(python3 *)
 ---
 
 Complete SEO toolkit for websites — from zero to ranking. Run a full audit, fix technical issues, generate schema markup, optimize content, get found by AI search engines, and deliver polished client reports.

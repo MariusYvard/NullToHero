@@ -74,11 +74,12 @@ fi
 cp -r "${TEMP_DIR}/NullToHero" "${DEST}"
 ok "Files copied to ${DEST}"
 
-# Register with Claude Code if possible
-if claude plugin add "${DEST}" 2>/dev/null; then
+# Register the local copy as a marketplace, then install from it
+if claude plugin marketplace add "${DEST}" 2>/dev/null && \
+   claude plugin install "${INSTALL_NAME}@null-to-hero-marketplace" 2>/dev/null; then
   ok "Plugin registered with Claude Code."
 else
-  warn "Could not auto-register. You may need to restart Claude Code."
+  warn "Could not auto-register. Run: claude plugin marketplace add \"${DEST}\"  then restart Claude Code."
 fi
 
 # ─── Node.js check (for /inspect preview) ─────────────────────────────────────

@@ -36,9 +36,11 @@ Log "Attempting marketplace install (recommended)..."
 
 $marketplaceOk = $false
 try {
-    claude plugin marketplace add $REPO 2>$null
-    claude plugin install "${INSTALL_NAME}@null-to-hero-marketplace" 2>$null
-    $marketplaceOk = $true
+    claude plugin marketplace add $REPO
+    if ($LASTEXITCODE -eq 0) {
+        claude plugin install "${INSTALL_NAME}@null-to-hero-marketplace"
+        if ($LASTEXITCODE -eq 0) { $marketplaceOk = $true }
+    }
 } catch {}
 
 if ($marketplaceOk) {
@@ -72,12 +74,19 @@ try {
     Copy-Item "$tempDir\NullToHero" $dest -Recurse -Force
     Ok "Files copied to $dest"
 
-    # Register with Claude Code if possible
+    # Register the local copy as a marketplace, then install from it
     try {
-        claude plugin add $dest 2>$null
-        Ok "Plugin registered with Claude Code."
+        claude plugin marketplace add $dest
+        if ($LASTEXITCODE -eq 0) {
+            claude plugin install "${INSTALL_NAME}@null-to-hero-marketplace"
+        }
+        if ($LASTEXITCODE -eq 0) {
+            Ok "Plugin registered with Claude Code."
+        } else {
+            Warn "Could not auto-register. Run 'claude plugin marketplace add `"$dest`"' manually, then restart Claude Code."
+        }
     } catch {
-        Warn "Could not auto-register. You may need to restart Claude Code."
+        Warn "Could not auto-register. Run 'claude plugin marketplace add `"$dest`"' manually, then restart Claude Code."
     }
 
 } finally {
@@ -101,7 +110,7 @@ Ok "NullToHero installed successfully!"
 Write-Host ""
 Write-Host "  Skills available:" -ForegroundColor Cyan
 Write-Host "    /siteasy  — Design, UX, motion, accessibility" -ForegroundColor Green
-Write-Host "    /seo      — Full SEO toolkit (18 commands)" -ForegroundColor Green
+Write-Host "    /seo      — Full SEO toolkit (19 commands)" -ForegroundColor Green
 Write-Host "    /inspect  — Anti-pattern detection, browser preview" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Quick start:" -ForegroundColor Cyan

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-marketplace.json",
   "name": "null-to-hero-marketplace",
   "owner": {
     "name": "Marius Yvard",
@@ -13,12 +14,36 @@
       "version": "1.6.0",
       "category": "design",
       "tags": [
-        "design", "seo", "frontend", "ui", "ux", "css", "html", "parallax",
-        "scrollytelling", "scroll-driven", "accessibility", "motion", "anti-patterns",
-        "schema", "core-web-vitals", "gestalt", "ux-research", "information-architecture",
-        "wcag-2-2", "image-strategy", "form-patterns", "journey-mapping", "local-seo",
-        "hreflang", "programmatic-seo", "geo", "ai-search", "keyword-clustering",
-        "ecommerce-seo", "report"
+        "design",
+        "seo",
+        "frontend",
+        "ui",
+        "ux",
+        "css",
+        "html",
+        "parallax",
+        "scrollytelling",
+        "scroll-driven",
+        "accessibility",
+        "motion",
+        "anti-patterns",
+        "schema",
+        "core-web-vitals",
+        "gestalt",
+        "ux-research",
+        "information-architecture",
+        "wcag-2-2",
+        "image-strategy",
+        "form-patterns",
+        "journey-mapping",
+        "local-seo",
+        "hreflang",
+        "programmatic-seo",
+        "geo",
+        "ai-search",
+        "keyword-clustering",
+        "ecommerce-seo",
+        "report"
       ]
     }
   ]
