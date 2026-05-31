@@ -1,3 +1,9 @@
+---
+name: wcag-2-2
+description: "The Web Content Accessibility Guidelines 2.2 (W3C Recommendation, October 2023) adds nine success criteria to WCAG 2.1, targeting cognitive disabilities, motor impairments, and."
+version: 1.6.0
+---
+
 # WCAG 2.2 Compliance Reference
 
 The Web Content Accessibility Guidelines 2.2 (W3C Recommendation, October 2023) adds nine success criteria to WCAG 2.1, targeting cognitive disabilities, motor impairments, and low-vision mobile users. This reference is the operational checklist for every shipped interface. Pair with [accessibility-engineering.md](accessibility-engineering.md), [parallax.md](parallax.md), and [form-patterns.md](form-patterns.md).

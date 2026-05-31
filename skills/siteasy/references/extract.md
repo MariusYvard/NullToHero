@@ -1,3 +1,9 @@
+---
+name: extract
+description: "Identify reusable patterns, components, and design tokens, then extract and consolidate them into the design system for systematic reuse."
+version: 1.6.0
+---
+
 # Extract Flow
 
 Identify reusable patterns, components, and design tokens, then extract and consolidate them into the design system for systematic reuse.

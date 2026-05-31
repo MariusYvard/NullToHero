@@ -1,3 +1,9 @@
+---
+name: clarify
+description: "Identify and improve unclear, confusing, or poorly written interface text to make the product easier to understand and use."
+version: 1.6.0
+---
+
 > **Additional context needed**: audience technical level and users' mental state in context.
 
 Identify and improve unclear, confusing, or poorly written interface text to make the product easier to understand and use.

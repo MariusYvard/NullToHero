@@ -1,3 +1,9 @@
+---
+name: creative-patterns
+description: "Arsenal of high-end UI patterns for /impeccable overdrive, /impeccable delight, and ambitious /impeccable craft work. Use selectively - the point is intentionality, not."
+version: 1.6.0
+---
+
 # Creative Patterns
 
 *Arsenal of high-end UI patterns for `/impeccable overdrive`, `/impeccable delight`, and ambitious `/impeccable craft` work. Use selectively — the point is intentionality, not implementing everything at once.*

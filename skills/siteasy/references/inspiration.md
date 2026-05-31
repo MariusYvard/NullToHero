@@ -1,3 +1,9 @@
+---
+name: inspiration
+description: "Curated resources for developing taste and staying current. Taste is trained by surrounding yourself with exceptional work - not by reading about it abstractly. Study these."
+version: 1.6.0
+---
+
 # Inspiration & Reference Sources
 
 *Curated resources for developing taste and staying current. Taste is trained by surrounding yourself with exceptional work — not by reading about it abstractly. Study these actively.*

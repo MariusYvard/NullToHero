@@ -1,3 +1,9 @@
+---
+name: heuristics-scoring
+description: "Score each of Nielsen's 10 Usability Heuristics on a 0-4 scale. Be honest - a 4 means genuinely excellent, not 'good enough.'"
+version: 1.6.0
+---
+
 # Heuristics Scoring Guide
 
 Score each of Nielsen's 10 Usability Heuristics on a 0–4 scale. Be honest — a 4 means genuinely excellent, not "good enough."

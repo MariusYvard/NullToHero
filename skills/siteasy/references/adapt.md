@@ -1,3 +1,9 @@
+---
+name: adapt
+description: "Adapt existing designs to work effectively across different contexts - different screen sizes, devices, platforms, or use cases."
+version: 1.6.0
+---
+
 > **Additional context needed**: target platforms/devices and usage contexts.
 
 Adapt existing designs to work effectively across different contexts - different screen sizes, devices, platforms, or use cases.

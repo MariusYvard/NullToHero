@@ -1,3 +1,9 @@
+---
+name: optimize
+description: "Identify and fix performance issues to create faster, smoother user experiences."
+version: 1.6.0
+---
+
 Identify and fix performance issues to create faster, smoother user experiences.
 
 ## Assess Performance Issues

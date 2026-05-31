@@ -1,3 +1,9 @@
+---
+name: playwright
+description: "Screenshot a UI in a real Chromium browser, read the image visually, identify design bugs and layout issues, then fix them in the source. Loop until the output is correct."
+version: 1.6.0
+---
+
 # Preview — Browser Visual Testing with Playwright
 
 ## Purpose

@@ -1,3 +1,9 @@
+---
+name: ux-writing
+description: "Never use 'OK', 'Submit', or 'Yes/No'. These are lazy and ambiguous. Use specific verb + object patterns:"
+version: 1.6.0
+---
+
 # UX Writing
 
 ## The Button Label Problem

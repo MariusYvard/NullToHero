@@ -1,3 +1,9 @@
+---
+name: interaction-design
+description: "Every interactive element needs these states designed:"
+version: 1.6.0
+---
+
 # Interaction Design
 
 ## The Eight Interactive States

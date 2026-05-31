@@ -1,3 +1,9 @@
+---
+name: live
+description: "Interactive live variant mode: select elements in the browser, pick a design action, and get AI-generated HTML+CSS variants hot-swapped via the dev server's HMR."
+version: 1.6.0
+---
+
 Interactive live variant mode: select elements in the browser, pick a design action, and get AI-generated HTML+CSS variants hot-swapped via the dev server's HMR.
 
 ## Prerequisites

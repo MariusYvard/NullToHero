@@ -1,3 +1,9 @@
+---
+name: information-architecture
+description: "IA is the invisible structure that determines whether users can find what they need. Navigation is the visible manifestation. Both must match the user's mental model, not the org."
+version: 1.6.0
+---
+
 # Information Architecture
 
 IA is the invisible structure that determines whether users can find what they need. Navigation is the visible manifestation. Both must match the user's mental model, not the org chart.

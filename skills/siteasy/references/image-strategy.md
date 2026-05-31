@@ -1,3 +1,9 @@
+---
+name: image-strategy
+description: "Image decisions determine Largest Contentful Paint, bandwidth cost, and perceived quality. The wrong format ships 800 KB where 80 KB would suffice. The wrong markup blocks."
+version: 1.6.0
+---
+
 # Image Strategy
 
 Image decisions determine Largest Contentful Paint, bandwidth cost, and perceived quality. The wrong format ships 800 KB where 80 KB would suffice. The wrong markup blocks rendering. This reference is the operational guide for choosing format, marking up responsive sources, prioritizing critical images, and lazy-loading the rest. Pair with [optimize.md](optimize.md), [parallax.md](parallax.md), and [responsive-design.md](responsive-design.md).

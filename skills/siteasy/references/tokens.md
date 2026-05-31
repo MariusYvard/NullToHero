@@ -1,3 +1,9 @@
+---
+name: tokens
+description: "Builds and audits design token systems. A proper token system is the foundation of every maintainable design - done right once, everything else becomes easy."
+version: 1.6.0
+---
+
 # Design Token System — Audit & Creation
 
 Builds and audits design token systems. A proper token system is the foundation of every maintainable design — done right once, everything else becomes easy.

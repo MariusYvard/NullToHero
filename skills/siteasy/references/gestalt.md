@@ -1,3 +1,9 @@
+---
+name: gestalt
+description: "The cognitive laws that govern how humans perceive visual groupings. Every layout choice activates one or more of these principles, whether the designer intends it or not. Use."
+version: 1.6.0
+---
+
 # Gestalt Principles
 
 The cognitive laws that govern how humans perceive visual groupings. Every layout choice activates one or more of these principles, whether the designer intends it or not. Use this reference whenever a composition feels cluttered, ambiguous, or arbitrary. Pair with [layout.md](layout.md), [cognitive-load.md](cognitive-load.md), and [shape.md](shape.md).

@@ -1,3 +1,9 @@
+---
+name: dark-mode-engineering
+description: "Complete technical reference for dark mode implementation. Load for /impeccable craft, /impeccable tokens, and any theming work."
+version: 1.6.0
+---
+
 # Dark Mode Engineering
 
 *Complete technical reference for dark mode implementation. Load for `/impeccable craft`, `/impeccable tokens`, and any theming work.*

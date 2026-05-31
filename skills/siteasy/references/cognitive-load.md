@@ -1,3 +1,9 @@
+---
+name: cognitive-load
+description: "Cognitive load is the total mental effort required to use an interface. Overloaded users make mistakes, get frustrated, and leave. This reference helps identify and fix cognitive."
+version: 1.6.0
+---
+
 # Cognitive Load Assessment
 
 Cognitive load is the total mental effort required to use an interface. Overloaded users make mistakes, get frustrated, and leave. This reference helps identify and fix cognitive overload.

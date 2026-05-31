@@ -1,3 +1,9 @@
+---
+name: distill
+description: "Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification."
+version: 1.6.0
+---
+
 Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification.
 
 

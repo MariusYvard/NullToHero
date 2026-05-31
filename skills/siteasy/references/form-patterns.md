@@ -1,3 +1,9 @@
+---
+name: form-patterns
+description: "Forms are the highest-friction surface of most products. Every additional field, every ambiguous label, every late-fire validation message increases drop-off. This reference."
+version: 1.6.0
+---
+
 # Form Patterns
 
 Forms are the highest-friction surface of most products. Every additional field, every ambiguous label, every late-fire validation message increases drop-off. This reference covers the canonical patterns: layout, labels, validation, autocomplete, error recovery, accessible authentication, and multi-step flows. Pair with [wcag-2-2.md](wcag-2-2.md), [accessibility-engineering.md](accessibility-engineering.md), and [interaction-design.md](interaction-design.md).

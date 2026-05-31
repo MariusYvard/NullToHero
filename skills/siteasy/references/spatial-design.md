@@ -1,3 +1,9 @@
+---
+name: spatial-design
+description: "8pt systems are too coarse - you'll frequently need 12px (between 8 and 16). Use 4pt for granularity: 4, 8, 12, 16, 24, 32, 48, 64, 96px."
+version: 1.6.0
+---
+
 # Spatial Design
 
 ## Spacing Systems

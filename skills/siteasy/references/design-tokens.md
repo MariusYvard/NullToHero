@@ -1,3 +1,9 @@
+---
+name: design-tokens
+description: "Reference for /impeccable tokens, /impeccable extract, and /impeccable document. A token system is the foundation of every maintainable design - build it right once, and."
+version: 1.6.0
+---
+
 # Design Tokens
 
 *Reference for `/impeccable tokens`, `/impeccable extract`, and `/impeccable document`. A token system is the foundation of every maintainable design — build it right once, and everything else follows.*

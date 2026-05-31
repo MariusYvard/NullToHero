@@ -1,3 +1,9 @@
+---
+name: typeset
+description: "Assess and improve typography that feels generic, inconsistent, or poorly structured - turning default-looking text into intentional, well-crafted type."
+version: 1.6.0
+---
+
 Assess and improve typography that feels generic, inconsistent, or poorly structured — turning default-looking text into intentional, well-crafted type.
 
 ---

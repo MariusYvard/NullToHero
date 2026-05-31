@@ -1,3 +1,9 @@
+---
+name: polish
+description: "Perform a meticulous final pass to catch all the small details that separate good work from great work. The difference between shipped and polished."
+version: 1.6.0
+---
+
 > **Additional context needed**: quality bar (MVP vs flagship).
 
 Perform a meticulous final pass to catch all the small details that separate good work from great work. The difference between shipped and polished.

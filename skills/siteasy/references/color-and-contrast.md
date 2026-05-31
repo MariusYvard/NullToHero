@@ -1,3 +1,9 @@
+---
+name: color-and-contrast
+description: "Stop using HSL. Use OKLCH (or LCH) instead. It's perceptually uniform, meaning equal steps in lightness look equal-unlike HSL where 50% lightness in yellow looks bright while 50%."
+version: 1.6.0
+---
+
 # Color & Contrast
 
 ## Color Spaces: Use OKLCH

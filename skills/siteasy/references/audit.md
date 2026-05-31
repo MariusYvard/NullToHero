@@ -1,3 +1,9 @@
+---
+name: audit
+description: "Run systematic technical quality checks and generate a comprehensive report. Don't fix issues - document them for other commands to address."
+version: 1.6.0
+---
+
 Run systematic **technical** quality checks and generate a comprehensive report. Don't fix issues — document them for other commands to address.
 
 This is a code-level audit, not a design critique. Check what's measurable and verifiable in the implementation.

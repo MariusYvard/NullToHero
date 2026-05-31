@@ -1,3 +1,9 @@
+---
+name: critique
+description: "Launch two independent assessments. Neither may see the other's output - this isolation is what makes the combined score honest. Running both in one head silently anchors them to."
+version: 1.6.0
+---
+
 > **Additional context needed**: what the interface is trying to accomplish.
 
 ### Gather Assessments

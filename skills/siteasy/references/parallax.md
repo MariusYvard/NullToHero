@@ -1,3 +1,9 @@
+---
+name: parallax
+description: "Depth illusion through differential scroll velocity. Use as the operational reference whenever a project considers parallax, scrollytelling, multi-layer depth, or scroll-driven."
+version: 1.6.0
+---
+
 # Parallax Engineering (2025 to 2026)
 
 Depth illusion through differential scroll velocity. Use as the operational reference whenever a project considers parallax, scrollytelling, multi-layer depth, or scroll-driven reveals. Pair with [animation-engineering.md](animation-engineering.md), [motion-design.md](motion-design.md), [overdrive.md](overdrive.md), and [accessibility-engineering.md](accessibility-engineering.md).

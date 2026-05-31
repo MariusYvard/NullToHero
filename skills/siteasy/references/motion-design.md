@@ -1,3 +1,9 @@
+---
+name: motion-design
+description: "Exit animations are faster than entrances - use ~75% of enter duration."
+version: 1.6.0
+---
+
 # Motion Design
 
 ## Duration: The 100/300/500 Rule

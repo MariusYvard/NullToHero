@@ -1,3 +1,9 @@
+---
+name: preview
+description: "Take real browser screenshots using Playwright, read them back visually, and fix what's wrong."
+version: 1.6.0
+---
+
 # Browser Visual Testing
 
 Take real browser screenshots using Playwright, read them back visually, and fix what's wrong.

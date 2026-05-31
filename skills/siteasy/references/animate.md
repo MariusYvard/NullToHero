@@ -1,3 +1,9 @@
+---
+name: animate
+description: "Analyze a feature and strategically add animations and micro-interactions that enhance understanding, provide feedback, and create delight."
+version: 1.6.0
+---
+
 > **Additional context needed**: performance constraints.
 
 Analyze a feature and strategically add animations and micro-interactions that enhance understanding, provide feedback, and create delight.

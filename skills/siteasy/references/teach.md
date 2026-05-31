@@ -1,3 +1,9 @@
+---
+name: teach
+description: "Gathers design context for a project and writes two complementary files at the project root:"
+version: 1.6.0
+---
+
 # Teach Flow
 
 Gathers design context for a project and writes two complementary files at the project root:

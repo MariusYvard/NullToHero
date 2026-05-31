@@ -1,3 +1,9 @@
+---
+name: accessibility-engineering
+description: "Deep reference for /impeccable audit, /impeccable harden, and any build work. Accessibility is not a checklist - it's a design constraint that improves every interface."
+version: 1.6.0
+---
+
 # Accessibility Engineering
 
 *Deep reference for `/impeccable audit`, `/impeccable harden`, and any build work. Accessibility is not a checklist — it's a design constraint that improves every interface.*

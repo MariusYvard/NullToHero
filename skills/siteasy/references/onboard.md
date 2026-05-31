@@ -1,3 +1,9 @@
+---
+name: onboard
+description: "Create or improve onboarding experiences that help users understand, adopt, and succeed with the product quickly."
+version: 1.6.0
+---
+
 > **Additional context needed**: the "aha moment" you want users to reach, and users' experience level.
 
 Create or improve onboarding experiences that help users understand, adopt, and succeed with the product quickly.

@@ -1,3 +1,9 @@
+---
+name: harden
+description: "Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs."
+version: 1.6.0
+---
+
 Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs.
 
 ## Assess Hardening Needs

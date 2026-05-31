@@ -1,3 +1,9 @@
+---
+name: journey-mapping
+description: "Methods for visualizing how users move through a product or service over time, what they think and feel at each step, and which moments break the experience. Use this reference."
+version: 1.6.0
+---
+
 # Journey Mapping
 
 Methods for visualizing how users move through a product or service over time, what they think and feel at each step, and which moments break the experience. Use this reference when stakeholders disagree on where the problems are, when a redesign touches more than one team, or when the gap between intention and reality needs to be made undeniable. Pair with [ux-research.md](ux-research.md), [personas.md](personas.md), and [shape.md](shape.md).

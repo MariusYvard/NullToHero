@@ -1,3 +1,9 @@
+---
+name: craft
+description: "Build a feature with impeccable UX and UI quality through a structured process: shape the design, land the visual direction, build real production code, then inspect and improve."
+version: 1.6.0
+---
+
 # Craft Flow
 
 Build a feature with impeccable UX and UI quality through a structured process: shape the design, land the visual direction, build real production code, then inspect and improve in-browser until the result meets a high-end studio bar.

@@ -1,3 +1,9 @@
+---
+name: bolder
+description: "Increase visual impact and personality in designs that are too safe, generic, or visually underwhelming, creating more engaging and memorable experiences."
+version: 1.6.0
+---
+
 Increase visual impact and personality in designs that are too safe, generic, or visually underwhelming, creating more engaging and memorable experiences.
 
 ---

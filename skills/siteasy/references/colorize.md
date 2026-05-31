@@ -1,3 +1,9 @@
+---
+name: colorize
+description: "Strategically introduce color to designs that are too monochromatic, gray, or lacking in visual warmth and personality."
+version: 1.6.0
+---
+
 > **Additional context needed**: existing brand colors.
 
 Strategically introduce color to designs that are too monochromatic, gray, or lacking in visual warmth and personality.

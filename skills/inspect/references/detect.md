@@ -1,3 +1,9 @@
+---
+name: detect
+description: "Run the deterministic impeccable detect CLI on code or a URL and present findings clearly."
+version: 1.6.0
+---
+
 # Anti-Pattern Detector
 
 Run the deterministic `impeccable detect` CLI on code or a URL and present findings clearly.

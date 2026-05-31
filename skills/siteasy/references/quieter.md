@@ -1,3 +1,9 @@
+---
+name: quieter
+description: "Reduce visual intensity in designs that are too bold, aggressive, or overstimulating, creating a more refined and approachable aesthetic without losing effectiveness."
+version: 1.6.0
+---
+
 Reduce visual intensity in designs that are too bold, aggressive, or overstimulating, creating a more refined and approachable aesthetic without losing effectiveness.
 
 ---

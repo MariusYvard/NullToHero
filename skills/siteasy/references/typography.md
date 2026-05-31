@@ -1,3 +1,9 @@
+---
+name: typography
+description: "Your line-height should be the base unit for ALL vertical spacing. If body text has line-height: 1.5 on 16px type (= 24px), spacing values should be multiples of 24px. This."
+version: 1.6.0
+---
+
 # Typography
 
 ## Classic Typography Principles
