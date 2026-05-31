@@ -43,6 +43,24 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 ---
 
+## What's new in 1.7.0
+
+### Real parallel SEO audit sub-agents
+
+`/seo audit` dispatches five specialist sub-agents (technical, content, schema, performance, GEO) in parallel through the Task tool, then aggregates them by weight, with an inline sequential fallback. The agents live in `agents/` as standard plugin agents.
+
+### Interactive live variant mode
+
+`/siteasy live` ships as a self-contained system: a helper daemon (HTTP and SSE), a browser picker client, git-aware source wrapping with a generated-file guard, an accept and carbonize flow, and CSP detection. No external dependency. Pick an element in the browser, choose an action, get three variants written into source, accept the one you keep.
+
+### Stack-aware design-system generator, wired in
+
+The 16-stack design knowledge base under `tools/design-system/` is now invocable from `/siteasy setup` to seed a DESIGN.md starting point.
+
+### Coherence and robustness
+
+Command references corrected throughout (`/siteasy <cmd>`, `/seo <sub>`), installers hardened, the reference index is committed and self-healing, the `/seo` skill declares its tools, both manifests gain `$schema`, and GitHub Actions are pinned to commit SHAs. The validator gained content-coherence checks (no stale command references, referenced scripts exist, declared agents are dispatched) and now runs 255 checks.
+
 ## What's new in 1.6.0
 
 ### Modern CSS coverage
@@ -109,7 +127,7 @@ Build, polish, and ship production-grade interfaces.
 | `document` | Generate DESIGN.md from existing project code |
 | `extract [target]` | Pull reusable tokens and components into a design system |
 | `tokens [project]` | Audit or create a two-layer CSS token system |
-| `live [target]` | Interactive variant mode (requires running dev server) |
+| `live [target]` | Interactive in-browser variant mode (bundled helper daemon plus picker) |
 
 ---
 
@@ -262,6 +280,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.7.0** (June 2026): real parallel SEO audit sub-agents, self-contained `/siteasy live` variant mode, design-system generator wired into setup, command-reference coherence, installer and supply-chain hardening, validator at 255 checks.
 - **1.6.0** (May 2026) — Modern CSS (View Transitions, container queries, `:has()`, `color-mix()`), full reference frontmatter (0 validator warnings), release-pipeline fixes (package.json tracking, changelog extraction), impeccable attribution.
 - **1.5.0** (May 2026) — Design system generator (16 stacks), searchable reference index, priority/severity model, validator upgrades, 82 reference docs.
 - **1.4.0** (May 2026) — Group C: parallel sub-agents for `/seo audit` (5 agent files), `/seo report` command (Markdown + PDF export), standardized ACTION-PLAN template across all commands, file integrity checks in validator.
