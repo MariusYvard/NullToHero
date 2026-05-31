@@ -1,3 +1,9 @@
+---
+name: css-architecture
+description: "Modern CSS features that fundamentally change how you write styles. Load for /impeccable craft, /impeccable extract, and any work touching a project's CSS foundation."
+version: 1.6.0
+---
+
 # CSS Architecture
 
 *Modern CSS features that fundamentally change how you write styles. Load for `/impeccable craft`, `/impeccable extract`, and any work touching a project's CSS foundation.*
@@ -409,3 +415,29 @@ Design system with themes:
   → Two-layer token architecture (primitive → semantic)
   → Dark mode via semantic layer override only
 ```
+
+## Parent and relational selection with :has()
+
+`:has()` styles an element based on its descendants or siblings, removing a large class of state-tracking JavaScript.
+
+```css
+.field:has(input:invalid) { border-color: var(--color-danger); }
+.card:has(img) { grid-template-rows: auto 1fr; }   /* only cards that contain an image */
+label:has(+ input:focus) { color: var(--color-accent); } /* sibling-driven */
+```
+
+Keep selectors shallow for performance and never depend on `:has()` for critical layout without a sensible base style.
+
+## Color manipulation with color-mix()
+
+Derive tints, shades, and state colors from one source token instead of hand-picking hex values. This keeps a palette coherent and themeable.
+
+```css
+:root { --brand: oklch(0.62 0.17 250); }
+
+.button        { background: var(--brand); }
+.button:hover  { background: color-mix(in oklch, var(--brand) 88%, black); }
+.button-subtle { background: color-mix(in oklch, var(--brand) 12%, white); }
+```
+
+Mix in `oklch` or `srgb` depending on the intent: `oklch` keeps perceived lightness even across hues. Pair with `@property` tokens when the mixed value must animate.

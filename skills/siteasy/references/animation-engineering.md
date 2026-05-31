@@ -1,3 +1,9 @@
+---
+name: animation-engineering
+description: "Deep technical reference for motion. Load alongside motion-design.md for /impeccable animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
+version: 1.6.0
+---
+
 # Animation Engineering
 
 *Deep technical reference for motion. Load alongside [motion-design.md](motion-design.md) for `/impeccable animate` work, and [parallax.md](parallax.md) for scroll-driven multi-layer compositions. Based on Emil Kowalski's design engineering philosophy, see [animations.dev](https://animations.dev/).*
@@ -338,3 +344,40 @@ When reviewing motion in any UI:
 | Framer `x`/`y` props under load | Use `transform: "translateX()"` for GPU acceleration |
 | Same enter/exit speed | Exit at ~75% of enter duration |
 | All elements appear at once | Add stagger (30–80ms between items) |
+
+## View Transitions API
+
+Animate between two DOM states (or two pages) without manual FLIP bookkeeping. The browser snapshots before and after, then cross-fades or morphs matched elements.
+
+Same-document (SPA-style state change):
+
+```js
+if (document.startViewTransition) {
+  document.startViewTransition(() => updateTheDOM());
+} else {
+  updateTheDOM(); // graceful fallback, no animation
+}
+```
+
+Cross-document (multi-page, no JS) opts in via CSS:
+
+```css
+@view-transition { navigation: auto; }
+```
+
+Match elements across states so the browser tweens position and size instead of cross-fading:
+
+```css
+.card { view-transition-name: hero-card; } /* must be unique per snapshot */
+```
+
+Tune the morph; always gate motion:
+
+```css
+::view-transition-group(hero-card) { animation-duration: 250ms; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) { animation: none; }
+}
+```
+
+Rules: a `view-transition-name` must be unique in a given snapshot. Keep transitions under 300ms. Feature-detect (`document.startViewTransition`) and fall back to an instant update. Reduced motion disables the animation, never the state change.

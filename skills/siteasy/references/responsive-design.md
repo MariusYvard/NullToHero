@@ -1,3 +1,9 @@
+---
+name: responsive-design
+description: "Start with base styles for mobile, use min-width queries to layer complexity. Desktop-first (max-width) means mobile loads unnecessary styles first."
+version: 1.6.0
+---
+
 # Responsive Design
 
 ## Mobile-First: Write It Right
@@ -112,3 +118,27 @@ DevTools device emulation is useful for layout but misses:
 ---
 
 **Avoid**: Desktop-first design. Device detection instead of feature detection. Separate mobile/desktop codebases. Ignoring tablet and landscape. Assuming all mobile devices are powerful.
+
+---
+
+## Container queries
+
+Media queries respond to the viewport. Container queries respond to the component's own available width, so the same component adapts correctly in a sidebar, a grid cell, or a full-bleed section without viewport-specific overrides.
+
+```css
+.card-list { container-type: inline-size; container-name: cards; }
+
+.card { display: grid; gap: 0.5rem; }
+
+@container cards (min-width: 30rem) {
+  .card { grid-template-columns: 8rem 1fr; } /* switch to horizontal when the container is wide */
+}
+```
+
+Container query length units (`cqi`, `cqw`, `cqb`) size type and spacing against the container:
+
+```css
+.card h3 { font-size: clamp(1rem, 4cqi, 1.5rem); }
+```
+
+Use container queries for reusable components placed in varying contexts. Keep media queries for page-level layout (global breakpoints, overall grid). Feature support is baseline across current browsers; for old engines the unqueried base styles remain the fallback.
