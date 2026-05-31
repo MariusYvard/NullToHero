@@ -1,7 +1,7 @@
 ﻿---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.5.0
+version: 1.5.1
 user-invocable: true
 argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
 license: "Apache-2.0"
