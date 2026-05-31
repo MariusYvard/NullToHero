@@ -1,13 +1,8 @@
 ---
 name: seo-agent-schema
-description: >
-  Sub-agent for the Schema markup dimension of /seo audit.
-  Detects existing JSON-LD, validates required and recommended properties,
-  checks for rich result eligibility, and flags critical errors.
-version: 1.0.0
-agent: true
-dimension: schema
-weight: 15
+description: Sub-agent for the Schema markup dimension of /seo audit. Detects existing JSON-LD, validates required and recommended properties, checks for rich result eligibility, and flags critical errors.
+model: sonnet
+tools: Read, Grep, Glob, WebFetch, Bash
 ---
 
 # Schema Markup Sub-Agent

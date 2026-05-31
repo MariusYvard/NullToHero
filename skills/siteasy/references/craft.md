@@ -37,17 +37,17 @@ Do not let generated mockups replace interface structure, copy, accessibility, r
 
 ## Step 1: Shape the Design
 
-Run /impeccable shape, passing along whatever feature description the user provided.
+Run /siteasy plan, passing along whatever feature description the user provided.
 
 Wait for the design brief to be fully confirmed by the user before proceeding. The brief is your blueprint, and every implementation decision should trace back to it.
 
 If this craft run resumed after `teach` created PRODUCT.md, run shape now. Do not treat the teach interview, PRODUCT.md, or a summary of project context as a substitute for shape. Shape is task-specific and must cover scope, content/states, visual direction, constraints, anti-goals, probes when applicable, and explicit brief confirmation.
 
-If the user has already run /impeccable shape and has a confirmed design brief, skip this step and use the existing brief.
+If the user has already run /siteasy plan and has a confirmed design brief, skip this step and use the existing brief.
 
 ## Step 2: Load References
 
-Based on the design brief's "Recommended References" section, consult the relevant impeccable reference files. At minimum, always consult:
+Based on the design brief's "Recommended References" section, consult the relevant siteasy reference files. At minimum, always consult:
 
 - [spatial-design.md](spatial-design.md) for layout and spacing
 - [typography.md](typography.md) for type hierarchy
@@ -178,7 +178,7 @@ After the first browser pass, write a short critique for yourself and patch the 
 1. **Does it match the brief?** Compare the live result against every section of the design brief. Fix discrepancies.
 2. **Does it match the approved mock?** Compare screenshots against the mock fidelity inventory: hero silhouette, major motifs, imagery, nav/CTA, section sequence, density, color/materials, and second-fold substance. Missing major ingredients are P0 defects.
 3. **Does it pass the AI slop test?** If someone saw this and said "AI made this," would they believe it immediately? If yes, it needs more design intention.
-4. **Check against impeccable's DON'T guidelines.** Fix any anti-pattern violations.
+4. **Check against siteasy's DON'T guidelines.** Fix any anti-pattern violations.
 5. **Check every state.** Navigate through empty, error, loading, and edge case states. Each one should feel intentional, not like an afterthought.
 6. **Check responsive behavior.** The design should adapt compositionally, not merely shrink.
 7. **Check craft details.** Spacing consistency, optical alignment, type hierarchy, color contrast, image quality, icon coherence, interactive feedback, motion timing, and focus treatment.

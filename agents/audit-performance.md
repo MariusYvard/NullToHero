@@ -1,13 +1,8 @@
 ---
 name: seo-agent-performance
-description: >
-  Sub-agent for the Performance dimension of /seo audit.
-  Evaluates page speed signals, image optimization, font loading,
-  render-blocking resources, and Core Web Vitals readiness.
-version: 1.0.0
-agent: true
-dimension: performance
-weight: 15
+description: Sub-agent for the Performance dimension of /seo audit. Evaluates page speed signals, image optimization, font loading, render-blocking resources, and Core Web Vitals readiness.
+model: sonnet
+tools: Read, Grep, Glob, WebFetch, Bash
 ---
 
 # Performance Sub-Agent

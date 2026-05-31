@@ -4,6 +4,7 @@
 // docs whole. Pure Node standard library, no dependencies.
 // Usage: node tools/search-references.mjs "<query>" [--skill seo|siteasy|inspect] [--max 5]
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -23,12 +24,19 @@ if (!terms.length) {
 }
 const q = terms.join(" ").toLowerCase().match(/[a-z0-9]+/g) || [];
 
+const indexPath = join(root, "tools", "reference-index.json");
 let index;
 try {
-  index = JSON.parse(readFileSync(join(root, "tools", "reference-index.json"), "utf8"));
+  index = JSON.parse(readFileSync(indexPath, "utf8"));
 } catch {
-  console.error("Index missing. Run: node tools/build-index.mjs");
-  process.exit(1);
+  // Auto-build once if the index is missing (e.g. fresh install).
+  try {
+    execFileSync(process.execPath, [join(root, "tools", "build-index.mjs")], { stdio: "ignore" });
+    index = JSON.parse(readFileSync(indexPath, "utf8"));
+  } catch {
+    console.error("Index missing and auto-build failed. Run: node tools/build-index.mjs");
+    process.exit(1);
+  }
 }
 
 const scored = index

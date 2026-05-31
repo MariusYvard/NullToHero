@@ -25,7 +25,7 @@ const path = require("path");
 const ROOT       = path.resolve(__dirname, "..");
 const SEO_SKILL  = path.join(ROOT, "skills", "seo", "SKILL.md");
 const SEO_REFS   = path.join(ROOT, "skills", "seo", "references");
-const SEO_AGENTS = path.join(ROOT, "skills", "seo", "agents");
+const SEO_AGENTS = path.join(ROOT, "agents");
 
 let errors   = 0;
 let warnings = 0;
@@ -105,11 +105,11 @@ const FILE_INTEGRITY = {
   "skills/seo/references/ecommerce.md":         { minLines:  80 },
   "skills/seo/references/report.md":            { minLines:  80 },
   "skills/seo/references/action-plan.md":       { minLines:  80 },
-  "skills/seo/agents/audit-technical.md":       { minLines:  60 },
-  "skills/seo/agents/audit-content.md":         { minLines:  60 },
-  "skills/seo/agents/audit-schema.md":          { minLines:  60 },
-  "skills/seo/agents/audit-geo.md":             { minLines:  60 },
-  "skills/seo/agents/audit-performance.md":     { minLines:  60 },
+  "agents/audit-technical.md":       { minLines:  60 },
+  "agents/audit-content.md":         { minLines:  60 },
+  "agents/audit-schema.md":          { minLines:  60 },
+  "agents/audit-geo.md":             { minLines:  60 },
+  "agents/audit-performance.md":     { minLines:  60 },
   // ── siteasy ──────────────────────────────────────────────────────────────
   "skills/siteasy/SKILL.md":                                { minLines: 140 },  // actual: 153
   "skills/siteasy/references/live.md":                      { minLines: 520 },  // actual: 546
@@ -254,9 +254,12 @@ if (!fs.existsSync(SEO_AGENTS)) {
     const content = readFile(agentPath);
     const fm = parseFrontmatter(content);
     if (!fm) { fail(`agents/${file}: missing frontmatter`); return; }
-    if (!fm.agent || fm.agent !== "true") warn(`agents/${file}: missing 'agent: true'`);
-    if (!fm.dimension) warn(`agents/${file}: missing 'dimension' field`);
-    pass(`agents/${file}: valid (dimension: ${fm.dimension || "?"})`);
+    ["name", "description", "model"].forEach(field => {
+      if (!fm[field]) fail(`agents/${file}: missing standard plugin-agent field '${field}'`);
+    });
+    if (fm.name && fm.description && fm.model) {
+      pass(`agents/${file}: valid plugin agent (${fm.name}, model: ${fm.model})`);
+    }
   });
 }
 
@@ -282,7 +285,7 @@ Object.entries(FILE_INTEGRITY).forEach(([relPath, { minLines }]) => {
 
 section("7. seo command count");
 
-const seoExpectedMinimum = 19; // v1.5.0
+const seoExpectedMinimum = 19; // minimum floor
 const seoActual = Object.keys(commandReferenceMap).length;
 if (seoActual >= seoExpectedMinimum) {
   pass(`${seoActual} commands declared (minimum: ${seoExpectedMinimum})`);
@@ -370,7 +373,7 @@ if (Object.keys(siteasyCmdRefMap).length === 0) {
 
 section("10. siteasy command count");
 
-const siteasyCmdMinimum = 25; // v1.5.0
+const siteasyCmdMinimum = 25; // minimum floor
 const siteasyCmdCount   = Object.keys(siteasyCmdRefMap).length;
 if (siteasyCmdCount >= siteasyCmdMinimum) {
   pass(`siteasy: ${siteasyCmdCount} commands declared (minimum: ${siteasyCmdMinimum})`);
@@ -494,6 +497,87 @@ function scanDir(dir, root) {
 
 scanDir(path.join(ROOT, "tools"), ROOT);
 pass("Large-file scan complete");
+
+// ─── Check 14: no stale /impeccable command references ────────────────────────
+
+section("14. No stale /impeccable command references in skills");
+
+function walkMd(dir, acc) {
+  if (!fs.existsSync(dir)) return acc;
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    if (fs.statSync(full).isDirectory()) walkMd(full, acc);
+    else if (name.endsWith(".md")) acc.push(full);
+  }
+  return acc;
+}
+
+const SKILLS_DIR = path.join(ROOT, "skills");
+const allSkillMd = walkMd(SKILLS_DIR, []);
+let impeccableHits = 0;
+allSkillMd.forEach(f => {
+  const content = readFile(f) || "";
+  content.split("\n").forEach((line, i) => {
+    if (/\/impeccable\b/.test(line)) {
+      const rel = f.slice(ROOT.length + 1).split("\\").join("/");
+      fail(`${rel}:${i + 1}: stale /impeccable command reference — use /siteasy`);
+      impeccableHits++;
+    }
+  });
+});
+if (impeccableHits === 0) pass("No /impeccable command references in skills/");
+
+// ─── Check 15: referenced helper scripts exist ────────────────────────────────
+
+section("15. Referenced helper scripts exist on disk");
+
+const scriptRefRe = /(?:node|python3)\s+(?:"?\$\{CLAUDE_PLUGIN_ROOT\}\/)?([^"`\s)]+\.(?:mjs|js|py))/g;
+let missingScripts = 0;
+let scriptRefs = 0;
+allSkillMd.forEach(f => {
+  const content = readFile(f) || "";
+  let m;
+  while ((m = scriptRefRe.exec(content)) !== null) {
+    let rel = m[1];
+    if (rel.startsWith("./")) rel = rel.slice(2);
+    // resolve plugin-root-relative paths only (skip bare names / node_modules tools)
+    if (!rel.includes("/")) continue;
+    if (rel.startsWith(".claude/")) {
+      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+      fail(`${relFile}: script path "${rel}" assumes external .claude/ layout — use \${CLAUDE_PLUGIN_ROOT}`);
+      missingScripts++;
+      continue;
+    }
+    scriptRefs++;
+    if (!fs.existsSync(path.join(ROOT, rel))) {
+      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+      fail(`${relFile}: referenced script not found: ${rel}`);
+      missingScripts++;
+    }
+  }
+});
+if (missingScripts === 0) pass(`All ${scriptRefs} referenced helper scripts exist`);
+
+// ─── Check 16: declared agents are actually dispatched ────────────────────────
+
+section("16. SEO audit agents are dispatched, not orphaned");
+
+if (fs.existsSync(SEO_AGENTS)) {
+  const agentFiles = fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md"));
+  const auditRef = readFile(path.join(SEO_REFS, "audit.md")) || "";
+  let orphan = 0;
+  agentFiles.forEach(file => {
+    const fm = parseFrontmatter(readFile(path.join(SEO_AGENTS, file)) || "");
+    const agentName = fm && fm.name;
+    if (agentName && !auditRef.includes(agentName)) {
+      fail(`agents/${file}: agent '${agentName}' is never referenced by references/audit.md (orphaned)`);
+      orphan++;
+    }
+  });
+  if (orphan === 0 && agentFiles.length > 0) {
+    pass(`All ${agentFiles.length} audit agents are dispatched by audit.md`);
+  }
+}
 
 // ─── Summary ──────────────────────────────────────────────────────────────────
 

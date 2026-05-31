@@ -1,12 +1,12 @@
 ---
 name: animation-engineering
-description: "Deep technical reference for motion. Load alongside motion-design.md for /impeccable animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
+description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
 version: 1.6.0
 ---
 
 # Animation Engineering
 
-*Deep technical reference for motion. Load alongside [motion-design.md](motion-design.md) for `/impeccable animate` work, and [parallax.md](parallax.md) for scroll-driven multi-layer compositions. Based on Emil Kowalski's design engineering philosophy, see [animations.dev](https://animations.dev/).*
+*Deep technical reference for motion. Load alongside [motion-design.md](motion-design.md) for `/siteasy animate` work, and [parallax.md](parallax.md) for scroll-driven multi-layer compositions. Based on Emil Kowalski's design engineering philosophy, see [animations.dev](https://animations.dev/).*
 
 ---
 

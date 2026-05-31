@@ -1,12 +1,12 @@
 ---
 name: component-patterns
-description: "Architecture reference for /impeccable extract, /impeccable craft, and component-heavy design systems. How to design component APIs that are composable, accessible, and don't."
+description: "Architecture reference for /siteasy extract, /siteasy build, and component-heavy design systems. How to design component APIs that are composable, accessible, and don't."
 version: 1.6.0
 ---
 
 # Component Patterns
 
-*Architecture reference for `/impeccable extract`, `/impeccable craft`, and component-heavy design systems. How to design component APIs that are composable, accessible, and don't fight consumers.*
+*Architecture reference for `/siteasy extract`, `/siteasy build`, and component-heavy design systems. How to design component APIs that are composable, accessible, and don't fight consumers.*
 
 ---
 

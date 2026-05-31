@@ -11,6 +11,34 @@ Format: [Semantic Versioning](https://semver.org)
 
 ---
 
+## [1.7.0] — 2026-06-01
+
+### Fixed
+
+- siteasy: 131 stale `/impeccable` command references across 15 reference files now point to the real `/siteasy` commands, with forked verbs remapped (craft→build, shape→plan, teach→setup, harden/optimize→launch, quieter/distill→simplify, bolder/colorize→amplify)
+- seo: `/seo-technical` style cross-references corrected to `/seo technical`
+- install.ps1: marketplace install is detected via `$LASTEXITCODE` instead of an unconditional success flag; command count corrected from 18 to 19
+- install.sh + install.ps1: the local fallback now uses `claude plugin marketplace add` + install instead of the undocumented `claude plugin add`
+- design_system.py: project and page slugs are sanitized against path traversal
+
+### Added
+
+- seo: the five audit specialists are real plugin agents under `agents/`, dispatched in parallel by `/seo audit` via the Task tool (with an inline sequential fallback)
+- siteasy: stack-aware design-system generator wired into `/siteasy setup` (16 stacks, curated color/typography/landing data)
+- siteasy: self-contained live variant mode (`live.mjs`, `live-poll.mjs`, `live-wrap.mjs`, `live-server.mjs`, `live-accept.mjs`, `live-inject.mjs`, `detect-csp.mjs`, `live.js`) replacing the broken external script references
+- siteasy: `load-context.mjs` (PRODUCT.md/DESIGN.md loader with legacy `.impeccable.md` migration), unblocking `/siteasy setup` and `/siteasy document`
+- `tools/reference-index.json` is now committed, and `search-references.mjs` auto-builds it when missing
+- both manifests gain `$schema`; GitHub Actions pinned to commit SHAs
+- ATTRIBUTION.md credits impeccable as adapted prior work
+- validate.js: new content-coherence checks (no stale `/impeccable` refs, referenced scripts exist, declared agents are dispatched); now 255 checks
+
+### Changed
+
+- seo SKILL.md declares `allowed-tools`
+- agents moved from `skills/seo/agents/` to plugin-root `agents/` with standard plugin-agent frontmatter
+
+---
+
 ## [1.6.0] — 2026-05-31
 
 ### Added

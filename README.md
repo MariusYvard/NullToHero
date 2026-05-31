@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.6.0** · 3 skills · 47 commands · 82 reference docs · parallel audit sub-agents · report export · deterministic anti-pattern detector
+> **v1.7.0** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 

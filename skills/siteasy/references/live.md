@@ -6,6 +6,8 @@ version: 1.6.0
 
 Interactive live variant mode: select elements in the browser, pick a design action, and get AI-generated HTML+CSS variants hot-swapped via the dev server's HMR.
 
+>  **Implementation note.** Live mode ships as self-contained Node scripts under `skills/siteasy/scripts/` (`live.mjs`, `live-poll.mjs`, `live-wrap.mjs`, `live-server.mjs`, `live-accept.mjs`, `live-inject.mjs`, `detect-csp.mjs`) plus the browser client `live.js`. The helper writes its config and runtime state under `.siteasy-live/` at the project root. Protocol attributes are `data-siteasy-*`. This build sends comments and strokes as structured JSON only; it does not rasterize an annotated screenshot, so `event.screenshotPath` is never set. Work from `element.outerHTML`, the computed styles, the freeform prompt, and the structured `comments` / `strokes`.
+
 ## Prerequisites
 
 A running dev server with hot module replacement (Vite, Next.js, Bun, etc.), OR a static HTML file open in the browser.
@@ -32,10 +34,10 @@ Chat is overhead. No recap, no tutorial output, no pasting PRODUCT / DESIGN bodi
 ## Start
 
 ```bash
-node .claude/skills/impeccable/scripts/live.mjs
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live.mjs"
 ```
 
-Output JSON: `{ ok, serverPort, serverToken, pageFiles, hasProduct, product, productPath, hasDesign, design, designPath, migrated }`. `pageFiles` is the list of HTML entries the live script was injected into. Keep PRODUCT.md and DESIGN.md in mind for variant generation — **DESIGN.md wins on visual decisions; PRODUCT.md wins on strategic/voice decisions.** If `migrated: true`, the loader auto-renamed legacy `.impeccable.md` to `PRODUCT.md`; mention this once and suggest `/impeccable document` for the matching DESIGN.md.
+Output JSON: `{ ok, serverPort, serverToken, pageFiles, hasProduct, product, productPath, hasDesign, design, designPath, migrated }`. `pageFiles` is the list of HTML entries the live script was injected into. Keep PRODUCT.md and DESIGN.md in mind for variant generation — **DESIGN.md wins on visual decisions; PRODUCT.md wins on strategic/voice decisions.** If `migrated: true`, the loader auto-renamed legacy `.impeccable.md` to `PRODUCT.md`; mention this once and suggest `/siteasy document` for the matching DESIGN.md.
 
 `serverPort` and `serverToken` belong to the small **NullToHero live helper** HTTP server (serves `/live.js`, SSE, and `/poll`). That port is **not** your dev server and is usually not the URL you open to view the app. The browser page is whatever origin serves one of the `pageFiles` entries (Vite / Next / Bun / tunnel / LAN hostname).
 
@@ -45,7 +47,7 @@ If output is `{ ok: false, error: "config_missing" | "config_invalid", path }`, 
 
 ```
 LOOP:
-  node .claude/skills/impeccable/scripts/live-poll.mjs   # default long timeout; no --timeout=
+  node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live-poll.mjs"   # default long timeout; no --timeout=
   Read JSON; dispatch on "type"
 
   "generate"  → Handle Generate; reply done; LOOP
@@ -80,7 +82,7 @@ Reading annotations precisely:
 ### 2. Wrap the element
 
 ```bash
-node .claude/skills/impeccable/scripts/live-wrap.mjs --id EVENT_ID --count EVENT_COUNT --element-id "ELEMENT_ID" --classes "class1,class2" --tag "div" --text "TEXT_SNIPPET"
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live-wrap.mjs" --id EVENT_ID --count EVENT_COUNT --element-id "ELEMENT_ID" --classes "class1,class2" --tag "div" --text "TEXT_SNIPPET"
 ```
 
 Flag mapping — keep them separate, don't collapse into `--query`:
@@ -106,7 +108,7 @@ All three carry `fallback: "agent-driven"`. Follow **Handle fallback** below.
 
 ### 3. Load the action's reference
 
-If `event.action` is `impeccable` (the default freeform action), use SKILL.md's shared laws plus the loaded register reference (`brand.md` or `product.md`). Do not load a sub-command reference. **Freeform is not a pass to skip parameters:** you still follow the composition budget and the freeform bias in **§7 Parameters** below. Sub-command files list MUST-have signature knobs; freeform has no such file, so sizing knobs from surface weight and primary axes is entirely on you.
+If `event.action` is `siteasy` (the default freeform action), use SKILL.md's shared laws plus the loaded register reference (`brand.md` or `product.md`). Do not load a sub-command reference. **Freeform is not a pass to skip parameters:** you still follow the composition budget and the freeform bias in **§7 Parameters** below. Sub-command files list MUST-have signature knobs; freeform has no such file, so sizing knobs from surface weight and primary axes is entirely on you.
 
 Any other `event.action` (`bolder`, `quieter`, `distill`, `polish`, `typeset`, `colorize`, `layout`, `adapt`, `animate`, `delight`, `overdrive`): Read `reference/<action>.md` before planning. Each sub-command encodes a specific discipline; skipping its reference produces generic output. Those files may require specific params; layer them on top of the §7 budget, not instead of it.
 
@@ -114,7 +116,7 @@ Any other `event.action` (`bolder`, `quieter`, `distill`, `polish`, `typeset`, `
 
 Before writing a single line of code, name each variant.
 
-**For freeform (`action` is `impeccable`, or the user supplied a free prompt):** each variant must anchor to a different **archetype** — a real-world design analogue specific enough to be recognizable at a glance. Not "modern landing page." Not "minimal product hero." Examples:
+**For freeform (`action` is `siteasy`, or the user supplied a free prompt):** each variant must anchor to a different **archetype** — a real-world design analogue specific enough to be recognizable at a glance. Not "modern landing page." Not "minimal product hero." Examples:
 
 - *Broadsheet masthead with rule-divided columns* (think NYT print edition)
 - *Klim Type Foundry specimen page* (dense, technical, catalog-driven)
@@ -169,17 +171,17 @@ Write CSS + all variants in ONE edit at the `insertLine` reported by `wrap`. Col
 
 ```html
 <!-- Variants: insert below this line -->
-<style data-impeccable-css="SESSION_ID">
-  @scope ([data-impeccable-variant="1"]) { ... }
-  @scope ([data-impeccable-variant="2"]) { ... }
+<style data-siteasy-css="SESSION_ID">
+  @scope ([data-siteasy-variant="1"]) { ... }
+  @scope ([data-siteasy-variant="2"]) { ... }
 </style>
-<div data-impeccable-variant="1">
+<div data-siteasy-variant="1">
   <!-- variant 1: full element replacement (single top-level element) -->
 </div>
-<div data-impeccable-variant="2" style="display: none">
+<div data-siteasy-variant="2" style="display: none">
   <!-- variant 2: full element replacement -->
 </div>
-<div data-impeccable-variant="3" style="display: none">
+<div data-siteasy-variant="3" style="display: none">
   <!-- variant 3: full element replacement -->
 </div>
 ```
@@ -190,24 +192,24 @@ The first variant has no `display: none` (visible by default). All others do. If
 
 One edit, all variants — the browser's MutationObserver picks everything up in one pass.
 
-**Author every `:scope` rule with a descendant combinator.** The `@scope` boundary is the **variant wrapper `<div data-impeccable-variant="N">`**, not the element you're designing. A bare `:scope { background: cream; }` styles the wrapper, not the inner replacement, so the cream lands on a `display: contents` shell while the actual element keeps page defaults. Always step in: `:scope > .card`, `:scope > section`, `:scope .hero-title`, etc. The fake test agent's CSS in `tests/live-e2e/agent.mjs` is a faithful template — every rule starts `:scope > ...`.
+**Author every `:scope` rule with a descendant combinator.** The `@scope` boundary is the **variant wrapper `<div data-siteasy-variant="N">`**, not the element you're designing. A bare `:scope { background: cream; }` styles the wrapper, not the inner replacement, so the cream lands on a `display: contents` shell while the actual element keeps page defaults. Always step in: `:scope > .card`, `:scope > section`, `:scope .hero-title`, etc. Every rule must start `:scope > ...` so the boundary lands on the inner replacement, not the wrapper shell.
 
-**JSX / TSX target files.** Wrap `<style>` content in a template literal so the CSS `{` / `}` aren't parsed as JSX expressions, and use `className=` / `style={{…}}` on every variant element. Keep `data-impeccable-*` attributes as-is — they're plain strings:
+**JSX / TSX target files.** Wrap `<style>` content in a template literal so the CSS `{` / `}` aren't parsed as JSX expressions, and use `className=` / `style={{…}}` on every variant element. Keep `data-siteasy-*` attributes as-is — they're plain strings:
 
 ```tsx
-<style data-impeccable-css="SESSION_ID">{`
-  @scope ([data-impeccable-variant="1"]) { ... }
-  @scope ([data-impeccable-variant="2"]) { ... }
+<style data-siteasy-css="SESSION_ID">{`
+  @scope ([data-siteasy-variant="1"]) { ... }
+  @scope ([data-siteasy-variant="2"]) { ... }
 `}</style>
-<div data-impeccable-variant="1">
+<div data-siteasy-variant="1">
   {/* variant 1 */}
 </div>
-<div data-impeccable-variant="2" style={{ display: 'none' }}>
+<div data-siteasy-variant="2" style={{ display: 'none' }}>
   {/* variant 2 */}
 </div>
 ```
 
-The wrap script already gives you a single-rooted JSX wrapper — a `<div data-impeccable-variants="…">` outer element with the marker comments tucked inside. Drop the variants block above into the "Variants: insert below this line" comment and the source stays valid TSX.
+The wrap script already gives you a single-rooted JSX wrapper — a `<div data-siteasy-variants="…">` outer element with the marker comments tucked inside. Drop the variants block above into the "Variants: insert below this line" comment and the source stays valid TSX.
 
 ### 7. Parameters (composition-sized, 0–4 per variant)
 
@@ -217,7 +219,7 @@ Each variant can expose **coarse** knobs alongside the full HTML/CSS replacement
 
 **When to add.** As soon as the variant’s scoped CSS has a meaningful continuous or stepped axis: density, color amount, type scale, motion intensity, column weight, and so on. If you can imagine the user muttering “a bit tighter” or “a touch more accent” **without** wanting a full regeneration, wire that axis. **Not** micro-margins or one-off nudges; those are not parameters.
 
-**Freeform (`action` is `impeccable`) bias.** You did not load `reference/bolder.md` (etc.), so you must **choose** 1–2 signature-like axes yourself. Prefer knobs that sit on the same dimensions as your three directions (e.g. all three riffs on editorial density → expose `density` or a `steps` “air / snug / packed”; two directions differ mostly in chroma → add `color-amount`). A hero, section, or other **large** surface that ships with **0** params needs a one-line reason in your head (e.g. “truly a fixed-point A/B/C comparison, no shared dial”), not a default habit.
+**Freeform (`action` is `siteasy`) bias.** You did not load `reference/bolder.md` (etc.), so you must **choose** 1–2 signature-like axes yourself. Prefer knobs that sit on the same dimensions as your three directions (e.g. all three riffs on editorial density → expose `density` or a `steps` “air / snug / packed”; two directions differ mostly in chroma → add `color-amount`). A hero, section, or other **large** surface that ships with **0** params needs a one-line reason in your head (e.g. “truly a fixed-point A/B/C comparison, no shared dial”), not a default habit.
 
 **Budget scales with the element's visual weight, not token budget.** Knobs need real estate to read as tunable; three sliders on a single control are noise.
 
@@ -233,7 +235,7 @@ Each variant can expose **coarse** knobs alongside the full HTML/CSS replacement
 **How to declare.** Put a JSON manifest on the variant wrapper:
 
 ```html
-<div data-impeccable-variant="1" data-impeccable-params='[
+<div data-siteasy-variant="1" data-siteasy-params='[
   {"id":"color-amount","kind":"range","min":0,"max":1,"step":0.05,"default":0.5,"label":"Color amount"},
   {"id":"density","kind":"steps","default":"snug","label":"Density","options":[
     {"value":"airy","label":"Airy"},
@@ -259,7 +261,7 @@ Each variant can expose **coarse** knobs alongside the full HTML/CSS replacement
 **On accept**, the browser sends the user's current values in the accept event. `live-accept.mjs` writes them as a sibling comment:
 
 ```html
-<!-- impeccable-param-values SESSION_ID: {"color-amount":0.7,"density":"packed"} -->
+<!-- siteasy-param-values SESSION_ID: {"color-amount":0.7,"density":"packed"} -->
 ```
 
 The carbonize cleanup step (see below) reads that comment and bakes the chosen values into the final CSS. For `steps`/`toggle` attribute selectors: keep only the branch matching the chosen value, drop the others, collapse `:scope[data-p-density="packed"] .grid` to a semantic class rule. For `range` vars: either substitute the literal or keep the var with the chosen value as its new default.
@@ -267,7 +269,7 @@ The carbonize cleanup step (see below) reads that comment and bakes the chosen v
 ### 8. Signal done
 
 ```bash
-node .claude/skills/impeccable/scripts/live-poll.mjs --reply EVENT_ID done --file RELATIVE_PATH
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live-poll.mjs" --reply EVENT_ID done --file RELATIVE_PATH
 ```
 
 `RELATIVE_PATH` is relative to project root (`public/index.html`, `src/App.tsx`, etc.) — the browser fetches source directly if the dev server lacks HMR.
@@ -279,7 +281,7 @@ Then run `live-poll.mjs` again immediately.
 If wrap or generation fails after the browser has flipped to GENERATING (e.g. wrap landed on the wrong source branch and you've already reverted it, or generation hit an unrecoverable error), tell the **browser** so its bar resets to PICKING:
 
 ```bash
-node .claude/skills/impeccable/scripts/live-poll.mjs --reply EVENT_ID error "Short reason"
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live-poll.mjs" --reply EVENT_ID error "Short reason"
 ```
 
 Don't run `live-accept --discard` for this — that's a pure file mutator, the browser doesn't see it, and the bar gets stuck on the GENERATING dots forever (the user has to refresh). `--discard` is only correct when the **browser** initiated the discard (user clicked ✕ during CYCLING) and the agent is just running source-side cleanup the browser already triggered.
@@ -304,7 +306,7 @@ Read the candidate source until you're confident where a change to the element w
 
 The browser bar is waiting for variants. Even without a wrapper in source, you still need to show something:
 
-1. Manually write the wrapper scaffold into the **served** file (the one the browser actually loaded). Use the same structure `live-wrap.mjs` produces — `<!-- impeccable-variants-start ID --><div data-impeccable-variants="ID" data-impeccable-variant-count="3" style="display: contents">…</div><!-- end -->`.
+1. Manually write the wrapper scaffold into the **served** file (the one the browser actually loaded). Use the same structure `live-wrap.mjs` produces — `<!-- siteasy-variants-start ID --><div data-siteasy-variants="ID" data-siteasy-variant-count="3" style="display: contents">…</div><!-- end -->`.
 2. Insert your three variant divs inside it, same shape as the deterministic path.
 3. Signal done with `--reply EVENT_ID done --file <served file>`. The browser's no-HMR fallback will fetch and inject.
 
@@ -335,15 +337,15 @@ Event: `{id, variantId, _acceptResult}`. The poll script already ran `live-accep
 
 ### Required after accept (carbonize)
 
-When `_acceptResult.carbonize === true`, the accepted variant was stitched into source with helper markers and inline CSS so the browser can render it immediately with no visual gap. That stitch-in is **temporary**. The agent must rewrite it into permanent form before doing anything else. Skipping this leaves dead `@scope` rules for unaccepted variants, a pointless `data-impeccable-variant` wrapper, and `impeccable-carbonize-start/end` comment noise in the source file — all of which accumulate across sessions.
+When `_acceptResult.carbonize === true`, the accepted variant was stitched into source with helper markers and inline CSS so the browser can render it immediately with no visual gap. That stitch-in is **temporary**. The agent must rewrite it into permanent form before doing anything else. Skipping this leaves dead `@scope` rules for unaccepted variants, a pointless `data-siteasy-variant` wrapper, and `siteasy-carbonize-start/end` comment noise in the source file — all of which accumulate across sessions.
 
 Do these five steps in the current thread, synchronously, before the next poll. Do not poll again until the file is clean.
 
-1. **Locate the carbonize block** in the source file (`_acceptResult.file`). It's bracketed by `<!-- impeccable-carbonize-start SESSION_ID -->` and `<!-- impeccable-carbonize-end SESSION_ID -->` and contains a `<style data-impeccable-css="SESSION_ID">` element. If the variant declared parameters, an `<!-- impeccable-param-values SESSION_ID: {...} -->` comment sits alongside the style tag with the user's chosen values — read it first; it drives steps 3 and 4 below.
+1. **Locate the carbonize block** in the source file (`_acceptResult.file`). It's bracketed by `<!-- siteasy-carbonize-start SESSION_ID -->` and `<!-- siteasy-carbonize-end SESSION_ID -->` and contains a `<style data-siteasy-css="SESSION_ID">` element. If the variant declared parameters, an `<!-- siteasy-param-values SESSION_ID: {...} -->` comment sits alongside the style tag with the user's chosen values — read it first; it drives steps 3 and 4 below.
 2. **Move the CSS rules** into the project's real stylesheet. Which stylesheet depends on the project (e.g. `public/css/workflow.css` for this repo, or the component's co-located CSS file for a Vite/Next project — pick whichever already owns styling for the surrounding element).
-3. **Bake in parameter values while rewriting selectors.** For `@scope ([data-impeccable-variant="N"])` wrappers: retarget to real, semantic classes on the accepted HTML (`.why-visual--v2 .v2-label { … }`). For `:scope[data-p-<id>="VALUE"]` selectors: keep only the branch matching the chosen value from the param-values comment; drop the others (they're dead after accept). For `var(--p-<id>, DEFAULT)` in the CSS: either substitute the literal value, or if the param is still useful as a knob going forward, leave the var and update its initial declaration to the chosen value.
-4. **Unwrap the accepted content.** Delete the `<div data-impeccable-variant="N" style="display: contents">` that wraps it. Drop `data-impeccable-params` and any `data-p-*` attributes from it — those are live-mode plumbing, not source.
-5. **Delete the inline `<style>` block, the `<!-- impeccable-param-values -->` comment if present, and both `<!-- impeccable-carbonize-start/end -->` markers.** Also drop any `@scope` rules for variants other than the accepted one — those are dead code now.
+3. **Bake in parameter values while rewriting selectors.** For `@scope ([data-siteasy-variant="N"])` wrappers: retarget to real, semantic classes on the accepted HTML (`.why-visual--v2 .v2-label { … }`). For `:scope[data-p-<id>="VALUE"]` selectors: keep only the branch matching the chosen value from the param-values comment; drop the others (they're dead after accept). For `var(--p-<id>, DEFAULT)` in the CSS: either substitute the literal value, or if the param is still useful as a knob going forward, leave the var and update its initial declaration to the chosen value.
+4. **Unwrap the accepted content.** Delete the `<div data-siteasy-variant="N" style="display: contents">` that wraps it. Drop `data-siteasy-params` and any `data-p-*` attributes from it — those are live-mode plumbing, not source.
+5. **Delete the inline `<style>` block, the `<!-- siteasy-param-values -->` comment if present, and both `<!-- siteasy-carbonize-start/end -->` markers.** Also drop any `@scope` rules for variants other than the accepted one — those are dead code now.
 
 Then poll again.
 
@@ -378,14 +380,14 @@ When the poll returns `exit`, proceed to cleanup. If the poll is still running a
 ## Cleanup
 
 ```bash
-node .claude/skills/impeccable/scripts/live-server.mjs stop
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/live-server.mjs" stop
 ```
 
 Stops the HTTP server and runs `live-inject.mjs --remove` to strip `localhost:…/live.js` from the HTML entry. To stop the server but keep the inject tag (for a quick restart), use `stop --keep-inject`. `config.json` persists for future sessions.
 
 Then:
-- Remove any leftover variant wrappers (search for `impeccable-variants-start` markers).
-- Remove any leftover carbonize blocks (search for `impeccable-carbonize-start` markers).
+- Remove any leftover variant wrappers (search for `siteasy-variants-start` markers).
+- Remove any leftover carbonize blocks (search for `siteasy-carbonize-start` markers).
 
 ## First-time setup (config missing or invalid)
 
@@ -464,7 +466,7 @@ If `config.cspChecked === true`, skip this entire section. You already asked thi
 Otherwise, run the detection helper:
 
 ```bash
-node .claude/skills/impeccable/scripts/detect-csp.mjs
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/detect-csp.mjs"
 ```
 
 Output: `{ shape, signals }` where `shape` is one of `append-arrays`, `append-string`, `middleware`, `meta-tag`, or `null`. The shape is named by *patch mechanism*, so one template covers many frameworks.
@@ -514,10 +516,6 @@ const __impeccableLiveDev =
 - **SvelteKit** — edit `svelte.config.js`, appending to `kit.csp.directives['script-src']` and `kit.csp.directives['connect-src']`.
 - **Nuxt + nuxt-security** — edit `nuxt.config.*`, appending to `security.headers.contentSecurityPolicy['script-src']` and `['connect-src']`.
 
-Reference outputs:
-- `tests/framework-fixtures/nextjs-turborepo/expected-after-patch.ts` (Next.js)
-- `tests/framework-fixtures/sveltekit-csp/expected-after-patch.js` (SvelteKit)
-
 Idempotency: if `__impeccableLiveDev` already exists in the file, the patch is already applied; skip asking and just mark `cspChecked: true`.
 
 #### append-string
@@ -539,10 +537,6 @@ Then in the CSP value string:
 Per-framework specifics:
 - **Next.js inline `headers()`** — edit `next.config.*`, splicing the variable into the CSP value.
 - **Nuxt `routeRules`** — edit `nuxt.config.*`, splicing into the CSP in `routeRules['/**'].headers['Content-Security-Policy']`.
-
-Reference outputs:
-- `tests/framework-fixtures/nextjs-inline-csp/expected-after-patch.js` (Next.js)
-- `tests/framework-fixtures/nuxt-csp/expected-after-patch.ts` (Nuxt)
 
 ### Troubleshooting
 

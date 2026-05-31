@@ -1,12 +1,12 @@
 ---
 name: css-architecture
-description: "Modern CSS features that fundamentally change how you write styles. Load for /impeccable craft, /impeccable extract, and any work touching a project's CSS foundation."
+description: "Modern CSS features that fundamentally change how you write styles. Load for /siteasy build, /siteasy extract, and any work touching a project's CSS foundation."
 version: 1.6.0
 ---
 
 # CSS Architecture
 
-*Modern CSS features that fundamentally change how you write styles. Load for `/impeccable craft`, `/impeccable extract`, and any work touching a project's CSS foundation.*
+*Modern CSS features that fundamentally change how you write styles. Load for `/siteasy build`, `/siteasy extract`, and any work touching a project's CSS foundation.*
 
 ---
 

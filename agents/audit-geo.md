@@ -1,13 +1,8 @@
 ---
 name: seo-agent-geo
-description: >
-  Sub-agent for the GEO (Generative Engine Optimization) dimension of /seo audit.
-  Evaluates AI crawler access, llms.txt compliance, passage citability,
-  brand authority signals, and platform-specific visibility.
-version: 1.0.0
-agent: true
-dimension: geo
-weight: 15
+description: Sub-agent for the GEO (Generative Engine Optimization) dimension of /seo audit. Evaluates AI crawler access, llms.txt compliance, passage citability, brand authority signals, and platform-specific visibility.
+model: sonnet
+tools: Read, Grep, Glob, WebFetch, Bash
 ---
 
 # GEO Sub-Agent
