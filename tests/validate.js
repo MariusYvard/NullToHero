@@ -425,6 +425,15 @@ if (pluginJsonContent) {
   } catch { fail("plugin.json: invalid JSON"); }
 } else { fail(".claude-plugin/plugin.json: not found"); }
 
+const packageJsonContent = readFile(path.join(ROOT, "package.json"));
+if (packageJsonContent) {
+  try {
+    const pkg = JSON.parse(packageJsonContent);
+    versionSources["package.json"] = pkg.version || null;
+    if (!pkg.version) fail("package.json: missing 'version'");
+  } catch { fail("package.json: invalid JSON"); }
+} else { warn("package.json: not found"); }
+
 const marketplaceJsonContent = readFile(path.join(ROOT, ".claude-plugin", "marketplace.json"));
 if (marketplaceJsonContent) {
   try {

@@ -27,7 +27,7 @@ jobs:
       - name: Extract changelog entry
         run: |
           version="${GITHUB_REF_NAME#v}"
-          awk "/^## \\[$version\\]/,/^## \\[/" CHANGELOG.md | sed '$d' | tail -n +2 > release_notes.txt
+          awk -v v="$version" '$0 ~ "^## \\["v"\\]" {f=1; next} f && /^## \\[/ {exit} f' CHANGELOG.md > release_notes.txt
           echo "--- release notes ---"
           cat release_notes.txt
 
