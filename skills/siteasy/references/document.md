@@ -339,7 +339,7 @@ Do not reword. The panel shows these as secondary collapsible context; the same 
 1. Show the user the full DESIGN.md you wrote. Briefly highlight the non-obvious creative choices (descriptive color names, atmosphere language, named rules).
 2. Mention that `DESIGN.json` was also written alongside — the live panel will now render this project's actual button/input/nav primitives instead of generic approximations.
 3. Offer to refine any section: "Want me to revise a section, add component patterns I missed, or adjust the atmosphere language?"
-4. **Refresh the session cache.** Run `node .claude/skills/siteasy/scripts/load-context.mjs` one final time so the newly-written DESIGN.md lands in conversation. Subsequent commands in this session will use the fresh version automatically without re-reading.
+4. **Refresh the session cache.** Run `node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/load-context.mjs"` one final time so the newly-written DESIGN.md lands in conversation. Subsequent commands in this session will use the fresh version automatically without re-reading.
 
 ## Seed mode
 
@@ -404,7 +404,7 @@ Seed mode writes a minimal frontmatter with `name` and `description` only — no
 
 1. Show the seed DESIGN.md. Call out that it is a seed (the marker is the literal commitment).
 2. Tell the user: "Re-run `/siteasy document` once you have some code. That pass will extract real tokens and generate the sidecar."
-3. Run `node .claude/skills/siteasy/scripts/load-context.mjs` once so the seed lands in conversation for the rest of the session.
+3. Run `node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/load-context.mjs"` once so the seed lands in conversation for the rest of the session.
 
 ## Style guidelines
 

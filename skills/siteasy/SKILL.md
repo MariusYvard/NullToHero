@@ -9,7 +9,7 @@ allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
   - Bash(node *)
-  - Bash(python3 -m http.server *)
+  - Bash(python3 *)
   - Bash(npx serve *)
   - Bash(kill *)
   - Read

@@ -18,7 +18,7 @@ Every other siteasy command reads these files before doing any work.
 Run the shared loader first so you know what already exists:
 
 ```bash
-node .claude/skills/siteasy/scripts/load-context.mjs
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/load-context.mjs"
 ```
 
 The output tells you whether PRODUCT.md and/or DESIGN.md already exist. If `migrated: true`, legacy `.impeccable.md` was auto-renamed to `PRODUCT.md`. Mention this once to the user.
@@ -145,6 +145,16 @@ Offer `/siteasy document` either way. Two paths:
 
 If the user agrees, delegate to `/siteasy document` (it auto-detects scan vs seed). Load its reference and follow that flow.
 
+### Optional: stack-aware starting point
+
+For a pre-implementation project, you can seed the visual direction from the bundled design-system knowledge base (16 stacks, curated color, typography, landing and chart guidance) instead of starting from a blank page. Run:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/tools/design-system/scripts/search.py" "<product or style description>" --design-system --stack <react|nextjs|vue|svelte|astro|nuxtjs|angular|laravel|html-tailwind|shadcn|swiftui|react-native|flutter|jetpack-compose|threejs|nuxt-ui> --format markdown
+```
+
+It prints a stack-specific recommendation (style, color roles, type pairing, key effects, anti-patterns). Treat the output as a proposal: confirm or adjust it with the user, then fold the chosen values into DESIGN.md through `/siteasy document` (seed mode). Add `--persist -p "Project Name"` to also write a `design-system/<project>/MASTER.md` scaffold the user can keep. The generator never overwrites DESIGN.md itself; you stay in control of the final file.
+
 If the user prefers to skip, mention they can run `/siteasy document` any time later.
 
 ## Step 6: Confirm and wrap up
@@ -155,7 +165,7 @@ Summarize:
 - The 3-5 strategic principles from PRODUCT.md that will guide future work
 - If DESIGN.md is pending, remind the user how to generate it later
 
-**Critical: re-run the loader to refresh session context.** After writing PRODUCT.md, run `node .claude/skills/siteasy/scripts/load-context.mjs` one final time and let its full JSON output land in conversation. This ensures subsequent commands in this session use the freshly-written PRODUCT.md, not a stale earlier version.
+**Critical: re-run the loader to refresh session context.** After writing PRODUCT.md, run `node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/load-context.mjs"` one final time and let its full JSON output land in conversation. This ensures subsequent commands in this session use the freshly-written PRODUCT.md, not a stale earlier version.
 
 If teach was invoked as a blocker by another siteasy command (e.g. the user ran `/siteasy polish` with no PRODUCT.md), resume that original task now with the fresh context.
 
