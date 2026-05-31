@@ -18,9 +18,23 @@ license: "Apache-2.0"
 1. **Fetch homepage** via WebFetch or Bash
 2. **Detect business type** — analyze homepage signals
 3. **Crawl site** — follow internal links up to 500 pages, respect robots.txt
-4. **Run checks** sequentially across all categories below
-5. **Score** — aggregate into SEO Health Score (0–100)
+4. **Dispatch the five specialist sub-agents in parallel** (see "Parallel audit architecture" below)
+5. **Score** — aggregate each dimension into the SEO Health Score (0–100) using the weights below
 6. **Report** — generate prioritized action plan
+
+## Parallel audit architecture
+
+The audit runs five specialist sub-agents concurrently, each scoped to one dimension. Launch them with the Task tool in a single message (one `Task` call per agent, all in the same turn) so they execute in parallel rather than one after another. Pass each agent the target URL plus any page HTML already fetched.
+
+| Sub-agent (`subagent_type`) | Dimension | Covers |
+|---|---|---|
+| `seo-agent-technical` | Technical | crawlability, indexability, HTTPS, robots.txt, sitemaps, mobile, JS rendering, security headers |
+| `seo-agent-content` | Content + On-Page | E-E-A-T, titles, meta, headings, readability, thin content, AI citation readiness |
+| `seo-agent-schema` | Schema | JSON-LD detection, validation, rich result eligibility |
+| `seo-agent-performance` | Performance + Images | speed signals, image optimization, fonts, render-blocking, CWV readiness |
+| `seo-agent-geo` | AI search | AI crawler access, llms.txt, passage citability, brand authority |
+
+Each agent returns its dimension score and findings. Wait for all five to complete, then aggregate. If the Task tool or plugin agents are unavailable in the current harness, fall back to running the five dimension checklists inline, in sequence, using the same scoring weights. Never skip a dimension silently.
 
 ## Crawl Configuration
 
