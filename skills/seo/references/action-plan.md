@@ -5,8 +5,7 @@ description: >
   Every audit, page analysis, technical check, and strategy command
   should produce a structured action plan using this template.
   Priority tiers: Quick Wins (< 1h), 1-Week, 1-Month, Backlog.
-version: 1.0.0
-user-invocable: false
+version: 1.8.1
 ---
 
 # ACTION-PLAN Output Standard

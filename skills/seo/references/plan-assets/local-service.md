@@ -1,3 +1,8 @@
+---
+name: plan-local-service
+description: "Local Service Business SEO Strategy Template — industry SEO strategy template loaded by /seo plan."
+version: 1.8.1
+---
 <!-- Updated: 2026-02-07 -->
 # Local Service Business SEO Strategy Template
 

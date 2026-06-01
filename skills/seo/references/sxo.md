@@ -6,9 +6,7 @@ description: >
   satisfaction signals. Use for: "SXO", "search experience", "user intent",
   "page type mismatch", "bounce rate SEO", "dwell time", "pogo-sticking",
   "user satisfaction", "intent alignment".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Search Experience Optimization (SXO)

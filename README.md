@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.8.0** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
+> **v1.8.1** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
@@ -42,6 +42,16 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 ```
 
 ---
+
+## What's new in 1.8.1
+
+### Correctness and consistency pass
+
+Fixed three internal links in `skills/siteasy/references/tokens.md` that resolved to a non-existent `references/references/` path. Normalised the 19 `skills/seo/references/*.md` files: they no longer declare `user-invocable`, `argument-hint` or `license`, since they are reference documents loaded by `seo/SKILL.md` rather than standalone skills. Their frontmatter now matches the siteasy and inspect references. The six `plan-assets` industry templates gain frontmatter for consistency.
+
+### Validator at 260 checks
+
+Check 19 is a stale-index guard: it rebuilds the reference index in memory and fails if `tools/reference-index.json` is out of date. Check 12 now also verifies the `PLUGIN_VERSION` pinned in `install.sh` and `install.ps1`, closing a version-drift gap.
 
 ## What's new in 1.8.0
 
@@ -292,6 +302,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.8.1** (June 2026): correctness pass — fixed broken `tokens.md` links, normalised SEO reference frontmatter (dropped misleading `user-invocable`/`argument-hint`), added frontmatter to the `plan-assets` templates, and grew the validator to 260 checks (stale-index guard, installer version coverage).
 - **1.8.0** (June 2026): licensing and attribution pass (`NOTICE` for impeccable and its upstream sources, explicit Apache 2.0 statement in `ATTRIBUTION.md`); runtime unit tests for `resolveInRoot` and `safe_slug` wired into CI; validator Check 18 on README headline counts (259 checks); install-section accuracy fixes; `live.js` status bar uses `textContent`.
 - **1.7.1** (June 2026): security and accuracy audit pass. Hardened the `/siteasy live` daemon (path-confined writes, localhost-scoped CORS, CSPRNG session token, bounded request bodies and poll timeouts); fixed an FID/INP contradiction; removed dead in-doc references; corrected the README command count; fixed the marketplace `$schema` URL; added a `SECURITY.md`, validator Check 17, CI concurrency guards, installer tag-pinning, and a `__pycache__` ignore rule. Validator at 256 checks.
 - **1.7.0** (June 2026): real parallel SEO audit sub-agents, self-contained `/siteasy live` variant mode, design-system generator wired into setup, command-reference coherence, installer and supply-chain hardening, validator at 255 checks.

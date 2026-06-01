@@ -15,12 +15,14 @@
  *  9.  siteasy command→reference mapping (every declared command has a backing file)
  * 10.  siteasy command count meets minimum (≥25)
  * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
- * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md must match
+ * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md, install.sh, install.ps1 must match
  * 13.  Large files warning — files over 500 KB in tools/ (known exceptions excluded)
  * 14.  No stale /impeccable command references
  * 15.  Referenced helper scripts exist on disk
  * 16.  Declared SEO audit agents are dispatched by audit.md
  * 17.  In-doc references/*.md and schema/*.json pointers resolve
+ * 18.  README headline counts are accurate
+ * 19.  reference-index.json matches references on disk (stale-index guard)
  */
 
 const fs   = require("fs");
@@ -462,6 +464,19 @@ if (marketplaceJsonContent) {
   }
 });
 
+const shInstaller = readFile(path.join(ROOT, "install.sh"));
+if (shInstaller) {
+  const m = shInstaller.match(/PLUGIN_VERSION="([^"]+)"/);
+  if (m) versionSources["install.sh"] = m[1];
+  else warn("install.sh: PLUGIN_VERSION not found");
+}
+const ps1Installer = readFile(path.join(ROOT, "install.ps1"));
+if (ps1Installer) {
+  const m = ps1Installer.match(/\$PLUGIN_VERSION\s*=\s*"([^"]+)"/);
+  if (m) versionSources["install.ps1"] = m[1];
+  else warn("install.ps1: PLUGIN_VERSION not found");
+}
+
 const versions = Object.values(versionSources).filter(Boolean);
 if (versions.length > 0) {
   const allSame = versions.every(v => v === versions[0]);
@@ -655,6 +670,46 @@ claims.forEach(([label, claimed, actual]) => {
   else if (claimed === actual) pass(`README "${label}" count ${claimed} matches actual ${actual}`);
   else fail(`README "${label}" count ${claimed} does not match actual ${actual}`);
 });
+
+// ─── Check 19: reference-index.json is up to date ────────────────────────────
+// Mirrors the algorithm in tools/build-index.mjs. Keep the two in sync.
+section("19. reference-index.json matches references on disk");
+{
+  const STOP = new Set(["the","a","an","and","or","for","to","of","in","on","with","is","are","by","use","using","when","your","you"]);
+  const firstHeading = (text) => {
+    for (const line of text.split("\n")) { const m = line.match(/^#\s+(.+)/); if (m) return m[1].trim(); }
+    return null;
+  };
+  const kw = (title, file) => {
+    const base = path.basename(file, ".md").replace(/-/g, " ");
+    const words = `${base} ${title || ""}`.toLowerCase().match(/[a-z0-9]+/g) || [];
+    return [...new Set(words.filter((w) => w.length > 2 && !STOP.has(w)))];
+  };
+  const walk = (dir) => {
+    const out = [];
+    for (const name of fs.readdirSync(dir)) {
+      const p = path.join(dir, name);
+      if (fs.statSync(p).isDirectory()) out.push(...walk(p));
+      else if (name.endsWith(".md") && name !== "SKILL.md") out.push(p);
+    }
+    return out;
+  };
+  const entries = [];
+  for (const file of walk(path.join(ROOT, "skills"))) {
+    const rel = file.slice(ROOT.length + 1).split("\\").join("/");
+    const skill = rel.split("/")[1];
+    const text = fs.readFileSync(file, "utf8");
+    const title = firstHeading(text);
+    entries.push({ skill, path: rel, title: title || path.basename(file, ".md"), keywords: kw(title, file) });
+  }
+  entries.sort((a, b) => a.path.localeCompare(b.path));
+  const expected = JSON.stringify(entries, null, 2) + "\n";
+  const indexPath = path.join(ROOT, "tools", "reference-index.json");
+  const committed = fs.existsSync(indexPath) ? fs.readFileSync(indexPath, "utf8") : null;
+  if (committed === null) fail("tools/reference-index.json missing — run `node tools/build-index.mjs`");
+  else if (committed === expected) pass(`reference-index.json is current (${entries.length} entries)`);
+  else fail("tools/reference-index.json is stale — run `node tools/build-index.mjs` and commit the result");
+}
 
 // ─── Summary ──────────────────────────────────────────────────────────────────
 

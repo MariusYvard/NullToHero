@@ -5,9 +5,7 @@ description: >
   Generates new sitemaps with industry templates. Use for: "sitemap", "generate
   sitemap", "sitemap audit", "XML sitemap", "sitemap errors", "sitemap index",
   "sitemap validation", "missing sitemap".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url | generate]"
+version: 1.8.1
 ---
 
 # XML Sitemap Analysis & Generation

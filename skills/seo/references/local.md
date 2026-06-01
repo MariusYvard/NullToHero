@@ -6,9 +6,7 @@ description: >
   reviews, local schema, location page quality. Use for: "local SEO", "Google
   Business Profile", "GBP", "NAP", "citations", "local rankings", "map pack",
   "near me", "local business", "Google Maps".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Local SEO Analysis

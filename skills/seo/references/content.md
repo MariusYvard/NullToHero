@@ -5,9 +5,7 @@ description: >
   citation readiness, and thin content. Use for: "content quality", "E-E-A-T",
   "content analysis", "readability score", "thin content", "content audit",
   "improve article", "AI citation readiness".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Content Quality & E-E-A-T Analysis

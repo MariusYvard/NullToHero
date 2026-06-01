@@ -74,10 +74,10 @@ button { background: var(--color-primary); }
 1. Identify brand colour from existing CSS, logo, Tailwind config, README
 2. Build OKLCH palette from brand colour
 3. Name neutrals with tiny brand-hued chroma (0.005–0.01)
-4. Generate two-layer file per [references/design-tokens.md](references/design-tokens.md)
+4. Generate two-layer file per [design-tokens.md](design-tokens.md)
 5. Write to `src/styles/tokens.css`, `styles/tokens.css`, or `app/globals.css`
 
-Load [references/design-tokens.md](references/design-tokens.md) before generating — it contains the complete reference structure.
+Load [design-tokens.md](design-tokens.md) before generating — it contains the complete reference structure.
 
 ## Step 5 — Dark Mode (`--darkmode`)
 
@@ -86,6 +86,6 @@ Load [references/design-tokens.md](references/design-tokens.md) before generatin
 3. For missing: invert lightness (90% light → ~10% dark), keep hue/chroma + adjust
 4. Generate `@media (prefers-color-scheme: dark)` block
 
-Load [references/dark-mode-engineering.md](references/dark-mode-engineering.md) first.
+Load [dark-mode-engineering.md](dark-mode-engineering.md) first.
 
 Always **Write** the token file to disk — don't just show it in chat.

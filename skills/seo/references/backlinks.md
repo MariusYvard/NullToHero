@@ -6,9 +6,7 @@ description: >
   (Moz, Bing, Common Crawl). Use for: "backlinks", "link profile", "link building",
   "backlink audit", "toxic links", "competitor links", "anchor text", "domain authority",
   "referring domains".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Backlink Profile Analysis

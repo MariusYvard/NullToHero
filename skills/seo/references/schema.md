@@ -5,9 +5,7 @@ description: >
   format. Use for: "schema markup", "structured data", "rich results", "JSON-
   LD", "FAQ schema", "Article schema", "Product schema", "LocalBusiness schema",
   "HowTo schema", "schema errors".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Schema Markup Analysis & Generation

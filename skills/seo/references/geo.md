@@ -6,9 +6,7 @@ description: >
   "GEO", "llms.txt", "AI crawler", "passage citability", "ChatGPT visibility",
   "Perplexity ranking", "brand mentions", "AI citation", "AI search visibility",
   "geo quick", "geo compare".
-version: 1.1.0
-user-invocable: true
-argument-hint: "[audit|quick|compare] [url]"
+version: 1.8.1
 ---
 
 # AI Search / GEO Optimization

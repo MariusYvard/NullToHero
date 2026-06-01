@@ -6,9 +6,7 @@ description: >
   "ecommerce SEO", "product page SEO", "category page SEO", "product schema",
   "WooCommerce SEO", "Shopify SEO", "faceted navigation", "product reviews SEO",
   "out of stock SEO".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # E-commerce SEO

@@ -6,9 +6,7 @@ description: >
   "keyword clustering", "topic clusters", "content architecture", "content
   strategy", "keyword research", "semantic SEO", "pillar pages", "cluster pages",
   "content gaps".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[seed-keyword | topic]"
+version: 1.8.1
 ---
 
 # Semantic Keyword Clustering & Content Architecture

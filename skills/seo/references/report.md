@@ -7,9 +7,7 @@ description: >
   /seo technical, or any other SEO command to produce a deliverable.
   Trigger: "generate a report", "export this as PDF", "create a deliverable",
   "format this for a client", "make a report".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url | file | generate]"
+version: 1.8.1
 ---
 
 # SEO Report Generator

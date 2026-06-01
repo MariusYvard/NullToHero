@@ -5,9 +5,7 @@ description: >
   "X vs Y" layouts, alternatives pages, feature matrices, schema markup, and FAQ
   sections. Use for: "vs page", "competitor comparison", "alternatives to X",
   "comparison page", "competitor landing page", "X vs Y", "best alternatives".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url | generate]"
+version: 1.8.1
 ---
 
 # Competitor Comparison Page Generator

@@ -5,9 +5,7 @@ description: >
   templates (SaaS, e-commerce, local, publisher, agency), competitive analysis,
   content strategy, implementation roadmap. Use for: "SEO strategy", "SEO plan",
   "content roadmap", "keyword strategy", "site planning".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[business-type]"
+version: 1.8.1
 ---
 
 # Strategic SEO Planning

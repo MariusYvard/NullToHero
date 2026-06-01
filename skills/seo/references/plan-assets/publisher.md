@@ -1,3 +1,8 @@
+---
+name: plan-publisher
+description: "Publisher/Media SEO Strategy Template — industry SEO strategy template loaded by /seo plan."
+version: 1.8.1
+---
 <!-- Updated: 2026-02-07 -->
 # Publisher/Media SEO Strategy Template
 

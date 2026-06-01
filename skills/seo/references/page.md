@@ -5,9 +5,7 @@ description: >
   meta tags, schema, images, performance. Use for: "analyze this page", "on-page
   SEO", "page audit", "title tag", "meta description", "H1", "page score",
   "single URL analysis".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Single Page Analysis

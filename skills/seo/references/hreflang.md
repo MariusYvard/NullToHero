@@ -5,9 +5,7 @@ description: >
   common mistakes, validates language/region codes, generates correct hreflang
   tags. Use for: "hreflang", "international SEO", "multilingual site", "language
   targeting", "hreflang errors", "x-default", "multi-language", "country targeting".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Hreflang / International SEO

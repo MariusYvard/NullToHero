@@ -5,9 +5,7 @@ description: >
   degradation over time. Use for: "SEO changes", "track ranking drops",
   "baseline SEO", "monitor SEO", "SEO regression", "detect SEO problems",
   "compare before after", "SEO drift", "SEO monitoring".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[baseline|compare|history] [url]"
+version: 1.8.1
 ---
 
 # SEO Drift Monitoring

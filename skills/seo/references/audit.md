@@ -5,10 +5,7 @@ description: >
   7 specialist checks (technical, content, schema, images, sitemap, performance,
   AI search). Use for: "audit my site", "full SEO audit", "website analysis",
   "SEO health check".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
-license: "Apache-2.0"
+version: 1.8.1
 ---
 
 # Full Website SEO Audit

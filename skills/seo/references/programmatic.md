@@ -6,9 +6,7 @@ description: >
   deduplication, quality safeguards. Use for: "programmatic SEO", "scale pages",
   "template pages", "location pages", "data-driven pages", "programmatic content",
   "doorway pages", "thin content at scale".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url | plan]"
+version: 1.8.1
 ---
 
 # Programmatic SEO

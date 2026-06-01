@@ -5,9 +5,7 @@ description: >
   (WebP/AVIF), responsive images, lazy loading, CLS prevention, and LCP impact.
   Use for: "image SEO", "alt text", "image optimization", "image audit",
   "WebP conversion", "CLS from images", "LCP image", "lazy loading", "missing alt".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Image SEO Audit

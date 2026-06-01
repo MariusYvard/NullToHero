@@ -5,9 +5,7 @@ description: >
   URL structure, mobile, Core Web Vitals, structured data, JavaScript rendering,
   international. Use for: "technical SEO", "crawl issues", "robots.txt", "Core
   Web Vitals", "mobile SEO", "canonical".
-version: 1.0.0
-user-invocable: true
-argument-hint: "[url]"
+version: 1.8.1
 ---
 
 # Technical SEO Audit
