@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="1.8.1"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="1.8.2"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -105,6 +105,9 @@ echo -e "  ${BLUE}Skills available:${NC}"
 echo -e "    ${GREEN}/siteasy${NC}  — Design, UX, motion, accessibility"
 echo -e "    ${GREEN}/seo${NC}      — Full SEO toolkit (19 commands)"
 echo -e "    ${GREEN}/inspect${NC}  — Anti-pattern detection, browser preview"
+echo ""
+echo -e "  ${BLUE}If a short name collides with another plugin, use the namespaced form:${NC}"
+echo -e "    /null-to-hero:seo · /null-to-hero:siteasy · /null-to-hero:inspect"
 echo ""
 echo -e "  ${BLUE}Quick start:${NC}"
 echo -e "    /seo audit https://yoursite.com"

@@ -5,7 +5,7 @@ description: >
   format. Use for: "schema markup", "structured data", "rich results", "JSON-
   LD", "FAQ schema", "Article schema", "Product schema", "LocalBusiness schema",
   "HowTo schema", "schema errors".
-version: 1.8.1
+version: 1.8.2
 ---
 
 # Schema Markup Analysis & Generation
@@ -31,6 +31,8 @@ version: 1.8.1
 - Flag deprecated types (see below)
 
 ## Schema Type Status (as of June 2026)
+
+*Statuses change as Google updates its rich results support. Re-verify dated retirements against Google Search Central before quoting them.*
 
 ### ACTIVE (recommend freely):
 Organization, LocalBusiness, SoftwareApplication, WebApplication, Product (with Certification markup as of April 2025), ProductGroup, Offer, Service, Article, BlogPosting, NewsArticle, Review, AggregateRating, BreadcrumbList, WebSite, WebPage, Person, ProfilePage, ContactPage, VideoObject, ImageObject, Event, JobPosting, Course, DiscussionForumPosting

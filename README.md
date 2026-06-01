@@ -2,11 +2,11 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.8.1** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
+> **v1.8.2** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
-NullToHero exposes three user-invocable skills (`/siteasy`, `/seo`, `/inspect`). Each skill routes to its sub-commands through the first argument (for example `/seo audit` or `/siteasy build`). The 47 commands listed below are these sub-commands, not separate Claude Code command files: the skills handle routing, so there is no `commands/` directory.
+NullToHero exposes three user-invocable skills. Claude Code namespaces plugin skills under the plugin name, so the fully-qualified commands are `/null-to-hero:siteasy`, `/null-to-hero:seo` and `/null-to-hero:inspect`. The short forms `/siteasy`, `/seo` and `/inspect` also resolve as long as no other installed skill claims the same name; prefer the namespaced form if you run several plugins. Each skill routes to its sub-commands through the first argument (for example `/seo audit` or `/siteasy build`). The 47 commands listed below are these sub-commands, not separate Claude Code command files: the skills handle routing, so there is no `commands/` directory.
 
 By [Marius Yvard](https://lecvdemarius.netlify.app/) · Apache 2.0
 
@@ -42,6 +42,20 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 ```
 
 ---
+
+## What's new in 1.8.2
+
+### Correctness pass
+
+Aligned the FAQ rich-results status across the SEO references. `references/page.md` and `references/competitor-pages.md` still described FAQ as "restricted to government and healthcare sites"; both now match `references/schema.md`, which records that Google removed FAQ rich results for all sites on May 7, 2026 (FAQPage stays a valid Schema.org type that Google still parses). Added a re-verification note to the `schema.md` status table so dated retirements get checked before they are quoted.
+
+### Documentation and policy
+
+The README now states the plugin-namespaced command form (`/null-to-hero:seo`) and explains that the short form depends on there being no name collision. `SECURITY.md` lists 1.8.x as the supported line.
+
+### Validator at 261 checks
+
+Check 20 is a regression guard: it fails if any SEO reference reintroduces a present-tense "FAQ restricted to gov/health" claim, while leaving the historical "previously restricted" note in `schema.md` untouched.
 
 ## What's new in 1.8.1
 
@@ -302,6 +316,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.8.2** (June 2026): correctness pass — aligned the FAQ rich-results status across `page.md`, `competitor-pages.md` and `schema.md` (removed for all sites May 7, 2026); documented the `/null-to-hero:*` namespaced command form; refreshed the `SECURITY.md` supported-versions table to 1.8.x; validator Check 20 guards against the FAQ claim regressing (261 checks).
 - **1.8.1** (June 2026): correctness pass — fixed broken `tokens.md` links, normalised SEO reference frontmatter (dropped misleading `user-invocable`/`argument-hint`), added frontmatter to the `plan-assets` templates, and grew the validator to 260 checks (stale-index guard, installer version coverage).
 - **1.8.0** (June 2026): licensing and attribution pass (`NOTICE` for impeccable and its upstream sources, explicit Apache 2.0 statement in `ATTRIBUTION.md`); runtime unit tests for `resolveInRoot` and `safe_slug` wired into CI; validator Check 18 on README headline counts (259 checks); install-section accuracy fixes; `live.js` status bar uses `textContent`.
 - **1.7.1** (June 2026): security and accuracy audit pass. Hardened the `/siteasy live` daemon (path-confined writes, localhost-scoped CORS, CSPRNG session token, bounded request bodies and poll timeouts); fixed an FID/INP contradiction; removed dead in-doc references; corrected the README command count; fixed the marketplace `$schema` URL; added a `SECURITY.md`, validator Check 17, CI concurrency guards, installer tag-pinning, and a `__pycache__` ignore rule. Validator at 256 checks.

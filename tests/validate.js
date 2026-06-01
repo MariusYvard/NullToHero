@@ -23,6 +23,7 @@
  * 17.  In-doc references/*.md and schema/*.json pointers resolve
  * 18.  README headline counts are accurate
  * 19.  reference-index.json matches references on disk (stale-index guard)
+ * 20.  No stale present-tense "FAQ restricted to gov/health" claims in SEO references
  */
 
 const fs   = require("fs");
@@ -709,6 +710,38 @@ section("19. reference-index.json matches references on disk");
   if (committed === null) fail("tools/reference-index.json missing — run `node tools/build-index.mjs`");
   else if (committed === expected) pass(`reference-index.json is current (${entries.length} entries)`);
   else fail("tools/reference-index.json is stale — run `node tools/build-index.mjs` and commit the result");
+}
+
+// ─── Check 20: no stale present-tense FAQ "restricted to gov/health" claims ──
+// Google removed FAQ rich results for all sites on May 7, 2026. References must not
+// assert a *current* gov/health restriction. The historical "previously restricted"
+// note in schema.md is exempt, as is any line that also says the feature was removed.
+section("20. No stale FAQ 'restricted to gov/health' claims in SEO references");
+{
+  const RESTRICT_RE = /restrict(?:ed|ion)?\s+to\s+gov(?:ernment)?/i;
+  let staleFaq = 0;
+  let faqLinesScanned = 0;
+  function walkSeoRefs(dir, acc) {
+    if (!fs.existsSync(dir)) return acc;
+    for (const name of fs.readdirSync(dir)) {
+      const full = path.join(dir, name);
+      if (fs.statSync(full).isDirectory()) walkSeoRefs(full, acc);
+      else if (name.endsWith(".md")) acc.push(full);
+    }
+    return acc;
+  }
+  walkSeoRefs(SEO_REFS, []).forEach(f => {
+    (readFile(f) || "").split("\n").forEach((line, i) => {
+      if (!/FAQ/i.test(line)) return;
+      faqLinesScanned++;
+      if (RESTRICT_RE.test(line) && !/previously/i.test(line) && !/removed/i.test(line)) {
+        const rel = f.slice(ROOT.length + 1).split("\\").join("/");
+        fail(`${rel}:${i + 1}: stale present-tense FAQ gov/health restriction — FAQ rich results were removed for all sites May 7, 2026 (see schema.md)`);
+        staleFaq++;
+      }
+    });
+  });
+  if (staleFaq === 0) pass(`No stale FAQ gov/health claims (${faqLinesScanned} FAQ mentions scanned)`);
 }
 
 // ─── Summary ──────────────────────────────────────────────────────────────────

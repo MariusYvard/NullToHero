@@ -5,7 +5,7 @@ description: >
   meta tags, schema, images, performance. Use for: "analyze this page", "on-page
   SEO", "page audit", "title tag", "meta description", "H1", "page score",
   "single URL analysis".
-version: 1.8.1
+version: 1.8.2
 ---
 
 # Single Page Analysis
@@ -39,7 +39,7 @@ version: 1.8.1
 - Detect all types (JSON-LD preferred)
 - Validate required properties
 - Identify missing opportunities
-- NEVER recommend HowTo (deprecated) or FAQ (restricted to gov/health)
+- NEVER recommend HowTo or FAQ for rich results (both deprecated; FAQ rich results were removed for all sites May 7, 2026, HowTo in September 2023)
 
 ### Images
 - Alt text: present, descriptive, includes keywords where natural

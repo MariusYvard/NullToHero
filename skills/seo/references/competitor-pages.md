@@ -5,7 +5,7 @@ description: >
   "X vs Y" layouts, alternatives pages, feature matrices, schema markup, and FAQ
   sections. Use for: "vs page", "competitor comparison", "alternatives to X",
   "comparison page", "competitor landing page", "X vs Y", "best alternatives".
-version: 1.8.1
+version: 1.8.2
 ---
 
 # Competitor Comparison Page Generator
@@ -200,7 +200,7 @@ Feature matrices are the highest-value element for comparison pages. They must b
 }
 ```
 
-Note: FAQPage schema is restricted to government and healthcare authority sites on Google Search. It still provides value for other AI platforms (ChatGPT, Perplexity) that use it for citation.
+Note: FAQ rich results were removed from Google Search for all sites on May 7, 2026 (FAQPage remains a valid Schema.org type that Google still parses, the visible SERP feature is gone). The markup still provides value for AI platforms (ChatGPT, Perplexity) that use it for citation.
 
 **Product schema for review aggregation:**
 ```json
