@@ -2,9 +2,11 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.7.1** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
+> **v1.8.0** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
+
+NullToHero exposes three user-invocable skills (`/siteasy`, `/seo`, `/inspect`). Each skill routes to its sub-commands through the first argument (for example `/seo audit` or `/siteasy build`). The 47 commands listed below are these sub-commands, not separate Claude Code command files: the skills handle routing, so there is no `commands/` directory.
 
 By [Marius Yvard](https://lecvdemarius.netlify.app/) · Apache 2.0
 
@@ -12,7 +14,7 @@ By [Marius Yvard](https://lecvdemarius.netlify.app/) · Apache 2.0
 
 ## Install via marketplace
 
-This repo is also a Claude Code marketplace. Two install paths:
+This repo is also a Claude Code marketplace.
 
 **A. As a marketplace (recommended, supports auto-update)**
 
@@ -23,25 +25,37 @@ This repo is also a Claude Code marketplace. Two install paths:
 
 Future releases pull automatically with `/plugin marketplace update null-to-hero-marketplace`.
 
-**B. As a direct plugin**
-
-```
-/plugin install MariusYvard/NullToHero
-```
-
-**C. Manual install (Unix/macOS/Linux)**
+**B. Manual install (Unix/macOS/Linux)**
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)
+git clone https://github.com/MariusYvard/NullToHero.git
+bash NullToHero/install.sh
 ```
 
-**D. Manual install (Windows PowerShell)**
+The one-liner `bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)` also works, but it executes a remote script directly. Clone and read `install.sh` first if you prefer to inspect it before running.
+
+**C. Manual install (Windows PowerShell)**
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
+git clone https://github.com/MariusYvard/NullToHero.git
+powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 ```
 
 ---
+
+## What's new in 1.8.0
+
+### Licensing and attribution
+
+A `NOTICE` file now carries the Apache 2.0 attribution for impeccable (Paul Bakaus) and its upstream sources (Anthropic's frontend-design skill and ehmo's typecraft-guide-skill). `ATTRIBUTION.md` states the license explicitly.
+
+### Runtime unit tests
+
+`tests/unit.mjs` covers the live-mode path-containment guard (`resolveInRoot`) and `tests/test_design_system.py` covers slug sanitisation (`safe_slug`). Both run in CI next to the validator, which gains Check 18 (the README headline counts must match reality). The suite is at 259 checks plus the two unit runners.
+
+### Documentation accuracy
+
+The install section drops an unverified direct-install path and adds a `curl | bash` caveat. The README now states the skill-and-sub-command architecture plainly.
 
 ## What's new in 1.7.0
 
@@ -278,6 +292,7 @@ NullToHero works best with two files in your project root:
 
 ## Release History
 
+- **1.8.0** (June 2026): licensing and attribution pass (`NOTICE` for impeccable and its upstream sources, explicit Apache 2.0 statement in `ATTRIBUTION.md`); runtime unit tests for `resolveInRoot` and `safe_slug` wired into CI; validator Check 18 on README headline counts (259 checks); install-section accuracy fixes; `live.js` status bar uses `textContent`.
 - **1.7.1** (June 2026): security and accuracy audit pass. Hardened the `/siteasy live` daemon (path-confined writes, localhost-scoped CORS, CSPRNG session token, bounded request bodies and poll timeouts); fixed an FID/INP contradiction; removed dead in-doc references; corrected the README command count; fixed the marketplace `$schema` URL; added a `SECURITY.md`, validator Check 17, CI concurrency guards, installer tag-pinning, and a `__pycache__` ignore rule. Validator at 256 checks.
 - **1.7.0** (June 2026): real parallel SEO audit sub-agents, self-contained `/siteasy live` variant mode, design-system generator wired into setup, command-reference coherence, installer and supply-chain hardening, validator at 255 checks.
 - **1.6.0** (May 2026) — Modern CSS (View Transitions, container queries, `:has()`, `color-mix()`), full reference frontmatter (0 validator warnings), release-pipeline fixes (package.json tracking, changelog extraction), impeccable attribution.

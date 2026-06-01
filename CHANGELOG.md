@@ -11,6 +11,26 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.8.0] — 2026-06-01
+
+### Added
+
+- `NOTICE` — Apache 2.0 section 4(d) attribution for impeccable (Copyright 2025-2026 Paul Bakaus), carrying forward its upstream notices (Anthropic frontend-design skill, ehmo's typecraft-guide-skill).
+- `tests/unit.mjs` — runtime unit tests for the siteasy live helper: `resolveInRoot` path containment (rejects absolute paths, `../` escapes, empty and non-string input) and `looksGenerated` marker detection.
+- `tests/test_design_system.py` — unit tests for `safe_slug` (normalisation, traversal and unsafe-character stripping, fallback behaviour).
+- `tests/validate.js` — Check 18: the README headline counts (skills, commands, reference docs) must match the real file and command totals. Now 259 checks.
+- CI: both workflows run the Node and Python unit tests alongside the validator.
+
+### Changed
+
+- `ATTRIBUTION.md`: states impeccable's license explicitly (Apache 2.0, the same license as NullToHero) instead of the previous "verify its terms" hedge, and points to `NOTICE`.
+- README: clarifies the architecture (three user-invocable skills routing to 47 sub-commands through the first argument, no separate `commands/` directory) and reworks the install section. The unverified direct `/plugin install owner/repo` path was removed (Claude Code installs plugins as `name@marketplace`), and a caveat plus a clone-first alternative were added for the `curl | bash` one-liner.
+- `tools/design-system/scripts/design_system.py`: the nested `_safe_slug` helper was lifted to a module-level, importable `safe_slug` (behaviour unchanged) so it can be unit-tested.
+- `skills/siteasy/scripts/live.js`: the status bar is built with `textContent` and an element style instead of `innerHTML`.
+- `CONTRIBUTING.md`: the large-file soft limit is Check 13, not Check 12.
+
+---
+
 ## [1.7.1] — 2026-06-01
 
 ### Security

@@ -25,6 +25,9 @@ jobs:
       - name: Validate
         run: node tests/validate.js
 
+      - name: Unit tests
+        run: node tests/unit.mjs && python3 tests/test_design_system.py
+
       - name: Build reference index
         run: node tools/build-index.mjs
 

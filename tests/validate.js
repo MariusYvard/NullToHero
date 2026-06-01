@@ -618,6 +618,44 @@ allSkillMd.forEach(f => {
 });
 if (deadDocRefs === 0) pass(`All ${docRefsChecked} in-doc reference pointers resolve`);
 
+// ─── Check 18: README headline counts match reality ─────────────────────────
+
+section("18. README headline counts are accurate");
+
+const README_PATH = path.join(ROOT, "README.md");
+const readmeTxt = readFile(README_PATH) || "";
+
+function countRefDocs(dir) {
+  let n = 0;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fp = path.join(dir, e.name);
+    if (e.isDirectory()) n += countRefDocs(fp);
+    else if (e.name.endsWith(".md") && e.name !== "SKILL.md") n++;
+  }
+  return n;
+}
+const SKILLS_ROOT = path.join(ROOT, "skills");
+const actualRefDocs = countRefDocs(SKILLS_ROOT);
+const actualSkills = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true })
+  .filter(d => d.isDirectory() && fs.existsSync(path.join(SKILLS_ROOT, d.name, "SKILL.md")))
+  .length;
+const inspectCmdCount = Object.keys(
+  extractCommandRefs(readFile(path.join(SKILLS_ROOT, "inspect", "SKILL.md")))
+).length;
+const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount;
+
+function readmeNum(re) { const m = readmeTxt.match(re); return m ? Number(m[1]) : null; }
+const claims = [
+  ["skills",         readmeNum(/(\d+)\s+skills/i),                    actualSkills],
+  ["commands",       readmeNum(/(\d+)\s+(?:sub-)?commands/i),          actualCommands],
+  ["reference docs", readmeNum(/(\d+)\s+reference docs/i),            actualRefDocs],
+];
+claims.forEach(([label, claimed, actual]) => {
+  if (claimed === null) warn(`README: no "${label}" count found to verify`);
+  else if (claimed === actual) pass(`README "${label}" count ${claimed} matches actual ${actual}`);
+  else fail(`README "${label}" count ${claimed} does not match actual ${actual}`);
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────────
 
 console.log("\n" + "═".repeat(50));

@@ -89,7 +89,10 @@
   function bar(msg, isErr) {
     clearBar();
     barEl = document.createElement("div"); barEl.className = "sl-bar";
-    barEl.innerHTML = "<span style='color:" + (isErr ? "#f87171" : "#9fb3d8") + "'>" + msg + "</span>";
+    var span = document.createElement("span");
+    span.style.color = isErr ? "#f87171" : "#9fb3d8";
+    span.textContent = msg;
+    barEl.appendChild(span);
     document.body.appendChild(barEl);
   }
   function clearBar() { if (barEl && barEl.parentNode) barEl.parentNode.removeChild(barEl); barEl = null; }

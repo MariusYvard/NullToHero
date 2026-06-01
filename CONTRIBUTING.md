@@ -170,7 +170,7 @@ By contributing, you agree that your contribution will be licensed under Apache 
 
 ## Large files
 
-NullToHero imposes a **500 KB** per-file soft limit tracked by `tests/validate.js` (Check 12). A warning fires for any file in `tools/` that exceeds this threshold.
+NullToHero imposes a **500 KB** per-file soft limit tracked by `tests/validate.js` (Check 13). A warning fires for any file in `tools/` that exceeds this threshold.
 
 If you need to add a large dataset:
 

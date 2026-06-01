@@ -1,0 +1,44 @@
+NullToHero
+Copyright 2026 Marius Yvard
+
+This product includes software and design knowledge developed by third parties.
+It is distributed under the Apache License, Version 2.0 (see LICENSE).
+
+================================================================================
+impeccable
+================================================================================
+
+The `siteasy` and `inspect` skills adapt the command vocabulary, design laws and
+review methodology of impeccable.
+
+  impeccable
+  Copyright 2025-2026 Paul Bakaus
+  Licensed under the Apache License, Version 2.0
+  Source: https://github.com/pbakaus/impeccable
+
+Changes made by NullToHero: the vocabulary was remapped to the `/siteasy` and
+`/inspect` command sets, reorganized into this plugin's reference structure, and
+extended with SEO, GEO and additional design references. The `/inspect` skill
+also invokes the upstream `impeccable` CLI through `npx` when present.
+
+impeccable's own NOTICE records the following upstream attributions, carried
+forward here as required by Apache License 2.0 section 4(d):
+
+  - Anthropic frontend-design Skill
+    Copyright 2025 Anthropic, PBC
+    Licensed under the Apache License, Version 2.0
+    Source: https://github.com/anthropics/skills/tree/main/skills/frontend-design
+    impeccable builds on this original skill.
+
+  - Typecraft Guide Skill
+    Author: ehmo
+    Source: https://github.com/ehmo/typecraft-guide-skill
+    impeccable's typography reference incorporates tactical additions from this
+    work, merged at the author's request.
+
+================================================================================
+Standards, tools and data sources
+================================================================================
+
+Additional standards, tools and data sources are credited in ATTRIBUTION.md.
+Each remains under its own license.

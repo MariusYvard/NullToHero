@@ -1,10 +1,10 @@
 {
   "name": "null-to-hero",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "From zero knowledge to hero website. Design + SEO skills for Claude Cowork.",
   "scripts": {
     "build": "node tools/build-index.mjs",
-    "test": "node tools/build-index.mjs && node tests/validate.js"
+    "test": "node tools/build-index.mjs && node tests/validate.js && node tests/unit.mjs && python3 tests/test_design_system.py"
   },
   "repository": {
     "type": "git",

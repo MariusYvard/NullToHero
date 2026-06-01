@@ -26,3 +26,11 @@ jobs:
       - name: Run reference validator
         if: always()
         run: node tests/validate.js
+
+      - name: Run Node unit tests
+        if: always()
+        run: node tests/unit.mjs
+
+      - name: Run Python unit tests
+        if: always()
+        run: python3 tests/test_design_system.py

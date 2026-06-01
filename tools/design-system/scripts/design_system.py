@@ -19,6 +19,20 @@ import os
 from datetime import datetime
 from pathlib import Path
 from core import search, DATA_DIR
+import re
+
+
+def safe_slug(value, fallback):
+    """Sanitize a name into a filesystem-safe slug.
+
+    Lowercases, replaces spaces with dashes, drops characters outside
+    [a-z0-9._-], and strips leading dots and surrounding dashes so a crafted
+    project or page name cannot traverse outside the output directory.
+    """
+    slug = (value or fallback).lower().replace(' ', '-')
+    slug = re.sub(r'[^a-z0-9._-]', '', slug)
+    slug = slug.lstrip('.').strip('-') or fallback
+    return slug
 
 
 # ============ CONFIGURATION ============
@@ -575,15 +589,8 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
     
     # Use project name for project-specific folder.
     # Sanitize to a safe slug so a crafted name cannot traverse outside base_dir.
-    def _safe_slug(value, fallback):
-        import re as _re
-        slug = (value or fallback).lower().replace(' ', '-')
-        slug = _re.sub(r'[^a-z0-9._-]', '', slug)          # drop separators and unsafe chars
-        slug = slug.lstrip('.').strip('-') or fallback     # no leading dots, no bare dashes
-        return slug
-
     project_name = design_system.get("project_name", "default")
-    project_slug = _safe_slug(project_name, "default")
+    project_slug = safe_slug(project_name, "default")
     
     design_system_dir = base_dir / "design-system" / project_slug
     pages_dir = design_system_dir / "pages"
@@ -604,7 +611,7 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
     
     # If page is specified, create page override file with intelligent content
     if page:
-        page_file = pages_dir / f"{_safe_slug(page, 'page')}.md"
+        page_file = pages_dir / f"{safe_slug(page, 'page')}.md"
         page_content = format_page_override_md(design_system, page, page_query)
         with open(page_file, 'w', encoding='utf-8') as f:
             f.write(page_content)
