@@ -8,6 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
+PLUGIN_VERSION="1.7.1"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -59,8 +60,11 @@ warn "Marketplace install failed or not supported. Falling back to manual instal
 TEMP_DIR=$(mktemp -d)
 trap "rm -rf ${TEMP_DIR}" EXIT
 
-log "Cloning repository..."
-git clone --depth 1 "https://github.com/${REPO}.git" "${TEMP_DIR}/NullToHero"
+log "Cloning repository (pinned to v${PLUGIN_VERSION})..."
+if ! git clone --depth 1 --branch "v${PLUGIN_VERSION}" "https://github.com/${REPO}.git" "${TEMP_DIR}/NullToHero" 2>/dev/null; then
+  warn "Tag v${PLUGIN_VERSION} not found; falling back to default branch."
+  git clone --depth 1 "https://github.com/${REPO}.git" "${TEMP_DIR}/NullToHero"
+fi
 
 log "Installing plugin manually..."
 mkdir -p "${PLUGIN_DIR}"

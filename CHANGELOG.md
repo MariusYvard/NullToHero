@@ -1,13 +1,44 @@
 # Changelog
 
 All notable changes to NullToHero are documented here.
-Format: [Semantic Versioning](https://semver.org)
+Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Semantic Versioning](https://semver.org).
 
 ---
 
 ## [Unreleased]
 
 <!-- Add your changes here before the next release -->
+
+---
+
+## [1.7.1] — 2026-06-01
+
+### Security
+
+- siteasy live daemon (`live-server.mjs`, `live-accept.mjs`, `live-core.mjs`): closed an arbitrary-file-write chain. Accept/discard handlers now confine writes to the project root via a new `resolveInRoot` guard (rejecting absolute paths and `../` escapes); CORS is scoped to localhost origins instead of `*`; the session token uses `crypto.randomBytes` instead of `Math.random`; request bodies are capped at 1 MiB and the long-poll timeout at 10 minutes.
+
+### Fixed
+
+- siteasy: `references/optimize.md` no longer presents FID as a live Core Web Vital. Replaced with INP (LCP, INP, CLS), consistent with the project's own `seo/references/technical.md` directive.
+- seo: removed four dead in-doc references (`schema-types.md`, `schema/templates.json` in two files, `eeat-framework.md`); the content they pointed to was already inline.
+- seo: `references/schema.md` — FAQ moved from RESTRICTED to DEPRECATED (rich results removed for all sites May 7, 2026); status date refreshed to June 2026.
+- README: folded `geo quick`/`geo compare` into the `geo` row so the `/seo` table is 19 commands and the total reconciles to 47.
+- `.claude-plugin/marketplace.json`: corrected the `$schema` URL to the resolving `claude-code-marketplace.json`.
+- CHANGELOG: removed the unverifiable "64 reference documents" figure from the 1.0.0 entry; relabelled the format as Keep a Changelog.
+- siteasy: `parallax-audit.mjs` loads Playwright lazily with a clear install message instead of crashing on a missing module; `live-accept.mjs` CLI self-detection is now Windows-safe via `pathToFileURL`.
+
+### Changed
+
+- Touch-target guidance unified across inspect, seo and siteasy: 24×24px CSS minimum (WCAG 2.5.8 AA), 44×44px recommended for touch.
+- geo: broadened the citable-passage figure to ~120–180 words and date-stamped the industry-statistics table.
+- Installers pin the manual-clone fallback to the matching release tag, with a graceful fall-back to the default branch.
+- CI: added `concurrency` guards to both workflows; `release.yml` binds the tag name via `env:` instead of the implicit `GITHUB_REF_NAME`.
+- `.gitignore`: added `__pycache__/` and `*.pyc`; removed the two tracked `.pyc` files from the index.
+
+### Added
+
+- `SECURITY.md` — disclosure policy and trust model.
+- `tests/validate.js` — Check 17: in-doc `references/*.md` and `schema/*.json` pointers must resolve (would have caught the dead references above). Now 256 checks.
 
 ---
 
@@ -165,4 +196,4 @@ Format: [Semantic Versioning](https://semver.org)
 - `/siteasy` — 24 commands for design, UX, motion, performance, and site architecture
 - `/seo` — 7 commands: audit, page, plan, technical, schema, content, geo
 - `/inspect` — 3 commands: detect, preview, review
-- 64 reference documents, Playwright-based browser preview, deterministic anti-pattern detector
+- Core reference documents across siteasy, seo and inspect, Playwright-based browser preview, deterministic anti-pattern detector

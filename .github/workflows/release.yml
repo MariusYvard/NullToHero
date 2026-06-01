@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -25,8 +29,10 @@ jobs:
         run: node tools/build-index.mjs
 
       - name: Extract changelog entry
+        env:
+          TAG_NAME: ${{ github.ref_name }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG_NAME#v}"
           awk -v v="$version" '$0 ~ "^## \\["v"\\]" {f=1; next} f && /^## \[/ {exit} f' CHANGELOG.md > release_notes.txt
           echo "--- release notes ---"
           cat release_notes.txt
@@ -34,7 +40,8 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "NullToHero $GITHUB_REF_NAME" \
+          gh release create "$TAG_NAME" \
+            --title "NullToHero $TAG_NAME" \
             --notes-file release_notes.txt

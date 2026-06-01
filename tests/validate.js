@@ -17,6 +17,10 @@
  * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
  * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md must match
  * 13.  Large files warning — files over 500 KB in tools/ (known exceptions excluded)
+ * 14.  No stale /impeccable command references
+ * 15.  Referenced helper scripts exist on disk
+ * 16.  Declared SEO audit agents are dispatched by audit.md
+ * 17.  In-doc references/*.md and schema/*.json pointers resolve
  */
 
 const fs   = require("fs");
@@ -578,6 +582,41 @@ if (fs.existsSync(SEO_AGENTS)) {
     pass(`All ${agentFiles.length} audit agents are dispatched by audit.md`);
   }
 }
+
+// ─── Check 17: in-doc references/*.md and schema/*.json pointers resolve ──────
+
+section("17. In-doc reference pointers resolve to real files");
+
+// Matches inline-code paths that point into a references/ tree or a schema/ dir.
+// Deliberately narrow: skips bare filenames (e.g. `saas.md`) and output-file
+// templates with placeholders (e.g. `ACTION-PLAN-[domain].md`).
+const DOC_REF_RE = /`([\w./-]*(?:references|schema)\/[\w./-]+\.(?:md|json))`/g;
+let deadDocRefs = 0;
+let docRefsChecked = 0;
+allSkillMd.forEach(f => {
+  const content = readFile(f) || "";
+  const dir = path.dirname(f);
+  let m;
+  while ((m = DOC_REF_RE.exec(content)) !== null) {
+    const ref = m[1];
+    if (ref.includes("[") || ref.includes("]")) continue; // output template, not a pointer
+    docRefsChecked++;
+    // Try resolving against the file's own dir, the skill root, and the repo root.
+    const candidates = [
+      path.join(dir, ref),                 // relative to the doc itself
+      path.join(dir, path.basename(ref)),  // same dir, by basename
+      path.join(ROOT, "skills", ref),      // skill-qualified, e.g. siteasy/references/x.md
+      path.join(ROOT, "skills", "seo", ref),
+      path.join(ROOT, ref),                // repo-root relative
+    ];
+    if (!candidates.some(c => fs.existsSync(c))) {
+      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+      fail(`${relFile}: in-doc reference not found: ${ref}`);
+      deadDocRefs++;
+    }
+  }
+});
+if (deadDocRefs === 0) pass(`All ${docRefsChecked} in-doc reference pointers resolve`);
 
 // ─── Summary ──────────────────────────────────────────────────────────────────
 

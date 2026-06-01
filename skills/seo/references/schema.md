@@ -32,9 +32,7 @@ argument-hint: "[url]"
   - Invalid date formats
 - Flag deprecated types (see below)
 
-## Schema Type Status (as of Feb 2026)
-
-Read `references/schema-types.md` for the full list. Key rules:
+## Schema Type Status (as of June 2026)
 
 ### ACTIVE (recommend freely):
 Organization, LocalBusiness, SoftwareApplication, WebApplication, Product (with Certification markup as of April 2025), ProductGroup, Offer, Service, Article, BlogPosting, NewsArticle, Review, AggregateRating, BreadcrumbList, WebSite, WebPage, Person, ProfilePage, ContactPage, VideoObject, ImageObject, Event, JobPosting, Course, DiscussionForumPosting
@@ -42,14 +40,11 @@ Organization, LocalBusiness, SoftwareApplication, WebApplication, Product (with 
 ### VIDEO & SPECIALIZED (recommend freely):
 BroadcastEvent, Clip, SeekToAction, SoftwareSourceCode
 
-See `schema/templates.json` for ready-to-use JSON-LD templates for these types.
 
 > **JSON-LD and JavaScript rendering:** Per Google's December 2025 JS SEO guidance, structured data injected via JavaScript may face delayed processing. For time-sensitive markup (especially Product, Offer), include JSON-LD in the initial server-rendered HTML.
 
-### RESTRICTED (only for specific sites):
-- **FAQ**: ONLY for government and healthcare authority sites (restricted Aug 2023)
-
 ### DEPRECATED (never recommend):
+- **FAQ**: Rich results removed for all sites May 7, 2026 (previously restricted to government and healthcare authority sites in Aug 2023)
 - **HowTo**: Rich results removed September 2023
 - **SpecialAnnouncement**: Deprecated July 31, 2025
 - **CourseInfo, EstimatedSalary, LearningVideo**: Retired June 2025
@@ -57,7 +52,7 @@ See `schema/templates.json` for ready-to-use JSON-LD templates for these types.
 - **VehicleListing**: Retired from rich results June 2025
 - **Practice Problem**: Retired from rich results late 2025
 - **Dataset**: Retired from rich results late 2025
-- **Book Actions**: Deprecated then reversed, still functional as of Feb 2026 (historical note)
+- **Book Actions**: Deprecated then reversed, still functional as of June 2026 (historical note)
 
 ## Generation
 

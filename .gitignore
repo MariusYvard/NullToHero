@@ -9,6 +9,10 @@ npm-debug.log*
 
 # Build artifacts
 
+# Python
+__pycache__/
+*.pyc
+
 # Editor
 .vscode/
 .idea/

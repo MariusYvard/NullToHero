@@ -12,10 +12,20 @@
  * Exits 0 on pass, 1 on at least one failure.
  */
 
-import { chromium, devices } from 'playwright';
 import { pathToFileURL } from 'node:url';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+
+// Playwright is an optional peer dependency (not bundled). Load it lazily so a
+// missing install yields a clear message instead of an uncaught module error.
+let chromium, devices;
+try {
+  ({ chromium, devices } = await import('playwright'));
+} catch {
+  console.error('[parallax-audit] Playwright is required but not installed.');
+  console.error('  Install it once with:  npm i -D playwright && npx playwright install chromium');
+  process.exit(2);
+}
 
 const RAW = process.argv[2];
 if (!RAW) {

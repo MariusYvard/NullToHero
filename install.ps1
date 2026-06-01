@@ -7,6 +7,7 @@ $ErrorActionPreference = "Stop"
 $REPO      = "MariusYvard/NullToHero"
 $PLUGIN_DIR = Join-Path $env:USERPROFILE ".claude\plugins"
 $INSTALL_NAME = "null-to-hero"
+$PLUGIN_VERSION = "1.7.1"   # pinned release tag for the manual-clone fallback
 
 function Log   { param($msg) Write-Host "[NullToHero] $msg" -ForegroundColor Cyan }
 function Ok    { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
@@ -57,8 +58,12 @@ $tempDir = Join-Path $env:TEMP "NullToHero-install-$(Get-Random)"
 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
 try {
-    Log "Cloning repository..."
-    git clone --depth 1 "https://github.com/$REPO.git" "$tempDir\NullToHero"
+    Log "Cloning repository (pinned to v$PLUGIN_VERSION)..."
+    git clone --depth 1 --branch "v$PLUGIN_VERSION" "https://github.com/$REPO.git" "$tempDir\NullToHero" 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        Warn "Tag v$PLUGIN_VERSION not found; falling back to default branch."
+        git clone --depth 1 "https://github.com/$REPO.git" "$tempDir\NullToHero"
+    }
 
     Log "Installing plugin manually..."
     if (-not (Test-Path $PLUGIN_DIR)) {

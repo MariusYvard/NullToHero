@@ -89,7 +89,7 @@ Allow: /
 
 ### 5. Mobile Optimization
 - Responsive design: viewport meta tag, responsive CSS
-- Touch targets: minimum 48x48px with 8px spacing
+- Touch targets: 24x24px CSS minimum (WCAG 2.5.8 AA), 44x44px recommended for comfortable touch, with adequate spacing
 - Font size: minimum 16px base
 - No horizontal scroll
 - Mobile-first indexing: Google indexes mobile version. **Mobile-first indexing is 100% complete as of July 5, 2024.** Google now crawls and indexes ALL websites exclusively with the mobile Googlebot user-agent.

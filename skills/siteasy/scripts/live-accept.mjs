@@ -5,14 +5,15 @@
 // CLI: live-accept.mjs --id EVENT --file PATH --variant N            (accept)
 //      live-accept.mjs --id EVENT --file PATH --discard              (discard)
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import { projectRoot, gitTrackedFiles, looksGenerated } from "./live-core.mjs";
+import { pathToFileURL } from "node:url";
+import { projectRoot, gitTrackedFiles, looksGenerated, resolveInRoot } from "./live-core.mjs";
 
 const VAR_RE = (n) => new RegExp(
   `<div\\s+data-siteasy-variant=["']${n}["'][^>]*>[\\s\\S]*?<\\/div>`, "m");
 
 export function applyAccept({ root, file, variantId }) {
-  const full = join(root, file);
+  const full = resolveInRoot(root, file);
+  if (!full) return { handled: false, error: "path_outside_root", file };
   if (!existsSync(full)) return { handled: false, error: "file_missing", file };
   const tracked = gitTrackedFiles(root);
   const rel = file.split("\\").join("/");
@@ -35,7 +36,8 @@ export function applyAccept({ root, file, variantId }) {
 
 export function applyDiscard({ root, file }) {
   // Strip all variant scaffolding markers and blocks; restore original.
-  const full = join(root, file);
+  const full = resolveInRoot(root, file);
+  if (!full) return { handled: false, error: "path_outside_root", file };
   if (!existsSync(full)) return { handled: true, file };
   let s = readFileSync(full, "utf8");
   s = s.replace(/[ \t]*(<!--|\{\/\*) Variants: insert below this line (-->|\*\/\})\n?/g, "");
@@ -47,7 +49,7 @@ export function applyDiscard({ root, file }) {
 }
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   const get = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
   const root = projectRoot();

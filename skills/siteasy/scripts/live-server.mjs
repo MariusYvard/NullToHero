@@ -4,7 +4,7 @@
 //
 // Usage: live-server.mjs start --port N --token T
 //        live-server.mjs stop [--keep-inject]
-import { readFileSync, existsSync, writeFileSync, unlinkSync } from "node:fs";
+import { readFileSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -56,9 +56,22 @@ function sseSend(event) {
   sseClients.forEach((c) => { try { c.write(payload); } catch {} });
 }
 
+// Only same-machine dev origins may talk to the daemon. The token is the auth;
+// scoping CORS keeps a leaked token from being driven by an arbitrary website.
+function corsFor(req) {
+  const origin = req.headers.origin;
+  const ok = !origin || /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(origin);
+  const h = { "access-control-allow-headers": "content-type,x-live-token", vary: "Origin" };
+  if (ok && origin) h["access-control-allow-origin"] = origin;
+  return h;
+}
+
+const MAX_BODY_BYTES = 1 << 20;   // 1 MiB cap on request bodies
+const MAX_POLL_MS = 600000;       // 10 min ceiling on long-poll timeout
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://127.0.0.1:${PORT}`);
-  const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type,x-live-token" };
+  const cors = corsFor(req);
   if (req.method === "OPTIONS") { res.writeHead(204, cors); return res.end(); }
 
   // Serve the browser client.
@@ -79,7 +92,10 @@ const server = http.createServer(async (req, res) => {
     req.on("close", () => {
       sseClients = sseClients.filter((c) => c !== res);
       if (sseClients.length === 0) {
-        exitTimer = setTimeout(() => deliver({ type: "exit", reason: "browser_closed" }), 8000);
+        exitTimer = setTimeout(() => {
+          exitTimer = null;
+          if (sseClients.length === 0) deliver({ type: "exit", reason: "browser_closed" });
+        }, 8000);
       }
     });
     return;
@@ -101,7 +117,7 @@ const server = http.createServer(async (req, res) => {
   // Agent long-poll.
   if (req.method === "GET" && url.pathname === "/poll") {
     if (queue.length) { res.writeHead(200, cors); return res.end(JSON.stringify(queue.shift())); }
-    const timeout = Number(url.searchParams.get("timeout")) || 600000;
+    const timeout = Math.min(Number(url.searchParams.get("timeout")) || MAX_POLL_MS, MAX_POLL_MS);
     const timer = setTimeout(() => {
       waiters.splice(waiters.findIndex((w) => w.res === res), 1);
       res.writeHead(200, cors); res.end(JSON.stringify({ type: "timeout" }));
@@ -130,8 +146,15 @@ const server = http.createServer(async (req, res) => {
 
 function readBody(req) {
   return new Promise((resolve) => {
-    let b = ""; req.on("data", (c) => (b += c));
-    req.on("end", () => { try { resolve(b ? JSON.parse(b) : {}); } catch { resolve({}); } });
+    let b = "", size = 0, aborted = false;
+    req.on("data", (c) => {
+      if (aborted) return;
+      size += c.length;
+      if (size > MAX_BODY_BYTES) { aborted = true; req.destroy(); return resolve({}); }
+      b += c;
+    });
+    req.on("end", () => { if (aborted) return; try { resolve(b ? JSON.parse(b) : {}); } catch { resolve({}); } });
+    req.on("error", () => resolve({}));
   });
 }
 

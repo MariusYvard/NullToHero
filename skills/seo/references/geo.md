@@ -25,6 +25,8 @@ argument-hint: "[audit|quick|compare] [url]"
 
 ## Key Statistics (2026)
 
+*Figures below reflect industry data available as of early 2026 and decay quickly; re-verify before quoting.*
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | AI Overviews reach | 1.5B users/month across 200+ countries | Google |
@@ -77,7 +79,7 @@ argument-hint: "[audit|quick|compare] [url]"
 
 ### Dimension 1: Citability Score (25%)
 
-**Optimal passage length for AI citation: 134–167 words.**
+**Optimal passage length for AI citation: roughly 120–180 words per self-contained block.** (Citation-extraction studies cluster citable units in this range; treat the figure as a guideline, not a hard target.)
 
 AI systems extract self-contained passages that directly answer a question. Every key claim should exist as an extractable unit.
 
@@ -302,7 +304,7 @@ Backed by: Reddit, Yahoo, Medium, Quora, Cloudflare, Akamai, Creative Commons
 ## Quick Wins (can be done today)
 
 1. Add "What is [topic]?" definition in the first 60 words
-2. Structure answer blocks of 134–167 words around specific questions
+2. Structure answer blocks of roughly 120–180 words around specific questions
 3. Add question-based H2/H3 headings throughout
 4. Include specific statistics with source attribution
 5. Add visible publication and last-updated dates

@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'."
-version: 1.7.0
+version: 1.7.1
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 license: "Apache-2.0"
@@ -43,7 +43,7 @@ Triage findings highest severity first: fix CRITICAL before HIGH, HIGH before ME
 | # | Category | Severity |
 |---|----------|----------|
 | 1 | Accessibility (contrast, focus rings, alt text, keyboard, aria-labels) | CRITICAL |
-| 2 | Touch and interaction (target size 44x44px, spacing, feedback) | CRITICAL |
+| 2 | Touch and interaction (target size: 24x24px CSS minimum per WCAG 2.5.8 AA, 44x44px recommended for touch; spacing, feedback) | CRITICAL |
 | 3 | Performance and Core Web Vitals (WebP/AVIF, lazy-load, CLS, LCP) | HIGH |
 | 4 | Structure and semantics (heading order, landmarks, valid HTML) | HIGH |
 | 5 | Layout and responsive (breakpoints, viewport, no horizontal scroll) | HIGH |

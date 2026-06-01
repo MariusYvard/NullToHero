@@ -2,9 +2,10 @@
 // live-core.mjs — shared helpers for siteasy live mode (maison implementation).
 // Pure Node standard library. No external dependencies.
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from "node:fs";
-import { join, resolve, relative, extname, basename } from "node:path";
+import { join, resolve, relative, extname, isAbsolute, sep } from "node:path";
 import { execFileSync } from "node:child_process";
 import http from "node:http";
+import { randomBytes } from "node:crypto";
 
 export const STATE_DIRNAME = ".siteasy-live";
 
@@ -110,6 +111,17 @@ export function looksGenerated(content) {
   return GENERATED_MARKERS.some((r) => r.test(head));
 }
 
+// ── Path containment ───────────────────────────────────────────────────────────
+// Resolve `file` against `root` and confirm it stays inside the project tree.
+// Returns the absolute path, or null if `file` is absolute / escapes root.
+export function resolveInRoot(root, file) {
+  if (typeof file !== "string" || file.length === 0) return null;
+  if (isAbsolute(file)) return null;
+  const full = resolve(root, file);
+  if (full !== root && !full.startsWith(root + sep)) return null;
+  return full;
+}
+
 // ── Comment syntax ─────────────────────────────────────────────────────────────
 export function commentSyntaxFor(file) {
   const ext = extname(file).toLowerCase();
@@ -140,5 +152,5 @@ export function httpJSON(method, port, path, token, body) {
 }
 
 export function token() {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  return randomBytes(24).toString("base64url");
 }
