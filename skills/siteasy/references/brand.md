@@ -1,7 +1,7 @@
 ---
 name: brand
 description: "When design IS the product: brand sites, landing pages, marketing surfaces, campaign pages, portfolios, long-form content, about pages. The deliverable is the design itself - a."
-version: 1.6.0
+version: 1.9.0
 ---
 
 # Brand register
@@ -77,7 +77,7 @@ Brand surfaces lean on imagery. A restaurant, hotel, magazine, or product landin
 
 **When the brief implies imagery (restaurants, hotels, magazines, photography, hobbyist communities, food, travel, fashion, product), you must ship imagery.** Zero images is a bug, not a design choice. "Restraint" is not an excuse.
 
-- **For greenfield work without local assets, use stock imagery** — Unsplash is the default. The URL shape is `https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w=1600&q=80`. Pick real Unsplash photo IDs you're confident exist (`photo-1559339352-11d035aa65de`, `photo-1590490360182-c33d57733427`, etc.); if unsure, pick fewer photos but don't substitute colored `<div>` placeholders.
+- **For greenfield work without local assets, use seeded placeholder imagery that never 404s.** The URL shape is `https://picsum.photos/seed/{descriptive-words}/1600/900`. Choose seed words for the brand's physical object (`handmade-pasta-wooden-table`), not the generic category. Never substitute colored `<div>` placeholders.
 - **Search for the brand's physical object**, not the generic category: "handmade pasta on a scratched wooden table" beats "Italian food"; "cypress trees above a limestone hotel facade at dusk" beats "luxury hotel".
 - **One decisive photo beats five mediocre ones.** Hero imagery should commit to a mood; padding with more stock doesn't rescue an indecisive one.
 - **Alt text is part of the voice.** "Coastal fettuccine, hand-cut, served on the terrace" beats "pasta dish".

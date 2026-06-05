@@ -1,7 +1,7 @@
 ---
 name: creative-patterns
-description: "Arsenal of high-end UI patterns for /siteasy overdrive, /siteasy delight, and ambitious /siteasy build work. Use selectively - the point is intentionality, not."
-version: 1.6.0
+description: "Arsenal of bold creative techniques for /siteasy overdrive, delight, and build. Use selectively; the point is intentionality, not novelty for its own sake."
+version: 1.9.0
 ---
 
 # Creative Patterns
@@ -189,7 +189,7 @@ These patterns signal "AI made this." Avoid unless explicitly requested.
 - **Custom mouse cursors** — outdated, hurt performance and accessibility
 
 ### Typography
-- **Inter** — banned. Use Geist, Outfit, Cabinet Grotesk, or Satoshi
+- **Inter** — banned. Use Geist, Cabinet Grotesk, or Satoshi
 - **Oversized H1 that screams** — control hierarchy through weight and color, not scale alone
 - **Serif fonts on dashboards or software UIs** — use high-end sans pairings (Geist + Geist Mono, Satoshi + JetBrains Mono)
 

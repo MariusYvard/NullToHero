@@ -15,15 +15,17 @@
  *  9.  siteasy command→reference mapping (every declared command has a backing file)
  * 10.  siteasy command count meets minimum (≥25)
  * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
+ * 11b. audit (meta-orchestrator) SKILL.md, command->reference mapping, reference frontmatter
  * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md, install.sh, install.ps1 must match
  * 13.  Large files warning — files over 500 KB in tools/ (known exceptions excluded)
  * 14.  No stale /impeccable command references
  * 15.  Referenced helper scripts exist on disk
- * 16.  Declared SEO audit agents are dispatched by audit.md
+ * 16.  All plugin agents are dispatched by an orchestrator reference
  * 17.  In-doc references/*.md and schema/*.json pointers resolve
  * 18.  README headline counts are accurate
  * 19.  reference-index.json matches references on disk (stale-index guard)
  * 20.  No stale present-tense "FAQ restricted to gov/health" claims in SEO references
+ * 21.  CSV column integrity - header vs row field counts in tools/ data (quote-aware)
  */
 
 const fs   = require("fs");
@@ -112,11 +114,19 @@ const FILE_INTEGRITY = {
   "skills/seo/references/ecommerce.md":         { minLines:  80 },
   "skills/seo/references/report.md":            { minLines:  80 },
   "skills/seo/references/action-plan.md":       { minLines:  80 },
-  "agents/audit-technical.md":       { minLines:  60 },
-  "agents/audit-content.md":         { minLines:  60 },
-  "agents/audit-schema.md":          { minLines:  60 },
-  "agents/audit-geo.md":             { minLines:  60 },
-  "agents/audit-performance.md":     { minLines:  60 },
+  "agents/seo-agent-technical.md":      { minLines:  60 },
+  "agents/seo-agent-content.md":        { minLines:  60 },
+  "agents/seo-agent-schema.md":         { minLines:  60 },
+  "agents/seo-agent-geo.md":            { minLines:  60 },
+  "agents/seo-agent-performance.md":    { minLines:  60 },
+  "agents/inspect-agent-a11y.md":         { minLines:  60 },
+  "agents/inspect-agent-interaction.md":  { minLines:  60 },
+  "agents/inspect-agent-layout.md":       { minLines:  60 },
+  "agents/inspect-agent-code.md":         { minLines:  60 },
+  "agents/siteasy-agent-ux.md":           { minLines:  60 },
+  "agents/siteasy-agent-visual.md":       { minLines:  60 },
+  "agents/siteasy-agent-motion.md":       { minLines:  60 },
+  "agents/siteasy-agent-content.md":      { minLines:  60 },
   // ── siteasy ──────────────────────────────────────────────────────────────
   "skills/siteasy/SKILL.md":                                { minLines: 140 },  // actual: 153
   "skills/siteasy/references/live.md":                      { minLines: 520 },  // actual: 546
@@ -155,7 +165,6 @@ const FILE_INTEGRITY = {
   "skills/siteasy/references/adapt.md":                     { minLines: 110 },
   "skills/siteasy/references/typeset.md":                   { minLines: 100 },
   "skills/siteasy/references/clarify.md":                   { minLines: 100 },
-  "skills/siteasy/references/playwright.md":                { minLines: 100 },
   "skills/siteasy/references/distill.md":                   { minLines:  90 },
   "skills/siteasy/references/cognitive-load.md":            { minLines:  80 },
   "skills/siteasy/references/typography.md":                { minLines:  75 },
@@ -172,6 +181,10 @@ const FILE_INTEGRITY = {
   "skills/inspect/references/detect.md":        { minLines: 115 },  // actual: 125
   "skills/inspect/references/review.md":        { minLines: 100 },
   "skills/inspect/references/preview.md":       { minLines:  35 },
+  // -- audit (meta-orchestrator) ------------------------------------------
+  "skills/audit/SKILL.md":                      { minLines:  60 },
+  "skills/audit/references/full.md":            { minLines: 150 },
+  "skills/audit/references/report.md":          { minLines:  60 },
 };
 
 // ─── Check 1: seo/SKILL.md exists ─────────────────────────────────────────────
@@ -245,11 +258,15 @@ if (fs.existsSync(SEO_REFS)) {
 
 // ─── Check 5: Agent files ─────────────────────────────────────────────────────
 
-section("5. seo agent files");
+section("5. plugin agent files (SEO + inspect + siteasy)");
 
 const expectedAgents = [
-  "audit-technical.md", "audit-content.md",
-  "audit-schema.md", "audit-geo.md", "audit-performance.md",
+  "seo-agent-technical.md", "seo-agent-content.md",
+  "seo-agent-schema.md", "seo-agent-geo.md", "seo-agent-performance.md",
+  "inspect-agent-a11y.md", "inspect-agent-interaction.md",
+  "inspect-agent-layout.md", "inspect-agent-code.md",
+  "siteasy-agent-ux.md", "siteasy-agent-visual.md",
+  "siteasy-agent-motion.md", "siteasy-agent-content.md",
 ];
 
 if (!fs.existsSync(SEO_AGENTS)) {
@@ -261,10 +278,10 @@ if (!fs.existsSync(SEO_AGENTS)) {
     const content = readFile(agentPath);
     const fm = parseFrontmatter(content);
     if (!fm) { fail(`agents/${file}: missing frontmatter`); return; }
-    ["name", "description", "model"].forEach(field => {
+    ["name", "description", "model", "tools"].forEach(field => {
       if (!fm[field]) fail(`agents/${file}: missing standard plugin-agent field '${field}'`);
     });
-    if (fm.name && fm.description && fm.model) {
+    if (fm.name && fm.description && fm.model && fm.tools) {
       pass(`agents/${file}: valid plugin agent (${fm.name}, model: ${fm.model})`);
     }
   });
@@ -420,7 +437,45 @@ if (!fs.existsSync(INSPECT_REFS)) {
   });
 }
 
-// ─── Check 12: Version consistency ────────────────────────────────────────────
+// --- Check 11b: audit (meta-orchestrator) SKILL.md and references ------------
+
+section("11b. audit SKILL.md and references");
+
+const AUDIT_SKILL = path.join(ROOT, "skills", "audit", "SKILL.md");
+const AUDIT_REFS  = path.join(ROOT, "skills", "audit", "references");
+
+const auditSKILL = readFile(AUDIT_SKILL);
+if (!auditSKILL) {
+  fail("skills/audit/SKILL.md not found");
+} else {
+  const fm = parseFrontmatter(auditSKILL);
+  if (!fm) fail("skills/audit/SKILL.md: missing frontmatter");
+  else if (!fm.version) fail("skills/audit/SKILL.md: missing 'version' field");
+  else pass(`skills/audit/SKILL.md found (v${fm.version})`);
+
+  const auditCmdRefMap = extractCommandRefs(auditSKILL);
+  if (Object.keys(auditCmdRefMap).length === 0) {
+    warn("No commands with references found in audit/SKILL.md - check table formatting");
+  } else {
+    Object.entries(auditCmdRefMap).forEach(([cmd, refs]) => {
+      refs.forEach(ref => {
+        if (fs.existsSync(path.join(AUDIT_REFS, ref))) pass(`audit '${cmd}' -> references/${ref} ok`);
+        else fail(`audit '${cmd}' -> references/${ref} NOT found`);
+      });
+    });
+  }
+}
+
+if (fs.existsSync(AUDIT_REFS)) {
+  fs.readdirSync(AUDIT_REFS).filter(f => f.endsWith(".md")).forEach(file => {
+    const fm = parseFrontmatter(readFile(path.join(AUDIT_REFS, file)) || "");
+    if (!fm) warn(`audit/references/${file}: missing frontmatter`);
+    else if (!fm.name || !fm.version) warn(`audit/references/${file}: incomplete frontmatter`);
+    else pass(`audit/references/${file}: ok (v${fm.version})`);
+  });
+}
+
+// --- Check 12: Version consistency ----------------------------------------------
 
 section("12. Version consistency (plugin.json / marketplace.json / SKILL.md)");
 
@@ -454,7 +509,7 @@ if (marketplaceJsonContent) {
   } catch { fail("marketplace.json: invalid JSON"); }
 } else { fail(".claude-plugin/marketplace.json: not found"); }
 
-["seo", "siteasy", "inspect"].forEach(skill => {
+["seo", "siteasy", "inspect", "audit"].forEach(skill => {
   const content = readFile(path.join(ROOT, "skills", skill, "SKILL.md"));
   if (content) {
     const fm = parseFrontmatter(content);
@@ -580,22 +635,22 @@ if (missingScripts === 0) pass(`All ${scriptRefs} referenced helper scripts exis
 
 // ─── Check 16: declared agents are actually dispatched ────────────────────────
 
-section("16. SEO audit agents are dispatched, not orphaned");
+section("16. All plugin agents are dispatched by an orchestrator, not orphaned");
 
 if (fs.existsSync(SEO_AGENTS)) {
   const agentFiles = fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md"));
-  const auditRef = readFile(path.join(SEO_REFS, "audit.md")) || "";
+  const allSkillText = allSkillMd.map(f => readFile(f) || "").join("\n");
   let orphan = 0;
   agentFiles.forEach(file => {
     const fm = parseFrontmatter(readFile(path.join(SEO_AGENTS, file)) || "");
     const agentName = fm && fm.name;
-    if (agentName && !auditRef.includes(agentName)) {
-      fail(`agents/${file}: agent '${agentName}' is never referenced by references/audit.md (orphaned)`);
+    if (agentName && !allSkillText.includes(agentName)) {
+      fail(`agents/${file}: agent '${agentName}' is never dispatched by any skill reference (orphaned)`);
       orphan++;
     }
   });
   if (orphan === 0 && agentFiles.length > 0) {
-    pass(`All ${agentFiles.length} audit agents are dispatched by audit.md`);
+    pass(`All ${agentFiles.length} agents are dispatched by an orchestrator`);
   }
 }
 
@@ -658,7 +713,10 @@ const actualSkills = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true })
 const inspectCmdCount = Object.keys(
   extractCommandRefs(readFile(path.join(SKILLS_ROOT, "inspect", "SKILL.md")))
 ).length;
-const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount;
+const auditCmdCount = Object.keys(
+  extractCommandRefs(readFile(path.join(SKILLS_ROOT, "audit", "SKILL.md")))
+).length;
+const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount + auditCmdCount;
 
 function readmeNum(re) { const m = readmeTxt.match(re); return m ? Number(m[1]) : null; }
 const claims = [
@@ -744,7 +802,55 @@ section("20. No stale FAQ 'restricted to gov/health' claims in SEO references");
   if (staleFaq === 0) pass(`No stale FAQ gov/health claims (${faqLinesScanned} FAQ mentions scanned)`);
 }
 
-// ─── Summary ──────────────────────────────────────────────────────────────────
+// --- Check 21: CSV column integrity -------------------------------------------
+// Catches unescaped commas that silently shift columns in the data CSVs consumed
+// by the design-system generator and /inspect. Quote-aware: commas inside double
+// quotes are legitimate. Free-form backup files are exempt.
+section("21. CSV column integrity (header vs rows)");
+{
+  const CSV_EXEMPT = new Set([
+    "tools/design-system/data/draft.csv",
+    "tools/design-system/data/design.csv",
+  ]);
+  function countFields(line) {
+    let cnt = 1, inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') inQ = !inQ;
+      else if (ch === "," && !inQ) cnt++;
+    }
+    return cnt;
+  }
+  function walkCsv(dir, acc) {
+    if (!fs.existsSync(dir)) return acc;
+    for (const name of fs.readdirSync(dir)) {
+      const full = path.join(dir, name);
+      if (fs.statSync(full).isDirectory()) walkCsv(full, acc);
+      else if (name.endsWith(".csv")) acc.push(full);
+    }
+    return acc;
+  }
+  let badCsv = 0, csvScanned = 0;
+  walkCsv(path.join(ROOT, "tools"), []).forEach(f => {
+    const rel = f.slice(ROOT.length + 1).split(path.sep).join("/");
+    if (CSV_EXEMPT.has(rel)) return;
+    const lines = (readFile(f) || "").split("\n").filter(l => l.length > 0);
+    if (lines.length < 2) return;
+    csvScanned++;
+    const header = countFields(lines[0]);
+    let fileBad = 0;
+    lines.slice(1).forEach((line, i) => {
+      if (countFields(line) !== header) {
+        fail(`${rel}:${i + 2}: ${countFields(line)} columns, header has ${header} (unescaped comma?)`);
+        badCsv++; fileBad++;
+      }
+    });
+    if (fileBad === 0) pass(`${rel}: ${header} columns consistent across ${lines.length - 1} rows`);
+  });
+  if (csvScanned === 0) warn("No CSV files scanned");
+}
+
+// --- Summary --------------------------------------------------------------------
 
 console.log("\n" + "═".repeat(50));
 console.log(`  Checks run:  ${checks}`);

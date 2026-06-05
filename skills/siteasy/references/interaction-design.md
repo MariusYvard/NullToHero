@@ -1,7 +1,7 @@
 ---
 name: interaction-design
-description: "Every interactive element needs these states designed:"
-version: 1.6.0
+description: "Interactive-state design: the default, hover, focus, active, disabled, loading, and error states every control needs."
+version: 1.9.0
 ---
 
 # Interaction Design

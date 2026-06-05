@@ -1,7 +1,7 @@
 ---
 name: gestalt
-description: "The cognitive laws that govern how humans perceive visual groupings. Every layout choice activates one or more of these principles, whether the designer intends it or not. Use."
-version: 1.6.0
+description: "Gestalt principles of perception (proximity, similarity, closure, continuity, figure-ground) applied to layout, grouping, and visual hierarchy."
+version: 1.9.0
 ---
 
 # Gestalt Principles

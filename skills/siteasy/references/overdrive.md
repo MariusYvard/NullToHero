@@ -1,7 +1,7 @@
 ---
 name: overdrive
-description: "Start your response with:"
-version: 1.6.0
+description: "Advanced visual effects for high-impact interfaces: the View Transitions API, WebGL, and scroll-driven animations."
+version: 1.9.0
 ---
 
 Start your response with:

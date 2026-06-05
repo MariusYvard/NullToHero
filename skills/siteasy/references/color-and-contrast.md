@@ -1,7 +1,7 @@
 ---
 name: color-and-contrast
 description: "Stop using HSL. Use OKLCH (or LCH) instead. It's perceptually uniform, meaning equal steps in lightness look equal-unlike HSL where 50% lightness in yellow looks bright while 50%."
-version: 1.6.0
+version: 1.9.0
 ---
 
 # Color & Contrast
@@ -50,7 +50,7 @@ The common mistake: using the accent color everywhere because it's "the brand co
 | Content Type | AA Minimum | AAA Target |
 |--------------|------------|------------|
 | Body text | 4.5:1 | 7:1 |
-| Large text (18px+ or 14px bold) | 3:1 | 4.5:1 |
+| Large text (24px+, or 18.66px+ bold) | 3:1 | 4.5:1 |
 | UI components, icons | 3:1 | 4.5:1 |
 | Non-essential decorations | None | None |
 

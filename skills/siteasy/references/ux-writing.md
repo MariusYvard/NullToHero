@@ -1,7 +1,7 @@
 ---
 name: ux-writing
-description: "Never use 'OK', 'Submit', or 'Yes/No'. These are lazy and ambiguous. Use specific verb + object patterns:"
-version: 1.6.0
+description: "UX writing patterns: replace lazy, ambiguous labels with specific verb-plus-object microcopy, error messages, and empty states."
+version: 1.9.0
 ---
 
 # UX Writing

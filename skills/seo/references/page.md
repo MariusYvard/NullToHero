@@ -5,7 +5,7 @@ description: >
   meta tags, schema, images, performance. Use for: "analyze this page", "on-page
   SEO", "page audit", "title tag", "meta description", "H1", "page score",
   "single URL analysis".
-version: 1.8.2
+version: 1.9.0
 ---
 
 # Single Page Analysis
@@ -22,7 +22,7 @@ version: 1.8.2
 - External links: to authoritative sources, reasonable count
 
 ### Content Quality
-- Word count vs page type minimums (see quality-gates.md)
+- Word count vs page type minimums (see [content.md](content.md))
 - Readability: Flesch Reading Ease score, grade level
 - Keyword density: natural (1-3%), semantic variations present
 - E-E-A-T signals: author bio, credentials, first-hand experience markers
@@ -85,11 +85,11 @@ Ready-to-use JSON-LD code for detected opportunities
 
 ## CROSS-SKILL REFERENCES
 
-| Besoin / Need | Skill |
+| Need | Skill |
 |---------------|-------|
-| Audit complet du site / Full site-wide audit | `/seo audit` |
-| Audit technique approfondi / Technical deep-dive | `/seo technical` |
-| Qualité du contenu et E-E-A-T / Content quality & E-E-A-T | `/seo content` |
-| Données structurées et schéma / Schema & structured data | `/seo schema` |
-| Optimisation images de la page / Page image optimization | (not included) |
-| Citabilité IA de la page / Page AI citability | `/seo geo` |
+| Full site-wide audit | `/seo audit` |
+| Technical deep-dive | `/seo technical` |
+| Content quality & E-E-A-T | `/seo content` |
+| Schema & structured data | `/seo schema` |
+| Page image optimization | `/seo images` |
+| Page AI citability | `/seo geo` |

@@ -1,7 +1,7 @@
 ---
 name: shape
-description: "Shape the UX and UI for a feature before any code is written. This command produces a design brief: a structured artifact that guides implementation through discovery, not."
-version: 1.6.0
+description: "Produce a shape brief, the design artifact that guides implementation through discovery before any code is written."
+version: 1.9.0
 ---
 
 Shape the UX and UI for a feature before any code is written. This command produces a **design brief**: a structured artifact that guides implementation through discovery, not guesswork.

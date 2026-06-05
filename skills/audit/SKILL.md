@@ -1,0 +1,73 @@
+---
+name: audit
+description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
+version: 1.9.0
+user-invocable: true
+argument-hint: "[url] | [full|seo|defects|design|quick|report] [url | file]"
+license: "Apache-2.0"
+allowed-tools:
+  - Read
+  - Write
+  - WebFetch
+  - Glob
+  - Grep
+  - Task
+  - Bash(node *)
+  - Bash(python3 *)
+---
+
+Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/seo, /inspect, /siteasy), dispatches all 13 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
+
+## Commands
+
+| Command | What it does | Reference |
+|---------|-------------|-----------|
+| `full [url]` | All 13 sub-agents across SEO, defects, and design; unified report + action plan | [references/full.md](references/full.md) |
+| `seo [url]` | Search-visibility group only (5 SEO sub-agents) | [references/full.md](references/full.md) |
+| `defects [url]` | Front-end defect group only (4 inspect sub-agents) | [references/full.md](references/full.md) |
+| `design [url]` | Design-quality group only (4 siteasy sub-agents) | [references/full.md](references/full.md) |
+| `quick [url]` | One representative sub-agent per group for a fast triage | [references/full.md](references/full.md) |
+| `report [file]` | Format an existing audit into a client-ready report or PDF | [references/report.md](references/report.md) |
+
+Six commands, two references. The five run modes (`full`, `seo`, `defects`, `design`, `quick`) all share the orchestration playbook in [references/full.md](references/full.md); they differ only in which agent group is dispatched. The `report` mode formats an already-produced audit and is documented in [references/report.md](references/report.md).
+
+## How to run a command
+
+When the user invokes a command:
+1. Read the matching reference file with the Read tool (`full.md` for the run modes, `report.md` for formatting).
+2. Follow the instructions in that reference exactly. Do not improvise scoring weights or skip a dimension.
+3. If no command is specified:
+   - With a URL, the bare invocation runs `full` against that URL.
+   - With no URL, ask the user for the site URL before dispatching any agent.
+
+## Relationship to the other skills
+
+The three audit groups map one-to-one onto the plugin's three other skills and reuse their sub-agents directly. There is a single source of truth per dimension and no duplicated detection logic. The audit skill changes only the scheduling (parallel, shared fetch) and the consolidation (one merged report).
+
+| Group | Backing skill | Sub-agents reused |
+|-------|---------------|-------------------|
+| Search visibility | /seo (see /seo audit) | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo |
+| Front-end defects | /inspect (detect, review) | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
+| Design quality | /siteasy (see /siteasy audit) | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content |
+
+Because the agents are shared, a fix surfaced here can be re-run or deepened with the owning skill (for example /seo technical for a flagged crawl issue, or /siteasy clarify for flagged copy) without re-auditing the whole site.
+
+## Output
+
+Each run mode produces two files (see [references/full.md](references/full.md) for the templates):
+
+- `SITE-AUDIT-REPORT.md` holds the full findings for every group that ran, with each agent's returned section embedded verbatim.
+- `ACTION-PLAN.md` holds the consolidated, de-duplicated fix list ordered Critical, High, Medium, Low.
+
+The overall Site Health Score weights Search Visibility at 35 percent, Front-end Defects at 35 percent, and Design Quality at 30 percent. Any critical accessibility or interaction defect caps the Defects group regardless of other passes. The exact weights and the cap rule live in [references/full.md](references/full.md).
+
+## When NOT to use
+
+| Situation | Use instead |
+|-----------|-------------|
+| You only need search visibility | /seo audit |
+| You only need deterministic front-end defects | /inspect detect or /inspect review |
+| You only need subjective design and UX review | /siteasy audit |
+| You want to build, fix, or redesign the interface | /siteasy build |
+
+A single-dimension request does not need all 13 agents. Routing it to the one owning skill is faster and cheaper. The audit skill is for the whole-site, cross-dimension pass.

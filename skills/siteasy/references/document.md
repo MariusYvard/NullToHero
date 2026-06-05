@@ -1,7 +1,7 @@
 ---
 name: document
 description: "Generate a DESIGN.md file at the project root that captures the current visual design system, so AI agents generating new screens stay on-brand."
-version: 1.6.0
+version: 1.9.0
 ---
 
 Generate a `DESIGN.md` file at the project root that captures the current visual design system, so AI agents generating new screens stay on-brand.
@@ -72,7 +72,7 @@ Optional evocative subtitles are allowed in the form `## 2. Colors: The [Name] P
 - An existing `DESIGN.md` is stale (the design has drifted).
 - Before a large redesign, to capture the current state as a reference.
 
-If a `DESIGN.md` already exists, **do not silently overwrite it**. Show the user the existing file and STOP and call the AskUserQuestion tool to clarify. whether to refresh, overwrite, or merge.
+If a `DESIGN.md` already exists, **do not silently overwrite it**. Show the user the existing file and STOP and call the AskUserQuestion tool to clarify whether to refresh, overwrite, or merge.
 
 ## Two paths
 

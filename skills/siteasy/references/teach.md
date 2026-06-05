@@ -1,7 +1,7 @@
 ---
 name: teach
-description: "Gathers design context for a project and writes two complementary files at the project root:"
-version: 1.6.0
+description: "Interactive teaching mode: inspects a project and writes two complementary files at the project root to explain its design system."
+version: 1.9.0
 ---
 
 # Teach Flow

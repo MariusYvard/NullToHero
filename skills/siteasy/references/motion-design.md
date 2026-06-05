@@ -1,7 +1,7 @@
 ---
 name: motion-design
 description: "Exit animations are faster than entrances - use ~75% of enter duration."
-version: 1.6.0
+version: 1.9.0
 ---
 
 # Motion Design
@@ -24,7 +24,7 @@ version: 1.6.0
 | Curve | Use For | CSS |
 |-------|---------|-----|
 | **ease-out** | Elements entering | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| **ease-in** | Elements leaving | `cubic-bezier(0.7, 0, 0.84, 0)` |
+| **accelerate** | Elements leaving the screen (a custom curve, never the bare `ease-in` keyword) | `cubic-bezier(0.7, 0, 0.84, 0)` |
 | **ease-in-out** | State toggles | `cubic-bezier(0.65, 0, 0.35, 1)` |
 
 **For micro-interactions, use exponential curves:**

@@ -37,6 +37,21 @@ forward here as required by Apache License 2.0 section 4(d):
     work, merged at the author's request.
 
 ================================================================================
+ui-ux-pro-max-skill
+================================================================================
+
+The `tools/design-system` generator adapts the stack knowledge base and design
+data of ui-ux-pro-max-skill.
+
+  ui-ux-pro-max-skill
+  Copyright (c) 2024 Next Level Builder
+  Licensed under the MIT License
+  Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+
+The full MIT license text is retained at
+tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt.
+
+================================================================================
 Standards, tools and data sources
 ================================================================================
 

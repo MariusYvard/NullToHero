@@ -5,7 +5,7 @@ description: >
   7 specialist checks (technical, content, schema, images, sitemap, performance,
   AI search). Use for: "audit my site", "full SEO audit", "website analysis",
   "SEO health check".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # Full Website SEO Audit
@@ -59,7 +59,7 @@ Delay: 1s
 ## Output Files
 
 - `FULL-AUDIT-REPORT.md` — comprehensive findings
-- `ACTION-PLAN.md` — prioritized recommendations (Critical > High > Medium > Low)
+- `ACTION-PLAN.md` — prioritized recommendations (Critical > High > Medium > Low), built from the [action-plan.md](action-plan.md) template
 
 ## Report Structure
 

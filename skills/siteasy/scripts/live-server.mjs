@@ -158,6 +158,10 @@ function readBody(req) {
   });
 }
 
+server.on("error", (e) => {
+  process.stderr.write(JSON.stringify({ ok: false, error: (e && e.code === "EADDRINUSE") ? "port_in_use" : "server_error", port: PORT }) + "\n");
+  process.exit(1);
+});
 server.listen(PORT, "127.0.0.1", () => {
   ensureStateDir(root);
   writeJSON(statePath(root), { port: PORT, token: TOKEN, pid: process.pid });

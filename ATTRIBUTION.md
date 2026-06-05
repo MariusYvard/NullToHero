@@ -16,6 +16,8 @@ NullToHero is built on the following open standards, tools and sources of knowle
 - **Playwright** — Microsoft, Apache 2.0. https://playwright.dev/
 - **Lenis** — Studio Freight, MIT. https://github.com/studio-freight/lenis
 - **GSAP** — GreenSock, standard license. https://gsap.com/
+- **ui-ux-pro-max-skill** — design-system knowledge base (stack guidelines and design data) by Next Level Builder, licensed under the MIT License. https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+  The `tools/design-system` generator adapts its stack knowledge base and design data. The MIT license text is retained in `tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt` and credited in [NOTICE](NOTICE).
 
 ## Data sources referenced in SEO references
 

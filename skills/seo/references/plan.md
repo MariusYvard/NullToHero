@@ -5,7 +5,7 @@ description: >
   templates (SaaS, e-commerce, local, publisher, agency), competitive analysis,
   content strategy, implementation roadmap. Use for: "SEO strategy", "SEO plan",
   "content roadmap", "keyword strategy", "site planning".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # Strategic SEO Planning
@@ -116,12 +116,12 @@ Load from `assets/` directory:
 
 ## CROSS-SKILL REFERENCES
 
-| Besoin / Need | Skill |
+| Need | Skill |
 |---------------|-------|
-| Audit SEO pour informer la stratégie / SEO audit to inform strategy | `/seo audit` |
-| Données SERP et concurrents pour la stratégie / SERP & competitor data | (not included) |
-| Recherche web pour gaps de contenu / Web research for content gaps | (not included) |
-| Production de contenu / Content production | (not included) |
-| Stratégie SEO programmatique / Programmatic SEO strategy | (not included) |
-| Architecture de site / Site architecture & build | `/siteasy build` |
-| Suivi des tâches SEO / SEO task tracking | (not included) |
+| SEO audit to inform strategy | `/seo audit` |
+| SERP & competitor data | (not included) |
+| Web research for content gaps | (not included) |
+| Content production | (not included) |
+| Programmatic SEO strategy | `/seo programmatic` |
+| Site architecture & build | `/siteasy build` |
+| SEO task tracking | (not included) |

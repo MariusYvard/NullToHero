@@ -6,7 +6,7 @@ description: >
   satisfaction signals. Use for: "SXO", "search experience", "user intent",
   "page type mismatch", "bounce rate SEO", "dwell time", "pogo-sticking",
   "user satisfaction", "intent alignment".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # Search Experience Optimization (SXO)
@@ -152,7 +152,7 @@ Different personas have different content needs even for the same keyword.
 
 Over 60% of searches happen on mobile. SXO includes mobile-specific experience:
 
-- Touch targets ≥ 48px (buttons, links)
+- Touch targets ≥ 44px (24px WCAG 2.5.8 AA minimum)
 - No horizontal scroll
 - Font size ≥ 16px for body text
 - CTAs thumb-reachable (bottom half of screen preferred)

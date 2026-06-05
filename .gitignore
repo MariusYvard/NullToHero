@@ -6,8 +6,7 @@ desktop.ini
 # Node
 node_modules/
 npm-debug.log*
-
-# Build artifacts
+package-lock.json
 
 # Python
 __pycache__/

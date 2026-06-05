@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.8.2
+version: 1.9.0
 user-invocable: true
 argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
 license: "Apache-2.0"
@@ -14,6 +14,9 @@ allowed-tools:
   - Bash(kill *)
   - Read
   - Write
+  - Edit
+  - Task
+  - Bash(lsof *)
 ---
 
 Designs and iterates production-grade frontend interfaces. Real working code, committed design choices, exceptional craft. Accessible to beginners, powerful enough for experts.
@@ -102,7 +105,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 - **Identical card grids.** Same-sized cards with icon + heading + text, repeated endlessly.
 - **Centered hero, centered text, dark image.** Use an asymmetric split instead.
 - **Modal as first thought.** Exhaust inline / progressive alternatives first.
-- **Inter font.** Use Geist, Outfit, Cabinet Grotesk, or Satoshi.
+- **Inter on brand surfaces** (and other training-data defaults like Outfit and DM Sans; see references/brand.md). Use Geist, Cabinet Grotesk, or Satoshi. Product UI may use system stacks (see references/product.md).
 - **Serif fonts in software UIs or dashboards.**
 - **AI Purple/Blue gradient aesthetic.** Use neutral bases (Zinc/Slate) with singular, concrete accents.
 - **Pure black (#000) for large areas.** Use off-black with a hint of hue (chroma 0.005+).
@@ -110,7 +113,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 - **`ease-in` on UI animations.** Use `ease-out` or a custom curve.
 - **Durations > 300ms on UI feedback.**
 - **Generic placeholder content.** "John Doe", "Acme Corp", "99.99%". Use realistic names, organic numbers (`47.2%`), and `picsum.photos/seed/{word}/width/height`.
-- **Emojis in code, markup, or UI copy.** Replace with proper icons (Radix, Phosphor) or SVG primitives.
+- **Emojis in the website you build** (code, markup, or UI copy). Replace with proper icons (Radix, Phosphor) or SVG primitives. (Status markers like PASS/WARN/FAIL in audit reports are exempt.)
 
 ### Copy
 
@@ -142,8 +145,8 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
 | `layout [target]` | Enhance | Spacing systems, visual rhythm, grid tools | [references/layout.md](references/layout.md) |
 | `adapt [target]` | Enhance | Mobile/tablet/desktop/print adaptation | [references/adapt.md](references/adapt.md) + [references/responsive-design.md](references/responsive-design.md) |
-| `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) |
-| `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) |
+| `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) + [references/creative-patterns.md](references/creative-patterns.md) |
+| `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 

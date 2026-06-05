@@ -1,12 +1,25 @@
 ---
 name: audit
 description: "Run systematic technical quality checks and generate a comprehensive report. Don't fix issues - document them for other commands to address."
-version: 1.6.0
+version: 1.9.0
 ---
 
 Run systematic **technical** quality checks and generate a comprehensive report. Don't fix issues — document them for other commands to address.
 
 This is a code-level audit, not a design critique. Check what's measurable and verifiable in the implementation.
+
+## Parallel audit architecture (multi-agent)
+
+For a deeper design-quality pass, `/siteasy audit` dispatches four specialist sub-agents concurrently, each scoped to one design dimension. Launch them with the Task tool in a single message (one `Task` call per agent, same turn) so they run in parallel rather than in sequence. Pass each agent the target plus any source already in context.
+
+| Sub-agent (`subagent_type`) | Dimension | Covers |
+|---|---|---|
+| `siteasy-agent-ux` | UX and IA | navigation clarity, flow friction, cognitive load, empty/error/onboarding states |
+| `siteasy-agent-visual` | Visual design | type system, color, spacing rhythm, Gestalt, hierarchy, brand fit |
+| `siteasy-agent-motion` | Motion | animation purpose, micro-interactions, scroll/parallax restraint, perceived performance |
+| `siteasy-agent-content` | UX writing | microcopy, voice and tone, CTA wording, i18n readiness, scannability |
+
+Each agent returns its dimension score and findings. Wait for all four, then reconcile them with the five inline technical dimensions below (accessibility, performance, theming, responsive, anti-patterns), which catch implementation defects the design agents do not. If the Task tool or plugin agents are unavailable in the current harness, fall back to running the inline diagnostic scan only, in sequence. Never skip a dimension silently. For a whole-site pass that also covers search visibility and front-end defects, use `/audit`.
 
 ## Diagnostic Scan
 

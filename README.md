@@ -2,11 +2,11 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.8.2** · 3 skills · 47 commands · 82 reference docs · 5 parallel SEO audit sub-agents · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
+> **v1.9.0** · 4 skills · 53 commands · 83 reference docs · 13 parallel audit sub-agents (SEO + defects + design) · whole-site /audit orchestrator · interactive live variant mode · stack-aware design-system generator · report export · deterministic anti-pattern detector
 
 **From zero knowledge to hero website.** NullToHero gives Claude a complete design, SEO and motion engineering vocabulary so anyone, even with no prior experience, can build websites that look professional, rank on Google, and pass accessibility audits.
 
-NullToHero exposes three user-invocable skills. Claude Code namespaces plugin skills under the plugin name, so the fully-qualified commands are `/null-to-hero:siteasy`, `/null-to-hero:seo` and `/null-to-hero:inspect`. The short forms `/siteasy`, `/seo` and `/inspect` also resolve as long as no other installed skill claims the same name; prefer the namespaced form if you run several plugins. Each skill routes to its sub-commands through the first argument (for example `/seo audit` or `/siteasy build`). The 47 commands listed below are these sub-commands, not separate Claude Code command files: the skills handle routing, so there is no `commands/` directory.
+NullToHero exposes four user-invocable skills. Claude Code namespaces plugin skills under the plugin name, so the fully-qualified commands are `/null-to-hero:siteasy`, `/null-to-hero:seo`, `/null-to-hero:inspect` and `/null-to-hero:audit`. The short forms `/siteasy`, `/seo`, `/inspect` and `/audit` also resolve as long as no other installed skill claims the same name; prefer the namespaced form if you run several plugins. Each skill routes to its sub-commands through the first argument (for example `/seo audit` or `/siteasy build`). The 53 commands listed below are these sub-commands, not separate Claude Code command files: the skills handle routing, so there is no `commands/` directory.
 
 By [Marius Yvard](https://lecvdemarius.netlify.app/) · Apache 2.0
 
@@ -40,6 +40,22 @@ The one-liner `bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/N
 git clone https://github.com/MariusYvard/NullToHero.git
 powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 ```
+
+---
+
+## What's new in 1.9.0
+
+### 13 parallel audit sub-agents
+
+The five SEO agents are joined by four `/inspect` defect specialists (`inspect-agent-a11y`, `inspect-agent-interaction`, `inspect-agent-layout`, `inspect-agent-code`) and four `/siteasy` design-quality specialists (`siteasy-agent-ux`, `siteasy-agent-visual`, `siteasy-agent-motion`, `siteasy-agent-content`). `/siteasy audit` and `/inspect review` dispatch their agents in parallel, with an inline fallback when the Task tool is unavailable. The SEO agent files are renamed to the `seo-agent-*` convention so filenames match their dispatch names.
+
+### New `/audit` skill
+
+`/audit [url]` runs the whole-site audit: one shared fetch phase, all 13 sub-agents in parallel, one merged report (`SITE-AUDIT-REPORT.md`) and a prioritized `ACTION-PLAN.md`. Sub-modes `seo`, `defects`, `design` and `quick` scope the run to one agent group or a fast triage; `report` formats the result for clients.
+
+### Correctness pass
+
+Reconciled the font, imagery and motion contradictions between references; corrected the SEO cross-skill tables; repaired six malformed design-system CSV rows; attributed the MIT design-system component in `NOTICE` and `ATTRIBUTION.md`. Validator at 319 checks (audit skill, agent `tools` field, CSV column integrity).
 
 ---
 
@@ -228,39 +244,39 @@ Three tools to run before every ship.
 
 ---
 
+### `/audit` — Whole-site
+
+Run a complete audit across all three skills in one pass. Dispatches every specialist sub-agent, then merges the findings into one scored report.
+
+| Command | What it does |
+|---------|-------------|
+| `full [url]` | All 13 sub-agents (SEO, defects, design); unified report and prioritized action plan |
+| `seo [url]` | Search-visibility group only (5 SEO sub-agents) |
+| `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
+| `design [url]` | Design-quality group only (4 siteasy sub-agents) |
+| `quick [url]` | One representative sub-agent per group for fast triage |
+| `report [file]` | Format an existing audit into a client-ready report or PDF |
+
+---
+
 ## Knowledge Base
 
-NullToHero ships 82 reference documents that Claude loads on demand.
+NullToHero ships 83 reference documents that Claude loads on demand.
 
-### Design fundamentals
-gestalt, cognitive-load, layout, typography, color-and-contrast, dark-mode-engineering, spatial-design, shape, polish, distill, bolder, quieter, amplify, simplify
+### siteasy — design (52)
+accessibility-engineering, adapt, animate, animation-engineering, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
 
-### Methodology
-ux-research, personas, journey-mapping, information-architecture, heuristics-scoring, critique, shape, teach
+### seo — search (20)
+action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
 
-### Accessibility
-accessibility-engineering, wcag-2-2, form-patterns
+### seo — plan assets (6)
+agency, ecommerce, generic, local-service, publisher, saas
 
-### Motion
-motion-design, animation-engineering, animate, delight, parallax, overdrive, interaction-design
-
-### Performance and assets
-optimize, image-strategy, responsive-design, adapt, harden, launch
-
-### Systems and architecture
-component-patterns, creative-patterns, css-architecture, design-tokens, tokens, extract, brand, document
-
-### SEO — core
-audit, plan, technical, schema, content, page, geo
-
-### SEO — advanced
-sitemap, images, local, hreflang, programmatic, competitor-pages, cluster, sxo, drift, backlinks, ecommerce
-
-### SEO — plan assets
-ecommerce-plan, saas, local-service, publisher, agency, generic
-
-### Inspect
+### inspect — defects (3)
 detect, preview, review
+
+### audit — whole-site (2)
+full, report
 
 ---
 
@@ -311,11 +327,13 @@ NullToHero works best with two files in your project root:
 
 - **Node.js** — required for `/inspect preview`, `/inspect detect`, and the validator (`tests/validate.js`)
 - **Playwright** — auto-installed on first `/inspect preview` run
+- **Python 3** — required for the design-system generator (`/siteasy setup`) and the Python test suite (`tests/test_design_system.py`)
 
 ---
 
 ## Release History
 
+- **1.9.0** (June 2026): multi-agent expansion. Added 8 specialist sub-agents (4 for `/inspect`, 4 for `/siteasy`) alongside the existing 5 SEO agents, renamed the SEO agent files to the `seo-agent-*` convention, and introduced the `/audit` meta-skill that orchestrates all 13 across search visibility, front-end defects and design quality. Audit-driven correctness pass: reconciled font, imagery and motion contradictions, corrected the SEO cross-skill tables, and attributed the MIT design-system component in `NOTICE`. Validator grows to Check 21 (audit skill, agent `tools` field, CSV integrity); 319 checks.
 - **1.8.2** (June 2026): correctness pass — aligned the FAQ rich-results status across `page.md`, `competitor-pages.md` and `schema.md` (removed for all sites May 7, 2026); documented the `/null-to-hero:*` namespaced command form; refreshed the `SECURITY.md` supported-versions table to 1.8.x; validator Check 20 guards against the FAQ claim regressing (261 checks).
 - **1.8.1** (June 2026): correctness pass — fixed broken `tokens.md` links, normalised SEO reference frontmatter (dropped misleading `user-invocable`/`argument-hint`), added frontmatter to the `plan-assets` templates, and grew the validator to 260 checks (stale-index guard, installer version coverage).
 - **1.8.0** (June 2026): licensing and attribution pass (`NOTICE` for impeccable and its upstream sources, explicit Apache 2.0 statement in `ATTRIBUTION.md`); runtime unit tests for `resolveInRoot` and `safe_slug` wired into CI; validator Check 18 on README headline counts (259 checks); install-section accuracy fixes; `live.js` status bar uses `textContent`.

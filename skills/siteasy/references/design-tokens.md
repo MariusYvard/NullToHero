@@ -1,7 +1,7 @@
 ---
 name: design-tokens
 description: "Reference for /siteasy tokens, /siteasy extract, and /siteasy document. A token system is the foundation of every maintainable design - build it right once, and."
-version: 1.6.0
+version: 1.9.0
 ---
 
 # Design Tokens
@@ -204,7 +204,7 @@ Examples:
   --shadow-lg: 0 16px 32px oklch(0% 0 0 / 0.10), 0 4px 8px oklch(0% 0 0 / 0.04);
 
   /* Typography */
-  --font-family-sans: 'Geist', 'Inter', system-ui, sans-serif;
+  --font-family-sans: 'Geist', system-ui, sans-serif;
   --font-family-mono: 'Geist Mono', 'JetBrains Mono', monospace;
   --font-size-xs:   0.75rem;
   --font-size-sm:   0.875rem;

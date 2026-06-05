@@ -5,7 +5,7 @@ description: >
   format. Use for: "schema markup", "structured data", "rich results", "JSON-
   LD", "FAQ schema", "Article schema", "Product schema", "LocalBusiness schema",
   "HowTo schema", "schema errors".
-version: 1.8.2
+version: 1.9.0
 ---
 
 # Schema Markup Analysis & Generation
@@ -160,12 +160,12 @@ When generating schema for a page:
 
 ## CROSS-SKILL REFERENCES
 
-| Besoin / Need | Skill |
+| Need | Skill |
 |---------------|-------|
-| Audit SEO complet / Full SEO audit | `/seo audit` |
-| Audit technique / Technical audit | `/seo technical` |
-| Schéma pour pages locales / Schema for local business pages | (not included) |
-| Schéma pour images / ImageObject schema | (not included) |
-| Données structurées en direct / Live structured data analysis | (not included) |
-| Implémentation sur pages web / Schema on web pages | `/siteasy build` |
-| Schéma pour pages de comparaison / Comparison page schema | `seo-competitor-pages` |
+| Full SEO audit | `/seo audit` |
+| Technical audit | `/seo technical` |
+| Schema for local business pages | `/seo local` |
+| ImageObject schema | `/seo images` |
+| Live structured data analysis | (not included) |
+| Schema on web pages | `/siteasy build` |
+| Comparison page schema | `/seo competitor-pages` |

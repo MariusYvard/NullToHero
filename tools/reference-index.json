@@ -1,5 +1,26 @@
 [
   {
+    "skill": "audit",
+    "path": "skills/audit/references/full.md",
+    "title": "Complete Site Audit",
+    "keywords": [
+      "full",
+      "complete",
+      "site",
+      "audit"
+    ]
+  },
+  {
+    "skill": "audit",
+    "path": "skills/audit/references/report.md",
+    "title": "Unified Audit Report",
+    "keywords": [
+      "report",
+      "unified",
+      "audit"
+    ]
+  },
+  {
     "skill": "inspect",
     "path": "skills/inspect/references/detect.md",
     "title": "Anti-Pattern Detector",
@@ -661,18 +682,6 @@
       "persona",
       "based",
       "design",
-      "testing"
-    ]
-  },
-  {
-    "skill": "siteasy",
-    "path": "skills/siteasy/references/playwright.md",
-    "title": "Preview — Browser Visual Testing with Playwright",
-    "keywords": [
-      "playwright",
-      "preview",
-      "browser",
-      "visual",
       "testing"
     ]
   },

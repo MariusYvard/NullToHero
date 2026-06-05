@@ -5,7 +5,7 @@ description: >
   URL structure, mobile, Core Web Vitals, structured data, JavaScript rendering,
   international. Use for: "technical SEO", "crawl issues", "robots.txt", "Core
   Web Vitals", "mobile SEO", "canonical".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # Technical SEO Audit
@@ -160,12 +160,12 @@ Google updated its JavaScript SEO documentation in December 2025 with critical c
 
 ## CROSS-SKILL REFERENCES
 
-| Besoin / Need | Skill |
+| Need | Skill |
 |---------------|-------|
-| Audit SEO complet / Full SEO audit orchestration | `/seo audit` |
-| Données techniques en direct / Live technical data (Lighthouse, on-page) | (not included) |
-| Analyse de sitemap / Sitemap analysis | (not included) |
-| Données structurées / Structured data validation | `/seo schema` |
-| Implémentation hreflang / Hreflang validation | (not included) |
-| Construction du site / Site build with technical best practices | `/siteasy build` |
-| Suivi des correctifs / Fix tracking | (not included) |
+| Full SEO audit orchestration | `/seo audit` |
+| Live technical data (Lighthouse, on-page) | (not included) |
+| Sitemap analysis | `/seo sitemap` |
+| Structured data validation | `/seo schema` |
+| Hreflang validation | `/seo hreflang` |
+| Site build with technical best practices | `/siteasy build` |
+| Fix tracking | (not included) |

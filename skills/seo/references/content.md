@@ -5,7 +5,7 @@ description: >
   citation readiness, and thin content. Use for: "content quality", "E-E-A-T",
   "content analysis", "readability score", "thin content", "content audit",
   "improve article", "AI citation readiness".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # Content Quality & E-E-A-T Analysis
@@ -166,12 +166,12 @@ GEO is the emerging discipline of optimizing content specifically for AI-generat
 
 ## CROSS-SKILL REFERENCES
 
-| Besoin / Need | Skill |
+| Need | Skill |
 |---------------|-------|
-| Audit SEO complet / Full SEO audit | `/seo audit` |
-| Données mots-clés pour le contenu / Keyword data for content | (not included) |
-| Optimisation recherche IA / AI search optimization | `/seo geo` |
-| Production de contenu / Content production | (not included) |
-| Pages de comparaison concurrentes / Competitor comparison pages | `seo-competitor-pages` |
-| Recherche sujets et sources / Topic & source research | (not included) |
-| Stratégie de contenu SEO / SEO content strategy | `/seo plan` |
+| Full SEO audit | `/seo audit` |
+| Keyword data for content | (not included) |
+| AI search optimization | `/seo geo` |
+| Content production | (not included) |
+| Competitor comparison pages | `/seo competitor-pages` |
+| Topic & source research | (not included) |
+| SEO content strategy | `/seo plan` |

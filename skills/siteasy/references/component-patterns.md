@@ -1,7 +1,7 @@
 ---
 name: component-patterns
-description: "Architecture reference for /siteasy extract, /siteasy build, and component-heavy design systems. How to design component APIs that are composable, accessible, and don't."
-version: 1.6.0
+description: "Patterns for composable, accessible component APIs: slots and compound components, controlled vs uncontrolled, and clear prop design."
+version: 1.9.0
 ---
 
 # Component Patterns

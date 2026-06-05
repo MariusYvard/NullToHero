@@ -6,7 +6,7 @@ description: >
   "GEO", "llms.txt", "AI crawler", "passage citability", "ChatGPT visibility",
   "Perplexity ranking", "brand mentions", "AI citation", "AI search visibility",
   "geo quick", "geo compare".
-version: 1.8.1
+version: 1.9.0
 ---
 
 # AI Search / GEO Optimization
@@ -241,7 +241,7 @@ Check `robots.txt` for these AI crawlers (14 tracked):
 
 | Crawler | Owner | Purpose | Recommendation |
 |---------|-------|---------|----------------|
-| GPTBot | OpenAI | ChatGPT web search | **Allow** for AI visibility |
+| GPTBot | OpenAI | AI model training | **Allow** for AI visibility |
 | OAI-SearchBot | OpenAI | OpenAI search features | **Allow** |
 | ChatGPT-User | OpenAI | ChatGPT browsing | **Allow** |
 | ClaudeBot | Anthropic | Claude web features | **Allow** |

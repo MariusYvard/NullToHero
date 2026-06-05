@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="1.8.2"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="1.9.0"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -58,7 +58,7 @@ warn "Marketplace install failed or not supported. Falling back to manual instal
 # ─── Fallback: manual git clone ───────────────────────────────────────────────
 
 TEMP_DIR=$(mktemp -d)
-trap "rm -rf ${TEMP_DIR}" EXIT
+trap 'rm -rf "${TEMP_DIR}"' EXIT
 
 log "Cloning repository (pinned to v${PLUGIN_VERSION})..."
 if ! git clone --depth 1 --branch "v${PLUGIN_VERSION}" "https://github.com/${REPO}.git" "${TEMP_DIR}/NullToHero" 2>/dev/null; then

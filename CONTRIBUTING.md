@@ -61,8 +61,6 @@ description: >
   One to three lines describing when Claude should use this. Include the key
   trigger phrases in natural language.
 version: 1.0.0
-user-invocable: true
-argument-hint: "[url | keyword | generate]"
 ---
 
 # Title
@@ -180,3 +178,11 @@ If you need to add a large dataset:
 
 `node tests/validate.js` warns on files above 500 KB but does not fail CI. Treat the warning as a prompt to discuss before merging.
 
+## Releasing
+
+Releases are tag-driven. To cut version X.Y.Z:
+
+1. Bump the version in every source the validator checks (Check 12): `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `package.json`, the four `skills/*/SKILL.md` frontmatters, `install.sh` and `install.ps1`. All must match.
+2. Add a dated `## [X.Y.Z]` section to `CHANGELOG.md`.
+3. Run `npm test` (build-index, `validate.js`, `unit.mjs`, the Python suite) and confirm zero errors.
+4. Commit, then `git tag vX.Y.Z && git push --tags`. The `release.yml` workflow re-runs the suite, extracts the matching `CHANGELOG` section, and publishes the GitHub Release.

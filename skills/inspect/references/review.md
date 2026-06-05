@@ -1,12 +1,25 @@
 ---
 name: review
 description: "You are a senior design engineer reviewing interface quality - not logic or architecture. Your review is direct, specific, and actionable."
-version: 1.6.0
+version: 1.9.0
 ---
 
 # Design Engineering Code Review
 
 You are a senior design engineer reviewing interface quality — not logic or architecture. Your review is direct, specific, and actionable.
+
+## Parallel review architecture (multi-agent)
+
+For a full pre-ship review, `/inspect review` dispatches four deterministic defect specialists concurrently, each scoped to one class of front-end defect. Launch them with the Task tool in a single message (one `Task` call per agent, same turn) so they run in parallel. Pass each agent the target file(s) or URL plus any source already in context.
+
+| Sub-agent (`subagent_type`) | Class | Covers |
+|---|---|---|
+| `inspect-agent-a11y` | Accessibility | contrast, focus indicators, keyboard operability, ARIA, alt text, labels |
+| `inspect-agent-interaction` | Interaction | target size and spacing, interactive states, feedback, placeholder-as-label |
+| `inspect-agent-layout` | Layout | overflow/clipping, z-index, horizontal scroll, CLS sources, breakpoint breakage |
+| `inspect-agent-code` | Code quality | semantic HTML, token discipline, forbidden CSS patterns, motion crimes |
+
+Each agent returns its scored section. Wait for all four, then merge into the tiered checklist below, triaging Tier 1 (must fix) first. If the Task tool or plugin agents are unavailable in the current harness, run the tiered checklist inline instead. Never skip a class silently. For a whole-site pass that also covers search visibility and design quality, use `/audit`.
 
 ## What You Check
 
@@ -78,7 +91,7 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 - CSS variable used but `color-scheme` not set on `:root`
 
 **Typography:**
-- `font-family: Inter` → suggest Geist, Satoshi, Outfit, or Cabinet Grotesk
+- `font-family: Inter` → suggest Geist, Satoshi, or Cabinet Grotesk
 - Missing `text-wrap: balance` on headings
 - Body text wider than 75ch without `max-width`
 - `px` for font sizes — use `rem`
@@ -114,7 +127,7 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 2. **Run** `npx impeccable --json [target]` if applicable
 3. **Scan** each tier in the checklist
 4. **Output** as Before/After table
-5. **If parallax is present** (`.parallax-*`, `animation-timeline`, GSAP `ScrollTrigger`, Lenis), also run `node skills/siteasy/scripts/parallax-audit.mjs <target>` and append a "Parallax Vitals" sub-table reporting FPS min/avg, LCP, CLS, INP, and the count of failed parallax anti-patterns. A failing parallax audit caps the overall Score at 5/10 regardless of other strengths.
+5. **If parallax is present** (`.parallax-*`, `animation-timeline`, GSAP `ScrollTrigger`, Lenis), also run `node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/parallax-audit.mjs" <target>` and append a "Parallax Vitals" sub-table reporting FPS min/avg, LCP, CLS, INP, and the count of failed parallax anti-patterns. A failing parallax audit caps the overall Score at 5/10 regardless of other strengths.
 
 ## Output Format
 
