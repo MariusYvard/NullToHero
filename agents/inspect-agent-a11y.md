@@ -2,7 +2,7 @@
 name: inspect-agent-a11y
 description: Sub-agent for the Accessibility dimension of /audit (and /inspect). Evaluates color contrast ratios, visible focus indicators, keyboard operability, ARIA correctness, alt text, form labels, color-only meaning, and reduced-motion handling.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Accessibility Sub-Agent

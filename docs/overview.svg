@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" width="920" height="360" role="img" aria-label="NullToHero overview: four skills (siteasy, seo, inspect, audit) inside Claude">
+  <rect x="1" y="1" width="918" height="358" rx="18" fill="#ffffff" stroke="#e6e8ec" stroke-width="2"/>
+  <text x="40" y="56" font-family="Segoe UI, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#0f172a">NullToHero</text>
+  <text x="40" y="84" font-family="Segoe UI, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="16" fill="#64748b">From zero to a website you can publish, right inside Claude.</text>
+  <rect x="816" y="36" width="64" height="26" rx="13" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="848" y="53" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="700" fill="#4f46e5">v1.9.1</text>
+
+  <!-- Card 1: siteasy -->
+  <g>
+    <rect x="40" y="116" width="196" height="192" rx="14" fill="#f8fafc" stroke="#e6e8ec" stroke-width="1.5"/>
+    <circle cx="80" cy="160" r="20" fill="#4f46e5"/>
+    <rect x="70" y="151" width="20" height="5" rx="1.5" fill="#ffffff"/>
+    <rect x="70" y="159" width="8" height="10" rx="1.5" fill="#ffffff"/>
+    <rect x="82" y="159" width="8" height="10" rx="1.5" fill="#ffffff"/>
+    <text x="62" y="210" font-family="Segoe UI, system-ui, sans-serif" font-size="17" font-weight="700" fill="#0f172a">/siteasy</text>
+    <text x="62" y="231" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="600" fill="#4f46e5">Design and build</text>
+    <text x="62" y="258" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">Pages, layout, type,</text>
+    <text x="62" y="276" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">color and motion.</text>
+  </g>
+
+  <!-- Card 2: seo -->
+  <g>
+    <rect x="254" y="116" width="196" height="192" rx="14" fill="#f8fafc" stroke="#e6e8ec" stroke-width="1.5"/>
+    <circle cx="294" cy="160" r="20" fill="#0ea5e9"/>
+    <circle cx="291" cy="157" r="7.5" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+    <line x1="296" y1="162" x2="303" y2="169" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <text x="276" y="210" font-family="Segoe UI, system-ui, sans-serif" font-size="17" font-weight="700" fill="#0f172a">/seo</text>
+    <text x="276" y="231" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="600" fill="#0284c7">Get found</text>
+    <text x="276" y="258" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">Rank on Google and</text>
+    <text x="276" y="276" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">in AI answers.</text>
+  </g>
+
+  <!-- Card 3: inspect -->
+  <g>
+    <rect x="468" y="116" width="196" height="192" rx="14" fill="#f8fafc" stroke="#e6e8ec" stroke-width="1.5"/>
+    <circle cx="508" cy="160" r="20" fill="#f59e0b"/>
+    <polyline points="500,160 506,167 517,153" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="490" y="210" font-family="Segoe UI, system-ui, sans-serif" font-size="17" font-weight="700" fill="#0f172a">/inspect</text>
+    <text x="490" y="231" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="600" fill="#b45309">Catch problems</text>
+    <text x="490" y="258" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">Accessibility and</text>
+    <text x="490" y="276" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">layout, pre-publish.</text>
+  </g>
+
+  <!-- Card 4: audit -->
+  <g>
+    <rect x="682" y="116" width="196" height="192" rx="14" fill="#f8fafc" stroke="#e6e8ec" stroke-width="1.5"/>
+    <circle cx="722" cy="160" r="20" fill="#7c3aed"/>
+    <circle cx="722" cy="160" r="9" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+    <circle cx="722" cy="160" r="3.2" fill="#ffffff"/>
+    <text x="704" y="210" font-family="Segoe UI, system-ui, sans-serif" font-size="17" font-weight="700" fill="#0f172a">/audit</text>
+    <text x="704" y="231" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="600" fill="#6d28d9">Whole-site score</text>
+    <text x="704" y="258" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">Every check at once,</text>
+    <text x="704" y="276" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#475569">one action plan.</text>
+  </g>
+
+  <text x="40" y="338" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#64748b">Tell Claude what you want in plain language. It does the expert work, you stay in control.</text>
+</svg>

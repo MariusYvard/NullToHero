@@ -24,7 +24,6 @@ jobs:
 
       - name: Build reference index
         run: node tools/build-index.mjs
-        continue-on-error: true
 
       - name: Run reference validator
         if: always()

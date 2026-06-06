@@ -2,7 +2,7 @@
 name: siteasy-agent-ux
 description: Sub-agent for the UX dimension of /audit (and /siteasy). Evaluates information architecture and navigation clarity, user-flow friction, journey continuity, cognitive load, state coverage, above-the-fold prioritization, and pattern consistency.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # UX Sub-Agent

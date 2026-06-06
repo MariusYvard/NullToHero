@@ -2,7 +2,7 @@
 name: siteasy-agent-motion
 description: Sub-agent for the Motion dimension of /audit (and /siteasy). Evaluates animation purpose, timing and easing taste, micro-interaction polish, scroll and parallax restraint, perceived performance, choreography, and delight without distraction.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Motion Sub-Agent

@@ -16,7 +16,8 @@
  * 10.  siteasy command count meets minimum (≥25)
  * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
  * 11b. audit (meta-orchestrator) SKILL.md, command->reference mapping, reference frontmatter
- * 12.  Version consistency — plugin.json, marketplace.json, all SKILL.md, install.sh, install.ps1 must match
+ * 12.  Version consistency — plugin.json, marketplace.json, package.json, all SKILL.md, install.sh, install.ps1
+ * 12b. SECURITY.md supported line (major.minor) and README **vX.Y.Z** token match plugin.json
  * 13.  Large files warning — files over 500 KB in tools/ (known exceptions excluded)
  * 14.  No stale /impeccable command references
  * 15.  Referenced helper scripts exist on disk
@@ -544,6 +545,36 @@ if (versions.length > 0) {
   }
 }
 
+// ─── Check 12b: SECURITY.md supported line + README version token ──────────
+
+section("12b. SECURITY.md and README version alignment");
+{
+  const pv = versionSources[".claude-plugin/plugin.json"];
+  if (!pv) {
+    warn("plugin.json version unavailable; skipping 12b");
+  } else {
+    const [maj, min] = pv.split(".");
+    const sec = readFile(path.join(ROOT, "SECURITY.md"));
+    if (sec === null) {
+      fail("SECURITY.md not found");
+    } else {
+      const m = sec.match(/^\|\s*(\d+)\.(\d+)\.x\s*\|\s*Yes/m);
+      if (!m) fail("SECURITY.md: no 'X.Y.x | Yes' supported row found");
+      else if (m[1] === maj && m[2] === min) pass(`SECURITY.md supported line ${m[1]}.${m[2]}.x matches plugin ${maj}.${min}`);
+      else fail(`SECURITY.md supported line ${m[1]}.${m[2]}.x does not match plugin ${maj}.${min}`);
+    }
+    const rd = readFile(path.join(ROOT, "README.md"));
+    if (rd === null) {
+      fail("README.md not found");
+    } else {
+      const mm = rd.match(/\*\*v(\d+\.\d+\.\d+)\*\*/);
+      if (!mm) fail("README.md: no **vX.Y.Z** version token found");
+      else if (mm[1] === pv) pass(`README version token v${mm[1]} matches plugin ${pv}`);
+      else fail(`README version token v${mm[1]} does not match plugin ${pv}`);
+    }
+  }
+}
+
 // ─── Check 13: Large files warning ────────────────────────────────────────────
 
 section("13. Large files (> 500 KB in tools/)");
@@ -809,8 +840,6 @@ section("20. No stale FAQ 'restricted to gov/health' claims in SEO references");
 section("21. CSV column integrity (header vs rows)");
 {
   const CSV_EXEMPT = new Set([
-    "tools/design-system/data/draft.csv",
-    "tools/design-system/data/design.csv",
   ]);
   function countFields(line) {
     let cnt = 1, inQ = false;

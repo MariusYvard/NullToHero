@@ -2,7 +2,7 @@
 name: seo-agent-technical
 description: Sub-agent for the Technical SEO dimension of /seo audit. Analyzes crawlability, indexability, Core Web Vitals, HTTPS, robots.txt, sitemaps, mobile-friendliness, JavaScript rendering, and security headers.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Technical SEO Sub-Agent

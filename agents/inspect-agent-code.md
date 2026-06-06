@@ -2,7 +2,7 @@
 name: inspect-agent-code
 description: Sub-agent for the Front-end Code dimension of /audit (and /inspect). Evaluates semantic HTML and landmarks, valid markup, design-token discipline, forbidden CSS patterns, deterministic motion crimes, and inline-style sprawl.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Front-end Code Sub-Agent

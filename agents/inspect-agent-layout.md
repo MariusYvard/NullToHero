@@ -2,7 +2,7 @@
 name: inspect-agent-layout
 description: Sub-agent for the Layout dimension of /audit (and /inspect). Evaluates overflow and clipping, z-index conflicts, horizontal scroll at 375px, CLS sources, responsive breakpoint breakage, viewport meta, and sticky or fixed positioning bugs.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Layout Sub-Agent

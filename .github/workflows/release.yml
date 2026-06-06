@@ -22,6 +22,22 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Verify tag matches manifest version
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          version="${TAG_NAME#v}"
+          manifest="$(node -p "require('./.claude-plugin/plugin.json').version")"
+          if [ "$version" != "$manifest" ]; then
+            echo "::error::Tag ${TAG_NAME} (${version}) does not match plugin.json (${manifest})"
+            exit 1
+          fi
+          if ! grep -q "^## \[${version}\]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no section for ${version}"
+            exit 1
+          fi
+          echo "Tag ${TAG_NAME} matches manifest ${manifest}; CHANGELOG entry present."
+
       - name: Validate
         run: node tests/validate.js
 

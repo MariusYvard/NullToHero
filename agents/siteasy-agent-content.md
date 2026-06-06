@@ -2,7 +2,7 @@
 name: siteasy-agent-content
 description: Sub-agent for the Content dimension of /audit (and /siteasy). Evaluates microcopy clarity, voice and tone consistency, CTA wording, error and empty-state messaging, label scannability, terminology consistency, i18n readiness, and inclusive plain language.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Content Sub-Agent

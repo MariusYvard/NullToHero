@@ -2,7 +2,7 @@
 name: inspect-agent-interaction
 description: Sub-agent for the Interaction dimension of /audit (and /inspect). Evaluates target size and spacing, interactive state coverage, action feedback, placeholder misuse, hit-area accuracy, dead clickable regions, and cursor affordance.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Interaction Sub-Agent

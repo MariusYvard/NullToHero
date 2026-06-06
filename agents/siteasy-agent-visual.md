@@ -2,7 +2,7 @@
 name: siteasy-agent-visual
 description: Sub-agent for the Visual Design dimension of /audit (and /siteasy). Evaluates the typographic system, color system, spacing and rhythm, Gestalt grouping, visual hierarchy, layout composition, and brand alignment.
 model: sonnet
-tools: Read, Grep, Glob, WebFetch, Bash
+tools: Read, Grep, Glob, WebFetch
 ---
 
 # Visual Design Sub-Agent
