@@ -1,7 +1,7 @@
 ---
 name: typeset
 description: "Assess and improve typography that feels generic, inconsistent, or poorly structured - turning default-looking text into intentional, well-crafted type."
-version: 1.6.0
+version: 1.9.2
 ---
 
 Assess and improve typography that feels generic, inconsistent, or poorly structured — turning default-looking text into intentional, well-crafted type.
@@ -127,4 +127,4 @@ Each variant MUST declare a `scale` param controlling the hierarchy ratio. Expre
 
 Where the variant riffs on a specific pairing, expose the pairing choice as a `steps` param (e.g. "serif display + sans body" vs. "mono display + sans body" vs. "all-sans"). Each branch routes through `:scope[data-p-pairing="X"]` selectors in scoped CSS.
 
-See `reference/live.md` for the full params contract.
+See [live.md](live.md) for the full params contract.

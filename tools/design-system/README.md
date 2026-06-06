@@ -8,7 +8,7 @@ Data-driven design intelligence: a searchable knowledge base across 16 technolog
 python3 tools/design-system/scripts/search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-results 3]
 ```
 
-Domains: style, prompt, color, chart, landing, product, ux, typography, google-fonts.
+Domains: style, color, chart, landing, product, ux, typography, icons, react, web, google-fonts.
 
 Stacks (16): react, nextjs, vue, svelte, astro, nuxtjs, nuxt-ui, angular, laravel, html-tailwind, shadcn, swiftui, react-native, flutter, jetpack-compose, threejs.
 
@@ -31,6 +31,6 @@ python3 tools/design-system/scripts/search.py "<brief>" --design-system --persis
 ## Files
 
 - `scripts/` — `search.py` (CLI entry), `core.py` (CSV search engine), `design_system.py` (generator). Pure standard library.
-- `data/` — CSV knowledge base: colors (WCAG-checked token sets per product type), typography (font pairings), ui-reasoning (per-product patterns with conditional decision rules), ux-guidelines, styles, products, landing, charts, icons, google-fonts, app-interface, design, draft, react-performance.
+- `data/` — CSV knowledge base: colors (WCAG-checked token sets per product type), typography (font pairings), ui-reasoning (per-product patterns with conditional decision rules), ux-guidelines, styles, products, landing, charts, icons, google-fonts, app-interface, react-performance.
 - `data/stacks/` — one CSV per supported stack.
 - `UI-UX-PRO-MAX-LICENSE-MIT.txt` — upstream MIT license, retained as required.

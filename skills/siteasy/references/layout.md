@@ -1,7 +1,7 @@
 ---
 name: layout
 description: "Assess and improve layout and spacing that feels monotonous, crowded, or structurally weak - turning generic arrangements into intentional, rhythmic compositions."
-version: 1.6.0
+version: 1.9.2
 ---
 
 Assess and improve layout and spacing that feels monotonous, crowded, or structurally weak — turning generic arrangements into intentional, rhythmic compositions.
@@ -144,4 +144,4 @@ For variants whose topology genuinely changes (stacked vs. side-by-side, grid vs
 ]}
 ```
 
-See `reference/live.md` for the full params contract.
+See [live.md](live.md) for the full params contract.

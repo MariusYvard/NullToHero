@@ -1,6 +1,6 @@
 ---
 name: seo-agent-technical
-description: Sub-agent for the Technical SEO dimension of /seo audit. Analyzes crawlability, indexability, Core Web Vitals, HTTPS, robots.txt, sitemaps, mobile-friendliness, JavaScript rendering, and security headers.
+description: Sub-agent for the Technical SEO dimension of /audit (and /seo audit). Analyzes crawlability, indexability, Core Web Vitals, HTTPS, robots.txt, sitemaps, mobile-friendliness, JavaScript rendering, and security headers.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---
@@ -38,7 +38,7 @@ You are the **Technical SEO specialist** in a parallel audit. Analyze ONLY the t
 
 ### Mobile
 - [ ] `<meta name="viewport">` present
-- [ ] Touch targets >= 48px
+- [ ] Touch targets >= 48px (Google mobile guideline; the WCAG 2.5.8 floor is 24px, 44px recommended)
 - [ ] No horizontal scroll on 375px viewport
 
 ### JavaScript rendering
@@ -89,4 +89,4 @@ Quick wins:
 |------|-------|
 | Full technical audit | `/seo technical [url]` |
 | Sitemap generation | `/seo sitemap [url]` |
-| Core Web Vitals deep dive | `/inspect audit` |
+| Core Web Vitals deep dive | `/inspect preview` |

@@ -75,4 +75,4 @@ Quick wins:
 |------|-------|
 | Responsive review | `/siteasy adapt` |
 | Render screenshot | `/inspect preview` |
-| CWV for ranking | `/seo performance` |
+| CWV for ranking | `/seo technical` |

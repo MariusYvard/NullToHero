@@ -14,7 +14,7 @@ NullToHero is built on the following open standards, tools and sources of knowle
 - **impeccable** — design skill, anti-pattern detection CLI and live variant tooling by Paul Bakaus (Copyright 2025-2026 Paul Bakaus), licensed under the Apache License 2.0. https://github.com/pbakaus/impeccable
   The `siteasy` skill's command vocabulary, design laws and review methodology are adapted from impeccable, then remapped to the `/siteasy` and `/inspect` command sets and extended with SEO, GEO and additional design references. The `inspect` skill calls the `impeccable` CLI through `npx`, and `siteasy live` integrates with impeccable's live-mode scripts when they are installed. impeccable is Apache 2.0, the same license as NullToHero, so this adaptation is permitted; its attribution notices (including the upstream Anthropic frontend-design skill and ehmo's typecraft-guide-skill) are carried forward in [NOTICE](NOTICE) as required by Apache 2.0 section 4(d).
 - **Playwright** — Microsoft, Apache 2.0. https://playwright.dev/
-- **Lenis** — Studio Freight, MIT. https://github.com/studio-freight/lenis
+- **Lenis** — Darkroom Engineering (formerly Studio Freight), MIT. https://github.com/darkroomengineering/lenis
 - **GSAP** — GreenSock, standard license. https://gsap.com/
 - **ui-ux-pro-max-skill** — design-system knowledge base (stack guidelines and design data) by Next Level Builder, licensed under the MIT License. https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
   The `tools/design-system` generator adapts its stack knowledge base and design data. The MIT license text is retained in `tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt` and credited in [NOTICE](NOTICE).

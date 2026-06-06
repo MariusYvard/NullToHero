@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="1.9.1"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="1.9.2"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -48,7 +48,7 @@ log "Attempting marketplace install (recommended)..."
 if claude plugin marketplace add "${REPO}" 2>/dev/null; then
   if claude plugin install "${INSTALL_NAME}@null-to-hero-marketplace" 2>/dev/null; then
     ok "Installed via marketplace. Auto-updates enabled."
-    ok "Run /siteasy, /seo, or /inspect in Claude to get started."
+    ok "Run /siteasy, /seo, /inspect, or /audit in Claude to get started."
     exit 0
   fi
 fi
@@ -105,9 +105,10 @@ echo -e "  ${BLUE}Skills available:${NC}"
 echo -e "    ${GREEN}/siteasy${NC}  — Design, UX, motion, accessibility"
 echo -e "    ${GREEN}/seo${NC}      — Full SEO toolkit (19 commands)"
 echo -e "    ${GREEN}/inspect${NC}  — Anti-pattern detection, browser preview"
+echo -e "    ${GREEN}/audit${NC}    — Whole-site audit, 13 parallel sub-agents"
 echo ""
 echo -e "  ${BLUE}If a short name collides with another plugin, use the namespaced form:${NC}"
-echo -e "    /null-to-hero:seo · /null-to-hero:siteasy · /null-to-hero:inspect"
+echo -e "    /null-to-hero:seo · /null-to-hero:siteasy · /null-to-hero:inspect · /null-to-hero:audit"
 echo ""
 echo -e "  ${BLUE}Quick start:${NC}"
 echo -e "    /seo audit https://yoursite.com"

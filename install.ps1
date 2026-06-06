@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 $REPO      = "MariusYvard/NullToHero"
 $PLUGIN_DIR = Join-Path $env:USERPROFILE ".claude\plugins"
 $INSTALL_NAME = "null-to-hero"
-$PLUGIN_VERSION = "1.9.1"   # pinned release tag for the manual-clone fallback
+$PLUGIN_VERSION = "1.9.2"   # pinned release tag for the manual-clone fallback
 
 function Log   { param($msg) Write-Host "[NullToHero] $msg" -ForegroundColor Cyan }
 function Ok    { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
@@ -46,7 +46,7 @@ try {
 
 if ($marketplaceOk) {
     Ok "Installed via marketplace. Auto-updates enabled."
-    Ok "Run /siteasy, /seo, or /inspect in Claude to get started."
+    Ok "Run /siteasy, /seo, /inspect, or /audit in Claude to get started."
     exit 0
 }
 
@@ -117,9 +117,10 @@ Write-Host "  Skills available:" -ForegroundColor Cyan
 Write-Host "    /siteasy  — Design, UX, motion, accessibility" -ForegroundColor Green
 Write-Host "    /seo      — Full SEO toolkit (19 commands)" -ForegroundColor Green
 Write-Host "    /inspect  — Anti-pattern detection, browser preview" -ForegroundColor Green
+Write-Host "    /audit    — Whole-site audit, 13 parallel sub-agents" -ForegroundColor Green
 Write-Host ""
 Write-Host "  If a short name collides with another plugin, use the namespaced form:" -ForegroundColor Cyan
-Write-Host "    /null-to-hero:seo · /null-to-hero:siteasy · /null-to-hero:inspect"
+Write-Host "    /null-to-hero:seo · /null-to-hero:siteasy · /null-to-hero:inspect · /null-to-hero:audit"
 Write-Host ""
 Write-Host "  Quick start:" -ForegroundColor Cyan
 Write-Host "    /seo audit https://yoursite.com"

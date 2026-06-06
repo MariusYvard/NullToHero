@@ -1,11 +1,11 @@
 ---
 name: seo-audit
 description: >
-  Full website SEO audit. Crawls up to 500 pages, detects business type, runs
-  7 specialist checks (technical, content, schema, images, sitemap, performance,
-  AI search). Use for: "audit my site", "full SEO audit", "website analysis",
-  "SEO health check".
-version: 1.9.0
+  Full website SEO audit. Crawls up to 500 pages, detects business type, scores
+  7 dimensions (technical, content, on-page, schema, performance, AI search,
+  images) through 5 parallel specialist sub-agents. Use for: "audit my site",
+  "full SEO audit", "website analysis", "SEO health check".
+version: 1.9.2
 ---
 
 # Full Website SEO Audit
@@ -32,6 +32,8 @@ The audit runs five specialist sub-agents concurrently, each scoped to one dimen
 | `seo-agent-geo` | AI search | AI crawler access, llms.txt, passage citability, brand authority |
 
 Each agent returns its dimension score and findings. Wait for all five to complete, then aggregate. If the Task tool or plugin agents are unavailable in the current harness, fall back to running the five dimension checklists inline, in sequence, using the same scoring weights. Never skip a dimension silently.
+
+The seven scored dimensions below map onto these five agents: images fold into performance, on-page into content and sitemap checks into technical. `/audit` dispatches the same five agents but re-aggregates them with its own five weights, so its SEO sub-score is intentionally not the seven-dimension score computed here.
 
 ## Crawl Configuration
 

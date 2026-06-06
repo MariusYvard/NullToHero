@@ -6,20 +6,20 @@ description: >
   consistent score bands and gauges, and lays out the report skeleton. Reuses the
   SEO report PDF tooling rather than duplicating it. Use after a full, seo,
   defects, or design run, or when the user asks for a report or PDF.
-version: 1.9.0
+version: 1.9.2
 ---
 
 # Unified Audit Report
 
 This reference formats an existing audit, produced by a run mode in
 [full.md](full.md), into a deliverable. It does not run agents and does not
-re-score. It reads `SITE-AUDIT-REPORT.md` (and `ACTION-PLAN.md` when present) and
+re-score. It reads `SITE-AUDIT-REPORT.md` (and `SITE-ACTION-PLAN.md` when present) and
 renders a clean Markdown document, optionally converting it to PDF.
 
 ## From audit output to deliverable
 
 1. Read `SITE-AUDIT-REPORT.md` for the scores and the per-group findings, and
-   `ACTION-PLAN.md` for the prioritized fix list.
+   `SITE-ACTION-PLAN.md` for the prioritized fix list.
 2. Render the overall Site Health Score and the three group sub-scores as gauges
    with their band label (see "Score bands" and "Score gauges").
 3. Lay out the group breakdown (Search Visibility, Front-end Defects, Design

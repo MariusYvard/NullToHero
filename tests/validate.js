@@ -10,6 +10,7 @@
  *  4.  File integrity — minimum line counts (catches truncated rewrites)
  *  5.  Agent files exist and have valid frontmatter
  *  6.  Repo quality files present (CHANGELOG.md absence = error)
+ *  8b. LICENSE matches the canonical Apache-2.0 body (normalized SHA-256)
  *  7.  seo command count meets minimum (≥19) — error if not met
  *  8.  siteasy SKILL.md and all reference files exist with valid frontmatter
  *  9.  siteasy command→reference mapping (every declared command has a backing file)
@@ -29,8 +30,9 @@
  * 21.  CSV column integrity - header vs row field counts in tools/ data (quote-aware)
  */
 
-const fs   = require("fs");
-const path = require("path");
+const fs     = require("fs");
+const path   = require("path");
+const crypto = require("crypto");
 
 const ROOT       = path.resolve(__dirname, "..");
 const SEO_SKILL  = path.join(ROOT, "skills", "seo", "SKILL.md");
@@ -340,6 +342,36 @@ EXPECTED_FILES.forEach(file => {
     warn(`${file} missing`);
   }
 });
+
+// ─── Check 8b: LICENSE is the canonical Apache-2.0 text ───────────────────────
+
+section("8b. LICENSE canonical Apache-2.0 body");
+{
+  // Normalized (whitespace-collapsed) SHA-256 of the license body up to and
+  // including "END OF TERMS AND CONDITIONS". The appendix and any copyright
+  // line below it are excluded, mirroring what GitHub's licensee ignores.
+  // Reference text: https://www.apache.org/licenses/LICENSE-2.0.txt
+  const APACHE2_BODY_SHA256 = "59d8f0ba87ad9a2f1a431123c8d16646e5b89ba53653e818f16d136d77263c99";
+  const lic = readFile(path.join(ROOT, "LICENSE"));
+  if (lic === null) {
+    fail("LICENSE not found");
+  } else {
+    const marker = "END OF TERMS AND CONDITIONS";
+    const unified = lic.replace(/\r\n/g, "\n");
+    const idx = unified.indexOf(marker);
+    if (idx === -1) {
+      fail(`LICENSE: marker "${marker}" not found — not the Apache-2.0 text`);
+    } else {
+      const norm = unified.slice(0, idx + marker.length).replace(/\s+/g, " ").trim();
+      const sha = crypto.createHash("sha256").update(norm).digest("hex");
+      if (sha === APACHE2_BODY_SHA256) {
+        pass("LICENSE body matches the canonical Apache-2.0 text (normalized SHA-256)");
+      } else {
+        fail("LICENSE body deviates from the canonical Apache-2.0 text — GitHub license detection (licensee) will fail");
+      }
+    }
+  }
+}
 
 // ─── Check 9: siteasy SKILL.md and references ─────────────────────────────────
 

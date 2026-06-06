@@ -75,6 +75,6 @@ Quick wins:
 | Need | Skill |
 |------|-------|
 | Typography | `/siteasy typeset` |
-| Color | `/siteasy colorize` |
+| Color | `/siteasy amplify` |
 | Bolder or quieter | `/siteasy amplify` |
 | Layout | `/siteasy layout` |

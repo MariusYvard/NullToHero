@@ -21,7 +21,7 @@ You are the **Motion specialist** in a parallel audit. Analyze ONLY motion and i
 
 ### Timing and easing taste
 - [ ] Entrances use ease-out; exits feel natural
-- [ ] UI transition durations sit in the 150-400ms range
+- [ ] UI feedback durations sit in the 150-300ms range (large surfaces such as modals and drawers may take up to ~500ms)
 - [ ] Easing is consistent across similar interactions
 
 ### Micro-interaction polish

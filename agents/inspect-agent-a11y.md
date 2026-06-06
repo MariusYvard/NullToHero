@@ -81,4 +81,4 @@ Quick wins:
 |------|-------|
 | Full WCAG pass | `/siteasy audit` |
 | Contrast tooling | `/inspect detect` |
-| Design-time color | `/siteasy colorize` |
+| Design-time color | `/siteasy amplify` |

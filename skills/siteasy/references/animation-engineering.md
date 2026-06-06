@@ -1,7 +1,7 @@
 ---
 name: animation-engineering
 description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
-version: 1.6.0
+version: 1.9.2
 ---
 
 # Animation Engineering
@@ -72,7 +72,7 @@ Resources: [easing.dev](https://easing.dev/), [easings.co](https://easings.co/)
 | Modals, drawers | 200–500ms |
 | Exit animations | ~75% of enter duration |
 
-**UI animations must stay under 300ms.** A 180ms dropdown feels more responsive than a 400ms one. Faster-spinning spinners make loading *feel* faster even when load time is identical.
+**UI feedback animations (buttons, dropdowns, toggles, small reveals) must stay under 300ms; only large-surface choreography such as modals and drawers may use the 300-500ms end of the table.** A 180ms dropdown feels more responsive than a 400ms one. Faster-spinning spinners make loading *feel* faster even when load time is identical.
 
 **Asymmetric enter/exit:** Enter can be slow when deliberate (hold-to-delete: 2s linear). Release is always snappy (200ms ease-out). Slow where the user is deciding, fast where the system is responding.
 

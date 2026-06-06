@@ -11,6 +11,33 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.9.2] — 2026-06-06
+
+Implements every finding of the v1.9.1 full audit. No new features.
+
+### Fixed
+- `LICENSE` is now the canonical Apache-2.0 text, verbatim from apache.org (appendix included). The previous file paraphrased several sections and grafted MIT wording ("publish, distribute, sublicense, and/or sell") into section 4, which broke GitHub's license detection (NOASSERTION) and contradicted the Apache-2.0 declared everywhere else.
+- Removed four cross-references to commands that do not exist: `seo-agent-technical` pointed to `/inspect audit` (now `/inspect preview`), `inspect-agent-layout` to `/seo performance` (now `/seo technical`), and `siteasy-agent-visual` plus `inspect-agent-a11y` to `/siteasy colorize` (now `/siteasy amplify`, which loads the colorize reference).
+- `siteasy-agent-motion` now checks UI feedback against the same 150-300ms ceiling as the siteasy design laws and `/inspect review`, with an explicit carve-out for large surfaces (modals, drawers, up to ~500ms). `animation-engineering.md` states the same distinction instead of contradicting its own duration table.
+- `tools/design-system/README.md` no longer lists the `design` and `draft` CSVs removed in 1.9.1, and its domain list matches the real `--domain` choices (`prompt` never existed; `icons`, `react` and `web` were missing). Same fix in the `search.py` docstring, which also now lists all 16 stacks.
+- The five SEO agent descriptions now state their dual dispatch ("dimension of /audit (and /seo audit)"), matching the nine inspect and siteasy agents.
+- `/audit` writes `SITE-ACTION-PLAN.md` instead of `ACTION-PLAN.md`, so running `/audit` after `/seo audit` in the same directory no longer overwrites the SEO action plan.
+- `/seo audit` documentation no longer claims "7 specialist checks": it scores 7 dimensions through 5 parallel sub-agents and now says exactly which dimension folds into which agent. Both `/seo audit` and `/audit` state that their SEO scores use different weights and are not comparable.
+- `install.sh`, `install.ps1` and the feature-request template now list the `/audit` skill (added in 1.9.0 but missing there).
+- Lenis attribution updated: Studio Freight is now Darkroom Engineering and the repository moved to `darkroomengineering/lenis`.
+- `tools/data/inspect-rules.csv` is now valid RFC 4180 (doubled quotes instead of backslash-escaped ones), so strict CSV parsers read all 25 rules correctly.
+- `search.py --persist` prints the path it actually writes: the confirmation message now runs the project and page names through `safe_slug` like the writer does.
+- `seo-agent-technical` annotates its 48px touch-target line as the Google mobile guideline, with the WCAG 2.5.8 floor (24px, 44px recommended) stated alongside, so `/audit` reports no longer carry two unexplained thresholds.
+- Three references pointed to `reference/live.md`; they now link `live.md` directly.
+
+### Changed
+- `docs/overview.svg` adapts to dark mode via `prefers-color-scheme` (GitHub dark palette, lightened accents) and shows the current version badge.
+
+### CI
+- Validator gains Check 8b: the LICENSE body (up to "END OF TERMS AND CONDITIONS", whitespace-normalized) must hash to the canonical Apache-2.0 text, so a non-canonical license can never ship again. 322 checks total.
+
+---
+
 ## [1.9.1] — 2026-06-06
 
 ### Changed

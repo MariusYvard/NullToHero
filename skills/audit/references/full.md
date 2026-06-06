@@ -6,7 +6,7 @@ description: >
   sub-agents in parallel, aggregates their scored sections into a single Site
   Health Score, and writes a unified report plus a prioritized action plan.
   Backs the full, seo, defects, design, and quick run modes of /audit.
-version: 1.9.0
+version: 1.9.2
 ---
 
 # Complete Site Audit
@@ -38,7 +38,7 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
 5. **Aggregate.** Compute the three group sub-scores, then the overall Site
    Health Score, using the weights in "Scoring" below. Apply the defect severity
    cap.
-6. **Write outputs.** Produce `SITE-AUDIT-REPORT.md` and `ACTION-PLAN.md` (see
+6. **Write outputs.** Produce `SITE-AUDIT-REPORT.md` and `SITE-ACTION-PLAN.md` (see
    "Output files" and "Report structure"). For client formatting or PDF, defer to
    [report.md](report.md).
 
@@ -87,6 +87,10 @@ Search Visibility (SEO group):
 | seo-agent-schema | 15 |
 | seo-agent-geo | 15 |
 
+These five weights are specific to `/audit`. `/seo audit` scores the same site
+across seven dimensions with its own weights, so the two SEO scores are
+intentionally not comparable.
+
 Front-end Defects (inspect group):
 
 | Agent | Weight |
@@ -125,7 +129,7 @@ so a critical defect cannot be hidden by passing layout or code checks.
 | File | Contents |
 |------|----------|
 | `SITE-AUDIT-REPORT.md` | Full findings for every group that ran, each agent's returned section embedded verbatim, plus the executive summary and scores. |
-| `ACTION-PLAN.md` | Consolidated, de-duplicated fix list ordered Critical, High, Medium, Low, with the owning dimension noted on each row. |
+| `SITE-ACTION-PLAN.md` | Consolidated, de-duplicated fix list ordered Critical, High, Medium, Low, with the owning dimension noted on each row. |
 
 For converting `SITE-AUDIT-REPORT.md` into a client-ready Markdown deliverable or
 a PDF, defer to [report.md](report.md). Do not re-implement formatting here.

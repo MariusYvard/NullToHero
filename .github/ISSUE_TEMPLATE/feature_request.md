@@ -20,4 +20,5 @@ Link to specs, docs, or existing implementations that would inform the content.
 - [ ] `/siteasy` — design and frontend
 - [ ] `/seo` — search engine optimization
 - [ ] `/inspect` — quality checks
+- [ ] `/audit` — whole-site orchestrator
 - [ ] New skill (describe scope)

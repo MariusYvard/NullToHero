@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.9.1
+version: 1.9.2
 user-invocable: true
 argument-hint: "[url] | [full|seo|defects|design|quick|report] [url | file]"
 allowed-tools:
@@ -56,7 +56,7 @@ Because the agents are shared, a fix surfaced here can be re-run or deepened wit
 Each run mode produces two files (see [references/full.md](references/full.md) for the templates):
 
 - `SITE-AUDIT-REPORT.md` holds the full findings for every group that ran, with each agent's returned section embedded verbatim.
-- `ACTION-PLAN.md` holds the consolidated, de-duplicated fix list ordered Critical, High, Medium, Low.
+- `SITE-ACTION-PLAN.md` holds the consolidated, de-duplicated fix list ordered Critical, High, Medium, Low.
 
 The overall Site Health Score weights Search Visibility at 35 percent, Front-end Defects at 35 percent, and Design Quality at 30 percent. Any critical accessibility or interaction defect caps the Defects group regardless of other passes. The exact weights and the cap rule live in [references/full.md](references/full.md).
 
