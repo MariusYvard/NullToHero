@@ -1,7 +1,7 @@
 ---
 name: information-architecture
 description: "IA is the invisible structure that determines whether users can find what they need. Navigation is the visible manifestation. Both must match the user's mental model, not the org."
-version: 1.6.0
+version: 1.10.0
 ---
 
 # Information Architecture
@@ -84,6 +84,25 @@ Limit to 5 to 7 items. Beyond that, the cognitive cost of scanning the menu exce
 | Tabbed | Distinct sections, mutually exclusive | Limited depth, not for browsing |
 
 Mobile-first navigation: design the constrained version first, then expand. A hamburger that hides 12 items is failing the user, not solving for space.
+
+### Mobile navigation
+
+Most phone use is one-handed. In Steven Hoober's field observations, 49 percent of users operate the phone with one thumb, 36 percent cradle it and tap with a finger, and 15 percent type with both thumbs. Design for the thumb: the bottom half of the screen is the comfort zone, the top corners are the stretch zone.
+
+| Pattern | Strengths | Trade-offs | Use for |
+|---|---|---|---|
+| Bottom tab bar | Always visible, in thumb reach, one-tap switching | Hard limit of 5 destinations | 3-5 high-frequency sections |
+| Hamburger / drawer | Maximum screen space, scales to deep trees | Halves discoverability, doubles interaction cost | Low-frequency utilities, settings, profile |
+| Full-screen menu | Immersive, guides a single choice | Interrupts the content entirely | Onboarding, initial category pick |
+| Gesture-only | Frees the whole screen | Invisible, steep learning curve, excludes motor-impaired users | Optional shortcuts layered over visible controls |
+
+Rules that survive testing:
+
+- **Priority+ hybrid.** Keep the 3-4 highest-frequency destinations in a visible bottom bar and overflow the rest behind a labeled "More" tab. Documented redesigns that moved core navigation out of a hamburger into a visible bar raised feature engagement sharply (Spotify's return to a tab bar; a Siemens field-service app gained 38 percent engagement and cut task time 15 percent with a Priority+ bar).
+- **80-20 for the hamburger.** A drawer, when kept, holds only options that account for under 20 percent of interactions, opens from a conventional top corner, and animates as a slide or fade that preserves spatial continuity.
+- **Three levels deep, maximum.** Deeper trees disorient. Flatten with category landing pages, accordions, or sequential flows; breadcrumbs become mandatory past level 3 (see below).
+- **Back must be safe.** The hardware or browser back action follows the user's actual history, never discards entered data, and never dumps the user on the homepage.
+- **Avoid in-app browsers for core journeys.** They strip navigation context and make returning to the source content unreliable.
 
 ### Secondary navigation
 

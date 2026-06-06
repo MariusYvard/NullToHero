@@ -1,7 +1,7 @@
 ---
 name: wcag-2-2
 description: "The Web Content Accessibility Guidelines 2.2 (W3C Recommendation, October 2023) adds nine success criteria to WCAG 2.1, targeting cognitive disabilities, motor impairments, and."
-version: 1.6.0
+version: 1.10.0
 ---
 
 # WCAG 2.2 Compliance Reference
@@ -112,6 +112,29 @@ Icon buttons need invisible padding:
   justify-content: center;
 }
 ```
+
+### Where 24px sits among platform standards
+
+24x24 CSS px is the legal floor, not the comfort target. A fingertip's contact patch is 16-20mm wide; the platform guidelines all aim higher:
+
+| Standard | Minimum | Physical equivalent |
+|---|---|---|
+| WCAG 2.5.8 (AA) | 24x24 CSS px | 48px physical at 2x, 72px at 3x displays |
+| WCAG 2.5.5 (AAA) | 44x44 CSS px | The accessibility comfort baseline |
+| Apple HIG | 44x44 pt | iOS design floor |
+| Android / Material | 48x48 dp | About 9x9 mm |
+| Microsoft | 7 mm, 2 mm gaps | Hardware-agnostic physical sizing |
+
+Per-control comfort targets, with the visual size decoupled from the hit area:
+
+| Control | Floor | Comfortable | Placement note |
+|---|---|---|---|
+| Primary action (CTA) | 44px | 48px or more, full width on mobile | 16px side margins from screen edges |
+| Form field | 44px height | 48px height | At least 12px vertical gap between stacked fields |
+| Icon button | 24px | 44px | Extend with padding, keep the glyph small |
+| Modal close (the X) | 24px | 32-44px | Keep clear of underlying links to avoid mis-taps |
+
+Adjacent targets need an 8px gap minimum so a thumb cannot bridge two controls in one press.
 
 ## 3.2.6 Consistent Help
 

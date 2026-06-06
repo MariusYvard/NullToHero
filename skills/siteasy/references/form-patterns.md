@@ -1,7 +1,7 @@
 ---
 name: form-patterns
 description: "Forms are the highest-friction surface of most products. Every additional field, every ambiguous label, every late-fire validation message increases drop-off. This reference."
-version: 1.6.0
+version: 1.10.0
 ---
 
 # Form Patterns
@@ -47,6 +47,17 @@ Required indicator: asterisk after the label, with an aria-label or sr-only expl
 ```html
 <label for="email">Email <span aria-hidden="true">*</span><span class="sr-only">required</span></label>
 <input id="email" type="email" required autocomplete="email">
+```
+
+### Group related fields
+
+Wrap semantically related groups (shipping address, card details) in `<fieldset>` with a `<legend>`. Screen readers announce the legend with each field, preserving the context that sighted users get from proximity.
+
+```html
+<fieldset>
+  <legend>Shipping address</legend>
+  <!-- address fields -->
+</fieldset>
 ```
 
 ## Autocomplete Vocabulary
@@ -167,6 +178,18 @@ Always use `inputmode` to control the mobile keyboard:
 ```
 
 `type="number"` is risky: it allows scroll wheel changes, has spinner controls, and rejects non-numeric pastes (which can confuse password manager fills). For postal codes, card numbers, and codes, prefer `type="text"` with `inputmode="numeric"`.
+
+### Keyboard triggers by data type
+
+`type` drives semantics and native validation, `inputmode` drives the virtual keyboard, `autocomplete` drives autofill. The three are independent; set all that apply.
+
+| Data | `type` | `inputmode` | `autocomplete` |
+|---|---|---|---|
+| Code, ID, OTP | `text` | `numeric` | `one-time-code` (for OTP) |
+| Phone | `tel` | `tel` | `tel` |
+| Email | `email` | `email` | `email` |
+| Amount, decimal | `text` | `decimal` | not applicable |
+| URL | `url` | `url` | `url` |
 
 ### File upload
 

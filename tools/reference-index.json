@@ -631,6 +631,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/mobile-ergonomics.md",
+    "title": "Mobile Ergonomics",
+    "keywords": [
+      "mobile",
+      "ergonomics"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/motion-design.md",
     "title": "Motion Design",
     "keywords": [

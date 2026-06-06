@@ -16,7 +16,8 @@ You are the **UX specialist** in a parallel audit. Analyze ONLY UX quality and i
 ## Checklist
 ### Information architecture
 - [ ] Navigation labels match the user's mental model
-- [ ] Key tasks are findable within a reasonable depth
+- [ ] Key tasks are findable within a reasonable depth (three levels maximum)
+- [ ] On touch devices, primary destinations sit within thumb reach (a visible bottom bar beats hamburger-only navigation)
 - [ ] Grouping and ordering reflect priority and frequency of use
 
 ### User-flow friction

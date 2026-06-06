@@ -35,7 +35,7 @@ You are the **Motion specialist** in a parallel audit. Analyze ONLY motion and i
 - [ ] A graceful reduced-motion fallback exists
 
 ### Perceived performance and choreography
-- [ ] Skeletons or optimistic UI mask latency
+- [ ] Skeletons or optimistic UI mask latency (skeleton for 300ms-2s waits, spinner plus context beyond 2s, nothing under 300ms)
 - [ ] Shared-element or View Transitions used where apt
 - [ ] Sequenced motion maintains continuity between views
 - [ ] Overall effect is delight without distraction

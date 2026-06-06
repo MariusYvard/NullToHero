@@ -1,7 +1,7 @@
 ---
 name: animation-engineering
 description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
-version: 1.9.2
+version: 1.10.0
 ---
 
 # Animation Engineering
@@ -75,6 +75,18 @@ Resources: [easing.dev](https://easing.dev/), [easings.co](https://easings.co/)
 **UI feedback animations (buttons, dropdowns, toggles, small reveals) must stay under 300ms; only large-surface choreography such as modals and drawers may use the 300-500ms end of the table.** A 180ms dropdown feels more responsive than a 400ms one. Faster-spinning spinners make loading *feel* faster even when load time is identical.
 
 **Asymmetric enter/exit:** Enter can be slow when deliberate (hold-to-delete: 2s linear). Release is always snappy (200ms ease-out). Slow where the user is deciding, fast where the system is responding.
+
+## Loading-State Choreography
+
+A wait of identical length feels shorter or longer depending on what is on screen. Spinners focus attention on time itself and give no clue about the incoming layout; skeletons project the structure, so the user starts parsing the page before it arrives. Loading loops are ambient state, not interactive feedback, so the 300ms feedback ceiling above does not apply to them.
+
+| Expected wait | Show | Notes |
+|---|---|---|
+| Under 300ms | Nothing | A skeleton that flashes in and out is worse than a blank beat |
+| 300ms to 2s | Skeleton screen | Shimmer or pulse loop at 1.5-2s per cycle; shapes match the real layout |
+| Over 2s | Progress bar or spinner plus a contextual message ("Securing your payment...") | Disable the submit control while the request is in flight to prevent double sends |
+
+Swap the skeleton for content with a cross-fade of at least 200ms; an instant swap reads as a glitch. On degraded networks, load critical text first, keep media as lightweight placeholders, and queue user actions locally for later sync.
 
 ---
 

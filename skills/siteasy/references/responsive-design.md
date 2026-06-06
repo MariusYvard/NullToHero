@@ -1,7 +1,7 @@
 ---
 name: responsive-design
 description: "Start with base styles for mobile, use min-width queries to layer complexity. Desktop-first (max-width) means mobile loads unnecessary styles first."
-version: 1.6.0
+version: 1.10.0
 ---
 
 # Responsive Design
@@ -9,6 +9,22 @@ version: 1.6.0
 ## Mobile-First: Write It Right
 
 Start with base styles for mobile, use `min-width` queries to layer complexity. Desktop-first (`max-width`) means mobile loads unnecessary styles first.
+
+## Mobile-First Is a Strategy, Not a Media-Query Order
+
+Responsive design adapts a desktop layout downward; mobile-first designs the small-screen experience upward. The difference shows in what gets cut:
+
+| Criterion | Responsive (top-down) | Mobile-first (bottom-up) |
+|---|---|---|
+| Content priority | Layout is squeezed to fit | Non-essential content is cut at the design stage |
+| Performance | Desktop scripts and assets often load hidden | Budgeted for the smallest device from the start |
+| Touch | Hover behaviors retrofitted | Designed for touch and gestures natively |
+
+Operational rules:
+
+- **Full content parity.** Mobile users expect to complete the same tasks as on desktop. Organize content sequentially instead of removing it, and never ship a "view desktop site" escape hatch.
+- **Every element pays rent.** Reading comprehension on mobile drops to roughly half of desktop for complex content (NN/g), and anything scrolled off-screen taxes short-term memory. Each decorative block has a real opportunity cost.
+- **No false floors.** Full-width decorative images and banner-shaped blocks read as ads (banner blindness) and signal "end of page", stopping the scroll early. Cut them or make them unmistakably content.
 
 ## Breakpoints: Content-Driven
 

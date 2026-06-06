@@ -1,9 +1,9 @@
 ---
 name: siteasy
-description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.9.2
+description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
+version: 1.10.0
 user-invocable: true
-argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
+argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
 allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
@@ -144,6 +144,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
 | `layout [target]` | Enhance | Spacing systems, visual rhythm, grid tools | [references/layout.md](references/layout.md) |
 | `adapt [target]` | Enhance | Mobile/tablet/desktop/print adaptation | [references/adapt.md](references/adapt.md) + [references/responsive-design.md](references/responsive-design.md) |
+| `mobile [target]` | Enhance | Phone-specific ergonomics — thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit | [references/mobile-ergonomics.md](references/mobile-ergonomics.md) |
 | `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) + [references/creative-patterns.md](references/creative-patterns.md) |
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |

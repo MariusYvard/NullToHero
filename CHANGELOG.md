@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.10.0] — 2026-06-06
+
+Mobile ergonomics knowledge drop: a dedicated phone playbook plus thumb-zone navigation, touch-target standards, mobile-first strategy, virtual-keyboard mapping and loading-state choreography folded into the existing references. One new command; 54 commands, 84 references.
+
+### Added
+- `/siteasy mobile` and its reference `mobile-ergonomics.md`: the phone-specific playbook — thumb-zone placement map with corollaries (primary actions at the bottom, destructive actions out of the easy zone), condensed touch-target rules, one-handed navigation constraints, gesture escape hatches, keyboard-friction reduction through device capabilities (geolocation, camera, passkeys), cellular performance, and a five-step mobile audit protocol with a 12-point checklist.
+- `information-architecture.md`: "Mobile navigation" section — one-handed-use data (49/36/15), bottom tab bar vs hamburger vs full-screen vs gesture-only trade-offs, the Priority+ hybrid pattern with documented results, the 80-20 rule for drawers, the three-level depth ceiling, safe back behavior and the case against in-app browsers for core journeys.
+- `responsive-design.md`: "Mobile-first is a strategy, not a media-query order" — top-down responsive vs bottom-up mobile-first comparison, full content parity (no "view desktop site" link), the mobile comprehension penalty and the false-floor effect of banner-shaped decoration.
+- `wcag-2-2.md`: target-size context — how 24px (AA) sits against WCAG 2.5.5 AAA 44px, Apple 44pt, Android 48dp and Microsoft 7mm, plus per-control comfort sizes (CTA, fields, icon buttons, modal close) and the 8px adjacency gap.
+- `form-patterns.md`: `<fieldset>`/`<legend>` grouping for screen readers and a keyboard-trigger map pairing `type`, `inputmode` and `autocomplete` per data type (codes, phone, email, decimal, URL).
+- `animation-engineering.md`: "Loading-State Choreography" — nothing under 300ms, skeleton with 1.5-2s shimmer loop from 300ms to 2s, spinner plus contextual message beyond 2s, 200ms cross-fade to content, degraded-network strategy. Explicitly scoped as ambient state outside the 300ms feedback ceiling.
+- `adapt.md`: gesture affordance rule (visible hint plus button alternative for every swipe or pinch) and thumb-reach repositioning on rotation.
+- `tools/data/inspect-rules.csv`: two rules — mobile keyboard triggers (`inputmode` over `type="number"` for codes) and loading-state choreography. 27 rules total.
+- Agent checklists: `siteasy-agent-ux` gains thumb-reach navigation and the three-level depth check; `siteasy-agent-motion` scores skeleton timing against the 300ms/2s thresholds.
+
+---
+
 ## [1.9.2] — 2026-06-06
 
 Implements every finding of the v1.9.1 full audit. No new features.

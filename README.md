@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.9.2** · 4 skills · 53 commands · 83 reference docs · 13 audit sub-agents
+> **v1.10.0** · 4 skills · 54 commands · 84 reference docs · 13 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -91,6 +91,7 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `typeset [target]` | Typography audit, font selection, hierarchy |
 | `layout [target]` | Spacing systems, visual rhythm, grid |
 | `adapt [target]` | Mobile, tablet, desktop and print adaptation |
+| `mobile [target]` | Phone ergonomics: thumb zone, touch targets, keyboards, mobile audit |
 | `clarify [target]` | UX copy, error messages, button labels, empty states |
 | `onboard [target]` | First-run flows, empty states, feature discovery |
 | `delight [target]` | Micro-interactions, personality, satisfying feedback |
@@ -203,12 +204,12 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ## What is inside
 
-NullToHero ships **83 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **84 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (52):** accessibility-engineering, adapt, animate, animation-engineering, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
+**siteasy, design (53):** accessibility-engineering, adapt, animate, animation-engineering, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
 
 **seo, search (20):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
 

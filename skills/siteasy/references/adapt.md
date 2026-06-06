@@ -1,7 +1,7 @@
 ---
 name: adapt
 description: "Adapt existing designs to work effectively across different contexts - different screen sizes, devices, platforms, or use cases."
-version: 1.6.0
+version: 1.10.0
 ---
 
 > **Additional context needed**: target platforms/devices and usage contexts.
@@ -53,6 +53,7 @@ Create context-appropriate strategy:
 - Bottom sheets instead of dropdowns
 - Thumbs-first design (controls within thumb reach)
 - Larger tap areas with more spacing
+- Gesture affordances: every swipe or pinch interaction shows a visual hint (a peeking card edge, pagination dots) and keeps a visible button alternative
 
 **Content Strategy**:
 - Progressive disclosure (don't show everything at once)
@@ -65,6 +66,7 @@ Create context-appropriate strategy:
 - Reduce navigation complexity
 - Sticky headers for context
 - Back button in navigation flow
+- On rotation, reposition primary controls so they stay within thumb reach (video players, dashboards)
 
 ### Tablet Adaptation (Hybrid Approach)
 
