@@ -28,6 +28,10 @@
  * 19.  reference-index.json matches references on disk (stale-index guard)
  * 20.  No stale present-tense "FAQ restricted to gov/health" claims in SEO references
  * 21.  CSV column integrity - header vs row field counts in tools/ data (quote-aware)
+ * 22.  Audit sub-agents are read-only (least agency, no write-class tools)
+ * 23.  Every audit sub-agent carries a '## Trust boundary' block
+ * 24.  /audit verify consensus mode is wired (SKILL.md command + full.md sections)
+ * 25.  docs/ARCHITECTURE.md rationale doc is present
  */
 
 const fs     = require("fs");
@@ -909,6 +913,75 @@ section("21. CSV column integrity (header vs rows)");
     if (fileBad === 0) pass(`${rel}: ${header} columns consistent across ${lines.length - 1} rows`);
   });
   if (csvScanned === 0) warn("No CSV files scanned");
+}
+
+// --- Check 22: audit sub-agents declare only read-only tools -----------------
+
+section("22. Audit sub-agents are read-only (least agency)");
+{
+  const READONLY = new Set(["Read", "Grep", "Glob", "WebFetch"]);
+  const agentFiles = fs.existsSync(SEO_AGENTS)
+    ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")) : [];
+  let bad = 0;
+  agentFiles.forEach(file => {
+    const fm = parseFrontmatter(readFile(path.join(SEO_AGENTS, file)) || "");
+    const toolsRaw = fm && fm.tools;
+    if (!toolsRaw) { fail(`agents/${file}: no 'tools' field in frontmatter`); bad++; return; }
+    const tools = toolsRaw.split(",").map(t => t.trim()).filter(Boolean);
+    const offenders = tools.filter(t => !READONLY.has(t));
+    if (offenders.length) {
+      fail(`agents/${file}: non-read-only tool(s) [${offenders.join(", ")}]; sub-agents must stay read-only`);
+      bad++;
+    }
+  });
+  if (agentFiles.length && bad === 0) {
+    pass(`All ${agentFiles.length} sub-agents declare only read-only tools (Read, Grep, Glob, WebFetch)`);
+  }
+}
+
+// --- Check 23: every sub-agent carries the Trust boundary block ---------------
+
+section("23. Sub-agents carry the Trust boundary block");
+{
+  const agentFiles = fs.existsSync(SEO_AGENTS)
+    ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")) : [];
+  let missing = 0;
+  agentFiles.forEach(file => {
+    const c = readFile(path.join(SEO_AGENTS, file)) || "";
+    if (!/^##\s+Trust boundary\s*$/m.test(c)) {
+      fail(`agents/${file}: missing '## Trust boundary' block (untrusted-input guardrail)`);
+      missing++;
+    }
+  });
+  if (agentFiles.length && missing === 0) {
+    pass(`All ${agentFiles.length} sub-agents carry a Trust boundary block`);
+  }
+}
+
+// --- Check 24: /audit verify consensus mode is wired -------------------------
+
+section("24. /audit verify consensus mode is wired");
+{
+  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
+  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
+  const cmds = extractCommandRefs(auditSkill);
+  if (cmds.verify) pass("audit/SKILL.md declares the 'verify' command");
+  else fail("audit/SKILL.md: 'verify' command row missing from the Commands table");
+  if (/^##\s+Consensus verification/m.test(full)) pass("full.md documents Consensus verification");
+  else fail("full.md: '## Consensus verification' section missing");
+  if (/^\|\s*`verify`\s*\|/m.test(full)) pass("full.md modes table lists the verify row");
+  else fail("full.md: verify row missing from the Modes table");
+}
+
+// --- Check 25: architecture rationale doc present ----------------------------
+
+section("25. docs/ARCHITECTURE.md present");
+{
+  const arch = readFile(path.join(ROOT, "docs", "ARCHITECTURE.md"));
+  if (arch === null) fail("docs/ARCHITECTURE.md not found");
+  else if (!/^#\s+Multi-Agent Architecture/m.test(arch)) fail("docs/ARCHITECTURE.md: missing '# Multi-Agent Architecture' heading");
+  else if (arch.length < 1500) warn("docs/ARCHITECTURE.md is unexpectedly short");
+  else pass("docs/ARCHITECTURE.md present and non-trivial");
 }
 
 // --- Summary --------------------------------------------------------------------

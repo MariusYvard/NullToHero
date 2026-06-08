@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.10.0** · 4 skills · 54 commands · 84 reference docs · 13 audit sub-agents
+> **v1.11.0** · 4 skills · 55 commands · 84 reference docs · 13 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -149,7 +149,7 @@ Your quality gate. Three quick checks to run before you ship.
 
 ### /audit, the whole site in one pass
 
-Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority.
+Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 | Command | What it does |
 |---------|-------------|
@@ -158,6 +158,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
 | `design [url]` | Design-quality group only (4 siteasy sub-agents) |
 | `quick [url]` | One representative sub-agent per group for a fast triage |
+| `verify [url]` | Consensus re-check of the gating dimensions (a11y, interaction, technical) by majority vote |
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
 
 ---

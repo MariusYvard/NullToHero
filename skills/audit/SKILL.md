@@ -1,9 +1,9 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.10.0
+version: 1.11.0
 user-invocable: true
-argument-hint: "[url] | [full|seo|defects|design|quick|report] [url | file]"
+argument-hint: "[url] | [full|seo|defects|design|quick|verify|report] [url | file]"
 allowed-tools:
   - Read
   - Write
@@ -26,9 +26,10 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) | [references/full.md](references/full.md) |
 | `design [url]` | Design-quality group only (4 siteasy sub-agents) | [references/full.md](references/full.md) |
 | `quick [url]` | One representative sub-agent per group for a fast triage | [references/full.md](references/full.md) |
+| `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF | [references/report.md](references/report.md) |
 
-Six commands, two references. The five run modes (`full`, `seo`, `defects`, `design`, `quick`) all share the orchestration playbook in [references/full.md](references/full.md); they differ only in which agent group is dispatched. The `report` mode formats an already-produced audit and is documented in [references/report.md](references/report.md).
+Seven commands, two references. The six run modes (`full`, `seo`, `defects`, `design`, `quick`, `verify`) all share the orchestration playbook in [references/full.md](references/full.md). The first five differ only in which agent group is dispatched; `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. The `report` mode formats an already-produced audit and is documented in [references/report.md](references/report.md).
 
 ## How to run a command
 
