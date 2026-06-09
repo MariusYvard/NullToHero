@@ -1,6 +1,6 @@
 ---
 name: audit-compare
-version: 1.13.0
+version: 1.14.0
 description: >
   Two-target comparison for /audit. Audits target A and target B with the same
   specialist group, then diffs them check by check: which verdicts regressed,
@@ -26,12 +26,30 @@ difference between A and B, not run-to-run scoring jitter. Without that property
 comparison would mostly measure noise. The residual is verdict flips, which the
 diff exposes one by one rather than hiding inside a number.
 
+## Structural diff (preferred)
+
+When both targets have a `SITE-AUDIT.json` (the pre-pass writes one for every run,
+including `checks`), diff them structurally instead of re-parsing markdown:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/tools/audit/compare.mjs A.json B.json --md
+```
+
+The helper aligns checks by `agent::id`, classifies each pair as improvement,
+regression, unchanged or coverage change, attaches the rubric point impact and
+computes the per-group and overall deltas as B minus A. It reads structured fields,
+so it does not depend on report formatting and cannot be thrown off by a reworded
+table. Use this for before/after of the same site (regression detection) and for
+A versus B (benchmark). When a target has no JSON, fall back to reading the verdict
+tables from its `SITE-AUDIT-REPORT.md` and align them the same way by hand.
+
 ## Inputs
 
-- `A` and `B`. Each is a URL, a local HTML file or a previously saved
-  `SITE-AUDIT-REPORT.md`. A saved report is read for its verdict tables instead of
-  being re-audited, which is the cheap way to compare today against a kept
-  baseline.
+- `A` and `B`. Each is a URL, a local HTML file, a saved `SITE-AUDIT.json` or a
+  saved `SITE-AUDIT-REPORT.md`. A saved result is read instead of being re-audited,
+  which is the cheap way to compare today against a kept baseline. Prefer
+  `SITE-AUDIT.json`: it diffs structurally (see below) rather than by re-parsing
+  markdown tables, so a layout change in the report cannot corrupt the diff.
 - Optional group: `full` (default), `seo`, `defects`, `design` or `quick`. The
   group is applied identically to both targets so the check sets line up.
 

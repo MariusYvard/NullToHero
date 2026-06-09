@@ -1,6 +1,17 @@
 [
   {
     "skill": "audit",
+    "path": "skills/audit/references/checks.md",
+    "title": "Deterministic checks pre-pass",
+    "keywords": [
+      "checks",
+      "deterministic",
+      "pre",
+      "pass"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/compare.md",
     "title": "Audit Compare",
     "keywords": [

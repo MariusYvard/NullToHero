@@ -35,6 +35,11 @@
  * 26.  Agents use the deterministic scoring rubric (formula + critical checks)
  * 27.  Orchestrator severity cap is rule-based (deterministic)
  * 28.  /audit compare mode is wired (command + compare.md diff sections)
+ * 29.  /audit checks deterministic pre-pass is wired (command + checks.md)
+ * 30.  Deterministic audit tooling + JSON schema present (tools/audit/*)
+ * 31.  SITE-AUDIT.json + cost ledger wired into the orchestration docs
+ * 32.  Reference eval set present and consistent (tests/eval)
+ * 33.  Audit-gate GitHub Action + self-test workflow present
  */
 
 const fs     = require("fs");
@@ -195,6 +200,7 @@ const FILE_INTEGRITY = {
   "skills/audit/SKILL.md":                      { minLines:  60 },
   "skills/audit/references/full.md":            { minLines: 150 },
   "skills/audit/references/report.md":          { minLines:  60 },
+  "skills/audit/references/checks.md":          { minLines:  90 },
 };
 
 // ─── Check 1: seo/SKILL.md exists ─────────────────────────────────────────────
@@ -1052,6 +1058,102 @@ section("28. /audit compare mode is wired");
     if (missing.length === 0) pass("compare.md carries the diff sections (Process, Regressions, Improvements, determinism note)");
     else fail(`compare.md missing expected content: ${missing.join(", ")}`);
   }
+}
+
+// --- Check 29: /audit checks deterministic pre-pass is wired -----------------
+
+section("29. /audit checks deterministic pre-pass is wired");
+{
+  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
+  const cmds = extractCommandRefs(auditSkill);
+  if (cmds.checks) pass("audit/SKILL.md declares the 'checks' command");
+  else fail("audit/SKILL.md: 'checks' command row missing from the Commands table");
+  const checksRef = readFile(path.join(ROOT, "skills", "audit", "references", "checks.md"));
+  if (checksRef === null) {
+    fail("skills/audit/references/checks.md not found");
+  } else {
+    const need = ["analyze.mjs", "SITE-AUDIT.json", "clientRendered", "## Process"];
+    const missing = need.filter(t => !checksRef.includes(t));
+    if (missing.length === 0) pass("checks.md documents the pre-pass (analyzer, SITE-AUDIT.json, client-rendered, process)");
+    else fail(`checks.md missing expected content: ${missing.join(", ")}`);
+  }
+}
+
+// --- Check 30: deterministic audit tooling + JSON schema present -------------
+
+section("30. Deterministic audit tooling present");
+{
+  const need = [
+    "tools/audit/fetch.mjs", "tools/audit/analyze.mjs", "tools/audit/gate.mjs",
+    "tools/audit/compare.mjs", "tools/audit/cost.mjs", "tools/audit/eval.mjs",
+    "tools/audit/lib/html.mjs", "tools/audit/lib/contrast.mjs", "tools/audit/lib/checks.mjs",
+    "tools/audit/lib/site-audit.mjs", "tools/audit/schema/site-audit.schema.json",
+    "tools/audit/README.md",
+  ];
+  let miss = 0;
+  for (const rel of need) if (!fs.existsSync(path.join(ROOT, rel))) { fail(`missing ${rel}`); miss++; }
+  if (miss === 0) pass(`all ${need.length} deterministic audit tooling files present`);
+  const schemaTxt = readFile(path.join(ROOT, "tools", "audit", "schema", "site-audit.schema.json"));
+  try {
+    const sc = JSON.parse(schemaTxt);
+    if (sc.$schema && sc.properties && sc.properties.checks) pass("site-audit schema is valid JSON with a checks array");
+    else fail("site-audit schema missing expected keys ($schema, properties.checks)");
+  } catch { fail("site-audit schema is not valid JSON"); }
+}
+
+// --- Check 31: SITE-AUDIT.json + cost ledger wired into orchestration ---------
+
+section("31. SITE-AUDIT.json and cost ledger wired into the orchestration");
+{
+  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
+  const report = readFile(path.join(ROOT, "skills", "audit", "references", "report.md")) || "";
+  const compare = readFile(path.join(ROOT, "skills", "audit", "references", "compare.md")) || "";
+  const items = [
+    ["full.md references SITE-AUDIT.json", full.includes("SITE-AUDIT.json")],
+    ["full.md documents the ground-truth pre-pass", /Ground truth from computed checks/.test(full)],
+    ["full.md documents a cost ledger", /Cost ledger/.test(full)],
+    ["report.md reads SITE-AUDIT.json", report.includes("SITE-AUDIT.json")],
+    ["compare.md uses the structural JSON diff (compare.mjs)", compare.includes("compare.mjs")],
+  ];
+  for (const [label, ok] of items) ok ? pass(label) : fail(`missing: ${label}`);
+}
+
+// --- Check 32: reference eval set present and consistent ---------------------
+
+section("32. Reference eval set present and consistent");
+{
+  const labelsPath = path.join(ROOT, "tests", "eval", "labels.json");
+  const baselinePath = path.join(ROOT, "tests", "eval", "baseline.json");
+  const fixturesDir = path.join(ROOT, "tests", "eval", "fixtures");
+  let labels = null;
+  try { labels = JSON.parse(readFile(labelsPath)); } catch { fail("tests/eval/labels.json missing or invalid JSON"); }
+  if (Array.isArray(labels)) {
+    if (labels.length >= 20) pass(`labels.json has ${labels.length} labeled fixtures (min 20)`);
+    else fail(`labels.json has only ${labels.length} fixtures (expected >= 20)`);
+    let bad = 0;
+    for (const l of labels) {
+      if (!l.file || !fs.existsSync(path.join(fixturesDir, l.file))) { fail(`eval fixture missing: ${l && l.file}`); bad++; }
+      if (!l.expect || Object.keys(l.expect).length === 0) { fail(`eval label without expectations: ${l && l.file}`); bad++; }
+    }
+    if (bad === 0) pass("every label points to an existing fixture with expectations");
+  }
+  if (fs.existsSync(baselinePath)) {
+    try { JSON.parse(readFile(baselinePath)); pass("baseline.json present and valid JSON"); } catch { fail("baseline.json invalid JSON"); }
+  } else fail("tests/eval/baseline.json missing");
+}
+
+// --- Check 33: audit-gate Action + self-test workflow ------------------------
+
+section("33. Audit-gate GitHub Action and self-test workflow present");
+{
+  const action = readFile(path.join(ROOT, "action.yml"));
+  if (action === null) fail("action.yml not found");
+  else if (/using:\s*composite/.test(action) && action.includes("tools/audit/gate.mjs")) pass("action.yml is a composite action that runs the audit gate");
+  else fail("action.yml present but does not run tools/audit/gate.mjs as a composite action");
+  const wf = readFile(path.join(ROOT, ".github", "workflows", "audit-selftest.yml"));
+  if (wf === null) fail(".github/workflows/audit-selftest.yml not found");
+  else if (wf.includes("eval.mjs") && wf.includes("gate.mjs")) pass("audit-selftest workflow runs eval and gate");
+  else fail("audit-selftest workflow missing eval/gate steps");
 }
 
 // --- Summary --------------------------------------------------------------------

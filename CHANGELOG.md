@@ -11,6 +11,30 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.14.0] — 2026-06-09
+
+Deterministic pre-pass. A pure-Node ground-truth layer turns the shared fetch into objective verdicts before any agent runs: an optional JavaScript render (Playwright) so a client-rendered SPA is audited as rendered rather than as an empty shell, a static analyzer that computes the objectively decidable checks (contrast, image dimensions, viewport, robots.txt, heading order, html lang, title, meta description, 375px overflow), a machine-readable `SITE-AUDIT.json`, a CI gate, a cost ledger and a reference evaluation set. One new command; 57 commands, 86 references.
+
+### Added
+- `/audit checks [url]` and `references/checks.md`: a deterministic-only run mode that fetches once, computes the objective checks and writes `SITE-AUDIT.json`, dispatching no sub-agents. Fast, cheap and fully reproducible; it is also the ground-truth layer the agent run modes consume in their fetch phase.
+- `tools/audit/fetch.mjs`: shared fetch with an optional `--render` (headless Chromium via Playwright, an optional peer dependency) and a `clientRendered` verdict, so a raw fetch of an SPA is flagged rather than silently audited as a shell.
+- `tools/audit/analyze.mjs` and `tools/audit/lib/` (`html`, `contrast`, `checks`, `site-audit`): the static analyzer and its check engine. Each verdict carries a `method` of computed, static or not-measured, and maps to the sub-agent that owns the dimension.
+- `tools/audit/schema/site-audit.schema.json`: the JSON Schema (draft-07) for `SITE-AUDIT.json` (scores plus per-check verdicts plus a cost ledger).
+- `tools/audit/gate.mjs` and a reusable composite GitHub Action (`action.yml`): a CI gate that fails on a critical-check FAIL or below a score threshold, usable as `uses: MariusYvard/NullToHero@v1.14.0`. `.github/workflows/audit-selftest.yml` runs it on the fixtures every push.
+- `tools/audit/compare.mjs`: a structural diff of two `SITE-AUDIT.json` results, so `/audit compare` diffs structured fields instead of re-parsing markdown.
+- `tools/audit/cost.mjs`: an end-of-run cost ledger (agents launched, approximate tokens, elapsed time).
+- `tools/audit/eval.mjs` with `tests/eval` (25 labeled HTML fixtures, `labels.json`, `baseline.json`): grades the analyzer for verdict accuracy and drift; wired into `npm test` and CI.
+- `docs/CLAUDE-IN-CHROME.md`: how to use Claude in Chrome for live-site analysis and feed the rendered DOM back into the audit.
+- `tests/validate.js`: checks 29-33 enforce the new wiring (the checks command, the tooling and schema, the JSON and cost wiring in the orchestration docs, the eval fixtures, the Action).
+
+### Changed
+- `skills/audit/references/full.md`: the shared fetch phase documents the optional render and the deterministic pre-pass, adds a "Ground truth from computed checks" section (agents adopt computed verdicts rather than re-judging them), and the outputs now include `SITE-AUDIT.json` and a cost ledger.
+- `skills/audit/references/compare.md` prefers the structural `SITE-AUDIT.json` diff; `skills/audit/references/report.md` reads `SITE-AUDIT.json` and embeds the cost ledger.
+- `agents/inspect-agent-a11y`, `inspect-agent-layout`, `seo-agent-technical`, `seo-agent-content`: a "Computed ground truth" block tells each to adopt the pre-pass verdicts for the checks it owns.
+- `docs/ARCHITECTURE.md`: a "Deterministic pre-pass (ground truth)" section and an evaluation-set note under empirical tuning.
+
+---
+
 ## [1.13.0] — 2026-06-09
 
 Audit comparison. A new `/audit compare A B` mode diffs two targets check by check: which verdicts regressed, which improved and the resulting score deltas. It is trustworthy because 1.12.0 made the scores deterministic, so a delta is a real difference rather than jitter. One new command; 56 commands, 85 references.

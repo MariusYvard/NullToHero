@@ -6,7 +6,7 @@ description: >
   consistent score bands and gauges, and lays out the report skeleton. Reuses the
   SEO report PDF tooling rather than duplicating it. Use after a full, seo,
   defects, or design run, or when the user asks for a report or PDF.
-version: 1.9.2
+version: 1.14.0
 ---
 
 # Unified Audit Report
@@ -19,7 +19,9 @@ renders a clean Markdown document, optionally converting it to PDF.
 ## From audit output to deliverable
 
 1. Read `SITE-AUDIT-REPORT.md` for the scores and the per-group findings, and
-   `SITE-ACTION-PLAN.md` for the prioritized fix list.
+   `SITE-ACTION-PLAN.md` for the prioritized fix list. When `SITE-AUDIT.json` is
+   present, read it for the machine-readable scores, the per-check verdicts and the
+   cost ledger rather than re-deriving them from the prose.
 2. Render the overall Site Health Score and the three group sub-scores as gauges
    with their band label (see "Score bands" and "Score gauges").
 3. Lay out the group breakdown (Search Visibility, Front-end Defects, Design
@@ -86,6 +88,9 @@ Every unified report follows this structure:
 | # | Priority | Issue | Dimension | Fix |
 |---|----------|-------|-----------|-----|
 | 1 | Critical | ... | ... | ... |
+
+## Cost ledger
+[agents launched, approximate tokens, elapsed — from SITE-AUDIT.json cost or the report's Cost ledger table]
 
 ## Appendix: Methodology
 ```

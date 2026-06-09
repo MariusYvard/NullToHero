@@ -1,0 +1,95 @@
+name: "NullToHero Audit Gate"
+description: "Deterministic front-end and SEO audit gate. Fails the build on a critical accessibility or crawlability defect, or below a score threshold. Computed checks only; the subjective design verdicts never block a build."
+author: "Marius Yvard"
+branding:
+  icon: "check-circle"
+  color: "purple"
+
+inputs:
+  url:
+    description: "URL to audit (mutually exclusive with file and report)."
+    required: false
+    default: ""
+  file:
+    description: "Local HTML file to audit, relative to the workspace."
+    required: false
+    default: ""
+  report:
+    description: "Path to an existing SITE-AUDIT.json to gate instead of fetching."
+    required: false
+    default: ""
+  min-score:
+    description: "Fail if the deterministic floor score is below this (0-100). Empty disables the score gate."
+    required: false
+    default: ""
+  max-warns:
+    description: "Fail if the number of WARN checks exceeds this. Empty disables."
+    required: false
+    default: ""
+  fail-on-critical:
+    description: "Fail on any critical-check FAIL (contrast, robots crawlability)."
+    required: false
+    default: "true"
+  render:
+    description: "Render the page with Playwright before analyzing (needs a URL). Installs Chromium in the action."
+    required: false
+    default: "false"
+  robots:
+    description: "Also fetch and evaluate robots.txt (URL targets only)."
+    required: false
+    default: "true"
+
+outputs:
+  score:
+    description: "Deterministic floor score (0-100)."
+    value: ${{ steps.gate.outputs.score }}
+  result:
+    description: "pass or fail."
+    value: ${{ steps.gate.outputs.result }}
+  critical-fails:
+    description: "Number of critical checks that FAILed."
+    value: ${{ steps.gate.outputs.critical-fails }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: "20"
+
+    - name: Install Playwright Chromium
+      if: ${{ inputs.render == 'true' }}
+      shell: bash
+      run: npx --yes playwright install --with-deps chromium
+
+    - name: Run audit gate
+      id: gate
+      shell: bash
+      env:
+        IN_URL: ${{ inputs.url }}
+        IN_FILE: ${{ inputs.file }}
+        IN_REPORT: ${{ inputs.report }}
+        IN_MIN_SCORE: ${{ inputs.min-score }}
+        IN_MAX_WARNS: ${{ inputs.max-warns }}
+        IN_FAIL_CRIT: ${{ inputs.fail-on-critical }}
+        IN_RENDER: ${{ inputs.render }}
+        IN_ROBOTS: ${{ inputs.robots }}
+      run: |
+        set -euo pipefail
+        ARGS=()
+        if [ -n "$IN_REPORT" ]; then
+          ARGS+=( --report "$IN_REPORT" )
+        elif [ -n "$IN_URL" ]; then
+          ARGS+=( "$IN_URL" )
+          [ "$IN_RENDER" = "true" ] && ARGS+=( --render )
+          [ "$IN_ROBOTS" = "true" ] && ARGS+=( --robots )
+        elif [ -n "$IN_FILE" ]; then
+          ARGS+=( "$IN_FILE" )
+        else
+          echo "::error::Provide one of: url, file, or report"; exit 2
+        fi
+        [ -n "$IN_MIN_SCORE" ] && ARGS+=( --min-score "$IN_MIN_SCORE" )
+        [ -n "$IN_MAX_WARNS" ] && ARGS+=( --max-warns "$IN_MAX_WARNS" )
+        [ "$IN_FAIL_CRIT" = "false" ] && ARGS+=( --no-fail-on-critical )
+        node "$GITHUB_ACTION_PATH/tools/audit/gate.mjs" "${ARGS[@]}"

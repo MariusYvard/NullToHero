@@ -1,0 +1,46 @@
+name: audit-selftest
+
+# Continuous deterministic audit: grades the analyzer against the labeled
+# fixtures and proves the CI gate passes a clean page and fails a defective one.
+# This is the deterministic half of /audit running on every push.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audit-selftest-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+
+      - name: Analyzer eval (correctness + drift)
+        run: node tools/audit/eval.mjs --strict
+
+      - name: Gate passes a clean fixture
+        run: node tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 90
+
+      - name: Gate fails a critical-defect fixture
+        run: |
+          if node tools/audit/gate.mjs tests/eval/fixtures/contrast-fail-grey.html; then
+            echo "::error::gate should have failed on a critical contrast defect"
+            exit 1
+          fi
+          echo "gate correctly failed the defective fixture"
+
+      - name: Gate JSON report round-trips
+        run: |
+          node tools/audit/analyze.mjs tests/eval/fixtures/clean-pass.html --out /tmp/sa.json
+          node tools/audit/gate.mjs --report /tmp/sa.json --min-score 90

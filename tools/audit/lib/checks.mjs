@@ -1,0 +1,379 @@
+// Deterministic, render-free check engine. Given parsed HTML (and optionally a
+// rendered DOM, robots.txt, and computed facts from a Playwright pass), it
+// returns objective per-check verdicts. The model never decides these; the code
+// does. Each check maps to the audit sub-agent that owns the dimension so the
+// orchestrator can hand an agent its ground truth.
+//
+// Pure Node standard library. No network, no execution of page content.
+
+import { parse, queryAll, first, textContent, styleMap, resolveBackgroundStr, ancestors } from "./html.mjs";
+import { ratioOf, aaThreshold } from "./contrast.mjs";
+
+// dimension/agent constants — kept in lockstep with agents/*.md
+const A11Y    = { agent: "inspect-agent-a11y",     dimension: "Front-end Defects" };
+const LAYOUT  = { agent: "inspect-agent-layout",   dimension: "Front-end Defects" };
+const TECH    = { agent: "seo-agent-technical",    dimension: "Search Visibility" };
+const CONTENT = { agent: "seo-agent-content",      dimension: "Search Visibility" };
+
+const TEXTISH = new Set(["p","span","a","li","td","th","div","button","label",
+  "strong","em","small","b","i","h1","h2","h3","h4","h5","h6","figcaption",
+  "blockquote","cite","dd","dt","summary","caption"]);
+
+function mk(o) {
+  return {
+    id: o.id, label: o.label, dimension: o.dimension, agent: o.agent,
+    verdict: o.verdict, critical: !!o.critical, method: o.method,
+    value: o.value === undefined ? null : o.value, detail: o.detail || "",
+  };
+}
+
+function fontSizePx(st, tag) {
+  const v = st["font-size"];
+  if (v) {
+    const m = v.match(/^([\d.]+)\s*(px|pt|rem|em)?$/);
+    if (m) {
+      const n = parseFloat(m[1]);
+      switch (m[2]) {
+        case "pt": return n * 4 / 3;
+        case "rem": case "em": return n * 16;
+        default: return n; // px or unit-less
+      }
+    }
+  }
+  if (tag === "h1") return 32;
+  if (tag === "h2") return 24;
+  return 16;
+}
+
+function isBold(st, el) {
+  const w = (st["font-weight"] || "").toLowerCase();
+  if (w === "bold" || w === "bolder") return true;
+  const num = parseInt(w, 10);
+  if (Number.isFinite(num) && num >= 700) return true;
+  if (["b","strong","h1","h2","h3"].includes(el.tag)) return true;
+  for (const a of ancestors(el)) if (a.tag === "b" || a.tag === "strong") return true;
+  return false;
+}
+
+// ── individual checks ─────────────────────────────────────────────────────────
+
+function checkViewport(doc) {
+  const metas = queryAll(doc, "meta").filter(m => (m.attrs.name || "").toLowerCase() === "viewport");
+  if (metas.length === 0) {
+    return mk({ id: "viewport-meta", label: "Viewport meta", ...LAYOUT, verdict: "FAIL",
+      method: "static", value: null, detail: "No <meta name=\"viewport\"> — page will not adapt to mobile widths." });
+  }
+  const content = (metas[0].attrs.content || "").toLowerCase();
+  if (!/width\s*=\s*device-width/.test(content)) {
+    return mk({ id: "viewport-meta", label: "Viewport meta", ...LAYOUT, verdict: "WARN",
+      method: "static", value: content, detail: "Viewport present but missing width=device-width." });
+  }
+  if (/user-scalable\s*=\s*(no|0)/.test(content) || /maximum-scale\s*=\s*1(\.0)?\b/.test(content)) {
+    return mk({ id: "viewport-meta", label: "Viewport meta", ...LAYOUT, verdict: "WARN",
+      method: "static", value: content, detail: "Viewport blocks pinch-zoom (user-scalable=no / maximum-scale=1) — accessibility issue." });
+  }
+  return mk({ id: "viewport-meta", label: "Viewport meta", ...LAYOUT, verdict: "PASS",
+    method: "static", value: content, detail: "Responsive viewport declared." });
+}
+
+function hasDims(el) {
+  const a = el.attrs || {};
+  if (a.width !== undefined && a.height !== undefined) return true;
+  const st = styleMap(el);
+  if (st.width && st.height) return true;
+  if (st["aspect-ratio"]) return true;
+  return false;
+}
+
+function checkImgDimensions(doc) {
+  const imgs = queryAll(doc, "img");
+  if (imgs.length === 0) {
+    return mk({ id: "img-dimensions", label: "Image width/height", ...LAYOUT, verdict: "PASS",
+      method: "static", value: { total: 0, missing: 0 }, detail: "No <img> elements." });
+  }
+  const missing = imgs.filter(im => !hasDims(im)).length;
+  const value = { total: imgs.length, missing };
+  if (missing === 0) {
+    return mk({ id: "img-dimensions", label: "Image width/height", ...LAYOUT, verdict: "PASS",
+      method: "static", value, detail: `All ${imgs.length} images declare width and height.` });
+  }
+  const verdict = missing >= 3 ? "FAIL" : "WARN";
+  return mk({ id: "img-dimensions", label: "Image width/height", ...LAYOUT, verdict,
+    method: "static", value,
+    detail: `${missing}/${imgs.length} images lack explicit width/height (CLS risk).` });
+}
+
+function checkHtmlLang(doc) {
+  const htmlEl = first(doc, "html");
+  const lang = htmlEl && (htmlEl.attrs.lang || "").trim();
+  if (lang) {
+    return mk({ id: "html-lang", label: "HTML lang attribute", ...A11Y, verdict: "PASS",
+      method: "static", value: lang, detail: `Document language declared (lang="${lang}").` });
+  }
+  return mk({ id: "html-lang", label: "HTML lang attribute", ...A11Y, verdict: "FAIL",
+    method: "static", value: null, detail: "<html> has no lang attribute — screen readers cannot pick a voice." });
+}
+
+function checkTitle(doc) {
+  const t = first(doc, "title");
+  const text = t ? textContent(t).trim() : "";
+  if (!text) {
+    return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "FAIL",
+      method: "static", value: 0, detail: "Missing or empty <title>." });
+  }
+  const len = text.length;
+  if (len > 60) {
+    return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "WARN",
+      method: "static", value: len, detail: `Title is ${len} chars (over ~60 may truncate in SERP).` });
+  }
+  if (len < 10) {
+    return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "WARN",
+      method: "static", value: len, detail: `Title is only ${len} chars (thin).` });
+  }
+  return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "PASS",
+    method: "static", value: len, detail: `Title present (${len} chars).` });
+}
+
+function checkMetaDescription(doc) {
+  const metas = queryAll(doc, "meta").filter(m => (m.attrs.name || "").toLowerCase() === "description");
+  const content = metas.length ? (metas[0].attrs.content || "").trim() : "";
+  if (!content) {
+    return mk({ id: "meta-description", label: "Meta description", ...CONTENT, verdict: "WARN",
+      method: "static", value: 0, detail: "No meta description — Google may synthesize a snippet." });
+  }
+  const len = content.length;
+  if (len > 160) {
+    return mk({ id: "meta-description", label: "Meta description", ...CONTENT, verdict: "WARN",
+      method: "static", value: len, detail: `Meta description is ${len} chars (over ~160 truncates).` });
+  }
+  if (len < 50) {
+    return mk({ id: "meta-description", label: "Meta description", ...CONTENT, verdict: "WARN",
+      method: "static", value: len, detail: `Meta description is ${len} chars (short).` });
+  }
+  return mk({ id: "meta-description", label: "Meta description", ...CONTENT, verdict: "PASS",
+    method: "static", value: len, detail: `Meta description present (${len} chars).` });
+}
+
+function checkHeadingOrder(doc) {
+  const levels = [];
+  const seen = [];
+  for (let l = 1; l <= 6; l++) seen.push(`h${l}`);
+  // collect headings in document order
+  const order = [];
+  const rec = (n) => {
+    for (const c of n.children) {
+      if (c.type === "element") {
+        if (/^h[1-6]$/.test(c.tag)) order.push(Number(c.tag[1]));
+        rec(c);
+      }
+    }
+  };
+  rec(doc);
+  if (order.length === 0) {
+    return mk({ id: "heading-order", label: "Heading order", ...CONTENT, verdict: "WARN",
+      method: "static", value: { count: 0 }, detail: "No headings found." });
+  }
+  const h1 = order.filter(l => l === 1).length;
+  let skip = null;
+  for (let i = 1; i < order.length; i++) {
+    if (order[i] > order[i - 1] + 1) { skip = [order[i - 1], order[i]]; break; }
+  }
+  const value = { count: order.length, h1, sequence: order };
+  if (skip) {
+    return mk({ id: "heading-order", label: "Heading order", ...CONTENT, verdict: "FAIL",
+      method: "static", value, detail: `Heading level skipped (h${skip[0]} jumps to h${skip[1]}).` });
+  }
+  if (h1 === 0) {
+    return mk({ id: "heading-order", label: "Heading order", ...CONTENT, verdict: "WARN",
+      method: "static", value, detail: "No <h1> on the page." });
+  }
+  if (h1 > 1) {
+    return mk({ id: "heading-order", label: "Heading order", ...CONTENT, verdict: "WARN",
+      method: "static", value, detail: `${h1} <h1> elements (expected one primary heading).` });
+  }
+  return mk({ id: "heading-order", label: "Heading order", ...CONTENT, verdict: "PASS",
+    method: "static", value, detail: `One h1, ${order.length} headings, no skipped levels.` });
+}
+
+function checkRobots(robotsTxt, url) {
+  if (robotsTxt == null) {
+    return mk({ id: "robots-disallow", label: "robots.txt crawlability", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "robots.txt not provided to the analyzer." });
+  }
+  let path = "/";
+  try { if (url) path = new URL(url).pathname || "/"; } catch { /* keep / */ }
+
+  // Build the rule set that applies to a generic crawler: the '*' group plus
+  // googlebot, which is what an SEO crawlability check cares about.
+  const lines = robotsTxt.split(/\r?\n/).map(l => l.replace(/#.*$/, "").trim());
+  let groups = [], cur = null, applies = false;
+  const apply = [];
+  for (const line of lines) {
+    const m = line.match(/^(user-agent|disallow|allow)\s*:\s*(.*)$/i);
+    if (!m) continue;
+    const field = m[1].toLowerCase(), val = m[2].trim();
+    if (field === "user-agent") {
+      if (cur && !cur._open) { cur = null; }
+      if (!cur) { cur = { agents: [], rules: [], _open: true }; groups.push(cur); }
+      cur.agents.push(val.toLowerCase());
+    } else if (cur) {
+      cur._open = false;
+      cur.rules.push({ type: field, val });
+    }
+  }
+  const relevant = groups.filter(g => g.agents.some(a => a === "*" || a === "googlebot"));
+  const disallows = [];
+  for (const g of relevant) for (const r of g.rules) if (r.type === "disallow" && r.val) disallows.push(r.val);
+
+  if (disallows.some(d => d === "/")) {
+    return mk({ id: "robots-disallow", label: "robots.txt crawlability", ...TECH, verdict: "FAIL", critical: true,
+      method: "static", value: { disallows }, detail: "robots.txt has Disallow: / — the whole site is blocked from crawling." });
+  }
+  const blocking = disallows.find(d => path.startsWith(d));
+  if (blocking) {
+    return mk({ id: "robots-disallow", label: "robots.txt crawlability", ...TECH, verdict: "FAIL", critical: true,
+      method: "static", value: { path, rule: blocking }, detail: `robots.txt blocks this page (Disallow: ${blocking}).` });
+  }
+  return mk({ id: "robots-disallow", label: "robots.txt crawlability", ...TECH, verdict: "PASS",
+    method: "static", value: { disallows }, detail: disallows.length ? `Page allowed; ${disallows.length} Disallow rule(s) do not match ${path}.` : "robots.txt present, nothing disallowed." });
+}
+
+function checkContrast(doc, computed) {
+  if (computed && Array.isArray(computed.contrastSamples)) {
+    const fails = computed.contrastSamples.filter(s => s.ratio < s.threshold);
+    if (computed.contrastSamples.length === 0) {
+      return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "NOT_MEASURED", critical: true,
+        method: "computed", value: null, detail: "Render produced no text samples to measure." });
+    }
+    if (fails.length) {
+      const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
+      return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: true,
+        method: "computed", value: { failures: fails.length, worst: worst.ratio },
+        detail: `${fails.length} text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1).` });
+    }
+    return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: true,
+      method: "computed", value: { samples: computed.contrastSamples.length }, detail: "All measured text meets AA contrast." });
+  }
+
+  // Static path: only elements with an inline color and a resolvable background.
+  const samples = [];
+  const visit = (n) => {
+    for (const c of n.children) {
+      if (c.type !== "element") continue;
+      if (TEXTISH.has(c.tag)) {
+        const st = styleMap(c);
+        if (st.color) {
+          const bgStr = resolveBackgroundStr(c);
+          const r = ratioOf(st.color, bgStr);
+          if (r) {
+            const threshold = aaThreshold({ fontSizePx: fontSizePx(st, c.tag), bold: isBold(st, c) });
+            samples.push({ tag: c.tag, ratio: r.ratio, threshold });
+          }
+        }
+      }
+      visit(c);
+    }
+  };
+  visit(doc);
+
+  if (samples.length === 0) {
+    return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "NOT_MEASURED", critical: true,
+      method: "not-measured", value: null,
+      detail: "No inline text colors to measure statically — run with --render for computed-style contrast." });
+  }
+  const fails = samples.filter(s => s.ratio < s.threshold);
+  if (fails.length) {
+    const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
+    return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: true,
+      method: "static", value: { samples: samples.length, failures: fails.length, worst: worst.ratio },
+      detail: `${fails.length}/${samples.length} inline text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1).` });
+  }
+  return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: true,
+    method: "static", value: { samples: samples.length }, detail: `All ${samples.length} inline text sample(s) meet AA contrast.` });
+}
+
+function checkOverflow375(doc, computed) {
+  if (computed && typeof computed.horizontalOverflow375 === "boolean") {
+    return computed.horizontalOverflow375
+      ? mk({ id: "horizontal-overflow-375", label: "No horizontal scroll at 375px", ...LAYOUT, verdict: "FAIL",
+          method: "computed", value: computed.scrollWidth375 || null, detail: `Page scrolls horizontally at 375px (scrollWidth ${computed.scrollWidth375}px > 375px).` })
+      : mk({ id: "horizontal-overflow-375", label: "No horizontal scroll at 375px", ...LAYOUT, verdict: "PASS",
+          method: "computed", value: null, detail: "No horizontal scroll at a 375px viewport." });
+  }
+  // Static heuristic: explicit width sources that commonly overflow a 375px screen.
+  const hits = [];
+  const visit = (n) => {
+    for (const c of n.children) {
+      if (c.type !== "element") continue;
+      const st = styleMap(c);
+      const w = st.width || "", mw = st["min-width"] || "";
+      if (/\b100vw\b/.test(w) || /\b100vw\b/.test(mw)) hits.push(`${c.tag}{${/min-width/.test(mw)?"min-":""}width:100vw}`);
+      const px = w.match(/^([\d.]+)px$/);
+      if (px && parseFloat(px[1]) > 600) hits.push(`${c.tag}{width:${px[1]}px}`);
+      const mpx = mw.match(/^([\d.]+)px$/);
+      if (mpx && parseFloat(mpx[1]) > 420) hits.push(`${c.tag}{min-width:${mpx[1]}px}`);
+      // Note: bare width/height ATTRIBUTES on img/table are deliberately NOT a
+      // signal here — they are near-always constrained by responsive CSS
+      // (max-width:100%). Real image overflow is caught by the rendered pass.
+      visit(c);
+    }
+  };
+  visit(doc);
+  if (hits.length) {
+    return mk({ id: "horizontal-overflow-375", label: "No horizontal scroll at 375px", ...LAYOUT, verdict: "WARN",
+      method: "static", value: hits.slice(0, 8),
+      detail: `Possible 375px overflow from fixed widths (static heuristic, not laid out): ${hits.slice(0, 4).join(", ")}.` });
+  }
+  return mk({ id: "horizontal-overflow-375", label: "No horizontal scroll at 375px", ...LAYOUT, verdict: "PASS",
+    method: "static", value: [], detail: "No fixed-width overflow source found statically (run with --render to lay out)." });
+}
+
+// ── engine ────────────────────────────────────────────────────────────────────
+
+export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null } = {}) {
+  const rawDoc = parse(rawHtml || "");
+  const activeDoc = renderedHtml ? parse(renderedHtml) : rawDoc;
+  const checks = [
+    checkViewport(activeDoc),
+    checkImgDimensions(activeDoc),
+    checkOverflow375(activeDoc, computed),
+    checkContrast(activeDoc, computed),
+    checkHtmlLang(activeDoc),
+    checkRobots(robotsTxt, url),
+    checkTitle(activeDoc),
+    checkMetaDescription(activeDoc),
+    checkHeadingOrder(activeDoc),
+  ];
+  return checks;
+}
+
+// Deterministic health floor computed from the objective checks only. This is a
+// SUBSET of each agent's full checklist, so it is a floor, not the agent score.
+export function scoreFromChecks(checks) {
+  const measured = checks.filter(c => c.verdict !== "NOT_MEASURED");
+  const fails = measured.filter(c => c.verdict === "FAIL");
+  const warns = measured.filter(c => c.verdict === "WARN");
+  const criticalFails = fails.filter(c => c.critical).map(c => c.id);
+  let score = 100 - 15 * fails.length - 7 * warns.length;
+  if (score < 0) score = 0;
+  if (criticalFails.length) score = Math.min(score, 49);
+
+  const byAgent = {};
+  for (const c of measured) {
+    const a = (byAgent[c.agent] ||= { fails: 0, warns: 0, score: 100, criticalFails: [] });
+    if (c.verdict === "FAIL") { a.fails++; if (c.critical) a.criticalFails.push(c.id); }
+    if (c.verdict === "WARN") a.warns++;
+  }
+  for (const a of Object.values(byAgent)) {
+    a.score = Math.max(0, 100 - 15 * a.fails - 7 * a.warns);
+    if (a.criticalFails.length) a.score = Math.min(a.score, 49);
+  }
+  return {
+    score,
+    fails: fails.length,
+    warns: warns.length,
+    notMeasured: checks.length - measured.length,
+    criticalFails,
+    byAgent,
+  };
+}

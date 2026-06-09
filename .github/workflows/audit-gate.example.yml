@@ -1,0 +1,28 @@
+# EXAMPLE — copy this into any repo to gate a deploy on the deterministic audit.
+# Renamed with .example so it does not run in this repo. Remove the suffix and set
+# your URL to activate it in your own project.
+name: audit-gate (example)
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to audit"
+        required: true
+        default: "https://example.com/"
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: NullToHero audit gate
+        uses: MariusYvard/NullToHero@v1.14.0
+        with:
+          url: ${{ inputs.url }}
+          render: "true"        # render the page so an SPA is not audited as a shell
+          min-score: "60"       # fail the build below 60/100 on the computed checks
+          fail-on-critical: "true"

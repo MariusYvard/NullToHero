@@ -122,6 +122,33 @@ removes that whole error class. The consolidation step adds only the cross-cutti
 action plan, which de-duplicates the same root cause across dimensions and reports
 it once.
 
+## Deterministic pre-pass (ground truth)
+
+Before any agent runs, a pure-Node pre-pass turns the shared fetch into objective
+ground truth. Two pieces.
+
+Rendered fetch. The fetch step reads the server HTML by default and, with
+`--render`, loads the page in headless Chromium (Playwright) so a client-rendered
+SPA is audited as a user sees it rather than as an empty shell. It always emits a
+`clientRendered` verdict, so a raw fetch of a React or Vue app without server-side
+rendering is flagged, not silently scored against a blank page. Playwright is an
+optional peer dependency; without it `--render` degrades to a raw fetch with a
+warning and the run records partial coverage.
+
+Computed checks. The analyzer decides the objectively decidable checks in code,
+not in a prompt: color contrast (WCAG math over computed or inline styles), image
+width/height, viewport meta, robots.txt crawlability, heading order, html lang,
+title, meta description and 375px horizontal overflow. Each verdict is handed to
+the sub-agent that owns the dimension as ground truth, and the agent adopts it
+rather than re-judging it. This is the static-analyzer step that removes the last
+source of run-to-run variance on the computable checks: a contrast ratio is a
+number the code computes, not a value the model estimates. The result is a
+machine-readable `SITE-AUDIT.json` (scores plus per-check verdicts plus a cost
+ledger) that powers a structural compare, a CI gate and score-over-time. The
+analyzer is itself graded against a labeled fixture set (`tests/eval`), so a rule
+or model change that moves a verdict surfaces as a correctness regression or as
+drift, the evaluation-set discipline applied to the plugin.
+
 ## Deterministic reduce
 
 The combine step is code-shaped, not model-shaped, so it is reproducible:
@@ -142,6 +169,9 @@ The combine step is code-shaped, not model-shaped, so it is reproducible:
   license integrity, reference-index freshness, and the agent invariants (read-only
   tools and trust boundary since 1.11.0, the scoring rubric since 1.12.0). It treats
   generated structure as a proposal that must pass a checker, not as trusted output.
+  Since 1.14.0 the same discipline extends from plugin structure to page facts:
+  `tools/audit/analyze.mjs` computes the objective checks and `tools/audit/eval.mjs`
+  grades them against labeled fixtures, so the computed verdicts are checked too.
 
 Run-to-run variance is therefore confined to verdict flips on the genuinely subjective
 design checks, which carry no hard cap. The verify mode bounds and surfaces those
@@ -206,6 +236,7 @@ simplicity first (justify each agent against a single-agent baseline), defense i
 depth (least privilege and untrusted-input handling enforced in code, not only in
 prompts), separation of reasoning from durability (kept trivial here because the
 plugin holds no runtime state) and empirical tuning (the scoring weights and the
-severity cap are explicit and testable). Further reading: the OWASP guidance on AI
+severity cap are explicit and testable, and the deterministic analyzer is measured
+against a reference evaluation set for verdict accuracy and drift). Further reading: the OWASP guidance on AI
 agent security and agentic application risks, and Anthropic's published guidance on
 effective agent architecture patterns.

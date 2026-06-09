@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.13.0** · 4 skills · 56 commands · 85 reference docs · 13 audit sub-agents
+> **v1.14.0** · 4 skills · 57 commands · 86 reference docs · 13 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -158,9 +158,12 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
 | `design [url]` | Design-quality group only (4 siteasy sub-agents) |
 | `quick [url]` | One representative sub-agent per group for a fast triage |
+| `checks [url]` | Deterministic pre-pass: computed checks and `SITE-AUDIT.json`, no sub-agents (powers the CI gate) |
 | `verify [url]` | Consensus re-check of the gating dimensions (a11y, interaction, technical) by majority vote |
 | `compare [A] [B]` | Diff two targets: per-check verdict changes and score deltas (before/after, or A vs B) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
+
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (contrast, image dimensions, viewport, robots.txt, headings, lang, title, description, 375px overflow) and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 ---
 
@@ -206,7 +209,7 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ## What is inside
 
-NullToHero ships **84 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **86 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>
@@ -219,7 +222,7 @@ NullToHero ships **84 reference docs** that Claude loads only when it needs them
 
 **inspect, defects (3):** detect, preview, review
 
-**audit, whole-site (2):** full, report
+**audit, whole-site (4):** checks, compare, full, report
 
 A stack-aware design-system generator also lives under `tools/design-system/`, covering 16 technology stacks (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, HTML and Tailwind, shadcn/ui, SwiftUI, React Native, Flutter, Jetpack Compose, Three.js, Nuxt UI).
 
