@@ -6,8 +6,8 @@ The latest released version of NullToHero receives security fixes. Older tags do
 
 | Version | Supported |
 |---------|-----------|
-| 1.12.x  | Yes       |
-| < 1.12  | No        |
+| 1.13.x  | Yes       |
+| < 1.13  | No        |
 
 ## Reporting a vulnerability
 

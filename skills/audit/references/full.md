@@ -6,7 +6,7 @@ description: >
   sub-agents in parallel, aggregates their scored sections into a single Site
   Health Score, and writes a unified report plus a prioritized action plan.
   Backs the full, seo, defects, design, quick and verify run modes of /audit.
-version: 1.12.0
+version: 1.13.0
 ---
 
 # Complete Site Audit

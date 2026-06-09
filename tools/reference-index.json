@@ -1,6 +1,15 @@
 [
   {
     "skill": "audit",
+    "path": "skills/audit/references/compare.md",
+    "title": "Audit Compare",
+    "keywords": [
+      "compare",
+      "audit"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/full.md",
     "title": "Complete Site Audit",
     "keywords": [

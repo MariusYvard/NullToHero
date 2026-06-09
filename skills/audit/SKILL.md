@@ -1,9 +1,9 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.12.0
+version: 1.13.0
 user-invocable: true
-argument-hint: "[url] | [full|seo|defects|design|quick|verify|report] [url | file]"
+argument-hint: "[url] | [full|seo|defects|design|quick|verify|report] [url|file] | compare [A] [B]"
 allowed-tools:
   - Read
   - Write
@@ -27,14 +27,15 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | `design [url]` | Design-quality group only (4 siteasy sub-agents) | [references/full.md](references/full.md) |
 | `quick [url]` | One representative sub-agent per group for a fast triage | [references/full.md](references/full.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
+| `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF | [references/report.md](references/report.md) |
 
-Seven commands, two references. The six run modes (`full`, `seo`, `defects`, `design`, `quick`, `verify`) all share the orchestration playbook in [references/full.md](references/full.md). The first five differ only in which agent group is dispatched; `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. The `report` mode formats an already-produced audit and is documented in [references/report.md](references/report.md).
+Eight commands, three references. The six single-target run modes (`full`, `seo`, `defects`, `design`, `quick`, `verify`) share the orchestration playbook in [references/full.md](references/full.md); the first five differ only in which agent group is dispatched, and `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. `compare` diffs two targets and is documented in [references/compare.md](references/compare.md). The `report` mode formats an already-produced audit and is documented in [references/report.md](references/report.md).
 
 ## How to run a command
 
 When the user invokes a command:
-1. Read the matching reference file with the Read tool (`full.md` for the run modes, `report.md` for formatting).
+1. Read the matching reference file with the Read tool (`full.md` for the run modes, `compare.md` for compare, `report.md` for formatting).
 2. Follow the instructions in that reference exactly. Do not improvise scoring weights or skip a dimension.
 3. If no command is specified:
    - With a URL, the bare invocation runs `full` against that URL.

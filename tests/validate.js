@@ -34,6 +34,7 @@
  * 25.  docs/ARCHITECTURE.md rationale doc is present
  * 26.  Agents use the deterministic scoring rubric (formula + critical checks)
  * 27.  Orchestrator severity cap is rule-based (deterministic)
+ * 28.  /audit compare mode is wired (command + compare.md diff sections)
  */
 
 const fs     = require("fs");
@@ -1032,6 +1033,25 @@ section("27. Orchestrator severity cap is rule-based");
   else fail("full.md: severity cap is not marked deterministic");
   if (/subtract 15 per FAIL/i.test(full)) pass("full.md scoring intro references the rubric formula");
   else fail("full.md: scoring intro does not reference the deterministic rubric");
+}
+
+// --- Check 28: /audit compare mode is wired ---------------------------------
+
+section("28. /audit compare mode is wired");
+{
+  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
+  const cmp = readFile(path.join(ROOT, "skills", "audit", "references", "compare.md"));
+  const cmds = extractCommandRefs(auditSkill);
+  if (cmds.compare) pass("audit/SKILL.md declares the 'compare' command");
+  else fail("audit/SKILL.md: 'compare' command row missing from the Commands table");
+  if (cmp === null) {
+    fail("skills/audit/references/compare.md not found");
+  } else {
+    const need = ["## Process", "Regressions", "Improvements", "deterministic"];
+    const missing = need.filter(t => !cmp.includes(t));
+    if (missing.length === 0) pass("compare.md carries the diff sections (Process, Regressions, Improvements, determinism note)");
+    else fail(`compare.md missing expected content: ${missing.join(", ")}`);
+  }
 }
 
 // --- Summary --------------------------------------------------------------------

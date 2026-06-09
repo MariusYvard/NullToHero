@@ -11,6 +11,16 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.13.0] — 2026-06-09
+
+Audit comparison. A new `/audit compare A B` mode diffs two targets check by check: which verdicts regressed, which improved and the resulting score deltas. It is trustworthy because 1.12.0 made the scores deterministic, so a delta is a real difference rather than jitter. One new command; 56 commands, 85 references.
+
+### Added
+- `/audit compare [A] [B] [group]` and `references/compare.md`: audits target A and target B with the same specialist group (default full, 13 agents per target), aligns their check tables one to one, and reports per-check verdict changes classified as regression or improvement with their rubric point impact, plus per-agent, per-group and overall score deltas. Each target is a URL, a local HTML file or a previously saved `SITE-AUDIT-REPORT.md` (a saved baseline is read rather than re-audited, the cheap way to compare today against a kept snapshot). Flags severity-cap changes between the two targets and writes `SITE-AUDIT-COMPARE.md`. Documents the before/after regression use and the A-vs-B benchmark use, with the cross-site caveat that two different sites do not share intent. States the cost (a full compare is about twice a single full audit).
+- `tests/validate.js`: check 28 verifies the compare command is wired and that `compare.md` carries its diff sections.
+
+---
+
 ## [1.12.0] — 2026-06-09
 
 Deterministic audit scoring. Replaces the free-form 0-100 score each agent picked by feel with a fixed rubric computed from the check verdicts, and makes the severity cap fire on a rule instead of a judgment. Cuts run-to-run score variance on the same site. No new commands; 55 commands, 84 references.
