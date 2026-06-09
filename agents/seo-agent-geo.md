@@ -75,6 +75,12 @@ On the top 3-5 most important pages:
 
 ## Scoring (weighted)
 
+Deterministic scoring. Each dimension sub-score comes from the counted signals, not a
+feel estimate, so equal inputs return equal scores. AI crawler access = (allowed bots /
+14) x 100. llms.txt = 100 when present and valid, else 0. Citability, brand authority,
+content-for-AI and platform optimization follow the per-dimension rules in the checklist.
+Overall = the weighted sum below. Put the inputs on the score line.
+
 | Dimension | Weight | Score |
 |-----------|--------|-------|
 | Citability (passage quality) | 25% | X/100 |
@@ -89,7 +95,7 @@ Overall GEO score = weighted sum.
 ## Output format
 
 ```
-### GEO Visibility — Score: XX/100
+### GEO Visibility — Score: XX/100  (weighted sum of the dimension scores below)
 
 AI crawler access: X/14 bots allowed
 llms.txt: present / missing

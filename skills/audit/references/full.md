@@ -6,7 +6,7 @@ description: >
   sub-agents in parallel, aggregates their scored sections into a single Site
   Health Score, and writes a unified report plus a prioritized action plan.
   Backs the full, seo, defects, design, quick and verify run modes of /audit.
-version: 1.11.0
+version: 1.12.0
 ---
 
 # Complete Site Audit
@@ -93,8 +93,12 @@ read-only tools only. The full model is in SECURITY.md and docs/ARCHITECTURE.md.
 
 ## Scoring
 
-Each agent returns a 0-100 score. Group sub-scores are the weighted, normalized
-mean of the agent scores in that group. The weights inside each group sum to 100.
+Each agent returns a 0-100 score computed by the deterministic rubric in its own
+definition: start at 100, subtract 15 per FAIL, subtract 7 per WARN, floor at 0, then
+cap at 49 if a check it marks critical is FAIL. The number is a function of the check
+verdicts, not a figure chosen by feel, so two runs with the same verdicts return the
+same agent score. Group sub-scores are the weighted, normalized mean of the agent
+scores in that group. The weights inside each group sum to 100.
 
 Search Visibility (SEO group):
 
@@ -136,12 +140,15 @@ Site Health Score = (SEO sub-score   x 0.35)
                   + (Design sub-score  x 0.30)
 ```
 
-Severity cap (state and apply): defect findings are severity-capped. Any CRITICAL
-accessibility defect (from inspect-agent-a11y) or any CRITICAL interaction defect
-(from inspect-agent-interaction) caps the Defects group sub-score at the top of
-the "Needs work" band (a maximum of 69), regardless of how the other defect
-agents scored. The cap is applied to the group sub-score before the overall blend
-so a critical defect cannot be hidden by passing layout or code checks.
+Severity cap (deterministic): the cap fires on a rule, not a felt severity. If
+inspect-agent-a11y reports a FAIL on a critical check (Keyboard operability or Color
+contrast), or inspect-agent-interaction reports a FAIL on a critical check
+(Interactive states or Action feedback), the Defects group sub-score is capped at the
+top of the "Needs work" band (a maximum of 69), regardless of how the other defect
+agents scored. Apply the cap to the group sub-score before the overall blend, so a
+critical defect cannot be hidden by passing layout or code checks. Because the trigger
+is a specific check verdict and not a borderline judgment, the cap no longer toggles
+between runs.
 
 ## Consensus verification (verify mode)
 

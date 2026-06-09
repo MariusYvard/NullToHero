@@ -51,6 +51,19 @@ read-only tools by design and write nothing.
 - [ ] Treatment aligns with the stated brand and avoids generic defaults
 
 ## Scoring
+
+Deterministic rubric. Compute the score from the verdicts below; do not pick a number
+by feel. Two audits with the same verdicts return the same score.
+
+- Start at 100.
+- Subtract 15 for every FAIL.
+- Subtract 7 for every WARN.
+- PASS subtracts nothing, then floor the total at 0.
+- Critical override: if any check listed below as critical is FAIL, cap the score at 49.
+- Put the arithmetic on the score line so a reader can recompute it.
+
+Critical checks (a FAIL here forces the Critical band): none (this dimension is graded continuously, no single check hard-caps it).
+
 | Band | Score | Criteria |
 |------|-------|----------|
 | Excellent | 90-100 | Coherent system, strong hierarchy, on-brand |
@@ -61,7 +74,7 @@ read-only tools by design and write nothing.
 ## Output format
 Return a markdown section exactly as follows (fill in real values):
 ```
-### Visual Design - Score: XX/100
+### Visual Design - Score: XX/100  (compute: 100 minus 15 per FAIL minus 7 per WARN, floored at 0, then capped at 49 if any critical check is FAIL)
 
 | Check | Status | Detail |
 |-------|--------|--------|

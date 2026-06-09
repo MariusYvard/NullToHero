@@ -128,15 +128,24 @@ The combine step is code-shaped, not model-shaped, so it is reproducible:
 
 - Weighted scoring. Group sub-scores are fixed-weight normalized means of the
   agent scores; the overall Site Health Score is a fixed blend (SEO 35, defects
-  35, design 30). The weights live in the playbook, not in a prompt.
-- Severity cap. Any critical accessibility or interaction defect caps the defects
+  35, design 30). The weights live in the playbook, not in a prompt. Each agent
+  score is itself rubric-computed from its check verdicts (start 100, minus 15 per
+  FAIL, minus 7 per WARN, floored, then capped at 49 on a critical-check FAIL), so
+  the number is a function of the verdicts rather than one the model picks by feel.
+- Severity cap. A FAIL on a critical accessibility check (keyboard, contrast) or a
+  critical interaction check (interactive states, action feedback) caps the defects
   sub-score at 69 before the blend, so a critical defect cannot be hidden behind
-  passing layout or code checks.
+  passing layout or code checks. The trigger is a check verdict, not a felt
+  severity, so the cap does not toggle between runs.
 - Structural validation. `tests/validate.js` is a deterministic gate over the
   plugin itself: version consistency, command-to-reference mapping, README counts,
-  license integrity, reference-index freshness, and (since 1.11.0) the agent
-  invariants below. It treats generated structure as a proposal that must pass a
-  checker, not as trusted output.
+  license integrity, reference-index freshness, and the agent invariants (read-only
+  tools and trust boundary since 1.11.0, the scoring rubric since 1.12.0). It treats
+  generated structure as a proposal that must pass a checker, not as trusted output.
+
+Run-to-run variance is therefore confined to verdict flips on the genuinely subjective
+design checks, which carry no hard cap. The verify mode bounds and surfaces those
+rather than letting them move the headline number silently.
 
 ## Security model
 

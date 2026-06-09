@@ -11,6 +11,21 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.12.0] — 2026-06-09
+
+Deterministic audit scoring. Replaces the free-form 0-100 score each agent picked by feel with a fixed rubric computed from the check verdicts, and makes the severity cap fire on a rule instead of a judgment. Cuts run-to-run score variance on the same site. No new commands; 55 commands, 84 references.
+
+### Changed
+- All 13 sub-agents: the `## Scoring` section is now a deterministic rubric (start 100, minus 15 per FAIL, minus 7 per WARN, floored at 0, then capped at 49 if a check the agent marks critical is FAIL). The score is a function of the verdicts, so two audits with the same verdicts return the same number, and the score line must show the arithmetic. seo-agent-geo keeps its weighted model but pins each dimension to a counted signal (AI crawler access = allowed/14, llms.txt present = 100 or 0).
+- Critical checks are declared per agent and only where the condition is objectively checkable (a11y keyboard and contrast, interaction states and feedback, layout horizontal-scroll and overflow, code valid-markup and forbidden-CSS, technical robots.txt, content depth, performance LCP, schema absence). The subjective siteasy dimensions stay graded continuously with no hard cap, so a borderline judgment cannot jolt the score.
+- `skills/audit/references/full.md`: the severity cap now fires when inspect-agent-a11y or inspect-agent-interaction reports a FAIL on a declared critical check, not on a felt CRITICAL severity, so the cap no longer toggles between runs. The scoring section states that agent scores are rubric-computed.
+- `docs/ARCHITECTURE.md`: the deterministic-reduce section documents rubric-computed agent scores and the rule-based cap, and notes that residual variance is confined to verdict flips on subjective checks, which the verify mode bounds.
+
+### Added
+- `tests/validate.js`: checks 26 and 27 enforce the rubric (every agent declares it, the check-table agents carry the explicit formula, the gating agents declare concrete critical checks) and that the orchestrator cap is rule-based.
+
+---
+
 ## [1.11.0] — 2026-06-08
 
 Multi-agent architecture pass. Documents the orchestrator and the 13 sub-agents against production multi-agent practice, hardens the agent layer against untrusted-input injection, and adds a consensus re-check mode. One new command; 55 commands, 84 references.

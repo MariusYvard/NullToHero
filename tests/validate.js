@@ -32,6 +32,8 @@
  * 23.  Every audit sub-agent carries a '## Trust boundary' block
  * 24.  /audit verify consensus mode is wired (SKILL.md command + full.md sections)
  * 25.  docs/ARCHITECTURE.md rationale doc is present
+ * 26.  Agents use the deterministic scoring rubric (formula + critical checks)
+ * 27.  Orchestrator severity cap is rule-based (deterministic)
  */
 
 const fs     = require("fs");
@@ -982,6 +984,54 @@ section("25. docs/ARCHITECTURE.md present");
   else if (!/^#\s+Multi-Agent Architecture/m.test(arch)) fail("docs/ARCHITECTURE.md: missing '# Multi-Agent Architecture' heading");
   else if (arch.length < 1500) warn("docs/ARCHITECTURE.md is unexpectedly short");
   else pass("docs/ARCHITECTURE.md present and non-trivial");
+}
+
+// --- Check 26: agents use the deterministic scoring rubric -------------------
+
+section("26. Agent scoring rubric is deterministic");
+{
+  const agentFiles = fs.existsSync(SEO_AGENTS)
+    ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")) : [];
+  let bad = 0;
+  agentFiles.forEach(file => {
+    const c = readFile(path.join(SEO_AGENTS, file)) || "";
+    if (!/Deterministic (rubric|scoring)/.test(c)) {
+      fail(`agents/${file}: Scoring section lacks the deterministic rubric marker`);
+      bad++;
+    }
+  });
+  if (agentFiles.length && bad === 0) {
+    pass(`All ${agentFiles.length} agents declare a deterministic scoring rubric`);
+  }
+  const formulaAgents = agentFiles.filter(f => f !== "seo-agent-geo.md");
+  let nf = 0;
+  formulaAgents.forEach(file => {
+    const c = readFile(path.join(SEO_AGENTS, file)) || "";
+    if (!/Start at 100/.test(c) || !/Subtract 15 for every FAIL/.test(c)) {
+      fail(`agents/${file}: missing the explicit rubric formula (Start at 100 / Subtract 15 per FAIL)`);
+      nf++;
+    }
+  });
+  if (formulaAgents.length && nf === 0) {
+    pass(`All ${formulaAgents.length} check-table agents carry the explicit rubric formula`);
+  }
+  [["inspect-agent-a11y.md", /Critical checks[^\n]*(Keyboard|contrast)/i],
+   ["inspect-agent-interaction.md", /Critical checks[^\n]*(Interactive states|Action feedback)/i]].forEach(([file, re]) => {
+    const c = readFile(path.join(SEO_AGENTS, file)) || "";
+    if (re.test(c)) pass(`${file}: declares concrete critical checks for the cap`);
+    else fail(`${file}: gating agent must declare concrete critical checks for the cap trigger`);
+  });
+}
+
+// --- Check 27: orchestrator severity cap is deterministic --------------------
+
+section("27. Orchestrator severity cap is rule-based");
+{
+  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
+  if (/Severity cap \(deterministic\)/.test(full)) pass("full.md severity cap is rule-based (deterministic)");
+  else fail("full.md: severity cap is not marked deterministic");
+  if (/subtract 15 per FAIL/i.test(full)) pass("full.md scoring intro references the rubric formula");
+  else fail("full.md: scoring intro does not reference the deterministic rubric");
 }
 
 // --- Summary --------------------------------------------------------------------

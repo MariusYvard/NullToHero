@@ -64,6 +64,18 @@ read-only tools by design and write nothing.
 
 ## Scoring
 
+Deterministic rubric. Compute the score from the verdicts below; do not pick a number
+by feel. Two audits with the same verdicts return the same score.
+
+- Start at 100.
+- Subtract 15 for every FAIL.
+- Subtract 7 for every WARN.
+- PASS subtracts nothing, then floor the total at 0.
+- Critical override: if any check listed below as critical is FAIL, cap the score at 49.
+- Put the arithmetic on the score line so a reader can recompute it.
+
+Critical checks (a FAIL here forces the Critical band): Content depth (a key page under 300 words, or duplicate content).
+
 | Band | Score | Criteria |
 |------|-------|----------|
 | Excellent | 90-100 | E-E-A-T strong, no thin content, fully optimized |
@@ -74,7 +86,7 @@ read-only tools by design and write nothing.
 ## Output format
 
 ```
-### Content Quality — Score: XX/100
+### Content Quality — Score: XX/100  (compute: 100 minus 15 per FAIL minus 7 per WARN, floored at 0, then capped at 49 if any critical check is FAIL)
 
 | Check | Status | Detail |
 |-------|--------|--------|

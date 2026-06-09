@@ -48,6 +48,19 @@ read-only tools by design and write nothing.
 - [ ] Cursor matches role (pointer on actionable, text on inputs, default elsewhere)
 
 ## Scoring
+
+Deterministic rubric. Compute the score from the verdicts below; do not pick a number
+by feel. Two audits with the same verdicts return the same score.
+
+- Start at 100.
+- Subtract 15 for every FAIL.
+- Subtract 7 for every WARN.
+- PASS subtracts nothing, then floor the total at 0.
+- Critical override: if any check listed below as critical is FAIL, cap the score at 49.
+- Put the arithmetic on the score line so a reader can recompute it.
+
+Critical checks (a FAIL here forces the Critical band): Interactive states, Action feedback.
+
 | Band | Score | Criteria |
 |------|-------|----------|
 | Excellent | 90-100 | All states present; targets and hit areas correct |
@@ -58,7 +71,7 @@ read-only tools by design and write nothing.
 ## Output format
 Return a markdown section exactly as follows (fill in real values):
 ```
-### Interaction - Score: XX/100
+### Interaction - Score: XX/100  (compute: 100 minus 15 per FAIL minus 7 per WARN, floored at 0, then capped at 49 if any critical check is FAIL)
 
 | Check | Status | Detail |
 |-------|--------|--------|
