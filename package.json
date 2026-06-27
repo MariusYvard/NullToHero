@@ -1,6 +1,6 @@
 {
   "name": "null-to-hero",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "From zero knowledge to hero website. Design + SEO skills for Claude Cowork.",
   "scripts": {
     "build": "node tools/build-index.mjs",

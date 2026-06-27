@@ -11,6 +11,21 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.15.0] — 2026-06-27
+
+Design reference depth. Five new siteasy references (data visualization accessibility, an elevation and shadow system, a semantic color system, named style systems, landing page patterns) plus a modular type scale, adapted from external MIT sources recorded in THIRD-PARTY-NOTICES.md. One new command (charts); 58 commands, 91 references.
+
+### Added
+
+- `siteasy charts` command and `references/data-viz.md`: chart accessibility grades, mandatory non-color fallbacks, render thresholds by data volume.
+- `references/elevation.md`: a doubling shadow ramp, elevation tokens, dark-mode tint depth.
+- `references/color-systems.md`: ink-opacity hierarchy, tonal ramps, WCAG-corrected semantic roles.
+- `references/style-systems.md`: per-aesthetic hard rules and cross-style motion timings.
+- `references/landing-patterns.md`: landing section orders, CTA placement, proof patterns.
+- `references/typeset.md`: a modular type scale with fluid clamp() sizing and tabular figures.
+
+---
+
 ## [1.14.0] — 2026-06-09
 
 Deterministic pre-pass. A pure-Node ground-truth layer turns the shared fetch into objective verdicts before any agent runs: an optional JavaScript render (Playwright) so a client-rendered SPA is audited as rendered rather than as an empty shell, a static analyzer that computes the objectively decidable checks (contrast, image dimensions, viewport, robots.txt, heading order, html lang, title, meta description, 375px overflow), a machine-readable `SITE-AUDIT.json`, a CI gate, a cost ledger and a reference evaluation set. One new command; 57 commands, 86 references.

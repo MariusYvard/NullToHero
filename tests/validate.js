@@ -191,6 +191,11 @@ const FILE_INTEGRITY = {
   "skills/siteasy/references/interaction-design.md":        { minLines:  50 },
   "skills/siteasy/references/tokens.md":                    { minLines:  50 },
   "skills/siteasy/references/spatial-design.md":            { minLines:  45 },
+  "skills/siteasy/references/data-viz.md": { minLines: 68 },
+  "skills/siteasy/references/elevation.md": { minLines: 57 },
+  "skills/siteasy/references/color-systems.md": { minLines: 50 },
+  "skills/siteasy/references/style-systems.md": { minLines: 62 },
+  "skills/siteasy/references/landing-patterns.md": { minLines: 40 },
   // ── inspect ──────────────────────────────────────────────────────────────
   "skills/inspect/SKILL.md":                    { minLines:  65 },
   "skills/inspect/references/detect.md":        { minLines: 115 },  // actual: 125

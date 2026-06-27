@@ -128,3 +128,34 @@ Each variant MUST declare a `scale` param controlling the hierarchy ratio. Expre
 Where the variant riffs on a specific pairing, expose the pairing choice as a `steps` param (e.g. "serif display + sans body" vs. "mono display + sans body" vs. "all-sans"). Each branch routes through `:scope[data-p-pairing="X"]` selectors in scoped CSS.
 
 See [live.md](live.md) for the full params contract.
+
+## Modular type scale
+
+Pick one ratio and derive every size from a single base, rather than choosing sizes by hand. The base is the body size (commonly 16px or 1rem). Each step multiplies or divides by the ratio.
+
+| Ratio | Name | Feel |
+|---|---|---|
+| 1.200 | Minor third | Compact, dense dashboards and tools |
+| 1.250 | Major third | Balanced, the safe default for most sites |
+| 1.333 | Perfect fourth | Expressive, marketing and editorial |
+| 1.414 | Augmented fourth | Dramatic, big display headings |
+
+From a 16px base at 1.250: 16, 20, 25, 31, 39, 49, 61. Round to whole pixels and stop at the number of steps the design actually uses; an unused step is not a size.
+
+### Make it fluid
+
+Collapse the desktop scale to a smaller mobile scale with `clamp()` so headings shrink with the viewport instead of stepping at fixed breakpoints:
+
+```css
+:root {
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);   /* body */
+  --step-3: clamp(1.6rem, 1.3rem + 1.5vw, 2.4rem);     /* h2 */
+  --step-5: clamp(2.4rem, 1.8rem + 3vw, 3.8rem);       /* hero */
+}
+```
+
+The fixed pixel ladder is the fallback to reason about; `clamp()` is what ships.
+
+### Tabular figures for changing numbers
+
+Counters, prices, timers and data columns use `font-variant-numeric: tabular-nums` so each digit occupies the same width and the layout does not jitter as values change. Proportional figures are correct for running prose, wrong for anything that updates in place.

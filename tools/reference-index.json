@@ -445,6 +445,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/color-systems.md",
+    "title": "Color Systems",
+    "keywords": [
+      "color",
+      "systems"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/colorize.md",
     "title": "colorize",
     "keywords": [
@@ -507,6 +516,16 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/data-viz.md",
+    "title": "Data Visualization",
+    "keywords": [
+      "data",
+      "viz",
+      "visualization"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/delight.md",
     "title": "delight",
     "keywords": [
@@ -540,6 +559,14 @@
       "system",
       "project",
       "title"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/elevation.md",
+    "title": "Elevation",
+    "keywords": [
+      "elevation"
     ]
   },
   {
@@ -631,6 +658,15 @@
     "keywords": [
       "journey",
       "mapping"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/landing-patterns.md",
+    "title": "Landing Patterns",
+    "keywords": [
+      "landing",
+      "patterns"
     ]
   },
   {
@@ -763,6 +799,15 @@
     "keywords": [
       "spatial",
       "design"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/style-systems.md",
+    "title": "Style Systems",
+    "keywords": [
+      "style",
+      "systems"
     ]
   },
   {
