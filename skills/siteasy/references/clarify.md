@@ -202,3 +202,16 @@ Name the specific consequence and object: "Delete the Q3 report? This cannot be 
 ### Tone
 
 Write like a competent person, not a mascot and not a manual. Drop filler ("please note that", "in order to"). Match the moment: plain in errors, warmer in success, never jokey in a failure the reader did not cause.
+
+## Spotting machine-written copy
+
+Generated copy has tells. When auditing or editing site text, watch for and remove these:
+
+- Uniform sentence rhythm, every sentence the same length. Break it with a short one.
+- Repetitive openings, many sentences starting with the same word ("Moreover", "Additionally"). Vary the first word.
+- Overused connectors ("moreover", "furthermore", "in addition", "as such") on most sentences. Cut the mechanical ones, keep the load-bearing ones.
+- The rule of three on autopilot, where every list is three items. Vary it to one, two or four.
+- Contrastive amplification, "not only X but also Y". Replace with a direct statement.
+- A two-word phrase repeated several times on one page. Reword the reprises.
+
+These are form, not fact. Fix the wording, never the meaning, and re-read aloud: copy that sounds like a person passes.

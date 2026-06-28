@@ -38,7 +38,7 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
    used (Playwright absent, or a non-URL target), the run is flagged and the
    shell-derived findings must not be trusted (see [checks.md](checks.md)). Keep the
    raw (and rendered, when available) HTML in memory and pass it to every dispatched
-   agent so no agent re-fetches. One network pass feeds all 13 agents. The same pass
+   agent so no agent re-fetches. One network pass feeds all 14 agents. The same pass
    produces the computed ground truth (next section).
 3. **Dispatch the group in parallel.** For the selected mode, launch every agent
    in that group with the Task tool, one `Task` call per agent, all in a single
@@ -56,14 +56,14 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
 
 ## Modes
 
-Each mode dispatches a fixed set of `subagent_type` names. `full` runs all 13.
+Each mode dispatches a fixed set of `subagent_type` names. `full` runs all 14.
 
 | Mode | Agents dispatched (`subagent_type`) |
 |------|-------------------------------------|
-| `full` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo, inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code, siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content |
+| `full` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo, inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code, siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims |
 | `seo` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo |
 | `defects` | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
-| `design` | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content |
+| `design` | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims |
 | `quick` | seo-agent-technical, inspect-agent-a11y, siteasy-agent-ux (one representative per group) |
 | `verify` | gating group re-run for consensus: inspect-agent-a11y, inspect-agent-interaction, seo-agent-technical, each dispatched K=3 times and reconciled by majority vote |
 
@@ -153,10 +153,11 @@ Design Quality (siteasy group):
 
 | Agent | Weight |
 |-------|--------|
-| siteasy-agent-ux | 30 |
-| siteasy-agent-visual | 25 |
-| siteasy-agent-content | 25 |
-| siteasy-agent-motion | 20 |
+| siteasy-agent-ux | 28 |
+| siteasy-agent-visual | 22 |
+| siteasy-agent-content | 20 |
+| siteasy-agent-motion | 15 |
+| siteasy-agent-claims | 15 |
 
 Overall Site Health Score, stated explicitly:
 
@@ -185,7 +186,7 @@ a majority vote, the Map/Reduce reliability pattern.
 Gating group. By default `verify` re-runs three agents: inspect-agent-a11y,
 inspect-agent-interaction and seo-agent-technical. These hold the findings that cap
 or block the result, so they are where a missed check costs the most. `verify`
-does not re-run all 13 agents.
+does not re-run all 14 agents.
 
 Procedure.
 
@@ -240,7 +241,7 @@ a PDF, defer to [report.md](report.md). Do not re-implement formatting here.
 3. **Front-end Defects.** Embed the returned sections from inspect-agent-a11y,
    inspect-agent-interaction, inspect-agent-layout, and inspect-agent-code.
 4. **Design Quality.** Embed the returned sections from siteasy-agent-ux,
-   siteasy-agent-visual, siteasy-agent-motion, and siteasy-agent-content.
+   siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, and siteasy-agent-claims.
 5. **Consolidated action plan.** A single cross-cutting list that de-duplicates
    overlaps between groups. The same root cause is reported once, cross-referenced
    to every dimension that surfaced it. For example an image missing explicit

@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.18.0** · 4 skills · 59 commands · 95 reference docs · 13 audit sub-agents
+> **v1.19.0** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -153,7 +153,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 
 | Command | What it does |
 |---------|-------------|
-| `full [url]` | All 13 sub-agents (SEO, defects, design), unified report and prioritized action plan |
+| `full [url]` | All 14 sub-agents (SEO, defects, design), unified report and prioritized action plan |
 | `seo [url]` | Search-visibility group only (5 SEO sub-agents) |
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
 | `design [url]` | Design-quality group only (4 siteasy sub-agents) |

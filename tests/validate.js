@@ -142,6 +142,7 @@ const FILE_INTEGRITY = {
   "agents/siteasy-agent-visual.md":       { minLines:  60 },
   "agents/siteasy-agent-motion.md":       { minLines:  60 },
   "agents/siteasy-agent-content.md":      { minLines:  60 },
+  "agents/siteasy-agent-claims.md":      { minLines:  60 },
   // ── siteasy ──────────────────────────────────────────────────────────────
   "skills/siteasy/SKILL.md":                                { minLines: 140 },  // actual: 153
   "skills/siteasy/references/live.md":                      { minLines: 520 },  // actual: 546

@@ -543,3 +543,13 @@ Per-framework specifics:
 If a user says "no" to the CSP patch at setup time and later complains that live doesn't work: their dev CSP blocks `http://localhost:8400`. Fix: delete `cspChecked` from `config.json` and re-run `live.mjs` — setup will ask again.
 
 Then re-run `live.mjs`.
+
+## Exploring options: structurally different variants
+
+When the user wants to see a few directions rather than one, generate variants that differ in structure, not just color.
+
+- Default to three. More than five stops being distinct and becomes noise.
+- Each variant differs in layout, information hierarchy, or the primary affordance. Three tweaked card grids are one idea, not three.
+- Host them behind a `?variant=` URL parameter with a small fixed switcher (arrows, and left or right keys when no input is focused), so a variant is shareable and survives a reload.
+- Gate the switcher on a non-production build so a stray merge cannot ship it.
+- The useful outcome is usually a recombination ("the header from B with the layout from C"). Name it, then build that.

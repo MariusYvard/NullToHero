@@ -11,6 +11,18 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.19.0] — 2026-06-27
+
+A 14th audit agent and editorial rigor. The audit gains a Claims and credibility specialist that red-teams the page's marketing claims with the Toulmin model. Plus a machine-written-copy check, a structurally-different variant mode, and a lightweight ADR practice. 59 commands, 95 references, 14 sub-agents.
+
+### Added
+
+- `agents/siteasy-agent-claims.md`: a 14th sub-agent for the Claims and credibility dimension, dispatched in `/audit full` and `design`. The design group is re-weighted across five agents.
+- Machine-written-copy tells in `clarify.md`; a structurally-different variant mode in `live.md`.
+- `docs/adr/` (a one-paragraph ADR practice, first record on deterministic scoring) and `docs/OUT-OF-SCOPE.md`.
+
+---
+
 ## [1.18.0] — 2026-06-27
 
 New outputs. A developer handoff spec, a pre-launch ship checklist, a self-contained HTML rendering of an audit, plus UX copy patterns and a design-system audit. One new command (handoff); 59 commands, 95 references.
