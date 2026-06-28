@@ -11,6 +11,18 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.4] — 2026-06-27
+
+README readability. Reverted the workflow to the plain-text flow, collapsed all four command tables and folded the output samples.
+
+### Changed
+
+- "How a project flows" is the plain-text flow again.
+- All four skill command tables (siteasy, seo, inspect, audit) are collapsible.
+- "See sample output" is now collapsed by default.
+
+---
+
 ## [1.20.3] — 2026-06-27
 
 More README polish. A Mermaid workflow diagram, a four-skill card grid, syntax-highlighted output samples, GitHub callouts and a dark-mode demo via a picture element.

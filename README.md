@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.20.3-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.20.4-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.20.3** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.20.4** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 </div>
 
@@ -207,11 +207,16 @@ Common runs: new site (`plan` → build → `technical` → `schema` → `sitema
 
 Your quality gate. Three quick checks to run before you ship.
 
+<details>
+<summary><b>All 3 commands</b></summary>
+
 | Command | What it does |
 |---------|-------------|
 | `detect [target]` | Deterministic problem scan (focus rings, touch targets, reduced-motion, WCAG 2.2, images, forms) |
 | `preview [target]` | Real Chromium screenshot (desktop and mobile), reads it back, fixes bugs in a loop |
 | `review [file]` | Design engineering code review (motion issues, accessibility, Before and After table with a score) |
+
+</details>
 
 ```
 /inspect detect index.html
@@ -222,6 +227,9 @@ Your quality gate. Three quick checks to run before you ship.
 ### ![audit](https://img.shields.io/badge/audit-7c3aed) The whole site in one pass
 
 Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+<details>
+<summary><b>All 9 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -235,13 +243,14 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `compare [A] [B]` | Diff two targets: per-check verdict changes and score deltas (before/after, or A vs B) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
 
+</details>
+
 The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (contrast, image dimensions, viewport, robots.txt, headings, lang, title, description, 375px overflow) and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 ---
 
-## See what it produces
-
-Concrete artifacts, not just advice.
+<details>
+<summary><b>See sample output</b></summary>
 
 A theme from `/siteasy tokens`, a drop-in `:root` stylesheet with WCAG-checked tokens:
 
@@ -283,6 +292,8 @@ An action plan from `/audit`, ordered by severity:
 - Heading order skips from H2 to H4. Renumber the section.
 ```
 
+</details>
+
 ---
 
 ## How NullToHero compares
@@ -307,21 +318,29 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 
 ## How a project flows
 
-```mermaid
-flowchart TD
-  R["siteasy · research · ia · setup · plan"]:::sa
-  P["seo · plan"]:::se
-  B["siteasy · build · layout · adapt"]:::sa
-  A["siteasy · amplify · animate"]:::sa
-  I["inspect · detect · preview · review"]:::insp
-  S["seo · audit · schema · geo"]:::se
-  L["siteasy · launch"]:::sa
-  R --> B
-  P --> B
-  B --> A --> I --> S --> L
-  classDef sa fill:#eef2ff,stroke:#4f46e5,color:#312e81
-  classDef se fill:#e0f2fe,stroke:#0284c7,color:#075985
-  classDef insp fill:#fef3c7,stroke:#b45309,color:#92400e
+```
+/siteasy research       understand the users
+/siteasy ia             validate the structure
+/siteasy setup          define brand, audience, tone
+/siteasy plan           plan UX before coding
+/seo plan               build the SEO strategy in parallel
+     |
+/siteasy build          build the interface
+/siteasy layout         fix spacing and rhythm
+/siteasy adapt          make it responsive
+     |
+/siteasy amplify        make it beautiful
+/siteasy animate        add motion
+     |
+/inspect detect         catch problems
+/inspect preview        see it in a real browser
+/inspect review         final code-quality gate
+     |
+/seo audit              full SEO check
+/seo schema             add structured data
+/seo geo                AI-search visibility
+     |
+/siteasy launch         harden for production
 ```
 
 > [!TIP]
