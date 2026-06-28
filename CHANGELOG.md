@@ -11,6 +11,18 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.0] — 2026-06-27
+
+Attribution cleanup and documentation. Third-party attribution is consolidated onto the genuinely vendored engine; the redundant THIRD-PARTY-NOTICES.md is removed. The overview diagram is refreshed and the README gains a comparison section.
+
+### Changed
+
+- Attribution is carried by ATTRIBUTION.md and NOTICE alone (the vendored ui-ux-pro-max engine and impeccable). The rewritten design references carry no separate notice. Removed THIRD-PARTY-NOTICES.md.
+- `docs/overview.svg` version refreshed.
+- README gains a "How NullToHero compares" section.
+
+---
+
 ## [1.19.0] — 2026-06-27
 
 A 14th audit agent and editorial rigor. The audit gains a Claims and credibility specialist that red-teams the page's marketing claims with the Toulmin model. Plus a machine-written-copy check, a structurally-different variant mode, and a lightweight ADR practice. 59 commands, 95 references, 14 sub-agents.
@@ -67,7 +79,7 @@ Code quality lane. A new inspect reference reviews the robustness of emitted cod
 
 ## [1.15.0] — 2026-06-27
 
-Design reference depth. Five new siteasy references (data visualization accessibility, an elevation and shadow system, a semantic color system, named style systems, landing page patterns) plus a modular type scale, adapted from external MIT sources recorded in THIRD-PARTY-NOTICES.md. One new command (charts); 58 commands, 91 references.
+Design reference depth. Five new siteasy references (data visualization accessibility, an elevation and shadow system, a semantic color system, named style systems, landing page patterns) plus a modular type scale, adapted from external MIT sources recorded in ATTRIBUTION.md. One new command (charts); 58 commands, 91 references.
 
 ### Added
 

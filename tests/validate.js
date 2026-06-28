@@ -627,6 +627,10 @@ section("12b. SECURITY.md and README version alignment");
       else if (mm[1] === pv) pass(`README version token v${mm[1]} matches plugin ${pv}`);
       else fail(`README version token v${mm[1]} does not match plugin ${pv}`);
     }
+    const svg = readFile(path.join(ROOT, "docs", "overview.svg"));
+    if (svg === null) fail("docs/overview.svg not found");
+    else if (svg.includes(`>v${pv}<`)) pass(`overview.svg version label matches plugin ${pv}`);
+    else fail("docs/overview.svg version label is stale: run `node tools/sync-overview.mjs` and commit");
   }
 }
 

@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.19.0** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+> **v1.20.0** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -164,6 +164,27 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
 
 The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (contrast, image dimensions, viewport, robots.txt, headings, lang, title, description, 375px overflow) and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+
+---
+
+## How NullToHero compares
+
+NullToHero overlaps three kinds of tool and differs from each in scope.
+
+Design-intelligence skills, such as ui-ux-pro-max, supply a knowledge base and generate a design system from a brief. NullToHero embeds that engine (in `tools/design-system`) and wraps the build, the audit and the SEO work around it, so the knowledge feeds a scored review rather than a one-off recommendation.
+
+Design-methodology skills give a designer's process: critique, handoff, research, copy. NullToHero covers that ground in `siteasy` and adds the parts a methodology leaves out, the emitted code and a number you can compare between runs.
+
+In-browser code generators (the prompt-to-UI tools) produce a screen quickly. NullToHero is build plus audit: the same plugin that builds a page also scores its accessibility, Core Web Vitals, structured data, search visibility and code robustness, and caps the score when a critical check fails.
+
+What is specific to NullToHero:
+
+- One plugin spanning four jobs: design and build (`siteasy`), defect detection (`inspect`), search visibility (`seo`) and a whole-site pass that runs all of them (`audit`).
+- A deterministic 0-100 score from a fixed rubric, not a number the model picks by feel, backed by a structural validator that gates every release.
+- 14 read-only parallel sub-agents with a trust boundary, so audited pages are treated as data, never as instructions.
+- Coverage of generative-engine optimization (visibility in ChatGPT, Perplexity and Google AI answers), which design and code tools do not address.
+
+It is not a hosted product or a visual editor. It runs inside Claude and edits real files in your project, so the output is yours to keep and version.
 
 ---
 
