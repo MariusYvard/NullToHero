@@ -6,19 +6,22 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.20.2-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.20.3-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.20.2** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.20.3** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 </div>
 
 NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
 <div align="center">
-  <img src="docs/demo.gif" alt="NullToHero in action: ask Claude if a site is ready, it runs an audit and returns a scored report with a prioritized action plan" width="860">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/demo-dark.gif">
+    <img src="docs/demo.gif" alt="NullToHero in action: ask Claude if a site is ready, it runs an audit and returns a scored report with a prioritized action plan" width="860">
+  </picture>
 </div>
 
 <div align="center">
@@ -82,19 +85,59 @@ git clone https://github.com/MariusYvard/NullToHero.git
 powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 ```
 
-A one-liner (`bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)`) also works, but it runs a remote script directly. Clone and read `install.sh` first if you want to inspect it.
+> [!WARNING]
+> A one-liner (`bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)`) also works, but it runs a remote script directly. Clone and read `install.sh` first if you want to inspect it.
 
 </details>
 
-The short forms `/siteasy`, `/seo`, `/inspect` and `/audit` work as long as no other plugin claims the same name. If you run several plugins, use the namespaced form `/null-to-hero:siteasy`.
+> [!TIP]
+> The short forms `/siteasy`, `/seo`, `/inspect` and `/audit` work as long as no other plugin claims the same name. If you run several plugins, use the namespaced form `/null-to-hero:siteasy`.
 
 ---
 
 ## The four skills
 
+<table>
+<tr>
+<td valign="top" width="50%">
+
+![siteasy](https://img.shields.io/badge/siteasy-4f46e5)<br>
+**Design and build.** Plan, build, make it responsive, add motion.<br>
+`/siteasy build` · `/siteasy amplify` · `/siteasy tokens`
+
+</td>
+<td valign="top" width="50%">
+
+![seo](https://img.shields.io/badge/seo-0ea5e9)<br>
+**Get found.** Audit, structured data, sitemaps, AI-search visibility.<br>
+`/seo audit` · `/seo schema` · `/seo geo`
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="50%">
+
+![inspect](https://img.shields.io/badge/inspect-f59e0b)<br>
+**Check before you publish.** Anti-pattern scan, browser preview, code review.<br>
+`/inspect detect` · `/inspect preview` · `/inspect review`
+
+</td>
+<td valign="top" width="50%">
+
+![audit](https://img.shields.io/badge/audit-7c3aed)<br>
+**Whole site in one pass.** Every specialist at once, one score, one action plan.<br>
+`/audit` · `/audit verify` · `/audit compare`
+
+</td>
+</tr>
+</table>
+
 ### ![siteasy](https://img.shields.io/badge/siteasy-4f46e5) Design and build
 
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
+
+<details>
+<summary><b>All 26 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -125,9 +168,14 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `tokens [project]` | Audit or create a two-layer CSS token system |
 | `live [target]` | Interactive in-browser variant mode (bundled helper and picker) |
 
+</details>
+
 ### ![seo](https://img.shields.io/badge/seo-0ea5e9) Get found
 
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
+
+<details>
+<summary><b>All 19 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -150,6 +198,8 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `backlinks [url]` | Backlink profile analysis |
 | `ecommerce [url]` | E-commerce SEO (products, categories, faceted navigation) |
 | `report [url\|file\|generate]` | Format audit output as a Markdown deliverable or PDF |
+
+</details>
 
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
@@ -189,6 +239,52 @@ The deterministic pre-pass behind `checks` fetches the page once (optionally ren
 
 ---
 
+## See what it produces
+
+Concrete artifacts, not just advice.
+
+A theme from `/siteasy tokens`, a drop-in `:root` stylesheet with WCAG-checked tokens:
+
+```css
+:root {
+  --bg: #0B0B0C;
+  --surface: #161618;
+  --fg: #F5F5F4;
+  --accent: #6E56CF;     /* on-accent 5.2:1, passes AA */
+  --ring: #6E56CF;
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+}
+```
+
+Structured data from `/seo schema`, valid Schema.org JSON-LD ready to paste:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Example",
+  "url": "https://example.com",
+  "logo": "https://example.com/logo.png"
+}
+```
+
+An action plan from `/audit`, ordered by severity:
+
+```md
+## Action plan
+
+### Critical
+- Contrast 3.1:1 on the hero CTA. Raise the accent or darken the label.
+
+### High
+- LCP 3.8s. Preload the hero image and set fetchpriority="high".
+
+### Medium
+- Heading order skips from H2 to H4. Renumber the section.
+```
+
+---
+
 ## How NullToHero compares
 
 NullToHero overlaps three kinds of tool and differs from each in scope. The table sets out who does what.
@@ -211,32 +307,25 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 
 ## How a project flows
 
-```
-/siteasy research       understand the users
-/siteasy ia             validate the structure
-/siteasy setup          define brand, audience, tone
-/siteasy plan           plan UX before coding
-/seo plan               build the SEO strategy in parallel
-     |
-/siteasy build          build the interface
-/siteasy layout         fix spacing and rhythm
-/siteasy adapt          make it responsive
-     |
-/siteasy amplify        make it beautiful
-/siteasy animate        add motion
-     |
-/inspect detect         catch problems
-/inspect preview        see it in a real browser
-/inspect review         final code-quality gate
-     |
-/seo audit              full SEO check
-/seo schema             add structured data
-/seo geo                AI-search visibility
-     |
-/siteasy launch         harden for production
+```mermaid
+flowchart TD
+  R["siteasy · research · ia · setup · plan"]:::sa
+  P["seo · plan"]:::se
+  B["siteasy · build · layout · adapt"]:::sa
+  A["siteasy · amplify · animate"]:::sa
+  I["inspect · detect · preview · review"]:::insp
+  S["seo · audit · schema · geo"]:::se
+  L["siteasy · launch"]:::sa
+  R --> B
+  P --> B
+  B --> A --> I --> S --> L
+  classDef sa fill:#eef2ff,stroke:#4f46e5,color:#312e81
+  classDef se fill:#e0f2fe,stroke:#0284c7,color:#075985
+  classDef insp fill:#fef3c7,stroke:#b45309,color:#92400e
 ```
 
-In a hurry, `/audit yoursite.com` runs the whole check in a single pass.
+> [!TIP]
+> In a hurry, `/audit yoursite.com` runs the whole check in a single pass.
 
 ---
 

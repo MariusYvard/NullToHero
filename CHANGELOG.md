@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.3] — 2026-06-27
+
+More README polish. A Mermaid workflow diagram, a four-skill card grid, syntax-highlighted output samples, GitHub callouts and a dark-mode demo via a picture element.
+
+### Added
+
+- `docs/demo-dark.gif`: a dark-theme variant of the demo, served in dark mode.
+- A "See what it produces" section with sample CSS tokens, JSON-LD and an action plan.
+
+### Changed
+
+- "How a project flows" is now a Mermaid diagram.
+- "The four skills" opens with a card grid; the long siteasy and seo command tables are collapsible.
+- Key asides use GitHub [!TIP] and [!WARNING] callouts.
+
+---
+
 ## [1.20.2] — 2026-06-27
 
 README aesthetics. A centered header with a badge row, an animated demo of an audit, a navigation bar, collapsible secondary sections, color-coded skill badges and a footer.
