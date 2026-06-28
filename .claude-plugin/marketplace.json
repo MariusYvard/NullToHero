@@ -11,7 +11,7 @@
       "name": "null-to-hero",
       "source": "./",
       "description": "From zero knowledge to hero website. Four skills and 57 commands: design (siteasy), SEO, defect inspection, and a whole-site /audit orchestrator running 13 parallel sub-agents. GEO for AI search, stack-aware design-system generator, interactive live variant mode, report export, WCAG 2.2, image strategy, accessible forms, parallax, and motion.",
-      "version": "1.20.0",
+      "version": "1.20.1",
       "category": "design",
       "tags": [
         "design",

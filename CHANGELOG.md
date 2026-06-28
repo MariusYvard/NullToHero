@@ -11,6 +11,16 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.1] — 2026-06-27
+
+The README comparison is now a capability table across NullToHero, design-intelligence skills, design-methodology skills and in-browser UI generators.
+
+### Changed
+
+- "How NullToHero compares" reformatted as a feature matrix.
+
+---
+
 ## [1.20.0] — 2026-06-27
 
 Attribution cleanup and documentation. Third-party attribution is consolidated onto the genuinely vendored engine; the redundant THIRD-PARTY-NOTICES.md is removed. The overview diagram is refreshed and the README gains a comparison section.
