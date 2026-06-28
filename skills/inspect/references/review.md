@@ -154,3 +154,8 @@ Each agent returns its scored section. Wait for all four, then merge into the ti
 Scores: 9-10 ship it · 7-8 minor fixes · 5-6 fix T1 first · 3-4 substantial work needed · 1-2 reconsider approach.
 
 After the review, offer: "Want me to apply the Tier 1 fixes?"
+
+
+## Code robustness (beyond interface)
+
+Interface review stops at how the page looks and behaves. Before shipping, also review what the emitted code does under stress: secrets in client code, render-blocking resources, unhandled fetch failures, and missing empty or error states. Run that pass from [code-quality.md](code-quality.md). A page can pass every visual check and still leak a key or crash on an empty list.

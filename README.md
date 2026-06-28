@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 
-> **v1.15.0** · 4 skills · 58 commands · 91 reference docs · 13 audit sub-agents
+> **v1.16.0** · 4 skills · 58 commands · 92 reference docs · 13 audit sub-agents
 
 **Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
@@ -209,7 +209,7 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ## What is inside
 
-NullToHero ships **91 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **92 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>

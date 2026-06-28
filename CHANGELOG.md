@@ -11,6 +11,21 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.16.0] — 2026-06-27
+
+Code quality lane. A new inspect reference reviews the robustness of emitted code (the security, performance, correctness and maintainability that interface review skips) and wires into the bundled per-stack rule base. Ten web code-quality rules added to the deterministic detector. 58 commands, 92 references.
+
+### Added
+
+- `inspect/references/code-quality.md`: client-side security, performance, correctness and maintainability checks, plus a pointer to `tools/design-system/scripts/search.py` for stack-specific rules.
+- Ten rules (28-37) in `tools/data/inspect-rules.csv`: link safety, unsanitized HTML, client secrets, non-blocking scripts, font-display, async failure, empty and error states, null guards, semantic interactive elements, debug noise.
+
+### Changed
+
+- `inspect review` also points to code-quality.md for robustness beyond interface defects.
+
+---
+
 ## [1.15.0] — 2026-06-27
 
 Design reference depth. Five new siteasy references (data visualization accessibility, an elevation and shadow system, a semantic color system, named style systems, landing page patterns) plus a modular type scale, adapted from external MIT sources recorded in THIRD-PARTY-NOTICES.md. One new command (charts); 58 commands, 91 references.

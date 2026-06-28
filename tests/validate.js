@@ -200,6 +200,7 @@ const FILE_INTEGRITY = {
   "skills/inspect/SKILL.md":                    { minLines:  65 },
   "skills/inspect/references/detect.md":        { minLines: 115 },  // actual: 125
   "skills/inspect/references/review.md":        { minLines: 100 },
+  "skills/inspect/references/code-quality.md": { minLines: 70 },
   "skills/inspect/references/preview.md":       { minLines:  35 },
   // -- audit (meta-orchestrator) ------------------------------------------
   "skills/audit/SKILL.md":                      { minLines:  60 },

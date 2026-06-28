@@ -42,6 +42,15 @@
   },
   {
     "skill": "inspect",
+    "path": "skills/inspect/references/code-quality.md",
+    "title": "Code Quality",
+    "keywords": [
+      "code",
+      "quality"
+    ]
+  },
+  {
+    "skill": "inspect",
     "path": "skills/inspect/references/detect.md",
     "title": "Anti-Pattern Detector",
     "keywords": [
