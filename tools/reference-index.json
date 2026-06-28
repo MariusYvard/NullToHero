@@ -32,6 +32,15 @@
   },
   {
     "skill": "audit",
+    "path": "skills/audit/references/html-report.md",
+    "title": "HTML Report",
+    "keywords": [
+      "html",
+      "report"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/report.md",
     "title": "Unified Audit Report",
     "keywords": [
@@ -607,6 +616,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/handoff.md",
+    "title": "Developer Handoff",
+    "keywords": [
+      "handoff",
+      "developer"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/harden.md",
     "title": "harden",
     "keywords": [
@@ -799,6 +817,15 @@
     "title": "shape",
     "keywords": [
       "shape"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/ship-checklist.md",
+    "title": "Ship Checklist",
+    "keywords": [
+      "ship",
+      "checklist"
     ]
   },
   {

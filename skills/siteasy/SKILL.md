@@ -1,9 +1,9 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.17.0
+version: 1.18.0
 user-invocable: true
-argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|tokens · live] [target]"
+argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
 allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
@@ -131,6 +131,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `journey [persona]` | Build | Generate empathy maps, journey maps, or service blueprints from research | [references/journey-mapping.md](references/journey-mapping.md) |
 | `document` | Build | Generate DESIGN.md from existing project code | [references/document.md](references/document.md) |
 | `extract [target]` | Build | Pull reusable tokens and components into a design system | [references/extract.md](references/extract.md) |
+| `handoff [target]` | Build | Developer handoff spec: layout, tokens, props, states, breakpoints, edge cases, motion, accessibility | [references/handoff.md](references/handoff.md) |
 | `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) + [references/color-systems.md](references/color-systems.md) + [references/elevation.md](references/elevation.md) |
 | `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) |
 | `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |
@@ -138,7 +139,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) + [references/style-systems.md](references/style-systems.md) |
 | `simplify [target]` | Refine | Reduce visual noise, tone down, strip to essence | [references/quieter.md](references/quieter.md) + [references/distill.md](references/distill.md) |
 | `clarify [target]` | Refine | UX copy, error messages, button labels, empty states | [references/clarify.md](references/clarify.md) |
-| `launch [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) |
+| `launch [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) + [references/ship-checklist.md](references/ship-checklist.md) |
 | `onboard [target]` | Refine | First-run flows, empty states, feature discovery, activation | [references/onboard.md](references/onboard.md) |
 | `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) |
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |

@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.17.0
+version: 1.18.0
 user-invocable: true
 argument-hint: "[url] | [full|seo|defects|design|quick|verify|checks|report] [url|file] | compare [A] [B]"
 allowed-tools:
@@ -29,9 +29,9 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
-| `report [file]` | Format an existing audit into a client-ready report or PDF | [references/report.md](references/report.md) |
+| `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF | [references/report.md](references/report.md) + [references/html-report.md](references/html-report.md) |
 
-Nine commands, four references. The five agent run modes (`full`, `seo`, `defects`, `design`, `quick`) share the orchestration playbook in [references/full.md](references/full.md) and differ only in which agent group is dispatched. `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. `checks` runs the deterministic pre-pass with no sub-agents and is documented in [references/checks.md](references/checks.md); it is also the ground-truth layer the agent modes consume in their fetch phase. `compare` diffs two targets ([references/compare.md](references/compare.md)) and `report` formats an already-produced audit ([references/report.md](references/report.md)).
+Nine commands, five references. The five agent run modes (`full`, `seo`, `defects`, `design`, `quick`) share the orchestration playbook in [references/full.md](references/full.md) and differ only in which agent group is dispatched. `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. `checks` runs the deterministic pre-pass with no sub-agents and is documented in [references/checks.md](references/checks.md); it is also the ground-truth layer the agent modes consume in their fetch phase. `compare` diffs two targets ([references/compare.md](references/compare.md)) and `report` formats an already-produced audit ([references/report.md](references/report.md)).
 
 ## How to run a command
 

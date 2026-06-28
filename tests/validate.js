@@ -196,6 +196,8 @@ const FILE_INTEGRITY = {
   "skills/siteasy/references/color-systems.md": { minLines: 50 },
   "skills/siteasy/references/style-systems.md": { minLines: 62 },
   "skills/siteasy/references/landing-patterns.md": { minLines: 40 },
+  "skills/siteasy/references/handoff.md": { minLines: 75 },
+  "skills/siteasy/references/ship-checklist.md": { minLines: 55 },
   // ── inspect ──────────────────────────────────────────────────────────────
   "skills/inspect/SKILL.md":                    { minLines:  65 },
   "skills/inspect/references/detect.md":        { minLines: 115 },  // actual: 125
@@ -206,6 +208,7 @@ const FILE_INTEGRITY = {
   "skills/audit/SKILL.md":                      { minLines:  60 },
   "skills/audit/references/full.md":            { minLines: 150 },
   "skills/audit/references/report.md":          { minLines:  60 },
+  "skills/audit/references/html-report.md": { minLines: 80 },
   "skills/audit/references/checks.md":          { minLines:  90 },
 };
 

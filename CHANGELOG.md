@@ -11,6 +11,19 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.18.0] — 2026-06-27
+
+New outputs. A developer handoff spec, a pre-launch ship checklist, a self-contained HTML rendering of an audit, plus UX copy patterns and a design-system audit. One new command (handoff); 59 commands, 95 references.
+
+### Added
+
+- `siteasy handoff` and `references/handoff.md`: an implementable handoff contract (layout, tokens, component states, motion, responsive, edge cases, accessibility).
+- `siteasy/references/ship-checklist.md` (via `launch`): pre-deploy gates, deploy steps, post-launch verification and a rollback trigger.
+- `audit/references/html-report.md` (via `report`): a self-contained HTML report with inline CSS, a score gauge and severity colors.
+- UX copy patterns in `clarify.md` (error, CTA, empty-state, confirmation, tone) and a design-system audit in `extract.md` (naming, hardcoded values, component completeness).
+
+---
+
 ## [1.17.0] — 2026-06-27
 
 Theme generator. A pure-stdlib script turns a few brand inputs into a drop-in :root stylesheet: semantic tokens with WCAG contrast checks, neutral and accent tonal ramps, an elevation ramp, a fluid type scale, spacing and radius scales, focus-visible, a reduced-motion guard and a print sheet. The generative counterpart to the tokens audit. 58 commands, 92 references.

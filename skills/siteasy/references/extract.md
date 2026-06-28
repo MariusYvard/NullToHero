@@ -74,3 +74,28 @@ Update design system documentation:
 - Extract things that differ in intent (two buttons that look similar but serve different purposes should stay separate)
 
 Remember: A good design system is a living system. Extract patterns as they emerge, enrich them thoughtfully, and maintain them consistently.
+
+## Design-system audit
+
+Beyond pulling tokens and components, audit the system for the drift that accumulates as a codebase grows.
+
+### Naming consistency
+
+- One name per concept: not primary, brand and main for the same color.
+- Tokens follow one scheme (role-based like --surface, or scale-based like --blue-500), not a mix.
+- Component and variant names match between the design and the code.
+
+### Hardcoded values
+
+- Count the raw hex, px and one-off shadows that bypass a token. Each is a future inconsistency.
+- Flag any color or spacing used more than once with no token; that is a token waiting to exist.
+
+### Component completeness
+
+Score each component against the states it owes: default, hover, focus-visible, active, disabled, loading, empty, error.
+
+| Component | States covered | Variants | Documented | Verdict |
+|---|---|---|---|---|
+| Button | 6 / 8 | 3 | partial | needs work |
+
+A component missing its error or empty state will be reinvented inconsistently the first time someone needs it.
