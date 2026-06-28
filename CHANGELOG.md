@@ -11,6 +11,17 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.6] — 2026-06-27
+
+README consistency. Every skill block now carries a "Common runs" line; the inspect example block is removed in favor of one.
+
+### Changed
+
+- Added a "Common runs" line to siteasy, inspect and audit (seo already had one).
+- Removed the inspect example code block.
+
+---
+
 ## [1.20.5] — 2026-06-27
 
 README consistency. Each skill now ends the same way: a description and a single collapsible block, with nothing left visible after it.
