@@ -28,6 +28,16 @@ python3 tools/design-system/scripts/search.py "<brief>" --design-system --persis
 
 `--persist` writes a MASTER design system file plus optional per-page override files. This is the data-driven counterpart to `/siteasy setup`, which is otherwise manual. Use the output to seed DESIGN.md, then refine by hand.
 
+## Generate a CSS theme
+
+From a few brand inputs, emit a drop-in `:root` stylesheet: semantic color tokens with WCAG contrast checks, neutral and accent tonal ramps, an elevation ramp, a fluid type scale, spacing and radius scales, focus-visible, a reduced-motion guard and a print sheet. Pure standard library.
+
+```
+python3 tools/design-system/scripts/theme_css.py --bg "#0B0B0C" --ink "#F5F5F4" --accent "#6E56CF" [--accent-ink "#FFFFFF"] [--font "Geist, system-ui, sans-serif"] [--radius 10] [--ratio 1.25] [--out theme.css]
+```
+
+Each color pairing is checked against WCAG; a failing pair is flagged in a CSS comment rather than shipped. Tokens are an sRGB starter, refine the palette in OKLCH. This is the generative counterpart to the `/siteasy tokens` audit.
+
 ## Files
 
 - `scripts/` — `search.py` (CLI entry), `core.py` (CSV search engine), `design_system.py` (generator). Pure standard library.

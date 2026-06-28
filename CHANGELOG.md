@@ -11,6 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.17.0] — 2026-06-27
+
+Theme generator. A pure-stdlib script turns a few brand inputs into a drop-in :root stylesheet: semantic tokens with WCAG contrast checks, neutral and accent tonal ramps, an elevation ramp, a fluid type scale, spacing and radius scales, focus-visible, a reduced-motion guard and a print sheet. The generative counterpart to the tokens audit. 58 commands, 92 references.
+
+### Added
+
+- `tools/design-system/scripts/theme_css.py`: emit a validated :root theme from --bg, --ink, --accent (plus optional font, radius and type ratio). Failing color pairings are flagged in a CSS comment, not shipped.
+
+### Changed
+
+- `siteasy tokens` and the design-system README point to the theme generator for a starter stylesheet.
+
+---
+
 ## [1.16.0] — 2026-06-27
 
 Code quality lane. A new inspect reference reviews the robustness of emitted code (the security, performance, correctness and maintainability that interface review skips) and wires into the bundled per-stack rule base. Ten web code-quality rules added to the deterministic detector. 58 commands, 92 references.

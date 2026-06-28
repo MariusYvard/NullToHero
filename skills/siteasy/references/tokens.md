@@ -89,3 +89,14 @@ Load [design-tokens.md](design-tokens.md) before generating — it contains the 
 Load [dark-mode-engineering.md](dark-mode-engineering.md) first.
 
 Always **Write** the token file to disk — don't just show it in chat.
+
+
+## Generate a starter theme
+
+To produce a drop-in `:root` stylesheet instead of hand-writing one, run the theme generator. It emits semantic tokens, neutral and accent ramps, an elevation ramp, a fluid type scale and a print sheet, and flags any pairing that fails WCAG contrast:
+
+```
+python3 tools/design-system/scripts/theme_css.py --bg "#0B0B0C" --ink "#F5F5F4" --accent "#6E56CF" --out theme.css
+```
+
+Treat the output as a seed for DESIGN.md, then refine the palette in OKLCH. See [color-systems.md](color-systems.md) for the role of each token and [elevation.md](elevation.md) for the shadow ramp.

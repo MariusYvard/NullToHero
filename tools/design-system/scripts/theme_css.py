@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Theme CSS generator. From a few brand inputs, emit a drop-in :root stylesheet:
+semantic color tokens with WCAG contrast checks, an elevation ramp, a fluid type
+scale, spacing and radius scales, focus-visible, a reduced-motion guard and a print
+sheet. Pure standard library, no dependencies.
+
+Usage:
+  python theme_css.py --bg "#0B0B0C" --ink "#F5F5F4" --accent "#6E56CF" \
+      [--accent-ink "#FFFFFF"] [--font "Geist, system-ui, sans-serif"] \
+      [--font-head "Cabinet Grotesk, serif"] [--radius 10] [--ratio 1.25] [--out theme.css]
+
+Colors are sRGB mixes for a starter; refine in OKLCH afterwards. Contrast uses the
+WCAG 2.1 relative-luminance formula. A pairing below its threshold is flagged in a
+CSS comment, never silently shipped.
+"""
+import argparse, re, sys
+
+HEX = re.compile(r"^#([0-9a-fA-F]{6})$")
+
+def parse_hex(h):
+    if not HEX.match(h):
+        raise SystemExit(f"Invalid hex color: {h} (expected #RRGGBB)")
+    h = h[1:]
+    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+def to_hex(rgb):
+    return "#%02X%02X%02X" % tuple(max(0, min(255, round(c))) for c in rgb)
+
+def _lin(v):
+    v /= 255.0
+    return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+
+def lum(rgb):
+    r, g, b = (_lin(c) for c in rgb)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+def contrast(a, b):
+    la, lb = lum(a), lum(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+def mix(rgb, target, t):
+    return tuple(rgb[i] + (target[i] - rgb[i]) * t for i in range(3))
+
+WHITE, BLACK = (255, 255, 255), (0, 0, 0)
+
+def ramp(base):
+    out = {}
+    for name, t in [("50", 0.94), ("100", 0.86), ("200", 0.72), ("300", 0.54), ("400", 0.30)]:
+        out[name] = to_hex(mix(base, WHITE, t))
+    out["500"] = to_hex(base)
+    for name, t in [("600", 0.18), ("700", 0.36), ("800", 0.56), ("900", 0.74)]:
+        out[name] = to_hex(mix(base, BLACK, t))
+    return out
+
+def fluid(n, ratio):
+    maxpx = 16 * (ratio ** n)
+    minpx = 16 * (ratio ** (n * 0.62)) if n > 0 else maxpx
+    if abs(maxpx - minpx) < 0.5:
+        return f"{maxpx/16:.3f}rem"
+    span = (maxpx - minpx) / 9.2
+    return f"clamp({minpx/16:.3f}rem, calc({minpx/16:.3f}rem + {span:.2f}vw), {maxpx/16:.3f}rem)"
+
+def main():
+    ap = argparse.ArgumentParser(description="Emit a drop-in :root theme stylesheet.")
+    ap.add_argument("--bg", default="#0B0B0C")
+    ap.add_argument("--ink", default="#F5F5F4")
+    ap.add_argument("--accent", default="#6E56CF")
+    ap.add_argument("--accent-ink", default="#FFFFFF")
+    ap.add_argument("--font", default="Geist, system-ui, sans-serif")
+    ap.add_argument("--font-head", default=None)
+    ap.add_argument("--radius", type=float, default=10)
+    ap.add_argument("--ratio", type=float, default=1.25)
+    ap.add_argument("--out", default=None)
+    a = ap.parse_args()
+    bg = parse_hex(a.bg); ink = parse_hex(a.ink); accent = parse_hex(a.accent); aink = parse_hex(a.accent_ink)
+    surface = to_hex(mix(bg, ink, 0.05))
+    fg_muted = to_hex(mix(ink, bg, 0.32))
+    border = to_hex(mix(bg, ink, 0.16))
+    nr = ramp(mix((128, 128, 128), bg, 0.12))
+    ar = ramp(accent)
+    L = []
+    L.append("/* Generated theme. Tokens are a starter; refine the palette in OKLCH. */")
+    L.append("/* WCAG: body text needs 4.5:1; large text and UI components need 3:1. */")
+    for label, val, thr in [("fg on bg", contrast(ink, bg), 4.5),
+                            ("muted on bg", contrast(parse_hex(fg_muted), bg), 4.5),
+                            ("accent-ink on accent", contrast(aink, accent), 4.5)]:
+        L.append(f"/* contrast {label}: {val:.2f}:1 (need {thr}) -> {'PASS' if val>=thr else 'FAIL, adjust before shipping'} */")
+    L.append(":root {")
+    L.append(f"  --font-sans: {a.font};")
+    L.append(f"  --font-head: {a.font_head or a.font};")
+    L.append(f"  --bg: {a.bg};")
+    L.append(f"  --surface: {surface};")
+    L.append(f"  --fg: {a.ink};")
+    L.append(f"  --fg-muted: {fg_muted};")
+    L.append(f"  --border: {border};")
+    L.append(f"  --accent: {a.accent};")
+    L.append(f"  --accent-ink: {a.accent_ink};")
+    L.append(f"  --ring: {a.accent};")
+    for k, v in nr.items(): L.append(f"  --neutral-{k}: {v};")
+    for k, v in ar.items(): L.append(f"  --accent-{k}: {v};")
+    for i, (oy, bl, op) in enumerate([(1, 2, 0.20), (2, 4, 0.20), (4, 8, 0.18), (8, 16, 0.16), (16, 24, 0.14)], 1):
+        L.append(f"  --elevation-{i}: 0 {oy}px {bl}px rgb(0 0 0 / {op});")
+    L.append(f"  --radius-sm: {max(0, a.radius-4):g}px;")
+    L.append(f"  --radius: {a.radius:g}px;")
+    L.append(f"  --radius-lg: {a.radius+6:g}px;")
+    for i in [1, 2, 3, 4, 6, 8, 12, 16]:
+        L.append(f"  --space-{i}: {i*0.25:.2f}rem;")
+    for name, n in [("xs", -1), ("sm", -0.4), ("base", 0), ("lg", 1), ("xl", 2), ("2xl", 3), ("3xl", 4), ("4xl", 5)]:
+        L.append(f"  --text-{name}: {fluid(n, a.ratio)};")
+    L.append("  --measure: 70ch;")
+    L.append("}")
+    L.append("")
+    L.append("*:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }")
+    L.append("@media (prefers-reduced-motion: reduce) {")
+    L.append("  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }")
+    L.append("}")
+    L.append("@media print {")
+    L.append("  :root { --bg: #ffffff; --surface: #ffffff; --fg: #000000; }")
+    L.append("  body { background: #fff; color: #000; }")
+    L.append("}")
+    css = "\n".join(L) + "\n"
+    if a.out:
+        open(a.out, "w", encoding="utf-8", newline="\n").write(css)
+        print(f"Wrote {a.out}")
+    else:
+        sys.stdout.write(css)
+
+if __name__ == "__main__":
+    main()
