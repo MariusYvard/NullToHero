@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.20.4-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.20.5-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.20.4** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.20.5** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 </div>
 
@@ -199,9 +199,9 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `ecommerce [url]` | E-commerce SEO (products, categories, faceted navigation) |
 | `report [url\|file\|generate]` | Format audit output as a Markdown deliverable or PDF |
 
-</details>
-
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
+
+</details>
 
 ### ![inspect](https://img.shields.io/badge/inspect-f59e0b) Check before you publish
 
@@ -216,13 +216,13 @@ Your quality gate. Three quick checks to run before you ship.
 | `preview [target]` | Real Chromium screenshot (desktop and mobile), reads it back, fixes bugs in a loop |
 | `review [file]` | Design engineering code review (motion issues, accessibility, Before and After table with a score) |
 
-</details>
-
 ```
 /inspect detect index.html
 /inspect preview index.html
 /inspect review index.html
 ```
+
+</details>
 
 ### ![audit](https://img.shields.io/badge/audit-7c3aed) The whole site in one pass
 
@@ -243,9 +243,9 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `compare [A] [B]` | Diff two targets: per-check verdict changes and score deltas (before/after, or A vs B) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
 
-</details>
-
 The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (contrast, image dimensions, viewport, robots.txt, headings, lang, title, description, 375px overflow) and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+
+</details>
 
 ---
 

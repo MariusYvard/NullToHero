@@ -11,6 +11,16 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.5] — 2026-06-27
+
+README consistency. Each skill now ends the same way: a description and a single collapsible block, with nothing left visible after it.
+
+### Changed
+
+- The seo "common runs", the inspect example block and the audit pre-pass note now sit inside their skill's collapsible section.
+
+---
+
 ## [1.20.4] — 2026-06-27
 
 README readability. Reverted the workflow to the plain-text flow, collapsed all four command tables and folded the output samples.
