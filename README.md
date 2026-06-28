@@ -1,14 +1,31 @@
+<div align="center">
+
 # NullToHero
 
+<img src="docs/overview.svg" alt="NullToHero overview: four skills (siteasy, seo, inspect, audit) inside Claude" width="860">
+
+**Build a website you are proud of, even if you have never written a line of code.**
+
+[![version](https://img.shields.io/badge/version-1.20.2-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-> **v1.20.1** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.20.2** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
-**Build a website you are proud of, even if you have never written a line of code.** NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
+</div>
 
-By [Marius Yvard](https://lecvdemarius.netlify.app/) · Apache 2.0
+NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
 
-![NullToHero overview: four skills (siteasy, seo, inspect, audit) inside Claude](docs/overview.svg)
+<div align="center">
+  <img src="docs/demo.gif" alt="NullToHero in action: ask Claude if a site is ready, it runs an audit and returns a scored report with a prioritized action plan" width="860">
+</div>
+
+<div align="center">
+
+[What it is](#what-is-nulltohero) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows)
+
+</div>
 
 ---
 
@@ -48,6 +65,9 @@ NullToHero is a Claude Code plugin and a marketplace in one repository.
 
 Later, pull new releases with `/plugin marketplace update null-to-hero-marketplace`.
 
+<details>
+<summary><b>Manual install (macOS, Linux, Windows)</b></summary>
+
 **B. Manual install (macOS, Linux)**
 
 ```bash
@@ -64,13 +84,15 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 
 A one-liner (`bash <(curl -fsSL https://raw.githubusercontent.com/MariusYvard/NullToHero/main/install.sh)`) also works, but it runs a remote script directly. Clone and read `install.sh` first if you want to inspect it.
 
+</details>
+
 The short forms `/siteasy`, `/seo`, `/inspect` and `/audit` work as long as no other plugin claims the same name. If you run several plugins, use the namespaced form `/null-to-hero:siteasy`.
 
 ---
 
 ## The four skills
 
-### /siteasy, design and build
+### ![siteasy](https://img.shields.io/badge/siteasy-4f46e5) Design and build
 
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
@@ -103,7 +125,7 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `tokens [project]` | Audit or create a two-layer CSS token system |
 | `live [target]` | Interactive in-browser variant mode (bundled helper and picker) |
 
-### /seo, get found
+### ![seo](https://img.shields.io/badge/seo-0ea5e9) Get found
 
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
 
@@ -131,7 +153,7 @@ Your search expert. It audits a whole site or a single page, writes the structur
 
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
-### /inspect, check before you publish
+### ![inspect](https://img.shields.io/badge/inspect-f59e0b) Check before you publish
 
 Your quality gate. Three quick checks to run before you ship.
 
@@ -147,7 +169,7 @@ Your quality gate. Three quick checks to run before you ship.
 /inspect review index.html
 ```
 
-### /audit, the whole site in one pass
+### ![audit](https://img.shields.io/badge/audit-7c3aed) The whole site in one pass
 
 Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -218,12 +240,15 @@ In a hurry, `/audit yoursite.com` runs the whole check in a single pass.
 
 ---
 
-## Set up your project
+<details>
+<summary><b>Set up your project</b></summary>
 
 NullToHero works best with two small files in your project root. Claude reads them so its output matches your brand.
 
 - `PRODUCT.md`, who your users are, your brand, tone and anti-references. Create it with `/siteasy setup`.
 - `DESIGN.md`, your colors, typography and components. Generate it with `/siteasy document`.
+
+</details>
 
 ---
 
@@ -250,11 +275,14 @@ A stack-aware design-system generator also lives under `tools/design-system/`, c
 
 ---
 
-## Requirements
+<details>
+<summary><b>Requirements</b></summary>
 
 - **Node.js**, for `/inspect preview`, `/inspect detect` and the validator (`tests/validate.js`).
 - **Playwright**, installed on first `/inspect preview` run.
 - **Python 3**, for the design-system generator (`/siteasy setup`) and the Python tests.
+
+</details>
 
 ---
 
@@ -269,4 +297,12 @@ A stack-aware design-system generator also lives under `tools/design-system/`, c
 node tests/validate.js   # run before opening a PR
 ```
 
+---
+
+<div align="center">
+
+Built by [Marius Yvard](https://lecvdemarius.netlify.app/) · [Releases](https://github.com/MariusYvard/NullToHero/releases) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+
 License: Apache 2.0. See [LICENSE](LICENSE).
+
+</div>

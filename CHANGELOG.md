@@ -11,6 +11,21 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.20.2] — 2026-06-27
+
+README aesthetics. A centered header with a badge row, an animated demo of an audit, a navigation bar, collapsible secondary sections, color-coded skill badges and a footer.
+
+### Added
+
+- `docs/demo.gif`: an animated audit (the question, then the score, group sub-scores and findings building in).
+
+### Changed
+
+- README header centered with version, license, CI and plugin badges; the four skills carry color-coded badges.
+- Manual install, "Set up your project" and "Requirements" are collapsible; a nav bar links the main sections; a footer added.
+
+---
+
 ## [1.20.1] — 2026-06-27
 
 The README comparison is now a capability table across NullToHero, design-intelligence skills, design-methodology skills and in-browser UI generators.
