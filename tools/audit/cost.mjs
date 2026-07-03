@@ -4,27 +4,35 @@
  *
  * Estimates agents launched, approximate tokens and elapsed time for a run so
  * cost is recorded empirically rather than guessed. The token figures are a
- * transparent HEURISTIC (chars/4 for the shared HTML, fixed prompt and output
- * budgets per agent), not a billing meter. The agent COUNT and the elapsed time
- * are exact when the orchestrator passes them in.
+ * transparent HEURISTIC, calibrated to an observed full run (~1M tokens): the
+ * dominant term is a per-agent HARNESS overhead (the sub-agent system prompt,
+ * tool schemas, the several Read round-trips over the shared files, and the
+ * agent's own reasoning), not the shared HTML. A naive prompt+HTML+output model
+ * undercounts this by roughly 6x, which is why an earlier estimate reported ~156k
+ * for a run that actually cost ~1M. The agent COUNT and the elapsed time are exact
+ * when the orchestrator passes them in.
  *
  * Usage:
  *   node tools/audit/cost.mjs --mode full --html-bytes 120000 [--k 3] [--elapsed-ms 45000] [--md]
- *   node tools/audit/cost.mjs --agents 13 --html-bytes 90000 --md
+ *   node tools/audit/cost.mjs --agents 14 --html-bytes 90000 --md
  */
 
 // Per-mode agent counts (single target). compare doubles full; verify re-runs
 // the 3 gating agents K times.
-export const AGENTS_PER_MODE = { full: 13, seo: 5, defects: 4, design: 4, quick: 3, checks: 0, verify: 3 };
+export const AGENTS_PER_MODE = { full: 14, seo: 5, defects: 4, design: 5, quick: 3, checks: 0, verify: 3 };
 
-// Heuristic token budgets. Documented constants, deliberately conservative.
+// Heuristic token budgets. Documented constants, calibrated to a real run.
 const TOK = {
   charsPerToken: 4,
-  htmlCapTokens: 30000,   // an agent receives at most this much shared page text
-  agentPromptTokens: 1500, // a sub-agent's own instruction/checklist overhead
-  agentOutputTokens: 700,  // a sub-agent's returned section
-  supervisorPromptTokens: 2000,
-  supervisorOutputTokens: 1500, // consolidation, action plan, report scaffolding
+  sharedFilesCapTokens: 40000,   // raw + rendered + CSS + JS an agent may read, capped
+  agentHarnessTokens: 42000,     // per-agent fixed overhead, amortized: the sub-agent
+                                 // system prompt, tool schemas, several Read
+                                 // round-trips over the shared files, and reasoning.
+                                 // This term DOMINATES the cost of a run.
+  agentPromptTokens: 2000,       // the agent's own instruction / checklist
+  agentOutputTokens: 1500,       // the returned section
+  supervisorPromptTokens: 3000,
+  supervisorOutputTokens: 4000,  // consolidation, action plan, report scaffolding
 };
 
 export function estimateCost({ mode = "full", htmlBytes = 0, k = 3, elapsedMs = null, agentsLaunched = null } = {}) {
@@ -33,8 +41,8 @@ export function estimateCost({ mode = "full", htmlBytes = 0, k = 3, elapsedMs = 
   else if (mode === "verify") runs = AGENTS_PER_MODE.verify * k;
   else runs = AGENTS_PER_MODE[mode] ?? 0;
 
-  const htmlTokens = Math.min(Math.ceil(htmlBytes / TOK.charsPerToken), TOK.htmlCapTokens);
-  const perAgentInput = htmlTokens + TOK.agentPromptTokens;
+  const sharedTokens = Math.min(Math.ceil(htmlBytes / TOK.charsPerToken), TOK.sharedFilesCapTokens);
+  const perAgentInput = sharedTokens + TOK.agentHarnessTokens + TOK.agentPromptTokens;
   const inputTokens = TOK.supervisorPromptTokens + runs * perAgentInput;
   const outputTokens = TOK.supervisorOutputTokens + runs * TOK.agentOutputTokens;
   const total = inputTokens + outputTokens;
@@ -42,12 +50,12 @@ export function estimateCost({ mode = "full", htmlBytes = 0, k = 3, elapsedMs = 
   return {
     mode,
     agentsLaunched: runs,
-    sharedHtmlTokens: htmlTokens,
+    sharedHtmlTokens: sharedTokens,
     approxInputTokens: inputTokens,
     approxOutputTokens: outputTokens,
     approxTotalTokens: total,
     elapsedMs: elapsedMs == null ? null : Number(elapsedMs),
-    notes: `Heuristic: shared HTML ~${htmlTokens} tok (chars/4, capped ${TOK.htmlCapTokens}); ${runs} agent run(s) at ~${perAgentInput} in / ${TOK.agentOutputTokens} out each, plus supervisor. Token figures are an estimate; agent count and elapsed time are exact when supplied.`,
+    notes: `Heuristic calibrated to an observed full run (~1M tokens): shared files ~${sharedTokens} tok (chars/4, capped ${TOK.sharedFilesCapTokens}) plus a per-agent harness overhead of ~${TOK.agentHarnessTokens} tok (sub-agent system prompt, tool schemas, Read round-trips, reasoning) that dominates; ${runs} agent run(s), plus supervisor. Agent count and elapsed time are exact when supplied; token figures are an estimate.`,
   };
 }
 

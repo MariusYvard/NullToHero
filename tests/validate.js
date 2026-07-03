@@ -1101,7 +1101,8 @@ section("30. Deterministic audit tooling present");
     "tools/audit/fetch.mjs", "tools/audit/analyze.mjs", "tools/audit/gate.mjs",
     "tools/audit/compare.mjs", "tools/audit/cost.mjs", "tools/audit/eval.mjs",
     "tools/audit/lib/html.mjs", "tools/audit/lib/contrast.mjs", "tools/audit/lib/checks.mjs",
-    "tools/audit/lib/site-audit.mjs", "tools/audit/schema/site-audit.schema.json",
+    "tools/audit/lib/css.mjs", "tools/audit/lib/site-audit.mjs", "tools/audit/reaudit.mjs",
+    "tools/audit/schema/site-audit.schema.json",
     "tools/audit/README.md",
   ];
   let miss = 0;
@@ -1168,6 +1169,21 @@ section("33. Audit-gate GitHub Action and self-test workflow present");
   if (wf === null) fail(".github/workflows/audit-selftest.yml not found");
   else if (wf.includes("eval.mjs") && wf.includes("gate.mjs")) pass("audit-selftest workflow runs eval and gate");
   else fail("audit-selftest workflow missing eval/gate steps");
+}
+
+// --- Check 34: agents wire to shared inputs and constrain their output -------
+
+section("34. Agents read shared audit-assets inputs and return only their section");
+{
+  const agentFiles = fs.existsSync(SEO_AGENTS)
+    ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")) : [];
+  let bad = 0;
+  agentFiles.forEach(file => {
+    const c = readFile(path.join(SEO_AGENTS, file)) || "";
+    if (!/audit-assets\//.test(c)) { fail(`agents/${file}: Inputs do not reference the shared audit-assets files (agents must Read, not WebFetch)`); bad++; }
+    if (!/Return ONLY this section\./.test(c)) { fail(`agents/${file}: missing the strict output contract ('Return ONLY this section.')`); bad++; }
+  });
+  if (agentFiles.length && bad === 0) pass(`all ${agentFiles.length} agents read shared inputs and constrain output to the scored section`);
 }
 
 // --- Summary --------------------------------------------------------------------

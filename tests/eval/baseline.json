@@ -1,5 +1,5 @@
 {
-  "clean-pass.html": {
+  "clean-pass": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -8,9 +8,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "clean-blog.html": {
+  "clean-blog": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -19,9 +21,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "img-all-dims.html": {
+  "img-all-dims": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -30,9 +34,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "contrast-pass-teal.html": {
+  "contrast-pass-teal": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -41,9 +47,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "heading-good-deep.html": {
+  "heading-good-deep": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -52,9 +60,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "viewport-missing.html": {
+  "viewport-missing": {
     "viewport-meta": "FAIL",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -63,9 +73,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "viewport-no-zoom.html": {
+  "viewport-no-zoom": {
     "viewport-meta": "WARN",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -74,9 +86,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "viewport-no-device-width.html": {
+  "viewport-no-device-width": {
     "viewport-meta": "WARN",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -85,9 +99,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "img-missing-some.html": {
+  "img-missing-some": {
     "viewport-meta": "PASS",
     "img-dimensions": "WARN",
     "horizontal-overflow-375": "PASS",
@@ -96,9 +112,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "img-missing-many.html": {
+  "img-missing-many": {
     "viewport-meta": "PASS",
     "img-dimensions": "FAIL",
     "horizontal-overflow-375": "PASS",
@@ -107,9 +125,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "overflow-vw.html": {
+  "overflow-vw": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "WARN",
@@ -118,9 +138,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "contrast-fail-grey.html": {
+  "contrast-fail-grey": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -129,9 +151,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "contrast-large-ok.html": {
+  "contrast-large-ok": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -140,9 +164,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "html-lang-missing.html": {
+  "html-lang-missing": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -151,9 +177,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "title-missing.html": {
+  "title-missing": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -162,9 +190,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "FAIL",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "title-too-long.html": {
+  "title-too-long": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -173,9 +203,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "WARN",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "title-too-short.html": {
+  "title-too-short": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -184,9 +216,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "WARN",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "meta-desc-missing.html": {
+  "meta-desc-missing": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -195,9 +229,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "WARN",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "meta-desc-too-long.html": {
+  "meta-desc-too-long": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -206,9 +242,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "WARN",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "heading-skip.html": {
+  "heading-skip": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -217,9 +255,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "FAIL"
+    "heading-order": "FAIL",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "heading-multi-h1.html": {
+  "heading-multi-h1": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -228,9 +268,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "WARN"
+    "heading-order": "WARN",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "heading-none.html": {
+  "heading-none": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -239,9 +281,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "WARN"
+    "heading-order": "WARN",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "overflow-fixed-width.html": {
+  "overflow-fixed-width": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "WARN",
@@ -250,9 +294,11 @@
     "robots-disallow": "NOT_MEASURED",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
   },
-  "robots-disallow-all.html": {
+  "robots-disallow-all": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -261,9 +307,11 @@
     "robots-disallow": "FAIL",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "WARN"
   },
-  "robots-allowed.html": {
+  "robots-allowed": {
     "viewport-meta": "PASS",
     "img-dimensions": "PASS",
     "horizontal-overflow-375": "PASS",
@@ -272,6 +320,86 @@
     "robots-disallow": "PASS",
     "title-tag": "PASS",
     "meta-description": "PASS",
-    "heading-order": "PASS"
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "WARN"
+  },
+  "token-contrast-fail": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "FAIL",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
+  },
+  "token-contrast-pass": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "PASS",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "NOT_MEASURED"
+  },
+  "security-headers-pass": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "NOT_MEASURED",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "PASS",
+    "canonical-url": "WARN"
+  },
+  "security-headers-fail": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "NOT_MEASURED",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "FAIL",
+    "canonical-url": "WARN"
+  },
+  "preview-canonical": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "NOT_MEASURED",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "PASS"
+  },
+  "canonical-cross-domain": {
+    "viewport-meta": "PASS",
+    "img-dimensions": "PASS",
+    "horizontal-overflow-375": "PASS",
+    "contrast-ratio": "NOT_MEASURED",
+    "html-lang": "PASS",
+    "robots-disallow": "NOT_MEASURED",
+    "title-tag": "PASS",
+    "meta-description": "PASS",
+    "heading-order": "PASS",
+    "security-headers": "NOT_MEASURED",
+    "canonical-url": "WARN"
   }
 }

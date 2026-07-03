@@ -20,7 +20,8 @@
         "file": { "type": ["string", "null"] },
         "pagesFetched": { "type": "integer", "minimum": 0 },
         "render": { "type": "string", "enum": ["playwright", "none"] },
-        "clientRendered": { "enum": [true, false, "unknown"] }
+        "clientRendered": { "enum": [true, false, "unknown"] },
+        "previewHost": { "type": "boolean", "description": "True when the fetched host is a known preview host (netlify.app, vercel.app, pages.dev, ...)." }
       }
     },
     "scores": {
@@ -49,6 +50,14 @@
         "warns": { "type": "integer" },
         "notMeasured": { "type": "integer" },
         "criticalFails": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Short content hashes of each fetched artifact and which artifacts feed each dimension, so a later run can re-audit only the dimensions whose inputs changed (see reaudit.mjs).",
+      "properties": {
+        "hashes": { "type": "object", "additionalProperties": { "type": ["string", "null"] } },
+        "dimensions": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
       }
     },
     "checks": {

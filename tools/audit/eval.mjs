@@ -37,10 +37,10 @@ const freshBaseline = {};
 
 for (const lab of labels) {
   const html = readFileSync(join(EVAL, "fixtures", lab.file), "utf8");
-  const checks = runChecks({ rawHtml: html, robotsTxt: lab.robots || null, url: lab.url || null });
+  const checks = runChecks({ rawHtml: html, robotsTxt: lab.robots || null, url: lab.url || null, headers: lab.headers || null, css: lab.css || "" });
   const actual = {};
   for (const c of checks) actual[c.id] = c.verdict;
-  freshBaseline[lab.file] = actual;
+  freshBaseline[lab.name] = actual;
 
   for (const [id, want] of Object.entries(lab.expect)) {
     asserted++;
@@ -49,7 +49,7 @@ for (const lab of labels) {
     if (actual[id] === want) { correct++; pc.correct++; }
     else misses.push(`${lab.file}: ${id} expected ${want}, got ${actual[id]}`);
   }
-  const base = baseline[lab.file];
+  const base = baseline[lab.name];
   if (base) for (const id of Object.keys(actual)) {
     if (base[id] !== undefined && base[id] !== actual[id]) drifts.push(`${lab.file}: ${id} ${base[id]} -> ${actual[id]}`);
   }

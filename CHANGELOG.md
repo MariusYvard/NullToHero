@@ -11,6 +11,26 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.21.0] — 2026-07-03
+
+Audit reliability. The deterministic pre-pass now writes the raw and rendered HTML, the linked CSS and JS, the response headers and robots.txt to a known assets directory that every sub-agent reads with the Read tool, so agents no longer depend on a WebFetch that may be unavailable. Contrast is computed statically from design tokens and linked CSS without a headless browser, security headers and canonical or preview state are parsed deterministically, and a preview host with a production canonical is no longer a false failure.
+
+### Added
+
+- `tools/audit/lib/css.mjs`: a bounded CSS model (custom properties, rules, `var()` resolution) so the static contrast check resolves token colours over a known background without Playwright.
+- Deterministic `security-headers` check (HSTS, CSP or X-Frame-Options, X-Content-Type-Options, Referrer-Policy) and `canonical-url` check (preview-host detection; a cross-domain canonical on a preview host recommends noindex instead of failing).
+- `tools/audit/reaudit.mjs`: an incremental re-audit planner that hashes the current inputs against the previous `SITE-AUDIT.json` and re-dispatches only the dimensions whose inputs changed.
+- Eval fixtures for token contrast, security headers and preview canonical (31 fixtures).
+
+### Changed
+
+- `fetch.mjs` captures response headers and fetches same-origin linked CSS and JS (capped), and writes `raw.html`, `rendered.html`, `styles.css`, `scripts.js`, `headers.json` and `robots.txt` to `--assets-dir`.
+- Static contrast is advisory (non-critical): only the Playwright-computed contrast caps the score, so a render-free estimate never forces the Critical band.
+- Every sub-agent points its Inputs at the written files, carries a strict output contract, and a severity clarifier (Critical means blocks indexing, rendering or access).
+- `cost.mjs` recalibrated to model the per-agent harness overhead that dominates a run (a full audit is about 1M tokens, not 156k); `SITE-AUDIT.json` records per-artifact input hashes.
+
+---
+
 ## [1.20.6] — 2026-06-27
 
 README consistency. Every skill block now carries a "Common runs" line; the inspect example block is removed in favor of one.

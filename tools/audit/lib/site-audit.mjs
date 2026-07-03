@@ -1,13 +1,38 @@
 // Shared helpers that assemble a SITE-AUDIT.json object from analyzer output.
 // Pure Node standard library. Used by analyze.mjs (deterministic pre-pass) and
-// reused by gate.mjs / eval.mjs so the JSON shape lives in exactly one place.
+// reused by gate.mjs / eval.mjs / reaudit.mjs so the JSON shape lives in exactly
+// one place.
 
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 import { scoreFromChecks } from "./checks.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+const sha = (s) => (s == null ? null : createHash("sha256").update(typeof s === "string" ? s : JSON.stringify(s)).digest("hex").slice(0, 16));
+
+// Which fetched artifacts feed each dimension. reaudit.mjs uses this to re-run
+// only the dimensions whose inputs changed since the last SITE-AUDIT.json.
+export const DIMENSION_INPUTS = {
+  searchVisibility: ["rawHtml", "headers", "robots"],
+  frontEndDefects: ["rawHtml", "renderedHtml", "styles", "scripts"],
+  designQuality: ["rawHtml", "renderedHtml", "styles", "scripts"],
+};
+
+// Short content hashes of every input artifact, so a later run can tell which
+// dimensions need re-auditing and which can reuse their prior agent sections.
+export function inputHashes(fetchResult) {
+  return {
+    rawHtml: sha(fetchResult.rawHtml || ""),
+    renderedHtml: sha(fetchResult.renderedHtml || null),
+    styles: sha(fetchResult.linkedCss || ""),
+    scripts: sha(fetchResult.linkedJs || ""),
+    headers: sha(fetchResult.headers || null),
+    robots: sha(fetchResult.robotsTxt || null),
+  };
+}
 
 export function pluginVersion() {
   try {
@@ -50,6 +75,8 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
   const groups = groupFloors(checks);
   const agents = {};
   for (const [a, v] of Object.entries(det.byAgent)) agents[a] = v.score;
+  const canon = checks.find(c => c.id === "canonical-url");
+  const previewHost = !!(canon && canon.value && canon.value.preview);
 
   return {
     schemaVersion: "1.0",
@@ -63,18 +90,20 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       pagesFetched: 1,
       render: fetchResult.render || "none",
       clientRendered: fetchResult.clientRendered === undefined ? "unknown" : fetchResult.clientRendered,
+      previewHost,
     },
     scores: {
       overall: det.score,
       groups,
       agents,
       band: band(det.score),
-      note: "Scores are the deterministic floor from objective checks only (mode=checks). A full /audit blends all 13 agent scores; see SITE-AUDIT-REPORT.md.",
+      note: "Scores are the deterministic floor from objective checks only (mode=checks). A full /audit blends all 14 agent scores; see SITE-AUDIT-REPORT.md.",
     },
     deterministic: {
       score: det.score, fails: det.fails, warns: det.warns,
       notMeasured: det.notMeasured, criticalFails: det.criticalFails,
     },
+    inputs: { hashes: inputHashes(fetchResult), dimensions: DIMENSION_INPUTS },
     checks: checks.map(c => ({ ...c, source: "analyzer" })),
     cost: null,
     partialCoverage: fetchResult.clientRendered === true && !fetchResult.renderAvailable

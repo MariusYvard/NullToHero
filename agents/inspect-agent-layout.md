@@ -27,8 +27,20 @@ eye. You still own every check the pre-pass leaves unmeasured and every subjecti
 call. A computed FAIL on a critical check still triggers the severity cap.
 
 ## Inputs
-- `url` or `path` (page, site, or file to audit)
-- (Optional) page HTML or source already in context
+
+The shared fetch phase already retrieved the target and wrote these files to the
+audit assets directory. Read them with the Read tool. Do NOT WebFetch the URL: it
+may be unavailable in this harness, and re-fetching wastes the shared pass.
+
+- `audit-assets/raw.html` server HTML, no JavaScript run
+- `audit-assets/rendered.html` rendered DOM (only when --render ran)
+- `audit-assets/styles.css` all inline and same-origin linked CSS, concatenated
+- `audit-assets/scripts.js` all inline and same-origin linked JS, concatenated
+- `audit-assets/headers.json` the HTTP response headers
+- `SITE-AUDIT.json` the deterministic pre-pass verdicts for the checks you own
+
+`url` or `path` names the target. If a file is absent, note it once and score from
+what is present; never block on a missing WebFetch.
 
 ## Checklist
 ### Overflow and clipping
@@ -69,7 +81,7 @@ by feel. Two audits with the same verdicts return the same score.
 - Critical override: if any check listed below as critical is FAIL, cap the score at 49.
 - Put the arithmetic on the score line so a reader can recompute it.
 
-Critical checks (a FAIL here forces the Critical band): Horizontal scroll, Overflow / clipping.
+Critical checks (a FAIL here forces the Critical band): Horizontal scroll, Overflow / clipping. Critical means the issue blocks indexing, rendering, or access, not that a detail could be finer. Subjective quality, a single-item BreadcrumbList, cosmetic spacing or a stylistic nitpick is never Critical and never triggers the cap.
 
 | Band | Score | Criteria |
 |------|-------|----------|
@@ -79,6 +91,8 @@ Critical checks (a FAIL here forces the Critical band): Horizontal scroll, Overf
 | Critical | 0-49 | Horizontal scroll or clipped controls break use |
 
 ## Output format
+
+Return ONLY this section. No preamble, no postamble, no file paths, no notes about tool availability or limits, and no reasoning outside the section.
 Return a markdown section exactly as follows (fill in real values):
 ```
 ### Layout - Score: XX/100  (compute: 100 minus 15 per FAIL minus 7 per WARN, floored at 0, then capped at 49 if any critical check is FAIL)

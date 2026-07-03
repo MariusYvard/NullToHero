@@ -45,6 +45,8 @@ const checks = runChecks({
   robotsTxt: fetchResult.robotsTxt || null,
   url: fetchResult.url || null,
   computed: fetchResult.computed || null,
+  headers: fetchResult.headers || null,
+  css: fetchResult.linkedCss || "",
 });
 
 const siteAudit = buildSiteAudit({ fetchResult, checks, mode: "checks" });

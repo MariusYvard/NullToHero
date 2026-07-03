@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token contrast failure fixture</title>
+  <meta name="description" content="A fixture whose body text uses a low-contrast design token so the static contrast pass can resolve it from CSS and fail.">
+  <style>
+    :root { --paper:#ffffff; --ink:#1a1a1a; --muted:#9a9a9a; }
+    body { background: var(--paper); color: var(--ink); }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>Heading in ink</h1>
+  <p class="muted">This muted paragraph uses a design token that fails AA on white.</p>
+  <p>Body copy in ink that passes.</p>
+</body>
+</html>

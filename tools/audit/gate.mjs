@@ -47,7 +47,7 @@ if (reportPath) {
   report = JSON.parse(readFileSync(reportPath, "utf8"));
 } else {
   const fetchResult = await fetchTarget({ target, render: has("--render"), robots: has("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
-  const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null });
+  const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "" });
   report = buildSiteAudit({ fetchResult, checks, mode: "checks" });
 }
 

@@ -5,7 +5,7 @@ description: >
   Deterministic pre-pass for /audit. Fetches the target once (optionally
   rendering JavaScript with Playwright), computes the objectively decidable
   checks (contrast, image dimensions, viewport meta, robots.txt, heading order,
-  html lang, title, meta description, 375px overflow) and writes a machine
+  html lang, title, meta description, 375px overflow, security headers, canonical) and writes a machine
   readable SITE-AUDIT.json plus a short summary. No sub-agents run. Backs the
   /audit checks command and the shared fetch phase of every other run mode.
 ---
@@ -64,17 +64,19 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | Viewport meta | present, `width=device-width`, zoom not blocked | no | inspect-agent-layout |
 | Image width/height | width and height (attribute, inline, or aspect-ratio) | no | inspect-agent-layout |
 | Horizontal scroll at 375px | rendered scrollWidth, or a static fixed-width heuristic | no | inspect-agent-layout |
-| Color contrast (AA) | WCAG ratio from computed styles, or inline color over a resolved background | yes | inspect-agent-a11y |
+| Color contrast (AA) | WCAG ratio from computed styles (critical), or a render-free estimate from token and linked CSS over a known background (advisory, non-critical) | computed only | inspect-agent-a11y |
 | HTML lang | `<html lang>` present and non-empty | no | inspect-agent-a11y |
 | robots.txt crawlability | `Disallow` rules matching the page | yes | seo-agent-technical |
+| Security headers | HSTS, CSP or X-Frame-Options, X-Content-Type-Options, Referrer-Policy parsed from the response | no | seo-agent-technical |
+| Canonical / preview | canonical URL plus preview-host detection (`*.netlify.app` and a cross-domain canonical recommend noindex, not FAIL) | no | seo-agent-technical |
 | Title tag | presence and length | no | seo-agent-content |
 | Meta description | presence and length | no | seo-agent-content |
 | Heading order | one h1, no skipped levels | no | seo-agent-content |
 
 Each result carries a `method`: `computed` (from a render), `static` (parsed from
 HTML and CSS) or `not-measured`. A `not-measured` check never moves a score; it is
-reported as a coverage gap, for example contrast with no render and no inline
-colors, or robots.txt that was not fetched.
+reported as a coverage gap, for example contrast with no render and no resolvable
+text colors, or robots.txt that was not fetched.
 
 ## Rendered fetch and the client-rendered guard
 
@@ -118,6 +120,6 @@ the score band.
 
 | Need | Where |
 |------|-------|
-| Full audit with all 13 sub-agents | /audit full (see [full.md](full.md)) |
+| Full audit with all 14 sub-agents | /audit full (see [full.md](full.md)) |
 | Diff two results | /audit compare (see [compare.md](compare.md)) |
 | Format a result as a report or PDF | /audit report (see [report.md](report.md)) |

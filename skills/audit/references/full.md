@@ -28,7 +28,7 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
    shared helper so the fetch, the client-rendered check and the computed checks
    come from one place:
    ```bash
-   node ${CLAUDE_PLUGIN_ROOT}/tools/audit/fetch.mjs <url> --render --robots --out fetch.json
+   node ${CLAUDE_PLUGIN_ROOT}/tools/audit/fetch.mjs <url> --render --robots --assets-dir ./audit-assets --out fetch.json
    node ${CLAUDE_PLUGIN_ROOT}/tools/audit/analyze.mjs --from fetch.json --out SITE-AUDIT.json
    ```
    Add `--render` when the page may be a client-rendered SPA. Raw HTML is the
@@ -36,10 +36,14 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
    empty shell, and auditing the shell yields false PASS and false FAIL. The helper
    always reports a `clientRendered` verdict; when it is true and `--render` was not
    used (Playwright absent, or a non-URL target), the run is flagged and the
-   shell-derived findings must not be trusted (see [checks.md](checks.md)). Keep the
-   raw (and rendered, when available) HTML in memory and pass it to every dispatched
-   agent so no agent re-fetches. One network pass feeds all 14 agents. The same pass
-   produces the computed ground truth (next section).
+   shell-derived findings must not be trusted (see [checks.md](checks.md)). The fetch
+   helper writes the raw and rendered HTML, the linked CSS and JS, the response
+   headers and robots.txt to `./audit-assets/` as named files (`raw.html`,
+   `rendered.html`, `styles.css`, `scripts.js`, `headers.json`, `robots.txt`) plus
+   `SITE-AUDIT.json`. Every dispatched agent READS these files with the Read tool; no
+   agent issues its own WebFetch. One network pass feeds all 14 agents and each sees
+   the same bytes, which is what makes two runs comparable. The same pass produces
+   the computed ground truth (next section).
 3. **Dispatch the group in parallel.** For the selected mode, launch every agent
    in that group with the Task tool, one `Task` call per agent, all in a single
    message, so they run concurrently. See "Parallel dispatch" below.
@@ -79,9 +83,13 @@ overall blend (see "Consensus verification").
 
 Launch all agents for the selected mode with the Task tool in ONE message, one
 `Task` call per agent, so the harness runs them concurrently rather than one
-after another. Pass each agent the same object: `{ url, fetched HTML for the
-relevant pages, optional file path }`. The fetched HTML comes from the shared
-fetch phase so no agent issues a duplicate request.
+after another. Give each agent the same inputs: the target `url` (or `path`) and
+the `./audit-assets/` files written by the shared fetch phase (`raw.html`,
+`rendered.html`, `styles.css`, `scripts.js`, `headers.json`, `robots.txt`) plus
+`SITE-AUDIT.json`, which it reads with the Read tool. inspect-agent-a11y,
+inspect-agent-interaction and inspect-agent-code read `styles.css` and `scripts.js`
+by default (states, ARIA and token discipline live there, not in the HTML). No
+agent issues a duplicate request.
 Pass each agent only its task and the shared HTML. Do not pass the routing
 decisions, the supervisor's scratch reasoning or another agent's output into an
 agent's context, and embed each returned section verbatim rather than
@@ -217,6 +225,32 @@ agent's section gains a Consensus line (for example "Consensus 3/3" or "Consensu
 2/3, 1 low-consensus check") and any low-consensus checks are collected under
 "Needs human review". `verify` reports the gating group only and does not compute
 an overall Site Health Score.
+
+## Incremental re-audit and auto-compare
+
+When a `SITE-AUDIT.json` from a previous run of the same target is present, do not
+blindly re-run all 14 agents.
+
+**Auto-compare.** After writing the new `SITE-AUDIT.json`, keep the prior one (for
+example as `SITE-AUDIT.prev.json`) and diff them, then fold the delta into the
+executive summary:
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/tools/audit/compare.mjs SITE-AUDIT.prev.json SITE-AUDIT.json --md
+```
+Report each change as a Regression or an Improvement (see [compare.md](compare.md)).
+
+**Incremental re-audit.** Ask the planner which dimensions actually moved. It hashes
+the current inputs (raw HTML, rendered HTML, CSS, JS, headers, robots) and compares
+them to the hashes the previous `SITE-AUDIT.json` recorded under `inputs.hashes`:
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/tools/audit/reaudit.mjs --prev SITE-AUDIT.json --from fetch.json --out reaudit-plan.json
+```
+Re-dispatch only the agents in the plan's `reRunAgents`; reuse the previous agent
+sections verbatim for the dimensions whose inputs are unchanged; recompute the
+blend from the mix of fresh and reused agent scores. When only one group changed
+this is about a third of the agents, and the report must note which dimensions were
+reused rather than re-audited. The deterministic pre-pass always runs fresh; it is
+cheap.
 
 ## Output files
 

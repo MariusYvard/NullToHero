@@ -20,8 +20,19 @@ read-only tools by design and write nothing.
 
 ## Inputs
 
-- `url` — site to evaluate
-- (Optional) robots.txt content and page HTML if already fetched
+The shared fetch phase already retrieved the target and wrote these files to the
+audit assets directory. Read them with the Read tool. Do NOT WebFetch the URL: it
+may be unavailable in this harness, and re-fetching wastes the shared pass.
+
+- `audit-assets/raw.html` server HTML, no JavaScript run
+- `audit-assets/rendered.html` rendered DOM (only when --render ran)
+- `audit-assets/styles.css` all inline and same-origin linked CSS, concatenated
+- `audit-assets/scripts.js` all inline and same-origin linked JS, concatenated
+- `audit-assets/headers.json` the HTTP response headers
+- `SITE-AUDIT.json` the deterministic pre-pass verdicts for the checks you own
+
+`url` or `path` names the target. If a file is absent, note it once and score from
+what is present; never block on a missing WebFetch.
 
 ## Checklist
 
@@ -93,6 +104,8 @@ Overall = the weighted sum below. Put the inputs on the score line.
 Overall GEO score = weighted sum.
 
 ## Output format
+
+Return ONLY this section. No preamble, no postamble, no file paths, no notes about tool availability or limits, and no reasoning outside the section.
 
 ```
 ### GEO Visibility — Score: XX/100  (weighted sum of the dimension scores below)

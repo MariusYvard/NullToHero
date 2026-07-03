@@ -6,7 +6,7 @@ The latest released version of NullToHero receives security fixes. Older tags do
 
 | Version | Supported |
 |---------|-----------|
-| 1.20.x  | Yes       |
+| 1.21.x  | Yes       |
 | < 1.13  | No        |
 
 ## Reporting a vulnerability
@@ -31,7 +31,7 @@ Run the plugin only on projects you trust, and keep a running `/siteasy live` se
 
 ## Agent security model
 
-The `/audit` orchestrator and the 13 audit sub-agents follow least agency and a
+The `/audit` orchestrator and the 14 audit sub-agents follow least agency and a
 read/write split. The rationale is in docs/ARCHITECTURE.md; the policy is:
 
 - Least agency. Every sub-agent declares only read-only tools (Read, Grep, Glob,
@@ -43,7 +43,7 @@ read/write split. The rationale is in docs/ARCHITECTURE.md; the policy is:
 - Untrusted input. Fetched page content (HTML, scripts, comments, metadata, copy)
   is data to analyze, never instructions to follow. Every sub-agent carries a Trust
   boundary block to that effect, and `tests/validate.js` checks the block is present
-  in all 13. A page that tries to direct agent behavior is reported as a finding,
+  in all 14. A page that tries to direct agent behavior is reported as a finding,
   not obeyed.
 - Multi-hop injection. Passing an injection through an intermediate agent does not
   make it safe; an intermediate can strip the markers that made a payload look

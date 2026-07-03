@@ -2,28 +2,37 @@
 /**
  * fetch.mjs — shared fetch phase for /audit.
  *
- * Retrieves a target's HTML once. By default it reads the server response only
- * (raw HTML, no JavaScript). With --render it loads the page in headless
- * Chromium (Playwright) so a client-rendered SPA is audited as a user sees it,
- * not as an empty shell, and collects computed-style facts (contrast samples,
- * 375px horizontal overflow) the static analyzer cannot get from raw HTML.
+ * Retrieves a target's HTML once, plus its linked CSS and JavaScript, its
+ * robots.txt and its HTTP response headers, and writes them to a known assets
+ * directory so every sub-agent reads the SAME files with the Read tool instead
+ * of issuing its own WebFetch (which is not always available in a harness). By
+ * default it reads the server response only (raw HTML, no JavaScript run). With
+ * --render it loads the page in headless Chromium (Playwright) so a
+ * client-rendered SPA is audited as a user sees it, not as an empty shell, and
+ * collects computed-style facts (contrast samples, 375px horizontal overflow)
+ * the static analyzer cannot get from raw HTML.
  *
  * It always reports whether the page looks client-rendered, so a raw-only fetch
  * of a React/Vue SPA is FLAGGED rather than silently audited as a blank page.
  *
  * Usage:
- *   node tools/audit/fetch.mjs <url|file> [--render] [--robots] [--out file.json] [--timeout 15000]
+ *   node tools/audit/fetch.mjs <url|file> [--render] [--robots] [--assets-dir DIR] [--no-assets] [--out file.json] [--timeout 15000]
  *
  * Playwright is an optional peer dependency. Without it, --render degrades to a
  * raw fetch with a clear warning. Exit 0 on fetch, 2 on usage/target error.
  */
 
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
 import { parse, textContent, queryAll } from "./lib/html.mjs";
 import { flatten, contrastRatio } from "./lib/contrast.mjs";
 
+const UA = "NullToHero-audit/1.0 (+https://github.com/MariusYvard/NullToHero)";
 const isUrlStr = (t) => /^https?:\/\//i.test(t);
+
+// Bounded asset collection: enough to give agents the real CSS/JS without
+// downloading an entire third-party bundle graph.
+const ASSET_CAPS = { maxFiles: 30, maxBytesPerFile: 512 * 1024, maxTotalBytes: 3 * 1024 * 1024 };
 
 function visibleText(html) {
   try { return textContent(parse(html)).replace(/\s+/g, " ").trim(); } catch { return ""; }
@@ -54,29 +63,118 @@ function shellSignals(html) {
   return { emptyMount, mountId, scriptCount: scripts.length, moduleBundles };
 }
 
+// Turn a fetch Headers object into a plain, lowercase-keyed object.
+function headersToObject(h) {
+  const out = {};
+  try { for (const [k, v] of h) out[k.toLowerCase()] = v; } catch { /* no headers */ }
+  return out;
+}
+
 async function rawFetch(target, isUrl, timeout) {
   if (isUrl) {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), timeout);
     try {
-      const res = await fetch(target, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": "NullToHero-audit/1.0 (+https://github.com/MariusYvard/NullToHero)" } });
+      const res = await fetch(target, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
       const html = await res.text();
-      return { html, status: res.status, finalUrl: res.url };
+      return { html, status: res.status, finalUrl: res.url, headers: headersToObject(res.headers) };
     } finally { clearTimeout(t); }
   }
   const p = resolve(target);
   if (!existsSync(p)) { console.error(`[fetch] file not found: ${p}`); process.exit(2); }
-  return { html: readFileSync(p, "utf8"), status: 200, finalUrl: null };
+  return { html: readFileSync(p, "utf8"), status: 200, finalUrl: null, headers: null };
 }
 
 async function fetchRobots(baseUrl, isUrl) {
   if (!isUrl) return null;
   try {
     const u = new URL("/robots.txt", baseUrl);
-    const res = await fetch(u, { redirect: "follow" });
+    const res = await fetch(u, { redirect: "follow", headers: { "user-agent": UA } });
     if (!res.ok) return null;
     return await res.text();
   } catch { return null; }
+}
+
+// ── linked CSS / JS collection ────────────────────────────────────────────────
+
+function collectAssetRefs(html) {
+  const root = parse(html);
+  const cssHrefs = [], jsSrcs = [], inlineCss = [], inlineJs = [];
+  for (const l of queryAll(root, "link")) {
+    const rel = (l.attrs.rel || "").toLowerCase().split(/\s+/);
+    if (rel.includes("stylesheet") && l.attrs.href) cssHrefs.push(l.attrs.href);
+  }
+  for (const s of queryAll(root, "style")) { const t = textContent(s); if (t.trim()) inlineCss.push(t); }
+  for (const s of queryAll(root, "script")) {
+    const ty = (s.attrs.type || "").toLowerCase();
+    if (s.attrs.src) { if (!/json/.test(ty)) jsSrcs.push(s.attrs.src); }
+    else { const t = textContent(s); if (t.trim() && (ty === "" || ty === "text/javascript" || ty === "module" || ty === "application/javascript")) inlineJs.push(t); }
+  }
+  return { cssHrefs, jsSrcs, inlineCss, inlineJs };
+}
+
+async function fetchOne(u, timeout) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
+    return { ok: true, text: await res.text() };
+  } catch (e) { return { ok: false, reason: e.name === "AbortError" ? "timeout" : e.message }; }
+  finally { clearTimeout(t); }
+}
+
+// Collect the page's own CSS and JS (inline plus same-origin linked files) into
+// two concatenated blobs. Same-origin only and capped, so a third-party CDN or a
+// giant vendor bundle cannot blow up the fetch. Local-file targets resolve
+// relative hrefs from disk. Returns { css, js, cssFiles, jsFiles, skipped }.
+async function fetchAssets({ html, baseUrl, isUrl, localPath, timeout }) {
+  const { cssHrefs, jsSrcs, inlineCss, inlineJs } = collectAssetRefs(html);
+  const cssParts = inlineCss.map((c, i) => `/* ==== inline <style> #${i + 1} ==== */\n${c}`);
+  const jsParts  = inlineJs.map((c, i) => `// ==== inline <script> #${i + 1} ====\n${c}`);
+  const cssFiles = [], jsFiles = [], skipped = [];
+  let total = 0, count = 0;
+  let baseHost = null; try { baseHost = new URL(baseUrl).host; } catch { /* local */ }
+
+  const take = async (href, kind) => {
+    if (count >= ASSET_CAPS.maxFiles || total >= ASSET_CAPS.maxTotalBytes) { skipped.push({ href, reason: "cap reached" }); return; }
+    let text = null, label = href;
+    if (isUrl) {
+      let abs; try { abs = new URL(href, baseUrl); } catch { skipped.push({ href, reason: "bad url" }); return; }
+      if (baseHost && abs.host !== baseHost) { skipped.push({ href: abs.href, reason: "cross-origin" }); return; }
+      label = abs.href;
+      const r = await fetchOne(abs, timeout);
+      if (!r.ok) { skipped.push({ href: label, reason: r.reason }); return; }
+      text = r.text;
+    } else if (localPath) {
+      if (/^https?:\/\//i.test(href) || href.startsWith("//")) { skipped.push({ href, reason: "remote ref in local file" }); return; }
+      let p; try { p = resolve(dirname(localPath), href.split("?")[0].split("#")[0]); } catch { skipped.push({ href, reason: "bad path" }); return; }
+      if (!existsSync(p)) { skipped.push({ href, reason: "not found" }); return; }
+      try { text = readFileSync(p, "utf8"); label = p; } catch { skipped.push({ href, reason: "read error" }); return; }
+    } else { return; }
+    if (text.length > ASSET_CAPS.maxBytesPerFile) { skipped.push({ href: label, reason: `too large (${text.length} b)` }); return; }
+    total += text.length; count++;
+    if (kind === "css") { cssParts.push(`/* ==== ${label} ==== */\n${text}`); cssFiles.push({ href: label, bytes: text.length }); }
+    else { jsParts.push(`// ==== ${label} ====\n${text}`); jsFiles.push({ href: label, bytes: text.length }); }
+  };
+
+  for (const h of cssHrefs) await take(h, "css");
+  for (const s of jsSrcs) await take(s, "js");
+  return { css: cssParts.join("\n\n"), js: jsParts.join("\n\n"), cssFiles, jsFiles, skipped };
+}
+
+// Write the fetched artifacts to a directory as the files agents read by name.
+export function writeAssets(result, dir) {
+  mkdirSync(dir, { recursive: true });
+  const written = [];
+  const w = (name, content) => { writeFileSync(join(dir, name), content); written.push({ name, bytes: content.length }); };
+  w("raw.html", result.rawHtml || "");
+  if (result.renderedHtml) w("rendered.html", result.renderedHtml);
+  w("styles.css", result.linkedCss || "");
+  w("scripts.js", result.linkedJs || "");
+  w("headers.json", JSON.stringify(result.headers || {}, null, 2));
+  if (result.robotsTxt != null) w("robots.txt", result.robotsTxt);
+  return written;
 }
 
 function ratioFromSample(s) {
@@ -143,14 +241,20 @@ function classifyClientRendered({ rawTextLen, renderedTextLen, shell, renderAvai
   return "unknown";
 }
 
-export async function fetchTarget({ target, render: wantRender = false, robots: wantRobots = false, timeout = 15000 } = {}) {
+export async function fetchTarget({ target, render: wantRender = false, robots: wantRobots = false, timeout = 15000, assets: wantAssets = true, assetsDir = null } = {}) {
   const isUrl = isUrlStr(target);
-  const { html, status, finalUrl } = await rawFetch(target, isUrl, timeout);
+  const { html, status, finalUrl, headers } = await rawFetch(target, isUrl, timeout);
   const baseUrl = finalUrl || (isUrl ? target : null);
   const robotsTxt = wantRobots ? await fetchRobots(baseUrl, isUrl) : null;
 
   const rawTextLen = visibleText(html).length;
   const shell = shellSignals(html);
+
+  let assetInfo = { css: "", js: "", cssFiles: [], jsFiles: [], skipped: [] };
+  if (wantAssets) {
+    try { assetInfo = await fetchAssets({ html, baseUrl, isUrl, localPath: isUrl ? null : resolve(target), timeout }); }
+    catch (e) { console.error(`[fetch] asset collection failed: ${e.message}`); }
+  }
 
   let renderedHtml = null, computed = null, renderAvailable = false;
   if (wantRender) {
@@ -181,8 +285,19 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     renderRequested: wantRender, renderAvailable,
     clientRendered,
     signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell },
+    headers,
     rawHtml: html, renderedHtml, robotsTxt, computed,
+    linkedCss: assetInfo.css, linkedJs: assetInfo.js,
+    assets: { cssFiles: assetInfo.cssFiles, jsFiles: assetInfo.jsFiles, skipped: assetInfo.skipped },
   };
+
+  if (assetsDir) {
+    try {
+      result.assetsWritten = writeAssets(result, assetsDir);
+      result.assetsDir = resolve(assetsDir);
+      console.error(`[fetch] wrote ${result.assetsWritten.length} asset file(s) to ${assetsDir} (${assetInfo.cssFiles.length} css, ${assetInfo.jsFiles.length} js linked; ${assetInfo.skipped.length} skipped)`);
+    } catch (e) { console.error(`[fetch] asset write failed: ${e.message}`); }
+  }
 
   warnClientRendered(result);
   return result;
@@ -205,13 +320,17 @@ import { fileURLToPath } from "node:url";
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);
   if (args.length === 0 || args[0].startsWith("-")) {
-    console.error("Usage: node tools/audit/fetch.mjs <url|file> [--render] [--robots] [--out file.json] [--timeout ms]");
+    console.error("Usage: node tools/audit/fetch.mjs <url|file> [--render] [--robots] [--assets-dir DIR] [--no-assets] [--out file.json] [--timeout ms]");
     process.exit(2);
   }
   const opt = (name) => args.includes(name);
   const val = (name, d) => { const i = args.indexOf(name); return i !== -1 && args[i + 1] ? args[i + 1] : d; };
   const outFile = val("--out", null);
-  const result = await fetchTarget({ target: args[0], render: opt("--render"), robots: opt("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
+  const result = await fetchTarget({
+    target: args[0], render: opt("--render"), robots: opt("--robots"),
+    timeout: parseInt(val("--timeout", "15000"), 10),
+    assets: !opt("--no-assets"), assetsDir: val("--assets-dir", null),
+  });
   const json = JSON.stringify(result, null, 2);
   if (outFile) { writeFileSync(outFile, json); console.error(`[fetch] wrote ${outFile}`); }
   else process.stdout.write(json + "\n");

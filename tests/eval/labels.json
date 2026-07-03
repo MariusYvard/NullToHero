@@ -377,5 +377,63 @@
       "meta-description": "PASS",
       "heading-order": "PASS"
     }
+  },
+  {
+    "name": "token-contrast-fail",
+    "file": "token-contrast-fail.html",
+    "expect": {
+      "contrast-ratio": "FAIL",
+      "html-lang": "PASS"
+    }
+  },
+  {
+    "name": "token-contrast-pass",
+    "file": "token-contrast-pass.html",
+    "expect": {
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS"
+    }
+  },
+  {
+    "name": "security-headers-pass",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "content-security-policy": "default-src 'self'"
+    },
+    "expect": {
+      "security-headers": "PASS"
+    }
+  },
+  {
+    "name": "security-headers-fail",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "x-content-type-options": "nosniff"
+    },
+    "expect": {
+      "security-headers": "FAIL"
+    }
+  },
+  {
+    "name": "preview-canonical",
+    "file": "preview-canonical.html",
+    "url": "https://feature-branch.netlify.app/",
+    "expect": {
+      "canonical-url": "PASS"
+    }
+  },
+  {
+    "name": "canonical-cross-domain",
+    "file": "canonical-cross.html",
+    "url": "https://production-site.example/",
+    "expect": {
+      "canonical-url": "WARN"
+    }
   }
 ]

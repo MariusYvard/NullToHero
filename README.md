@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.20.6-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.21.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.20.6** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.21.0** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
 
 </div>
 
