@@ -32,13 +32,21 @@ jobs:
       - name: Gate passes a clean fixture
         run: node tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 90
 
-      - name: Gate fails a critical-defect fixture
+      - name: Gate fails a defective fixture (below score threshold)
         run: |
-          if node tools/audit/gate.mjs tests/eval/fixtures/contrast-fail-grey.html; then
-            echo "::error::gate should have failed on a critical contrast defect"
+          if node tools/audit/gate.mjs tests/eval/fixtures/contrast-fail-grey.html --min-score 90; then
+            echo "::error::gate should have failed the low-scoring defective fixture"
             exit 1
           fi
-          echo "gate correctly failed the defective fixture"
+          echo "gate correctly failed the defective fixture on the score threshold"
+
+      - name: Gate blocks a critical defect (robots)
+        run: |
+          if node tools/audit/gate.mjs --report tests/eval/fixtures/critical-report.json; then
+            echo "::error::gate should have failed on a critical check FAIL"
+            exit 1
+          fi
+          echo "gate correctly blocked the critical defect"
 
       - name: Gate JSON report round-trips
         run: |

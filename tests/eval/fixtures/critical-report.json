@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "tool": "NullToHero /audit",
+  "mode": "checks",
+  "target": { "url": null, "file": "synthetic-critical", "render": "none", "clientRendered": false },
+  "deterministic": { "score": 49, "fails": 1, "warns": 0, "notMeasured": 0, "criticalFails": ["robots-disallow"] },
+  "checks": [
+    {
+      "id": "robots-disallow",
+      "label": "robots.txt crawlability",
+      "dimension": "Search Visibility",
+      "agent": "seo-agent-technical",
+      "verdict": "FAIL",
+      "critical": true,
+      "method": "static",
+      "value": { "disallows": ["/"] },
+      "detail": "robots.txt has Disallow: / (synthetic fixture that exercises the gate's critical-block path).",
+      "source": "analyzer"
+    }
+  ]
+}
