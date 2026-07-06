@@ -318,51 +318,48 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 
 ## How a project flows
 
-A project moves through six stages, from an empty folder to a hardened launch. Every command is one focused step, so you can follow the whole arc or jump straight to the stage you need. The map reads top to bottom, and each block is a phase.
-
 ```
 /siteasy research       understand the users
 /siteasy ia             validate the structure
+/siteasy journey        map empathy and journeys
 /siteasy setup          define brand, audience, tone
 /siteasy plan           plan UX before coding
 /seo plan               build the SEO strategy in parallel
+/seo cluster            group keywords by intent
      |
 /siteasy build          build the interface
+/siteasy tokens         set up the token system
 /siteasy layout         fix spacing and rhythm
 /siteasy adapt          make it responsive
+/siteasy mobile         tune phone ergonomics
      |
 /siteasy amplify        make it beautiful
+/siteasy simplify       strip to the essence
+/siteasy typeset        refine the typography
 /siteasy animate        add motion
+/siteasy delight        add micro-interactions
+/siteasy clarify        sharpen the copy
      |
-/inspect detect         catch problems
+/inspect detect         catch anti-patterns
 /inspect preview        see it in a real browser
+/siteasy critique       heuristic UX review
 /inspect review         final code-quality gate
+/siteasy polish         last quality pass
      |
 /seo audit              full SEO check
+/seo technical          crawl and render health
 /seo schema             add structured data
+/seo content            E-E-A-T and readability
+/seo images             image SEO
 /seo geo                AI-search visibility
      |
 /siteasy launch         harden for production
+/seo report             client-ready report
+/seo drift              watch for regressions
 ```
-
-You start by discovering and planning. `/siteasy research` maps who the users are and `/siteasy ia` checks that the structure matches how they think. `/siteasy setup` records the brand, audience and tone in PRODUCT.md, `/siteasy plan` sketches the UX before any code, and `/seo plan` builds the search strategy at the same time so ranking is designed in rather than bolted on later.
-
-Next you build. `/siteasy build` produces the interface in real production code, `/siteasy layout` fixes spacing and rhythm against a consistent scale, and `/siteasy adapt` makes it hold together from a 375px phone to a wide desktop.
-
-Then you raise the surface. `/siteasy amplify` sharpens the visual system (type, color, hierarchy) and `/siteasy animate` adds motion that honors a reduced-motion preference.
-
-Inspection is the quality gate. `/inspect detect` runs a deterministic scan for design anti-patterns, `/inspect preview` renders the page in a real Chromium browser so you see it as a visitor does, and `/inspect review` is the last code-quality pass before you ship.
-
-Search optimization runs its own short arc. `/seo audit` scores crawlability, content and technical health, `/seo schema` adds the structured data that earns rich results, and `/seo geo` tunes the page for citation by AI answer engines.
-
-Finally you ship. `/siteasy launch` hardens the build for production and walks the pre-ship checklist.
 
 > [!TIP]
 > In a hurry, `/audit yoursite.com` runs the whole check in a single pass.
-
-### What the audit pass does
-
-`/audit` is the fast path through the quality gate, and it is worth understanding because the other checks build on the same engine. It fetches the target once and writes the raw HTML, the rendered DOM, the linked CSS and JS, the response headers and robots.txt to a shared folder every sub-agent reads. A deterministic pre-pass then computes the checks a machine can decide without judgment (contrast, heading order, HTML nesting validity, security headers, canonical state and more) and records them in `SITE-AUDIT.json`. Those verdicts are the ground truth handed to fourteen read-only sub-agents, which judge only the subjective half (design taste, UX flow, copy, motion), so two runs on the same page return the same score. The output is one report with a score, the failing checks and a prioritized action plan. Run `/audit checks` for the computed pre-pass on its own, for example as a CI gate.
 
 ---
 
