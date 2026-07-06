@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'."
-version: 1.21.0
+version: 1.22.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 allowed-tools:
@@ -56,7 +56,7 @@ Triage findings highest severity first: fix CRITICAL before HIGH, HIGH before ME
 
 ## Detection rules from data
 
-Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (27 rules) — extend coverage without changing code. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
+Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (46 rules) — extend coverage without changing code. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
 
 ## Quick start
 

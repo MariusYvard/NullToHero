@@ -41,6 +41,6 @@ Each color pairing is checked against WCAG; a failing pair is flagged in a CSS c
 ## Files
 
 - `scripts/` — `search.py` (CLI entry), `core.py` (CSV search engine), `design_system.py` (generator). Pure standard library.
-- `data/` — CSV knowledge base: colors (WCAG-checked token sets per product type), typography (font pairings), ui-reasoning (per-product patterns with conditional decision rules), ux-guidelines, styles, products, landing, charts, icons, google-fonts, app-interface, react-performance.
+- `data/` — CSV knowledge base: colors (WCAG-checked token sets per product type), typography (font pairings), ui-reasoning (per-product patterns with conditional decision rules), ux-guidelines, styles, products, landing, charts, icons, google-fonts, app-interface, react-performance, generators (build and remediation tools).
 - `data/stacks/` — one CSV per supported stack.
 - `UI-UX-PRO-MAX-LICENSE-MIT.txt` — upstream MIT license, retained as required.

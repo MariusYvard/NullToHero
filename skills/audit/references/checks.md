@@ -72,6 +72,19 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | Title tag | presence and length | no | seo-agent-content |
 | Meta description | presence and length | no | seo-agent-content |
 | Heading order | one h1, no skipped levels | no | seo-agent-content |
+| HTML nesting validity | invalid parent/child and self-nesting from the parsed DOM | no | inspect-agent-code |
+| ARIA attribute names | aria-* names checked against WAI-ARIA | no | inspect-agent-a11y |
+| Charset declared early | meta charset present within the first 1024 bytes | no | seo-agent-technical |
+| Head metadata | favicon, manifest, theme-color and color-scheme presence | no | seo-agent-technical |
+| Subresource Integrity | cross-origin script and stylesheet carry an integrity hash | no | seo-agent-technical |
+| Open redirect parameters | on-page link routes an off-origin URL through a redirect parameter | no | seo-agent-technical |
+| CORS credentialed wildcard | Access-Control-Allow-Origin star or null combined with credentials | no | seo-agent-technical |
+| Response compression | Content-Encoding gzip, brotli, deflate or zstd | no | seo-agent-performance |
+| Server fingerprint headers | X-Powered-By and version-revealing Server headers | no | seo-agent-technical |
+| Cookie security flags | Set-Cookie sets Secure, HttpOnly and SameSite | no | seo-agent-technical |
+| HTTP to HTTPS redirect | plain HTTP redirects to HTTPS (URL probe) | no | seo-agent-technical |
+| www / non-www canonical host | the alternate host redirects or does not serve (URL probe) | no | seo-agent-technical |
+| security.txt | /.well-known/security.txt published (URL probe) | no | seo-agent-technical |
 
 Each result carries a `method`: `computed` (from a render), `static` (parsed from
 HTML and CSS) or `not-measured`. A `not-measured` check never moves a score; it is

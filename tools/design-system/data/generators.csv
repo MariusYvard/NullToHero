@@ -1,0 +1,89 @@
+name,url,category,cost,notes
+RealFaviconGenerator,https://realfavicongenerator.net/,favicon,free,Generates favicon and app icons for Windows iOS and Android with HTML snippet
+favicon.io,https://favicon.io/,favicon,free,Generates a favicon from text an emoji or an image
+Maskable.app,https://maskable.app/editor/,favicon,free,Editor for maskable PWA icons with safe-zone preview
+Favicomatic,https://favicomatic.com/,favicon,free,Generates favicons in every size and format plus the HTML markup
+Favicon Generator (inbrowser),https://favicon.inbrowser.app/,favicon,free,Client-side generator for SVG maskable and minified favicon assets
+FaviconForge,https://faviconforge.io/,favicon,free,Favicon generator exporting ico and png
+FontIcon,https://gauger.io/fonticon/,favicon,free,Generates favicons and images from Font Awesome glyphs
+Favicon.cc,https://www.favicon.cc/,favicon,free,Pixel editor to draw a favicon in the browser
+FaviFiles,https://favifiles.com/,favicon,free,Generates favicon files in multiple sizes
+Favicon Generator (Dynamic Drive),https://tools.dynamicdrive.com/favicon/,favicon,free,Converts an image into an ico favicon file
+Clippy,https://bennettfeely.com/clippy/,css-generator,free,Visual editor that outputs CSS clip-path shapes
+Fancy Border Radius,https://9elements.github.io/fancy-border-radius/,css-generator,free,Generates eight-value CSS border-radius from draggable handles
+Neumorphism.io,https://neumorphism.io/,css-generator,free,Generates soft-UI CSS box-shadow code
+Glass UI,https://ui.glass/generator/,css-generator,free,Generates glassmorphism CSS with backdrop-filter
+Glassmorphism,https://glassmorphism.com/,css-generator,free,Generates glassmorphic UI CSS snippets
+Calc Generator,https://fpece.com/calc-generator,css-generator,free,Builds CSS calc() expressions
+Scrollbar.app,https://scrollbar.app/,css-generator,free,Editor for custom CSS scrollbars
+CSS Ribbon Generator,https://www.cssportal.com/css-ribbon-generator/,css-generator,free,Generates a pure CSS corner ribbon
+Shadow Palette Generator,https://www.joshwcomeau.com/shadow-palette/,shadow-generator,free,Generates a layered set of realistic CSS box-shadows
+Shadows (brumm),https://shadows.brumm.af/,shadow-generator,free,Generates smooth layered CSS box-shadow code
+CSS Shadow Gradients,https://alvarotrigo.com/shadow-gradients/,shadow-generator,free,Generates CSS gradient shadows
+Mesh Gradient,https://meshgradient.in/,gradient-generator,free,Generates and exports mesh gradient images
+Mesher,https://csshero.org/mesher/,gradient-generator,free,Generates mesh gradients as CSS code
+ColorGradient,https://colorgradient.dev/,gradient-generator,free,Builds simple and complex CSS gradients visually
+CSS Gradient,https://cssgradient.io/,gradient-generator,free,Generates custom CSS gradient backgrounds
+Grabient,https://www.grabient.com/,gradient-generator,free,Selects gradients and copies the CSS
+CSS Gradient Editor,https://www.cssgradienteditor.com/,gradient-generator,free,Editor for CSS gradient backgrounds and patterns
+Hero Patterns,https://heropatterns.com/,pattern-generator,free,Repeatable SVG background patterns with color controls
+Pattern Monster,https://pattern.monster/,pattern-generator,free,Generates repeatable SVG patterns
+Transparent Textures,https://www.transparenttextures.com/,pattern-generator,free,Library of tileable transparent texture backgrounds
+SVG Backgrounds,https://www.svgbackgrounds.com/,pattern-generator,freemium,Configurable SVG backgrounds and patterns with CSS output
+Doodad Pattern Generator,https://doodad.dev/pattern-generator/,pattern-generator,free,Generates seamless royalty-free patterns
+PatternPad,https://patternpad.com/,pattern-generator,free,Generates unique repeatable pattern designs
+fffuel,https://www.fffuel.co/,pattern-generator,free,SVG generators for gradients patterns textures and shapes
+Get Waves,https://getwaves.io/,pattern-generator,free,Generates SVG wave shapes for section dividers
+Blobmaker,https://www.blobmaker.app/,pattern-generator,free,Generates organic SVG blob shapes
+CSS Grid Generator,https://grid.layoutit.com/,layout-generator,free,Builds CSS Grid layouts and exports the code
+Grid Malven,https://grid.malven.co/,layout-generator,free,Reference cheatsheet for CSS grid properties
+Flex Malven,https://flexbox.malven.co/,layout-generator,free,Reference cheatsheet for flexbox properties
+Layoutit Grid,https://www.layoutit.com/grid,layout-generator,free,Interactive CSS Grid layout builder
+Rive,https://rive.app/,animation-generator,freemium,Design and export interactive vector animations
+Jitter,https://jitter.video/,animation-generator,freemium,Creates motion graphics for the web
+Animista,https://animista.net/,animation-generator,free,Generates ready-to-use CSS keyframe animations
+Screely,https://www.screely.com/,mockup,free,Turns a screenshot into a browser-window mockup
+Pika,https://pika.style/,mockup,freemium,Creates browser mockups and marketing images
+Cleanmock,https://cleanmock.com/,mockup,freemium,Places designs into device frames with backgrounds
+Shots,https://shots.so/,mockup,freemium,Places screenshots into device and browser frames
+Shotsnapp,https://shotsnapp.com/,mockup,free,Creates device mockup images for apps and websites
+Screenshot.rocks,https://screenshot.rocks/,mockup,free,Creates browser and mobile mockups from screenshots
+Mockuphone,https://mockuphone.com/,mockup,free,Wraps screenshots in device frames for many platforms
+Device Shots,https://deviceshots.com/,mockup,free,Generates device mockups at high resolution
+Threed.io,https://threed.io/,mockup,freemium,Generates 3D device mockups in the browser
+Squoosh,https://squoosh.app/,image-optimizer,free,Client-side image compression and format conversion
+TinyPNG,https://tinypng.com/,image-optimizer,freemium,Lossy compression for PNG and JPEG
+Optimizilla,https://imagecompressor.com/,image-optimizer,free,JPEG and PNG optimizer with quality control
+Compressor.io,https://compressor.io/,image-optimizer,free,Compresses JPEG PNG GIF and SVG
+Watermarkly Compress,https://watermarkly.com/compress-jpeg/,image-optimizer,free,Client-side JPEG compression without upload
+CompressImage.io,https://compressimage.io/,image-optimizer,free,Compresses images offline and converts to WebP
+iLoveIMG,https://www.iloveimg.com/,image-optimizer,freemium,Web app for resizing compressing and converting images
+EZGif,https://ezgif.com/,image-optimizer,free,GIF editor with image optimization and WebP conversion
+SvgOMG,https://jakearchibald.github.io/svgomg/,svg-optimizer,free,Web UI for SVGO with per-option control and code paste
+Vecta Nano,https://vecta.io/nano,svg-optimizer,freemium,Lossless SVG compression that strips redundant data
+SVGminify,https://www.svgminify.com/,svg-optimizer,free,Removes superfluous data from SVG files
+UXWing SVG Editor,https://uxwing.com/svg-icon-editor/,svg-optimizer,free,Creates and edits SVG online
+whocanuse,https://whocanuse.com/,contrast-checker,free,Shows how a color pair reads under vision impairments
+Colorable,https://colorable.jxnblk.com/,contrast-checker,free,Tests contrast ratio of a foreground and background pair
+Kontrast,https://chrome.google.com/webstore/detail/kontrast-wcag-contrast-ch/haphaaenepedkjngghandlmhfillnhjk,contrast-checker,free,Browser extension that checks WCAG contrast in real time
+InclusiveColors,https://www.inclusivecolors.com/,contrast-checker,free,Builds accessible palettes and checks WCAG and APCA contrast
+A11ygator,https://a11ygator.chialab.io/,a11y-checker,free,Scans a URL against WCAG rules
+UX Check,https://chrome.google.com/webstore/detail/ux-check/giekhiebdpmljgchjojblnekkcgpdobp,a11y-checker,free,Runs a heuristic usability evaluation in the browser
+A Modern CSS Reset,https://piccalil.li/blog/a-modern-css-reset/,css-reset,free,Baseline CSS reset for consistent cross-browser rendering
+Critical Path CSS Generator,https://www.sitelocity.com/critical-path-css-generator,css-reset,free,Extracts above-the-fold critical CSS for a page
+Can I Use,https://caniuse.com/,compat,free,Cross-browser support tables for web platform features
+caniemail,https://www.caniemail.com/,compat,free,Support tables for HTML and CSS across email clients
+ES compat table,https://compat-table.github.io/compat-table/es6/,compat,free,JavaScript version support across runtimes and browsers
+everysize,https://everysize.kibalabs.com/,compat,free,Previews a page across many viewport sizes
+mydevice.io,https://www.mydevice.io/,compat,free,Reports common device resolutions and viewport data
+Lighthouse,https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk,audit-extension,free,Audits performance accessibility and best practices
+VisBug,https://chrome.google.com/webstore/detail/visbug/cdockenadnadldjbbgcallicgledbeoc,audit-extension,free,In-page visual design and inspection toolbar
+Pesticide,https://chrome.google.com/webstore/detail/pesticide-for-chrome-with/neonnmencpneifkhlmhmfhfiklgjmloi,audit-extension,free,Outlines every element to reveal layout boxes
+WhatFont,https://chrome.google.com/webstore/detail/whatfont/jabopobgcpjmedljpbcaablpmlmfcogm,audit-extension,free,Identifies fonts used on a web page
+Wappalyzer,https://chrome.google.com/webstore/detail/wappalyzer/gppongmhjkpfnbhagpmjfkannfbllamg,audit-extension,free,Detects the technology stack behind a website
+PerfectPixel,https://chrome.google.com/webstore/detail/perfectpixel-by-welldonec/dkaagdgjmgdmbnecmcefdhjekcoceebi,audit-extension,free,Overlays a design image to compare against the build
+Page Ruler Redux,https://chrome.google.com/webstore/detail/page-ruler-redux/giejhjebcalaheckengmchjekofhhmal,audit-extension,free,Measures element dimensions and positions on a page
+CSSViewer,https://chrome.google.com/webstore/detail/cssviewer/ggfgijbpiheegefliciemofobhmofgce,audit-extension,free,Shows CSS properties of a hovered element
+Stylebot,https://chrome.google.com/webstore/detail/stylebot/oiaejidbmkiecgbjeifoejpgmdaleoha,audit-extension,free,Applies custom CSS to a live page for testing
+Responsive Viewer,https://chrome.google.com/webstore/detail/responsive-viewer/inmopeiepgfljkpkidclfgbgbmfcennb,audit-extension,free,Renders a page across multiple screen sizes at once
+SVG Gobbler,https://github.com/rossmoody/svg-gobbler,audit-extension,free,Finds SVGs on a page to copy download or export

@@ -57,3 +57,40 @@ Standards, tools and data sources
 
 Additional standards, tools and data sources are credited in ATTRIBUTION.md.
 Each remains under its own license.
+
+================================================================================
+Harvested checks, rules and references (1.22.0)
+================================================================================
+
+NullToHero's deterministic checks, inspect rules and references adapt facts and,
+where noted, prose or data from the following, each under its own license.
+
+  React
+  Copyright (c) Meta Platforms, Inc. and affiliates
+  Licensed under the MIT License
+  Source: https://github.com/facebook/react
+
+  HTML5 Boilerplate and server-configs-apache
+  Copyright (c) HTML5 Boilerplate
+  Licensed under the MIT License
+  Source: https://github.com/h5bp/html5-boilerplate
+
+  Front-End-Checklist
+  Copyright (c) David Dias
+  Licensed under the MIT License
+  Source: https://github.com/thedaviddias/Front-End-Checklist
+
+  PayloadsAllTheThings
+  Copyright (c) 2019 Swissky
+  Licensed under the MIT License
+  Source: https://github.com/swisskyrepo/PayloadsAllTheThings
+
+  design-resources-for-developers
+  Copyright (c) 2020 Brad Traversy
+  Licensed under the MIT License
+  Source: https://github.com/bradtraversy/design-resources-for-developers
+
+  The Book of Secret Knowledge
+  Copyright (c) 2017 trimstray
+  Licensed under the MIT License
+  Source: https://github.com/trimstray/the-book-of-secret-knowledge

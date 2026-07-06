@@ -95,6 +95,50 @@ async function fetchRobots(baseUrl, isUrl) {
   } catch { return null; }
 }
 
+// Lightweight passive probes for a live URL: whether plain HTTP redirects to
+// HTTPS, whether the www/non-www alternate host resolves or redirects, and
+// whether a security.txt is published. Read-only GETs that follow redirects; no
+// crafted or attack traffic is ever sent.
+async function probeUrl(u, timeout) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    try { await res.body?.cancel(); } catch { /* ignore */ }
+    return { status: res.status, finalUrl: res.url, ok: res.ok };
+  } catch (e) { return { error: e.name === "AbortError" ? "timeout" : e.message }; }
+  finally { clearTimeout(t); }
+}
+
+async function runProbes(baseUrl, timeout) {
+  const out = { httpsRedirect: { tested: false }, hostCanonical: { tested: false }, securityTxt: { tested: false } };
+  let parsed; try { parsed = new URL(baseUrl); } catch { return out; }
+  const pt = Math.min(timeout, 8000);
+  const primaryHost = parsed.host.toLowerCase();
+  try {
+    const r = await probeUrl("http://" + parsed.host + "/", pt);
+    if (r.error) out.httpsRedirect = { tested: true, reachable: false };
+    else {
+      let https = false; try { https = new URL(r.finalUrl).protocol === "https:"; } catch { /* keep */ }
+      out.httpsRedirect = { tested: true, reachable: true, status: r.status, redirectsToHttps: https, location: r.finalUrl };
+    }
+  } catch { /* keep default */ }
+  try {
+    const altHost = primaryHost.startsWith("www.") ? primaryHost.slice(4) : "www." + primaryHost;
+    const r = await probeUrl(parsed.protocol + "//" + altHost + "/", pt);
+    if (r.error) out.hostCanonical = { tested: true, altHost, altReachable: false };
+    else {
+      let finalHost = null; try { finalHost = new URL(r.finalUrl).host.toLowerCase(); } catch { /* keep */ }
+      out.hostCanonical = { tested: true, altHost, altReachable: !!r.ok, altRedirects: finalHost === primaryHost };
+    }
+  } catch { /* keep default */ }
+  try {
+    const r = await probeUrl(parsed.protocol + "//" + parsed.host + "/.well-known/security.txt", pt);
+    out.securityTxt = { tested: true, found: !r.error && r.status >= 200 && r.status < 300 };
+  } catch { /* keep default */ }
+  return out;
+}
+
 // ── linked CSS / JS collection ────────────────────────────────────────────────
 
 function collectAssetRefs(html) {
@@ -246,6 +290,7 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
   const { html, status, finalUrl, headers } = await rawFetch(target, isUrl, timeout);
   const baseUrl = finalUrl || (isUrl ? target : null);
   const robotsTxt = wantRobots ? await fetchRobots(baseUrl, isUrl) : null;
+  const probes = (wantRobots && isUrl) ? await runProbes(baseUrl, timeout) : null;
 
   const rawTextLen = visibleText(html).length;
   const shell = shellSignals(html);
@@ -285,7 +330,7 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     renderRequested: wantRender, renderAvailable,
     clientRendered,
     signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell },
-    headers,
+    headers, probes,
     rawHtml: html, renderedHtml, robotsTxt, computed,
     linkedCss: assetInfo.css, linkedJs: assetInfo.js,
     assets: { cssFiles: assetInfo.cssFiles, jsFiles: assetInfo.jsFiles, skipped: assetInfo.skipped },

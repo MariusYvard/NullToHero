@@ -15,4 +15,4 @@ The search returns the most relevant reference paths so a skill opens only what 
 
 ## data/
 
-- `inspect-rules.csv` — Do/Don't rules with good and bad code examples (27 rules), consumable by `/inspect` as editable detection rules. Authored for NullToHero; schema and severity model inspired by ui-ux-pro-max-skill (MIT). See ../ATTRIBUTION.md.
+- `inspect-rules.csv` — Do/Don't rules with good and bad code examples (46 rules), consumable by `/inspect` as editable detection rules. Authored for NullToHero; schema and severity model inspired by ui-ux-pro-max-skill (MIT). See ../ATTRIBUTION.md.

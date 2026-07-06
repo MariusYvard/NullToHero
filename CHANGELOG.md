@@ -11,6 +11,25 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.22.0] — 2026-07-06
+
+Harvested checks and references. The deterministic pre-pass gains thirteen checks: HTML nesting validity and ARIA attribute names, early charset and head metadata, subresource integrity, open-redirect parameters, a credentialed CORS wildcard, response compression, server fingerprint headers, cookie security flags, and three passive URL probes (HTTP to HTTPS redirect, www or non-www canonical host, security.txt). The security-headers check now grades HSTS and CSP quality and reports Permissions-Policy and cross-origin isolation. Nine inspect rules cover runtime security, JavaScript resilience and print and scheme robustness, and the rule set gains why and source columns. New references document head metadata, print styles, a testing strategy, privacy and consent, and performance; remediation tool lists and a generators data set back the build path.
+
+### Added
+
+- Deterministic checks in `tools/audit/lib/checks.mjs`: `invalid-dom-nesting`, `invalid-aria-attribute`, `charset-early`, `head-meta`, `subresource-integrity`, `open-redirect-param`, `cors-credentialed-wildcard`, `compression-enabled`, `server-fingerprint`, `session-cookie-flags`, and the probe-backed `https-redirect`, `host-canonicalization` and `security-txt`.
+- `tools/audit/fetch.mjs`: passive URL probes (HTTP to HTTPS redirect, alternate host, security.txt) written into the fetch result and read by the new checks. Nothing crafted or offensive is sent.
+- References `seo/references/head-meta.md`, `seo/references/privacy-consent.md`, `seo/references/performance.md`, `siteasy/references/testing-strategy.md` and `siteasy/references/print-styles.md`.
+- `tools/design-system/data/generators.csv`: 88 build and remediation tools, registered in the design-system search.
+- Nine rules in `tools/data/inspect-rules.csv` plus `why` and `source` columns, and seven eval fixtures (38 total).
+
+### Changed
+
+- `security-headers` now parses HSTS max-age and CSP weaknesses and reports Permissions-Policy and COOP, COEP and CORP as advisory.
+- Remediation tool lists appended to the image-strategy, color-and-contrast, css-architecture, inspect review and performance references.
+
+---
+
 ## [1.21.0] — 2026-07-03
 
 Audit reliability. The deterministic pre-pass now writes the raw and rendered HTML, the linked CSS and JS, the response headers and robots.txt to a known assets directory that every sub-agent reads with the Read tool, so agents no longer depend on a WebFetch that may be unavailable. Contrast is computed statically from design tokens and linked CSS without a headless browser, security headers and canonical or preview state are parsed deterministically, and a preview host with a production canonical is no longer a false failure.

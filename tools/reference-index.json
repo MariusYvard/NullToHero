@@ -191,6 +191,16 @@
   },
   {
     "skill": "seo",
+    "path": "skills/seo/references/head-meta.md",
+    "title": "Head metadata",
+    "keywords": [
+      "head",
+      "meta",
+      "metadata"
+    ]
+  },
+  {
+    "skill": "seo",
     "path": "skills/seo/references/hreflang.md",
     "title": "Hreflang / International SEO",
     "keywords": [
@@ -228,6 +238,14 @@
       "page",
       "single",
       "analysis"
+    ]
+  },
+  {
+    "skill": "seo",
+    "path": "skills/seo/references/performance.md",
+    "title": "Performance",
+    "keywords": [
+      "performance"
     ]
   },
   {
@@ -311,6 +329,15 @@
       "strategic",
       "seo",
       "planning"
+    ]
+  },
+  {
+    "skill": "seo",
+    "path": "skills/seo/references/privacy-consent.md",
+    "title": "Privacy and consent",
+    "keywords": [
+      "privacy",
+      "consent"
     ]
   },
   {
@@ -787,6 +814,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/print-styles.md",
+    "title": "Print styles",
+    "keywords": [
+      "print",
+      "styles"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/product.md",
     "title": "Product register",
     "keywords": [
@@ -853,6 +889,15 @@
     "keywords": [
       "teach",
       "flow"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/testing-strategy.md",
+    "title": "Testing strategy",
+    "keywords": [
+      "testing",
+      "strategy"
     ]
   },
   {

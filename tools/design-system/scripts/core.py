@@ -69,6 +69,11 @@ CSV_CONFIG = {
         "file": "google-fonts.csv",
         "search_cols": ["Family", "Category", "Stroke", "Classifications", "Keywords", "Subsets", "Designers"],
         "output_cols": ["Family", "Category", "Stroke", "Classifications", "Styles", "Variable Axes", "Subsets", "Designers", "Popularity Rank", "Google Fonts URL"]
+    },
+    "generators": {
+        "file": "generators.csv",
+        "search_cols": ["name", "category", "notes"],
+        "output_cols": ["name", "url", "category", "cost", "notes"]
     }
 }
 

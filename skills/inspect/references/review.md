@@ -159,3 +159,14 @@ After the review, offer: "Want me to apply the Tier 1 fixes?"
 ## Code robustness (beyond interface)
 
 Interface review stops at how the page looks and behaves. Before shipping, also review what the emitted code does under stress: secrets in client code, render-blocking resources, unhandled fetch failures, and missing empty or error states. Run that pass from [code-quality.md](code-quality.md). A page can pass every visual check and still leak a key or crash on an empty list.
+
+
+## External tools
+
+- **Lighthouse** (audits performance accessibility and best practices). https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk
+- **VisBug** (in-page visual design and inspection toolbar). https://chrome.google.com/webstore/detail/visbug/cdockenadnadldjbbgcallicgledbeoc
+- **Pesticide** (outlines every element to reveal layout boxes). https://chrome.google.com/webstore/detail/pesticide-for-chrome-with/neonnmencpneifkhlmhmfhfiklgjmloi
+- **WhatFont** (identifies fonts used on a page). https://chrome.google.com/webstore/detail/whatfont/jabopobgcpjmedljpbcaablpmlmfcogm
+- **Wappalyzer** (detects the technology stack behind a site). https://chrome.google.com/webstore/detail/wappalyzer/gppongmhjkpfnbhagpmjfkannfbllamg
+- **PerfectPixel** (overlays a design image to compare with the build). https://chrome.google.com/webstore/detail/perfectpixel-by-welldonec/dkaagdgjmgdmbnecmcefdhjekcoceebi
+- **Can I Use** (cross-browser support tables). https://caniuse.com/

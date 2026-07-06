@@ -268,3 +268,15 @@ For every shipped page:
 - Responsive design and breakpoints: [responsive-design.md](responsive-design.md)
 - Accessibility for non-text content: [accessibility-engineering.md](accessibility-engineering.md)
 - SEO image best practices: ../../seo/references/technical.md
+
+
+## External tools
+
+- **Squoosh** (client-side image compression and format conversion). https://squoosh.app/
+- **SvgOMG** (web UI for SVGO with per-option control). https://jakearchibald.github.io/svgomg/
+- **TinyPNG** (lossy compression for PNG and JPEG). https://tinypng.com/
+- **Optimizilla** (JPEG and PNG optimizer with quality control). https://imagecompressor.com/
+- **Vecta Nano** (lossless SVG compression that strips redundant data). https://vecta.io/nano
+- **Watermarkly Compress** (client-side JPEG compression without upload). https://watermarkly.com/compress-jpeg/
+- **CompressImage.io** (offline compression with WebP output). https://compressimage.io/
+- **EZGif** (GIF editing with WebP conversion). https://ezgif.com/

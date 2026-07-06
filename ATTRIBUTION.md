@@ -26,6 +26,17 @@ NullToHero is built on the following open standards, tools and sources of knowle
 - **Common Crawl** — open web crawl data. https://commoncrawl.org/
 - **Moz** — domain authority and backlink data. https://moz.com/
 
+## Harvested checks, rules and references
+
+The 1.22.0 release adds deterministic checks, inspect rules and references adapted from these open sources. Specifications and facts (HTML nesting rules, ARIA attribute names, HTTP header semantics) are not copyrightable; where prose or data was adapted it is noted and the license is honored.
+
+- **React** (MIT, Meta Platforms, Inc.). The `invalid-dom-nesting` and `invalid-aria-attribute` checks use React DOM's enumerated WAI-ARIA attribute names and its HTML nesting rules (the WHATWG parsing spec). https://github.com/facebook/react
+- **HTML5 Boilerplate** and its Apache server configs (MIT, HTML5 Boilerplate). The `charset-early`, `head-meta`, `compression-enabled`, `server-fingerprint` and header-quality checks, and the head-meta and print-styles references, adapt its head order, favicon and manifest conventions, print stylesheet and server-header guidance. https://github.com/h5bp/html5-boilerplate
+- **Front-End-Checklist** (MIT, David Dias). The security, robustness, testing, privacy and i18n rules and references adapt its checklist items, rewritten in the house style. https://github.com/thedaviddias/Front-End-Checklist
+- **PayloadsAllTheThings** (MIT, Swissky). The `cors-credentialed-wildcard` and `open-redirect-param` detection heuristics adapt its documented misconfiguration signals; no offensive payloads are included. https://github.com/swisskyrepo/PayloadsAllTheThings
+- **design-resources-for-developers** (MIT, Brad Traversy). The `generators.csv` tool catalogue and the external-tool remediation lists adapt its curated tool names and URLs. https://github.com/bradtraversy/design-resources-for-developers
+- **The Book of Secret Knowledge** (MIT, trimstray). The external validator references cite its curated tool list. https://github.com/trimstray/the-book-of-secret-knowledge
+
 ## License
 
 NullToHero itself is licensed under Apache 2.0 (see [LICENSE](LICENSE)).

@@ -47,6 +47,7 @@ const checks = runChecks({
   computed: fetchResult.computed || null,
   headers: fetchResult.headers || null,
   css: fetchResult.linkedCss || "",
+  probes: fetchResult.probes || null,
 });
 
 const siteAudit = buildSiteAudit({ fetchResult, checks, mode: "checks" });

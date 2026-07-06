@@ -441,3 +441,15 @@ Derive tints, shades, and state colors from one source token instead of hand-pic
 ```
 
 Mix in `oklch` or `srgb` depending on the intent: `oklch` keeps perceived lightness even across hues. Pair with `@property` tokens when the mixed value must animate.
+
+
+## External tools
+
+- **Clippy** (visual editor for CSS clip-path shapes). https://bennettfeely.com/clippy/
+- **Shadow Palette Generator** (layered realistic CSS box-shadows). https://www.joshwcomeau.com/shadow-palette/
+- **CSS Grid Generator** (builds CSS Grid layouts and exports code). https://grid.layoutit.com/
+- **Fancy Border Radius** (eight-value CSS border-radius from handles). https://9elements.github.io/fancy-border-radius/
+- **Get Waves** (SVG wave shapes for section dividers). https://getwaves.io/
+- **A Modern CSS Reset** (baseline reset for cross-browser rendering). https://piccalil.li/blog/a-modern-css-reset/
+- **Critical Path CSS Generator** (extracts above-the-fold critical CSS). https://www.sitelocity.com/critical-path-css-generator
+- **Neumorphism.io** (generates soft-UI CSS box-shadow code). https://neumorphism.io/

@@ -208,3 +208,13 @@ Ready-to-use hreflang annotations for all pages (HTML `<link>` tags or sitemap X
 | Technical audit (canonical conflicts) | `/seo technical` |
 | Content quality for translated pages | `/seo content` |
 | Full site audit | `/seo audit` |
+
+
+## Internationalization readiness
+
+Translation-ready markup prevents a costly retrofit.
+
+- Text expansion. German and Finnish run 30 to 40 percent longer than English, French and Spanish around 20 percent. Size buttons and labels for the longest locale.
+- Pluralization. Do not build plurals by appending an s; use Intl.PluralRules, since languages have up to six plural forms.
+- Number, date and currency. Format with Intl.NumberFormat and Intl.DateTimeFormat rather than hand-rolled strings so separators and symbols match the locale.
+- Localized images. Swap images that carry text or culture-specific meaning per locale, not only the copy around them.

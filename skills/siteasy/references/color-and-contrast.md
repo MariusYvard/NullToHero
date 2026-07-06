@@ -90,3 +90,13 @@ Heavy use of transparency (rgba, hsla) usually means an incomplete palette. Alph
 ---
 
 **Avoid**: Relying on color alone to convey information. Using pure black (#000) for large areas. Skipping color blindness testing (8% of men affected).
+
+
+## External tools
+
+- **whocanuse** (shows how a color pair reads under vision impairments). https://whocanuse.com/
+- **Colorable** (contrast ratio of a foreground and background pair). https://colorable.jxnblk.com/
+- **InclusiveColors** (accessible palette builder with WCAG and APCA checks). https://www.inclusivecolors.com/
+- **Kontrast** (browser extension for real-time WCAG contrast). https://chrome.google.com/webstore/detail/kontrast-wcag-contrast-ch/haphaaenepedkjngghandlmhfillnhjk
+- **A11ygator** (scans a URL against WCAG rules). https://a11ygator.chialab.io/
+- **Huetone** (builds accessible color systems). https://github.com/ardov/huetone

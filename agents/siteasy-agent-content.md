@@ -44,6 +44,7 @@ what is present; never block on a missing WebFetch.
 - [ ] Voice is consistent with the brand across surfaces
 - [ ] Tone shifts appropriately for errors versus success
 - [ ] No mixing of formal and casual registers within a flow
+- [ ] Free of AI-generated tells: SaaS buzzwords (streamline, supercharge, unlock, seamless, elevate), the "Not an X. A Y." cadence and uniform sentence rhythm
 
 ### CTA and labels
 - [ ] CTA wording is specific and action-led (no bare "Submit" or "Click here")

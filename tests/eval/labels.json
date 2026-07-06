@@ -11,7 +11,9 @@
       "robots-disallow": "NOT_MEASURED",
       "title-tag": "PASS",
       "meta-description": "PASS",
-      "heading-order": "PASS"
+      "heading-order": "PASS",
+      "invalid-dom-nesting": "PASS",
+      "invalid-aria-attribute": "PASS"
     }
   },
   {
@@ -406,7 +408,9 @@
       "content-security-policy": "default-src 'self'"
     },
     "expect": {
-      "security-headers": "PASS"
+      "security-headers": "PASS",
+      "cors-credentialed-wildcard": "PASS",
+      "session-cookie-flags": "PASS"
     }
   },
   {
@@ -434,6 +438,66 @@
     "url": "https://production-site.example/",
     "expect": {
       "canonical-url": "WARN"
+    }
+  },
+  {
+    "name": "nesting-invalid",
+    "file": "nesting-invalid.html",
+    "expect": {
+      "invalid-dom-nesting": "FAIL"
+    }
+  },
+  {
+    "name": "aria-invalid",
+    "file": "aria-invalid.html",
+    "expect": {
+      "invalid-aria-attribute": "FAIL"
+    }
+  },
+  {
+    "name": "charset-missing",
+    "file": "charset-missing.html",
+    "expect": {
+      "charset-early": "WARN"
+    }
+  },
+  {
+    "name": "sri-missing",
+    "file": "sri-missing.html",
+    "url": "https://mysite.example/",
+    "expect": {
+      "subresource-integrity": "WARN"
+    }
+  },
+  {
+    "name": "open-redirect",
+    "file": "open-redirect.html",
+    "url": "https://mysite.example/",
+    "expect": {
+      "open-redirect-param": "WARN"
+    }
+  },
+  {
+    "name": "cors-wildcard",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true"
+    },
+    "expect": {
+      "cors-credentialed-wildcard": "FAIL"
+    }
+  },
+  {
+    "name": "cookie-insecure",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "set-cookie": "sid=abc123; Path=/"
+    },
+    "expect": {
+      "session-cookie-flags": "WARN"
     }
   }
 ]

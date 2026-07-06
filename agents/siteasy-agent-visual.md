@@ -41,6 +41,7 @@ what is present; never block on a missing WebFetch.
 - [ ] Line-height and measure (45-75 characters) support reading
 - [ ] Heading-to-body hierarchy is unambiguous
 - [ ] Inter is not used; Geist, Satoshi, or Cabinet Grotesk preferred over system defaults
+- [ ] Type does not lean on the generic AI-default wave (Inter, Roboto, Geist, Space Grotesk, Plus Jakarta Sans) as an unconsidered choice; a brand's own font on its own domain is not a tell
 
 ### Color system
 - [ ] Palette is coherent with a limited set of roles

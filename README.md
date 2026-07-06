@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.21.0** · 4 skills · 59 commands · 95 reference docs · 14 audit sub-agents
+**v1.22.0** · 4 skills · 59 commands · 100 reference docs · 14 audit sub-agents
 
 </div>
 
@@ -362,7 +362,7 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ## What is inside
 
-NullToHero ships **95 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **100 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>

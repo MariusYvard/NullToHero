@@ -6,7 +6,7 @@
 //
 // Pure Node standard library. No network, no execution of page content.
 
-import { parse, queryAll, first, textContent, styleMap, resolveBackgroundStr, ancestors } from "./html.mjs";
+import { parse, queryAll, first, textContent, styleMap, resolveBackgroundStr, ancestors, walk } from "./html.mjs";
 import { ratioOf, aaThreshold, parseColor, luminance } from "./contrast.mjs";
 import { parseStylesheet, computeElementStyle, pageBackground, pickColor } from "./css.mjs";
 
@@ -425,19 +425,22 @@ const PREVIEW_HOSTS = /\.(netlify\.app|vercel\.app|pages\.dev|github\.io|web\.ap
 function hostOf(u) { try { return new URL(u).host.toLowerCase(); } catch { return null; } }
 
 function checkSecurityHeaders(headers, url) {
-  if (!headers || typeof headers !== "object") {
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
     return mk({ id: "security-headers", label: "Security headers", ...TECH, verdict: "NOT_MEASURED",
       method: "not-measured", value: null, detail: "No HTTP response headers available (local file, or headers not captured)." });
   }
-  const h = {}; for (const k of Object.keys(headers)) h[k.toLowerCase()] = headers[k];
+  const h = lowerHeaders(headers);
   let isHttps = false; try { isHttps = new URL(url).protocol === "https:"; } catch { /* unknown */ }
   const csp = h["content-security-policy"] || "";
+  const hstsRaw = h["strict-transport-security"] || "";
   const present = {
-    hsts: !!h["strict-transport-security"],
+    hsts: !!hstsRaw,
     csp: !!csp,
     xFrameOptions: !!h["x-frame-options"],
     xContentTypeOptions: /nosniff/i.test(h["x-content-type-options"] || ""),
     referrerPolicy: !!h["referrer-policy"],
+    permissionsPolicy: !!h["permissions-policy"],
+    crossOriginIsolation: !!(h["cross-origin-opener-policy"] || h["cross-origin-embedder-policy"] || h["cross-origin-resource-policy"]),
   };
   const frameProtected = present.xFrameOptions || /frame-ancestors/i.test(csp);
   const missing = [];
@@ -445,10 +448,30 @@ function checkSecurityHeaders(headers, url) {
   if (!present.xContentTypeOptions) missing.push("X-Content-Type-Options: nosniff");
   if (!frameProtected) missing.push("X-Frame-Options / CSP frame-ancestors");
   if (!present.referrerPolicy) missing.push("Referrer-Policy");
-  const value = { present, missing };
+  // Quality of the headers that ARE present. A weak present header can drop a
+  // fully-present set to WARN; a missing advisory header never does, so a solid
+  // core still passes.
+  const weak = [];
+  if (present.hsts) {
+    const ma = (hstsRaw.match(/max-age\s*=\s*(\d+)/i) || [])[1];
+    if (ma !== undefined && Number(ma) < 15768000) weak.push(`HSTS max-age ${ma}s is under 6 months`);
+  }
+  if (present.csp) {
+    if (/'unsafe-inline'/i.test(csp)) weak.push("CSP allows 'unsafe-inline'");
+    if (/'unsafe-eval'/i.test(csp)) weak.push("CSP allows 'unsafe-eval'");
+  }
+  const advisory = [];
+  if (present.hsts && !/includesubdomains/i.test(hstsRaw)) advisory.push("HSTS includeSubDomains");
+  if (!present.permissionsPolicy) advisory.push("Permissions-Policy");
+  if (!present.crossOriginIsolation) advisory.push("Cross-Origin-*-Policy (COOP/COEP/CORP)");
+  const value = { present, missing, weak, advisory };
   if (missing.length === 0) {
+    if (weak.length) {
+      return mk({ id: "security-headers", label: "Security headers", ...TECH, verdict: "WARN",
+        method: "static", value, detail: `Core headers present but weak: ${weak.join(", ")}.` });
+    }
     return mk({ id: "security-headers", label: "Security headers", ...TECH, verdict: "PASS",
-      method: "static", value, detail: "HSTS, X-Content-Type-Options, frame protection and Referrer-Policy all present." });
+      method: "static", value, detail: `Core hardening headers present.${advisory.length ? " Optional next: " + advisory.join(", ") + "." : ""}` });
   }
   // Hardening signal, not an indexing blocker: never critical.
   const verdict = missing.length >= 3 ? "FAIL" : "WARN";
@@ -496,9 +519,364 @@ function checkCanonicalPreview(doc, url) {
     method: "static", value: { host, canonical }, detail: "Canonical URL present and same-origin." });
 }
 
+// ── DOM correctness, head hygiene and response hardening (harvested checks) ─────
+// Agent bindings for checks that land in the code and performance dimensions.
+const CODE = { agent: "inspect-agent-code",       dimension: "Front-end Defects" };
+const PERF = { agent: "seo-agent-performance",    dimension: "Search Visibility" };
+
+function lowerHeaders(headers) {
+  const h = {};
+  if (headers && typeof headers === "object") for (const k of Object.keys(headers)) h[k.toLowerCase()] = headers[k];
+  return h;
+}
+
+// Valid WAI-ARIA 1.2 state and property names. An aria-* attribute outside this
+// set is a typo or a non-standard name that assistive technology ignores.
+const VALID_ARIA = new Set([
+  "aria-activedescendant","aria-atomic","aria-autocomplete","aria-braillelabel",
+  "aria-brailleroledescription","aria-busy","aria-checked","aria-colcount",
+  "aria-colindex","aria-colindextext","aria-colspan","aria-controls","aria-current",
+  "aria-describedby","aria-description","aria-details","aria-disabled","aria-dropeffect",
+  "aria-errormessage","aria-expanded","aria-flowto","aria-grabbed","aria-haspopup",
+  "aria-hidden","aria-invalid","aria-keyshortcuts","aria-label","aria-labelledby",
+  "aria-level","aria-live","aria-modal","aria-multiline","aria-multiselectable",
+  "aria-orientation","aria-owns","aria-placeholder","aria-posinset","aria-pressed",
+  "aria-readonly","aria-relevant","aria-required","aria-roledescription","aria-rowcount",
+  "aria-rowindex","aria-rowindextext","aria-rowspan","aria-selected","aria-setsize",
+  "aria-sort","aria-valuemax","aria-valuemin","aria-valuenow","aria-valuetext",
+]);
+
+function editDistance(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, (_, i) => { const row = new Array(n + 1).fill(0); row[0] = i; return row; });
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return dp[m][n];
+}
+function suggestAria(name) {
+  let best = null, bestScore = 1e9;
+  for (const v of VALID_ARIA) { const d = editDistance(name, v); if (d < bestScore) { bestScore = d; best = v; } }
+  return bestScore > 0 && bestScore <= 3 ? best : null;
+}
+
+function checkInvalidAria(doc) {
+  const bad = [];
+  walk(doc, (el) => {
+    for (const name of Object.keys(el.attrs || {})) {
+      if (!name.startsWith("aria-") || VALID_ARIA.has(name)) continue;
+      const hint = suggestAria(name);
+      bad.push(hint ? `${name} (did you mean ${hint}?)` : name);
+    }
+  });
+  const uniq = [...new Set(bad)];
+  if (uniq.length === 0) {
+    return mk({ id: "invalid-aria-attribute", label: "ARIA attribute names", ...A11Y, verdict: "PASS",
+      method: "static", value: { invalid: 0 }, detail: "All aria-* attributes are valid WAI-ARIA names (or none are used)." });
+  }
+  return mk({ id: "invalid-aria-attribute", label: "ARIA attribute names", ...A11Y, verdict: "FAIL",
+    method: "static", value: { invalid: uniq.length, names: uniq.slice(0, 12) },
+    detail: `${uniq.length} invalid aria-* attribute(s) that assistive tech ignores: ${uniq.slice(0, 6).join(", ")}.` });
+}
+
+// Direct-parent requirements: a child tag is valid only inside these parents.
+const NEST_PARENT = {
+  li: new Set(["ul", "ol", "menu"]),
+  option: new Set(["select", "optgroup", "datalist"]),
+  optgroup: new Set(["select"]),
+  td: new Set(["tr"]), th: new Set(["tr"]),
+  tr: new Set(["thead", "tbody", "tfoot"]),
+  thead: new Set(["table"]), tbody: new Set(["table"]), tfoot: new Set(["table"]),
+  caption: new Set(["table"]), colgroup: new Set(["table"]), col: new Set(["colgroup"]),
+  figcaption: new Set(["figure"]), summary: new Set(["details"]),
+};
+// Block-level tags that must not be a direct child of a paragraph.
+const P_FORBIDS = new Set(["div", "p", "ul", "ol", "dl", "table", "section", "article",
+  "header", "footer", "aside", "nav", "main", "figure", "form", "blockquote", "hr", "pre",
+  "h1", "h2", "h3", "h4", "h5", "h6", "details", "fieldset", "address"]);
+// Tags that may never contain another of the same, anywhere in their subtree.
+const SELF_NEST = new Set(["a", "button", "form", "p"]);
+const NEST_SEVERE = new Set(["tr", "td", "th", "li", "option", "optgroup"]);
+
+function checkInvalidNesting(doc) {
+  const severe = [], minor = [];
+  walk(doc, (el) => {
+    const tag = el.tag;
+    const parent = el.parent && el.parent.type === "element" ? el.parent.tag : null;
+    if (NEST_PARENT[tag] && !(parent && parent.includes("-"))) {
+      if (!parent || !NEST_PARENT[tag].has(parent)) {
+        const msg = parent === "table" && (tag === "tr" || tag === "td" || tag === "th")
+          ? `<${tag}> directly in <table> (needs a <tbody>)`
+          : `<${tag}> not inside <${[...NEST_PARENT[tag]].join("/")}>`;
+        (NEST_SEVERE.has(tag) ? severe : minor).push(msg);
+      }
+    }
+    if (tag === "dt" || tag === "dd") {
+      let hasDl = false;
+      for (const a of ancestors(el)) if (a.tag === "dl") { hasDl = true; break; }
+      if (!hasDl) minor.push(`<${tag}> outside a <dl>`);
+    }
+    if (parent === "p" && P_FORBIDS.has(tag)) minor.push(`<${tag}> inside <p> (auto-closes the paragraph)`);
+    if (SELF_NEST.has(tag)) {
+      for (const a of ancestors(el)) if (a.tag === tag) {
+        ((tag === "a" || tag === "button" || tag === "form") ? severe : minor).push(`<${tag}> nested inside another <${tag}>`);
+        break;
+      }
+    }
+  });
+  const total = severe.length + minor.length;
+  if (total === 0) {
+    return mk({ id: "invalid-dom-nesting", label: "HTML nesting validity", ...CODE, verdict: "PASS",
+      method: "static", value: { violations: 0 }, detail: "No invalid element nesting found." });
+  }
+  const sample = [...severe, ...minor].slice(0, 6);
+  return mk({ id: "invalid-dom-nesting", label: "HTML nesting validity", ...CODE, verdict: severe.length ? "FAIL" : "WARN",
+    method: "static", value: { violations: total, severe: severe.length, sample },
+    detail: `${total} invalid nesting issue(s) that break parsing or semantics: ${sample.join("; ")}.` });
+}
+
+function checkCharsetEarly(rawHtml, headers) {
+  const html = rawHtml || "";
+  const ct = (headers && typeof headers === "object" && !Array.isArray(headers)) ? (lowerHeaders(headers)["content-type"] || "") : "";
+  if (/charset\s*=/i.test(ct)) {
+    return mk({ id: "charset-early", label: "Charset declared early", ...TECH, verdict: "PASS",
+      method: "static", value: { source: "content-type" }, detail: "Charset declared in the Content-Type response header." });
+  }
+  if (!html.trim()) {
+    return mk({ id: "charset-early", label: "Charset declared early", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "No raw HTML to inspect for a charset declaration." });
+  }
+  const m = html.match(/<meta[^>]+charset\s*=\s*["']?[a-z0-9_-]+/i)
+    || html.match(/<meta[^>]+http-equiv\s*=\s*["']?content-type["']?[^>]*charset\s*=/i);
+  if (!m) {
+    return mk({ id: "charset-early", label: "Charset declared early", ...TECH, verdict: "WARN",
+      method: "static", value: null, detail: "No <meta charset>, so the browser has to guess the encoding." });
+  }
+  const bytes = Buffer.byteLength(html.slice(0, m.index || 0), "utf8");
+  if (bytes > 1024) {
+    return mk({ id: "charset-early", label: "Charset declared early", ...TECH, verdict: "WARN",
+      method: "static", value: { byteOffset: bytes }, detail: `<meta charset> appears ${bytes} bytes in; the spec wants it within the first 1024.` });
+  }
+  return mk({ id: "charset-early", label: "Charset declared early", ...TECH, verdict: "PASS",
+    method: "static", value: { byteOffset: bytes }, detail: `Charset declared within the first ${bytes} bytes.` });
+}
+
+function checkHeadMeta(doc) {
+  const links = queryAll(doc, "link"), metas = queryAll(doc, "meta");
+  const relSet = (l) => (l.attrs.rel || "").toLowerCase().split(/\s+/);
+  const metaName = (n) => metas.some(m => (m.attrs.name || "").toLowerCase() === n);
+  const present = {
+    icon: links.some(l => relSet(l).includes("icon")),
+    appleTouchIcon: links.some(l => relSet(l).includes("apple-touch-icon")),
+    manifest: links.some(l => relSet(l).includes("manifest")),
+    themeColor: metaName("theme-color"),
+    colorScheme: metaName("color-scheme"),
+  };
+  const missing = Object.entries(present).filter(([, v]) => !v).map(([k]) => k);
+  if (!present.icon && !present.manifest && !present.themeColor) {
+    return mk({ id: "head-meta", label: "Head metadata", ...TECH, verdict: "WARN",
+      method: "static", value: { present, missing }, detail: "No favicon, web app manifest or theme-color (basic head metadata is absent)." });
+  }
+  if (!present.icon) {
+    return mk({ id: "head-meta", label: "Head metadata", ...TECH, verdict: "WARN",
+      method: "static", value: { present, missing }, detail: "No favicon link (rel=\"icon\")." });
+  }
+  return mk({ id: "head-meta", label: "Head metadata", ...TECH, verdict: "PASS",
+    method: "static", value: { present, missing },
+    detail: missing.length ? `Favicon present; optional extras absent: ${missing.join(", ")}.` : "Favicon, apple-touch-icon, manifest, theme-color and color-scheme all present." });
+}
+
+function isCrossOrigin(href, pageHost) {
+  if (!href) return false;
+  if (href.startsWith("//")) return true;
+  const m = href.match(/^https?:\/\/([^/]+)/i);
+  if (!m) return false;
+  if (!pageHost) return true;
+  return m[1].toLowerCase() !== pageHost;
+}
+function checkSri(doc, url) {
+  let pageHost = null; try { if (url) pageHost = new URL(url).host.toLowerCase(); } catch { /* unknown */ }
+  const offenders = [];
+  for (const s of queryAll(doc, "script"))
+    if (s.attrs.src && isCrossOrigin(s.attrs.src, pageHost) && !s.attrs.integrity) offenders.push(`script ${s.attrs.src.slice(0, 60)}`);
+  for (const l of queryAll(doc, "link")) {
+    const rel = (l.attrs.rel || "").toLowerCase().split(/\s+/);
+    if ((rel.includes("stylesheet") || rel.includes("modulepreload")) && l.attrs.href && isCrossOrigin(l.attrs.href, pageHost) && !l.attrs.integrity)
+      offenders.push(`stylesheet ${l.attrs.href.slice(0, 60)}`);
+  }
+  if (offenders.length === 0) {
+    return mk({ id: "subresource-integrity", label: "Subresource Integrity", ...TECH, verdict: "PASS",
+      method: "static", value: { missing: 0 }, detail: "No cross-origin script or stylesheet lacks an integrity hash." });
+  }
+  return mk({ id: "subresource-integrity", label: "Subresource Integrity", ...TECH, verdict: "WARN",
+    method: "static", value: { missing: offenders.length, sample: offenders.slice(0, 5) },
+    detail: `${offenders.length} cross-origin resource(s) without integrity: ${offenders.slice(0, 3).join(", ")}.` });
+}
+
+const REDIRECT_PARAMS = new Set(["url", "redirect", "redirect_url", "redirect_uri", "redir", "rurl",
+  "next", "dest", "destination", "go", "return", "returnto", "return_to", "return_path", "continue",
+  "checkout_url", "image_url", "view", "target", "link", "out"]);
+function offOrigin(val, pageHost) {
+  if (!val) return false;
+  if (val.startsWith("//")) return true;
+  const m = val.match(/^https?:\/\/([^/]+)/i);
+  if (!m) return false;
+  if (!pageHost) return true;
+  return m[1].toLowerCase() !== pageHost;
+}
+function checkOpenRedirect(doc, url) {
+  let pageHost = null; try { if (url) pageHost = new URL(url).host.toLowerCase(); } catch { /* unknown */ }
+  const hits = [];
+  const scan = (raw) => {
+    if (!raw) return;
+    const qi = raw.indexOf("?");
+    if (qi === -1) return;
+    for (const pair of raw.slice(qi + 1).split("&")) {
+      const eq = pair.indexOf("=");
+      if (eq === -1) continue;
+      let key = pair.slice(0, eq), value = pair.slice(eq + 1);
+      try { key = decodeURIComponent(key); } catch { /* raw */ }
+      try { value = decodeURIComponent(value); } catch { /* raw */ }
+      if (REDIRECT_PARAMS.has(key.toLowerCase()) && offOrigin(value, pageHost)) hits.push(`${key.toLowerCase()}=${value.slice(0, 40)}`);
+    }
+  };
+  for (const a of queryAll(doc, "a")) scan(a.attrs.href);
+  for (const f of queryAll(doc, "form")) scan(f.attrs.action);
+  if (hits.length === 0) {
+    return mk({ id: "open-redirect-param", label: "Open redirect parameters", ...TECH, verdict: "PASS",
+      method: "static", value: { hits: 0 }, detail: "No on-page link passes an off-origin URL through a redirect parameter." });
+  }
+  return mk({ id: "open-redirect-param", label: "Open redirect parameters", ...TECH, verdict: "WARN",
+    method: "static", value: { hits: hits.length, sample: hits.slice(0, 5) },
+    detail: `${hits.length} link(s) route an absolute off-origin URL through a redirect-style parameter (open-redirect smell): ${hits.slice(0, 3).join(", ")}. Advisory; confirm server-side validation.` });
+}
+
+function checkCorsWildcard(headers) {
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
+    return mk({ id: "cors-credentialed-wildcard", label: "CORS credentialed wildcard", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "No response headers available." });
+  }
+  const h = lowerHeaders(headers);
+  const acao = (h["access-control-allow-origin"] || "").trim();
+  const acac = /true/i.test(h["access-control-allow-credentials"] || "");
+  if ((acao === "*" || acao.toLowerCase() === "null") && acac) {
+    return mk({ id: "cors-credentialed-wildcard", label: "CORS credentialed wildcard", ...TECH, verdict: "FAIL",
+      method: "static", value: { acao, credentials: true },
+      detail: `Access-Control-Allow-Origin: ${acao} with Access-Control-Allow-Credentials: true is an insecure, invalid CORS combination.` });
+  }
+  return mk({ id: "cors-credentialed-wildcard", label: "CORS credentialed wildcard", ...TECH, verdict: "PASS",
+    method: "static", value: { acao: acao || null }, detail: acao ? `CORS origin policy present (${acao}) without the credentialed-wildcard flaw.` : "No permissive credentialed CORS wildcard." });
+}
+
+function checkCompression(headers) {
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
+    return mk({ id: "compression-enabled", label: "Response compression", ...PERF, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "No response headers available." });
+  }
+  const enc = (lowerHeaders(headers)["content-encoding"] || "").toLowerCase();
+  if (/\b(gzip|br|deflate|zstd)\b/.test(enc)) {
+    return mk({ id: "compression-enabled", label: "Response compression", ...PERF, verdict: "PASS",
+      method: "static", value: { encoding: enc }, detail: `Response compressed (${enc}).` });
+  }
+  return mk({ id: "compression-enabled", label: "Response compression", ...PERF, verdict: "WARN",
+    method: "static", value: { encoding: enc || null }, detail: "No Content-Encoding, so the response appears served uncompressed (enable gzip or brotli)." });
+}
+
+function checkServerFingerprint(headers) {
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
+    return mk({ id: "server-fingerprint", label: "Server fingerprint headers", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "No response headers available." });
+  }
+  const h = lowerHeaders(headers);
+  const leaks = [];
+  if (h["x-powered-by"]) leaks.push(`X-Powered-By: ${h["x-powered-by"]}`);
+  if (h["x-aspnet-version"]) leaks.push("X-AspNet-Version");
+  if (h["x-aspnetmvc-version"]) leaks.push("X-AspNetMvc-Version");
+  if (leaks.length === 0) {
+    return mk({ id: "server-fingerprint", label: "Server fingerprint headers", ...TECH, verdict: "PASS",
+      method: "static", value: { leaks: [] }, detail: "No version-revealing server headers." });
+  }
+  return mk({ id: "server-fingerprint", label: "Server fingerprint headers", ...TECH, verdict: "WARN",
+    method: "static", value: { leaks }, detail: `Response reveals stack or version details: ${leaks.slice(0, 3).join(", ")}.` });
+}
+
+function checkCookieFlags(headers) {
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
+    return mk({ id: "session-cookie-flags", label: "Cookie security flags", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "No response headers available." });
+  }
+  const sc = lowerHeaders(headers)["set-cookie"];
+  if (sc == null) {
+    return mk({ id: "session-cookie-flags", label: "Cookie security flags", ...TECH, verdict: "PASS",
+      method: "static", value: { cookies: 0 }, detail: "No Set-Cookie on this response." });
+  }
+  const cookies = Array.isArray(sc) ? sc : String(sc).split(/,(?=[^;=]+=)/);
+  const weak = [];
+  for (const c of cookies) {
+    const name = (c.split("=")[0] || "").trim();
+    const flags = c.toLowerCase(), miss = [];
+    if (!/;\s*httponly/.test(flags)) miss.push("HttpOnly");
+    if (!/;\s*secure/.test(flags)) miss.push("Secure");
+    if (!/;\s*samesite/.test(flags)) miss.push("SameSite");
+    if (miss.length) weak.push(`${name} (missing ${miss.join(", ")})`);
+  }
+  if (weak.length === 0) {
+    return mk({ id: "session-cookie-flags", label: "Cookie security flags", ...TECH, verdict: "PASS",
+      method: "static", value: { cookies: cookies.length, weak: 0 }, detail: `All ${cookies.length} cookie(s) set Secure, HttpOnly and SameSite.` });
+  }
+  return mk({ id: "session-cookie-flags", label: "Cookie security flags", ...TECH, verdict: "WARN",
+    method: "static", value: { cookies: cookies.length, weak: weak.slice(0, 5) },
+    detail: `${weak.length} cookie(s) missing a security flag: ${weak.slice(0, 3).join("; ")}.` });
+}
+
+function checkHttpsRedirect(probes) {
+  const p = probes && probes.httpsRedirect;
+  if (!p || !p.tested) {
+    return mk({ id: "https-redirect", label: "HTTP to HTTPS redirect", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "HTTP to HTTPS redirect not probed (URL crawl probes only)." });
+  }
+  if (p.redirectsToHttps) {
+    return mk({ id: "https-redirect", label: "HTTP to HTTPS redirect", ...TECH, verdict: "PASS",
+      method: "probe", value: { status: p.status || null, finalUrl: p.location || null }, detail: "Plain HTTP redirects to HTTPS." });
+  }
+  return mk({ id: "https-redirect", label: "HTTP to HTTPS redirect", ...TECH, verdict: p.reachable ? "FAIL" : "WARN",
+    method: "probe", value: { status: p.status || null },
+    detail: p.reachable ? "Plain HTTP does not redirect to HTTPS (content is reachable without transport security)." : "Could not confirm an HTTP to HTTPS redirect." });
+}
+
+function checkHostCanonical(probes) {
+  const p = probes && probes.hostCanonical;
+  if (!p || !p.tested) {
+    return mk({ id: "host-canonicalization", label: "www / non-www canonical host", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "Host canonicalization not probed." });
+  }
+  if (p.altRedirects || !p.altReachable) {
+    return mk({ id: "host-canonicalization", label: "www / non-www canonical host", ...TECH, verdict: "PASS",
+      method: "probe", value: { altHost: p.altHost, altRedirects: !!p.altRedirects },
+      detail: p.altRedirects ? `The alternate host (${p.altHost}) redirects to the canonical host.` : `The alternate host (${p.altHost}) does not serve the site.` });
+  }
+  return mk({ id: "host-canonicalization", label: "www / non-www canonical host", ...TECH, verdict: "WARN",
+    method: "probe", value: { altHost: p.altHost },
+    detail: `Both the audited host and ${p.altHost} serve the page without a redirect (duplicate-content risk). Pick one and 301 the other.` });
+}
+
+function checkSecurityTxt(probes) {
+  const p = probes && probes.securityTxt;
+  if (!p || !p.tested) {
+    return mk({ id: "security-txt", label: "security.txt", ...TECH, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "/.well-known/security.txt not probed." });
+  }
+  if (p.found) {
+    return mk({ id: "security-txt", label: "security.txt", ...TECH, verdict: "PASS",
+      method: "probe", value: { found: true }, detail: "A security.txt is published (RFC 9116)." });
+  }
+  return mk({ id: "security-txt", label: "security.txt", ...TECH, verdict: "WARN",
+    method: "probe", value: { found: false }, detail: "No /.well-known/security.txt (optional RFC 9116 disclosure contact)." });
+}
+
 // ── engine ────────────────────────────────────────────────────────────────────
 
-export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "" } = {}) {
+export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", probes = null } = {}) {
   const rawDoc = parse(rawHtml || "");
   const activeDoc = renderedHtml ? parse(renderedHtml) : rawDoc;
   // Build a CSS model from inline <style> blocks plus any linked stylesheets so
@@ -517,6 +895,19 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkHeadingOrder(activeDoc),
     checkSecurityHeaders(headers, url),
     checkCanonicalPreview(activeDoc, url),
+    checkInvalidNesting(rawDoc),
+    checkInvalidAria(activeDoc),
+    checkCharsetEarly(rawHtml, headers),
+    checkHeadMeta(activeDoc),
+    checkSri(activeDoc, url),
+    checkOpenRedirect(activeDoc, url),
+    checkCorsWildcard(headers),
+    checkCompression(headers),
+    checkServerFingerprint(headers),
+    checkCookieFlags(headers),
+    checkHttpsRedirect(probes),
+    checkHostCanonical(probes),
+    checkSecurityTxt(probes),
   ];
   return checks;
 }
