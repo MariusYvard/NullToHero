@@ -1,12 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Warning error">
-  <rect width="400" height="300" fill="#f4f6fb"/>
-  <ellipse cx="200" cy="252" rx="112" ry="16" fill="#dfe4ee"/>
-  <!-- warning triangle -->
-  <polygon points="200,72 300,238 100,238" fill="#f0a63c"/>
-  <polygon points="200,100 276,226 124,226" fill="#f6bd68"/>
-  <!-- exclamation -->
-  <rect x="192" y="138" width="16" height="52" rx="8" fill="#7a4a12"/>
-  <circle cx="200" cy="208" r="9" fill="#7a4a12"/>
-  <!-- small crack lines for a broken feel -->
-  <polyline points="150,238 160,224 152,216 164,206" fill="none" stroke="#c98a2c" stroke-width="3" stroke-linecap="round"/>
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Error">
+  <rect width="400" height="300" fill="#F8FAFC"/>
+  <ellipse cx="200" cy="236" rx="92" ry="13" fill="#000000" opacity="0.06"/>
+  <path d="M200 70 L296 232 H104 Z" fill="#FBBF24" stroke="#F59E0B" stroke-width="6" stroke-linejoin="round"/>
+  <rect x="192" y="120" width="16" height="60" rx="8" fill="#7C2D12"/>
+  <circle cx="200" cy="202" r="9" fill="#7C2D12"/>
 </svg>

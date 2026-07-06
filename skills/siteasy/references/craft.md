@@ -115,6 +115,8 @@ Treat the mock as a **north star**, not a screenshot to trace. Do **not** raster
 
 ## Step 4: Asset Extraction (Need-Gated)
 
+Before generating or sourcing anything new, check the bundled library in `assets/` (see [references/assets-library.md](references/assets-library.md)). It ships icons, background patterns, spot illustrations, loaders and page templates that are license-clean and ready to wire in. Use a bundled asset when it fits, tint icons and patterns with `color`, and only fall back to generating or fetching when nothing matches.
+
 If the chosen direction includes image-native visual ingredients that would materially improve the implementation, generate them as separate assets before building.
 
 Good candidates:

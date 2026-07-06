@@ -438,6 +438,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/assets-library.md",
+    "title": "Assets library",
+    "keywords": [
+      "assets",
+      "library"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/audit.md",
     "title": "audit",
     "keywords": [
