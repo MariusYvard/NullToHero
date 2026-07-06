@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Progress 75 percent">
+  <style>
+    .nth-track { stroke: #dbe1ee; }
+    .nth-fill {
+      stroke: #6a5cff; transform: rotate(-90deg); transform-origin: 32px 32px;
+      stroke-dasharray: 176; stroke-dashoffset: 44;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-fill { stroke-dashoffset: 176; animation: nth-fill 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+    }
+    @keyframes nth-fill { to { stroke-dashoffset: 44; } }
+  </style>
+  <circle class="nth-track" cx="32" cy="32" r="28" fill="none" stroke-width="6"/>
+  <circle class="nth-fill" cx="32" cy="32" r="28" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <text x="32" y="37" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#3a3a4a">75%</text>
+</svg>

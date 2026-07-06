@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact us</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <div class="card">
+      <header class="form-head">
+        <h1>Get in touch</h1>
+        <p class="lede">Send us a message and we will reply within two business days.</p>
+      </header>
+
+      <form class="contact-form" action="#" method="post" novalidate>
+        <p class="hint">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
+
+        <div class="field">
+          <label for="name">Full name <span class="req" aria-hidden="true">*</span></label>
+          <input id="name" name="name" type="text" autocomplete="name"
+                 required aria-required="true" aria-describedby="name-error">
+          <p class="error" id="name-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="email">Email address <span class="req" aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" inputmode="email"
+                 autocomplete="email" required aria-required="true"
+                 aria-describedby="email-hint email-error">
+          <p class="field-hint" id="email-hint">We will never share your email.</p>
+          <p class="error" id="email-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone <span class="optional">(optional)</span></label>
+          <input id="phone" name="phone" type="tel" inputmode="tel"
+                 autocomplete="tel" aria-describedby="phone-error">
+          <p class="error" id="phone-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="topic">Topic</label>
+          <select id="topic" name="topic">
+            <option value="general">General enquiry</option>
+            <option value="support">Product support</option>
+            <option value="sales">Sales</option>
+            <option value="billing">Billing</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="message" name="message" rows="5"
+                    required aria-required="true"
+                    aria-describedby="message-hint message-error"></textarea>
+          <p class="field-hint" id="message-hint">Tell us how we can help.</p>
+          <p class="error" id="message-error" role="alert"></p>
+        </div>
+
+        <div class="field field-check">
+          <input id="consent" name="consent" type="checkbox" required aria-required="true">
+          <label for="consent">I agree to be contacted about my enquiry.</label>
+        </div>
+
+        <button class="submit" type="submit">Send message</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

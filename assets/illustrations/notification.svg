@@ -1,0 +1,10 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New notification">
+  <rect width="400" height="300" fill="#FEFCE8"/>
+  <ellipse cx="200" cy="244" rx="90" ry="14" fill="#FEF9C3"/>
+  <path d="M200 70 a58 58 0 0 1 58 58 v34 l18 26 h-152 l18 -26 v-34 a58 58 0 0 1 58 -58 z" fill="#EAB308"/>
+  <path d="M200 70 a58 58 0 0 1 58 58 v34 l18 26 h-76 z" fill="#CA8A04"/>
+  <rect x="192" y="52" width="16" height="20" rx="8" fill="#CA8A04"/>
+  <path d="M180 188 a20 20 0 0 0 40 0 z" fill="#CA8A04"/>
+  <circle cx="256" cy="96" r="22" fill="#EF4444"/>
+  <text x="256" y="104" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3</text>
+</svg>

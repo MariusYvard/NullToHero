@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heartbeat</title>
+<style>
+  :root { --heart: #e5484d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .heart { width: 48px; height: 48px; color: var(--heart); }
+  @media (prefers-reduced-motion: no-preference) {
+    .heart { animation: nth-beat 1.1s ease-in-out infinite; }
+  }
+  @keyframes nth-beat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+  <svg class="heart" viewBox="0 0 32 32" role="img" aria-label="Heartbeat" fill="currentColor">
+    <path d="M16 28 C16 28 3 20 3 11 A6.5 6.5 0 0 1 16 8 A6.5 6.5 0 0 1 29 11 C29 20 16 28 16 28 Z"/>
+  </svg>
+</body>
+</html>

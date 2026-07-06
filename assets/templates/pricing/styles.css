@@ -1,0 +1,178 @@
+/*
+  Pricing section template. MIT licensed.
+  System font stack, CSS custom properties, no external dependencies.
+*/
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --accent: #4f46e5;
+  --accent-ink: #ffffff;
+  --accent-soft: #eef2ff;
+  --radius: 14px;
+  --space: 1rem;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) var(--space);
+}
+
+.pricing-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.pricing-head h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0 auto;
+  max-width: 46ch;
+}
+
+.tiers {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+}
+
+.tier {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tier-featured {
+  border-color: var(--accent);
+  border-width: 2px;
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+.tier-name {
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.price {
+  margin: 0 0 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.amount {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.per {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.tier-note {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+.features {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+  flex: 1;
+}
+
+.features li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.95rem;
+}
+
+.features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  width: 0.65rem;
+  height: 0.35rem;
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+}
+
+.cta {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cta-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.cta-primary:hover { background: #4338ca; }
+
+.cta-quiet {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.cta-quiet:hover { background: #e0e7ff; }
+
+.cta:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}

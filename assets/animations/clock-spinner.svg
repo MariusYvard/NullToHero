@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Loading">
+  <style>
+    .nth-face { stroke: #dbe1ee; }
+    .nth-hand { stroke: #6a5cff; stroke-linecap: round; transform-origin: 24px 24px; }
+    .nth-hour { transform: rotate(0deg); }
+    .nth-min { transform: rotate(90deg); }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-hour { animation: nth-spin 8s steps(12) infinite; }
+      .nth-min { animation: nth-spin 2s steps(12) infinite; }
+    }
+    @keyframes nth-spin { to { transform: rotate(360deg); } }
+  </style>
+  <circle class="nth-face" cx="24" cy="24" r="20" fill="none" stroke-width="3"/>
+  <line class="nth-hand nth-hour" x1="24" y1="24" x2="24" y2="14" stroke-width="3"/>
+  <line class="nth-hand nth-min" x1="24" y1="24" x2="24" y2="9" stroke-width="2.5"/>
+  <circle cx="24" cy="24" r="2" fill="#6a5cff"/>
+</svg>

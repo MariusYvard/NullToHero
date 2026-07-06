@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Loading">
+  <defs>
+    <linearGradient id="nthGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6a5cff"/>
+      <stop offset="100%" stop-color="#6a5cff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .nth-arc { transform-origin: 24px 24px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-arc { animation: nth-spin 1s linear infinite; }
+    }
+    @keyframes nth-spin { to { transform: rotate(360deg); } }
+  </style>
+  <circle cx="24" cy="24" r="19" fill="none" stroke="#dbe1ee" stroke-width="4"/>
+  <circle class="nth-arc" cx="24" cy="24" r="19" fill="none" stroke="url(#nthGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="90 120"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Loading">
+  <style>
+    .nth-r1 { stroke: #6a5cff; transform-origin: 24px 24px; }
+    .nth-r2 { stroke: #b7aeff; transform-origin: 24px 24px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-r1 { animation: nth-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
+      .nth-r2 { animation: nth-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse; }
+    }
+    @keyframes nth-spin { to { transform: rotate(360deg); } }
+  </style>
+  <circle class="nth-r1" cx="24" cy="24" r="18" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="60 200"/>
+  <circle class="nth-r2" cx="24" cy="24" r="11" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="35 120"/>
+</svg>

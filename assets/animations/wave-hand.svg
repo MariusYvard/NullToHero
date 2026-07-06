@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Waving hand">
+  <style>
+    .nth-hand { transform-origin: 32px 52px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-hand { animation: nth-wave 1.4s ease-in-out infinite; }
+    }
+    @keyframes nth-wave {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(16deg); }
+      40% { transform: rotate(-10deg); }
+      60% { transform: rotate(14deg); }
+      80% { transform: rotate(-6deg); }
+    }
+  </style>
+  <g class="nth-hand" fill="#f5b544" stroke="#d8951f" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M26 52 L24 30 a3 3 0 0 1 6 0 L36 30 a3 3 0 0 1 6 0 L42 32 a3 3 0 0 1 6 0 L48 40 c0 8 -3 14 -10 14 Z"/>
+    <path d="M24 34 L20 26 a3 3 0 0 1 5.2 -3 L28 30 Z"/>
+  </g>
+</svg>
