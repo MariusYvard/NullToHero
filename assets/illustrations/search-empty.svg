@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Search with no results">
+  <rect width="400" height="300" fill="#f4f6fb"/>
+  <!-- empty list card -->
+  <rect x="96" y="70" width="208" height="160" rx="14" fill="#ffffff" stroke="#dbe1ee" stroke-width="3"/>
+  <g fill="#e4e9f3">
+    <rect x="122" y="98" width="120" height="12" rx="6"/>
+    <rect x="122" y="126" width="156" height="12" rx="6"/>
+    <rect x="122" y="154" width="96" height="12" rx="6"/>
+    <rect x="122" y="182" width="140" height="12" rx="6"/>
+  </g>
+  <!-- magnifier over the list -->
+  <circle cx="252" cy="196" r="40" fill="#ffffff" stroke="#6a5cff" stroke-width="10"/>
+  <line x1="282" y1="226" x2="316" y2="260" stroke="#6a5cff" stroke-width="14" stroke-linecap="round"/>
+  <!-- no result mark inside lens -->
+  <line x1="238" y1="182" x2="266" y2="210" stroke="#b9c1d6" stroke-width="8" stroke-linecap="round"/>
+</svg>
