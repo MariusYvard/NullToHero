@@ -26,7 +26,7 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 
 <div align="center">
 
-[What it is](#what-is-nulltohero) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows)
+[What it is](#what-is-nulltohero) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows) · [Assets](#ready-made-assets)
 
 </div>
 
@@ -375,6 +375,10 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ---
 
+## Ready-made assets
+
+The `assets/` folder ships an original, license-clean starter library: 139 icons, 20 background patterns, 18 spot illustrations, 34 animations and 6 templates. Icons and patterns take the surrounding color and the animations honor `prefers-reduced-motion`. Everything is CC0 for the media and MIT for the templates, so it is safe to copy into any project. Open `assets/gallery.html` to browse the whole set, and `assets/README.md` for how to wire each kind in. During a build, `/siteasy build` pulls from this library before an external source.
+
 ## What is inside
 
 NullToHero ships **101 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
@@ -382,7 +386,7 @@ NullToHero ships **101 reference docs** that Claude loads only when it needs the
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (53):** accessibility-engineering, adapt, animate, animation-engineering, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
+**siteasy, design (54):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
 
 **seo, search (20):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
 
