@@ -19,7 +19,8 @@ import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CSV = join(HERE, "..", "data", "resources.csv");
-const UA = "NullToHero-resource-check/1.0 (+https://github.com/MariusYvard/NullToHero)";
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+const ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 const CONCURRENCY = 12;
 const TIMEOUT = 9000;
 
@@ -50,20 +51,36 @@ function toCsv(rows) {
   return rows.map(r => r.map(esc).join(",")).join("\n") + "\n";
 }
 
+const HDRS = { "user-agent": UA, "accept": ACCEPT, "accept-language": "en,fr;q=0.8" };
+function get(url, method, signal) {
+  return fetch(url, { method, redirect: "follow", signal, headers: HDRS });
+}
+// Only a confirmed-broken URL is dead. A reachable host that walls off a bare
+// request (401, 403, 429) is live; a server hiccup (5xx) or a slow or refused
+// connection is unverified, never condemned. A HEAD is tried first, then a GET,
+// since many hosts reject HEAD or answer it differently.
 async function ping(url) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), TIMEOUT);
   try {
-    let res = await fetch(url, { method: "HEAD", redirect: "follow", signal: ctrl.signal, headers: { "user-agent": UA } });
-    if (res.status === 403 || res.status === 405 || res.status === 501)
-      res = await fetch(url, { method: "GET", redirect: "follow", signal: ctrl.signal, headers: { "user-agent": UA } });
+    let res;
+    try {
+      res = await get(url, "HEAD", ctrl.signal);
+      if (!res.ok) { try { await res.body?.cancel(); } catch { /* ignore */ } res = await get(url, "GET", ctrl.signal); }
+    } catch (e) {
+      if (e.name === "AbortError") throw e;
+      res = await get(url, "GET", ctrl.signal);
+    }
     try { await res.body?.cancel(); } catch { /* ignore */ }
     let movedHost = false;
     try { movedHost = new URL(res.url).host.replace(/^www\./, "") !== new URL(url).host.replace(/^www\./, ""); } catch { /* keep */ }
-    if (!res.ok) return `dead(${res.status})`;
-    return movedHost ? "moved" : "live";
+    if (res.status === 404 || res.status === 410) return `dead(${res.status})`;
+    if (res.status >= 500) return "unverified";
+    if (res.ok || res.status === 401 || res.status === 403 || res.status === 429) return movedHost ? "moved" : "live";
+    return "unverified";
   } catch (e) {
-    return e.name === "AbortError" ? "dead(timeout)" : "dead(error)";
+    if (e.name === "AbortError") return "unverified";
+    return (e && e.cause && e.cause.code === "ENOTFOUND") ? "dead(dns)" : "unverified";
   } finally { clearTimeout(t); }
 }
 

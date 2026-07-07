@@ -11,6 +11,14 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.25.2] - 2026-07-07
+
+A correctness fix for the resource liveness check, plus the refreshed data it produces.
+
+### Fixed
+
+- `check-resources.mjs` no longer marks a reachable site dead. It sends a browser user-agent, retries a HEAD with a GET, and condemns only a confirmed-broken URL (404, 410 or a domain that does not resolve). A wall (401, 403 or 429), a server hiccup (5xx) or a slow connection is now recorded as live or unverified. The `status` column of `resources.csv` is refreshed with the corrected result, so the recommendation flow leads with sites that truly respond.
+
 ## [1.25.1] - 2026-07-07
 
 A hygiene pass. No new commands, agents or references; the plugin surface is unchanged. Line endings, a count guard and attribution are the only changes.
