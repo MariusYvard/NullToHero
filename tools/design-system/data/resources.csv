@@ -166,7 +166,7 @@ build,icons,more,free,"asset, check the set licence (often MIT or CC)",Circum Ic
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",UXWing,https://uxwing.com,live,"Well Optimized, Free icons for commercial use |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Shapedfonts Iconclub,https://shapedfonts.com/iconclub,live,8000+ free icons |
 build,icons,top,free,"asset, check the set licence (often MIT or CC)",Feather Icons,https://feathericons.com,live,"Beautiful, customizable open source icons |"
-build,icons,top,free,"asset, check the set licence (often MIT or CC)",Tabler Icons,https://tabler-icons.io,moved,"3500+ highly customizable open source SVG icons with React, Preact, Vue, Svelte and SolidJS support |"
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Tabler Icons,https://tabler.io/icons,live,"3500+ highly customizable open source SVG icons with React, Preact, Vue, Svelte and SolidJS support |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Xicons,https://www.xicons.org/#,live,"SVG Vue/React components integrated from fluentui-system-icons, ionicons, etc. (Vue3, Vue2, React, SVG). |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Iconoir,https://iconoir.com,live,Free library of 900+ open source icons |
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Simple Icons,https://simpleicons.org,live,1307 Free SVG icons for popular brands |
@@ -209,7 +209,7 @@ build,icons,more,free,"asset, check the set licence (often MIT or CC)",EOS Icons
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Ionicons,https://ionicons.com,moved,"Beautifully crafted open source icons for use in web, iOS, Android, and desktop apps. |"
 build,icons,top,free,"asset, check the set licence (often MIT or CC)",Phosphor Icons,https://phosphoricons.com,live,"Phosphor is a flexible icon family for interfaces, diagrams, presentations |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Teeny Icons,https://teenyicons.com,unverified,TeenyIcons is a set icons in SVG format easy to use in html |
-build,icons,top,free,"asset, check the set licence (often MIT or CC)",Lucide,https://lucide.netlify.app,moved,"Lucide is an open-source icon library, a fork of Feather Icons. |"
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Lucide,https://lucide.dev,live,"Lucide is an open-source icon library, a fork of Feather Icons. |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Icones,https://icones.js.org,live,"Icon Explorer with Instant searching, powered by Iconify. |"
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Shitty Icons,https://shittyicons.com,live,Collection of Free icons. |
 build,icons,more,free,"asset, check the set licence (often MIT or CC)",Iconspedia,https://www.iconspedia.com,unverified,Iconspedia is a website that contains a large collection of high quality free icons. |
@@ -246,8 +246,8 @@ ship,favicons,top,free,"tool, the output is yours",Favicon Generator,https://fav
 ship,favicons,more,free,"tool, the output is yours",FaviFiles,https://favifiles.com,dead(dns),Generate pixel-perfect favicons for free in seconds |
 build,icon-fonts,top,freemium,"asset, open-source font licence",Font Awesome,https://fontawesome.com,live,The web's most popular icon set and toolkit |
 build,icon-fonts,more,free,"asset, open-source font licence",Line Awesome,https://icons8.com/line-awesome,live,Swap in replacement of Font Awesome with modern line icons |
-build,icon-fonts,top,free,"asset, open-source font licence",Material Icons,https://material.io/resources/icons,dead(404),Material design icon library |
-build,icon-fonts,top,free,"asset, open-source font licence",IonIcons,http://ionicons.com,moved,Beautifully crafted open source icons from Ionic team |
+build,icon-fonts,top,free,"asset, open-source font licence",Material Icons,https://fonts.google.com/icons,live,Material design icon library |
+build,icon-fonts,top,free,"asset, open-source font licence",IonIcons,https://ionic.io/ionicons,live,Beautifully crafted open source icons from Ionic team |
 build,icon-fonts,more,free,"asset, open-source font licence",Zurb Foundation Icons,https://zurb.com/playground/foundation-icon-fonts-3,live,Customizable Foundation icons |
 build,icon-fonts,more,free,"asset, open-source font licence",Fontisto Icons,https://fontisto.com,unverified,Fontisto the iconic font and css toolkit · 616+ free icons |
 build,icon-fonts,top,free,"asset, open-source font licence",Boxicons,https://boxicons.com,live,Boxicons is a free collection of carefully crafted open source icons |
@@ -301,7 +301,7 @@ imagery,stock-photos,more,free,see stock-media.md for the licence split,Saxifrag
 imagery,stock-photos,more,free,see stock-media.md for the licence split,Creative Commons,https://search.creativecommons.org,live,Search for free images to reuse.
 imagery,stock-photos,more,free,see stock-media.md for the licence split,AllTheFreeStock,https://allthefreestock.com,live,"a curated list of free stock images, audio and videos."
 imagery,stock-photos,more,free,see stock-media.md for the licence split,Lorem.space - Placeholder image generator,https://lorem.space,live,API for placeholder images but useful! |
-imagery,stock-photos,top,free,see stock-media.md for the licence split,Openverse,https://wordpress.org/openverse,moved,Openverse is a search engine for openly-licensed media |
+imagery,stock-photos,top,free,see stock-media.md for the licence split,Openverse,https://openverse.org,live,Openverse is a search engine for openly-licensed media |
 imagery,stock-photos,more,free,see stock-media.md for the licence split,ISO Republic,https://isorepublic.com,live,Get Thousands of Free High-Resolution Stock CC0 Photos |
 imagery,stock-videos,top,free,see stock-media.md for the licence split,Pexels,https://www.pexels.com/videos,live,"Largest library of free to use videos, donated by the community |"
 imagery,stock-videos,top,free,see stock-media.md for the licence split,Pixabay,https://www.pixabay.com/videos,live,"Large library of free to use videos, donated by the community similar to Pexels |"
@@ -581,7 +581,7 @@ build,ui-kits,more,free,"open-source, check the licence",Stitches,https://stitch
 build,ui-kits,more,free,"open-source, check the licence",Meraki UI Components,https://merakiui.com,live,Beautiful Tailwindcss components that support RTL languages & fully responsive based on Flexbox & CSS Grid. |
 build,ui-kits,more,free,"open-source, check the licence",Daemonites Material Design For Bootstrap,https://http://daemonite.github.io/material,dead(dns),Daemonite's Material UI is a cross-platform and fully responsive front-end interface based on Google Material Design dev
 build,ui-kits,more,free,"open-source, check the licence",Stitches,https://stitches.dev,live,"CSS-in-JS with near-zero runtime, SSR, multi-variant support, and a best-in-class developer experience. |"
-build,ui-kits,top,free,"open-source, check the licence",Headless UI,https://headlessui.dev,moved,"Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS. |"
+build,ui-kits,top,free,"open-source, check the licence",Headless UI,https://headlessui.com,live,"Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS. |"
 build,ui-kits,more,free,"open-source, check the licence",Styled components,https://styled-components.com,live,"Build beautifully UI Components, for your applications & websites. |"
 build,ui-kits,more,free,"open-source, check the licence",Figma Bootstrap 5 UI Kit,https://drive.google.com/file/d/1SZOTxXYfCMujqP2P684Vd5QIrlk5bwe6/view?usp=sharing,live,UI Kit comprising 300+ organized Bootstrap 5 components built with atomic design system & auto layout. |
 build,ui-kits,more,free,"open-source, check the licence",Notiflix,https://notiflix.github.io,live,"JavaScript library for client-side non-blocking notifications, popup boxes, loading indicators, and more that makes your"
@@ -608,7 +608,7 @@ build,ui-kits,top,free,"open-source, check the licence",Shadcn studio,https://sh
 build,ui-kits,more,free,"open-source, check the licence",Bundui,https://bundui.io,live,"Discover a curated collection of over 200 handcrafted UI components made with Tailwind CSS, React, and Shadcn UI. |"
 build,ui-kits,top,free,"open-source, check the licence",Shadcn Examples,https://shadcnexamples.com,live,"Examples and components built with React and Tailwind CSS, compatible with Shadcn UI. |"
 build,ui-kits,top,free,"open-source, check the licence",Shadcn Admin,https://shadcnadmin.com,live,"A multipurpose admin dashboard template for React, Next.js, and Vue.js. Fully compatible with shadcn/ui."
-build,react-ui,top,free,"open-source, check the licence",Material UI,https://material-ui.com,moved,"React components for faster and easier web development, based on Material Design |"
+build,react-ui,top,free,"open-source, check the licence",Material UI,https://mui.com,live,"React components for faster and easier web development, based on Material Design |"
 build,react-ui,top,free,"open-source, check the licence",Chakra UI,https://chakra-ui.com,live,Build accessible React apps & websites with speed. [Openchakra](https://openchakra.app/) |
 build,react-ui,more,free,"open-source, check the licence",React Bootstrap,https://react-bootstrap.github.io,live,Bootstrap rebuilt for React. Include Bootstrap components right in your JavaScript |
 build,react-ui,more,free,"open-source, check the licence",Semi Design,https://semi.design/en-US,live,"A modern, comprehensive, flexible design system that gives you all modular blocks you need to build sensible web apps & "
@@ -719,7 +719,7 @@ build,vue-ui,more,free,"open-source, check the licence",Oruga,https://oruga.io,l
 build,vue-ui,more,freemium,"open-source, check the licence",BalmUI,https://material.balmjs.com/#,live,BalmUI is a modular and customizable Material Design UI library for Vue.js. |
 build,vue-ui,more,free,"open-source, check the licence",Weex UI,https://github.com/apache/incubator-weex-ui,live,"A rich interaction, lightweight, high performance UI library based on Weex. |"
 build,vue-ui,more,free,"open-source, check the licence",Varlet,https://github.com/haoziqaq/varlet,live,"Varlet is a Material design mobile component library developed based on Vue3, developed and maintained by partners in th"
-build,vue-ui,top,free,"open-source, check the licence",Naive UI,https://www.naiveui.com/en-US/os-theme,dead(404),A Vue 3 Component Library. Fairly Complete. Customizable Themes. Uses TypeScript. Not too Slow. |
+build,vue-ui,top,free,"open-source, check the licence",Naive UI,https://www.naiveui.com,live,A Vue 3 Component Library. Fairly Complete. Customizable Themes. Uses TypeScript. Not too Slow. |
 build,vue-ui,more,free,"open-source, check the licence",Vuestic,https://vuestic.dev,moved,Free and Open Source UI Library for Vue 3 🤘. |
 build,vue-ui,more,free,"open-source, check the licence",Vue Final Modal,https://vue-final-modal.org,live,"Vue Final Modal is a tiny, renderless, mobile-friendly, feature-rich modal component for Vue.js. |"
 build,vue-ui,more,free,"open-source, check the licence",Vuetensils,https://vuetensils.stegosource.com,unverified,"Vuetensils is a lightweight component library for Vue 2.x that brings some of most common UI features, but only the bare"

@@ -499,5 +499,144 @@
     "expect": {
       "session-cookie-flags": "WARN"
     }
+  },
+  {
+    "name": "head-meta-complete",
+    "file": "head-meta-complete.html",
+    "expect": {
+      "head-meta": "PASS"
+    }
+  },
+  {
+    "name": "head-meta-absent",
+    "file": "minimal-head.html",
+    "expect": {
+      "head-meta": "WARN"
+    }
+  },
+  {
+    "name": "compression-br",
+    "file": "minimal-head.html",
+    "headers": {
+      "content-encoding": "br"
+    },
+    "expect": {
+      "compression-enabled": "PASS"
+    }
+  },
+  {
+    "name": "compression-none",
+    "file": "minimal-head.html",
+    "headers": {
+      "content-type": "text/html; charset=utf-8"
+    },
+    "expect": {
+      "compression-enabled": "WARN"
+    }
+  },
+  {
+    "name": "server-clean",
+    "file": "minimal-head.html",
+    "headers": {
+      "server": "cloudflare"
+    },
+    "expect": {
+      "server-fingerprint": "PASS"
+    }
+  },
+  {
+    "name": "server-leak",
+    "file": "minimal-head.html",
+    "headers": {
+      "x-powered-by": "Express"
+    },
+    "expect": {
+      "server-fingerprint": "WARN"
+    }
+  },
+  {
+    "name": "https-redirect-yes",
+    "file": "minimal-head.html",
+    "probes": {
+      "httpsRedirect": {
+        "tested": true,
+        "redirectsToHttps": true,
+        "status": 301,
+        "location": "https://example.com/"
+      }
+    },
+    "expect": {
+      "https-redirect": "PASS"
+    }
+  },
+  {
+    "name": "https-redirect-no",
+    "file": "minimal-head.html",
+    "probes": {
+      "httpsRedirect": {
+        "tested": true,
+        "redirectsToHttps": false,
+        "reachable": true,
+        "status": 200
+      }
+    },
+    "expect": {
+      "https-redirect": "FAIL"
+    }
+  },
+  {
+    "name": "host-canonical-redirects",
+    "file": "minimal-head.html",
+    "probes": {
+      "hostCanonical": {
+        "tested": true,
+        "altRedirects": true,
+        "altHost": "www.example.com"
+      }
+    },
+    "expect": {
+      "host-canonicalization": "PASS"
+    }
+  },
+  {
+    "name": "host-canonical-dup",
+    "file": "minimal-head.html",
+    "probes": {
+      "hostCanonical": {
+        "tested": true,
+        "altRedirects": false,
+        "altReachable": true,
+        "altHost": "www.example.com"
+      }
+    },
+    "expect": {
+      "host-canonicalization": "WARN"
+    }
+  },
+  {
+    "name": "securitytxt-found",
+    "file": "minimal-head.html",
+    "probes": {
+      "securityTxt": {
+        "tested": true,
+        "found": true
+      }
+    },
+    "expect": {
+      "security-txt": "PASS"
+    }
+  },
+  {
+    "name": "securitytxt-missing",
+    "file": "minimal-head.html",
+    "probes": {
+      "securityTxt": {
+        "tested": true,
+        "found": false
+      }
+    },
+    "expect": {
+      "security-txt": "WARN"
+    }
   }
 ]

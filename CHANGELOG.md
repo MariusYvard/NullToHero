@@ -11,6 +11,18 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.25.3] - 2026-07-07
+
+Broader eval coverage and corrected resource URLs.
+
+### Added
+
+- Eval fixtures for the six deterministic checks that had none: `head-meta`, `compression-enabled`, `server-fingerprint`, `https-redirect`, `host-canonicalization` and `security-txt`. Each carries a pass case and a negative case, and the harness now threads the probe object so the response-driven checks are graded. The analyzer's covered checks go from 18 to 24 of 24.
+
+### Fixed
+
+- Corrected the URLs of eight top-tier resources whose sites had moved or returned 404: Tabler Icons, Lucide, IonIcons, Openverse, Headless UI, Material UI, Material Icons and Naive UI now point at their current addresses.
+
 ## [1.25.2] - 2026-07-07
 
 A correctness fix for the resource liveness check, plus the refreshed data it produces.
