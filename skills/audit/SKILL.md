@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.22.0
+version: 1.23.0
 user-invocable: true
 argument-hint: "[url] | [full|seo|defects|design|quick|verify|checks|report] [url|file] | compare [A] [B]"
 allowed-tools:
@@ -21,10 +21,10 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 
 | Command | What it does | Reference |
 |---------|-------------|-----------|
-| `full [url]` | All 13 sub-agents across SEO, defects, and design; unified report + action plan | [references/full.md](references/full.md) |
+| `full [url]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan | [references/full.md](references/full.md) |
 | `seo [url]` | Search-visibility group only (5 SEO sub-agents) | [references/full.md](references/full.md) |
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) | [references/full.md](references/full.md) |
-| `design [url]` | Design-quality group only (4 siteasy sub-agents) | [references/full.md](references/full.md) |
+| `design [url]` | Design-quality group only (5 siteasy sub-agents) | [references/full.md](references/full.md) |
 | `quick [url]` | One representative sub-agent per group for a fast triage | [references/full.md](references/full.md) |
 | `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |

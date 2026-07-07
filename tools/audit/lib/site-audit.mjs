@@ -57,6 +57,7 @@ const GROUP_OF = {
   "inspect-agent-layout": "frontEndDefects", "inspect-agent-code": "frontEndDefects",
   "siteasy-agent-ux": "designQuality", "siteasy-agent-visual": "designQuality",
   "siteasy-agent-motion": "designQuality", "siteasy-agent-content": "designQuality",
+  "siteasy-agent-memorability": "designQuality",
 };
 
 // Per-group deterministic floor from the objective checks that fell in each group.

@@ -41,7 +41,7 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
    headers and robots.txt to `./audit-assets/` as named files (`raw.html`,
    `rendered.html`, `styles.css`, `scripts.js`, `headers.json`, `robots.txt`) plus
    `SITE-AUDIT.json`. Every dispatched agent READS these files with the Read tool; no
-   agent issues its own WebFetch. One network pass feeds all 14 agents and each sees
+   agent issues its own WebFetch. One network pass feeds all 15 agents and each sees
    the same bytes, which is what makes two runs comparable. The same pass produces
    the computed ground truth (next section).
 3. **Dispatch the group in parallel.** For the selected mode, launch every agent
@@ -60,14 +60,14 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
 
 ## Modes
 
-Each mode dispatches a fixed set of `subagent_type` names. `full` runs all 14.
+Each mode dispatches a fixed set of `subagent_type` names. `full` runs all 15.
 
 | Mode | Agents dispatched (`subagent_type`) |
 |------|-------------------------------------|
-| `full` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo, inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code, siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims |
+| `full` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo, inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code, siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims, siteasy-agent-memorability |
 | `seo` | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo |
 | `defects` | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
-| `design` | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims |
+| `design` | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims, siteasy-agent-memorability |
 | `quick` | seo-agent-technical, inspect-agent-a11y, siteasy-agent-ux (one representative per group) |
 | `verify` | gating group re-run for consensus: inspect-agent-a11y, inspect-agent-interaction, seo-agent-technical, each dispatched K=3 times and reconciled by majority vote |
 
@@ -166,6 +166,7 @@ Design Quality (siteasy group):
 | siteasy-agent-content | 20 |
 | siteasy-agent-motion | 15 |
 | siteasy-agent-claims | 15 |
+| siteasy-agent-memorability | 18 |
 
 Overall Site Health Score, stated explicitly:
 
@@ -194,7 +195,7 @@ a majority vote, the Map/Reduce reliability pattern.
 Gating group. By default `verify` re-runs three agents: inspect-agent-a11y,
 inspect-agent-interaction and seo-agent-technical. These hold the findings that cap
 or block the result, so they are where a missed check costs the most. `verify`
-does not re-run all 14 agents.
+does not re-run all 15 agents.
 
 Procedure.
 
@@ -229,7 +230,7 @@ an overall Site Health Score.
 ## Incremental re-audit and auto-compare
 
 When a `SITE-AUDIT.json` from a previous run of the same target is present, do not
-blindly re-run all 14 agents.
+blindly re-run all 15 agents.
 
 **Auto-compare.** After writing the new `SITE-AUDIT.json`, keep the prior one (for
 example as `SITE-AUDIT.prev.json`) and diff them, then fold the delta into the
@@ -275,7 +276,7 @@ a PDF, defer to [report.md](report.md). Do not re-implement formatting here.
 3. **Front-end Defects.** Embed the returned sections from inspect-agent-a11y,
    inspect-agent-interaction, inspect-agent-layout, and inspect-agent-code.
 4. **Design Quality.** Embed the returned sections from siteasy-agent-ux,
-   siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, and siteasy-agent-claims.
+   siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims, and siteasy-agent-memorability.
 5. **Consolidated action plan.** A single cross-cutting list that de-duplicates
    overlaps between groups. The same root cause is reported once, cross-referenced
    to every dimension that surfaced it. For example an image missing explicit

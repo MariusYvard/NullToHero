@@ -463,6 +463,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/brand-identity.md",
+    "title": "Brand Identity",
+    "keywords": [
+      "brand",
+      "identity"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/brand.md",
     "title": "Brand register",
     "keywords": [
@@ -521,6 +530,17 @@
     "keywords": [
       "component",
       "patterns"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/concept.md",
+    "title": "Concept: The Art-Direction Gate",
+    "keywords": [
+      "concept",
+      "art",
+      "direction",
+      "gate"
     ]
   },
   {
@@ -750,11 +770,30 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/memorability.md",
+    "title": "Memorability: Scoring Distinctiveness",
+    "keywords": [
+      "memorability",
+      "scoring",
+      "distinctiveness"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/mobile-ergonomics.md",
     "title": "Mobile Ergonomics",
     "keywords": [
       "mobile",
       "ergonomics"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/motion-choreography.md",
+    "title": "Motion Choreography",
+    "keywords": [
+      "motion",
+      "choreography"
     ]
   },
   {
@@ -880,6 +919,15 @@
     "keywords": [
       "ship",
       "checklist"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/signature-moments.md",
+    "title": "Signature Moments",
+    "keywords": [
+      "signature",
+      "moments"
     ]
   },
   {

@@ -11,6 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.23.0] - 2026-07-06
+
+Memorable, not just correct. A site can pass every check and still be forgettable. This release adds the intent layer on top of the quality guardrails: a creative direction before building, an audit dimension that scores distinctiveness, and references for signature moments, authored motion and an ownable identity.
+
+### Added
+
+- `/siteasy concept`: an art-direction gate that sets a committed idea, an anti-reference and one signature moment in a `DIRECTION.md` the rest of the build honors.
+- A fifteenth audit sub-agent, `siteasy-agent-memorability`, in the design-quality group. It scores point of view, a signature element, distinctive type, ownable color, surprise and voice, and restraint against template-shaped design. Wired into `/audit full` and `/audit design`.
+- References `concept.md`, `memorability.md`, `signature-moments.md`, `motion-choreography.md` and `brand-identity.md`, linked from the concept, critique, overdrive, animate and amplify commands and from the craft flow.
+
+### Changed
+
+- The build flow now opens from the direction, not a component library, and the memorability dimension checks whether that direction survived to the rendered page.
+
 ## [1.22.0] — 2026-07-06
 
 Harvested checks and references. The deterministic pre-pass gains thirteen checks: HTML nesting validity and ARIA attribute names, early charset and head metadata, subresource integrity, open-redirect parameters, a credentialed CORS wildcard, response compression, server fingerprint headers, cookie security flags, and three passive URL probes (HTTP to HTTPS redirect, www or non-www canonical host, security.txt). The security-headers check now grades HSTS and CSP quality and reports Permissions-Policy and cross-origin isolation. Nine inspect rules cover runtime security, JavaScript resilience and print and scheme robustness, and the rule set gains why and source columns. New references document head metadata, print styles, a testing strategy, privacy and consent, and performance; remediation tool lists and a generators data set back the build path.

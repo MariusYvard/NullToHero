@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.22.0
+version: 1.23.0
 user-invocable: true
 argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
 allowed-tools:
@@ -126,6 +126,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) + [references/assets-library.md](references/assets-library.md) + [references/stock-media.md](references/stock-media.md) + [references/resource-recommendations.md](references/resource-recommendations.md) |
 | `plan [feature]` | Build | Plan UX/UI before writing code | [references/shape.md](references/shape.md) + [references/landing-patterns.md](references/landing-patterns.md) |
 | `setup` | Build | Create PRODUCT.md and DESIGN.md context | [references/teach.md](references/teach.md) |
+| `concept [project]` | Build | Set the creative direction before building: idea, anti-reference, signature moment | [references/concept.md](references/concept.md) + [references/memorability.md](references/memorability.md) |
 | `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |
 | `ia [target]` | Build | Information architecture, card sorting, tree testing, navigation patterns | [references/information-architecture.md](references/information-architecture.md) |
 | `journey [persona]` | Build | Generate empathy maps, journey maps, or service blueprints from research | [references/journey-mapping.md](references/journey-mapping.md) |
@@ -133,22 +134,22 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `extract [target]` | Build | Pull reusable tokens and components into a design system | [references/extract.md](references/extract.md) |
 | `handoff [target]` | Build | Developer handoff spec: layout, tokens, props, states, breakpoints, edge cases, motion, accessibility | [references/handoff.md](references/handoff.md) |
 | `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) + [references/color-systems.md](references/color-systems.md) + [references/elevation.md](references/elevation.md) |
-| `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) |
+| `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) + [references/memorability.md](references/memorability.md) |
 | `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |
 | `polish [target]` | Refine | Final quality pass before shipping | [references/polish.md](references/polish.md) |
-| `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) + [references/style-systems.md](references/style-systems.md) |
+| `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) + [references/style-systems.md](references/style-systems.md) + [references/brand-identity.md](references/brand-identity.md) |
 | `simplify [target]` | Refine | Reduce visual noise, tone down, strip to essence | [references/quieter.md](references/quieter.md) + [references/distill.md](references/distill.md) |
 | `clarify [target]` | Refine | UX copy, error messages, button labels, empty states | [references/clarify.md](references/clarify.md) |
 | `launch [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) + [references/ship-checklist.md](references/ship-checklist.md) |
 | `onboard [target]` | Refine | First-run flows, empty states, feature discovery, activation | [references/onboard.md](references/onboard.md) |
-| `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) |
+| `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) + [references/motion-choreography.md](references/motion-choreography.md) |
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
 | `layout [target]` | Enhance | Spacing systems, visual rhythm, grid tools | [references/layout.md](references/layout.md) |
 | `charts [target]` | Enhance | Accessible data visualization: chart-type choice, a11y grades, non-color fallbacks | [references/data-viz.md](references/data-viz.md) |
 | `adapt [target]` | Enhance | Mobile/tablet/desktop/print adaptation | [references/adapt.md](references/adapt.md) + [references/responsive-design.md](references/responsive-design.md) |
 | `mobile [target]` | Enhance | Phone-specific ergonomics — thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit | [references/mobile-ergonomics.md](references/mobile-ergonomics.md) |
 | `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) + [references/creative-patterns.md](references/creative-patterns.md) |
-| `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) |
+| `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) + [references/signature-moments.md](references/signature-moments.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 

@@ -37,6 +37,8 @@ Do not let generated mockups replace interface structure, copy, accessibility, r
 
 ## Step 1: Shape the Design
 
+Start from the direction, not a component library. If there is no DIRECTION.md, run `/siteasy concept` first (see [concept.md](concept.md)) so the build has a committed idea to honor, and [memorability.md](memorability.md) for the bar to clear.
+
 Run /siteasy plan, passing along whatever feature description the user provided.
 
 Wait for the design brief to be fully confirmed by the user before proceeding. The brief is your blueprint, and every implementation decision should trace back to it.

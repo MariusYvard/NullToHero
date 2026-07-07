@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.22.0** · 4 skills · 59 commands · 103 reference docs · 14 audit sub-agents
+**v1.23.0** · 4 skills · 60 commands · 108 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -231,10 +231,10 @@ Runs every specialist at once across search, defects and design, then merges eve
 
 | Command | What it does |
 |---------|-------------|
-| `full [url]` | All 14 sub-agents (SEO, defects, design), unified report and prioritized action plan |
+| `full [url]` | All 15 sub-agents (SEO, defects, design), unified report and prioritized action plan |
 | `seo [url]` | Search-visibility group only (5 SEO sub-agents) |
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
-| `design [url]` | Design-quality group only (4 siteasy sub-agents) |
+| `design [url]` | Design-quality group only (5 siteasy sub-agents) |
 | `quick [url]` | One representative sub-agent per group for a fast triage |
 | `checks [url]` | Deterministic pre-pass: computed checks and `SITE-AUDIT.json`, no sub-agents (powers the CI gate) |
 | `verify [url]` | Consensus re-check of the gating dimensions (a11y, interaction, technical) by majority vote |
@@ -381,12 +381,12 @@ The `assets/` folder ships an original, license-clean starter library: 139 icons
 
 ## What is inside
 
-NullToHero ships **103 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **108 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (56):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, resource-recommendations, shape, spatial-design, stock-media, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
+**siteasy, design (61):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, brand-identity, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, resource-recommendations, shape, signature-moments, spatial-design, stock-media, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
 
 **seo, search (20):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
 
