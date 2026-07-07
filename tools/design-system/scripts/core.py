@@ -82,8 +82,8 @@ CSV_CONFIG = {
     },
     "resources": {
         "file": "resources.csv",
-        "search_cols": ["name", "category", "stage", "notes"],
-        "output_cols": ["stage", "category", "name", "url", "notes"]
+        "search_cols": ["name", "category", "stage", "tier", "notes"],
+        "output_cols": ["stage", "category", "tier", "cost", "use", "name", "url", "status", "notes"]
     }
 }
 

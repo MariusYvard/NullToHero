@@ -11,6 +11,21 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.24.0] - 2026-07-06
+
+Better use of the resource registry. The 753 design resource sites gain a top-pick tier, a cost and licence hint and a liveness status, plus recipes to turn a pick into wired code and an aesthetic map so recommendations fit the concept.
+
+### Added
+
+- `resources.csv` columns: `tier` (top or more), `cost`, `use` (a licence hint) and `status`.
+- `tools/design-system/scripts/check-resources.mjs`: a maintenance script that pings every URL and refreshes the status column so dead links drop out of the recommendations.
+- `references/resource-recipes.md`: from a recommended resource to self-hosted, optimized code, per asset type (fonts, icons, color, illustrations, backgrounds, animation, charts).
+- An aesthetic map in `resource-recommendations.md` matching a concept mood to the best-fit sources, and a rule to lead with the top tier.
+
+### Changed
+
+- The resource search now surfaces the tier, cost, use and status of each site.
+
 ## [1.23.0] - 2026-07-06
 
 Memorable, not just correct. A site can pass every check and still be forgettable. This release adds the intent layer on top of the quality guardrails: a creative direction before building, an audit dimension that scores distinctiveness, and references for signature moments, authored motion and an ownable identity.

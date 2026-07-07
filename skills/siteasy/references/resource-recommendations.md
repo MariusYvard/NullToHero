@@ -14,6 +14,12 @@ The full catalogue is `tools/design-system/data/resources.csv` (753 sites, 23 ca
 python3 tools/design-system/scripts/search.py "<keyword>" --domain resources
 ```
 
+Each row now carries a `tier` (top or more), a `cost` (free, freemium or paid), a `use` licence hint and a `status`. Lead with the top tier, name the cost when it is not free, read the `use` column before committing a file, and skip anything the maintenance check has marked dead. Refresh liveness with:
+
+```bash
+node tools/design-system/scripts/check-resources.mjs
+```
+
 ## What to suggest, and when
 
 | Moment | What to fetch | Best-fit sites |
@@ -32,6 +38,20 @@ python3 tools/design-system/scripts/search.py "<keyword>" --domain resources
 | Ship, favicon | A full favicon set | RealFaviconGenerator, Favicon.io, Maskable.app |
 | Scaffold | A CSS framework or a template | Tailwind, Open Props, Bootstrap. Templates: HTML5 UP, Start Bootstrap, Cruip |
 
+## By aesthetic
+
+Match the source to the direction in DIRECTION.md, a brutalist concept does not call for the same fonts or illustrations as a soft, friendly one.
+
+| Aesthetic | Type | Imagery | Color |
+|-----------|------|---------|-------|
+| Brutalist or raw | Monospace or a heavy grotesque | Stark photography, no soft illustration | High contrast, one loud color |
+| Editorial | A serif display with a clean text face | Art-directed photography | Restrained, ink and one accent |
+| Playful or friendly | A rounded sans (Fredoka, Quicksand) | unDraw, Open Peeps, Humaaans | Bright and warm |
+| Minimal or Swiss | A neutral grotesque on a tight grid | Little imagery, strong whitespace | Mostly neutral, one accent |
+| Luxury | A high-contrast Didone serif | Dark, spacious photography | Black with gold or a deep jewel tone |
+| Retro | A pixel or bold display face | Halftones and stickers | Saturated primaries |
+| Techy or product | A grotesque used with intent, mono for data | Abstract 3D, gradients used sparingly | Cool blues or a single vivid accent |
+
 ## Rules
 
-Curated sites first, the bundled `assets/` library as a fallback for quick, offline or placeholder assets. Honor the license notes: for photos and video, follow [references/stock-media.md](stock-media.md) and never commit a use-only file. State the cost when a site is freemium or paid. A logo is a trademark, so suggest a real mark over a generic logo maker. Keep image assets optimized (WebP or AVIF) once fetched.
+Curated sites first, the bundled `assets/` library as a fallback for quick, offline or placeholder assets. Honor the license notes: for photos and video, follow [references/stock-media.md](stock-media.md) and never commit a use-only file. State the cost when a site is freemium or paid. A logo is a trademark, so suggest a real mark over a generic logo maker. Keep image assets optimized (WebP or AVIF) once fetched. To turn a pick into wired, self-hosted code, follow [resource-recipes.md](resource-recipes.md).

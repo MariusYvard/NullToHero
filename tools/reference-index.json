@@ -888,6 +888,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/resource-recipes.md",
+    "title": "Resource recipes",
+    "keywords": [
+      "resource",
+      "recipes"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/resource-recommendations.md",
     "title": "Resource recommendations",
     "keywords": [
