@@ -11,6 +11,19 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.25.0] - 2026-07-06
+
+Assets fetched, not just recommended. The build flow can now pull a license-clean asset from an open API on demand, no command and no key, then wire it in. Scraping is not attempted; sources without a clean API stay recommendations.
+
+### Added
+
+- `tools/design-system/scripts/fetch-asset.mjs`: fetches an icon (Iconify, 150 plus open sets), a brand mark (Simple Icons), a font (Google Fonts, self-hosted woff2), a CC0 photo (Openverse, the Met, Art Institute, Cleveland), an avatar (DiceBear), a placeholder (Lorem Picsum) or a palette (Colormind). Each result prints its licence and the saver refuses a use-only source unless forced.
+- `references/fetch-asset.md`, and guidance woven into the craft flow and the resource references so the build fetches by need rather than by a command.
+
+### Changed
+
+- The asset step now fetches directly from an open API when one exists, falling back to recommending a site otherwise.
+
 ## [1.24.0] - 2026-07-06
 
 Better use of the resource registry. The 753 design resource sites gain a top-pick tier, a cost and licence hint and a liveness status, plus recipes to turn a pick into wired code and an aesthetic map so recommendations fit the concept.

@@ -117,7 +117,7 @@ Treat the mock as a **north star**, not a screenshot to trace. Do **not** raster
 
 ## Step 4: Asset Extraction (Need-Gated)
 
-For production-quality assets, recommend the curated sites in [references/resource-recommendations.md](references/resource-recommendations.md) first. The bundled `assets/` library ([references/assets-library.md](references/assets-library.md)) is a fallback: reach for it when you need a license-clean asset instantly, offline or as a placeholder, and tint icons and patterns with `color`.
+For production-quality assets, recommend the curated sites in [references/resource-recommendations.md](references/resource-recommendations.md) first. The bundled `assets/` library ([references/assets-library.md](references/assets-library.md)) is a fallback: reach for it when you need a license-clean asset instantly, offline or as a placeholder, and tint icons and patterns with `color`. When a need has an open API (an icon, a font, a CC0 photo, an avatar), fetch it directly with the asset fetcher (see [fetch-asset.md](fetch-asset.md)) and wire it in, rather than asking the user to download it.
 
 At each step of the build, recommend the right external resource without being asked (a palette, a font, an icon set, a background, a chart, a mockup, a favicon). See [resource-recommendations.md](resource-recommendations.md) for the best-fit sites per moment, and honor the license split in [stock-media.md](stock-media.md).
 

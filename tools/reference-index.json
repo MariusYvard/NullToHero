@@ -654,6 +654,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/fetch-asset.md",
+    "title": "Fetch asset",
+    "keywords": [
+      "fetch",
+      "asset"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/form-patterns.md",
     "title": "Form Patterns",
     "keywords": [

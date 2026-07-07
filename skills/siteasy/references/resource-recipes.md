@@ -6,7 +6,7 @@ version: 1.24.0
 
 # Resource recipes
 
-A recommendation is only useful once the asset is in the code, optimized and self-hosted. Each recipe turns a picked resource into a wired result. Read the `use` column in resources.csv first and honor the licence, and keep attribution where the licence asks for it.
+For the sources with an open API, fetch the asset directly with the fetcher (see [fetch-asset.md](fetch-asset.md)); the recipes below then apply to what you fetched. A recommendation is only useful once the asset is in the code, optimized and self-hosted. Each recipe turns a picked resource into a wired result. Read the `use` column in resources.csv first and honor the licence, and keep attribution where the licence asks for it.
 
 ## Fonts
 

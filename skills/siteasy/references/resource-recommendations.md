@@ -14,7 +14,7 @@ The full catalogue is `tools/design-system/data/resources.csv` (753 sites, 23 ca
 python3 tools/design-system/scripts/search.py "<keyword>" --domain resources
 ```
 
-Each row now carries a `tier` (top or more), a `cost` (free, freemium or paid), a `use` licence hint and a `status`. Lead with the top tier, name the cost when it is not free, read the `use` column before committing a file, and skip anything the maintenance check has marked dead. Refresh liveness with:
+Each row now carries a `tier` (top or more), a `cost` (free, freemium or paid), a `use` licence hint and a `status`. Lead with the top tier, name the cost when it is not free, read the `use` column before committing a file, and skip anything the maintenance check has marked dead. For the API-backed sources (icons via Iconify, fonts via Google Fonts, CC0 photos via Openverse and the museums, avatars via DiceBear), the build fetches the asset directly with [fetch-asset.md](fetch-asset.md); for the rest, recommend the site to open. Refresh liveness with:
 
 ```bash
 node tools/design-system/scripts/check-resources.mjs
