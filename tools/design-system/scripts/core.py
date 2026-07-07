@@ -74,6 +74,11 @@ CSV_CONFIG = {
         "file": "generators.csv",
         "search_cols": ["name", "category", "notes"],
         "output_cols": ["name", "url", "category", "cost", "notes"]
+    },
+    "stock": {
+        "file": "stock.csv",
+        "search_cols": ["name", "media", "license", "notes"],
+        "output_cols": ["name", "url", "media", "license", "attribution", "redistributable", "notes"]
     }
 }
 

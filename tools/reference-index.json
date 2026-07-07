@@ -884,6 +884,16 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/stock-media.md",
+    "title": "Stock media sources",
+    "keywords": [
+      "stock",
+      "media",
+      "sources"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/style-systems.md",
     "title": "Style Systems",
     "keywords": [

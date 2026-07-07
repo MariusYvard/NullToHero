@@ -123,7 +123,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 
 | Command | Category | Description | Reference |
 |---|---|---|---|
-| `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) + [references/assets-library.md](references/assets-library.md) |
+| `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) + [references/assets-library.md](references/assets-library.md) + [references/stock-media.md](references/stock-media.md) |
 | `plan [feature]` | Build | Plan UX/UI before writing code | [references/shape.md](references/shape.md) + [references/landing-patterns.md](references/landing-patterns.md) |
 | `setup` | Build | Create PRODUCT.md and DESIGN.md context | [references/teach.md](references/teach.md) |
 | `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |

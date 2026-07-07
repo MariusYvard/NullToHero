@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.22.0** · 4 skills · 59 commands · 101 reference docs · 14 audit sub-agents
+**v1.22.0** · 4 skills · 59 commands · 102 reference docs · 14 audit sub-agents
 
 </div>
 
@@ -381,12 +381,12 @@ The `assets/` folder ships an original, license-clean starter library: 139 icons
 
 ## What is inside
 
-NullToHero ships **101 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **102 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (54):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
+**siteasy, design (55):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, mobile-ergonomics, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, shape, spatial-design, stock-media, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
 
 **seo, search (20):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
 

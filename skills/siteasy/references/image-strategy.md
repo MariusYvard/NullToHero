@@ -280,3 +280,7 @@ For every shipped page:
 - **Watermarkly Compress** (client-side JPEG compression without upload). https://watermarkly.com/compress-jpeg/
 - **CompressImage.io** (offline compression with WebP output). https://compressimage.io/
 - **EZGif** (GIF editing with WebP conversion). https://ezgif.com/
+
+## Where to source images
+
+For photos and video that are free to use, see [references/stock-media.md](references/stock-media.md). Prefer the CC0 and public-domain list for anything you commit, and treat the popular free-stock sites as use-only.
