@@ -11,6 +11,12 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.25.4] - 2026-07-07
+
+### Removed
+
+- The `assets/previews/` image gallery (about 2 MB of PNG and GIF). These files only rendered the gallery inside the README; every asset itself stays, and `assets/gallery.html` still shows them running in a browser. The README now lists the library in text and links to the live gallery.
+
 ## [1.25.3] - 2026-07-07
 
 Broader eval coverage and corrected resource URLs.
