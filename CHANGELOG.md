@@ -11,6 +11,19 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.25.1] - 2026-07-07
+
+A hygiene pass. No new commands, agents or references; the plugin surface is unchanged. Line endings, a count guard and attribution are the only changes.
+
+### Changed
+
+- Every text file is normalized to LF. A `.gitattributes` (`* text=auto eol=lf` with binary overrides) and an `.editorconfig` hold the convention, ending the mixed line endings that the design-system CSVs and scripts carried. The `LICENSE` body stays byte-exact so its verified hash still matches.
+- `ATTRIBUTION.md` records the build-time services `fetch-asset.mjs` can reach and credits `resources.csv` next to `generators.csv`.
+
+### Added
+
+- `tests/validate.js` check 35 reads the audit sub-agent count from disk and the inspect-rule count from the CSV, then fails if any figure stated in the README or the skills disagrees. The counts can no longer drift silently.
+
 ## [1.25.0] - 2026-07-06
 
 Assets fetched, not just recommended. The build flow can now pull a license-clean asset from an open API on demand, no command and no key, then wire it in. Scraping is not attempted; sources without a clean API stay recommendations.

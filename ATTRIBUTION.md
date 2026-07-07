@@ -34,8 +34,12 @@ The 1.22.0 release adds deterministic checks, inspect rules and references adapt
 - **HTML5 Boilerplate** and its Apache server configs (MIT, HTML5 Boilerplate). The `charset-early`, `head-meta`, `compression-enabled`, `server-fingerprint` and header-quality checks, and the head-meta and print-styles references, adapt its head order, favicon and manifest conventions, print stylesheet and server-header guidance. https://github.com/h5bp/html5-boilerplate
 - **Front-End-Checklist** (MIT, David Dias). The security, robustness, testing, privacy and i18n rules and references adapt its checklist items, rewritten in the house style. https://github.com/thedaviddias/Front-End-Checklist
 - **PayloadsAllTheThings** (MIT, Swissky). The `cors-credentialed-wildcard` and `open-redirect-param` detection heuristics adapt its documented misconfiguration signals; no offensive payloads are included. https://github.com/swisskyrepo/PayloadsAllTheThings
-- **design-resources-for-developers** (MIT, Brad Traversy). The `generators.csv` tool catalogue and the external-tool remediation lists adapt its curated tool names and URLs. https://github.com/bradtraversy/design-resources-for-developers
+- **design-resources-for-developers** (MIT, Brad Traversy). The `generators.csv` and `resources.csv` catalogues and the external-tool remediation lists adapt its curated tool names and URLs. https://github.com/bradtraversy/design-resources-for-developers
 - **The Book of Secret Knowledge** (MIT, trimstray). The external validator references cite its curated tool list. https://github.com/trimstray/the-book-of-secret-knowledge
+
+## Assets fetched at build time
+
+`tools/design-system/scripts/fetch-asset.mjs` can retrieve icons, brand marks, fonts and public-domain images from third-party services (Iconify, Simple Icons, Google Fonts, Openverse with its partner museums, DiceBear and Colormind) when a project needs them. Nothing from these services is stored in this repository, so each asset keeps its upstream license, honored in the generated site as described in `skills/siteasy/references/fetch-asset.md`.
 
 ## License
 

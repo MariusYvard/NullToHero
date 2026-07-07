@@ -1,0 +1,39 @@
+# Normalize all text to LF; auto-detect binary. Keeps line endings consistent
+# and ends the CRLF/LF drift across the design-system data and scripts.
+* text=auto eol=lf
+
+# Keep the LICENSE byte-exact (its hash is verified by tests/validate.js).
+LICENSE -text
+
+# Explicit binaries, never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.mp4 binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+# Text files pinned to LF.
+*.mjs text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.csv text eol=lf
+*.svg text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

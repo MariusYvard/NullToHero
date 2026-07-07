@@ -40,6 +40,8 @@
  * 31.  SITE-AUDIT.json + cost ledger wired into the orchestration docs
  * 32.  Reference eval set present and consistent (tests/eval)
  * 33.  Audit-gate GitHub Action + self-test workflow present
+ * 34.  Agents read shared audit-assets inputs and return only their section
+ * 35.  Stated agent and rule counts match the repository (drift guard)
  */
 
 const fs     = require("fs");
@@ -1184,6 +1186,38 @@ section("34. Agents read shared audit-assets inputs and return only their sectio
     if (!/Return ONLY this section\./.test(c)) { fail(`agents/${file}: missing the strict output contract ('Return ONLY this section.')`); bad++; }
   });
   if (agentFiles.length && bad === 0) pass(`all ${agentFiles.length} agents read shared inputs and constrain output to the scored section`);
+}
+
+// --- Check 35: doc-stated counts match the source of truth ------------------
+section("35. Stated agent and rule counts match the repository");
+{
+  const agentCount = fs.existsSync(SEO_AGENTS)
+    ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")).length : 0;
+  const rulesCsv = readFile(path.join(ROOT, "tools", "data", "inspect-rules.csv"));
+  const ruleCount = rulesCsv ? rulesCsv.trim().split(/\r?\n/).length - 1 : 0;
+
+  const claims = [
+    ["README.md",               /(\d+)\s+audit sub-agents/, agentCount, "README audit sub-agents"],
+    ["README.md",               /All\s+(\d+)\s+sub-agents/, agentCount, "README full-command sub-agents"],
+    ["skills/audit/SKILL.md",   /All\s+(\d+)\s+sub-agents/, agentCount, "audit SKILL sub-agents"],
+    ["tools/README.md",         /\((\d+)\s+rules\)/,       ruleCount,  "tools README inspect rules"],
+    ["skills/inspect/SKILL.md", /\((\d+)\s+rules\)/,       ruleCount,  "inspect SKILL rules"],
+  ];
+
+  let bad = 0;
+  claims.forEach(([rel, re, expected, label]) => {
+    const body = readFile(path.join(ROOT, rel));
+    if (body == null) { fail(`${label}: ${rel} not found`); bad++; return; }
+    const m = body.match(re);
+    if (!m) { fail(`${label}: no count matching ${re} in ${rel}`); bad++; }
+    else if (Number(m[1]) !== expected) {
+      fail(`${label}: ${rel} states ${m[1]} but the repository has ${expected}`); bad++;
+    }
+  });
+
+  if (bad === 0) {
+    pass(`agent count (${agentCount}) and inspect-rule count (${ruleCount}) match every stated figure`);
+  }
 }
 
 // --- Summary --------------------------------------------------------------------
