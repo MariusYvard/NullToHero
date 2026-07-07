@@ -74,3 +74,5 @@ This is not optional. Vestibular disorders affect ~35% of adults over 40, and ar
 ---
 
 **Avoid**: Animating everything (animation fatigue is real). Using >500ms for UI feedback. Ignoring `prefers-reduced-motion`. Using animation to hide slow loading.
+
+For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

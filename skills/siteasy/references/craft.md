@@ -117,6 +117,8 @@ Treat the mock as a **north star**, not a screenshot to trace. Do **not** raster
 
 Before generating or sourcing anything new, check the bundled library in `assets/` (see [references/assets-library.md](references/assets-library.md)). It ships icons, background patterns, spot illustrations, loaders and page templates that are license-clean and ready to wire in. Use a bundled asset when it fits, tint icons and patterns with `color`, and only fall back to generating or fetching when nothing matches.
 
+At each step of the build, recommend the right external resource without being asked (a palette, a font, an icon set, a background, a chart, a mockup, a favicon). See [resource-recommendations.md](resource-recommendations.md) for the best-fit sites per moment, and honor the license split in [stock-media.md](stock-media.md).
+
 If the chosen direction includes image-native visual ingredients that would materially improve the implementation, generate them as separate assets before building.
 
 Good candidates:

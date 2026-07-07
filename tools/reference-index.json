@@ -849,6 +849,15 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/resource-recommendations.md",
+    "title": "Resource recommendations",
+    "keywords": [
+      "resource",
+      "recommendations"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/responsive-design.md",
     "title": "Responsive Design",
     "keywords": [

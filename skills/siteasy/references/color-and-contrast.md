@@ -100,3 +100,5 @@ Heavy use of transparency (rgba, hsla) usually means an incomplete palette. Alph
 - **Kontrast** (browser extension for real-time WCAG contrast). https://chrome.google.com/webstore/detail/kontrast-wcag-contrast-ch/haphaaenepedkjngghandlmhfillnhjk
 - **A11ygator** (scans a URL against WCAG rules). https://a11ygator.chialab.io/
 - **Huetone** (builds accessible color systems). https://github.com/ardov/huetone
+
+For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

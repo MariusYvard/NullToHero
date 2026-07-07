@@ -79,3 +79,5 @@ Run this pass on any chart in the build:
 6. If it moves, check for a pause control and a reduced-motion path.
 
 A chart that passes this pass is usually a bar chart with labels and a table. That is not a failure of imagination. It is the most common right answer.
+
+For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

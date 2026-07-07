@@ -159,3 +159,5 @@ The fixed pixel ladder is the fallback to reason about; `clamp()` is what ships.
 ### Tabular figures for changing numbers
 
 Counters, prices, timers and data columns use `font-variant-numeric: tabular-nums` so each digit occupies the same width and the layout does not jitter as values change. Proportional figures are correct for running prose, wrong for anything that updates in place.
+
+For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

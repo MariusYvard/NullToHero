@@ -284,3 +284,5 @@ For every shipped page:
 ## Where to source images
 
 For photos and video that are free to use, see [references/stock-media.md](references/stock-media.md). Prefer the CC0 and public-domain list for anything you commit, and treat the popular free-stock sites as use-only.
+
+For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

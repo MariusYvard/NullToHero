@@ -79,6 +79,11 @@ CSV_CONFIG = {
         "file": "stock.csv",
         "search_cols": ["name", "media", "license", "notes"],
         "output_cols": ["name", "url", "media", "license", "attribution", "redistributable", "notes"]
+    },
+    "resources": {
+        "file": "resources.csv",
+        "search_cols": ["name", "category", "stage", "notes"],
+        "output_cols": ["stage", "category", "name", "url", "notes"]
     }
 }
 
