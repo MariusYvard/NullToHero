@@ -377,7 +377,7 @@ NullToHero works best with two small files in your project root. Claude reads th
 
 ## Ready-made assets
 
-The `assets/` folder ships an original, license-clean starter library: 139 icons, 20 background patterns, 18 spot illustrations, 34 animations and 6 templates. Icons and patterns take the surrounding color and the animations honor `prefers-reduced-motion`. Everything is CC0 for the media and MIT for the templates, so it is safe to copy into any project. Open `assets/gallery.html` to browse the whole set, and `assets/README.md` for how to wire each kind in. During a build, `/siteasy build` pulls from this library before an external source.
+The `assets/` folder ships an original, license-clean starter library: 139 icons, 20 background patterns, 18 spot illustrations, 34 animations and 6 templates. Icons and patterns take the surrounding color and the animations honor `prefers-reduced-motion`. Everything is CC0 for the media and MIT for the templates, so it is safe to copy into any project. Open `assets/gallery.html` to browse the whole set, and `assets/README.md` for how to wire each kind in. During a build, `/siteasy build` recommends curated external sites first and uses this library as a fallback for quick, offline or placeholder assets.
 
 ## What is inside
 

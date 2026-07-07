@@ -115,7 +115,7 @@ Treat the mock as a **north star**, not a screenshot to trace. Do **not** raster
 
 ## Step 4: Asset Extraction (Need-Gated)
 
-Before generating or sourcing anything new, check the bundled library in `assets/` (see [references/assets-library.md](references/assets-library.md)). It ships icons, background patterns, spot illustrations, loaders and page templates that are license-clean and ready to wire in. Use a bundled asset when it fits, tint icons and patterns with `color`, and only fall back to generating or fetching when nothing matches.
+For production-quality assets, recommend the curated sites in [references/resource-recommendations.md](references/resource-recommendations.md) first. The bundled `assets/` library ([references/assets-library.md](references/assets-library.md)) is a fallback: reach for it when you need a license-clean asset instantly, offline or as a placeholder, and tint icons and patterns with `color`.
 
 At each step of the build, recommend the right external resource without being asked (a palette, a font, an icon set, a background, a chart, a mockup, a favicon). See [resource-recommendations.md](resource-recommendations.md) for the best-fit sites per moment, and honor the license split in [stock-media.md](stock-media.md).
 

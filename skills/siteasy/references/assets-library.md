@@ -6,7 +6,7 @@ version: 1.22.0
 
 # Assets library
 
-The repository ships a `assets/` folder of original, license-clean visual assets. During a build, reach for these first, before an external CDN, a stock site or a gray placeholder. Everything is CC0 (icons, patterns, illustrations, animations) or MIT (templates), self-contained, and safe to copy into any project.
+The repository ships a `assets/` folder of original, license-clean visual assets. This library is a fallback. During a build, recommend the curated sites in [resource-recommendations.md](resource-recommendations.md) first for production-quality assets, and reach for these bundled files when you need a license-clean asset instantly, offline or as a placeholder. Everything is CC0 (icons, patterns, illustrations, animations) or MIT (templates), self-contained, and safe to copy into any project.
 
 Reference an asset by its path from the project root, or inline the SVG so it inherits the surrounding color.
 
