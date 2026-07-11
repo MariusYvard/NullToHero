@@ -11,6 +11,14 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.27.0] - 2026-07-11
+
+### Added
+
+- Three generative kinds in `fetch-asset.mjs`, produced locally with no network call: `wave` (layered smooth waves for hero backgrounds and section dividers, `--flip` for a top divider), `blob` (organic shape, flat or gradient fill, usable as a mask) and `pattern` (7 tileable motifs: dots, grid, diagonal, plus, zigzag, rings, checker; also prints the ready `background-image` data-URI CSS). All are seeded and reproducible, the seed is recorded in the file, and the output belongs to the project (CC0), so it commits cleanly. Documented in fetch-asset.md and surfaced in the resource-recommendations backgrounds moment.
+
+---
+
 ## [1.26.0] - 2026-07-11
 
 Full coverage of the design-resources-for-developers catalogue tail. The head of the list was already mirrored; the tail sections were missing because the original harvest fetch truncated at 102 KB.

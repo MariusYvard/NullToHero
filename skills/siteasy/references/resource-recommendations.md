@@ -1,7 +1,7 @@
 ---
 name: resource-recommendations
 description: "What external design resource to suggest at each moment of a build, and the best-fit sites for each need. Backed by tools/design-system/data/resources.csv."
-version: 1.26.0
+version: 1.27.0
 ---
 
 # Resource recommendations
@@ -29,7 +29,7 @@ node tools/design-system/scripts/check-resources.mjs
 | Direction, type | A font and a pairing | Google Fonts, Fontshare, Fontpair, Typewolf |
 | Build, icons | A consistent UI icon set | Heroicons, Tabler, Lucide, Iconify, Phosphor (`assets/icons` as a fallback) |
 | Build, illustrations | Spot art and characters | unDraw, Humaaans, Open Peeps, DrawKit, Blush (`assets/illustrations` as a fallback) |
-| Build, backgrounds | Section backdrops | Hero Patterns, SVG Backgrounds, Haikei, Pattern Monster (`assets/patterns` as a fallback) |
+| Build, backgrounds | Section backdrops | Hero Patterns, SVG Backgrounds, Haikei, Pattern Monster, or generate one on the spot: `fetch-asset.mjs wave\|blob\|pattern` with the project palette (seeded, offline, yours) |
 | Build, UI graphics | Blobs, waves, dividers | Get Waves, Blobmaker, Shape Dividers, Fancy Border Radius |
 | Build, components | Prebuilt UI parts | shadcn/ui, DaisyUI, Flowbite, Radix, Headless UI (framework: MUI, Chakra, Mantine, Vuetify) |
 | Build, patterns | How an established system solves the pattern | Material, Carbon, Polaris, Atlassian, Fluent (`--domain design-systems` for the full set) |

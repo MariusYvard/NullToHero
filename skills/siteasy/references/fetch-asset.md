@@ -1,7 +1,7 @@
 ---
 name: fetch-asset
-description: "The build flow's asset fetcher: pull a license-clean icon, font, photo, illustration or avatar from an open API on demand, then wire it in."
-version: 1.25.0
+description: "The build flow's asset fetcher: pull a license-clean icon, font, photo, illustration or avatar from an open API on demand, or generate a wave, blob or tileable pattern locally, then wire it in."
+version: 1.27.0
 ---
 
 # Fetch asset
@@ -21,6 +21,9 @@ node ${CLAUDE_PLUGIN_ROOT}/tools/design-system/scripts/fetch-asset.mjs <kind> <a
 | avatar | DiceBear | per style, verify | `avatar alex --style bottts` |
 | placeholder | Lorem Picsum | Unsplash, placeholder only, not committable | `placeholder 1200 800` |
 | palette | Colormind | generated, refine locally | `palette --from #6d28d9` |
+| wave | generated locally, no network | yours (CC0), seeded | `wave --colors "#0b3954,#087e8b" --seed 42` |
+| blob | generated locally, no network | yours (CC0), seeded | `blob --color #087e8b --points 8 --seed 7` |
+| pattern | generated locally, no network | yours (CC0) | `pattern dots --color #0b3954 --size 24` |
 
 ## How the flow uses it
 
@@ -29,5 +32,6 @@ node ${CLAUDE_PLUGIN_ROOT}/tools/design-system/scripts/fetch-asset.mjs <kind> <a
 - Photos: fetch from a CC0 source, then convert to WebP or AVIF and keep the attribution. For a use-only site, recommend it and hotlink, do not commit.
 - Avatars: fetch from DiceBear for seeded, on-brand placeholder people.
 - Placeholders: use Picsum only while building, replace before shipping.
+- Backgrounds: generate waves, blobs and tileable patterns locally with the project palette. Seeded and reproducible (the file records its seed), `pattern` also prints the `background-image` CSS with the data URI. No request leaves the machine and the output belongs to the project, so it commits cleanly.
 
 Add `--dry` to preview the request without fetching, `--out DIR` to choose where it saves (default `assets/`). If a need has no clean API here, fall back to recommending a site from resources.csv rather than scraping it.
