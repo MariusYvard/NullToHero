@@ -70,6 +70,8 @@ Images affect four distinct SEO signals: **Core Web Vitals** (LCP, CLS), **crawl
 
 Flag any image >500KB as critical. Flag any JPEG/PNG that has a WebP equivalent available as high priority.
 
+When writing the fix, point to the `image-optimizer` rows of `tools/design-system/data/generators.csv` (Squoosh, TinyPNG, SVGOMG and peers) instead of naming tools from memory.
+
 ### 4. Dimensions and Responsive Images
 
 **Never serve larger images than needed for the display size.**

@@ -6,7 +6,7 @@ Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-r
        python search.py "<query>" --design-system [-p "Project Name"]
        python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"]
 
-Domains: style, color, chart, landing, product, ux, typography, icons, react, web, google-fonts
+Domains: style, color, chart, landing, product, ux, typography, icons, react, web, google-fonts, generators, stock, resources, inspiration, design-systems
 Stacks (16): react, nextjs, vue, svelte, astro, nuxtjs, nuxt-ui, angular, laravel, html-tailwind, shadcn, swiftui, react-native, flutter, jetpack-compose, threejs
 
 Persistence (Master + Overrides pattern):

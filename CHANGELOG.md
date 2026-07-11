@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.26.0] - 2026-07-11
+
+Full coverage of the design-resources-for-developers catalogue tail. The head of the list was already mirrored; the tail sections were missing because the original harvest fetch truncated at 102 KB.
+
+### Added
+
+- 255 rows in `resources.csv` (753 to 1,008 sites, 23 to 33 categories): design-inspiration (47), design-systems (30), design-tools (53), desktop-apps (14), browser-extensions (26), image-compression (13), react-native-ui (9), ai-design (6), dev-resources (52) plus 5 more svelte-ui entries.
+- `inspiration.csv` (47 reference galleries with focus and best-for columns) and `design-systems.csv` (40 published design systems with org and strengths), registered in the design-system engine: `search.py "<query>" --domain inspiration` or `--domain design-systems`.
+- 19 rows in `generators.csv`: 13 image-optimizer tools and a new ai-design category (6 tools).
+- Wiring into existing flows, no new commands: a calibration step in the siteasy concept reference, optional calibration inputs for the memorability agent, an image-optimizer remediation pointer in the SEO images reference and three new moments in the resource-recommendations table (references, patterns, image weight).
+
+### Changed
+
+- `resources.csv` statuses refreshed by check-resources: 846 live, 81 moved, 46 unverified and 35 dead over 1,008 rows. 9 of the newly added URLs are dead upstream and enter already marked, so the recommendation flow skips them.
+
+---
+
 ## [1.25.4] - 2026-07-07
 
 ### Removed

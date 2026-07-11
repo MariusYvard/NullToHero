@@ -49,6 +49,8 @@ The signature moment belongs in the brief, not in a later polish pass, because i
 A page designed with its memorable moment in mind reserves the space and the timing for it.
 A page that bolts a moment on at the end has to fight its own structure.
 
+Before the brief is written, look outward once. The data directory ships `inspiration.csv`, a set of reference galleries searchable with `search.py "<territory>" --domain inspiration`: pick two or three entries that match the product's territory, note what the strongest references own, then write the anti-reference against them. This is calibration, not imitation. The brief has to beat the references at distinctiveness, not resemble them.
+
 ## The distinctiveness test
 
 Read the central idea aloud, then ask whether a direct competitor could put the same sentence at the top of their own `DIRECTION.md` without lying.

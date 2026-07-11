@@ -34,6 +34,11 @@ may be unavailable in this harness, and re-fetching wastes the shared pass.
 `url` or `path` names the target. If a file is absent, note it once and score from
 what is present; never block on a missing WebFetch.
 
+Optional calibration, never required: `tools/design-system/data/inspiration.csv`
+(what the strong reference galleries reward) and `design-systems.csv` (what the
+established systems standardize) sharpen the Signature element and Restraint
+judgments. Score from the page itself; treat these files as context, not evidence.
+
 ## Checklist
 ### Point of view
 - [ ] The page commits to one idea a visitor could state in a sentence

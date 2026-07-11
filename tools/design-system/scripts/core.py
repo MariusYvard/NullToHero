@@ -84,6 +84,16 @@ CSV_CONFIG = {
         "file": "resources.csv",
         "search_cols": ["name", "category", "stage", "tier", "notes"],
         "output_cols": ["stage", "category", "tier", "cost", "use", "name", "url", "status", "notes"]
+    },
+    "inspiration": {
+        "file": "inspiration.csv",
+        "search_cols": ["name", "focus", "best_for", "notes"],
+        "output_cols": ["name", "url", "focus", "best_for", "notes"]
+    },
+    "design-systems": {
+        "file": "design-systems.csv",
+        "search_cols": ["name", "org", "strengths", "notes"],
+        "output_cols": ["name", "org", "url", "strengths", "notes"]
     }
 }
 
