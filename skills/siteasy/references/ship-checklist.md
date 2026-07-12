@@ -1,7 +1,7 @@
 ---
 name: ship-checklist
 description: "A pre-launch checklist for a static site. The quality gates to clear before deploy, the deploy steps themselves, and the post-launch verification and rollback trigger."
-version: 1.18.0
+version: 1.28.0
 ---
 
 # Ship Checklist
@@ -24,6 +24,7 @@ Quality gates, all of which must pass:
 - [ ] Favicons and an Apple touch icon are set; the title and meta description are final, not placeholders.
 - [ ] Forms submit to the right endpoint, validate, and show success and error states. No `John Doe` or `Acme` placeholder content remains.
 - [ ] Analytics or consent banners, if used, fire only after consent and do not block render.
+- [ ] If a legal-notices or about page exists, it carries the one-line credit from craft.md (nofollow), or the owner asked for its removal and that is recorded.
 
 ## Deploy
 

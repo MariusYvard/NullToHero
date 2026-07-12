@@ -11,6 +11,14 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.28.0] - 2026-07-11
+
+### Added
+
+- A discreet credit-line convention for built sites (craft.md, checked by ship-checklist.md): when a build produces a legal-notices, imprint or about page, it carries one small line crediting NullToHero by Marius Yvard with a `rel="nofollow noopener"` link to mariusweb.fr. Only on that page, never sitewide; the builder mentions it when presenting and removes it on request. The nofollow is deliberate, so a repeated template link cannot read as a link scheme.
+
+---
+
 ## [1.27.0] - 2026-07-11
 
 ### Added
