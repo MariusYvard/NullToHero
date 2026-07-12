@@ -1032,6 +1032,50 @@ function checkMediaWeight(probes) {
     method: "probe", value, detail: `${videoMB.toFixed(1)} MB video and ${modelMB.toFixed(1)} MB 3D models referenced.` });
 }
 
+function checkThreeDuplicate(js) {
+  const t = js || "";
+  const revs = [];
+  const re = /\bREVISION\s*=\s*['"]?(\d{2,4})\b/g;
+  let m;
+  while ((m = re.exec(t))) revs.push(m[1]);
+  if (revs.length === 0) {
+    return mk({ id: "three-duplicate-copies", label: "Duplicate three.js copies", ...PERF, verdict: "PASS",
+      method: "static", value: { copies: 0 }, detail: "No three.js build detected in the page's own scripts." });
+  }
+  const distinct = [...new Set(revs)];
+  if (distinct.length > 1) {
+    return mk({ id: "three-duplicate-copies", label: "Duplicate three.js copies", ...PERF, verdict: "FAIL",
+      method: "static", value: { copies: revs.length, revisions: distinct },
+      detail: `Two different three.js builds are bundled (r${distinct.join(", r")}) — double weight and broken instanceof across the boundary.` });
+  }
+  if (revs.length > 1) {
+    return mk({ id: "three-duplicate-copies", label: "Duplicate three.js copies", ...PERF, verdict: "WARN",
+      method: "static", value: { copies: revs.length, revisions: distinct },
+      detail: `three.js r${distinct[0]} appears ${revs.length} times in the page's scripts — likely bundled twice.` });
+  }
+  return mk({ id: "three-duplicate-copies", label: "Duplicate three.js copies", ...PERF, verdict: "PASS",
+    method: "static", value: { copies: 1, revisions: distinct }, detail: `One three.js build (r${distinct[0]}).` });
+}
+
+function checkFrameLoopAlloc(js) {
+  const t = js || "";
+  const heads = /useFrame\s*\(|requestAnimationFrame\s*\(/g;
+  const alloc = /new\s+(THREE\.)?(Vector[23]|Matrix[34]|Quaternion|Euler|Color)\s*\(|\.clone\s*\(\s*\)/;
+  let m, hits = 0, windows = 0;
+  while ((m = heads.exec(t))) {
+    windows++;
+    if (alloc.test(t.slice(m.index, m.index + 500))) hits++;
+  }
+  if (hits > 0) {
+    return mk({ id: "frame-loop-alloc", label: "Allocation in the frame loop", ...PERF, verdict: "WARN",
+      method: "static", value: { loops: windows, allocating: hits },
+      detail: `${hits} frame loop(s) allocate engine objects (new Vector/Matrix/Color or .clone()) per frame — reuse a temporary with set()/copy().` });
+  }
+  return mk({ id: "frame-loop-alloc", label: "Allocation in the frame loop", ...PERF, verdict: "PASS",
+    method: "static", value: { loops: windows, allocating: 0 },
+    detail: windows ? `No per-frame allocation detected across ${windows} frame loop(s).` : "No frame loops detected." });
+}
+
 // ── engine ────────────────────────────────────────────────────────────────────
 
 export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", js = "", probes = null } = {}) {
@@ -1068,6 +1112,8 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkScrollbarHidden(styleText),
     checkFrameSequencePreload(js, rawHtml),
     checkMixedScriptText(activeDoc),
+    checkThreeDuplicate(js),
+    checkFrameLoopAlloc(js),
     checkHttpsRedirect(probes),
     checkHostCanonical(probes),
     checkSecurityTxt(probes),

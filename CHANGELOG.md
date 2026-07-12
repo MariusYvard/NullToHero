@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.30.0] - 2026-07-12
+
+### Added
+
+- WebGL scene budgets in `overdrive.md` (1.11.0): draw-call ceiling (a few hundred, 1000 max, instancing beyond), demand rendering with explicit invalidation, movement regression with fps hysteresis (~200ms rest), mount-cost discipline (share geometries/materials, toggle visible, stagger construction), nested low-to-high loading and disposal rules.
+- Frame-loop laws in `animation-engineering.md` (1.12.0): mutate in the loop instead of setState, delta-time advancement, zero allocation in the hot path.
+- Declarative-3D architecture notes in `creative-patterns.md` (1.10.0): static constructor args, state selectors, non-reactive reads in the loop, raycast event costs.
+- Animated component registries in `component-patterns.md` (1.10.0): registry code is site code (audit and fix locally), registry defaults are defaults (reduced-motion guard, factory gradients), the stable 8-family taxonomy, pure-SVG device mocks.
+- Component loops and entrances in `animate.md` (1.7.0): the two duration regimes (300-400ms feedback vs 3-40s ambient loops), IO entrance parameters, accessible split-text (aria-hidden clones + intact label), localized `tabular-nums` counters, negative-delay phasing, offscreen/reduced-motion/visibility cuts for canvas backgrounds, no setInterval engines.
+- Decorative loop budget in `delight.md` (1.7.0) and the registry component-zoo tell in `memorability.md` (1.25.0).
+- Eight inspect rules (57-64): no setState in frame loops, no allocation in frame loops, delta-time animation, cached asset loaders, declarative constructor props, hidden marquee clones, guarded infinite decorative loops, localized number formatting.
+- Two deterministic checks: `three-duplicate-copies` (distinct REVISION constants = double three.js bundle) and `frame-loop-alloc` (engine-object allocation inside useFrame/rAF windows); 3 eval fixtures (67 total, 100%).
+- Motion agent +2 checklist items (loop budget and guards, demand rendering and movement regression); memorability agent +1 (registry component zoo).
+- 10 resources rows (R3F ecosystem: official eslint plugin, three-stdlib, @react-spring/three, Discover three.js; magicui dependencies: cobe, canvas-confetti, tw-animate-css, react-tweet, Shiki, svg-dotted-map) and 2 refreshed notes (Motion merger lineage, Magic UI registry model). All URLs verified.
+
+---
+
 ## [1.29.0] - 2026-07-12
 
 ### Added

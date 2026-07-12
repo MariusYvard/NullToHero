@@ -1,7 +1,7 @@
 ---
 name: animate
 description: "Analyze a feature and strategically add animations and micro-interactions that enhance understanding, provide feedback, and create delight."
-version: 1.6.0
+version: 1.7.0
 ---
 
 > **Additional context needed**: performance constraints.
@@ -166,6 +166,18 @@ Use appropriate techniques for each animation:
 - Ignore `prefers-reduced-motion`—this is an accessibility violation
 - Animate everything—animation fatigue makes interfaces feel exhausting
 - Block interaction during animations unless intentional
+
+## Animated Component Loops and Entrances
+
+Rules distilled from the animated-component ecosystem (registries, hero effects):
+
+- Two duration regimes coexist. Feedback and entrances live at 300-400ms ease-out; ambient loops (shimmer ~3s, border beams ~6s, marquees ~40s) live at 3-40s linear. Judge a decorative loop on its reduced-motion guard and its per-view budget, not on the 300ms feedback ceiling.
+- Scroll entrances: IntersectionObserver with `once: true` and a margin around -50px, near-zero base delay (~40ms), staggers around 50ms that compress with segment count (total duration divided by elements) so long lists do not make the reader wait.
+- Split-text accessibly: per-character spans are noise for a screen reader. Hide the animated copy (`aria-hidden`) and expose the intact text (`aria-label` or a visually-hidden duplicate).
+- Animated counters: `tabular-nums` so digits keep a stable width (no reflow), write `textContent` directly outside the render cycle, and format with the page locale — never a hardcoded one.
+- Several beams or orbiters on one element: phase them with negative delays instead of duplicating keyframes.
+- Canvas and WebGL backgrounds: cut the rAF when off-viewport (IntersectionObserver), under reduced motion and on `visibilitychange`; listen for `webglcontextlost`.
+- `setInterval` is not an animation engine (background-tab throttling, drift): rAF or a CSS animation.
 
 ## Verify Quality
 

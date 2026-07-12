@@ -59,6 +59,7 @@ judgments. Score from the page itself; treat these files as context, not evidenc
 ### Restraint and template shape
 - [ ] Not template-shaped: a generic hero plus three feature cards plus a gradient, safe even spacing and zero signature
 - [ ] Not the award-genre template: slit reveals plus split-text plus pinned video plus marquee, all present with no variation, is a genre default, not an identity
+- [ ] Not the registry component zoo: logo marquee plus bento plus globe plus number tickers plus border beams, still wearing library factory gradients, is a pasted kit, not a designed page
 - [ ] Memorable through commitment, not through clutter
 
 ## Scoring

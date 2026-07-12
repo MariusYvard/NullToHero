@@ -1,7 +1,7 @@
 ---
 name: animation-engineering
 description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
-version: 1.11.0
+version: 1.12.0
 ---
 
 # Animation Engineering
@@ -348,6 +348,9 @@ Rules for pages that run continuous JS animation (WebGL scenes, custom cursors, 
 - **Lerp reference values.** Pointer-follow feels credible at 0.05-0.1 per frame (0.05 heavy, 0.1 crisp); a scroll scrub wants ~0.18. Clamp user-driven motion (a camera never dips below the floor) and re-aim (`lookAt`) after every lerp.
 - **Idle state.** Anything that animates continuously needs a resting behavior, a slow drift or a breathing wave, so the scene never freezes into a dead image when input stops.
 - **Cap the pixel ratio.** `renderer.setPixelRatio(Math.min(devicePixelRatio, 2))`. Uncapped DPR renders four times the pixels on dense mobile screens for an invisible gain.
+- **Mutate in the loop, never setState.** Continuous values (positions, scroll offsets, pointer trails) mutate refs or objects inside the frame loop; component state is for discrete transitions. A state update per frame or per pointermove routes 60+ renders a second through the framework for nothing.
+- **Advance by delta time.** `x += 0.1` per frame runs twice as fast on a 120Hz screen as on a 60Hz one; `x += speed * delta` is refresh-rate independent. Engine objects often also need their update flag (`.needsUpdate`, `updateProjectionMatrix()`) after a mutation.
+- **Zero allocation in the hot path.** No `new` and no `.clone()` inside a frame loop — allocate temporaries once (module scope or memo) and reuse them with `.set()`/`.copy()`. Sixty allocations a second is a GC hiccup on a timer.
 - **Tune with a bounded GUI, ship without it.** Subjective parameters (lerp ease, parallax intensity) get a dev panel with bounded ranges (lil-gui) during design, and the panel never reaches the production bundle, same rule as ScrollTrigger `markers`.
 
 ---

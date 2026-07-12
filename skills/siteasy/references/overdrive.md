@@ -1,7 +1,7 @@
 ---
 name: overdrive
 description: "Advanced visual effects for high-impact interfaces: the View Transitions API, WebGL, and scroll-driven animations."
-version: 1.10.0
+version: 1.11.0
 ---
 
 Start your response with:
@@ -115,6 +115,15 @@ else if (canvas.getContext('webgl2')) { /* WebGL2 fallback */ }
 - Cap `setPixelRatio` at 2 — uncapped DPR quadruples the pixels for an invisible gain.
 - Give continuous scenes an idle state (a slow drift) instead of freezing when input stops.
 - Test on real mid-range devices, not just your development machine.
+
+### WebGL scene budgets
+
+- Draw calls: aim for a few hundred meshes, treat 1000 as the absolute ceiling. Repeated objects belong in an instanced mesh — one draw call carries tens of thousands of instances.
+- Render on demand: a scene with nothing moving should render only when invalidated, not at 60fps forever. Imperative mutations (camera controls) are invisible to the framework — invalidate explicitly, and start a synchronous animation one frame after the invalidation or the first frame visibly jumps.
+- Movement regression, the pattern of the big model viewers: while the user drags or orbits, drop resolution (down to half), skip shadows and post-processing, then restore about 200ms after the input rests. Drive it with a bounded factor and fps hysteresis (a high and a low bound, a flip limit, then a definitive floor) so quality does not ping-pong.
+- Mounting costs more than rendering: a newly mounted material compiles and a new geometry is processed, which is a hitch the frame budget feels. Share geometries and materials, toggle `visible` instead of unmounting, and stagger expensive constructions instead of building everything in one frame.
+- Load nested: a low-definition model is the loading state of the high-definition one (three tiers: indicator, low, high). Preload by URL before mounting; cache per URL so CPU parse and GPU upload happen once.
+- Dispose GPU resources when something truly leaves — but never dispose shared or cached assets, and remember that objects injected imperatively are the injector's responsibility.
 
 ### Polish is the difference
 

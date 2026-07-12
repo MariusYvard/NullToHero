@@ -798,5 +798,30 @@
    "media-weight": "PASS",
    "video-embed-hygiene": "PASS"
   }
+ },
+ {
+  "name": "three-dup",
+  "file": "three-dup.html",
+  "js": "const REVISION = '160'; export { REVISION }; /* second bundle */ var REVISION2; REVISION = '178';",
+  "expect": {
+   "three-duplicate-copies": "FAIL"
+  }
+ },
+ {
+  "name": "three-clean",
+  "file": "three-clean.html",
+  "js": "const REVISION = '178'; console.log(REVISION);",
+  "expect": {
+   "three-duplicate-copies": "PASS",
+   "frame-loop-alloc": "PASS"
+  }
+ },
+ {
+  "name": "frame-alloc",
+  "file": "frame-alloc.html",
+  "js": "useFrame(() => { const v = new THREE.Vector3(1, 2, 3); mesh.position.copy(v); });",
+  "expect": {
+   "frame-loop-alloc": "WARN"
+  }
  }
 ]

@@ -38,6 +38,7 @@ what is present; never block on a missing WebFetch.
 ### Purpose
 - [ ] Motion clarifies state, relationship, or cause and effect
 - [ ] Decorative motion is restrained and earns its place
+- [ ] Infinite decorative loops (shimmer, beams, marquees) are budgeted to one or two per view and guarded for reduced motion
 - [ ] Motion does not delay access to content
 
 ### Timing and easing taste
@@ -62,6 +63,7 @@ what is present; never block on a missing WebFetch.
 - [ ] Shared-element or View Transitions used where apt
 - [ ] Sequenced motion maintains continuity between views
 - [ ] Loaders report real progress and continuous scenes keep a subtle idle state (a simulated percentage or a frozen scene is a fake)
+- [ ] Idle 3D scenes render on demand, and quality regresses during movement (resolution drops while dragging, restores at rest)
 - [ ] Overall effect is delight without distraction
 
 ## Scoring

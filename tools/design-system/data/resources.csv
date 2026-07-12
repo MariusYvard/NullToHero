@@ -491,7 +491,7 @@ motion,css-animation,more,free,open-source library,AnimXYZ,https://animxyz.com,l
 motion,css-animation,more,free,open-source library,Whirl,https://github.com/jh3y/whirl,live,CSS loading animations with minimal effort! |
 motion,css-animation,more,free,open-source library,Hamburgers,https://jonsuh.com/hamburgers,live,Hamburgers is a collection of tasty CSS-animated hamburger icons. Also included is the source as a Sass library. It's mo
 motion,css-animation,more,free,open-source library,CSS Loaders & Spinners,https://cssloaders.github.io,live,"This is a library having a collection of different types of CSS loaders, spinners |"
-motion,css-animation,more,free,open-source library,Motion One,https://motion.dev,live,"A new animation library, built on the Web Animations API for the smallest filesize and the fastest performance. |"
+motion,css-animation,more,free,open-source library,Motion,https://motion.dev,live,"The motion package (Framer Motion and Motion One merged): springs, useInView and the useReducedMotion JS guard |"
 motion,css-animation,more,free,open-source library,pocoloco,https://pocoloco.io,live,Generate dynamic backgrounds for your website |
 motion,css-animation,more,free,open-source library,AniX,https://adajuly.github.io/AniX,live,Super easy and lightweight css animation library. |
 motion,css-animation,top,free,open-source library,AOS,https://michalsnik.github.io/aos,live,Animate On Scroll Library. |
@@ -676,7 +676,7 @@ build,react-ui,more,free,"open-source, check the licence",React Aria,https://rea
 build,react-ui,top,free,"open-source, check the licence",shadcn/ui,https://ui.shadcn.com,live,Beautifully designed components built with Radix UI and Tailwind CSS. |
 build,react-ui,more,free,"open-source, check the licence",Tremor,https://tremor.so,live,React components to build charts and dashboards with |
 build,react-ui,more,free,"open-source, check the licence",Aceternity UI,https://ui.aceternity.com,live,Copy paste the most trending components and use them in your websites without having to worry about styling and animatio
-build,react-ui,more,free,"open-source, check the licence",Magic UI,https://magicui.design,live,"free and open-source animated components built with React, Typescript, Tailwind CSS, and Framer Motion. |"
+build,react-ui,more,free,open-source library,Magic UI,https://magicui.design,live,"78 animated components (React 19, Tailwind v4, motion) distributed as a shadcn registry plus an MCP server: the code lands in your project and is audited as site code; most components need a reduced-motion guard added |"
 build,react-ui,more,free,"open-source, check the licence",Code UI,https://www.codeui.co.in,live,"Beautifully designied mobile responsive components built with HTML, CSS , JS and React, Typescript, Tailwind CSS, and Fr"
 build,react-ui,more,free,"open-source, check the licence",Edil Ozi,https://www.edil-ozi.pro,unverified,Component Library for Developers. Open Source components you can copy and paste to your apps. |
 build,react-ui,top,free,"open-source, check the licence",Shadcn Templates,https://shadcntemplates.com,live,"Free collection of Shadcn UI templates, components, blocks, boilerplates, and more. |"
@@ -1022,3 +1022,13 @@ motion,webgl,more,free,open-source library,lil-gui,https://lil-gui.georgealways.
 motion,webgl,more,free,learning resource,The Book of Shaders,https://thebookofshaders.com,live,Step-by-step fragment-shader course |
 motion,webgl,more,free,learning resource,Shadertoy,https://www.shadertoy.com,live,Live-coded shader gallery for studying techniques |
 color,color-tools,more,free,reference,Okabe-Ito palette,https://jfly.uni-koeln.de/color/,live,Eight-color palette safe for the common color-vision deficiencies; the default fix for chart series hues |
+motion,webgl,more,free,open-source library,@react-three/eslint-plugin,https://www.npmjs.com/package/@react-three/eslint-plugin,live,"Official lint rules for the R3F frame loop (no-new-in-loop, no-clone-in-loop) |"
+motion,webgl,more,free,open-source library,three-stdlib,https://github.com/pmndrs/three-stdlib,live,"Maintained ESM fork of the three.js examples modules, tree-shakable |"
+motion,webgl,more,free,open-source library,@react-spring/three,https://www.npmjs.com/package/@react-spring/three,live,"Spring animation with its own loop outside React, the documented way to animate R3F without setState |"
+motion,webgl,more,free,learning resource,Discover three.js: Tips and Tricks,https://discoverthreejs.com/tips-and-tricks/,live,Reference page for three.js memory management and disposal |
+motion,webgl,more,free,open-source library,cobe,https://cobe.vercel.app,live,Lightweight WebGL dotted globe |
+motion,js-animation,more,free,open-source library,canvas-confetti,https://github.com/catdad/canvas-confetti,live,"Ephemeral canvas confetti, the de-facto standard; trigger on events, never on load |"
+motion,css-animation,more,free,open-source library,tw-animate-css,https://github.com/Wombosvideo/tw-animate-css,live,"Utility keyframes for Tailwind v4, successor of tailwindcss-animate |"
+build,react-ui,more,free,open-source library,react-tweet,https://react-tweet.vercel.app,live,Static tweet rendering without widgets.js |
+scaffold,dev-resources,more,free,open-source library,Shiki,https://shiki.style,live,Build-time syntax highlighting |
+imagery,svg,more,free,open-source library,svg-dotted-map,https://www.npmjs.com/package/svg-dotted-map,live,Dotted world maps as pure SVG |

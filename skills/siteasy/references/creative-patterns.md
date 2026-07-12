@@ -1,7 +1,7 @@
 ---
 name: creative-patterns
 description: "Arsenal of bold creative techniques for /siteasy overdrive, delight, and build. Use selectively; the point is intentionality, not novelty for its own sake."
-version: 1.9.0
+version: 1.10.0
 ---
 
 # Creative Patterns
@@ -171,6 +171,8 @@ For SaaS dashboards and feature sections, implement these perpetual animations:
 **Interactivity isolation** — any component with spring animations or perpetual motion must be extracted as an isolated leaf `"use client"` component. Server Components render static layouts only.
 
 **GSAP vs Framer Motion** — never mix in the same component tree. Framer Motion for UI/Bento interactions. GSAP/ThreeJS exclusively for isolated full-page scrolltelling or canvas backgrounds, wrapped in `useEffect` cleanup blocks.
+
+**Declarative 3D (React Three Fiber)** — the renderer is declarative, the engine underneath is not. Object props built inline (`position={new THREE.Vector3(...)}`, `geometry={new THREE.SphereGeometry(...)}`) are recreated on every render and defeat the engine's caches: pass constructor `args` and scalar shorthands instead. Subscribe to state with selectors, never whole-store subscriptions, and read fast-changing state non-reactively inside the frame loop (`getState()`), or every frame re-renders the component tree. 3D pointer events cost a raycast: keep them off large scenes, prune with a filter, and remember occlusion does not block events by default.
 
 **Grain/noise filters** — apply only to `fixed, pointer-events-none` pseudo-elements. Never on scrolling containers — causes continuous GPU repaints.
 

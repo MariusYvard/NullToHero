@@ -1,7 +1,7 @@
 ---
 name: component-patterns
 description: "Patterns for composable, accessible component APIs: slots and compound components, controlled vs uncontrolled, and clear prop design."
-version: 1.9.0
+version: 1.10.0
 ---
 
 # Component Patterns
@@ -428,3 +428,13 @@ class ErrorBoundary extends Component {
   <ComplexChart data={data} />
 </ErrorBoundary>
 ```
+
+## Animated Component Registries
+
+The shadcn distribution model (shadcn/ui, Magic UI and their neighbors) copies component source into the project instead of adding a dependency. Three consequences matter:
+
+- **The code is yours the moment it lands.** It ships under `components/`, it is versioned by your repo, and no upstream update will ever reach it. Audit it and fix it like any other file in the codebase — a flaw inherited from the registry is still your flaw in production.
+- **Registry defaults are defaults.** Most animated registry components ship without a `prefers-reduced-motion` guard and with factory accent gradients. Pasting one is accepting those choices until you edit them: add the guard, bind the colors to your tokens.
+- **The taxonomy is stable across libraries**: logo marquees, decorative backgrounds (SVG patterns, particles, WebGL), animated borders and beams, pointer-following spotlight cards, segmented text reveals, spring number tickers, device mockups and signature buttons. Knowing the families makes both building and auditing faster — and explains why unedited registry pages all look related.
+
+Device mockups deserve one specific rule: prefer a pure SVG frame (server-renderable, zero hydration) over a bitmap screenshot or a client component.

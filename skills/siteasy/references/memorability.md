@@ -1,7 +1,7 @@
 ---
 name: memorability
 description: "The method for judging and scoring how memorable a page is, complementing anti-pattern detection by scoring the positive."
-version: 1.24.0
+version: 1.25.0
 ---
 
 # Memorability: Scoring Distinctiveness
@@ -73,6 +73,8 @@ The fifth, and the most telling, is zero signature moment: nothing on the page t
 
 A sixth tell has emerged with the award-site genre: the full move set, clip-path slit reveals, split-text headlines, a scroll-pinned video, a velocity marquee, present together with no variation.
 On a portfolio or product page this cluster is now as template-shaped as the centered-hero-plus-three-cards arrangement, because it is the literal output of the genre's tutorials.
+
+A seventh tell is the registry component zoo: a logo marquee plus a bento grid plus a dotted globe plus spring number tickers plus an animated border beam plus a typing hero, assembled from a copy-paste component registry — often still wearing the library's factory gradients instead of the brand's tokens. Each component is competent; the unedited set is a kit, and MCP-driven generation is multiplying it.
 
 One tell is a smell.
 Three or more together are the diagnosis.

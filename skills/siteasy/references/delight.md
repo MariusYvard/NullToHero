@@ -1,7 +1,7 @@
 ---
 name: delight
 description: "Identify opportunities to add moments of joy, personality, and unexpected polish that transform functional interfaces into delightful experiences."
-version: 1.6.0
+version: 1.7.0
 ---
 
 > **Additional context needed**: what's appropriate for the domain (playful vs professional vs quirky vs elegant).
@@ -293,6 +293,12 @@ Loading messages — write ones specific to your product, not generic AI filler:
 - Make every interaction delightful (special moments should be special)
 - Sacrifice performance for delight
 - Be inappropriate for context (read the room)
+
+## Decorative Loop Budget
+
+- Infinite decorative loops (shimmer, beams, marquees, particle fields) are a condiment: one or two per view. Beyond that they cancel each other and drain batteries.
+- Confetti is event-triggered (a success, a submission) and ephemeral — never looping, never on page load.
+- A pointer-following spotlight or orb must reset cleanly when the pointer leaves the window, on tab blur and on `visibilitychange`, or the halo freezes mid-card.
 
 ## Verify Delight Quality
 

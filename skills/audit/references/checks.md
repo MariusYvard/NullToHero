@@ -91,6 +91,8 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | Image-sequence preload burst | 50+ sequential frame URLs, or an eager `new Image()` loop | no | seo-agent-performance |
 | Mixed-script homoglyphs | visible words mixing Latin with Cyrillic or Greek letters | no | seo-agent-content |
 | Referenced media weight | HEAD-probed video and 3D-model bytes against 10/30 MB and 5 MB budgets (URL probe) | no | seo-agent-performance |
+| Duplicate three.js copies | distinct `REVISION` constants in the page's own scripts | no | seo-agent-performance |
+| Allocation in the frame loop | `new Vector/Matrix/Color` or `.clone()` within a `useFrame`/`requestAnimationFrame` window | no | seo-agent-performance |
 
 Each result carries a `method`: `computed` (from a render), `static` (parsed from
 HTML and CSS) or `not-measured`. A `not-measured` check never moves a score; it is
