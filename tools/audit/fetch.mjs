@@ -22,7 +22,7 @@
  * raw fetch with a clear warning. Exit 0 on fetch, 2 on usage/target error.
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { parse, textContent, queryAll } from "./lib/html.mjs";
 import { flatten, contrastRatio } from "./lib/contrast.mjs";
@@ -137,6 +137,94 @@ async function runProbes(baseUrl, timeout) {
     out.securityTxt = { tested: true, found: !r.error && r.status >= 200 && r.status < 300 };
   } catch { /* keep default */ }
   return out;
+}
+
+// Passive scrollytelling probe: detects step/pin machinery in the page's own
+// HTML and JS so the motion and UX agents get context. Context only, never a
+// verdict — a scrollytelling page is not a defect.
+function scrollySignals(html, js) {
+  const t = (html || "") + "\n" + (js || "");
+  const found = [];
+  if (/\bScrollTrigger\b/.test(t)) found.push("gsap-scrolltrigger");
+  if (/scrollama/i.test(t)) found.push("scrollama");
+  if (/\bcr-section\b|closeread/i.test(t)) found.push("closeread");
+  if (/animation-timeline\s*:/.test(t)) found.push("css-scroll-driven");
+  if (/data-scrollama-index/.test(t)) found.push("scrollama-steps");
+  if (/position\s*:\s*sticky/i.test(t) && /IntersectionObserver/.test(t)) found.push("sticky+io");
+  return { detected: found.length > 0, signals: found };
+}
+
+// Weigh the video and 3D-model files a page references. HEAD requests (with a
+// 1-byte range GET fallback for hosts that reject HEAD) for URLs, fs.stat for
+// local targets. Read-only, capped, and reported through probes.mediaWeight so
+// the media-weight check can stay NOT_MEASURED when nothing was probed.
+const MEDIA_CAPS = { maxProbes: 20 };
+
+function collectMediaRefs(html, js) {
+  const t = (html || "") + "\n" + (js || "");
+  const re = /[^"'`()\s>{}]+\.(mp4|webm|mov|m4v|glb|gltf)\b/gi;
+  const videos = new Set(), models = new Set();
+  let m;
+  while ((m = re.exec(t))) {
+    const u = m[0].replace(/^[.,;:]+/, "");
+    if (/\.(glb|gltf)$/i.test(u)) models.add(u); else videos.add(u);
+  }
+  return { videos: [...videos].slice(0, MEDIA_CAPS.maxProbes), models: [...models].slice(0, MEDIA_CAPS.maxProbes) };
+}
+
+async function headBytes(u, timeout) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    let res = await fetch(u, { method: "HEAD", signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    let cl = res.ok ? res.headers.get("content-length") : null;
+    if (!cl) {
+      res = await fetch(u, { method: "GET", signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA, range: "bytes=0-0" } });
+      const cr = res.headers.get("content-range");
+      try { await res.body?.cancel(); } catch { /* ignore */ }
+      const mm = cr && cr.match(/\/(\d+)$/);
+      if (mm) return parseInt(mm[1], 10);
+      cl = res.ok ? res.headers.get("content-length") : null;
+      return cl ? parseInt(cl, 10) : null;
+    }
+    try { await res.body?.cancel(); } catch { /* ignore */ }
+    return parseInt(cl, 10);
+  } catch { return null; }
+  finally { clearTimeout(t); }
+}
+
+async function measureMediaWeight({ html, js, baseUrl, isUrl, localPath, timeout }) {
+  const refs = collectMediaRefs(html, js);
+  if (refs.videos.length === 0 && refs.models.length === 0) {
+    return { tested: true, videos: [], models: [], videoBytes: 0, modelBytes: 0, unresolved: 0 };
+  }
+  const pt = Math.min(timeout, 8000);
+  let unresolved = 0;
+  const weigh = async (ref) => {
+    if (isUrl) {
+      let abs; try { abs = new URL(ref, baseUrl).href; } catch { unresolved++; return null; }
+      const b = await headBytes(abs, pt);
+      if (b == null) { unresolved++; return null; }
+      return { url: abs, bytes: b };
+    }
+    if (localPath) {
+      try {
+        const p2 = resolve(dirname(localPath), ref.split("?")[0].split("#")[0]);
+        if (existsSync(p2)) return { url: ref, bytes: statSync(p2).size };
+      } catch { /* fall through */ }
+      unresolved++; return null;
+    }
+    unresolved++; return null;
+  };
+  const videos = [], models = [];
+  for (const r of refs.videos) { const w = await weigh(r); if (w) videos.push(w); }
+  for (const r of refs.models) { const w = await weigh(r); if (w) models.push(w); }
+  return {
+    tested: true, videos, models,
+    videoBytes: videos.reduce((s2, x) => s2 + x.bytes, 0),
+    modelBytes: models.reduce((s2, x) => s2 + x.bytes, 0),
+    unresolved,
+  };
 }
 
 // ── linked CSS / JS collection ────────────────────────────────────────────────
@@ -301,6 +389,13 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     catch (e) { console.error(`[fetch] asset collection failed: ${e.message}`); }
   }
 
+  let mediaWeight = { tested: false };
+  if (wantAssets) {
+    try { mediaWeight = await measureMediaWeight({ html, js: assetInfo.js, baseUrl, isUrl, localPath: isUrl ? null : resolve(target), timeout }); }
+    catch (e) { console.error(`[fetch] media weight probe failed: ${e.message}`); }
+  }
+  const scrolly = scrollySignals(html, assetInfo.js);
+
   let renderedHtml = null, computed = null, renderAvailable = false;
   if (wantRender) {
     if (!isUrl) console.error("[fetch] --render needs a URL; using raw HTML for the local file.");
@@ -329,8 +424,8 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     render: renderAvailable ? "playwright" : "none",
     renderRequested: wantRender, renderAvailable,
     clientRendered,
-    signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell },
-    headers, probes,
+    signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell, scrolly },
+    headers, probes: { ...(probes || {}), mediaWeight },
     rawHtml: html, renderedHtml, robotsTxt, computed,
     linkedCss: assetInfo.css, linkedJs: assetInfo.js,
     assets: { cssFiles: assetInfo.cssFiles, jsFiles: assetInfo.jsFiles, skipped: assetInfo.skipped },

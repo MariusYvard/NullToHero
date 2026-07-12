@@ -37,7 +37,7 @@ const freshBaseline = {};
 
 for (const lab of labels) {
   const html = readFileSync(join(EVAL, "fixtures", lab.file), "utf8");
-  const checks = runChecks({ rawHtml: html, robotsTxt: lab.robots || null, url: lab.url || null, headers: lab.headers || null, css: lab.css || "", probes: lab.probes || null });
+  const checks = runChecks({ rawHtml: html, robotsTxt: lab.robots || null, url: lab.url || null, headers: lab.headers || null, css: lab.css || "", js: lab.js || "", probes: lab.probes || null });
   const actual = {};
   for (const c of checks) actual[c.id] = c.verdict;
   freshBaseline[lab.name] = actual;

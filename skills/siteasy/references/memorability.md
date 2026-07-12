@@ -1,7 +1,7 @@
 ---
 name: memorability
 description: "The method for judging and scoring how memorable a page is, complementing anti-pattern detection by scoring the positive."
-version: 1.23.0
+version: 1.24.0
 ---
 
 # Memorability: Scoring Distinctiveness
@@ -43,6 +43,9 @@ A page with one strong idea and quiet support beats a page with five effects fig
 When commitment and restraint appear to conflict, they do not: commitment picks the idea, restraint protects it by removing everything that dilutes it.
 The two are a pair, not a trade-off.
 
+The strongest signature elements are literal and non-templatable: a hand-drawn mark animated stroke by stroke, a named 3D centerpiece, an owned display glyph.
+A genre effect (a slit reveal, a marquee, a split-text headline) can be executed beautifully and still belong to everyone.
+
 Commitment is weighted highest of the seven.
 A page that holds a real point of view will usually pull the other dimensions along with it, because a stance implies a voice, a voice implies word choices and a stance about who you serve implies a color and type territory.
 A page with no point of view has nothing to derive the rest from, which is why it defaults.
@@ -67,6 +70,9 @@ It is anonymous.
 The third is the stock palette, a violet or indigo primary lifted straight from a framework theme with no adjustment.
 The fourth is uniform even spacing everywhere, every gap the same, which produces a page with no rhythm and no emphasis.
 The fifth, and the most telling, is zero signature moment: nothing on the page that a visitor would remember or mention.
+
+A sixth tell has emerged with the award-site genre: the full move set, clip-path slit reveals, split-text headlines, a scroll-pinned video, a velocity marquee, present together with no variation.
+On a portfolio or product page this cluster is now as template-shaped as the centered-hero-plus-three-cards arrangement, because it is the literal output of the genre's tutorials.
 
 One tell is a smell.
 Three or more together are the diagnosis.

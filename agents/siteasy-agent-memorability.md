@@ -46,6 +46,7 @@ judgments. Score from the page itself; treat these files as context, not evidenc
 ### Signature element
 - [ ] One signature moment or element is present and only one dominates
 - [ ] The signature serves the idea, not decoration for its own sake
+- [ ] The strongest signatures are literal and non-templatable (a hand-drawn mark, a named centerpiece, an owned glyph), not a genre effect
 ### Distinctive type
 - [ ] Type has character and is not a default-wave face (Inter, Roboto, Geist, Space Grotesk, Plus Jakarta Sans) used without intent
 - [ ] One memorable typographic decision is made (scale, tracking, case or pairing)
@@ -57,6 +58,7 @@ judgments. Score from the page itself; treat these files as context, not evidenc
 - [ ] The copy has a voice, not interchangeable filler
 ### Restraint and template shape
 - [ ] Not template-shaped: a generic hero plus three feature cards plus a gradient, safe even spacing and zero signature
+- [ ] Not the award-genre template: slit reveals plus split-text plus pinned video plus marquee, all present with no variation, is a genre default, not an identity
 - [ ] Memorable through commitment, not through clutter
 
 ## Scoring

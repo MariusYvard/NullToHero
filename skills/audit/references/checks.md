@@ -69,7 +69,7 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | robots.txt crawlability | `Disallow` rules matching the page | yes | seo-agent-technical |
 | Security headers | HSTS, CSP or X-Frame-Options, X-Content-Type-Options, Referrer-Policy parsed from the response | no | seo-agent-technical |
 | Canonical / preview | canonical URL plus preview-host detection (`*.netlify.app` and a cross-domain canonical recommend noindex, not FAIL) | no | seo-agent-technical |
-| Title tag | presence and length | no | seo-agent-content |
+| Title tag | presence, length, and bundler-default titles (Vite + React, React App, Document...) | no | seo-agent-content |
 | Meta description | presence and length | no | seo-agent-content |
 | Heading order | one h1, no skipped levels | no | seo-agent-content |
 | HTML nesting validity | invalid parent/child and self-nesting from the parsed DOM | no | inspect-agent-code |
@@ -85,11 +85,22 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | HTTP to HTTPS redirect | plain HTTP redirects to HTTPS (URL probe) | no | seo-agent-technical |
 | www / non-www canonical host | the alternate host redirects or does not serve (URL probe) | no | seo-agent-technical |
 | security.txt | /.well-known/security.txt published (URL probe) | no | seo-agent-technical |
+| Video embed hygiene | every autoplay video carries `muted`, `playsinline` and a `poster` | no | inspect-agent-code |
+| Reduced-motion guard (JS) | a JS animation/scroll library implies a matchMedia or useReducedMotion guard; a CSS-only kill-switch is a WARN | no | inspect-agent-code |
+| Document scrollbar suppressed | `scrollbar-width: none` or a zero-width `::-webkit-scrollbar` on html/body | no | inspect-agent-a11y |
+| Image-sequence preload burst | 50+ sequential frame URLs, or an eager `new Image()` loop | no | seo-agent-performance |
+| Mixed-script homoglyphs | visible words mixing Latin with Cyrillic or Greek letters | no | seo-agent-content |
+| Referenced media weight | HEAD-probed video and 3D-model bytes against 10/30 MB and 5 MB budgets (URL probe) | no | seo-agent-performance |
 
 Each result carries a `method`: `computed` (from a render), `static` (parsed from
 HTML and CSS) or `not-measured`. A `not-measured` check never moves a score; it is
 reported as a coverage gap, for example contrast with no render and no resolvable
 text colors, or robots.txt that was not fetched.
+
+The fetch phase also runs a passive scrollytelling probe (ScrollTrigger, scrollama,
+closeread, CSS scroll-driven animations, sticky plus IntersectionObserver) surfaced
+as `target.scrolly` in SITE-AUDIT.json. It is context handed to the motion and UX
+agents, never a verdict: a scrollytelling page is not a defect.
 
 ## Rendered fetch and the client-rendered guard
 

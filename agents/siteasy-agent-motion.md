@@ -54,11 +54,14 @@ what is present; never block on a missing WebFetch.
 - [ ] Scroll-driven and parallax effects avoid jank
 - [ ] No scroll hijacking or fighting the native scroll
 - [ ] A graceful reduced-motion fallback exists
+- [ ] Scrubbed tweens use linear easing (the content tracks the finger; a dramatic ease on a scrub reads as lag)
+- [ ] Every pin has one idea and enough scroll track (a pinned stage with ~100vh of track shows nothing)
 
 ### Perceived performance and choreography
 - [ ] Skeletons or optimistic UI mask latency (skeleton for 300ms-2s waits, spinner plus context beyond 2s, nothing under 300ms)
 - [ ] Shared-element or View Transitions used where apt
 - [ ] Sequenced motion maintains continuity between views
+- [ ] Loaders report real progress and continuous scenes keep a subtle idle state (a simulated percentage or a frozen scene is a fake)
 - [ ] Overall effect is delight without distraction
 
 ## Scoring

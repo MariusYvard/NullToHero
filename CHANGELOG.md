@@ -11,6 +11,22 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.29.0] - 2026-07-12
+
+### Added
+
+- Scrub-media engineering in `parallax.md` (1.7.0): track sizing per second of footage, progress-unit thinking, four-point overlay choreography with 6-10% plateaus, blob-seek video scrubbing (lerp ~0.18, seek coalescing, iOS priming), scrub-friendly encoding (crf 20 GOP 8; 720p GOP 4 crf 23 mobile sibling), canvas frame-sequence rules, honest loaders, a reduced-motion path that skips the media download entirely, a data-story discipline block and eight new refused anti-patterns.
+- Runtime-discipline section in `animation-engineering.md` (1.11.0): one rAF ticker per page, `visibilitychange` pause, lerp reference values (0.05-0.1 pointer, ~0.18 scrub), idle states for continuous scenes, capped `setPixelRatio`, bounded tuning GUIs that never ship.
+- Award-genre grammar in `signature-moments.md` (1.24.0): canonical clip-path closed states, split-text stagger grammar, bounded 3D tilt, velocity-reactive marquee, capability-gated WebGL heroes, desynchronized cursor trails, plus the guardrail that the full genre set with no variation is a template, not a signature. Matching sixth template-shaped tell and the literal-element criterion in `memorability.md` (1.24.0); WebGL gating and runtime rules echoed in `overdrive.md` (1.10.0).
+- Narrative-chart rules in `data-viz.md` (1.16.0): message titles, direct labels over legends, small multiples against spaghetti, one highlight color, the Okabe-Ito palette, greyscale checking and a four-part chart alt-text formula.
+- Ten inspect rules (47-56): JS reduced-motion guard for JS-driven motion, one smoothing system, kept document scrollbar, custom-cursor fallback, pin scroll track, containing-block trap, autoplay video hygiene, staged image sequences, capability detection over UA sniffing, gated WebGL with a DOM fallback. Rule 37 extended to debug tooling (ScrollTrigger markers, dat.gui/lil-gui).
+- Six deterministic checks in the audit engine: `video-embed-hygiene`, `motion-reduced-guard` (CSS-only guard = WARN), `scrollbar-hidden`, `frame-sequence-preload`, `mixed-script-homoglyph` and `media-weight` (HEAD-probed video/3D budgets, with a range-GET fallback), plus bundler-default titles now FAIL `title-tag`. A passive scrollytelling probe (`target.scrolly`) gives the motion and UX agents context without a verdict. `runChecks` gains a `js` input wired through fetch, analyze and eval.
+- 14 eval fixtures and labels for the new checks (64 fixtures, 100% accuracy, baseline regenerated).
+- Motion agent checklist +3 (linear easing on scrubs, pin track, honest loaders and idle states); memorability agent +2 (literal non-templatable signatures, award-genre template tell).
+- 20 data rows: 15 in `resources.csv` (scrollytelling and WebGL tooling, Okabe-Ito), 4 in `inspiration.csv` (Zentry, SPYLT, Musab Hassan, Nicola Rennie scrollytelling), Higgsfield in `generators.csv`. All URLs verified live.
+
+---
+
 ## [1.28.0] - 2026-07-11
 
 ### Added

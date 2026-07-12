@@ -122,6 +122,10 @@ function checkTitle(doc) {
     return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "FAIL",
       method: "static", value: 0, detail: "Missing or empty <title>." });
   }
+  if (/^(vite \+ (react|vue|svelte|ts)|react app|create next app|welcome to nuxt|vue app|document|untitled|my app|new page)$/i.test(text)) {
+    return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "FAIL",
+      method: "static", value: text, detail: `Title is a bundler/template default ("${text}") — the page ships unnamed in tabs, SERPs and history.` });
+  }
   const len = text.length;
   if (len > 60) {
     return mk({ id: "title-tag", label: "Title tag", ...CONTENT, verdict: "WARN",
@@ -874,9 +878,163 @@ function checkSecurityTxt(probes) {
     method: "probe", value: { found: false }, detail: "No /.well-known/security.txt (optional RFC 9116 disclosure contact)." });
 }
 
+// ── media, motion and content hygiene ────────────────────────────────────────
+
+const MOTION_LIB_RE = /\bgsap\b|ScrollTrigger|ScrollSmoother|locomotive-scroll|framer-motion|@studio-freight\/lenis|darkroomengineering\/lenis|new\s+Lenis\b|from\s+["']lenis["']|lenis(?:\.min)?\.js|\banimejs\b|anime\.esm|motion\/react/i;
+
+function checkVideoEmbeds(doc) {
+  const videos = queryAll(doc, "video");
+  if (videos.length === 0) {
+    return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "PASS",
+      method: "static", value: { videos: 0 }, detail: "No <video> elements." });
+  }
+  const auto = videos.filter(v => v.attrs.autoplay !== undefined);
+  if (auto.length === 0) {
+    return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "PASS",
+      method: "static", value: { videos: videos.length, autoplay: 0 }, detail: "No autoplay video." });
+  }
+  const broken = [], noPoster = [];
+  for (const v of auto) {
+    const miss = [];
+    if (v.attrs.muted === undefined) miss.push("muted");
+    if (v.attrs.playsinline === undefined) miss.push("playsinline");
+    if (miss.length) broken.push(miss.join("+"));
+    if (v.attrs.poster === undefined) noPoster.push(v.attrs.src || "(source)");
+  }
+  if (broken.length) {
+    return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "FAIL",
+      method: "static", value: { videos: videos.length, autoplay: auto.length, broken: broken.length },
+      detail: `${broken.length} autoplay <video> missing ${[...new Set(broken)].join(", ")} — mobile browsers block the autoplay or paint a blank box without muted+playsinline.` });
+  }
+  if (noPoster.length) {
+    return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "WARN",
+      method: "static", value: { videos: videos.length, autoplay: auto.length, noPoster: noPoster.length },
+      detail: `${noPoster.length} autoplay <video> without a poster — nothing paints until the file arrives.` });
+  }
+  return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "PASS",
+    method: "static", value: { videos: videos.length, autoplay: auto.length },
+    detail: `All ${auto.length} autoplay video(s) carry muted, playsinline and a poster.` });
+}
+
+function checkMotionReducedGuard(styleText, js) {
+  if (!MOTION_LIB_RE.test(js || "")) {
+    return mk({ id: "motion-reduced-guard", label: "Reduced-motion guard for JS animation", ...CODE, verdict: "PASS",
+      method: "static", value: { library: false }, detail: "No JS animation or scroll library detected." });
+  }
+  const jsHas = /prefers-reduced-motion|useReducedMotion/i.test(js || "");
+  const cssHas = /prefers-reduced-motion/i.test(styleText || "");
+  if (jsHas) {
+    return mk({ id: "motion-reduced-guard", label: "Reduced-motion guard for JS animation", ...CODE, verdict: "PASS",
+      method: "static", value: { library: true, jsGuard: true, cssGuard: cssHas },
+      detail: "JS animation library present and guarded in JS (matchMedia/useReducedMotion)." });
+  }
+  if (cssHas) {
+    return mk({ id: "motion-reduced-guard", label: "Reduced-motion guard for JS animation", ...CODE, verdict: "WARN",
+      method: "static", value: { library: true, jsGuard: false, cssGuard: true },
+      detail: "CSS reduced-motion kill-switch only: inline styles set by GSAP/Lenis/Framer ignore a CSS-only guard, so the guard is cosmetic for JS-driven motion." });
+  }
+  return mk({ id: "motion-reduced-guard", label: "Reduced-motion guard for JS animation", ...CODE, verdict: "FAIL",
+    method: "static", value: { library: true, jsGuard: false, cssGuard: false },
+    detail: "A JS animation/scroll library is loaded with no prefers-reduced-motion guard anywhere (CSS or JS)." });
+}
+
+function checkScrollbarHidden(styleText) {
+  const t = styleText || "";
+  const hits = [];
+  const ruleRe = /([^{}]+)\{([^{}]*)\}/g;
+  let m;
+  while ((m = ruleRe.exec(t))) {
+    const sel = m[1].trim().toLowerCase().split(/\s+/).pop() ? m[1].trim().toLowerCase() : "";
+    const body = m[2].toLowerCase();
+    const lastSeg = sel.split(/[\n,]/).map(x => x.trim()).filter(Boolean);
+    const globalSel = lastSeg.some(x => x === "html" || x === "body" || x === "*" || x === ":root" || x === "html, body");
+    const wkGlobal = lastSeg.some(x => /^(html|body|\*|:root)?\s*::-webkit-scrollbar$/.test(x));
+    if (globalSel && /scrollbar-width\s*:\s*none/.test(body)) hits.push(`${lastSeg.join(",")} scrollbar-width:none`);
+    if (wkGlobal && /(display\s*:\s*none|width\s*:\s*0(px)?\b)/.test(body)) hits.push(`${lastSeg.join(",")}`);
+  }
+  if (hits.length) {
+    return mk({ id: "scrollbar-hidden", label: "Document scrollbar suppressed", ...A11Y, verdict: "WARN",
+      method: "static", value: { rules: hits.slice(0, 3) },
+      detail: `The document scrollbar is hidden (${hits[0]}) — the native position indicator, keyboard affordance and accessibility API are lost.` });
+  }
+  return mk({ id: "scrollbar-hidden", label: "Document scrollbar suppressed", ...A11Y, verdict: "PASS",
+    method: "static", value: null, detail: "Document scrollbar not suppressed." });
+}
+
+function checkFrameSequencePreload(js, rawHtml) {
+  const t = (js || "") + "\n" + (rawHtml || "");
+  const seq = new Map();
+  const re = /["'(=\s]([\w./-]{0,120}?[\w-]*?)(\d{2,4})\.(webp|jpe?g|png|avif)\b/gi;
+  let m;
+  while ((m = re.exec(t))) {
+    const key = m[1].toLowerCase() + "#" + m[3].toLowerCase();
+    if (!seq.has(key)) seq.set(key, new Set());
+    seq.get(key).add(m[2]);
+  }
+  let longest = 0, prefix = null;
+  for (const [k, v] of seq) if (v.size > longest) { longest = v.size; prefix = k.split("#")[0]; }
+  const loop = /for\s*\([^)]*<\s*(\d{2,4})[^)]*\)[\s\S]{0,240}?new\s+Image\s*\(/.exec(js || "");
+  if (loop) longest = Math.max(longest, parseInt(loop[1], 10));
+  if (longest >= 150) {
+    return mk({ id: "frame-sequence-preload", label: "Image-sequence preload burst", ...PERF, verdict: "FAIL",
+      method: "static", value: { longest, prefix },
+      detail: `${longest} sequential frames (${prefix || "detected loop"}…) referenced up front — a network and memory burst before any interaction; load windowed around the scroll position instead.` });
+  }
+  if (longest >= 50) {
+    return mk({ id: "frame-sequence-preload", label: "Image-sequence preload burst", ...PERF, verdict: "WARN",
+      method: "static", value: { longest, prefix },
+      detail: `${longest} sequential frames (${prefix || "detected loop"}…) referenced — verify they are loaded progressively, not all at mount.` });
+  }
+  return mk({ id: "frame-sequence-preload", label: "Image-sequence preload burst", ...PERF, verdict: "PASS",
+    method: "static", value: { longest }, detail: "No large sequential image set referenced." });
+}
+
+function checkMixedScriptText(doc) {
+  const body = first(doc, "body") || doc;
+  const text = textContent(body) || "";
+  const words = text.match(/[\p{L}\p{M}][\p{L}\p{M}'\u2019-]*/gu) || [];
+  const bad = [];
+  for (const w of words) {
+    if (/[A-Za-z]/.test(w) && /[\u0400-\u04FF\u0370-\u03FF]/.test(w)) { bad.push(w); if (bad.length >= 5) break; }
+  }
+  if (bad.length) {
+    return mk({ id: "mixed-script-homoglyph", label: "Mixed-script homoglyphs", ...CONTENT, verdict: "WARN",
+      method: "static", value: { samples: bad.slice(0, 3) },
+      detail: `Word(s) mixing Latin with Cyrillic/Greek letters: ${bad.slice(0, 3).join(", ")} — usually a paste artifact; breaks search matching, spellcheck and screen-reader pronunciation.` });
+  }
+  return mk({ id: "mixed-script-homoglyph", label: "Mixed-script homoglyphs", ...CONTENT, verdict: "PASS",
+    method: "static", value: null, detail: "No mixed-script words in visible text." });
+}
+
+function checkMediaWeight(probes) {
+  const p = probes && probes.mediaWeight;
+  if (!p || !p.tested) {
+    return mk({ id: "media-weight", label: "Referenced media weight", ...PERF, verdict: "NOT_MEASURED",
+      method: "not-measured", value: null, detail: "Referenced video/3D-model weight not probed." });
+  }
+  const MB = 1048576;
+  const videoMB = (p.videoBytes || 0) / MB;
+  const modelMB = (p.modelBytes || 0) / MB;
+  const maxModelMB = Math.max(0, ...(p.models || []).map(x => (x.bytes || 0))) / MB;
+  const value = { videoMB: +videoMB.toFixed(1), modelMB: +modelMB.toFixed(1),
+    videos: (p.videos || []).length, models: (p.models || []).length, unresolved: p.unresolved || 0 };
+  if (videoMB > 30) {
+    return mk({ id: "media-weight", label: "Referenced media weight", ...PERF, verdict: "FAIL",
+      method: "probe", value, detail: `${videoMB.toFixed(1)} MB of referenced video — a mobile visitor pays for this before any interaction; compress (crf/GOP), lazy-load or gate behind a poster.` });
+  }
+  if (videoMB > 10 || maxModelMB > 5) {
+    return mk({ id: "media-weight", label: "Referenced media weight", ...PERF, verdict: "WARN",
+      method: "probe", value, detail: videoMB > 10
+        ? `${videoMB.toFixed(1)} MB of referenced video (over the 10 MB comfort budget).`
+        : `A referenced 3D model weighs ${maxModelMB.toFixed(1)} MB — consider Draco/meshopt compression.` });
+  }
+  return mk({ id: "media-weight", label: "Referenced media weight", ...PERF, verdict: "PASS",
+    method: "probe", value, detail: `${videoMB.toFixed(1)} MB video and ${modelMB.toFixed(1)} MB 3D models referenced.` });
+}
+
 // ── engine ────────────────────────────────────────────────────────────────────
 
-export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", probes = null } = {}) {
+export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", js = "", probes = null } = {}) {
   const rawDoc = parse(rawHtml || "");
   const activeDoc = renderedHtml ? parse(renderedHtml) : rawDoc;
   // Build a CSS model from inline <style> blocks plus any linked stylesheets so
@@ -905,9 +1063,15 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkCompression(headers),
     checkServerFingerprint(headers),
     checkCookieFlags(headers),
+    checkVideoEmbeds(activeDoc),
+    checkMotionReducedGuard(styleText, js),
+    checkScrollbarHidden(styleText),
+    checkFrameSequencePreload(js, rawHtml),
+    checkMixedScriptText(activeDoc),
     checkHttpsRedirect(probes),
     checkHostCanonical(probes),
     checkSecurityTxt(probes),
+    checkMediaWeight(probes),
   ];
   return checks;
 }

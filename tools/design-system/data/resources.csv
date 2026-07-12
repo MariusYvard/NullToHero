@@ -1007,3 +1007,18 @@ scaffold,dev-resources,more,free,"asset or tool, check per item",RunJS,https://r
 scaffold,dev-resources,more,free,"asset or tool, check per item",Pillarstack,https://www.pillarstack.com/,live,Resource collection for front-end developers and designers
 scaffold,dev-resources,more,free,"asset or tool, check per item",ToolsHref,https://toolshref.com,live,Java code analyzer and JSON to Mermaid visualizer
 scaffold,dev-resources,more,free,"asset or tool, check per item",Toolbox Kit,https://toolbox-kit.com/,live,"Client-side developer tools: formatters, testers and generators"
+motion,scrollytelling,top,free,open-source library,Lenis,https://github.com/darkroomengineering/lenis,live,Lightweight smooth scroll; drive ScrollTrigger.update from its rAF and destroy it under prefers-reduced-motion |
+motion,scrollytelling,top,free,open-source library,Scrollama,https://github.com/russellsamora/scrollama,live,"Step-based scrollytelling on IntersectionObserver, the data-journalism standard |"
+motion,scrollytelling,more,free,open-source library,Closeread,https://closeread.dev,live,"Quarto extension for declarative scrollytelling (sticky visuals, focus-on steps, pan and zoom), MIT |"
+motion,scrollytelling,more,free,open-source library,@bsmnt/scrollytelling,https://github.com/basementstudio/scrollytelling,live,Declarative React layer over ScrollTrigger with a 0-100 progress timeline; MIT but inactive since 2024 |
+motion,scrollytelling,top,free,open-source library,GSAP ScrollTrigger,https://gsap.com/docs/v3/Plugins/ScrollTrigger/,live,"Scroll-driven animation reference (scrub, pin, toggleActions); the whole GSAP plugin set is free since 3.13 |"
+motion,js-animation,more,free,open-source library,SplitType,https://github.com/lukePeavey/SplitType,live,"Splits text into chars, words and lines for masked reveals, MIT |"
+motion,webgl,more,free,open-source library,detect-gpu,https://github.com/pmndrs/detect-gpu,live,GPU tier detection to gate WebGL effects behind measured capability instead of user-agent guesses |
+motion,webgl,more,free,open-source library,React Three Fiber,https://r3f.docs.pmnd.rs,live,React renderer for three.js |
+motion,webgl,more,free,open-source library,drei,https://github.com/pmndrs/drei,live,"Helper collection for React Three Fiber (useProgress for honest loaders, Float, Environment) |"
+motion,webgl,more,free,open-source library,gltfjsx,https://github.com/pmndrs/gltfjsx,live,Turns glTF models into reusable JSX components |
+motion,webgl,more,free,open-source library,webgl-noise,https://github.com/stegu/webgl-noise,live,MIT simplex and classic noise in GLSL; the canonical source to take noise shaders from |
+motion,webgl,more,free,open-source library,lil-gui,https://lil-gui.georgealways.com,live,Bounded tuning panel for dialing subjective parameters during design; never ships to production |
+motion,webgl,more,free,learning resource,The Book of Shaders,https://thebookofshaders.com,live,Step-by-step fragment-shader course |
+motion,webgl,more,free,learning resource,Shadertoy,https://www.shadertoy.com,live,Live-coded shader gallery for studying techniques |
+color,color-tools,more,free,reference,Okabe-Ito palette,https://jfly.uni-koeln.de/color/,live,Eight-color palette safe for the common color-vision deficiencies; the default fix for chart series hues |

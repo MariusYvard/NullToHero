@@ -92,6 +92,7 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       render: fetchResult.render || "none",
       clientRendered: fetchResult.clientRendered === undefined ? "unknown" : fetchResult.clientRendered,
       previewHost,
+      scrolly: (fetchResult.signals && fetchResult.signals.scrolly) || null,
     },
     scores: {
       overall: det.score,

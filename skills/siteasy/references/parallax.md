@@ -1,7 +1,7 @@
 ---
 name: parallax
 description: "Depth illusion through differential scroll velocity. Use as the operational reference whenever a project considers parallax, scrollytelling, multi-layer depth, or scroll-driven."
-version: 1.6.0
+version: 1.7.0
 ---
 
 # Parallax Engineering (2025 to 2026)
@@ -279,6 +279,13 @@ Four pillars for narrative parallax sections:
 2. Attention guidance. The fastest-moving layer carries the focal point. The slowest layer anchors the scene.
 3. Rhythm management. Alternate motion segments with static rest segments. A 100vh static section between two animated segments lets the user breathe.
 4. Active interactivity. Map scroll progress to content reveal, not autoplay. The user must feel they pilot the discovery.
+Data stories add four disciplines on top of the pillars:
+
+- One step, one change, one takeaway. The reader must be able to say what changed between two steps; a step with no perceptible response breaks trust in the medium.
+- Steps are self-contained. The narration still reads if the sticky visual never loads ("sales tripled in 2024", not "as you can see here").
+- Open and close on the whole. Zoom and highlight in between so every detail stays situated. Scrollytelling is only justified when each step transforms the SAME visual; unrelated images per step is an article, not a scrolly.
+- The narrative column stays readable: 300 to 400px wide, 14pt minimum, on its own background. Teaching an unfamiliar chart form works well as a scrolly: first how to read the shape, then the data.
+
 
 Reference scaffold (Path B):
 
@@ -303,6 +310,39 @@ Reference scaffold (Path B):
   animation-range: entry 15% cover 50%;
 }
 ```
+
+## Scrub Media (Video and Image Sequences)
+
+The Apple-style product fly-through: a pinned stage whose video time or frame index is driven by scroll. It is the heaviest scrollytelling pattern on the weight and decode budget, so it carries its own engineering rules.
+
+### Track sizing and progress
+
+- Reserve real scroll track: an N-vh container with a `position: sticky; top: 0; height: 100vh` child (no pin-spacer, no de-pin layout shift). Budget 1.5 to 2.5vh of track per second of scrubbed footage.
+- Leave ~10% of the track as a dead margin at the end so the final frame settles before the stage unpins.
+- Think in progress units (0 to 100% of the section), never in seconds. "The overlay enters at 60% and is gone by 100%" survives resizes and content changes; a duration does not.
+- Scrubbed tweens use linear easing. The easing the visitor feels is their own scroll velocity; a dramatic curve on top reads as lag.
+- Overlay choreography uses four points per message, [enter, plateau start, plateau end, exit], with plateaus of 6 to 10% of the progress and similar gaps between messages. Couple opacity, y and scale on the same points.
+
+### Video scrub engine rules
+
+- Load the clip as a Blob and play it through `URL.createObjectURL`. A Blob is always seekable; a static host without HTTP range support pins `video.seekable` to [0,0] and every seek snaps to frame zero.
+- Smooth the target with a lerp of ~0.18 per rAF frame, and never assign `currentTime` while `video.seeking` is true; the lerp catches up when the decoder frees. Seek epsilon ~0.008s desktop, ~0.02s mobile (fewer decodes).
+- iOS: a muted video that has never played will not paint a seeked frame. Keep the poster on top until the first real `seeked` event, and on the first `pointerdown`/`touchstart` (once, passive) run a muted `play()` then `pause()` on each clip.
+- Encode for scrubbing: native resolution, `crf 20`, GOP 8 (`-g 8 -keyint_min 8 -sc_threshold 0`), no audio, `+faststart`. Ship a mobile sibling at 720p, GOP 4, `crf 23`; a phone's seek cost is dominated by the distance to the previous keyframe. All-intra triples the weight for nothing.
+- When chaining generated or edited clips, cut on rendered frames (extract the actual last frame, `ffmpeg -sseof -0.15`), never on the original stills, or every seam pops. Never reverse the camera's velocity across a seam; scrolled in either direction it reads as a rewind.
+
+### Image-sequence (canvas) rules
+
+- Map progress to a frame index and redraw only when the index changes. A handler that redraws on every scroll event burns the frame budget on identical frames.
+- Implement cover/contain by comparing ratios, and reset the canvas transform (`setTransform(1,0,0,1,0,0)` then `scale(dpr)`) on every DPR resize, or transforms accumulate.
+- Load progressively in a window around the scroll position instead of instantiating the full set at mount. Fifty-plus `new Image()` calls up front is a network and memory burst the deterministic audit flags (`frame-sequence-preload`).
+
+### Weight, honesty and reduced motion
+
+- Budget: keep referenced video under ~10 MB. 30 to 50 MB heroes are the observed failure mode of the genre; the audit weighs referenced media (`media-weight`).
+- Loaders report real progress (assets loaded / total). A simulated percentage that crawls to 95% on a timer is a fake wait and reads as one.
+- Reduced motion means not downloading the media at all: cross-fade the posters, cut the particles, drop the lerp. A slowed-down scrub is still a scrub.
+- Mobile resize guard: browsers fire `resize` when the URL bar collapses. Ignore resizes at unchanged width on coarse pointers or the stage jumps mid-scroll; keep the full relayout on `orientationchange`.
 
 ## AI-Adaptive Parallax (runtime governance)
 
@@ -472,6 +512,9 @@ Run before every ship. A single fail is a blocker.
 | Code | `will-change` hygiene | Set when active, removed on idle |
 | SEO | Content in initial DOM | Yes, not script-injected |
 | SEO | Semantic landmarks plus anchors | Present for each chapter |
+| Scrub media | Referenced video weight | under 10 MB (`media-weight` check) |
+| Scrub media | Autoplay hygiene | `muted` + `playsinline` + `poster` on every autoplay video |
+| Scrub media | Loader honesty | progress = real assets loaded, never a simulated percentage |
 
 A Playwright-based audit script is available at [../scripts/parallax-audit.mjs](../scripts/parallax-audit.mjs).
 
@@ -504,6 +547,13 @@ Match-and-refuse list. If the brief implies any of these, push back before writi
 - Parallax behind interactive controls (CTA, form, navigation). Controls stay still, period.
 - JS scroll handler without `passive: true` or without `rAF` coalescing.
 - `transition: all` on a parallax layer.
+- A pin or sticky stage without scroll track (parent no taller than the viewport): the animation has zero distance and either flashes or never shows.
+- A sticky or pinned element under an ancestor with `transform`, `filter` or `will-change: transform`; the ancestor becomes its containing block and the pin silently breaks.
+- Waypoints or callbacks at exactly 0% or 100% of a timeline: reverse callbacks are unreliable at the bounds, place them slightly inside.
+- Two smoothing systems at once (`scroll-behavior: smooth` in CSS on top of Lenis or ScrollSmoother).
+- Hiding the document scrollbar (`scrollbar-width: none`, `::-webkit-scrollbar` at zero width); the position indicator and the accessibility API go with it.
+- Preloading a full frame sequence at mount behind a blocking loader.
+- A resize handler that recomputes layout without a width guard (the mobile URL bar collapse fires resize).
 
 ## Cross-References
 

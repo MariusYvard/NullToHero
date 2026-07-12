@@ -47,6 +47,7 @@ const checks = runChecks({
   computed: fetchResult.computed || null,
   headers: fetchResult.headers || null,
   css: fetchResult.linkedCss || "",
+  js: fetchResult.linkedJs || "",
   probes: fetchResult.probes || null,
 });
 

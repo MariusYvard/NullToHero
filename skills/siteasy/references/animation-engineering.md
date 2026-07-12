@@ -1,7 +1,7 @@
 ---
 name: animation-engineering
 description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
-version: 1.10.0
+version: 1.11.0
 ---
 
 # Animation Engineering
@@ -336,6 +336,19 @@ element.animate(
 ```
 
 Set `style="--i: 0"` on each item. **Cap total stagger at ~500ms** (10 items × 50ms). Stagger is decorative — never block interaction while it plays.
+
+---
+
+## Runtime Discipline: One Ticker, Idle States, Device Caps
+
+Rules for pages that run continuous JS animation (WebGL scenes, custom cursors, scroll engines):
+
+- **One rAF ticker per page.** A single global loop with named subscribe/unsubscribe beats three independent `requestAnimationFrame` chains (renderer plus cursor plus slider is the observed failure mode). Systems join and leave it; an audio-reactive part unsubscribes when paused.
+- **Pause when hidden.** Gate the ticker on `visibilitychange`. rAF throttles in background tabs, but the queued work still lands on return.
+- **Lerp reference values.** Pointer-follow feels credible at 0.05-0.1 per frame (0.05 heavy, 0.1 crisp); a scroll scrub wants ~0.18. Clamp user-driven motion (a camera never dips below the floor) and re-aim (`lookAt`) after every lerp.
+- **Idle state.** Anything that animates continuously needs a resting behavior, a slow drift or a breathing wave, so the scene never freezes into a dead image when input stops.
+- **Cap the pixel ratio.** `renderer.setPixelRatio(Math.min(devicePixelRatio, 2))`. Uncapped DPR renders four times the pixels on dense mobile screens for an invisible gain.
+- **Tune with a bounded GUI, ship without it.** Subjective parameters (lerp ease, parallax intensity) get a dev panel with bounded ranges (lil-gui) during design, and the panel never reaches the production bundle, same rule as ScrollTrigger `markers`.
 
 ---
 

@@ -31,7 +31,7 @@ hand an agent its ground truth.
 | `contrast-ratio` (critical) | WCAG AA ratio from computed styles, or inline color over a resolved background | inspect-agent-a11y |
 | `html-lang` | `<html lang>` present and non-empty | inspect-agent-a11y |
 | `robots-disallow` (critical) | `Disallow` rules in robots.txt matching the page | seo-agent-technical |
-| `title-tag` | `<title>` presence and length | seo-agent-content |
+| `title-tag` | `<title>` presence, length, bundler-default titles | seo-agent-content |
 | `meta-description` | description presence and length | seo-agent-content |
 | `heading-order` | one h1, no skipped levels | seo-agent-content |
 

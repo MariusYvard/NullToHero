@@ -1,7 +1,7 @@
 ---
 name: data-viz
 description: "Accessible data visualization. Choosing a chart type, the accessibility grade of each common type, the mandatory non-color fallback (data table, direct labels, patterns), and render thresholds by data volume."
-version: 1.15.0
+version: 1.16.0
 ---
 
 # Data Visualization
@@ -66,6 +66,17 @@ Every chart needs a programmatic alternative, not just a visual one.
 - Give the chart an accessible name and a short description (`aria-label` or a `<figure>` with `<figcaption>`).
 - Provide the underlying numbers as a real table, either always visible or behind a clearly labeled toggle. A table is the most accessible chart that exists.
 - Title, axis labels and units are mandatory. A number without a unit is a guess.
+- A strong chart alt text names four things: the chart type, the data, why the chart is here, and where the underlying source lives ([Amy Cesal's formula](https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81)).
+
+## Narrative charts
+
+Rules for charts that carry a story (posts, reports, scrollytelling steps):
+
+- The title states the message, not the variables. "Agreement rose sharply during 2024" beats "Survey agreement, 2020-2025" for comprehension and recall; keep the variable phrasing for the axis labels.
+- Direct-label series at the line's end instead of a detached legend whenever the series are few; the legend round-trip is a tax on every read.
+- Against spaghetti lines, prefer small multiples with the other series kept as grey context in each panel: one panel, one highlighted series.
+- One highlight color, used only to point. When several series need their own hue, use a colorblind-safe palette (Okabe-Ito) and check the chart in greyscale: default palettes of equal luminance become indistinguishable once desaturated.
+- In a scrollytelling step the chart transformation IS the narration: one change per step, announced by the step text. See [parallax.md](parallax.md), Scrollytelling Architecture.
 
 ## Auditing a chart
 

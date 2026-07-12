@@ -1,7 +1,7 @@
 ---
 name: overdrive
 description: "Advanced visual effects for high-impact interfaces: the View Transitions API, WebGL, and scroll-driven animations."
-version: 1.9.0
+version: 1.10.0
 ---
 
 Start your response with:
@@ -62,7 +62,7 @@ Organized by what you're trying to achieve, not by technology name.
 - **Scroll-driven animations** (`animation-timeline: scroll()`) — CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Chrome/Edge/Safari; Firefox: flag only, always provide a static fallback). For full multi-layer parallax, scrollytelling architecture, and AI-adaptive governance, load [parallax.md](parallax.md) first.
 
 ### Render beyond CSS
-- **WebGL** (all browsers) — shader effects, post-processing, particle systems. Libraries: Three.js, OGL (lightweight), regl. Use for effects CSS can't express.
+- **WebGL** (all browsers) — shader effects, post-processing, particle systems. Libraries: Three.js, OGL (lightweight), regl. Use for effects CSS can't express. Gate it behind measured capability (GPU tier via detect-gpu, a quick fps sample, pointer type) with the DOM version as the default state; drive shader uniforms with scroll or drag velocity so the effect dies out when the user stops; keep models under ~5 MB with Draco/meshopt.
 - **WebGPU** (Chrome/Edge; Safari partial; Firefox: flag only) — next-gen GPU compute. More powerful than WebGL but limited browser support. Always fall back to WebGL2.
 - **Canvas 2D / OffscreenCanvas** — custom rendering, pixel manipulation, or moving heavy rendering off the main thread entirely via Web Workers + OffscreenCanvas.
 - **SVG filter chains** — displacement maps, turbulence, morphology for organic distortion effects. CSS-animatable.
@@ -111,6 +111,9 @@ else if (canvas.getContext('webgl2')) { /* WebGL2 fallback */ }
 - Respect `prefers-reduced-motion` — always. Provide a beautiful static alternative.
 - Lazy-initialize heavy resources (WebGL contexts, WASM modules) only when near viewport.
 - Pause off-screen rendering. Kill what you can't see.
+- One rAF ticker per page: subsystems subscribe and unsubscribe, and the loop pauses on `visibilitychange`.
+- Cap `setPixelRatio` at 2 — uncapped DPR quadruples the pixels for an invisible gain.
+- Give continuous scenes an idle state (a slow drift) instead of freezing when input stops.
 - Test on real mid-range devices, not just your development machine.
 
 ### Polish is the difference
