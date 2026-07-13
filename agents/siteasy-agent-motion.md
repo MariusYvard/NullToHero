@@ -30,6 +30,7 @@ may be unavailable in this harness, and re-fetching wastes the shared pass.
 - `audit-assets/scripts.js` all inline and same-origin linked JS, concatenated
 - `audit-assets/headers.json` the HTTP response headers
 - `SITE-AUDIT.json` the deterministic pre-pass verdicts for the checks you own
+- `audit-assets/DIRECTION.md` the project's declared art direction (optional; when present, judge declared intent against the delivered page)
 
 `url` or `path` names the target. If a file is absent, note it once and score from
 what is present; never block on a missing WebFetch.

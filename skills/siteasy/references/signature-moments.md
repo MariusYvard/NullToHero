@@ -118,3 +118,8 @@ It is a liability wearing one.
 One more failure shape: the full award-genre set, slit reveals plus split-text headlines plus a pinned video circle plus a marquee, deployed together with no variation.
 Each element passes review on its own; the combination is the genre's template, and a template cannot be a signature.
 Pick the one that serves the concept and drop the rest.
+
+## Resource hooks
+
+- Calibrate the chosen moment against strong references: `python3 tools/design-system/scripts/search.py "<moment>" --domain inspiration`
+- Libraries that implement the moment, with caveats: `python3 tools/design-system/scripts/search.py "<moment>" --domain resources`

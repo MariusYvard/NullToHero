@@ -409,3 +409,8 @@ Tune the morph; always gate motion:
 ```
 
 Rules: a `view-transition-name` must be unique in a given snapshot. Keep transitions under 300ms. Feature-detect (`document.startViewTransition`) and fall back to an instant update. Reduced motion disables the animation, never the state change.
+
+## Resource hooks
+
+- Tuning panels and motion tooling: `python3 tools/design-system/scripts/search.py "gui" --domain resources`
+- Spring and scroll engines with caveats: `python3 tools/design-system/scripts/search.py "spring" --domain resources`

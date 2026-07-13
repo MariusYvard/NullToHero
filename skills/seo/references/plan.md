@@ -125,3 +125,8 @@ Load from `assets/` directory:
 | Programmatic SEO strategy | `/seo programmatic` |
 | Site architecture & build | `/siteasy build` |
 | SEO task tracking | (not included) |
+
+## Industry templates
+
+Load the matching plan template before drafting: [saas](plan-assets/saas.md) · [ecommerce](plan-assets/ecommerce.md) · [local-service](plan-assets/local-service.md) · [publisher](plan-assets/publisher.md) · [agency](plan-assets/agency.md) · [generic](plan-assets/generic.md).
+

@@ -745,11 +745,38 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/journey-express.md",
+    "title": "Journey: Express",
+    "keywords": [
+      "journey",
+      "express"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/journey-mapping.md",
     "title": "Journey Mapping",
     "keywords": [
       "journey",
       "mapping"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/journey-overhaul.md",
+    "title": "Journey: Overhaul",
+    "keywords": [
+      "journey",
+      "overhaul"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/journey-ship.md",
+    "title": "Journey: Ship",
+    "keywords": [
+      "journey",
+      "ship"
     ]
   },
   {

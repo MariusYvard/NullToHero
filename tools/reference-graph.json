@@ -1,0 +1,1152 @@
+{
+  "nodes": [
+    "skills/audit/references/checks.md",
+    "skills/audit/references/compare.md",
+    "skills/audit/references/full.md",
+    "skills/audit/references/html-report.md",
+    "skills/audit/references/report.md",
+    "skills/inspect/references/code-quality.md",
+    "skills/inspect/references/detect.md",
+    "skills/inspect/references/preview.md",
+    "skills/inspect/references/review.md",
+    "skills/seo/references/action-plan.md",
+    "skills/seo/references/audit.md",
+    "skills/seo/references/backlinks.md",
+    "skills/seo/references/cluster.md",
+    "skills/seo/references/competitor-pages.md",
+    "skills/seo/references/content.md",
+    "skills/seo/references/drift.md",
+    "skills/seo/references/ecommerce.md",
+    "skills/seo/references/geo.md",
+    "skills/seo/references/head-meta.md",
+    "skills/seo/references/hreflang.md",
+    "skills/seo/references/images.md",
+    "skills/seo/references/local.md",
+    "skills/seo/references/page.md",
+    "skills/seo/references/performance.md",
+    "skills/seo/references/plan-assets/agency.md",
+    "skills/seo/references/plan-assets/ecommerce.md",
+    "skills/seo/references/plan-assets/generic.md",
+    "skills/seo/references/plan-assets/local-service.md",
+    "skills/seo/references/plan-assets/publisher.md",
+    "skills/seo/references/plan-assets/saas.md",
+    "skills/seo/references/plan.md",
+    "skills/seo/references/privacy-consent.md",
+    "skills/seo/references/programmatic.md",
+    "skills/seo/references/report.md",
+    "skills/seo/references/schema.md",
+    "skills/seo/references/sitemap.md",
+    "skills/seo/references/sxo.md",
+    "skills/seo/references/technical.md",
+    "skills/siteasy/references/accessibility-engineering.md",
+    "skills/siteasy/references/adapt.md",
+    "skills/siteasy/references/animate.md",
+    "skills/siteasy/references/animation-engineering.md",
+    "skills/siteasy/references/assets-library.md",
+    "skills/siteasy/references/audit.md",
+    "skills/siteasy/references/bolder.md",
+    "skills/siteasy/references/brand-identity.md",
+    "skills/siteasy/references/brand.md",
+    "skills/siteasy/references/clarify.md",
+    "skills/siteasy/references/cognitive-load.md",
+    "skills/siteasy/references/color-and-contrast.md",
+    "skills/siteasy/references/color-systems.md",
+    "skills/siteasy/references/colorize.md",
+    "skills/siteasy/references/component-patterns.md",
+    "skills/siteasy/references/concept.md",
+    "skills/siteasy/references/craft.md",
+    "skills/siteasy/references/creative-patterns.md",
+    "skills/siteasy/references/critique.md",
+    "skills/siteasy/references/css-architecture.md",
+    "skills/siteasy/references/dark-mode-engineering.md",
+    "skills/siteasy/references/data-viz.md",
+    "skills/siteasy/references/delight.md",
+    "skills/siteasy/references/design-tokens.md",
+    "skills/siteasy/references/distill.md",
+    "skills/siteasy/references/document.md",
+    "skills/siteasy/references/elevation.md",
+    "skills/siteasy/references/extract.md",
+    "skills/siteasy/references/fetch-asset.md",
+    "skills/siteasy/references/form-patterns.md",
+    "skills/siteasy/references/gestalt.md",
+    "skills/siteasy/references/handoff.md",
+    "skills/siteasy/references/harden.md",
+    "skills/siteasy/references/heuristics-scoring.md",
+    "skills/siteasy/references/image-strategy.md",
+    "skills/siteasy/references/information-architecture.md",
+    "skills/siteasy/references/inspiration.md",
+    "skills/siteasy/references/interaction-design.md",
+    "skills/siteasy/references/journey-express.md",
+    "skills/siteasy/references/journey-mapping.md",
+    "skills/siteasy/references/journey-overhaul.md",
+    "skills/siteasy/references/journey-ship.md",
+    "skills/siteasy/references/landing-patterns.md",
+    "skills/siteasy/references/layout.md",
+    "skills/siteasy/references/live.md",
+    "skills/siteasy/references/memorability.md",
+    "skills/siteasy/references/mobile-ergonomics.md",
+    "skills/siteasy/references/motion-choreography.md",
+    "skills/siteasy/references/motion-design.md",
+    "skills/siteasy/references/onboard.md",
+    "skills/siteasy/references/optimize.md",
+    "skills/siteasy/references/overdrive.md",
+    "skills/siteasy/references/parallax.md",
+    "skills/siteasy/references/personas.md",
+    "skills/siteasy/references/polish.md",
+    "skills/siteasy/references/print-styles.md",
+    "skills/siteasy/references/product.md",
+    "skills/siteasy/references/quieter.md",
+    "skills/siteasy/references/resource-recipes.md",
+    "skills/siteasy/references/resource-recommendations.md",
+    "skills/siteasy/references/responsive-design.md",
+    "skills/siteasy/references/shape.md",
+    "skills/siteasy/references/ship-checklist.md",
+    "skills/siteasy/references/signature-moments.md",
+    "skills/siteasy/references/spatial-design.md",
+    "skills/siteasy/references/stock-media.md",
+    "skills/siteasy/references/style-systems.md",
+    "skills/siteasy/references/teach.md",
+    "skills/siteasy/references/testing-strategy.md",
+    "skills/siteasy/references/tokens.md",
+    "skills/siteasy/references/typeset.md",
+    "skills/siteasy/references/typography.md",
+    "skills/siteasy/references/ux-research.md",
+    "skills/siteasy/references/ux-writing.md",
+    "skills/siteasy/references/wcag-2-2.md"
+  ],
+  "edges": [
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/compare.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/html-report.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/checks.md",
+      "to": "skills/audit/references/compare.md"
+    },
+    {
+      "from": "skills/audit/references/checks.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/audit/references/checks.md",
+      "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/compare.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/audit/references/compare.md",
+      "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/full.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/audit/references/full.md",
+      "to": "skills/audit/references/compare.md"
+    },
+    {
+      "from": "skills/audit/references/full.md",
+      "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/report.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/audit/references/report.md",
+      "to": "skills/seo/references/report.md"
+    },
+    {
+      "from": "skills/inspect/SKILL.md",
+      "to": "skills/inspect/references/code-quality.md"
+    },
+    {
+      "from": "skills/inspect/SKILL.md",
+      "to": "skills/inspect/references/detect.md"
+    },
+    {
+      "from": "skills/inspect/SKILL.md",
+      "to": "skills/inspect/references/preview.md"
+    },
+    {
+      "from": "skills/inspect/SKILL.md",
+      "to": "skills/inspect/references/review.md"
+    },
+    {
+      "from": "skills/inspect/references/review.md",
+      "to": "skills/inspect/references/code-quality.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/audit.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/backlinks.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/cluster.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/competitor-pages.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/content.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/drift.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/ecommerce.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/hreflang.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/images.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/local.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/page.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/plan.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/programmatic.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/report.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/schema.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/sitemap.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/sxo.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/technical.md"
+    },
+    {
+      "from": "skills/seo/references/audit.md",
+      "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/references/page.md",
+      "to": "skills/seo/references/content.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/ecommerce.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/agency.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/ecommerce.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/generic.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/local-service.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/publisher.md"
+    },
+    {
+      "from": "skills/seo/references/plan.md",
+      "to": "skills/seo/references/plan-assets/saas.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/head-meta.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/performance.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/privacy-consent.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/accessibility-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/adapt.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/animate.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/assets-library.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/audit.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/bolder.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/brand-identity.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/brand.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/clarify.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/color-systems.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/colorize.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/component-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/craft.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/creative-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/critique.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/css-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/data-viz.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/delight.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/distill.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/document.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/elevation.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/extract.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/fetch-asset.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/gestalt.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/handoff.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/harden.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/image-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/information-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/inspiration.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/journey-express.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/journey-mapping.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/journey-overhaul.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/layout.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/live.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/memorability.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/mobile-ergonomics.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/motion-choreography.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/onboard.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/optimize.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/overdrive.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/personas.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/polish.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/product.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/quieter.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/resource-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/ship-checklist.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/signature-moments.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/stock-media.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/style-systems.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/teach.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/tokens.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/typeset.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/ux-research.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/accessibility-engineering.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/accessibility-engineering.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/accessibility-engineering.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/adapt.md",
+      "to": "skills/siteasy/references/print-styles.md"
+    },
+    {
+      "from": "skills/siteasy/references/animate.md",
+      "to": "skills/siteasy/references/assets-library.md"
+    },
+    {
+      "from": "skills/siteasy/references/animate.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/animation-engineering.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/animation-engineering.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/assets-library.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/bolder.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/color-and-contrast.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/color-systems.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/color-systems.md",
+      "to": "skills/siteasy/references/tokens.md"
+    },
+    {
+      "from": "skills/siteasy/references/colorize.md",
+      "to": "skills/siteasy/references/live.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/fetch-asset.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/interaction-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/memorability.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/spatial-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/stock-media.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/testing-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/craft.md",
+      "to": "skills/siteasy/references/ux-writing.md"
+    },
+    {
+      "from": "skills/siteasy/references/critique.md",
+      "to": "skills/siteasy/references/cognitive-load.md"
+    },
+    {
+      "from": "skills/siteasy/references/critique.md",
+      "to": "skills/siteasy/references/heuristics-scoring.md"
+    },
+    {
+      "from": "skills/siteasy/references/critique.md",
+      "to": "skills/siteasy/references/personas.md"
+    },
+    {
+      "from": "skills/siteasy/references/data-viz.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/data-viz.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/delight.md",
+      "to": "skills/siteasy/references/assets-library.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/accessibility-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/cognitive-load.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/interaction-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/ux-writing.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/cognitive-load.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/component-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/layout.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/gestalt.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/seo/references/technical.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/siteasy/references/accessibility-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/siteasy/references/optimize.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/seo/references/technical.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/layout.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/personas.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/ux-research.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/animate.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/craft.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/journey-overhaul.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/ship-checklist.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/teach.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-express.md",
+      "to": "skills/siteasy/references/tokens.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-mapping.md",
+      "to": "skills/siteasy/references/cognitive-load.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-mapping.md",
+      "to": "skills/siteasy/references/information-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-mapping.md",
+      "to": "skills/siteasy/references/personas.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-mapping.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-mapping.md",
+      "to": "skills/siteasy/references/ux-research.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/audit/references/compare.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/siteasy/references/journey-express.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/inspect/references/detect.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/harden.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/journey-express.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/journey-overhaul.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/optimize.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/polish.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/ship-checklist.md"
+    },
+    {
+      "from": "skills/siteasy/references/landing-patterns.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/layout.md",
+      "to": "skills/siteasy/references/live.md"
+    },
+    {
+      "from": "skills/siteasy/references/layout.md",
+      "to": "skills/siteasy/references/spatial-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/live.md",
+      "to": "skills/siteasy/references/brand.md"
+    },
+    {
+      "from": "skills/siteasy/references/live.md",
+      "to": "skills/siteasy/references/overdrive.md"
+    },
+    {
+      "from": "skills/siteasy/references/live.md",
+      "to": "skills/siteasy/references/product.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/adapt.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/dark-mode-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/image-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/information-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/interaction-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/motion-design.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/motion-design.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/optimize.md",
+      "to": "skills/siteasy/references/image-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/references/optimize.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/optimize.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/overdrive.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/seo/references/schema.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/accessibility-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/optimize.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/overdrive.md"
+    },
+    {
+      "from": "skills/siteasy/references/parallax.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/resource-recipes.md",
+      "to": "skills/siteasy/references/fetch-asset.md"
+    },
+    {
+      "from": "skills/siteasy/references/resource-recommendations.md",
+      "to": "skills/siteasy/references/fetch-asset.md"
+    },
+    {
+      "from": "skills/siteasy/references/resource-recommendations.md",
+      "to": "skills/siteasy/references/resource-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/resource-recommendations.md",
+      "to": "skills/siteasy/references/stock-media.md"
+    },
+    {
+      "from": "skills/siteasy/references/shape.md",
+      "to": "skills/siteasy/references/interaction-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/shape.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/shape.md",
+      "to": "skills/siteasy/references/spatial-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/ship-checklist.md",
+      "to": "skills/siteasy/references/craft.md"
+    },
+    {
+      "from": "skills/siteasy/references/signature-moments.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/style-systems.md",
+      "to": "skills/siteasy/references/elevation.md"
+    },
+    {
+      "from": "skills/siteasy/references/tokens.md",
+      "to": "skills/siteasy/references/color-systems.md"
+    },
+    {
+      "from": "skills/siteasy/references/tokens.md",
+      "to": "skills/siteasy/references/dark-mode-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/tokens.md",
+      "to": "skills/siteasy/references/design-tokens.md"
+    },
+    {
+      "from": "skills/siteasy/references/tokens.md",
+      "to": "skills/siteasy/references/elevation.md"
+    },
+    {
+      "from": "skills/siteasy/references/typeset.md",
+      "to": "skills/siteasy/references/brand.md"
+    },
+    {
+      "from": "skills/siteasy/references/typeset.md",
+      "to": "skills/siteasy/references/live.md"
+    },
+    {
+      "from": "skills/siteasy/references/typeset.md",
+      "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/typeset.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-research.md",
+      "to": "skills/siteasy/references/heuristics-scoring.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-research.md",
+      "to": "skills/siteasy/references/information-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-research.md",
+      "to": "skills/siteasy/references/journey-mapping.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-research.md",
+      "to": "skills/siteasy/references/personas.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-research.md",
+      "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/wcag-2-2.md",
+      "to": "skills/siteasy/references/accessibility-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/wcag-2-2.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/wcag-2-2.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/wcag-2-2.md",
+      "to": "skills/siteasy/references/interaction-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/wcag-2-2.md",
+      "to": "skills/siteasy/references/parallax.md"
+    }
+  ],
+  "orphans": []
+}

@@ -312,3 +312,8 @@ Test that delight actually delights:
 - **Accessible**: Works with reduced motion, screen readers
 
 Remember: Delight is the difference between a tool and an experience. Add personality, surprise users positively, and create moments worth sharing. But always respect usability - delight should enhance, never obstruct.
+
+## Resource hooks
+
+- Micro-interaction and confetti tooling: `python3 tools/design-system/scripts/search.py "confetti" --domain resources`
+- Ready animations shipped with the plugin: `assets/animations/` (see [assets-library.md](assets-library.md))

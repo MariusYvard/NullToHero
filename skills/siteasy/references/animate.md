@@ -179,6 +179,12 @@ Rules distilled from the animated-component ecosystem (registries, hero effects)
 - Canvas and WebGL backgrounds: cut the rAF when off-viewport (IntersectionObserver), under reduced motion and on `visibilitychange`; listen for `webglcontextlost`.
 - `setInterval` is not an animation engine (background-tab throttling, drift): rAF or a CSS animation.
 
+## Resource hooks
+
+- Animation libraries with status and caveats: `python3 tools/design-system/scripts/search.py "animation" --domain resources`
+- Ready-made loaders, reveals and micro-animations shipped with the plugin: `assets/animations/` (see [assets-library.md](assets-library.md))
+- The right reference for a sub-topic: `node tools/search-references.mjs "stagger" --skill siteasy`
+
 ## Verify Quality
 
 Test animations thoroughly:

@@ -36,6 +36,8 @@ node tools/design-system/scripts/check-resources.mjs
 | Build, charts | Data visualization | Chart.js, ApexCharts, Recharts, ECharts, Nivo |
 | Content, imagery | Hero and content photos or video | See [references/stock-media.md](stock-media.md) for the license split. StockSnap is CC0, Unsplash, Pexels, Coverr and Mixkit are use-only |
 | Refine, motion | Ready animations | Animate.css, AOS, GSAP, Motion One, LottieFiles (`assets/animations` as a fallback) |
+| Refine, scrollytelling | Scroll engines and step patterns | GSAP ScrollTrigger, Lenis, Scrollama, Closeread (`--domain resources`, category scrollytelling) |
+| Refine, WebGL | Capability gating, springs, noise, tuning | detect-gpu, @react-spring/three, webgl-noise, lil-gui (`--domain resources`, category webgl) |
 | Present, mockups | Device and browser frames | Shots.so, Screely, Cleanmock, Pika, Mockuphone |
 | Ship, favicon | A full favicon set | RealFaviconGenerator, Favicon.io, Maskable.app |
 | Ship, image weight | A compressor or converter for every committed image | Squoosh, TinyPNG, SVGOMG (`image-optimizer` rows in generators.csv) |

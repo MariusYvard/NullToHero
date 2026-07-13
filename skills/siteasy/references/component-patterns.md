@@ -438,3 +438,8 @@ The shadcn distribution model (shadcn/ui, Magic UI and their neighbors) copies c
 - **The taxonomy is stable across libraries**: logo marquees, decorative backgrounds (SVG patterns, particles, WebGL), animated borders and beams, pointer-following spotlight cards, segmented text reveals, spring number tickers, device mockups and signature buttons. Knowing the families makes both building and auditing faster — and explains why unedited registry pages all look related.
 
 Device mockups deserve one specific rule: prefer a pure SVG frame (server-renderable, zero hydration) over a bitmap screenshot or a client component.
+
+## Resource hooks
+
+- Component libraries and registries with caveats: `python3 tools/design-system/scripts/search.py "components" --domain resources`
+- How established systems solve a pattern: `python3 tools/design-system/scripts/search.py "<pattern>" --domain design-systems`

@@ -1,7 +1,7 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, build local SEO, handle hreflang/i18n, generate sitemaps, optimize images, run programmatic SEO, build competitor comparison pages, cluster keywords, optimize for Search Experience (SXO), monitor SEO drift, analyze backlinks, handle e-commerce SEO, or export a client report. Covers full site audits with parallel sub-agents, single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, JSON-LD, E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, keyword clustering, SXO, drift monitoring, backlink analysis, e-commerce SEO, and PDF report export. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local SEO, hreflang, backlinks, programmatic, ecommerce, or visibility."
-version: 1.30.0
+version: 1.31.0
 user-invocable: true
 argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|sxo|drift|backlinks|ecommerce|report] [url | business-type]"
 allowed-tools:
@@ -42,6 +42,8 @@ Complete SEO toolkit for websites — from zero to ranking. Run a full audit, fi
 | `report [url|file|generate]` | Format any audit output as a client-ready Markdown report or PDF with score gauges | [references/report.md](references/report.md) |
 
 ## How to run a command
+
+If `PRODUCT.md` or `DIRECTION.md` exist at the project root, read them first: brand names, entities, tone and anti-references committed there drive schema `name`/`sameAs`, content voice and keyword framing.
 
 When the user invokes a command:
 1. Load the matching reference file using the Read tool

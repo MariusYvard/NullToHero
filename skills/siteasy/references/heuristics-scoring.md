@@ -238,3 +238,7 @@ Tag each individual issue found during scoring with a priority level:
 | **P3** | Polish | Nice-to-fix, no real user impact | Fix if time permits |
 
 **Tip**: If you're unsure between two levels, ask: "Would a user contact support about this?" If yes, it's at least P1.
+
+## Data
+
+The design-system engine ships decision-heuristics data at `tools/design-system/data/ui-reasoning.csv`, consumed by the generator (`design_system.py`) when it argues a recommendation; read it directly when a scoring call needs a documented rationale.

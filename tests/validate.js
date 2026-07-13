@@ -42,6 +42,7 @@
  * 33.  Audit-gate GitHub Action + self-test workflow present
  * 34.  Agents read shared audit-assets inputs and return only their section
  * 35.  Stated agent and rule counts match the repository (drift guard)
+ * 36.  Reference graph: committed, current, no orphan references, data domains cited
  */
 
 const fs     = require("fs");
@@ -1218,6 +1219,85 @@ section("35. Stated agent and rule counts match the repository");
   if (bad === 0) {
     pass(`agent count (${agentCount}) and inspect-rule count (${ruleCount}) match every stated figure`);
   }
+}
+
+
+// ─── Check 36: reference graph — committed, current, no orphans, domains cited ─
+section("36. Reference graph: no orphan references, all data domains cited");
+{
+  // Mirrors the algorithm in tools/build-index.mjs. Keep the two in sync.
+  const walkAll = (dir) => {
+    const out = [];
+    for (const name of fs.readdirSync(dir)) {
+      const p = path.join(dir, name);
+      if (fs.statSync(p).isDirectory()) out.push(...walkAll(p));
+      else if (name.endsWith(".md")) out.push(p);
+    }
+    return out;
+  };
+  const walkRefs = (dir) => walkAll(dir).filter(p => path.basename(p) !== "SKILL.md");
+  const skillsRoot = path.join(ROOT, "skills");
+  const nodeSet = new Set(walkRefs(skillsRoot).map(p => p.slice(ROOT.length + 1).split("\\").join("/")));
+  const norm = (p) => {
+    const parts = [];
+    for (const seg of p.split("/")) {
+      if (seg === "" || seg === ".") continue;
+      if (seg === "..") { if (parts.length === 0) return null; parts.pop(); }
+      else parts.push(seg);
+    }
+    return parts.join("/");
+  };
+  const edges = new Set();
+  for (const file of walkAll(skillsRoot)) {
+    const relSource = file.slice(ROOT.length + 1).split("\\").join("/");
+    const text = fs.readFileSync(file, "utf8");
+    const dir = relSource.split("/").slice(0, -1).join("/");
+    for (const m of text.matchAll(/[A-Za-z0-9_./-]+\.md\b/g)) {
+      const cand = m[0];
+      const resolved = cand.startsWith("skills/") ? norm(cand) : norm(dir + "/" + cand);
+      if (resolved && nodeSet.has(resolved) && resolved !== relSource) edges.add(relSource + " -> " + resolved);
+    }
+  }
+  const inbound = {};
+  for (const n of nodeSet) inbound[n] = 0;
+  for (const e of edges) inbound[e.split(" -> ")[1]]++;
+  const orphans = [...nodeSet].filter(n => inbound[n] === 0).sort();
+  const graph = {
+    nodes: [...nodeSet].sort(),
+    edges: [...edges].sort().map(e => { const [from, to] = e.split(" -> "); return { from, to }; }),
+    orphans,
+  };
+  const expected = JSON.stringify(graph, null, 2) + "\n";
+  const graphPath = path.join(ROOT, "tools", "reference-graph.json");
+  if (!fs.existsSync(graphPath)) fail("tools/reference-graph.json missing — run `node tools/build-index.mjs`");
+  else if (fs.readFileSync(graphPath, "utf8") !== expected) fail("tools/reference-graph.json is stale — run `node tools/build-index.mjs` and commit the result");
+  else pass(`reference-graph.json is current (${graph.nodes.length} nodes, ${graph.edges.length} edges)`);
+  if (orphans.length) orphans.forEach(o => fail(`orphan reference (no inbound link from any reference or SKILL command table): ${o}`));
+  else pass("no orphan references — every reference is reachable from another reference or a command table");
+
+  let corpus = "";
+  for (const f of walkAll(skillsRoot)) corpus += fs.readFileSync(f, "utf8");
+  for (const extra of ["tools/design-system/README.md", "tools/README.md", "tools/design-system/scripts/core.py"]) {
+    const fp = path.join(ROOT, extra);
+    if (fs.existsSync(fp)) corpus += fs.readFileSync(fp, "utf8");
+  }
+  const dataDir = path.join(ROOT, "tools", "design-system", "data");
+  const csvs = [];
+  const walkCsv = (dir) => {
+    for (const name of fs.readdirSync(dir)) {
+      const p = path.join(dir, name);
+      if (fs.statSync(p).isDirectory()) walkCsv(p);
+      else if (name.endsWith(".csv")) csvs.push(p);
+    }
+  };
+  walkCsv(dataDir);
+  const uncited = csvs.filter(p => {
+    const base = path.basename(p);
+    const stem = base.replace(/\.csv$/, "");
+    return !corpus.includes(base) && !corpus.includes(`--stack ${stem}`) && !corpus.includes(`--domain ${stem}`);
+  });
+  if (uncited.length) uncited.forEach(u => fail(`data file never cited by any skill, README or engine config: ${u.slice(ROOT.length + 1)}`));
+  else pass(`all ${csvs.length} design-system data files are cited by a skill, a README or the engine config`);
 }
 
 // --- Summary --------------------------------------------------------------------

@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 13 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 1.30.0
+version: 1.31.0
 user-invocable: true
 argument-hint: "[url] | [full|seo|defects|design|quick|verify|checks|report] [url|file] | compare [A] [B]"
 allowed-tools:
@@ -15,7 +15,7 @@ allowed-tools:
   - Bash(python3 *)
 ---
 
-Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/seo, /inspect, /siteasy), dispatches all 13 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
+Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/seo, /inspect, /siteasy), dispatches all 15 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
 
 ## Commands
 

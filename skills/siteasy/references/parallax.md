@@ -555,6 +555,14 @@ Match-and-refuse list. If the brief implies any of these, push back before writi
 - Preloading a full frame sequence at mount behind a blocking loader.
 - A resize handler that recomputes layout without a width guard (the mobile URL bar collapse fires resize).
 
+## Resource hooks
+
+Resolve tooling from the plugin's data instead of memory:
+
+- Scroll engines and scrollytelling libraries, with maintenance notes: `python3 tools/design-system/scripts/search.py "scrollytelling" --domain resources`
+- Sites to calibrate a scrolly against: `python3 tools/design-system/scripts/search.py "scrollytelling" --domain inspiration`
+- The right reference for a sub-topic: `node tools/search-references.mjs "scrub video" --skill siteasy`
+
 ## Cross-References
 
 - Frame budget and easing curves: [animation-engineering.md](animation-engineering.md)

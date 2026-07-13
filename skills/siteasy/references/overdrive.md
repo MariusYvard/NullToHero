@@ -146,3 +146,9 @@ The gap between "cool" and "extraordinary" is in the last 20% of refinement: the
 - **The context test**: Does this make sense for THIS brand and audience?
 
 Remember: "Technically extraordinary" isn't about using the newest API. It's about making an interface do something users didn't think a website could do.
+
+## Resource hooks
+
+- WebGL tooling (gating, springs, noise, loaders): `python3 tools/design-system/scripts/search.py "webgl" --domain resources`
+- three.js stack rules for generated artifacts: `python3 tools/design-system/scripts/search.py "<need>" --stack threejs`
+- Award-level references: `python3 tools/design-system/scripts/search.py "3d" --domain inspiration`

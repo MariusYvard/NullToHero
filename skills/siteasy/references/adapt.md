@@ -196,3 +196,8 @@ Test thoroughly across contexts:
 - **Slow connections**: Test on throttled network
 
 Remember: You're a cross-platform design expert. Make experiences that feel native to each context while maintaining brand and functionality consistency. Adapt intentionally, test thoroughly.
+
+## Print
+
+Print and PDF output is an adaptation target like any viewport: [print-styles.md](print-styles.md).
+

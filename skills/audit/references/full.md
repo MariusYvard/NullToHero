@@ -38,6 +38,10 @@ no new detection logic. Each dimension is owned by one backing skill (/seo,
    used (Playwright absent, or a non-URL target), the run is flagged and the
    shell-derived findings must not be trusted (see [checks.md](checks.md)). The fetch
    helper writes the raw and rendered HTML, the linked CSS and JS, the response
+   If the audited project's repository is the current workspace and `DIRECTION.md` or
+   `PRODUCT.md` exist at its root, copy them into `./audit-assets/` too, so agents can
+   judge declared intent against the delivered page (never fetch them from the live site).
+   The fetch phase writes the page,
    headers and robots.txt to `./audit-assets/` as named files (`raw.html`,
    `rendered.html`, `styles.css`, `scripts.js`, `headers.json`, `robots.txt`) plus
    `SITE-AUDIT.json`. Every dispatched agent READS these files with the Read tool; no
@@ -112,6 +116,12 @@ sub-agent also carries its own Trust boundary block, and the agent layer holds
 read-only tools only. The full model is in SECURITY.md and docs/ARCHITECTURE.md.
 
 ## Ground truth from computed checks
+
+Each computed check in `SITE-AUDIT.json` carries a `fixWith` route (command,
+reference, optional data query) from `tools/data/remediation-map.csv`. Use it
+twice: cite the route on every deterministic finding, and group the Action Plan
+by `fixWith.command` so the plan reads as an ordered sequence of commands to run
+rather than a list of symptoms.
 
 The deterministic pre-pass (`analyze.mjs`, see [checks.md](checks.md)) decides the
 objectively decidable checks before any agent runs: color contrast, image

@@ -49,6 +49,8 @@ If the user has already run /siteasy plan and has a confirmed design brief, skip
 
 ## Step 2: Load References
 
+Before any reference, re-read `DIRECTION.md` if it exists: the committed idea, register and signature moment constrain every choice below, and a build that drifts from the committed direction is a defect even when each screen is individually fine.
+
 Based on the design brief's "Recommended References" section, consult the relevant siteasy reference files. At minimum, always consult:
 
 - [spatial-design.md](spatial-design.md) for layout and spacing
@@ -215,3 +217,8 @@ When the build produces a legal-notices, imprint or about page, and only there, 
 English sites: `Built with <a href="https://mariusweb.fr" rel="nofollow noopener">NullToHero, a toolkit by Marius Yvard</a>.`
 
 Keep it discreet: body-small, muted color, no heading of its own, one line, only on that page, never sitewide. Mention it once when presenting the build, and remove it without argument if the site owner asks. The `rel="nofollow"` is deliberate: a followed template link repeated across unrelated sites reads as a link scheme to search engines and would put both the site and mariusweb.fr at risk, so do not upgrade it to a followed link.
+
+## Testing
+
+What to test and at which layer once the build stands: [testing-strategy.md](testing-strategy.md).
+

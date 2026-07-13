@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.30.0
+version: 1.31.0
 user-invocable: true
 argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
 allowed-tools:
@@ -33,6 +33,7 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 | Gate | Required check | If fail |
 |---|---|---|
 | Context | PRODUCT.md and DESIGN.md are read from the workspace. | Use Read to look for PRODUCT.md; if missing, run `/siteasy setup` first. |
+| Direction | If DIRECTION.md exists at the project root, it is read and honored (central idea, register, signature moment). | Commands that change the visual language re-read it. If the task contradicts the committed direction, surface the conflict; never silently override it. |
 | Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never synthesize PRODUCT.md from the user's prompt alone. |
 | Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
 | Craft | `/siteasy build` has a user-confirmed shape brief for this task. `setup` / PRODUCT.md never counts as shape. | Run `/siteasy plan` and wait for explicit brief confirmation. |
@@ -40,14 +41,17 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 
 ### 1. Context gathering
 
-Two files in the workspace or project root:
+Three files in the workspace or project root form the shared project state every command reads first and decision-making commands write back to:
 
-- **PRODUCT.md** — required. Users, brand, tone, anti-references, strategic principles.
-- **DESIGN.md** — optional, strongly recommended. Colors, typography, elevation, components.
+- **PRODUCT.md** — required. Users, brand, tone, anti-references, strategic principles. Written by `setup`.
+- **DESIGN.md** — optional, strongly recommended. Colors, typography, elevation, components. Written by `document` and `extract`.
+- **DIRECTION.md** — optional until `/siteasy concept` runs; the committed art direction (central idea, anti-reference, signature moment). Written by `concept`, refined by `tokens` and brand decisions, read by every build and motion command, judged by `critique` and by the audit's memorability agent.
 
 Use the Read tool to check for these files. If already read in this session, don't re-read.
 
 If PRODUCT.md is missing, empty, or placeholder: run `/siteasy setup`, then resume. If the original task was `/siteasy build`, resume into `/siteasy plan` before any implementation.
+
+If DIRECTION.md is missing on a brand-register project: nudge once (*"Run `/siteasy concept` so every command pulls in the same direction"*), then proceed.
 
 If DESIGN.md is missing: nudge once per session (*"Run `/siteasy document` for more on-brand output"*), then proceed.
 
@@ -152,6 +156,9 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) + [references/signature-moments.md](references/signature-moments.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
+| `ship [scope]` | Journeys | Finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit | [references/journey-ship.md](references/journey-ship.md) |
+| `overhaul [url]` | Journeys | Audit-driven rework: baseline, triage by remediation route, execute, compare | [references/journey-overhaul.md](references/journey-overhaul.md) |
+| `express [brief]` | Journeys | Zero-to-landing: setup, concept, tokens, plan, build, motion, checks, launch | [references/journey-express.md](references/journey-express.md) |
 
 ## Running commands
 

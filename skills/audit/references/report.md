@@ -85,6 +85,11 @@ Every unified report follows this structure:
 [embed the four siteasy agent sections]
 
 ## Action Plan
+
+Group items by their `fixWith.command` (from SITE-AUDIT.json): one batch per
+command, critical first. Each batch names the command to run and the reference
+it loads; agent-level findings without a `fixWith` join the batch whose command
+owns their dimension.
 | # | Priority | Issue | Dimension | Fix |
 |---|----------|-------|-----------|-----|
 | 1 | Critical | ... | ... | ... |

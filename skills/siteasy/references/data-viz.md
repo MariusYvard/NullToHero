@@ -92,3 +92,8 @@ Run this pass on any chart in the build:
 A chart that passes this pass is usually a bar chart with labels and a table. That is not a failure of imagination. It is the most common right answer.
 
 For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).
+
+## Resource hooks
+
+- Chart-type guidance by data shape: `python3 tools/design-system/scripts/search.py "<data shape>" --domain chart`
+- Chart libraries and palettes: `python3 tools/design-system/scripts/search.py "chart" --domain resources` and the Okabe-Ito row under color-tools

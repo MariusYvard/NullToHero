@@ -139,6 +139,31 @@ async function runProbes(baseUrl, timeout) {
   return out;
 }
 
+// Passive library probe: which front-end libraries the page's own code carries.
+// Context for agents and remediation (stack-aware advice), never a verdict.
+function libSignals(html, js) {
+  const t = (html || "") + "\n" + (js || "");
+  const libs = [];
+  const add = (n, re) => { if (re.test(t)) libs.push(n); };
+  add("gsap", /\bgsap\b/i);
+  add("scrolltrigger", /ScrollTrigger/);
+  add("lenis", /\blenis\b/i);
+  add("locomotive-scroll", /locomotive-scroll/i);
+  add("motion", /framer-motion|motion\/react|useReducedMotion/);
+  add("three", /\bTHREE\b|three\.module|\bREVISION\s*=/);
+  add("react-three-fiber", /@react-three|useFrame\s*\(/);
+  add("scrollama", /scrollama/i);
+  add("react", /react-dom|__NEXT_DATA__/);
+  add("nextjs", /__NEXT_DATA__|\/_next\//);
+  add("vue", /__VUE__|data-v-[0-9a-f]{8}/);
+  add("svelte", /svelte-[a-z0-9]{6}/);
+  add("jquery", /jquery/i);
+  add("alpine", /x-data=/);
+  add("tailwind", /class(Name)?="[^"]*\b(sm|md|lg|xl|2xl):[a-z-]/);
+  add("wordpress", /wp-content\//);
+  return libs;
+}
+
 // Passive scrollytelling probe: detects step/pin machinery in the page's own
 // HTML and JS so the motion and UX agents get context. Context only, never a
 // verdict — a scrollytelling page is not a defect.
@@ -395,6 +420,7 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     catch (e) { console.error(`[fetch] media weight probe failed: ${e.message}`); }
   }
   const scrolly = scrollySignals(html, assetInfo.js);
+  const libs = libSignals(html, assetInfo.js);
 
   let renderedHtml = null, computed = null, renderAvailable = false;
   if (wantRender) {
@@ -424,7 +450,7 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     render: renderAvailable ? "playwright" : "none",
     renderRequested: wantRender, renderAvailable,
     clientRendered,
-    signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell, scrolly },
+    signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell, scrolly, libs },
     headers, probes: { ...(probes || {}), mediaWeight },
     rawHtml: html, renderedHtml, robotsTxt, computed,
     linkedCss: assetInfo.css, linkedJs: assetInfo.js,

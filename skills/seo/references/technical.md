@@ -169,3 +169,10 @@ Google updated its JavaScript SEO documentation in December 2025 with critical c
 | Hreflang validation | `/seo hreflang` |
 | Site build with technical best practices | `/siteasy build` |
 | Fix tracking | (not included) |
+
+## Deep dives
+
+- Head metadata specifics (favicon, manifest, theme-color, color-scheme): [head-meta.md](head-meta.md)
+- Core Web Vitals remediation in depth: [performance.md](performance.md)
+- Consent, privacy signals and tracking hygiene: [privacy-consent.md](privacy-consent.md)
+

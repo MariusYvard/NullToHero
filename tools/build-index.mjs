@@ -45,3 +45,56 @@ for (const file of walk(skillsDir)) {
 entries.sort((a, b) => a.path.localeCompare(b.path));
 writeFileSync(join(root, "tools", "reference-index.json"), JSON.stringify(entries, null, 2) + "\n");
 console.log(`Indexed ${entries.length} reference files -> tools/reference-index.json`);
+
+// ── reference graph ───────────────────────────────────────────────────────────
+// Nodes are the reference files above; edges are every resolvable .md mention
+// (markdown links, code spans or prose) in any skills/**/*.md file, SKILL.md
+// command tables included. The graph is the plugin's connective tissue and the
+// validator fails on orphan references (no inbound edge), so new content cannot
+// land as an unreachable island. Deterministic output, committed, checked in CI.
+
+function walkAll(dir) {
+  const out = [];
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) out.push(...walkAll(p));
+    else if (name.endsWith(".md")) out.push(p);
+  }
+  return out;
+}
+
+const nodeSet = new Set(entries.map((e) => e.path));
+const edges = new Set();
+const norm = (p) => {
+  const parts = [];
+  for (const seg of p.split("/")) {
+    if (seg === "" || seg === ".") continue;
+    if (seg === "..") { if (parts.length === 0) return null; parts.pop(); }
+    else parts.push(seg);
+  }
+  return parts.join("/");
+};
+for (const file of walkAll(skillsDir)) {
+  const relSource = file.slice(root.length + 1).split("\\").join("/");
+  const text = readFileSync(file, "utf8");
+  const dir = relSource.split("/").slice(0, -1).join("/");
+  for (const m of text.matchAll(/[A-Za-z0-9_./-]+\.md\b/g)) {
+    const cand = m[0];
+    const resolved = cand.startsWith("skills/") ? norm(cand) : norm(dir + "/" + cand);
+    if (resolved && nodeSet.has(resolved) && resolved !== relSource) {
+      edges.add(relSource + " -> " + resolved);
+    }
+  }
+}
+const inbound = {};
+for (const n of nodeSet) inbound[n] = 0;
+for (const e of edges) inbound[e.split(" -> ")[1]]++;
+const orphans = [...nodeSet].filter((n) => inbound[n] === 0).sort();
+const graph = {
+  nodes: [...nodeSet].sort(),
+  edges: [...edges].sort().map((e) => { const [from, to] = e.split(" -> "); return { from, to }; }),
+  orphans,
+};
+writeFileSync(join(root, "tools", "reference-graph.json"), JSON.stringify(graph, null, 2) + "\n");
+console.log(`Graph: ${graph.nodes.length} nodes, ${graph.edges.length} edges, ${orphans.length} orphan(s) -> tools/reference-graph.json`);
+if (orphans.length) for (const o of orphans) console.log(`  orphan: ${o}`);

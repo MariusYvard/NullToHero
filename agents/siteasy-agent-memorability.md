@@ -30,6 +30,7 @@ may be unavailable in this harness, and re-fetching wastes the shared pass.
 - `audit-assets/scripts.js` all inline and same-origin linked JS, concatenated
 - `audit-assets/headers.json` the HTTP response headers
 - `SITE-AUDIT.json` the deterministic pre-pass verdicts for the checks you own
+- `audit-assets/DIRECTION.md` the project's declared art direction (optional; when present, judge declared intent against the delivered page)
 
 `url` or `path` names the target. If a file is absent, note it once and score from
 what is present; never block on a missing WebFetch.
@@ -38,6 +39,9 @@ Optional calibration, never required: `tools/design-system/data/inspiration.csv`
 (what the strong reference galleries reward) and `design-systems.csv` (what the
 established systems standardize) sharpen the Signature element and Restraint
 judgments. Score from the page itself; treat these files as context, not evidence.
+If `audit-assets/DIRECTION.md` is present, weigh Commitment and Signature element
+against the DECLARED idea: a page that contradicts its own committed direction
+scores lower than one that never declared any.
 
 ## Checklist
 ### Point of view

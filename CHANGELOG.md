@@ -11,6 +11,24 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.31.0] - 2026-07-12
+
+Connective-tissue release: the five recommendations against the "catalogue" effect. No new detection content; the existing content now routes to itself.
+
+### Added
+
+- Shared project state generalized: `DIRECTION.md` joins PRODUCT.md/DESIGN.md as a first-class Setup gate in `/siteasy` (read by every command, conflict surfaced instead of overridden), re-read by `craft` at reference-load time, honored by `/seo` and `/inspect`, copied into `audit-assets/` by `/audit full`, listed as an optional input by all 15 sub-agents, and weighed by the memorability agent (declared intent vs delivered page).
+- Remediation routing: `tools/data/remediation-map.csv` (32 checks + 64 rules, each mapped to the command that fixes it, the reference that command loads and an optional data query); every check in SITE-AUDIT.json now carries a `fixWith` route; the audit Action Plan and `/inspect detect` cite routes and group fixes by command.
+- Active data: a passive library probe (`target.libs`: GSAP, Lenis, motion, three.js, R3F, scrollama, React/Next, Vue, Svelte, Tailwind, jQuery, Alpine, WordPress) beside the scrolly probe; standardized "Resource hooks" blocks in 8 references citing exact `search.py`/`search-references.mjs` queries; two new moments (scrollytelling, WebGL) in resource-recommendations.
+- Reference graph: `tools/build-index.mjs` now emits `tools/reference-graph.json` (113 nodes, 258 edges) and validate check 36 fails on stale graphs, orphan references and design-system data files cited nowhere; the 11 existing orphans were wired in (plan templates linked from plan.md, technical deep dives, print styles from adapt, testing strategy from craft, ui-reasoning.csv documented in heuristics-scoring).
+- Journeys: three orchestrated pipelines as `/siteasy` commands — `ship` (polish, defect scan, deterministic audit, hardening, final audit), `overhaul` (baseline audit, triage by remediation route, execute per command, compare) and `express` (setup to launch in eight gated stages) — 3 new references chaining existing commands around the shared state.
+
+### Fixed
+
+- audit SKILL.md described "13 specialist sub-agents"; the plugin dispatches 15.
+
+---
+
 ## [1.30.0] - 2026-07-12
 
 ### Added

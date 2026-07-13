@@ -34,6 +34,45 @@ export function inputHashes(fetchResult) {
   };
 }
 
+
+// ── remediation routing ──────────────────────────────────────────────────────
+// Each deterministic check id maps to the command that fixes it (and the
+// reference that command loads) via tools/data/remediation-map.csv, so a FAIL
+// in SITE-AUDIT.json is an entry point into the rest of the plugin, not a dead
+// end. Inspect rules route through the same file (kind=rule).
+
+function parseCsvLine(line) {
+  const out = []; let cur = "", inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQ) {
+      if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+      else if (ch === '"') inQ = false;
+      else cur += ch;
+    } else if (ch === '"') inQ = true;
+    else if (ch === ",") { out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  out.push(cur);
+  return out;
+}
+
+let REMEDIATION = null;
+export function remediationMap() {
+  if (REMEDIATION) return REMEDIATION;
+  REMEDIATION = {};
+  try {
+    const raw = readFileSync(join(HERE, "..", "..", "data", "remediation-map.csv"), "utf8");
+    for (const line of raw.trim().split(/\r?\n/).slice(1)) {
+      const f = parseCsvLine(line);
+      if (f.length >= 5 && f[1] === "check") {
+        REMEDIATION[f[0]] = { command: f[2], reference: f[3], query: f[4] || null };
+      }
+    }
+  } catch { /* map is optional; fixWith stays null */ }
+  return REMEDIATION;
+}
+
 export function pluginVersion() {
   try {
     const pj = JSON.parse(readFileSync(join(HERE, "..", "..", "..", ".claude-plugin", "plugin.json"), "utf8"));
@@ -93,6 +132,7 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       clientRendered: fetchResult.clientRendered === undefined ? "unknown" : fetchResult.clientRendered,
       previewHost,
       scrolly: (fetchResult.signals && fetchResult.signals.scrolly) || null,
+      libs: (fetchResult.signals && fetchResult.signals.libs) || null,
     },
     scores: {
       overall: det.score,
@@ -106,7 +146,7 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       notMeasured: det.notMeasured, criticalFails: det.criticalFails,
     },
     inputs: { hashes: inputHashes(fetchResult), dimensions: DIMENSION_INPUTS },
-    checks: checks.map(c => ({ ...c, source: "analyzer" })),
+    checks: checks.map(c => ({ ...c, source: "analyzer", fixWith: remediationMap()[c.id] || null })),
     cost: null,
     partialCoverage: fetchResult.clientRendered === true && !fetchResult.renderAvailable
       ? ["Target is client-rendered but was fetched without --render; raw HTML may be a shell."]

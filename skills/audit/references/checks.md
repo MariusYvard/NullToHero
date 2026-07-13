@@ -101,8 +101,14 @@ text colors, or robots.txt that was not fetched.
 
 The fetch phase also runs a passive scrollytelling probe (ScrollTrigger, scrollama,
 closeread, CSS scroll-driven animations, sticky plus IntersectionObserver) surfaced
-as `target.scrolly` in SITE-AUDIT.json. It is context handed to the motion and UX
-agents, never a verdict: a scrollytelling page is not a defect.
+as `target.scrolly` in SITE-AUDIT.json, and a library probe (`target.libs`: GSAP,
+Lenis, motion, three.js, React/Next, Vue, Tailwind and friends detected in the
+page's own code). Both are context handed to the agents, never a verdict.
+
+Every check in SITE-AUDIT.json also carries a `fixWith` route (the command that
+fixes it, the reference that command loads, and an optional data query), resolved
+from `tools/data/remediation-map.csv`. A FAIL is an entry point into the fixing
+command, not a dead end; inspect rules map through the same file (`rule-<id>`).
 
 ## Rendered fetch and the client-rendered guard
 
