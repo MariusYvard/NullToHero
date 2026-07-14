@@ -308,21 +308,26 @@ An action plan from `/audit`, ordered by severity:
 
 ## How NullToHero compares
 
-NullToHero overlaps three kinds of tool and differs from each in scope. The table sets out who does what.
+NullToHero overlaps four kinds of tool. The honest comparison: each column is excellent at what it is for, none of them spans the whole loop of building, auditing, scoring and fixing inside your own files.
 
-| Capability | NullToHero | Design-intelligence skill (ui-ux-pro-max) | Design-methodology skill | In-browser UI generator (v0, Lovable) |
-|---|---|---|---|---|
-| Design and build pages | Yes | Partial (a system, not pages) | No (process, not code) | Yes |
-| Generate tokens and a design system | Yes | Yes | No (documents only) | Partial |
-| Defect scan (accessibility, layout, motion) | Yes | No | Partial (manual critique) | No |
-| SEO and structured data | Yes | No | No | No |
-| AI-search visibility (GEO) | Yes | No | No | No |
-| Whole-site audit in one pass | Yes | No | No | No |
-| Deterministic 0-100 score | Yes | No | No | No |
-| Code-quality review of the output | Yes | No | No | No |
-| Runs inside Claude on your own files | Yes | Yes | Yes | No (hosted) |
+| Capability | **NullToHero** | AI site builders<br><sub>v0 · Lovable · Bolt</sub> | Audit tools<br><sub>Lighthouse · axe</sub> | SEO suites<br><sub>Semrush · Ahrefs</sub> | Design skills<br><sub>ui-ux-pro-max</sub> |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| Designs and builds real pages | ✅ | ✅ | — | — | 🟡 |
+| Audits an existing site | ✅ | — | ✅ | ✅ | — |
+| Routes every finding to the command that fixes it | ✅ | — | — | — | — |
+| Deterministic 0-100 score, reproducible in CI | ✅ | — | 🟡 | 🟡 | — |
+| Design taste scored (memorability, motion, Gestalt) | ✅ | 🟡 | — | — | 🟡 |
+| SEO with structured data | ✅ | — | 🟡 | ✅ | — |
+| AI-search visibility (GEO, llms.txt) | ✅ | — | — | 🟡 | — |
+| Accessibility: WCAG 2.2 rules and contrast checks | ✅ | 🟡 | ✅ | — | 🟡 |
+| CI gate on every push | ✅ | — | ✅ | — | — |
+| Runs inside Claude, on your own files | ✅ | — | — | — | ✅ |
+| Free, open source, no account | ✅ | — | ✅ | — | ✅ |
+| Editable knowledge (rules, laws, resources as CSV) | ✅ | — | — | — | 🟡 |
 
-NullToHero is the one that spans build, defects, SEO and a scored whole-site audit in a single plugin. It is not a hosted product or a visual editor: it runs inside Claude and edits the real files in your project, so the output is yours to keep and version.
+<sub>✅ yes · 🟡 partial · — no. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
+
+NullToHero is the one that spans build, defects, SEO and a scored whole-site audit in a single plugin, with every finding routed to the command that fixes it. It is not a hosted product or a visual editor: it runs inside Claude and edits the real files in your project, so the output is yours to keep and version.
 
 ---
 
