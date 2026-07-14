@@ -52,6 +52,8 @@ You do not learn commands by heart. You say what you want ("make this landing pa
 | Catch problems before publishing | `/inspect detect index.html` | A checklist of issues, each with its fix |
 | See it the way a real browser does | `/inspect preview index.html` | Desktop and mobile screenshots, bugs fixed in a loop |
 | Check the whole site in one pass | `/audit yoursite.com` | One site health score and one merged action plan |
+| Make a background video play everywhere (even iOS Low Power Mode) | `/siteasy video hero.mp4` | A canvas-decoded loop with poster, fallbacks and zero CLS |
+| Finish and ship, gates included | `/siteasy ship` | Polish, defect scan, deterministic audit and hardening, in order |
 
 ---
 
@@ -241,7 +243,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `compare [A] [B]` | Diff two targets: per-check verdict changes and score deltas (before/after, or A vs B) |
 | `report [file]` | Format an existing audit into a client-ready report or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (contrast, image dimensions, viewport, robots.txt, headings, lang, title, description, 375px overflow) and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (32 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -386,15 +388,17 @@ NullToHero ships **110 reference docs** that Claude loads only when it needs the
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (63):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, brand-identity, clarify, cognitive-load, color-and-contrast, colorize, component-patterns, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, delight, design-tokens, distill, document, extract, fetch-asset, form-patterns, gestalt, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-mapping, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, product, quieter, responsive-design, resource-recipes, resource-recommendations, shape, signature-moments, spatial-design, stock-media, teach, tokens, typeset, typography, ux-research, ux-writing, wcag-2-2
+**siteasy, design (77):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand-identity, brand, clarify, cognitive-load, color-and-contrast, color-systems, colorize, component-patterns, component-recipes, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, data-viz, delight, design-tokens, distill, document, elevation, extract, fetch-asset, form-patterns, gestalt, handoff, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-express, journey-mapping, journey-overhaul, journey-ship, landing-patterns, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, print-styles, product, quieter, resource-recipes, resource-recommendations, responsive-design, shape, ship-checklist, signature-moments, spatial-design, stock-media, style-systems, teach, testing-strategy, tokens, typeset, typography, ux-research, ux-writing, video, wcag-2-2
 
-**seo, search (20):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, hreflang, images, local, page, plan, programmatic, report, schema, sitemap, sxo, technical
+**seo, search (23):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, head-meta, hreflang, images, local, page, performance, plan, privacy-consent, programmatic, report, schema, sitemap, sxo, technical
 
 **seo, plan assets (6):** agency, ecommerce, generic, local-service, publisher, saas
 
-**inspect, defects (3):** detect, preview, review
+**inspect, defects (4):** code-quality, detect, preview, review
 
-**audit, whole-site (4):** checks, compare, full, report
+**audit, whole-site (6):** checks, compare, full, html-report, learnings, report
+
+**shared state and routing:** `DIRECTION.md` and `LOG.md` project files read by every command, `tools/data/laws.csv` (16 canonical numeric laws, CI-checked citations), `tools/data/remediation-map.csv` routing every check and rule to the command that fixes it (`fixWith` in SITE-AUDIT.json), and `tools/reference-graph.json` (the reference graph, zero orphans enforced by CI).
 
 A stack-aware design-system generator also lives under `tools/design-system/`, covering 16 technology stacks (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, HTML and Tailwind, shadcn/ui, SwiftUI, React Native, Flutter, Jetpack Compose, Three.js, Nuxt UI).
 
