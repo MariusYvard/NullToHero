@@ -139,36 +139,43 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
 <details>
-<summary><b>All 26 commands</b></summary>
+<summary><b>All 33 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
-| `build [feature]` | Build a full UI feature end to end from a confirmed brief |
-| `plan [feature]` | Plan UX and visual direction before any code |
-| `research [scope]` | UX research planning, method choice, persona and journey synthesis |
-| `ia [target]` | Information architecture, card sorting, tree testing, navigation |
-| `journey [persona]` | Empathy maps, journey maps, service blueprints |
-| `setup` | Create PRODUCT.md (brand, audience, tone, anti-references) |
-| `critique [target]` | Design review with heuristic scoring |
-| `audit [target]` | Quality checks (accessibility, performance, responsive, WCAG 2.2, images, forms) |
-| `polish [target]` | Final quality pass before shipping |
-| `amplify [target]` | Make bland designs bolder (type, color, presence) |
-| `simplify [target]` | Reduce visual noise, strip to the essentials |
-| `animate [target]` | Purposeful motion and micro-interactions |
-| `typeset [target]` | Typography audit, font selection, hierarchy |
-| `layout [target]` | Spacing systems, visual rhythm, grid |
-| `adapt [target]` | Mobile, tablet, desktop and print adaptation |
-| `mobile [target]` | Phone ergonomics: thumb zone, touch targets, keyboards, mobile audit |
-| `clarify [target]` | UX copy, error messages, button labels, empty states |
-| `onboard [target]` | First-run flows, empty states, feature discovery |
-| `delight [target]` | Micro-interactions, personality, satisfying feedback |
-| `launch [target]` | Production hardening and Core Web Vitals |
-| `overdrive [target]` | View Transitions API, WebGL, scroll-driven animation |
-| `parallax [target]` | Multi-layer depth, scrollytelling, WCAG 2.2.2 motion safety |
+| `build [feature]` | Shape, then build a feature end-to-end |
+| `plan [feature]` | Plan UX/UI before writing code |
+| `setup` | Create PRODUCT.md and DESIGN.md context |
+| `concept [project]` | Set the creative direction before building: idea, anti-reference, signature moment |
+| `research [scope]` | UX research planning, methods selection, persona and journey synthesis |
+| `ia [target]` | Information architecture, card sorting, tree testing, navigation patterns |
+| `journey [persona]` | Generate empathy maps, journey maps, or service blueprints from research |
 | `document` | Generate DESIGN.md from existing project code |
 | `extract [target]` | Pull reusable tokens and components into a design system |
-| `tokens [project]` | Audit or create a two-layer CSS token system |
-| `live [target]` | Interactive in-browser variant mode (bundled helper and picker) |
+| `handoff [target]` | Developer handoff spec: layout, tokens, props, states, breakpoints, edge cases, motion, accessibility |
+| `tokens [project]` | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode |
+| `critique [target]` | UX design review with heuristic scoring |
+| `audit [target]` | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) |
+| `polish [target]` | Final quality pass before shipping |
+| `amplify [target]` | Amplify safe or bland designs — bolder typography, stronger color, more presence |
+| `simplify [target]` | Reduce visual noise, tone down, strip to essence |
+| `clarify [target]` | UX copy, error messages, button labels, empty states |
+| `launch [target]` | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals |
+| `onboard [target]` | First-run flows, empty states, feature discovery, activation |
+| `animate [target]` | Add purposeful animations and motion |
+| `typeset [target]` | Typography audit, font selection, hierarchy |
+| `layout [target]` | Spacing systems, visual rhythm, grid tools |
+| `charts [target]` | Accessible data visualization: chart-type choice, a11y grades, non-color fallbacks |
+| `adapt [target]` | Mobile/tablet/desktop/print adaptation |
+| `mobile [target]` | Phone-specific ergonomics — thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit |
+| `delight [target]` | Micro-interactions, personality in copy, satisfying feedback |
+| `overdrive [target]` | View Transitions API, WebGL, scroll-driven animations |
+| `video [target]` | Guaranteed-play decorative video: classify, transcode to a canvas-decodable asset (WASM decoder), emit the drop-in component |
+| `parallax [target]` | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance |
+| `live [target]` | Interactive variant mode (requires running dev server) |
+| `ship [scope]` | Finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit |
+| `overhaul [url]` | Audit-driven rework: baseline, triage by remediation route, execute, compare |
+| `express [brief]` | Zero-to-landing: setup, concept, tokens, plan, build, motion, checks, launch |
 
 Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt` → `amplify` → `launch`), a refresh (`critique` → `amplify` → `polish`), a design system (`document` → `extract` → `tokens`).
 
@@ -183,25 +190,25 @@ Your search expert. It audits a whole site or a single page, writes the structur
 
 | Command | What it does |
 |---------|-------------|
-| `audit [url]` | Full site audit, crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md |
-| `page [url]` | Deep single-page analysis (title, meta, headings, schema, images, content score) |
-| `plan [business-type]` | Full strategy (architecture, content pillars, keyword plan, 4-phase roadmap) |
-| `technical [url]` | Robots.txt, sitemaps, Core Web Vitals, mobile, security headers, AI crawlers |
-| `schema [url]` | Detect, validate and generate Schema.org JSON-LD |
-| `content [url]` | E-E-A-T, readability, keyword density, AI citation readiness |
-| `geo [url]` | Weighted visibility score across Google AIO, ChatGPT, Perplexity, Bing Copilot (sub-modes `geo quick`, `geo compare`) |
-| `sitemap [url\|generate]` | XML sitemap validation and generation |
-| `images [url]` | Image SEO (alt text, formats, lazy loading, CLS, LCP) |
-| `local [url]` | Local SEO (Google Business Profile, NAP, citations, reviews, LocalBusiness schema) |
-| `hreflang [url\|generate]` | Hreflang validation and generation |
-| `programmatic [url\|plan]` | Programmatic SEO with quality gates |
-| `competitor-pages [url\|generate]` | Comparison and alternatives pages with feature matrices |
-| `cluster [keyword]` | Semantic keyword clustering and content architecture |
-| `sxo [url]` | Search Experience Optimization (intent alignment, satisfaction signals) |
-| `drift [url] baseline\|compare\|history` | SEO drift monitoring over time |
-| `backlinks [url]` | Backlink profile analysis |
-| `ecommerce [url]` | E-commerce SEO (products, categories, faceted navigation) |
-| `report [url\|file\|generate]` | Format audit output as a Markdown deliverable or PDF |
+| `audit [url]` | Full site SEO audit — crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md |
+| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, score |
+| `plan [business-type]` | Complete SEO strategy — architecture, content pillars, keyword plan, 4-phase roadmap |
+| `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering |
+| `schema [url]` | Detect, validate, and generate Schema.org JSON-LD — Organization, Article, Product, etc. |
+| `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness |
+| `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals |
+| `sitemap [url]` | XML sitemap validation and generation with industry-specific templates |
+| `images [url]` | Image SEO audit — alt text, formats (WebP/AVIF), lazy loading, CLS, LCP |
+| `local [business]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
+| `hreflang [url]` | Hreflang validation and generation for multilingual and multi-region sites |
+| `programmatic [url]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
+| `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks |
+| `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis |
+| `sxo [url]` | Search Experience Optimization — intent alignment, page-type matching, persona analysis |
+| `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking |
+| `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) |
+| `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
+| `report [url|file|generate]` | generate]` |
 
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
@@ -216,9 +223,9 @@ Your quality gate. Three quick checks to run before you ship.
 
 | Command | What it does |
 |---------|-------------|
-| `detect [target]` | Deterministic problem scan (focus rings, touch targets, reduced-motion, WCAG 2.2, images, forms) |
-| `preview [target]` | Real Chromium screenshot (desktop and mobile), reads it back, fixes bugs in a loop |
-| `review [file]` | Design engineering code review (motion issues, accessibility, Before and After table with a score) |
+| `detect [target]` | Deterministic anti-pattern scan — finds focus rings, clipped dropdowns, pure black/white, tiny touch targets, missing reduced-motion, and more |
+| `preview [target]` | Real Chromium screenshot — desktop + mobile viewports, reads back visually, fixes bugs in a loop |
+| `review [file]` | Design engineering code review — motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) |
 
 Common runs: before every ship (`detect` → `preview` → `review`).
 
@@ -229,19 +236,20 @@ Common runs: before every ship (`detect` → `preview` → `review`).
 Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 <details>
-<summary><b>All 9 commands</b></summary>
+<summary><b>All 10 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
-| `full [url]` | All 15 sub-agents (SEO, defects, design), unified report and prioritized action plan |
+| `full [url]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan |
 | `seo [url]` | Search-visibility group only (5 SEO sub-agents) |
 | `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
 | `design [url]` | Design-quality group only (5 siteasy sub-agents) |
 | `quick [url]` | One representative sub-agent per group for a fast triage |
-| `checks [url]` | Deterministic pre-pass: computed checks and `SITE-AUDIT.json`, no sub-agents (powers the CI gate) |
-| `verify [url]` | Consensus re-check of the gating dimensions (a11y, interaction, technical) by majority vote |
-| `compare [A] [B]` | Diff two targets: per-check verdict changes and score deltas (before/after, or A vs B) |
-| `report [file]` | Format an existing audit into a client-ready report or PDF |
+| `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents |
+| `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote |
+| `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas |
+| `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
+| `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
 The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (32 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 

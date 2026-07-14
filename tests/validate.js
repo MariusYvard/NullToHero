@@ -824,6 +824,23 @@ claims.forEach(([label, claimed, actual]) => {
   else fail(`README "${label}" count ${claimed} does not match actual ${actual}`);
 });
 
+// Per-skill "All N commands" collapsible counts, in README order.
+{
+  const perSkill = [...readmeTxt.matchAll(/All (\d+) commands/g)].map(m => Number(m[1]));
+  const actualPerSkill = [
+    ["siteasy", siteasyCmdCount], ["seo", seoActual],
+    ["inspect", inspectCmdCount], ["audit", auditCmdCount],
+  ];
+  if (perSkill.length !== actualPerSkill.length) {
+    fail(`README: expected ${actualPerSkill.length} "All N commands" blocks, found ${perSkill.length}`);
+  } else {
+    actualPerSkill.forEach(([label, actual], i) => {
+      if (perSkill[i] === actual) pass(`README "All ${perSkill[i]} commands" (${label}) matches the SKILL table`);
+      else fail(`README "All ${perSkill[i]} commands" (${label}) does not match the SKILL table (${actual})`);
+    });
+  }
+}
+
 // ─── Check 19: reference-index.json is up to date ────────────────────────────
 // Mirrors the algorithm in tools/build-index.mjs. Keep the two in sync.
 section("19. reference-index.json matches references on disk");
