@@ -310,7 +310,14 @@ An action plan from `/audit`, ordered by severity:
 
 NullToHero overlaps four kinds of tool. The honest comparison: each column is excellent at what it is for, none of them spans the whole loop of building, auditing, scoring and fixing inside your own files.
 
-| Capability | **NullToHero** | AI site builders<br><sub>v0 · Lovable · Bolt</sub> | Audit tools<br><sub>Lighthouse · axe</sub> | SEO suites<br><sub>Semrush · Ahrefs</sub> | Design skills<br><sub>ui-ux-pro-max</sub> |
+<p align="center">
+  <img src="docs/compare.svg" width="920" alt="Comparison matrix: NullToHero vs AI site builders (v0, Lovable, Bolt), audit tools (Lighthouse, axe), SEO suites (Semrush, Ahrefs) and design skills (ui-ux-pro-max, ux-ui-mastery, Taste) across 12 capabilities. NullToHero is the only column with every capability checked.">
+</p>
+
+<details>
+<summary><b>Text version of the table</b></summary>
+
+| Capability | **NullToHero** | AI site builders<br><sub>v0 · Lovable · Bolt</sub> | Audit tools<br><sub>Lighthouse · axe</sub> | SEO suites<br><sub>Semrush · Ahrefs</sub> | Design skills<br><sub>ui-ux-pro-max · ux-ui-mastery · Taste</sub> |
 |:---|:---:|:---:|:---:|:---:|:---:|
 | Designs and builds real pages | ✅ | ✅ | — | — | 🟡 |
 | Audits an existing site | ✅ | — | ✅ | ✅ | — |
@@ -326,6 +333,8 @@ NullToHero overlaps four kinds of tool. The honest comparison: each column is ex
 | Editable knowledge (rules, laws, resources as CSV) | ✅ | — | — | — | 🟡 |
 
 <sub>✅ yes · 🟡 partial · — no. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
+
+</details>
 
 NullToHero is the one that spans build, defects, SEO and a scored whole-site audit in a single plugin, with every finding routed to the command that fixes it. It is not a hosted product or a visual editor: it runs inside Claude and edits the real files in your project, so the output is yours to keep and version.
 
