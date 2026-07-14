@@ -39,7 +39,7 @@ Complete SEO toolkit for websites — from zero to ranking. Run a full audit, fi
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking | [references/drift.md](references/drift.md) |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) | [references/backlinks.md](references/backlinks.md) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema | [references/ecommerce.md](references/ecommerce.md) |
-| `report [url|file|generate]` | Format any audit output as a client-ready Markdown report or PDF with score gauges | [references/report.md](references/report.md) |
+| `report [url\|file\|generate]` | Format any audit output as a client-ready Markdown report or PDF with score gauges | [references/report.md](references/report.md) |
 
 ## How to run a command
 

@@ -208,7 +208,7 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
-| `report [url|file|generate]` | generate]` |
+| `report [url\|file\|generate]` | Format any audit output as a client-ready Markdown report or PDF with score gauges |
 
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
