@@ -311,7 +311,10 @@ An action plan from `/audit`, ordered by severity:
 NullToHero overlaps four kinds of tool. The honest comparison: each column is excellent at what it is for, none of them spans the whole loop of building, auditing, scoring and fixing inside your own files.
 
 <p align="center">
-  <img src="docs/compare.svg" width="920" alt="Comparison matrix: NullToHero vs AI site builders (v0, Lovable, Bolt), audit tools (Lighthouse, axe), SEO suites (Semrush, Ahrefs) and design skills (ui-ux-pro-max, ux-ui-mastery, Taste) across 12 capabilities. NullToHero is the only column with every capability checked.">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/compare-dark.svg">
+    <img src="docs/compare-light.svg" width="920" alt="Comparison matrix: NullToHero vs AI site builders (v0, Lovable, Bolt), audit tools (Lighthouse, axe), SEO suites (Semrush, Ahrefs) and design skills (ui-ux-pro-max, ux-ui-mastery, Taste) across 12 capabilities. NullToHero is the only column with every capability checked.">
+  </picture>
 </p>
 
 <details>

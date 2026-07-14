@@ -41,11 +41,23 @@ const H = PAD * 2 + TITLE_H + HDR_H + ROW_H * rows.length + LEG_H;
 const tableX = PAD, tableY = PAD + TITLE_H;
 const FONT = `-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif`;
 
-// palette (marine / sarcelle / crème / camel)
-const BG = "#0F1E33", PANEL = "#13263F", INK = "#F4EFE6", MUTED = "#8FA1B8",
-      TEAL = "#2FBFA7", AMBER = "#E4B363", DIM = "#54677F", STRIPE = "rgba(244,239,230,0.03)",
-      NTH_BG = "rgba(47,191,167,0.10)", NTH_EDGE = "rgba(47,191,167,0.55)";
+// palettes (marine / sarcelle / crème / camel), une par thème GitHub.
+// Le README les sert via <picture><source media="(prefers-color-scheme: dark)">.
+const THEMES = {
+  dark: {
+    BG: "#0F1E33", PANEL: "#13263F", INK: "#F4EFE6", MUTED: "#8FA1B8",
+    TEAL: "#2FBFA7", AMBER: "#E4B363", DIM: "#54677F", STRIPE: "rgba(244,239,230,0.03)",
+    NTH_BG: "rgba(47,191,167,0.10)", NTH_EDGE: "rgba(47,191,167,0.55)", EDGE: "none",
+  },
+  light: {
+    BG: "#FBF7EF", PANEL: "#FFFFFF", INK: "#16324F", MUTED: "#5D6B7A",
+    TEAL: "#178A78", AMBER: "#B97A24", DIM: "#9AA7B5", STRIPE: "rgba(22,50,79,0.04)",
+    NTH_BG: "rgba(23,138,120,0.07)", NTH_EDGE: "rgba(23,138,120,0.5)", EDGE: "#E6DECD",
+  },
+};
 
+function render(T) {
+const { BG, PANEL, INK, MUTED, TEAL, AMBER, DIM, STRIPE, NTH_BG, NTH_EDGE, EDGE } = T;
 function symbol(v, cx, cy) {
   if (v.includes("✅")) return `<circle cx="${cx}" cy="${cy}" r="9" fill="${TEAL}" fill-opacity="0.16" stroke="${TEAL}" stroke-width="1.4"/>
 <path d="M ${cx - 4.2} ${cy + 0.4} l 3 3.2 l 5.4 -6.4" fill="none" stroke="${TEAL}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
@@ -55,7 +67,7 @@ function symbol(v, cx, cy) {
 }
 
 let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="NullToHero comparison matrix">
-<rect width="${W}" height="${H}" rx="14" fill="${BG}"/>
+<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="14" fill="${BG}" stroke="${EDGE}" stroke-width="1"/>
 <text x="${PAD}" y="${PAD + 22}" font-family="${FONT}" font-size="18" font-weight="700" fill="${INK}">How NullToHero compares</text>
 <text x="${W - PAD}" y="${PAD + 22}" font-family="${FONT}" font-size="11" fill="${MUTED}" text-anchor="end">12 capabilities · 5 tool families</text>
 <rect x="${tableX}" y="${tableY}" width="${W - PAD * 2}" height="${HDR_H + ROW_H * rows.length}" rx="10" fill="${PANEL}"/>`;
@@ -94,6 +106,10 @@ svg += symbol("🟡", tableX + 70, ly) + `<text x="${tableX + 86}" y="${ly + 4}"
 svg += symbol("—", tableX + 152, ly) + `<text x="${tableX + 168}" y="${ly + 4}" font-family="${FONT}" font-size="11.5" fill="${MUTED}">no</text>`;
 svg += `<text x="${W - PAD}" y="${ly + 4}" font-family="${FONT}" font-size="11" fill="${MUTED}" text-anchor="end">Apache-2.0 · runs inside Claude · github.com/MariusYvard/NullToHero</text>`;
 svg += `</svg>\n`;
+return svg;
+}
 
-writeFileSync(join(root, "docs", "compare.svg"), svg);
-console.log(`docs/compare.svg: ${cols.length} columns, ${rows.length} rows, ${W}x${H}`);
+for (const [name, T] of Object.entries(THEMES)) {
+  writeFileSync(join(root, "docs", `compare-${name}.svg`), render(T));
+  console.log(`docs/compare-${name}.svg: ${cols.length} columns, ${rows.length} rows, ${W}x${H}`);
+}
