@@ -823,5 +823,12 @@
   "expect": {
    "frame-loop-alloc": "WARN"
   }
+ },
+ {
+  "name": "video-interactive",
+  "file": "video-interactive.html",
+  "expect": {
+   "video-embed-hygiene": "PASS"
+  }
  }
 ]

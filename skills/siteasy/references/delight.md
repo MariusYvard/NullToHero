@@ -296,7 +296,7 @@ Loading messages — write ones specific to your product, not generic AI filler:
 
 ## Decorative Loop Budget
 
-- Infinite decorative loops (shimmer, beams, marquees, particle fields) are a condiment: one or two per view. Beyond that they cancel each other and drain batteries.
+- Infinite decorative loops (shimmer, beams, marquees, particle fields) are a condiment: one or two per view (L-MOTION-2). Beyond that they cancel each other and drain batteries.
 - Confetti is event-triggered (a success, a submission) and ephemeral — never looping, never on page load.
 - A pointer-following spotlight or orb must reset cleanly when the pointer leaves the window, on tab blur and on `visibilitychange`, or the halo freezes mid-card.
 
@@ -312,6 +312,8 @@ Test that delight actually delights:
 - **Accessible**: Works with reduced motion, screen readers
 
 Remember: Delight is the difference between a tool and an experience. Add personality, surprise users positively, and create moments worth sharing. But always respect usability - delight should enhance, never obstruct.
+
+Ready-made animated components with their guardrails: [component-recipes.md](component-recipes.md).
 
 ## Resource hooks
 

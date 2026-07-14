@@ -64,6 +64,8 @@ Resources: [easing.dev](https://easing.dev/), [easings.co](https://easings.co/)
 
 ## Duration Reference
 
+Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quoting the range.
+
 | Element | Duration |
 |---------|----------|
 | Button press feedback | 100–160ms |

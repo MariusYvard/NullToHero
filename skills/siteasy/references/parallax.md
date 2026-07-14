@@ -187,7 +187,7 @@ The metric that punishes naive scroll handlers. Mandatory:
 - Declare moving layers with `will-change: transform` (only while active; remove on idle to free GPU memory).
 - Use `content-visibility: auto` plus `contain-intrinsic-size` on offscreen parallax sections.
 
-Target benchmarks: LCP under 2.5s, CLS under 0.1, INP under 200ms. If any vital regresses by more than 10 percent after parallax is added, roll back.
+Target benchmarks: LCP under 2.5s, CLS under 0.1, INP under 200ms (canonical: L-PERF-1, L-PERF-2, L-PERF-3 in tools/data/laws.csv). If any vital regresses by more than 10 percent after parallax is added, roll back.
 
 ## Vestibular Accessibility (non-negotiable)
 
@@ -339,7 +339,7 @@ The Apple-style product fly-through: a pinned stage whose video time or frame in
 
 ### Weight, honesty and reduced motion
 
-- Budget: keep referenced video under ~10 MB. 30 to 50 MB heroes are the observed failure mode of the genre; the audit weighs referenced media (`media-weight`).
+- Budget: keep referenced video under ~10 MB (L-MEDIA-1; sequences: L-MEDIA-3). 30 to 50 MB heroes are the observed failure mode of the genre; the audit weighs referenced media (`media-weight`).
 - Loaders report real progress (assets loaded / total). A simulated percentage that crawls to 95% on a timer is a fake wait and reads as one.
 - Reduced motion means not downloading the media at all: cross-fade the posters, cut the particles, drop the lerp. A slowed-down scrub is still a scrub.
 - Mobile resize guard: browsers fire `resize` when the URL bar collapses. Ignore resizes at unchanged width on coarse pointers or the stage jumps mid-scroll; keep the full relayout on `orientationchange`.

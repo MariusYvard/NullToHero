@@ -1156,8 +1156,62 @@ if __name__ == "__main__":
     parser.add_argument("query", help="Search query (e.g., 'SaaS dashboard')")
     parser.add_argument("--project-name", "-p", type=str, default=None, help="Project name")
     parser.add_argument("--format", "-f", choices=["ascii", "markdown"], default="ascii", help="Output format")
+    parser.add_argument("--direction", "-d", nargs="?", const=".", default=None, metavar="DIR",
+                        help="Read DIRECTION.md / PRODUCT.md from DIR (default: cwd) and constrain the output to the committed direction")
 
     args = parser.parse_args()
 
-    result = generate_design_system(args.query, args.project_name, args.format)
+    direction_note = ""
+    query = args.query
+    if args.direction is not None:
+        import os as _os
+        import re as _re
+        base = args.direction
+        decl = {"register": None, "anti": [], "idea": None}
+        for fname in ("DIRECTION.md", "PRODUCT.md"):
+            fp = _os.path.join(base, fname)
+            if not _os.path.exists(fp):
+                continue
+            text = open(fp, encoding="utf-8", errors="replace").read()
+            m = _re.search(r"^register\s*[:=]\s*(\w+)", text, _re.I | _re.M)
+            if m and not decl["register"]:
+                decl["register"] = m.group(1).lower()
+            m = _re.search(r"^#+\s*(?:central idea|idea|concept)\b[^\n]*\n+([^\n#]+)", text, _re.I | _re.M)
+            if m and not decl["idea"]:
+                decl["idea"] = m.group(1).strip()
+            for am in _re.finditer(r"^#+\s*anti-?references?\b[^\n]*\n((?:[-*] [^\n]+\n?)+)", text, _re.I | _re.M):
+                decl["anti"] += [ln.lstrip("-* ").strip() for ln in am.group(1).splitlines() if ln.strip()]
+        if decl["register"]:
+            query = f"{query} {decl['register']}"
+        lines = ["Direction constraints (from the committed project state):"]
+        if decl["idea"]:
+            lines.append(f"  central idea : {decl['idea']}")
+        if decl["register"]:
+            lines.append(f"  register     : {decl['register']}")
+        for a in decl["anti"][:6]:
+            lines.append(f"  anti-ref     : {a}")
+        if not (decl["idea"] or decl["register"] or decl["anti"]):
+            lines.append("  (no DIRECTION.md / PRODUCT.md found or nothing declared — output is unconstrained)")
+        direction_note = "\n".join(lines) + "\n" + "=" * 60 + "\n"
+
+    result = generate_design_system(query, args.project_name, args.format)
+
+    if args.direction is not None:
+        # Flag any recommendation that collides with a declared anti-reference.
+        anti_terms = [a.lower() for a in (decl["anti"] if "decl" in dir() else [])]
+        if anti_terms:
+            flagged = []
+            for line in result.splitlines():
+                low = line.lower()
+                for t in anti_terms:
+                    for word in [w for w in t.split() if len(w) > 3]:
+                        if word in low:
+                            flagged.append((t, line.strip()[:90]))
+                            break
+            if flagged:
+                direction_note += "COLLISIONS with the declared anti-references — rework before adopting:\n"
+                for t, l in flagged[:8]:
+                    direction_note += f"  [{t}] {l}\n"
+                direction_note += "=" * 60 + "\n"
+        result = direction_note + result
     print(result)

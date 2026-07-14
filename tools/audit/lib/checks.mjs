@@ -889,9 +889,12 @@ function checkVideoEmbeds(doc) {
       method: "static", value: { videos: 0 }, detail: "No <video> elements." });
   }
   const auto = videos.filter(v => v.attrs.autoplay !== undefined);
+  const interactive = videos.filter(v => v.attrs.controls !== undefined || (v.attrs.autoplay === undefined && v.attrs.muted === undefined)).length;
+  const decorative = videos.filter(v => v.attrs.autoplay !== undefined && v.attrs.muted !== undefined && v.attrs.controls === undefined).length;
   if (auto.length === 0) {
     return mk({ id: "video-embed-hygiene", label: "Video embed hygiene", ...CODE, verdict: "PASS",
-      method: "static", value: { videos: videos.length, autoplay: 0 }, detail: "No autoplay video." });
+      method: "static", value: { videos: videos.length, autoplay: 0, interactive, decorative },
+      detail: "No autoplay video (interactive video stays native by design)." });
   }
   const broken = [], noPoster = [];
   for (const v of auto) {

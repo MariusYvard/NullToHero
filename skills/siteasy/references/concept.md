@@ -84,7 +84,7 @@ Distinctiveness that costs the task is not a win, it is a different failure.
 
 ## Downstream obligation
 
-Every later step honors `DIRECTION.md`.
+Every later step honors `DIRECTION.md`. The design-system generator does too: `design_system.py <brief> --direction .` reads the committed direction, biases its search to the declared register and flags any recommendation colliding with the anti-references.
 Layout answers to the mood.
 The type and color systems answer to the ownable direction.
 Copy answers to the point of view and the stated voice.

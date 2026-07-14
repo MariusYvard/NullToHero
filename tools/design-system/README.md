@@ -23,6 +23,12 @@ From a short product brief, produce a tailored design system: page pattern, styl
 
 ```
 python3 tools/design-system/scripts/search.py "<brief>" --design-system -p "Project Name"
+```
+
+With a committed direction, constrain the generator to it (reads `DIRECTION.md` and `PRODUCT.md`, biases the search toward the declared register, prints the constraints and flags collisions with the declared anti-references):
+
+```
+python3 tools/design-system/scripts/design_system.py "<brief>" -p "Project Name" --direction .
 python3 tools/design-system/scripts/search.py "<brief>" --design-system --persist -p "Project Name" [--page "dashboard"]
 ```
 

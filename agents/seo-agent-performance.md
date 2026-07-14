@@ -92,6 +92,12 @@ Critical checks (a FAIL here forces the Critical band): LCP image. Critical mean
 
 ## Output format
 
+Handoffs: if you notice a clear issue that belongs to another dimension, do NOT
+score it in yours. Append one line per handoff at the very end of your section:
+`Handoff -> <agent-name>: <one-line finding>`. The orchestrator routes it; the
+owning agent's dimension counts it once.
+
+
 Return ONLY this section. No preamble, no postamble, no file paths, no notes about tool availability or limits, and no reasoning outside the section.
 
 ```

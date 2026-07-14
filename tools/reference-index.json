@@ -41,6 +41,19 @@
   },
   {
     "skill": "audit",
+    "path": "skills/audit/references/learnings.md",
+    "title": "Learnings: from audits back into the data",
+    "keywords": [
+      "learnings",
+      "from",
+      "audits",
+      "back",
+      "into",
+      "data"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/report.md",
     "title": "Unified Audit Report",
     "keywords": [
@@ -530,6 +543,17 @@
     "keywords": [
       "component",
       "patterns"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/component-recipes.md",
+    "title": "Component Recipes (Animated Registry)",
+    "keywords": [
+      "component",
+      "recipes",
+      "animated",
+      "registry"
     ]
   },
   {
@@ -1065,6 +1089,16 @@
     "title": "UX Writing",
     "keywords": [
       "writing"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/video.md",
+    "title": "Guaranteed-Play Video",
+    "keywords": [
+      "video",
+      "guaranteed",
+      "play"
     ]
   },
   {

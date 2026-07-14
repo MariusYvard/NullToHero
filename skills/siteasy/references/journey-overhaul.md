@@ -25,6 +25,8 @@ The rework pipeline for a site that already exists. The audit is the entry point
 - Batches are per command, not per page: one `/siteasy animate` pass fixes all motion findings at once.
 - Re-audit with the SAME mode and render settings as the baseline or the compare is meaningless.
 
+Checkpointing: after each stage, append the stage outcome to `LOG.md` (date, stage, decision or score, open items). A resumed journey reads `LOG.md` and continues from the last green stage instead of restarting.
+
 ## Cross-References
 
 - Ship gates: [journey-ship.md](journey-ship.md)

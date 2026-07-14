@@ -85,12 +85,12 @@ For the subjective dimensions (design taste, UX flow, copy, motion) run a full
 | HTTP to HTTPS redirect | plain HTTP redirects to HTTPS (URL probe) | no | seo-agent-technical |
 | www / non-www canonical host | the alternate host redirects or does not serve (URL probe) | no | seo-agent-technical |
 | security.txt | /.well-known/security.txt published (URL probe) | no | seo-agent-technical |
-| Video embed hygiene | every autoplay video carries `muted`, `playsinline` and a `poster` | no | inspect-agent-code |
+| Video embed hygiene | every autoplay video carries `muted`, `playsinline` and a `poster`; classifies decorative vs interactive video for /siteasy video | no | inspect-agent-code |
 | Reduced-motion guard (JS) | a JS animation/scroll library implies a matchMedia or useReducedMotion guard; a CSS-only kill-switch is a WARN | no | inspect-agent-code |
 | Document scrollbar suppressed | `scrollbar-width: none` or a zero-width `::-webkit-scrollbar` on html/body | no | inspect-agent-a11y |
 | Image-sequence preload burst | 50+ sequential frame URLs, or an eager `new Image()` loop | no | seo-agent-performance |
 | Mixed-script homoglyphs | visible words mixing Latin with Cyrillic or Greek letters | no | seo-agent-content |
-| Referenced media weight | HEAD-probed video and 3D-model bytes against 10/30 MB and 5 MB budgets (URL probe) | no | seo-agent-performance |
+| Referenced media weight | HEAD-probed video and 3D-model bytes against the L-MEDIA-1 and L-MEDIA-2 budgets (URL probe) | no | seo-agent-performance |
 | Duplicate three.js copies | distinct `REVISION` constants in the page's own scripts | no | seo-agent-performance |
 | Allocation in the frame loop | `new Vector/Matrix/Color` or `.clone()` within a `useFrame`/`requestAnimationFrame` window | no | seo-agent-performance |
 

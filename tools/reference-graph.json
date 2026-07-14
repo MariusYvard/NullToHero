@@ -4,6 +4,7 @@
     "skills/audit/references/compare.md",
     "skills/audit/references/full.md",
     "skills/audit/references/html-report.md",
+    "skills/audit/references/learnings.md",
     "skills/audit/references/report.md",
     "skills/inspect/references/code-quality.md",
     "skills/inspect/references/detect.md",
@@ -53,6 +54,7 @@
     "skills/siteasy/references/color-systems.md",
     "skills/siteasy/references/colorize.md",
     "skills/siteasy/references/component-patterns.md",
+    "skills/siteasy/references/component-recipes.md",
     "skills/siteasy/references/concept.md",
     "skills/siteasy/references/craft.md",
     "skills/siteasy/references/creative-patterns.md",
@@ -112,6 +114,7 @@
     "skills/siteasy/references/typography.md",
     "skills/siteasy/references/ux-research.md",
     "skills/siteasy/references/ux-writing.md",
+    "skills/siteasy/references/video.md",
     "skills/siteasy/references/wcag-2-2.md"
   ],
   "edges": [
@@ -133,6 +136,10 @@
     },
     {
       "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/learnings.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
       "to": "skills/audit/references/report.md"
     },
     {
@@ -165,7 +172,23 @@
     },
     {
       "from": "skills/audit/references/full.md",
+      "to": "skills/audit/references/learnings.md"
+    },
+    {
+      "from": "skills/audit/references/full.md",
       "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/learnings.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/audit/references/learnings.md",
+      "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/references/learnings.md",
+      "to": "skills/inspect/references/detect.md"
     },
     {
       "from": "skills/audit/references/report.md",
@@ -573,6 +596,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/video.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/wcag-2-2.md"
     },
     {
@@ -630,6 +657,26 @@
     {
       "from": "skills/siteasy/references/colorize.md",
       "to": "skills/siteasy/references/live.md"
+    },
+    {
+      "from": "skills/siteasy/references/component-patterns.md",
+      "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/component-recipes.md",
+      "to": "skills/siteasy/references/component-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/component-recipes.md",
+      "to": "skills/siteasy/references/memorability.md"
+    },
+    {
+      "from": "skills/siteasy/references/component-recipes.md",
+      "to": "skills/siteasy/references/signature-moments.md"
+    },
+    {
+      "from": "skills/siteasy/references/component-recipes.md",
+      "to": "skills/siteasy/references/video.md"
     },
     {
       "from": "skills/siteasy/references/craft.md",
@@ -706,6 +753,10 @@
     {
       "from": "skills/siteasy/references/delight.md",
       "to": "skills/siteasy/references/assets-library.md"
+    },
+    {
+      "from": "skills/siteasy/references/delight.md",
+      "to": "skills/siteasy/references/component-recipes.md"
     },
     {
       "from": "skills/siteasy/references/form-patterns.md",
@@ -1126,6 +1177,22 @@
     {
       "from": "skills/siteasy/references/ux-research.md",
       "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/video.md",
+      "to": "skills/seo/references/schema.md"
+    },
+    {
+      "from": "skills/siteasy/references/video.md",
+      "to": "skills/seo/references/sitemap.md"
+    },
+    {
+      "from": "skills/siteasy/references/video.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/video.md",
+      "to": "skills/siteasy/references/signature-moments.md"
     },
     {
       "from": "skills/siteasy/references/wcag-2-2.md",

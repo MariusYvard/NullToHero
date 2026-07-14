@@ -112,13 +112,13 @@ else if (canvas.getContext('webgl2')) { /* WebGL2 fallback */ }
 - Lazy-initialize heavy resources (WebGL contexts, WASM modules) only when near viewport.
 - Pause off-screen rendering. Kill what you can't see.
 - One rAF ticker per page: subsystems subscribe and unsubscribe, and the loop pauses on `visibilitychange`.
-- Cap `setPixelRatio` at 2 — uncapped DPR quadruples the pixels for an invisible gain.
+- Cap `setPixelRatio` at 2 (L-WEBGL-2) — uncapped DPR quadruples the pixels for an invisible gain.
 - Give continuous scenes an idle state (a slow drift) instead of freezing when input stops.
 - Test on real mid-range devices, not just your development machine.
 
 ### WebGL scene budgets
 
-- Draw calls: aim for a few hundred meshes, treat 1000 as the absolute ceiling. Repeated objects belong in an instanced mesh — one draw call carries tens of thousands of instances.
+- Draw calls: aim for a few hundred meshes, treat 1000 as the absolute ceiling (L-WEBGL-1). Repeated objects belong in an instanced mesh — one draw call carries tens of thousands of instances.
 - Render on demand: a scene with nothing moving should render only when invalidated, not at 60fps forever. Imperative mutations (camera controls) are invisible to the framework — invalidate explicitly, and start a synchronous animation one frame after the invalidation or the first frame visibly jumps.
 - Movement regression, the pattern of the big model viewers: while the user drags or orbits, drop resolution (down to half), skip shadows and post-processing, then restore about 200ms after the input rests. Drive it with a bounded factor and fps hysteresis (a high and a low bound, a flip limit, then a definitive floor) so quality does not ping-pong.
 - Mounting costs more than rendering: a newly mounted material compiles and a new geometry is processed, which is a hitch the frame budget feels. Share geometries and materials, toggle `visible` instead of unmounting, and stagger expensive constructions instead of building everything in one frame.

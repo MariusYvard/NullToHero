@@ -11,6 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.32.0] - 2026-07-12
+
+### Added
+
+- Canonical laws registry: `tools/data/laws.csv` (16 numeric laws with stable ids: L-MOTION-*, L-TOUCH-*, L-MEDIA-*, L-TYPE-*, L-CONTRAST-1, L-PERF-*, L-WEBGL-*), a Numeric laws section in the siteasy SKILL, citations across the references, and validate check 37 (well-formed registry, unique ids, every law cited somewhere in the skills).
+- Project working memory: `LOG.md` joins the shared state (append-only entries per command: decisions, artifacts, open items); journeys checkpoint to it and resume from the last green stage; `/audit full` appends its score, report path and top fixWith commands.
+- Agent handoffs and reconciliation: all 15 sub-agents may emit `Handoff -> <agent>` lines instead of scoring outside their dimension; the orchestrator routes them, deduplicates by root cause (one defect counted once) and records verdict conflicts in the report appendix.
+- Direction-constrained generation: `design_system.py --direction` reads DIRECTION.md/PRODUCT.md, biases the search toward the declared register, prints the constraints and flags recommendations colliding with declared anti-references.
+- Learnings loop: audits capture false positives, uncovered patterns and threshold drift as structured `LEARNINGS.md` candidates (never applied mid-audit); the new `/audit learnings` command reviews them into rules, gates, laws or fixtures with the eval discipline.
+- Guaranteed-play video: `/siteasy video` with `video.md` (decorative vs interactive classification, canvas + WASM decoder doctrine, fallback chain, honest tradeoffs) and `scripts/video-guardplay.mjs` (audit mode; generate mode: ffmpeg MPEG1-TS for JSMpeg by default, VP9 option, poster + native fallback clip + drop-in component with IntersectionObserver pause, reduced-motion poster, zero CLS; fetches the MIT JSMpeg decoder into the target project once). Rules 65-68 (modern formats with fallback, lazy-load below the fold, VideoObject + video sitemap, guaranteed decorative playback), remediation routes to `/siteasy video`, and the `video-embed-hygiene` check now reports the decorative/interactive classification (new fixture, 68 total).
+- Component recipes: `component-recipes.md` — 22 curated registry recipes (install, canonical props from the demos, per-recipe guardrails: reduced-motion, factory gradients to tokens, localized tickers, self-hosted flags, setInterval-free gauges) linked from component-patterns and delight, with the kit warning.
+
+---
+
 ## [1.31.0] - 2026-07-12
 
 Connective-tissue release: the five recommendations against the "catalogue" effect. No new detection content; the existing content now routes to itself.

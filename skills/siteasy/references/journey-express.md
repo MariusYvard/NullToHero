@@ -28,6 +28,8 @@ The zero-to-landing pipeline. Eight stages, each an existing command, each writi
 - Budgets from the motion references apply as gates, not advice: loops, media weight, one wow.
 - A stage-7 FAIL routes through the remediation map, fixes, re-runs stage 7.
 
+Checkpointing: after each stage, append the stage outcome to `LOG.md` (date, stage, decision or score, open items). A resumed journey reads `LOG.md` and continues from the last green stage instead of restarting.
+
 ## Cross-References
 
 - Shipping an existing build: [journey-ship.md](journey-ship.md)

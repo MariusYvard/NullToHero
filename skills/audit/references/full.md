@@ -135,6 +135,15 @@ the analyzer left `not-measured` and every subjective check. This removes the la
 source of verdict flips on the computable checks: the model stops guessing a value
 that code can compute.
 
+## Reconciliation
+
+Before scoring, reconcile the sections: collect every `Handoff -> <agent>` line,
+move each finding into the owning agent's section (as a WARN-level entry unless
+the owner already found it), and deduplicate by root cause — one underlying
+defect is counted in exactly one dimension, and other sections may reference it
+without re-penalizing. Conflicting verdicts on the same fact go to the agent
+that owns the dimension; note the disagreement in the report appendix.
+
 ## Scoring
 
 Each agent returns a 0-100 score computed by the deterministic rubric in its own
@@ -262,6 +271,17 @@ blend from the mix of fresh and reused agent scores. When only one group changed
 this is about a third of the agents, and the report must note which dimensions were
 reused rather than re-audited. The deterministic pre-pass always runs fresh; it is
 cheap.
+
+## Learnings capture
+
+When a finding is judged a false positive, or a real defect had no rule or check
+covering it, append a structured candidate to the project's `LEARNINGS.md` (see
+[learnings.md](learnings.md)) instead of silently ignoring it. Never edit the
+plugin's rules mid-audit; `/audit learnings` reviews the accumulated candidates.
+
+## Project log
+
+If the audited project keeps a `LOG.md` at its root, append one entry on completion: date, mode, overall score and band, report path, and the two highest-priority `fixWith` commands. The next audit or journey picks the thread up from there.
 
 ## Output files
 

@@ -25,6 +25,8 @@ The pipeline that takes a built feature or site from "works" to "shipped". It cr
 - Each stage reads the shared state fresh; nothing is carried in conversation memory.
 - Save `SITE-AUDIT.json` from stage 3; stage 5 and any later `/audit compare` use it as the baseline.
 
+Checkpointing: after each stage, append the stage outcome to `LOG.md` (date, stage, decision or score, open items). A resumed journey reads `LOG.md` and continues from the last green stage instead of restarting.
+
 ## Cross-References
 
 - Whole-site rework instead of a ship pass: [journey-overhaul.md](journey-overhaul.md)

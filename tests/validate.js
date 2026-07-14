@@ -43,6 +43,7 @@
  * 34.  Agents read shared audit-assets inputs and return only their section
  * 35.  Stated agent and rule counts match the repository (drift guard)
  * 36.  Reference graph: committed, current, no orphan references, data domains cited
+ * 37.  Canonical laws registry: well-formed, unique ids, every law cited in the skills
  */
 
 const fs     = require("fs");
@@ -1298,6 +1299,34 @@ section("36. Reference graph: no orphan references, all data domains cited");
   });
   if (uncited.length) uncited.forEach(u => fail(`data file never cited by any skill, README or engine config: ${u.slice(ROOT.length + 1)}`));
   else pass(`all ${csvs.length} design-system data files are cited by a skill, a README or the engine config`);
+}
+
+
+// ─── Check 37: canonical laws registry ────────────────────────────────────────
+section("37. Canonical laws: laws.csv well-formed and every law cited");
+{
+  const lawsPath = path.join(ROOT, "tools", "data", "laws.csv");
+  if (!fs.existsSync(lawsPath)) fail("tools/data/laws.csv missing");
+  else {
+    const lines = fs.readFileSync(lawsPath, "utf8").trim().split(/\r?\n/);
+    const ids = lines.slice(1).map(l => l.split(",")[0]).filter(Boolean);
+    const dupes = ids.filter((x, i) => ids.indexOf(x) !== i);
+    if (dupes.length) fail(`laws.csv duplicate ids: ${dupes.join(", ")}`);
+    else if (ids.length < 12) fail(`laws.csv has only ${ids.length} laws (expected >= 12)`);
+    else pass(`laws.csv: ${ids.length} laws, unique ids`);
+    let corpus = "";
+    const walkMd = (dir) => {
+      for (const name of fs.readdirSync(dir)) {
+        const p = path.join(dir, name);
+        if (fs.statSync(p).isDirectory()) walkMd(p);
+        else if (name.endsWith(".md")) corpus += fs.readFileSync(p, "utf8");
+      }
+    };
+    walkMd(path.join(ROOT, "skills"));
+    const uncited = ids.filter(id => !corpus.includes(id));
+    if (uncited.length) uncited.forEach(id => fail(`law never cited in any skill: ${id}`));
+    else pass("every law id is cited at least once in the skills");
+  }
 }
 
 // --- Summary --------------------------------------------------------------------

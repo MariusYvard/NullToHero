@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.31.0
+version: 1.32.0
 user-invocable: true
 argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
 allowed-tools:
@@ -45,6 +45,7 @@ Three files in the workspace or project root form the shared project state every
 
 - **PRODUCT.md** — required. Users, brand, tone, anti-references, strategic principles. Written by `setup`.
 - **DESIGN.md** — optional, strongly recommended. Colors, typography, elevation, components. Written by `document` and `extract`.
+- **LOG.md** — optional, append-only working memory. Every command that decides or produces something appends one short entry (`## <date> /<skill> <command>` + Decisions / Artifacts / Open bullets) and reads the log first to avoid re-deciding or contradicting past entries. Journeys use it as their checkpoint state; audits append their score and report path.
 - **DIRECTION.md** — optional until `/siteasy concept` runs; the committed art direction (central idea, anti-reference, signature moment). Written by `concept`, refined by `tokens` and brand decisions, read by every build and motion command, judged by `critique` and by the audit's memorability agent.
 
 Use the Read tool to check for these files. If already read in this session, don't re-read.
@@ -96,6 +97,10 @@ Dark vs. light is never a default. Write one sentence of physical scene: who use
 
 - Don't animate CSS layout properties.
 - Ease out with exponential curves (ease-out-quart / quint / expo). No bounce, no elastic.
+
+### Numeric laws (canonical)
+
+The numeric thresholds behind these laws live once, with stable identifiers, in `tools/data/laws.csv` — cite the identifier instead of restating the number: L-MOTION-1 (feedback 150-300ms), L-MOTION-2 (2 decorative loops per view), L-MOTION-3 (linear scrub), L-TOUCH-1 (44px targets), L-TOUCH-2 (8px spacing), L-MEDIA-1 (video 10/30MB), L-MEDIA-2 (models 5MB), L-MEDIA-3 (frame sequences 50/150), L-TYPE-1 (16px body), L-TYPE-2 (65-75ch), L-CONTRAST-1 (4.5:1), L-PERF-1 (LCP 2.5s), L-PERF-2 (CLS 0.1), L-PERF-3 (INP 200ms), L-WEBGL-1 (1000 draw calls), L-WEBGL-2 (DPR cap 2). The validator fails if a law stops being cited anywhere (check 37): when a threshold changes, change it in laws.csv and follow the citations.
 
 ### Absolute bans
 
@@ -154,6 +159,7 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `mobile [target]` | Enhance | Phone-specific ergonomics — thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit | [references/mobile-ergonomics.md](references/mobile-ergonomics.md) |
 | `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) + [references/creative-patterns.md](references/creative-patterns.md) |
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) + [references/signature-moments.md](references/signature-moments.md) |
+| `video [target]` | Advanced | Guaranteed-play decorative video: classify, transcode to a canvas-decodable asset (WASM decoder), emit the drop-in component | [references/video.md](references/video.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 | `ship [scope]` | Journeys | Finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit | [references/journey-ship.md](references/journey-ship.md) |

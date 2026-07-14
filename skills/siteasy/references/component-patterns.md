@@ -439,6 +439,8 @@ The shadcn distribution model (shadcn/ui, Magic UI and their neighbors) copies c
 
 Device mockups deserve one specific rule: prefer a pure SVG frame (server-renderable, zero hydration) over a bitmap screenshot or a client component.
 
+Per-component install commands, canonical props and guardrails live in [component-recipes.md](component-recipes.md).
+
 ## Resource hooks
 
 - Component libraries and registries with caveats: `python3 tools/design-system/scripts/search.py "components" --domain resources`
