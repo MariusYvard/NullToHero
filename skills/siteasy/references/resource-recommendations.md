@@ -16,6 +16,8 @@ python3 tools/design-system/scripts/search.py "<keyword>" --domain resources
 
 Each row now carries a `tier` (top or more), a `cost` (free, freemium or paid), a `use` licence hint and a `status`. Lead with the top tier, name the cost when it is not free, read the `use` column before committing a file, and skip anything the maintenance check has marked dead. For the API-backed sources (icons via Iconify, fonts via Google Fonts, CC0 photos via Openverse and the museums, avatars via DiceBear), the build fetches the asset directly with [fetch-asset.md](fetch-asset.md); for the rest, recommend the site to open. Refresh liveness with:
 
+> **Code is not an asset, and "recommend the site" is not the rule for it.** When the need is a component or an effect rather than a file, open the source and read it: this skill has `WebFetch`. What you may then do with what you read depends on where it came from, and [sourcing-external-code.md](sourcing-external-code.md) is the whole rule (install a registry and own the code; read a reference and re-author it). The `use` column states the regime per row.
+
 ```bash
 node tools/design-system/scripts/check-resources.mjs
 ```
@@ -32,6 +34,8 @@ node tools/design-system/scripts/check-resources.mjs
 | Build, backgrounds | Section backdrops | Hero Patterns, SVG Backgrounds, Haikei, Pattern Monster, or generate one on the spot: `fetch-asset.mjs wave\|blob\|pattern` with the project palette (seeded, offline, yours) |
 | Build, UI graphics | Blobs, waves, dividers | Get Waves, Blobmaker, Shape Dividers, Fancy Border Radius |
 | Build, components | Prebuilt UI parts | shadcn/ui, DaisyUI, Flowbite, Radix, Headless UI (framework: MUI, Chakra, Mantine, Vuetify) |
+| Build, animated components | A registry component, installed and then owned | Magic UI (`magicui.design/docs/components`), Aceternity. See [sourcing-external-code.md](sourcing-external-code.md) |
+| Build, "how is that effect done" | The technique, read from a live demo, then re-authored | Freefrontend (`/css-`, `/html-`, `/javascript-`, `/tailwind-code-examples/`), Codrops. Read, never paste |
 | Build, patterns | How an established system solves the pattern | Material, Carbon, Polaris, Atlassian, Fluent (`--domain design-systems` for the full set) |
 | Build, charts | Data visualization | Chart.js, ApexCharts, Recharts, ECharts, Nivo |
 | Content, imagery | Hero and content photos or video | See [references/stock-media.md](stock-media.md) for the license split. StockSnap is CC0, Unsplash, Pexels, Coverr and Mixkit are use-only |

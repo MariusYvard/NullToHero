@@ -3,6 +3,7 @@ viewport-meta,check,/siteasy adapt,skills/siteasy/references/responsive-design.m
 horizontal-overflow-375,check,/siteasy adapt,skills/siteasy/references/responsive-design.md,
 img-dimensions,check,/seo images,skills/seo/references/images.md,
 contrast-ratio,check,/siteasy tokens,skills/siteasy/references/color-and-contrast.md,
+contrast-exempt-undeclared,check,/siteasy tokens,skills/siteasy/references/color-and-contrast.md,
 html-lang,check,/siteasy audit,skills/siteasy/references/accessibility-engineering.md,
 robots-disallow,check,/seo technical,skills/seo/references/technical.md,
 title-tag,check,/seo page,skills/seo/references/page.md,

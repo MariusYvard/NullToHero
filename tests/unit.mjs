@@ -4,6 +4,7 @@
 // Pure Node standard library. Run: node tests/unit.mjs
 import { resolveInRoot, looksGenerated } from "../skills/siteasy/scripts/live-core.mjs";
 import { parseColor, ratioOf } from "../tools/audit/lib/contrast.mjs";
+import { runChecks } from "../tools/audit/lib/checks.mjs";
 import { resolve } from "node:path";
 
 let failures = 0;
@@ -76,6 +77,56 @@ ok("identical colours are 1:1", ratioOf("#808080", "#808080")?.ratio === 1);
 // return null here, so L-CONTRAST-1 passed without measuring anything.
 ok("an OKLCH token pair yields a real ratio", ratioOf("oklch(96% 0.004 265)", "oklch(17% 0.007 265)")?.ratio > 15);
 ok("unreadable colour yields null, not a guess", ratioOf("color(display-p3 1 0 0)", "#000") === null);
+
+// ---------------------------------------------------------------------------
+// Contrast exemptions.
+//
+// These test the POLICY, not the plumbing. The exemption exists so an author can
+// overrule us out loud; every test below is one way that could rot into a mute
+// button, pinned so it cannot. If someone loosens the rule, one of these fails and
+// says which promise was dropped.
+console.log("\n── contrast exemptions: declared, priced, never silent ──");
+const sample = (over) => ({ ratio: 2.0, threshold: 4.5, fontSizePx: 12, exempt: null, exemptReason: null, ...over });
+const run = (samples, html = "<html><body><p>x</p></body></html>") =>
+  runChecks({ rawHtml: html, computed: { contrastSamples: samples } });
+const check = (r, id) => r.find((c) => c.id === id);
+
+const plain = check(run([sample({})]), "contrast-ratio");
+ok("an undeclared low sample still fails", plain.verdict === "FAIL" && plain.value.failures === 1);
+
+const declared = check(run([sample({ exempt: "staging", exemptReason: "depicts a defect on purpose" })]), "contrast-ratio");
+ok("a properly declared exemption leaves the verdict", declared.verdict === "PASS");
+ok("...but is still counted and shown", declared.value.exempt === 1 && declared.value.failures === 0);
+ok("...and the report refuses to call it conformant",
+  /not WCAG exceptions/.test(declared.detail) && /non-conformant/.test(declared.detail));
+
+// The mute-button paths. Each of these MUST keep the sample in the failure count.
+const noReason = check(run([sample({ exempt: "staging" })]), "contrast-ratio");
+ok("an exemption without a reason does not excuse anything", noReason.verdict === "FAIL" && noReason.value.failures === 1);
+const badCode = check(run([sample({ exempt: "because-i-said-so", exemptReason: "trust me" })]), "contrast-ratio");
+ok("an exemption with an invented code does not excuse anything", badCode.verdict === "FAIL" && badCode.value.failures === 1);
+
+// A WCAG-sanctioned code is exempt WITHOUT the non-conformance warning: unlike
+// "staging", 1.4.3 actually grants these, so claiming otherwise would be a lie too.
+const logo = check(run([sample({ exempt: "logotype", exemptReason: "the mark is the brand" })]), "contrast-ratio");
+ok("a real WCAG exception is not smeared with the warning",
+  logo.verdict === "PASS" && logo.value.exempt === 1 && !/non-conformant/.test(logo.detail));
+
+console.log("\n── contrast-exempt-undeclared: the exemption pays its own price ──");
+const declHtml = (attrs) => `<html><body><b ${attrs}>FAIL</b></body></html>`;
+ok("no exemptions on the page passes quietly",
+  check(runChecks({ rawHtml: "<html><body><p>x</p></body></html>" }), "contrast-exempt-undeclared").verdict === "PASS");
+ok("a bare data-contrast-exempt is itself a defect",
+  check(runChecks({ rawHtml: declHtml('data-contrast-exempt="staging"') }), "contrast-exempt-undeclared").verdict === "FAIL");
+ok("an unknown code is itself a defect",
+  check(runChecks({ rawHtml: declHtml('data-contrast-exempt="whatever" data-contrast-exempt-reason="x"') }), "contrast-exempt-undeclared").verdict === "FAIL");
+ok("an empty reason does not count as a reason",
+  check(runChecks({ rawHtml: declHtml('data-contrast-exempt="staging" data-contrast-exempt-reason="   "') }), "contrast-exempt-undeclared").verdict === "FAIL");
+ok("code plus a real reason passes",
+  check(runChecks({ rawHtml: declHtml('data-contrast-exempt="staging" data-contrast-exempt-reason="depicts the audit overlay"') }), "contrast-exempt-undeclared").verdict === "PASS");
+// Static by design: it must work on a page that never booted.
+ok("it works render-free, straight off the markup",
+  check(runChecks({ rawHtml: declHtml('data-contrast-exempt="staging"') }), "contrast-exempt-undeclared").method === "static");
 
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {

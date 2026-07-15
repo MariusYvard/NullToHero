@@ -305,21 +305,82 @@ function bgResolve(el, model, memo, pageBg) {
   return { bg: "#ffffff", unresolved: false, explicit: false };
 }
 
+/* The closed vocabulary of exemption reasons. Closed on purpose: an open field
+   collects the word "because". Three of these are real WCAG 1.4.3 exceptions
+   (incidental, disabled/inactive, logotype); "staging" and "decorative-ghost" are
+   NOT — they are the author overriding our judgment, which they may do, out loud. */
+const EXEMPT_CODES = new Set(["staging", "decorative-ghost", "disabled", "logotype", "incidental"]);
+// The two codes that WCAG does not sanction. Kept apart so the report can say which.
+const EXEMPT_NON_WCAG = new Set(["staging", "decorative-ghost"]);
+const exemptValid = (s) => s.exempt && EXEMPT_CODES.has(s.exempt) && !!(s.exemptReason || "").trim();
+
+/* The exemption's own price. Declaring one costs a valid code and a written reason,
+   and that cost IS the mechanism: it forces the author to state the argument, in the
+   markup, where review sees it in the diff. An exemption nobody had to justify is just
+   a mute button. Static by design: it reads the attribute, so it works without a
+   render and cannot be dodged by a page that fails to boot. */
+function checkContrastExempt(doc) {
+  const bad = [];
+  let total = 0;
+  walk(doc, (el) => {
+    const code = el.attrs?.["data-contrast-exempt"];
+    if (code === undefined) return;
+    total++;
+    const reason = (el.attrs?.["data-contrast-exempt-reason"] || "").trim();
+    if (!EXEMPT_CODES.has((code || "").trim())) bad.push({ el: el.tag, why: `unknown code "${code}"` });
+    else if (!reason) bad.push({ el: el.tag, why: `code "${code}" carries no data-contrast-exempt-reason` });
+  });
+  if (!total) {
+    return mk({ id: "contrast-exempt-undeclared", label: "Contrast exemptions are declared", ...A11Y, verdict: "PASS",
+      critical: false, method: "static", value: { exemptions: 0, malformed: 0 }, detail: "No contrast exemptions on the page." });
+  }
+  if (bad.length) {
+    return mk({ id: "contrast-exempt-undeclared", label: "Contrast exemptions are declared", ...A11Y, verdict: "FAIL",
+      critical: false, method: "static", value: { exemptions: total, malformed: bad.length, codes: [...EXEMPT_CODES] },
+      detail: `${bad.length} of ${total} contrast exemption(s) are not declared properly (${bad.map(b => `<${b.el}>: ${b.why}`).join("; ")}). ` +
+        `A malformed exemption is ignored and its sample stays in the failure count. Valid codes: ${[...EXEMPT_CODES].join(", ")}.` });
+  }
+  return mk({ id: "contrast-exempt-undeclared", label: "Contrast exemptions are declared", ...A11Y, verdict: "PASS",
+    critical: false, method: "static", value: { exemptions: total, malformed: 0 },
+    detail: `${total} contrast exemption(s), each with a valid code and a stated reason.` });
+}
+
 function checkContrast(doc, computed, cssModel) {
   if (computed && Array.isArray(computed.contrastSamples)) {
-    const fails = computed.contrastSamples.filter(s => s.ratio < s.threshold);
     if (computed.contrastSamples.length === 0) {
       return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "NOT_MEASURED", critical: true,
         method: "computed", value: null, detail: "Render produced no text samples to measure." });
     }
+    const under = computed.contrastSamples.filter(s => s.ratio < s.threshold);
+    /* An exemption only counts if it is properly declared. A bare attribute, or one
+       carrying a code we do not recognise, is not a claim we can weigh, so it stays in
+       the failure count and contrast-exempt-undeclared says why. Otherwise "silence the
+       check" would be one typo away, which is the whole thing we are trying not to build. */
+    const exempt = under.filter(exemptValid);
+    const fails = under.filter(s => !exemptValid(s));
+    // Samples whose backdrop the render could not confirm from pixels. Coverage, not
+    // a verdict: a PASS over 74 of 79 samples is not the same claim as a clean page.
+    const unmeasured = computed.contrastUnmeasured || 0;
+    const value = { failures: fails.length, exempt: exempt.length, unmeasured, worst: fails.length ? fails.reduce((a, b) => a.ratio < b.ratio ? a : b).ratio : null };
+    /* The exempt count is never folded into the verdict and never omitted from the
+       report. An audit you can drive to zero by annotation is a machine for producing
+       clean reports on dirty pages. */
+    const note = exempt.length
+      ? ` ${exempt.length} declared intentional and excluded from the verdict` +
+        (exempt.some(s => EXEMPT_NON_WCAG.has(s.exempt))
+          ? "; these are the author's choice, not WCAG exceptions, so the page stays non-conformant at those points."
+          : ".")
+      : "";
+    const cover = unmeasured ? ` ${unmeasured} sample(s) unmeasured: backdrop not confirmable from pixels (offscreen or non-flat).` : "";
     if (fails.length) {
       const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
       return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: true,
-        method: "computed", value: { failures: fails.length, worst: worst.ratio },
-        detail: `${fails.length} text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1).` });
+        method: "computed", value,
+        detail: `${fails.length} text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1).${note}${cover}` });
     }
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: true,
-      method: "computed", value: { samples: computed.contrastSamples.length }, detail: "All measured text meets AA contrast." });
+      method: "computed", value: { ...value, samples: computed.contrastSamples.length },
+      detail: `All measured text meets AA contrast.${note}${cover}` });
   }
 
   // Static path. With a CSS model (inline <style> + linked stylesheets) resolve
@@ -1121,6 +1182,7 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkImgDimensions(activeDoc),
     checkOverflow375(activeDoc, computed),
     checkContrast(activeDoc, computed, cssModel),
+    checkContrastExempt(activeDoc),
     checkHtmlLang(activeDoc),
     checkRobots(robotsTxt, url),
     checkTitle(activeDoc),

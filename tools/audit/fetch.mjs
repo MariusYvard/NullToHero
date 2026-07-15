@@ -396,27 +396,125 @@ async function render(url, timeout) {
         if (!direct) continue;
         const cs = getComputedStyle(el);
         if (cs.visibility === "hidden" || cs.display === "none" || parseFloat(cs.opacity) === 0) continue;
+        /* getComputedStyle does NOT inherit display:none. A child of a display:none
+           parent reports its own specified display, so the check above waves through
+           entire subtrees that the browser never lays out — a responsive nav's desktop
+           links at 375px, for instance, which we then "measured" and failed. Geometry
+           does not lie: no box, no pixels, no reader, nothing to judge. */
+        const rect = el.getBoundingClientRect();
+        if (rect.width < 1 || rect.height < 1) continue;
         // Gradient-filled text (background-clip:text + transparent colour) has no
         // single foreground to measure. Report it as its own defect, do not average
         // it into a ratio that means nothing.
         if (parseFloat(cs.color.match(/[\d.]+\)$/) ? cs.color.slice(cs.color.lastIndexOf(",") + 1) : "1") === 0) continue;
         const color = toRGB(cs.color);
         if (!color || color.a === 0) continue;
-        let bgEl = el, bg = null;
+        let bgEl = el, bg = null, fromRoot = false;
         while (bgEl) { const b = toRGB(getComputedStyle(bgEl).backgroundColor); if (b && b.a > 0.9) { bg = b; break; } bgEl = bgEl.parentElement; }
         // No assumed white. An unresolved background is an unmeasurable sample, and
         // guessing one is how you manufacture a 1:1 failure out of thin air.
         if (!bg) continue;
-        out.push({ color, bg, fontSizePx: parseFloat(cs.fontSize), weight: parseInt(cs.fontWeight, 10) || 400 });
+        /* WHERE the background came from decides whether we may trust it. Walking
+           parentElement answers "who is my ancestor", not "what is painted under me",
+           and those diverge the moment a sibling layer paints below: a fixed nav over a
+           full-bleed hero resolves to <body>, so dark-on-light reads as dark-on-dark and
+           we invent a 1.1:1 failure on text a viewer sees at 16:1.
+           The split is provenance. If the element or an ancestor paints its own opaque
+           background, that IS the backdrop by construction (a red button is red wherever
+           it sits, on screen or not) and the DOM answer stands. If the walk fell all the
+           way through to <html>/<body>, nothing between the text and the root painted,
+           and the DOM answer is a guess. Those we re-resolve against real pixels below. */
+        fromRoot = bgEl === document.body || bgEl === document.documentElement;
+        /* A declared, deliberate violation. Read here rather than inferred later: the
+           author states it in the markup, the audit reports it, and nobody's judgment is
+           silently overridden. Scope is this element, never the subtree. */
+        const exempt = el.getAttribute("data-contrast-exempt");
+        out.push({
+          color, bg, fromRoot,
+          rect: { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
+          fontSizePx: parseFloat(cs.fontSize),
+          weight: parseInt(cs.fontWeight, 10) || 400,
+          exempt: exempt || null,
+          exemptReason: el.getAttribute("data-contrast-exempt-reason") || null,
+        });
         count++;
       }
       return out;
     });
-    return { renderedHtml, overflow, contrastSamples };
+    const { samples: resolved, dropped } = await resolveRootBackdrops(page, contrastSamples);
+    return { renderedHtml, overflow, contrastSamples: resolved, contrastUnmeasured: dropped };
   } catch (e) {
     console.error(`[fetch] render failed: ${e.message}; degrading to raw fetch.`);
     return null;
   } finally { if (browser) await browser.close(); }
+}
+
+/* Second pass, for the samples whose backdrop the DOM only guessed (nothing painted
+   between the text and the root). Ask the pixels instead: screenshot once, then for
+   each box take the most common colour inside it. Glyph strokes cover a minority of a
+   text box, so the modal pixel IS what sits behind them, and it accounts for sibling
+   layers, gradients, images and backdrop-filter, none of which a parentElement walk
+   can see.
+   Two ways out, both honest: if the box is offscreen there are no pixels to read, and
+   if no single colour holds a majority the backdrop is busy rather than flat, so the
+   sample is dropped as unmeasurable. Dropping loses a data point; keeping would invent
+   one. The rest of this file already made that trade. The count is returned, never
+   swallowed: "could not read this" must not look like "this is fine".
+
+   Viewport, NOT fullPage, and that is deliberate. Playwright builds a fullPage shot by
+   scrolling and stitching, which on a scroll-linked page drives the very animations we
+   are measuring: the strip would show a different act at every height while our rects
+   were taken at scroll 0, so every coordinate would land on the wrong pixels. It would
+   not widen coverage, it would fabricate it. Below-the-fold text on a bare root
+   background is reported unmeasured instead. */
+async function resolveRootBackdrops(page, samples) {
+  const needed = samples.filter(s => s.fromRoot);
+  if (!needed.length) return { samples, dropped: 0 };
+  let shot;
+  try { shot = await page.screenshot({ type: "png" }); }
+  catch (e) {
+    console.error(`[fetch] backdrop screenshot failed (${e.message}); dropping ${needed.length} sample(s) whose background could not be confirmed.`);
+    return { samples: samples.filter(s => !s.fromRoot), dropped: needed.length };
+  }
+  const verdicts = await page.evaluate(async ({ b64, boxes }) => {
+    const img = new Image();
+    img.src = "data:image/png;base64," + b64;
+    await img.decode();
+    const cv = document.createElement("canvas");
+    cv.width = img.width; cv.height = img.height;
+    const c = cv.getContext("2d", { willReadFrequently: true });
+    c.drawImage(img, 0, 0);
+    const dpr = img.width / window.innerWidth; // screenshots come back in device pixels
+    return boxes.map((b) => {
+      const x0 = Math.max(0, Math.round(b.x * dpr)), y0 = Math.max(0, Math.round(b.y * dpr));
+      const x1 = Math.min(img.width, Math.round((b.x + b.w) * dpr)), y1 = Math.min(img.height, Math.round((b.y + b.h) * dpr));
+      if (x1 - x0 < 1 || y1 - y0 < 1) return null;   // offscreen: no pixels, no verdict
+      const d = c.getImageData(x0, y0, x1 - x0, y1 - y0).data;
+      const tally = new Map();
+      const total = (x1 - x0) * (y1 - y0);
+      for (let i = 0; i < d.length; i += 4) {
+        const k = (d[i] << 16) | (d[i + 1] << 8) | d[i + 2];
+        tally.set(k, (tally.get(k) || 0) + 1);
+      }
+      let bestK = -1, bestN = 0;
+      for (const [k, n] of tally) if (n > bestN) { bestN = n; bestK = k; }
+      if (bestN / total < 0.5) return null;          // busy backdrop: not one flat colour
+      return { r: (bestK >> 16) & 255, g: (bestK >> 8) & 255, b: bestK & 255, a: 1 };
+    });
+  }, { b64: shot.toString("base64"), boxes: needed.map(s => s.rect) });
+
+  const byIndex = new Map();
+  needed.forEach((s, i) => byIndex.set(s, verdicts[i]));
+  const kept = [];
+  let dropped = 0;
+  for (const s of samples) {
+    if (!s.fromRoot) { kept.push(s); continue; }
+    const px = byIndex.get(s);
+    if (!px) { dropped++; continue; }
+    kept.push({ ...s, bg: px });
+  }
+  if (dropped) console.error(`[fetch] ${dropped} text sample(s) sit on a backdrop we could not confirm from pixels (offscreen or non-flat); dropped rather than guessed.`);
+  return { samples: kept, dropped };
 }
 
 // Decide the client-rendered verdict from the signals we have.
@@ -467,9 +565,13 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
         computed = {
           horizontalOverflow375: r.overflow.overflow,
           scrollWidth375: r.overflow.scrollWidth,
+          contrastUnmeasured: r.contrastUnmeasured || 0,
           contrastSamples: (r.contrastSamples || []).map(s => {
             const large = s.fontSizePx >= 24 || (s.weight >= 700 && s.fontSizePx >= 18.66);
-            return { ratio: ratioFromSample(s), threshold: large ? 3.0 : 4.5, fontSizePx: s.fontSizePx };
+            return {
+              ratio: ratioFromSample(s), threshold: large ? 3.0 : 4.5, fontSizePx: s.fontSizePx,
+              exempt: s.exempt || null, exemptReason: s.exemptReason || null,
+            };
           }),
         };
       }

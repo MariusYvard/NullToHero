@@ -35,3 +35,5 @@ node ${CLAUDE_PLUGIN_ROOT}/tools/design-system/scripts/fetch-asset.mjs <kind> <a
 - Backgrounds: generate waves, blobs and tileable patterns locally with the project palette. Seeded and reproducible (the file records its seed), `pattern` also prints the `background-image` CSS with the data URI. No request leaves the machine and the output belongs to the project, so it commits cleanly.
 
 Add `--dry` to preview the request without fetching, `--out DIR` to choose where it saves (default `assets/`). If a need has no clean API here, fall back to recommending a site from resources.csv rather than scraping it.
+
+This is about **files**: an image, a font, a video is committed as-is, so if its licence is not clean there is nothing to salvage, and the fetcher refuses. **Code is different**, because you can read a technique and write your own. Do not stretch "do not scrape" into "do not look": for a component or an effect, opening the source is the job. [sourcing-external-code.md](sourcing-external-code.md) sets out the two regimes (install a registry and own the code; read a reference and re-author it).

@@ -104,6 +104,7 @@
     "skills/siteasy/references/shape.md",
     "skills/siteasy/references/ship-checklist.md",
     "skills/siteasy/references/signature-moments.md",
+    "skills/siteasy/references/sourcing-external-code.md",
     "skills/siteasy/references/spatial-design.md",
     "skills/siteasy/references/stock-media.md",
     "skills/siteasy/references/style-systems.md",
@@ -568,6 +569,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/sourcing-external-code.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/stock-media.md"
     },
     {
@@ -757,6 +762,10 @@
     {
       "from": "skills/siteasy/references/delight.md",
       "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/fetch-asset.md",
+      "to": "skills/siteasy/references/sourcing-external-code.md"
     },
     {
       "from": "skills/siteasy/references/form-patterns.md",
@@ -1100,6 +1109,10 @@
     },
     {
       "from": "skills/siteasy/references/resource-recommendations.md",
+      "to": "skills/siteasy/references/sourcing-external-code.md"
+    },
+    {
+      "from": "skills/siteasy/references/resource-recommendations.md",
       "to": "skills/siteasy/references/stock-media.md"
     },
     {
@@ -1121,6 +1134,22 @@
     {
       "from": "skills/siteasy/references/signature-moments.md",
       "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/sourcing-external-code.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/sourcing-external-code.md",
+      "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/sourcing-external-code.md",
+      "to": "skills/siteasy/references/signature-moments.md"
+    },
+    {
+      "from": "skills/siteasy/references/sourcing-external-code.md",
+      "to": "skills/siteasy/references/stock-media.md"
     },
     {
       "from": "skills/siteasy/references/style-systems.md",

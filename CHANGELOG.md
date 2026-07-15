@@ -11,6 +11,32 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.34.0] - 2026-07-15
+
+### Fixed
+
+- **The contrast detector invented failures.** `contrast-ratio` reported 14 samples below AA on the plugin's own site. Six were not real. Both causes were the same mistake in different clothes: asking the DOM a question only the pixels can answer.
+  - **Backdrop resolved by ancestry, not by paint.** The background walk climbed `parentElement`, which answers "who is my ancestor", not "what is painted under me". Those diverge the moment a sibling layer paints below: a fixed nav over a full-bleed hero resolved to `<body>`, so dark-on-light was measured as dark-on-dark and three wordmark spans were reported at **1.11:1** when a viewer sees **16.27:1**. Now the provenance decides. If the element or an ancestor paints its own opaque background, that is the backdrop by construction (a red button is red wherever it sits) and the DOM answer stands. If the walk falls through to the root, nothing painted in between and the answer was a guess, so it is re-resolved against real screenshot pixels: the modal colour inside the element's box is what sits behind the glyphs. Offscreen, or no colour holding a majority, means unmeasurable, and it is dropped and counted rather than guessed.
+  - **Elements that are never painted were counted.** `getComputedStyle` does not inherit `display:none`: a child of a hidden parent reports its own specified display, so the visibility filter waved through whole subtrees the browser never lays out. A responsive nav's desktop links were "measured" at 375px and failed. Zero-area boxes are now skipped: no box, no pixels, no reader.
+- `value.unmeasured` on `contrast-ratio` reports samples whose backdrop could not be confirmed. A PASS over part of a page is not a clean page, and the two must not look alike.
+- The README version badge had read **1.21.0** since v1.21.0, thirteen releases stale. It was the one version site the validator did not check, so the validator now checks it: the README carries two versions and verifying only one of them is how the other rots quietly for a year.
+
+### Added
+
+- **Declared contrast exemptions.** `data-contrast-exempt` plus `data-contrast-exempt-reason` let an author state that a violation is deliberate: a page depicting a defect, ghost text that is texture rather than information. The audit excludes them from the failure count and reports them in `value.exempt`, never folded in and never omitted. Codes are closed (`staging`, `decorative-ghost`, `disabled`, `logotype`, `incidental`); an unknown code or a missing reason excuses nothing and its sample stays in the failure count. **Exempt is not conformant**: WCAG 1.4.3 grants three exceptions and "it is a demonstration" is not one, so `staging` and `decorative-ghost` leave the page non-conformant at those points, by the author's choice, said out loud. An audit you can drive to zero by annotation is a machine for producing clean reports on dirty pages.
+- New check `contrast-exempt-undeclared`: an exemption must carry a valid code and a written reason. The price of an exemption is stating the argument in the diff, where review sees it. Static, so it works on a page that never booted.
+- Ordering matters and was nearly got backwards: the exemption shipped **after** the detector fixes, because six of those fourteen failures were bugs and an exemption offered first is the tool that buries them.
+- Both directions of an accent colour, in `color-and-contrast.md`. A token read AS text and a token sitting UNDER white pull opposite ways, and verifying one while shipping both is how a palette that "passes AA" ships a CTA that does not. Sweeping `oklch(L 0.2 29)` on a near-black surface: text needs L >= 61%, white-on-it needs L <= 59%, and at 60% both fail. No single value exists, so the palette needs two. Arithmetic, not taste. Watch the hover too: one that brightens under white text is less readable than the resting state.
+
+### Changed
+
+- **`siteasy` and `inspect` can reach the web.** Both build and inspect interfaces, and neither had `WebFetch`: the skills that most need to read a component's documentation were the two that structurally could not. `siteasy` also gains `Bash(npx shadcn *)`, without which `component-recipes.md` documented an install command the skill was not allowed to run.
+- **Freefrontend was filed as a screenshot gallery.** It sat under `brand/design-inspiration` marked `gallery, for reference only`, while its own notes said "coded starting points" and "free with source", and a bare search for it returned nothing because the search defaults to the `style` domain. It is now `build/code-examples` with its four sections (CSS 282, HTML 36, JavaScript 218, Tailwind 78, Bootstrap 65), reachable mid-build.
+- New `sourcing-external-code.md`: opening the source is the job, but provenance decides what you may do with what you read. **Registry** (Magic UI, MIT, published in order to be installed): install it, then own it, and every law applies to it from that second, because it is site code now. **Reference** (Freefrontend, CodePen: other people's pens, licences per author and often unstated): read the technique, close the tab, write your own. That is the standard the skill already held for photos and fonts; code is not the one asset class where provenance stops mattering. The re-authored version is usually better anyway, since a pen carries no tokens, no reduced-motion guard and no keyboard path.
+- `resource-recommendations.md` and `fetch-asset.md` said "recommend the site to open" and "rather than scraping it". True of files, which commit as-is. Not true of code, which you can read and re-implement. "Do not scrape" no longer reads as "do not look".
+
+---
+
 ## [1.33.1] - 2026-07-15
 
 ### Fixed

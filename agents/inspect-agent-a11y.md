@@ -51,6 +51,20 @@ Read `styles.css` and `scripts.js` by default: contrast, focus-visible, ARIA sta
 - [ ] Large text (18pt / 24px, or 14pt / 18.66px bold) meets 3:1
 - [ ] UI components and graphical objects meet 3:1
 - [ ] Text over images or gradients has a measured worst-case ratio
+- [ ] Declared exemptions reported as declared, never as clean
+
+**On `data-contrast-exempt`.** An author may mark a sample as a deliberate violation.
+The pre-pass excludes those from the failure count and reports them separately in
+`value.exempt`. Carry that split into your report and never collapse it: `staging` and
+`decorative-ghost` are the author overruling us, NOT WCAG exceptions, so the page stays
+non-conformant at those points and you say so. Only `incidental`, `disabled` and
+`logotype` are exceptions 1.4.3 actually grants. If `contrast-exempt-undeclared` fails,
+those exemptions were not declared properly, so they excuse nothing: their samples are
+still in the failure count and you treat them as ordinary defects.
+
+**On `value.unmeasured`.** Samples whose backdrop the render could not confirm. A PASS
+alongside a non-zero `unmeasured` is a PASS over part of the page: say how much you
+could not see rather than reporting a clean sweep.
 
 ### Focus visibility
 - [ ] Every interactive element shows a visible focus indicator

@@ -87,6 +87,41 @@ Use two layers: primitive tokens (`--blue-500`) and semantic tokens (`--color-pr
 
 Heavy use of transparency (rgba, hsla) usually means an incomplete palette. Alpha creates unpredictable contrast, performance overhead, and inconsistency. Define explicit overlay colors for each context instead.
 
+## Verify Both Directions Of An Accent
+
+An accent token has two jobs and they pull opposite ways: read AS text on the surface, and sit UNDER white as a button. Verifying one and shipping both is the most common way a palette that "passes AA" ships a CTA that does not.
+
+They can be irreconcilable, and you find that by sweeping rather than arguing. A real case, `oklch(L 0.2 29)` on a near-black surface:
+
+| Direction | Requirement |
+|---|---|
+| red as text on the surface | needs L >= 61% |
+| white text on the red | needs L <= 59% |
+
+At L=60% both fail: **no single value exists**, so the palette needs two reds (the accent you read, and the surface you read white on). That is not a taste call, it is arithmetic, and one command settles it:
+
+```bash
+node -e 'import("./tools/audit/lib/contrast.mjs").then(({parseColor,contrastRatio})=>{const R=(a,b)=>contrastRatio(parseColor(a),parseColor(b));for(let L=70;L>=46;L-=2){const c=`oklch(${L}% 0.2 29)`;console.log(L, R(c,"oklch(17% 0.007 265)"), R("#fff",c));}})'
+```
+
+Watch the hover state too: a hover that goes *brighter* under white text is less readable than the resting state, which is exactly backwards.
+
+## Deliberate Violations Are Declared, Not Argued
+
+Sometimes low contrast is the point: a page that depicts a defect, ghost text that is texture rather than information. Say so in the markup and the audit will count it apart instead of failing you:
+
+```html
+<b data-contrast-exempt="staging"
+   data-contrast-exempt-reason="Depicts the audit overlay stamping the demo page; the badge's unreadability is the subject.">FAIL</b>
+```
+
+- **Codes are closed**: `staging`, `decorative-ghost`, `disabled`, `logotype`, `incidental`. An unknown code excuses nothing.
+- **The reason is mandatory.** No reason, no exemption — the sample stays in the failure count and `contrast-exempt-undeclared` fails. The price of an exemption is writing the argument down where review sees it.
+- **Element scope, never inherited.** Five badges is five attributes. The cost should grow with the size of the claim.
+- **Exempt is not conformant.** WCAG 1.4.3 grants exactly three exceptions (incidental/inactive, logotype, and the large-text threshold). "It is a demonstration" is not among them, so `staging` and `decorative-ghost` leave the page non-conformant at those points, by your choice, stated out loud. The audit reports them; it never launders them into a clean score.
+
+Reach for this last. Six of the fourteen failures on this plugin's own site turned out to be detector bugs, not intentional design — an exemption applied earlier would have buried them.
+
 ---
 
 **Avoid**: Relying on color alone to convey information. Using pure black (#000) for large areas. Skipping color blindness testing (8% of men affected).

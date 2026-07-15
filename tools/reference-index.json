@@ -1001,6 +1001,16 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/sourcing-external-code.md",
+    "title": "Sourcing external code",
+    "keywords": [
+      "sourcing",
+      "external",
+      "code"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/spatial-design.md",
     "title": "Spatial Design",
     "keywords": [

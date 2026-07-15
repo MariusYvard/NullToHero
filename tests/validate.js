@@ -630,6 +630,13 @@ section("12b. SECURITY.md and README version alignment");
       if (!mm) fail("README.md: no **vX.Y.Z** version token found");
       else if (mm[1] === pv) pass(`README version token v${mm[1]} matches plugin ${pv}`);
       else fail(`README version token v${mm[1]} does not match plugin ${pv}`);
+      // The shields badge is a SECOND version in the same file, and it went unchecked
+      // until v1.34.0: it had read 1.21.0 for thirteen releases while the token beside
+      // it was current. Checking one version site per file is how the other one rots.
+      const bm = rd.match(/img\.shields\.io\/badge\/version-(\d+\.\d+\.\d+)-/);
+      if (!bm) fail("README.md: no shields.io version badge found");
+      else if (bm[1] === pv) pass(`README version badge ${bm[1]} matches plugin ${pv}`);
+      else fail(`README version badge ${bm[1]} does not match plugin ${pv}`);
     }
     const svg = readFile(path.join(ROOT, "docs", "overview.svg"));
     if (svg === null) fail("docs/overview.svg not found");
