@@ -51,6 +51,29 @@ Read /tmp/pw-mobile.png
 
 Look for: layout breaks, overflow, typography hierarchy, color/contrast failures, spacing issues, component integrity.
 
+## Scroll-linked and animated pages
+
+A screenshot is a claim about a moment. On a page whose content is driven by scroll or by an animation clock, the default moment is the emptiest one, and it is easy to review a site that never ran.
+
+**Everything scroll-linked sits at progress 0 until something scrolls.** A fresh `goto` puts you at the top, so a scrollytelling hero shows only its first beat and every later beat is pinned at its start state. Screenshotting there and concluding is reviewing a page that has not begun. Scroll to the position you mean to judge, let it settle, and only then capture.
+
+**A hidden page runs no animation at all.** Browsers suspend `requestAnimationFrame` when `document.visibilityState === "hidden"`, and scroll libraries (Framer Motion, Lenis, GSAP ScrollTrigger) all drive their progress from rAF. In a hidden or backgrounded page the scroll position moves while the animation progress stays frozen at 0: the DOM says one thing, the pixels say another. Assert visibility before you trust any animated measurement:
+
+```js
+const state = await page.evaluate(() => document.visibilityState);
+if (state !== "visible") throw new Error("page is hidden: rAF is suspended, animation state is not measurable");
+```
+
+**Verify animated state from the DOM, not from the picture.** After a programmatic scroll, a screenshot can lag the real state by seconds, and you will diagnose bugs that do not exist. `getComputedStyle`, `textContent` and a `data-*` attribute that mirrors the component's own index are cheap, synchronous and truthful. Use the screenshot for composition and the DOM for state:
+
+```js
+await page.evaluate(() => window.scrollTo(0, 3000));
+await page.waitForFunction(() => document.querySelector("[data-act]")?.dataset.act === "3");
+const clip = await page.evaluate(() => getComputedStyle(document.querySelector(".beat-3")).clipPath);
+```
+
+If a component's own progress is not observable from the DOM, that is worth a finding on its own: nothing about it can be asserted, only eyeballed.
+
 ### 6. Fix issues
 1. Read the relevant file
 2. Apply targeted fix with Edit tool

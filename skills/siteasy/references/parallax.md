@@ -279,6 +279,27 @@ Four pillars for narrative parallax sections:
 2. Attention guidance. The fastest-moving layer carries the focal point. The slowest layer anchors the scene.
 3. Rhythm management. Alternate motion segments with static rest segments. A 100vh static section between two animated segments lets the user breathe.
 4. Active interactivity. Map scroll progress to content reveal, not autoplay. The user must feel they pilot the discovery.
+
+### Beats are covered, not crossfaded
+
+A crossfade is the default transition, which is exactly why it reads as unconsidered. N beats joined by N identical fades is the single loudest "nobody decided this" signal a scrolly can send, and readers name it long before an audit does. A beat should be **covered** by the next one, the way a cut works in film: the outgoing beat keeps moving underneath while the incoming one wipes over it, so the two layers have a spatial relationship instead of dissolving into mush.
+
+Give each boundary its own mechanism, motivated by the story rather than picked from a move set: a blind pulling down, a window growing until it becomes the page, an iris opening out of a focal point, a hard cut on identical pixels (which reads as a freeze frame), a wipe with a coloured leading edge, a letterbox opening. `clip-path` on the incoming layer does all of these and costs one composited property. Reserve the crossfade for when two beats genuinely have no spatial relationship.
+
+Opacity on a covered beat should be a **step**, never a ramp: it exists to unmount the layer once it is fully hidden, not to fade it. And pair it with `pointer-events: none` (rule 69) or the invisible layer keeps eating clicks.
+
+### Beats get weights, not equal segments
+
+Dividing the track into N equal segments is an arithmetic decision standing in for an editorial one. A beat lasts as long as it takes to read, and beats do not take the same time: a terminal that types itself out, or a step that stamps in five annotations, needs dwell that a blank sheet does not. Weight each beat, normalise, and derive the boundaries from that. Equal segments are why a beat gets cut off mid-sentence while a static one overstays.
+
+### A hand keeps its own clock
+
+Scroll-scrubbing is for anything the reader should feel they pilot. It is wrong for anything that imitates a human motor act, handwriting and typing above all: scrubbing ties the pen's speed to the wheel, so the stroke rate becomes whatever the reader's scroll happens to be, and no hand moves that way. Play those on a real clock, let scroll only trigger them, and vary the per-glyph timing (a capital carries more strokes than a lowercase, and the small gap after it is where a real hand lifts). The unevenness is what makes it read as written rather than wiped.
+
+### Scrub easing (L-MOTION-3)
+
+Scrubbed tweens are linear; the perceived easing comes from the visitor's scroll. Reusing a time-based curve here is the most common way to break that law, because the curve looks right in isolation. Concrete diagnostic: **an expo-out tween is ~90% complete at the midpoint of its scroll window** — it snaps shut and then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. If it is nearly finished, the curve is fighting the scrollbar.
+
 Data stories add four disciplines on top of the pillars:
 
 - One step, one change, one takeaway. The reader must be able to say what changed between two steps; a step with no perceptible response breaks trust in the medium.

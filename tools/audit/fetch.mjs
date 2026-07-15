@@ -352,6 +352,13 @@ async function render(url, timeout) {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: "networkidle", timeout });
+    // A hidden page runs no requestAnimationFrame, and every scroll library drives
+    // its progress from rAF. Measuring computed styles there reads a page whose
+    // animations never started — silently, since the DOM still answers. Cheap assert.
+    const visibility = await page.evaluate(() => document.visibilityState);
+    if (visibility !== "visible") {
+      console.error(`[fetch] page reports visibilityState="${visibility}": rAF is suspended, so any animated or scroll-linked state is frozen at its start value. Computed measurements below cover the static page only.`);
+    }
     const renderedHtml = await page.content();
     const overflow = await page.evaluate(() => {
       const de = document.documentElement;

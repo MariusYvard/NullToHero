@@ -23,6 +23,20 @@ Self-host over a third-party CDN, it is faster, private and never breaks. Downlo
 
 Preload the one weight above the fold: `<link rel="preload" as="font" type="font/woff2" href="/fonts/brand.woff2" crossorigin>`. If you must use a CDN, add `<link rel="preconnect">` to its origin.
 
+### Subset a display face to its literal string
+
+A body font needs a charset. A display face used for one wordmark needs the letters in that wordmark and nothing else, and the difference is not a rounding error:
+
+```bash
+pip install fonttools brotli
+pyftsubset display.ttf --text="NullToHero" --flavor=woff2 --layout-features='*' --output-file=display.woff2
+# measured: 122 KB TTF -> 2.6 KB woff2, 46x smaller
+```
+
+At that size the face is cheaper than the DNS lookup a font CDN would have cost, which settles the self-host question for you. Subset against the exact string, not a guessed alphabet, and re-run it when the wordmark changes. Use `--unicodes=U+0000-00FF` instead when the text is dynamic.
+
+Keep the full file out of the shipped directory: `public/fonts/` should hold the subset only. Ship one weight per face unless a second is doing real hierarchical work.
+
 ## Icons
 
 Three ways, in order of preference. Inline the SVG for the few icons a page uses so they take `currentColor` and cost no request. Build one SVG sprite when a page uses many. Import from a tree-shaken library (Lucide, Heroicons) in a component app so unused icons drop out. Avoid loading a whole icon font for three glyphs.

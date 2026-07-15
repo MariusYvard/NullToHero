@@ -58,7 +58,7 @@ If `DIRECTION.md` or `PRODUCT.md` exist at the project root, read them before sc
 
 ## Detection rules from data
 
-Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (68 rules) — extend coverage without changing code. Each rule also maps to its remediation route (the command to run and the reference to load) in `tools/data/remediation-map.csv` (`rule-<id>` rows): cite it with every finding. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
+Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (71 rules) — extend coverage without changing code. Each rule also maps to its remediation route (the command to run and the reference to load) in `tools/data/remediation-map.csv` (`rule-<id>` rows): cite it with every finding. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
 
 ## Quick start
 

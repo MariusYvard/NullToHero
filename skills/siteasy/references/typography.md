@@ -42,6 +42,18 @@ Use `ch` units for character-based measure (`max-width: 65ch`). Line-height scal
 
 **System fonts are underrated**: `-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui` looks native, loads instantly, and is highly readable. Consider this for apps where performance > personality.
 
+### Check the licence before you fall in love with the face
+
+Free-font sites label display faces "free for personal use", and that label is not the licence. The licence is the readme in the zip, and it routinely reads like this one:
+
+> 1. This font is ONLY FOR PERSONAL USE
+> 2. NO COMMERCIAL USE ALLOWED
+> 3. You are REQUIRES A LICENSE for PROMOTIONAL or COMMERCIAL USE
+
+**Promotional** is the word that catches almost every site we build. A marketing page for a product is promotional even when the product is free and the company does not exist yet; "it's my own little site" is not a defence, and nor is "the plugin is open source". The face is usually cheap to license and the author usually answers email, so this costs a purchase, not a redesign, as long as it is settled before launch rather than after.
+
+Practically: read the readme, not the badge. If the licence needs buying and the answer is no, pick the closest openly-licensed face (OFL) in the same genre rather than a different genre entirely, and say which one you dropped and why. If the client insists, that is their call to make with the terms in front of them, not a decision to make silently on their behalf.
+
 ### Pairing Principles
 
 **The non-obvious truth**: You often don't need a second font. One well-chosen font family in multiple weights creates cleaner hierarchy than two competing typefaces.
