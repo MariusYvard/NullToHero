@@ -28,9 +28,16 @@ function parseDecls(body) {
 }
 
 // Extract the first color-looking token from a `background` shorthand value.
+//
+// The function forms MUST come before the bare-word alternative. Without
+// `oklch(...)` in the list, `background: oklch(98% 0.003 88)` fell through to
+// `\b[a-z]+\b` and returned the word "oklch" — not a colour, so the background
+// resolved as "unknown" and every text sample on the page was dropped before it
+// ever reached the parser. `color()` is matched whole for the same reason: we
+// cannot convert it, but reporting it as unreadable beats degrading to "color".
 export function pickColor(val) {
   if (!val) return null;
-  const m = String(val).match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|var\(--[\w-]+[^)]*\)|\b[a-z]+\b/);
+  const m = String(val).match(/#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|lch|lab|color)\([^)]*\)|var\(--[\w-]+[^)]*\)|\b[a-z]+\b/);
   return m ? m[0] : null;
 }
 

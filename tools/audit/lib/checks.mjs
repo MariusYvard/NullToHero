@@ -261,6 +261,15 @@ function colorUp(el, model, memo) {
   return null;
 }
 function parseableColor(s) { return !!parseColor(s); }
+
+// CSS-wide keywords and unresolved token references are a cascade gap, not a
+// colour-space gap. They are excluded from the "unreadable" tally so that it
+// means one specific thing: a real colour our parser cannot decode.
+const COLOR_KEYWORDS = new Set(["inherit", "currentcolor", "initial", "unset", "revert", "revert-layer", "auto", "none", ""]);
+function isKeyword(s) {
+  const v = (s || "").trim().toLowerCase();
+  return COLOR_KEYWORDS.has(v) || v.startsWith("var(");
+}
 // Resolve the nearest background. Returns { bg, unresolved }: unresolved=true when
 // the nearest paint is a gradient, image or a value we cannot turn into a color,
 // so the caller SKIPS the sample rather than assuming white (the main source of
@@ -317,6 +326,11 @@ function checkContrast(doc, computed, cssModel) {
   // token colors and the tag/class cascade; without one, fall back to inline
   // color attributes only (the render-free minimum).
   const samples = [];
+  // Colours we found but could not read (a space parseColor does not support).
+  // Tracked, never silently dropped: a deterministic detector must not let
+  // "could not read this" look identical to "this is fine". Reported as
+  // coverage alongside the verdict.
+  const unreadable = new Set();
   if (cssModel) {
     const memo = new Map();
     const pageBg = pageBackground(cssModel);
@@ -325,6 +339,7 @@ function checkContrast(doc, computed, cssModel) {
         if (c.type !== "element") continue;
         if (TEXTISH.has(c.tag) && hasDirectText(c)) {
           const cu = colorUp(c, cssModel, memo);
+          if (cu && cu.color && !parseColor(cu.color) && !isKeyword(cu.color)) unreadable.add(cu.color.trim().toLowerCase());
           if (cu && parseableColor(cu.color)) {
             const { bg, unresolved, explicit } = bgResolve(c, cssModel, memo, pageBg);
             const fgc = parseColor(cu.color), bgc = bg ? parseColor(bg) : null;
@@ -358,6 +373,7 @@ function checkContrast(doc, computed, cssModel) {
             const bgStr = resolveBackgroundStr(c);
             const r = ratioOf(st.color, bgStr);
             if (r) samples.push({ tag: c.tag, ratio: r.ratio, threshold: aaThreshold({ fontSizePx: fontSizePx(st, c.tag), bold: isBold(st, c) }) });
+            else if (!parseColor(st.color) && !isKeyword(st.color)) unreadable.add(st.color.trim().toLowerCase());
           }
         }
         visit(c);
@@ -366,10 +382,21 @@ function checkContrast(doc, computed, cssModel) {
     visit(doc);
   }
 
+  // Colours we saw but could not decode. Surfaced on every verdict below, because
+  // a ratio measured over 2 of 12 colours is not the same claim as one measured
+  // over 12 of 12, and the reader cannot tell the two apart from a bare "PASS".
+  const skipped = unreadable.size;
+  const coverage = skipped
+    ? ` ${skipped} colour value(s) could not be decoded and were NOT measured (e.g. ${[...unreadable].slice(0, 2).join(", ")}); this verdict does not cover them.`
+    : "";
+  const unreadableValue = skipped ? { unreadable: skipped, examples: [...unreadable].slice(0, 5) } : {};
+
   if (samples.length === 0) {
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "NOT_MEASURED", critical: false,
-      method: "not-measured", value: null,
-      detail: "No resolvable text colors to measure statically — run with --render for computed-style contrast (ground truth)." });
+      method: "not-measured", value: skipped ? unreadableValue : null,
+      detail: skipped
+        ? `No text colour could be decoded: ${skipped} value(s) are in a colour space this parser does not support (e.g. ${[...unreadable].slice(0, 2).join(", ")}). Not a pass — nothing was measured. Run with --render for computed-style contrast (ground truth).`
+        : "No resolvable text colors to measure statically — run with --render for computed-style contrast (ground truth)." });
   }
   // Static contrast is a render-free ESTIMATE (no gradients, images, media queries
   // or specificity), so it informs the floor but is never critical: only the
@@ -379,11 +406,12 @@ function checkContrast(doc, computed, cssModel) {
   if (fails.length) {
     const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: false,
-      method: "static", value: { samples: samples.length, failures: fails.length, worst: worst.ratio },
-      detail: `${fails.length}/${samples.length} resolved text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1). Static estimate over samples with a known background; confirm with --render.` });
+      method: "static", value: { samples: samples.length, failures: fails.length, worst: worst.ratio, ...unreadableValue },
+      detail: `${fails.length}/${samples.length} resolved text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1). Static estimate over samples with a known background; confirm with --render.${coverage}` });
   }
   return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: false,
-    method: "static", value: { samples: samples.length }, detail: `All ${samples.length} resolved text sample(s) meet AA (static estimate over samples with a known background).` });
+    method: "static", value: { samples: samples.length, ...unreadableValue },
+    detail: `All ${samples.length} resolved text sample(s) meet AA (static estimate over samples with a known background).${coverage}` });
 }
 
 function checkOverflow375(doc, computed) {
