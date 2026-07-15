@@ -11,6 +11,27 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.33.0] - 2026-07-15
+
+Dogfooding release: everything here came from building a 7-act scrollytelling hero with the plugin, and every item is something the plugin either could not see, did not say, or said without the diagnostic that makes it checkable.
+
+### Fixed
+
+- **The contrast engine could not read the colour spaces the plugin prescribes.** `parseColor` handled named/hex/rgb only, so `oklch()` returned null — including `oklch(0.15 0.01 270)`, which is inspect-rules.csv rule 19's own "good" example, and the format `design-tokens.md` recommends throughout. `pickColor` was the upstream half: its regex lacked the modern functions, so `background: oklch(...)` fell through to the bare-word branch and returned the string `"oklch"`, the background resolved as unknown, and every text sample on the page was dropped before it reached the parser. A site that followed our own advice was reported NOT_MEASURED: no false pass, but no measurement either. `contrast.mjs` now parses `oklch()`, `oklab()`, `lch()`, `lab()` (Ottosson OKLab and D50 CIE Lab, Bradford-adapted) and `hsl()`/`hsla()`, pure stdlib, no dependencies; unsupported spaces still return null rather than a guess. Verified: an all-OKLCH page now FAILS on a 1.49:1 grey it previously did not measure at all.
+- **Undecodable colours were dropped silently.** `checks.mjs` did `if (r) samples.push(...)`, so a ratio measured over 2 of 12 colours produced the same bare PASS as one measured over 12 of 12. Colours we cannot decode are now tracked and surfaced on every verdict, named, with an explicit "this verdict does not cover them". A deterministic detector must not let "could not read this" look identical to "this is fine".
+- 25 unit tests for the parser, anchored on values with known-exact answers (the sRGB primaries through every space; `oklch(62.8% 0.258 29.23)` is CSS Color 4's own red sample) rather than on whatever the implementation happens to emit.
+
+### Added
+
+- Rules 69-71 (68 → 71). **69** Layout/critical: `opacity: 0` does not stop pointer events, so a faded full-bleed overlay silently swallows every click beneath it — nothing looks wrong, so it gets found by users rather than by review. **70** Motion/important: never reuse a time-based curve on a scrubbed tween; L-MOTION-3 already required linear, what was missing is the diagnostic — an expo-out tween is ~90% complete at the **midpoint** of its scroll window, so it snaps shut then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. **71** Motion/medium: a hand keeps its own clock; scrubbing handwriting ties the pen's speed to the wheel.
+- Scrollytelling doctrine in `parallax.md`, carried into the two artifacts that gate work (the Match-and-refuse list and the Audit Checklist) and into `siteasy-agent-motion`, not left as prose: beats are **covered, not crossfaded** (a fade is the default gesture, so the same fade on every boundary is the loudest signal that nobody chose any of them, and readers name it long before an audit does); beats get **weights, not equal segments** (a beat lasts as long as it takes to read, and a typing terminal does not take as long as a blank sheet).
+- Scroll-linked verification doctrine in `preview.md`: a screenshot is a claim about a moment, and on a scroll-driven page the default moment is the emptiest one. Everything scroll-linked sits at progress 0 until something scrolls; a hidden page runs no `requestAnimationFrame` at all, so scroll position moves while animation progress stays frozen and the DOM disagrees with the pixels; verify animated state from the DOM, never from the picture. `fetch.mjs` now asserts `visibilityState` before trusting computed measurements.
+- Font licensing in `typography.md`: read the licence in the zip, not the badge on the site. "Free for personal use" faces routinely require a licence for **promotional** use, which covers every marketing page we build, including free and open-source ones.
+- Display-face subsetting in `resource-recipes.md`: the advice existed without a command or a number. Both added — `pyftsubset --text="..." --flavor=woff2`, measured at 122 KB TTF → 2.6 KB woff2 (46x), cheaper than the DNS lookup a font CDN would have cost.
+- Stack gotchas: Tailwind `@theme inline` compiles utilities to the raw var name, so overriding `--color-*` does nothing, silently; re-theming needs an explicit colour class because inheritance carries the computed colour past the override; motion cannot animate SVG geometry attributes (use `clip-path`); `pathLength: 0` with a round cap paints a dot; a sticky header eats the top of a full-bleed hero and blurs the body instead of the hero.
+
+---
+
 ## [1.32.0] - 2026-07-12
 
 ### Added

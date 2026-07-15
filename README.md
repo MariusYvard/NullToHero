@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.32.0** · 4 skills · 65 commands · 116 reference docs · 15 audit sub-agents
+**v1.33.0** · 4 skills · 65 commands · 116 reference docs · 15 audit sub-agents
 
 </div>
 
