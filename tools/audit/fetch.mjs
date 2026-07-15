@@ -366,7 +366,28 @@ async function render(url, timeout) {
     });
     const contrastSamples = await page.evaluate(() => {
       const out = [];
-      const toRGB = (s) => { const m = (s || "").match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[,\s/]+/).map(Number); return { r: p[0], g: p[1], b: p[2], a: p[3] === undefined ? 1 : p[3] }; };
+      /* Resolve any CSS colour through the browser itself, by painting one pixel and
+         reading it back. A regex for rgba() cannot do this job: Chrome serialises
+         computed styles in the colour space they were authored in, so an oklch()
+         token comes back as "oklch(...)" and the regex returns null. That is not a
+         missed measurement, it is a FABRICATED one — the old code then assumed white
+         and reported white-on-white at 1:1 for a red button. An audit that invents
+         failures is worse than one that misses them, because it gets believed.
+         The canvas round trip understands every colour the page can render, and it
+         returns the exact sRGB bytes a viewer sees. */
+      const cv = document.createElement("canvas");
+      cv.width = cv.height = 1;
+      const ctx = cv.getContext("2d", { willReadFrequently: true });
+      const toRGB = (s) => {
+        if (!s || s === "transparent") return null;
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = "#000";
+        ctx.fillStyle = s;            // invalid values leave fillStyle at #000...
+        if (ctx.fillStyle === "#000000" && !/^#0{3,8}$|black|rgba?\(0,\s*0,\s*0/i.test(s.trim())) return null;
+        ctx.fillRect(0, 0, 1, 1);
+        const d = ctx.getImageData(0, 0, 1, 1).data;
+        return { r: d[0], g: d[1], b: d[2], a: d[3] / 255 };
+      };
       const els = Array.from(document.querySelectorAll("body *"));
       let count = 0;
       for (const el of els) {
@@ -375,11 +396,17 @@ async function render(url, timeout) {
         if (!direct) continue;
         const cs = getComputedStyle(el);
         if (cs.visibility === "hidden" || cs.display === "none" || parseFloat(cs.opacity) === 0) continue;
+        // Gradient-filled text (background-clip:text + transparent colour) has no
+        // single foreground to measure. Report it as its own defect, do not average
+        // it into a ratio that means nothing.
+        if (parseFloat(cs.color.match(/[\d.]+\)$/) ? cs.color.slice(cs.color.lastIndexOf(",") + 1) : "1") === 0) continue;
         const color = toRGB(cs.color);
+        if (!color || color.a === 0) continue;
         let bgEl = el, bg = null;
-        while (bgEl) { const b = toRGB(getComputedStyle(bgEl).backgroundColor); if (b && b.a > 0) { bg = b; break; } bgEl = bgEl.parentElement; }
-        if (!bg) bg = { r: 255, g: 255, b: 255, a: 1 };
-        if (!color) continue;
+        while (bgEl) { const b = toRGB(getComputedStyle(bgEl).backgroundColor); if (b && b.a > 0.9) { bg = b; break; } bgEl = bgEl.parentElement; }
+        // No assumed white. An unresolved background is an unmeasurable sample, and
+        // guessing one is how you manufacture a 1:1 failure out of thin air.
+        if (!bg) continue;
         out.push({ color, bg, fontSizePx: parseFloat(cs.fontSize), weight: parseInt(cs.fontWeight, 10) || 400 });
         count++;
       }
