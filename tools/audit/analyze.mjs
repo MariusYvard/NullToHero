@@ -22,7 +22,7 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { fetchTarget, warnClientRendered } from "./fetch.mjs";
-import { runChecks } from "./lib/checks.mjs";
+import { aggregateChecks } from "./lib/aggregate.mjs";
 import { buildSiteAudit } from "./lib/site-audit.mjs";
 
 const args = process.argv.slice(2);
@@ -51,16 +51,20 @@ const fetchResult = fromFile
 
 if (fromFile) warnClientRendered(fetchResult);
 
-const checks = runChecks({
-  rawHtml: fetchResult.rawHtml || "",
-  renderedHtml: fetchResult.renderedHtml || null,
+const checks = aggregateChecks({
+  entry: {
+    rawHtml: fetchResult.rawHtml || "",
+    renderedHtml: fetchResult.renderedHtml || null,
+    robotsTxt: fetchResult.robotsTxt || null,
+    url: fetchResult.url || null,
+    computed: fetchResult.computed || null,
+    headers: fetchResult.headers || null,
+    css: fetchResult.linkedCss || "",
+    js: fetchResult.linkedJs || "",
+    probes: fetchResult.probes || null,
+  },
+  pages: fetchResult.pages || [],
   robotsTxt: fetchResult.robotsTxt || null,
-  url: fetchResult.url || null,
-  computed: fetchResult.computed || null,
-  headers: fetchResult.headers || null,
-  css: fetchResult.linkedCss || "",
-  js: fetchResult.linkedJs || "",
-  probes: fetchResult.probes || null,
 });
 
 const siteAudit = buildSiteAudit({ fetchResult, checks, mode: "checks" });

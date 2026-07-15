@@ -384,7 +384,7 @@ const SETTLE_MS = 420;
 /* Which pages. The sitemap is the list the site declares about itself, so it beats
    guessing from links; links are the fallback for a site that ships none. Same-origin
    only, capped, entry URL always first and always kept. */
-async function discoverPages(baseUrl, entryHtml, timeout, explicit, cap) {
+export async function discoverPages(baseUrl, entryHtml, timeout, explicit, cap) {
   const entry = baseUrl.replace(/#.*$/, "");
   if (explicit && explicit.length) return [entry, ...explicit.filter(u => u !== entry)].slice(0, cap);
   const origin = new URL(entry).origin;
@@ -473,7 +473,10 @@ async function render(url, timeout, opts = {}) {
       const de = document.documentElement;
       return { scrollWidth: de.scrollWidth, clientWidth: de.clientWidth, overflow: de.scrollWidth > de.clientWidth + 1 };
     });
-    const pages = await discoverPages(url, renderedHtml, timeout, opts.explicitPages, cap);
+    // Discovery already happened in fetchTarget: the same list drives the static
+    // per-page checks and this sweep, so the two can never disagree about what "the
+    // site" means.
+    const pages = opts.pageList && opts.pageList.length ? opts.pageList.slice(0, cap) : [url];
     await ctx0.close();
 
     const samples = [];
@@ -740,11 +743,32 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
   const scrolly = scrollySignals(html, assetInfo.js);
   const libs = libSignals(html, assetInfo.js);
 
+  /* Which pages are "the site". Decided once, here, and reused by both the static
+     per-page checks and the rendered sweep, so the two can never disagree about what
+     was audited. Discovery is NOT gated on --render: "does every page have a title"
+     is a question raw HTML can answer, and making it wait for a browser was an
+     accident of where the code happened to live. */
+  const pageCap = renderOpts.pages ?? 10;
+  let pageList = baseUrl && isUrl ? [baseUrl.replace(/#.*$/, "")] : [];
+  const extraPages = [];
+  if (isUrl && pageCap > 1) {
+    try {
+      pageList = await discoverPages(baseUrl, html, timeout, renderOpts.explicitPages, pageCap);
+      for (const u of pageList.slice(1)) {
+        try {
+          const p = await rawFetch(u, true, timeout);
+          if (p.status >= 400) { console.error(`[fetch] ${u} returned ${p.status}; not audited.`); continue; }
+          extraPages.push({ url: p.finalUrl || u, rawHtml: p.html, headers: p.headers, status: p.status });
+        } catch (e) { console.error(`[fetch] ${u} could not be fetched (${e.message}); not audited.`); }
+      }
+    } catch (e) { console.error(`[fetch] page discovery failed (${e.message}); auditing the entry page only.`); }
+  }
+
   let renderedHtml = null, computed = null, renderAvailable = false;
   if (wantRender) {
     if (!isUrl) console.error("[fetch] --render needs a URL; using raw HTML for the local file.");
     else {
-      const r = await render(baseUrl, timeout, renderOpts);
+      const r = await render(baseUrl, timeout, { ...renderOpts, pageList });
       if (r) {
         renderAvailable = true;
         renderedHtml = r.renderedHtml;
@@ -780,6 +804,11 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
     signals: { rawTextLen, renderedTextLen, rawNodeCount: nodeCount(html), shell, scrolly, libs },
     headers, probes: { ...(probes || {}), mediaWeight },
     rawHtml: html, renderedHtml, robotsTxt, computed,
+    // The other pages of the site, for the checks that are questions about a document.
+    // Raw HTML only: shared bundles and response-level facts belong to the origin and
+    // are answered once, from the entry.
+    pages: extraPages,
+    pagesDiscovered: pageList,
     linkedCss: assetInfo.css, linkedJs: assetInfo.js,
     assets: { cssFiles: assetInfo.cssFiles, jsFiles: assetInfo.jsFiles, skipped: assetInfo.skipped },
   };

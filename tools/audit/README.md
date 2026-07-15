@@ -64,9 +64,27 @@ old single-shot pass:
 deduped per element per page keeping the **worst** state, so the failure count is
 distinct failing elements and does not grow just because the sweep got wider.
 
-The other checks (title, meta description, heading order, canonical, robots) still
-read the entry page only: they are per-page questions and aggregating them is a
-different job. `pagesFetched` tells you the difference rather than hiding it.
+## Per-page checks
+
+The document-level checks (title, meta description, heading order, canonical, html
+lang, viewport, img dimensions, DOM nesting, ARIA, charset, head meta, SRI, robots
+path, and the rest) now run on **every discovered page** and merge to the worst
+verdict. `value.perPage` lists each URL's verdict and the detail names the pages that
+are not clean. One page failing fails the site: a reader lands on any of them.
+
+This needs no `--render`: "does every page have a title" is a question raw HTML
+answers, and gating it on a browser was an accident of where the code sat. Discovery
+is shared with the sweep, so the two can never disagree about what "the site" means.
+
+Site-level checks stay on the entry, and that is not laziness:
+
+- `contrast-ratio` already sweeps every page itself
+- security headers, HTTPS/host probes, robots.txt and `security.txt` are properties of
+  the **origin**
+- the CSS/JS bundle checks (reduced-motion, scrollbar, frame loops, three duplication)
+  read the **shared bundles**
+
+Re-asking those per page would turn one fact into N identical copies of itself.
 
 ## Quick start
 

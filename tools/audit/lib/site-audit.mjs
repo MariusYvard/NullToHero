@@ -128,8 +128,9 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       url: fetchResult.url || null,
       file: fetchResult.file || null,
       // The real number, not a hardcoded 1. It sat at 1 while the schema advertised
-      // the field, which is a claim the tool was not entitled to make.
-      pagesFetched: fetchResult.computed?.contrastCoverage?.pages || 1,
+      // the field, which is a claim the tool was not entitled to make. Counts the
+      // entry plus every page actually fetched, which is what the static checks ran on.
+      pagesFetched: 1 + ((fetchResult.pages || []).length),
       // What the rendered sweep actually covered. A verdict over one page at scroll 0
       // and a verdict over the whole site are different claims and must not look alike.
       measured: fetchResult.computed?.contrastCoverage || null,

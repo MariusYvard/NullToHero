@@ -162,6 +162,50 @@ ok("worst is measured against the threshold, not by raw ratio",
 ok("samples without a path are never collapsed together",
   dedupeSamples([smp({ domPath: null }), smp({ domPath: null })]).length === 2);
 
+// ---------------------------------------------------------------------------
+// security-headers: which directive holds 'unsafe-inline' is the finding.
+//
+// Matching the whole CSP string gave one WARN for two unrelated facts: a script hole
+// the site must fix, and inline style attributes every animation library needs and no
+// site can drop. Advice that cannot be acted on is noise, and noise next to a real
+// hole is how the real hole gets ignored.
+console.log("\n── security-headers: CSP findings are per directive ──");
+const hdrs = (csp) => ({
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "permissions-policy": "camera=()",
+  "cross-origin-opener-policy": "same-origin",
+  "content-security-policy": csp,
+});
+const sec = (csp) => runChecks({ rawHtml: "<html><body><p>x</p></body></html>", url: "https://x.test/", headers: hdrs(csp) })
+  .find(c => c.id === "security-headers");
+
+const scriptHole = sec("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'");
+ok("script-src 'unsafe-inline' is a weakness", scriptHole.verdict === "WARN" && scriptHole.value.weak.some(w => /script-src/.test(w)));
+
+// The exact CSP this plugin's own site ships. Motion writes style="" at runtime, so
+// style-src-attr must stay open; that must not be reported as the same defect.
+const styleOnly = sec("default-src 'self'; script-src 'self' 'sha256-abc='; style-src 'self'; style-src-attr 'unsafe-inline'");
+ok("style-src-attr 'unsafe-inline' alone is not a weakness", styleOnly.verdict === "PASS");
+ok("...and is not smuggled in as advice either", !styleOnly.value.advisory.some(a => /style-src-attr/.test(a)));
+
+const styleBroad = sec("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
+ok("style-src 'unsafe-inline' is advisory, not a weakness", styleBroad.verdict === "PASS" && styleBroad.value.advisory.some(a => /style-src/.test(a)));
+
+// A browser ignores 'unsafe-inline' when hashes are present, so the CSP is not
+// actually permissive: calling it weak would be reporting a fact about the string
+// rather than about the browser.
+const hashed = sec("default-src 'self'; script-src 'self' 'unsafe-inline' 'sha256-abc123='; style-src 'self'");
+ok("'unsafe-inline' next to a hash is not a hole (browsers ignore it)",
+  hashed.verdict === "PASS" && hashed.value.advisory.some(a => /hashes\/nonces/.test(a)));
+
+// default-src is the fallback: a CSP with no script-src still governs scripts.
+const viaDefault = sec("default-src 'self' 'unsafe-inline'; frame-ancestors 'none'");
+ok("script-src inherits from default-src when absent", viaDefault.value.weak.some(w => /script-src/.test(w)));
+ok("'unsafe-eval' is still caught", sec("script-src 'self' 'unsafe-eval'").value.weak.some(w => /unsafe-eval/.test(w)));
+
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {
   console.error(`❌  unit tests FAILED: ${failures} failure(s).`);

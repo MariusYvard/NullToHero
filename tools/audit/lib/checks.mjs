@@ -570,11 +570,35 @@ function checkSecurityHeaders(headers, url) {
     const ma = (hstsRaw.match(/max-age\s*=\s*(\d+)/i) || [])[1];
     if (ma !== undefined && Number(ma) < 15768000) weak.push(`HSTS max-age ${ma}s is under 6 months`);
   }
-  if (present.csp) {
-    if (/'unsafe-inline'/i.test(csp)) weak.push("CSP allows 'unsafe-inline'");
-    if (/'unsafe-eval'/i.test(csp)) weak.push("CSP allows 'unsafe-eval'");
-  }
   const advisory = [];
+  if (present.csp) {
+    /* WHICH directive holds 'unsafe-inline' is the whole question, and matching the
+       raw CSP string could not ask it.
+         script-src 'unsafe-inline'     an injected <script> executes. A real hole.
+         style-src-attr 'unsafe-inline' inline style="" attributes are allowed. Every
+                                        runtime animation library writes those, so this
+                                        is the cost of motion, not a lapse.
+       Flagging both identically told a site to fix something it cannot fix, right next
+       to something it should, and gave it one WARN for the pair. A finding that cannot
+       be acted on differently should not be reported the same. */
+    const dir = (name) => {
+      const m = csp.match(new RegExp(`(?:^|;)\\s*${name}\\s+([^;]*)`, "i"));
+      return m ? m[1] : null;
+    };
+    const scriptSrc = dir("script-src") ?? dir("default-src") ?? "";
+    const styleSrc = dir("style-src") ?? dir("default-src") ?? "";
+    const styleAttr = dir("style-src-attr");
+    if (/'unsafe-inline'/i.test(scriptSrc)) {
+      // Hashes and nonces neutralise it: a browser ignores 'unsafe-inline' when either
+      // is present, so a CSP carrying them is not actually permissive here.
+      if (/'nonce-|'sha(256|384|512)-/i.test(scriptSrc)) advisory.push("script-src lists 'unsafe-inline' alongside hashes/nonces (browsers ignore it; drop it for clarity)");
+      else weak.push("script-src allows 'unsafe-inline' (any injected inline script runs)");
+    }
+    if (/'unsafe-eval'/i.test(scriptSrc)) weak.push("script-src allows 'unsafe-eval'");
+    // Style is advisory: it widens CSS injection, it does not execute script. And when
+    // style-src-attr is declared, style-src 'unsafe-inline' no longer covers attributes.
+    if (/'unsafe-inline'/i.test(styleSrc) && styleAttr === null) advisory.push("style-src allows 'unsafe-inline' (split style-src-attr if only inline style attributes need it)");
+  }
   if (present.hsts && !/includesubdomains/i.test(hstsRaw)) advisory.push("HSTS includeSubDomains");
   if (!present.permissionsPolicy) advisory.push("Permissions-Policy");
   if (!present.crossOriginIsolation) advisory.push("Cross-Origin-*-Policy (COOP/COEP/CORP)");

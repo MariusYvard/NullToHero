@@ -11,6 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.36.0] - 2026-07-15
+
+### Added
+
+- **The document-level checks run on every page.** Title, meta description, heading order, canonical, html lang, viewport, img dimensions, DOM nesting, ARIA, charset, head meta, SRI, robots path and the rest now merge to the worst verdict across every discovered page, with `value.perPage` listing each URL and the detail naming the ones that are not clean. `runChecks` answers "is THIS page ok"; the audit's claim was about a site, and asking only the first question while phrasing the answer as the second is how a passing home page vouched for routes nobody opened. Found immediately on this plugin's own site: `/journey` shipped a 187-character meta description (over the ~160 truncation point) while `/` and `/commands` passed, so every previous audit reported PASS.
+- No `--render` needed: "does every page have a title" is a question raw HTML answers, and gating it on a browser was an accident of where the code sat. Page discovery moved out of the render path and is shared by both, so the static checks and the contrast sweep can never disagree about what "the site" means.
+- Aggregation is a whitelist, never a default. A new check aggregates only once someone has decided what "worst across pages" means for it. Site-level checks stay on the entry for reasons, not laziness: `contrast-ratio` already sweeps every page itself, security headers and the HTTPS/host probes are properties of the **origin**, and the reduced-motion/scrollbar/frame-loop checks read the **shared bundles**. Re-asking those per page would turn one fact into N copies of itself, which is the units error this release exists to avoid.
+
+### Fixed
+
+- **`security-headers` could not tell an XSS hole from a font.** It matched `'unsafe-inline'` against the whole CSP string, so `script-src 'unsafe-inline'` (an injected inline script executes) and `style-src 'unsafe-inline'` (inline `style=""` attributes, which every runtime animation library writes on every frame) produced one identical WARN. That told sites to fix something they cannot fix, next to something they should, and gave them one finding for the pair. Now per directive: `script-src` is a weakness, `style-src` is advisory with the `style-src-attr` split named, `default-src` is honoured as the fallback when `script-src` is absent, and `'unsafe-inline'` sitting next to a hash or nonce is not reported as a hole at all, because browsers ignore it there. A finding a reader cannot act on differently should not be reported the same.
+
+---
+
 ## [1.35.0] - 2026-07-15
 
 ### Added
