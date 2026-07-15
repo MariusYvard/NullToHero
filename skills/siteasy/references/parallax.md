@@ -533,6 +533,10 @@ Run before every ship. A single fail is a blocker.
 | Code | `will-change` hygiene | Set when active, removed on idle |
 | SEO | Content in initial DOM | Yes, not script-injected |
 | SEO | Semantic landmarks plus anchors | Present for each chapter |
+| Scrollytelling | Beat transitions | Each boundary has its own mechanism; no boundary repeats another's |
+| Scrollytelling | Beat pacing | Segments weighted to reading time, never N equal N-ths |
+| Scrollytelling | Faded beats | Every `opacity: 0` full-bleed layer also has `pointer-events: none` |
+| Scrollytelling | Scrub sampling | At 50% of any scrub's range, the visual sits near 50% (L-MOTION-3) |
 | Scrub media | Referenced video weight | under 10 MB (`media-weight` check) |
 | Scrub media | Autoplay hygiene | `muted` + `playsinline` + `poster` on every autoplay video |
 | Scrub media | Loader honesty | progress = real assets loaded, never a simulated percentage |
@@ -566,6 +570,10 @@ Match-and-refuse list. If the brief implies any of these, push back before writi
 - Three or more layers on mobile.
 - Continuous rotation, infinite zoom, or stacked horizontal-plus-vertical movement.
 - Parallax behind interactive controls (CTA, form, navigation). Controls stay still, period.
+- The same crossfade on every beat boundary of a scrolly. A fade is the default, so N identical fades reads as N decisions nobody made. Each boundary earns its own mechanism, or the beats are not distinct enough to be beats.
+- A scrolly track cut into N equal segments. That is arithmetic standing in for editing: a beat lasts as long as it takes to read, and a typing terminal does not take as long as a blank sheet.
+- A full-bleed beat faded to `opacity: 0` without `pointer-events: none`. It is invisible and still eats every click underneath (rule 69).
+- Scrubbing a handwriting or typing animation. It ties the pen to the wheel, so the stroke rate is whatever the reader's scroll happens to be.
 - JS scroll handler without `passive: true` or without `rAF` coalescing.
 - `transition: all` on a parallax layer.
 - A pin or sticky stage without scroll track (parent no taller than the viewport): the animation has zero distance and either flashes or never shows.

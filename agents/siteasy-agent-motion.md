@@ -56,8 +56,11 @@ what is present; never block on a missing WebFetch.
 - [ ] Scroll-driven and parallax effects avoid jank
 - [ ] No scroll hijacking or fighting the native scroll
 - [ ] A graceful reduced-motion fallback exists
-- [ ] Scrubbed tweens use linear easing (the content tracks the finger; a dramatic ease on a scrub reads as lag)
+- [ ] Scrubbed tweens use linear easing (the content tracks the finger; a dramatic ease on a scrub reads as lag). Diagnostic: at 50% of a scrub's range the visual sits near 50% — an expo-out curve is ~90% done at its midpoint, so it snaps shut then waits
 - [ ] Every pin has one idea and enough scroll track (a pinned stage with ~100vh of track shows nothing)
+- [ ] Scrollytelling beats are covered, not crossfaded: each boundary has its own mechanism. A fade is the default gesture, so the same fade on every boundary is the loudest signal that nobody chose any of them
+- [ ] Scrollytelling beats are weighted to reading time, not cut into N equal N-ths (a typing terminal does not take as long as a blank sheet)
+- [ ] Anything imitating a human motor act (handwriting, typing) runs on a real clock, not on scroll progress
 
 ### Perceived performance and choreography
 - [ ] Skeletons or optimistic UI mask latency (skeleton for 300ms-2s waits, spinner plus context beyond 2s, nothing under 300ms)
