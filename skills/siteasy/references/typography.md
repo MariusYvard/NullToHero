@@ -54,6 +54,32 @@ Free-font sites label display faces "free for personal use", and that label is n
 
 Practically: read the readme, not the badge. If the licence needs buying and the answer is no, pick the closest openly-licensed face (OFL) in the same genre rather than a different genre entirely, and say which one you dropped and why. If the client insists, that is their call to make with the terms in front of them, not a decision to make silently on their behalf.
 
+### Mixing two faces: measure the painted ink, never the declared baseline
+
+Setting two typefaces side by side in one lockup (a wordmark, a logo, a display line) is where "looks about right" fails hardest, because every instinct is wrong:
+
+**`align-items: baseline` is not alignment.** It aligns the baselines the FONTS declare, and two faces have unrelated metrics. The typographically correct alignment is routinely the visually wrong one. When two words look off and nudging one by a few pixels seems to almost fix it, stop: the offset is a symptom, and hand-tuning it just buries a structural error under a second wrong number.
+
+**Match cap height, not font-size.** At the same `font-size`, two faces have different cap heights — a display face's caps can be 25% taller than a text face's. Measure both and scale one:
+
+```js
+const c = document.createElement("canvas").getContext("2d");
+const cap = (font, ch) => { c.font = font; return c.measureText(ch).actualBoundingBoxAscent; };
+const ratio = cap("900 100px Satoshi", "T") / cap("100px Display", "N");  // e.g. 74/71 = 1.042
+```
+
+**Centre on painted ink, effects included.** Once the words have different total heights, no baseline can level them. Take each word's painted box — `actualBoundingBoxAscent` + `actualBoundingBoxDescent`, **plus any shadow, extrusion or glow you drew** — find its centre, and shift each word onto the common centre. A text-shadow extrusion hanging 0.14em below the baseline is ink the reader sees; excluding it from the height is measuring the wrong object.
+
+**Fit letters on side bearings, not on guesses.** Ink gaps between the words are not the margins you set. An italic face's terminal can overhang its own advance width, and a heavy `H` carries a real left side bearing:
+
+```js
+const gap = (advanceA - inkRightA) + (-inkLeftB);   // actual white between two words
+```
+
+Two faces butted together with no margin were 9.6px overlapped on one side and 9.3px apart on the other in one real case: a 19px swing, invisible to the eye as a cause and obvious as a symptom ("this word is glued to that one").
+
+**Two things stay optical, and only two.** Size, when an effect adds mass no cap height accounts for (an extruded word reads heavier at the same cap height, so it wants ~0.95). And kerning across a round-to-flat pair (`o` then `H`): a curve recedes, so a mathematically equal gap reads smaller and must be opened. Measurement settles geometry; it does not settle perception. Everything else here is measured, and the ratio is worth re-deriving whenever a face, a size or an effect changes.
+
 ### Pairing Principles
 
 **The non-obvious truth**: You often don't need a second font. One well-chosen font family in multiple weights creates cleaner hierarchy than two competing typefaces.

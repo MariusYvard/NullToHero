@@ -1,13 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "null-to-hero",
-  "version": "1.33.0",
+  "version": "1.33.1",
   "description": "From zero knowledge to hero website. Design + SEO skills that make Claude your expert co-pilot for building beautiful, high-ranking websites.",
   "author": {
     "name": "Marius Yvard",
     "url": "https://lecvdemarius.netlify.app/"
   },
-  "homepage": "https://lecvdemarius.netlify.app/",
+  "homepage": "https://nulltohero.netlify.app/",
   "repository": "https://github.com/MariusYvard/NullToHero",
   "license": "Apache-2.0",
   "keywords": [

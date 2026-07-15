@@ -11,6 +11,22 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.33.1] - 2026-07-15
+
+### Fixed
+
+- `homepage` pointed at the author's CV. The plugin has a site now: https://nulltohero.netlify.app/ — built with the plugin, and the live proof of the OKLCH fix below. The author `url` stays the CV, which is what that field is for.
+
+### Added
+
+- Mixing two faces in one lockup, in `typography.md`. Every instinct here is wrong and the errors all look like each other. `align-items: baseline` aligns the baselines the FONTS declare, so the typographically correct alignment is routinely the visually wrong one — and nudging the symptom buries a structural error under a second wrong number. Match cap height (measured, not font-size: a display face's caps ran 25% taller at the same size). Centre on painted ink **including shadows** (an extrusion hanging below the baseline is ink the reader sees; excluding it measures the wrong object). Fit letters on real side bearings (two faces butted together were 9.6px overlapped on one side and 9.3px apart on the other — a 19px swing, obvious as a symptom, invisible as a cause). Two things stay optical and only two: size when an effect adds mass no cap height accounts for, and kerning across a round-to-flat pair. Measurement settles geometry, not perception.
+
+### Verified
+
+- The v1.33.0 contrast fix, on a live all-OKLCH site. `analyze.mjs https://nulltohero.netlify.app/` now resolves **59 text samples with zero undecodable colours**, and returns a real FAIL (4/59 below AA, worst 1.06:1). Before v1.33.0 the same page produced zero samples and NOT_MEASURED: the audit could not see a single colour on a site built to the plugin's own token doctrine.
+
+---
+
 ## [1.33.0] - 2026-07-15
 
 Dogfooding release: everything here came from building a 7-act scrollytelling hero with the plugin, and every item is something the plugin either could not see, did not say, or said without the diagnostic that makes it checkable.
