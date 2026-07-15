@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.37.0] - 2026-07-15
+
+### Fixed
+
+- **The static contrast path invented failures, the last place that fault survived.** Render-free, `contrast-ratio` reported **4 failures, worst 1.06:1** on a page the rendered pass measures at **0**. Same mistake as the two cleaned out of the rendered path in v1.34.0, still alive here because nobody had run this path against a site that re-themes. Three causes, each now declined instead of guessed at:
+  - **Light-on-light cascade artifacts.** A themed page states `--ink` light and `--paper` dark, then a light block re-points both under a selector this model does not evaluate. Catch one override and miss the other and you resolve light ink against light paper: 1.06:1 on a wordmark a viewer reads at 16:1. A `darkOnDark` guard already existed for the mirror case; its twin was missing for no reason but oversight. Nobody authors white on white on purpose, and a half-modelled cascade produces it constantly.
+  - **`mix-blend-mode`.** The cascade's `color` is the source of a blend, not the paint, so a ratio from it is a number no pixel holds. The rendered path learned this in v1.35.0; this one had not.
+  - **Declared exemptions were ignored.** `data-contrast-exempt` is a fact in the markup and readable without a browser, but only the rendered path honoured it, so the same page failed or passed depending on which flag you ran. Only one of those answers respected the author. A malformed exemption still excuses nothing here either: the rule is identical on both paths or it is not a rule.
+- `value.notJudged` reports all three, and `NOT_MEASURED` now carries them too. A page whose only text was skipped used to report "nothing measured" with no reason, which is the same silence this detector keeps being cleaned of: "could not read this" must never look like "nothing to read".
+- Static failures now name the colours, the tag and the text (`value.worstSamples`, and the detail says `#aaaaaa on #ffffff`). This path is an estimate, so it owes the reader the means to check it.
+
+### Notes
+
+- The 68 eval fixtures did not drift, and that is the finding rather than the reassurance: none of them covered a themed page, a blend mode or an exemption, which is exactly how the fault lived here this long. Seven unit tests now pin each case, including that a real static failure (mid-grey on white, no cascade excuse) still fails, so the guards cannot quietly grow into an amnesty.
+
+---
+
 ## [1.36.0] - 2026-07-15
 
 ### Added

@@ -262,6 +262,18 @@ function colorUp(el, model, memo) {
 }
 function parseableColor(s) { return !!parseColor(s); }
 
+// mix-blend-mode on the element or any ancestor: the cascade's `color` is then the
+// source of a blend, not the paint. Same rule the rendered sampler applies, so the two
+// paths cannot disagree about which text is measurable.
+function blendedUp(el, model, memo) {
+  for (const node of [el, ...ancestors(el)]) {
+    if (node.type !== "element") continue;
+    const m = (styleFor(node, model, memo)["mix-blend-mode"] || "").trim().toLowerCase();
+    if (m && m !== "normal") return true;
+  }
+  return false;
+}
+
 // CSS-wide keywords and unresolved token references are a cascade gap, not a
 // colour-space gap. They are excluded from the "unreadable" tally so that it
 // means one specific thing: a real colour our parser cannot decode.
@@ -413,6 +425,10 @@ function checkContrast(doc, computed, cssModel) {
   // "could not read this" look identical to "this is fine". Reported as
   // coverage alongside the verdict.
   const unreadable = new Set();
+  // Not measured, and each for its own stated reason. Counted rather than dropped:
+  // the whole point of this pass is that it is an estimate, so what it did not look at
+  // is part of the answer.
+  let blended = 0, exemptCount = 0, artifacts = 0;
   if (cssModel) {
     const memo = new Map();
     const pageBg = pageBackground(cssModel);
@@ -423,20 +439,55 @@ function checkContrast(doc, computed, cssModel) {
           const cu = colorUp(c, cssModel, memo);
           if (cu && cu.color && !parseColor(cu.color) && !isKeyword(cu.color)) unreadable.add(cu.color.trim().toLowerCase());
           if (cu && parseableColor(cu.color)) {
+            /* Two things the computed path learned and this one had not.
+               A declared exemption is a fact in the markup, so it is readable without a
+               browser: honouring it there but not here meant the same page failed or
+               passed depending on which flag you ran, and only one of those answers
+               respected the author.
+               mix-blend-mode makes the cascade's `color` the SOURCE, not the paint, so
+               a ratio computed from it is a number no pixel holds. Both are counted as
+               unmeasured rather than judged. */
+            if (blendedUp(c, cssModel, memo)) { blended++; visit(c); continue; }
+            const exempt = String(c.attrs?.["data-contrast-exempt"] ?? "").trim();
+            if (exempt) {
+              if (EXEMPT_CODES.has(exempt) && String(c.attrs?.["data-contrast-exempt-reason"] ?? "").trim()) { exemptCount++; visit(c); continue; }
+              // A malformed exemption excuses nothing here either, so fall through and
+              // measure it: the rule has to be the same on both paths or it is not a rule.
+            }
             const { bg, unresolved, explicit } = bgResolve(c, cssModel, memo, pageBg);
             const fgc = parseColor(cu.color), bgc = bg ? parseColor(bg) : null;
             if (!unresolved && bg && fgc && bgc) {
               const lf = luminance(fgc), lb = luminance(bgc);
-              // Skip the two cases a render-free cascade gets wrong: (1) light text on
+              // Skip the cases a render-free cascade gets wrong: (1) light text on
               // an assumed-white background (a section we could not resolve), and
               // (2) dark text on a dark background — a contextual light override set
               // by a descendant selector we do not model, that we missed. Both are
               // cascade artifacts, not real failures; --render resolves them.
               const ambiguousLight = !explicit && lf > 0.4;
               const darkOnDark = lf < 0.25 && lb < 0.25;
+              /* (3) The mirror of darkOnDark, and it was missing for no reason but
+                 oversight. A themed page states `--ink` light and `--paper` dark; a
+                 light-theme block re-points BOTH under a selector this model does not
+                 evaluate. Catch one override and not the other and you resolve light
+                 ink against light paper: 1.06:1 on a wordmark a viewer reads at 16:1.
+                 Exactly the false failure the rendered path was cleaned of in v1.34.0,
+                 still living here because nobody ran the static path on a themed site.
+                 Nobody authors white on white on purpose; a cascade we half-model
+                 produces it constantly. --render settles it, and until then the honest
+                 answer is that we did not see this one. */
+              const lightOnLight = lf > 0.75 && lb > 0.75;
+              if (lightOnLight) { artifacts++; visit(c); continue; }
               if (!ambiguousLight && !darkOnDark) {
                 const r = ratioOf(cu.color, bg);
-                if (r) samples.push({ tag: c.tag, ratio: r.ratio, threshold: aaThreshold({ fontSizePx: fontSizePx(cu.st, c.tag), bold: isBold(cu.st, c) }) });
+                // Carry the colours and the text. A static failure a reader cannot
+                // trace back to a pair of tokens is one they cannot check, and this
+                // path is an estimate, so it owes them the means to check it.
+                if (r) samples.push({
+                  tag: c.tag, ratio: r.ratio,
+                  threshold: aaThreshold({ fontSizePx: fontSizePx(cu.st, c.tag), bold: isBold(cu.st, c) }),
+                  fg: cu.color.trim(), bg: String(bg).trim(), explicit,
+                  text: textContent(c).trim().replace(/\s+/g, " ").slice(0, 40),
+                });
               }
             }
           }
@@ -472,13 +523,32 @@ function checkContrast(doc, computed, cssModel) {
     ? ` ${skipped} colour value(s) could not be decoded and were NOT measured (e.g. ${[...unreadable].slice(0, 2).join(", ")}); this verdict does not cover them.`
     : "";
   const unreadableValue = skipped ? { unreadable: skipped, examples: [...unreadable].slice(0, 5) } : {};
+  // What this pass declined to judge, and why. An estimate that hides its own blind
+  // spots is just a guess wearing a verdict.
+  const notJudged = [
+    artifacts ? `${artifacts} light-on-light cascade artifact(s)` : null,
+    blended ? `${blended} under mix-blend-mode` : null,
+    exemptCount ? `${exemptCount} declared intentional` : null,
+  ].filter(Boolean);
+  const skipNote = notJudged.length ? ` Not judged: ${notJudged.join(", ")}.` : "";
+  const skipValue = (artifacts || blended || exemptCount)
+    ? { notJudged: { cascadeArtifacts: artifacts, blended, exempt: exemptCount } } : {};
 
   if (samples.length === 0) {
+    /* Nothing measured, and the reader is owed the reason. A page whose only text we
+       skipped reports NOT_MEASURED either way, but "no colour I could decode",
+       "all of it was blended" and "you exempted all of it" are three different
+       situations and only one of them is anybody's fault. Carrying skipValue here is
+       the same rule as everywhere else in this file: could-not-read must never look
+       like nothing-to-read. */
+    const why = skipped
+      ? `No text colour could be decoded: ${skipped} value(s) are in a colour space this parser does not support (e.g. ${[...unreadable].slice(0, 2).join(", ")}). Not a pass — nothing was measured.`
+      : notJudged.length
+        ? `No text sample was judged.`
+        : "No resolvable text colors to measure statically.";
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "NOT_MEASURED", critical: false,
-      method: "not-measured", value: skipped ? unreadableValue : null,
-      detail: skipped
-        ? `No text colour could be decoded: ${skipped} value(s) are in a colour space this parser does not support (e.g. ${[...unreadable].slice(0, 2).join(", ")}). Not a pass — nothing was measured. Run with --render for computed-style contrast (ground truth).`
-        : "No resolvable text colors to measure statically — run with --render for computed-style contrast (ground truth)." });
+      method: "not-measured", value: (skipped || notJudged.length) ? { ...unreadableValue, ...skipValue } : null,
+      detail: `${why}${skipNote} Run with --render for computed-style contrast (ground truth).` });
   }
   // Static contrast is a render-free ESTIMATE (no gradients, images, media queries
   // or specificity), so it informs the floor but is never critical: only the
@@ -488,12 +558,16 @@ function checkContrast(doc, computed, cssModel) {
   if (fails.length) {
     const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: false,
-      method: "static", value: { samples: samples.length, failures: fails.length, worst: worst.ratio, ...unreadableValue },
-      detail: `${fails.length}/${samples.length} resolved text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1). Static estimate over samples with a known background; confirm with --render.${coverage}` });
+      method: "static", value: {
+        samples: samples.length, failures: fails.length, worst: worst.ratio, ...unreadableValue, ...skipValue,
+        worstSamples: fails.slice().sort((a, b) => a.ratio / a.threshold - b.ratio / b.threshold).slice(0, 10)
+          .map(s => ({ ratio: s.ratio, threshold: s.threshold, fg: s.fg, bg: s.bg, tag: s.tag, text: s.text })),
+      },
+      detail: `${fails.length}/${samples.length} resolved text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1) — ${worst.fg} on ${worst.bg}${worst.text ? ` ("${worst.text}")` : ""}. Static estimate over samples with a known background; confirm with --render.${skipNote}${coverage}` });
   }
   return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: false,
-    method: "static", value: { samples: samples.length, ...unreadableValue },
-    detail: `All ${samples.length} resolved text sample(s) meet AA (static estimate over samples with a known background).${coverage}` });
+    method: "static", value: { samples: samples.length, ...unreadableValue, ...skipValue },
+    detail: `All ${samples.length} resolved text sample(s) meet AA (static estimate over samples with a known background).${skipNote}${coverage}` });
 }
 
 function checkOverflow375(doc, computed) {

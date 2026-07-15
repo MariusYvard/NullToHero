@@ -66,6 +66,13 @@ still in the failure count and you treat them as ordinary defects.
 alongside a non-zero `unmeasured` is a PASS over part of the page: say how much you
 could not see rather than reporting a clean sweep.
 
+**On `method: "static"`.** Without `--render` this check is an estimate from the CSS
+cascade, never critical, and it declines what a render-free model cannot know:
+`value.notJudged` counts light-on-light cascade artifacts, text under `mix-blend-mode`
+(where the cascade's colour is the source of a blend, not the paint) and declared
+exemptions. Report a static verdict as an estimate and say `--render` settles it. A
+static PASS is not evidence the page is clean; it is evidence nothing decidable failed.
+
 **On `value.coverage`.** What the verdict is a verdict over: `{pages, scrollStates,
 viewports}`. Quote it. "Contrast passes" and "contrast passes across 3 pages, 10 scroll
 states, mobile and desktop" are different claims, and only one of them is falsifiable.

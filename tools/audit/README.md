@@ -28,7 +28,7 @@ hand an agent its ground truth.
 | `viewport-meta` | `<meta name=viewport>` present, `width=device-width`, zoom not blocked | inspect-agent-layout |
 | `img-dimensions` | `<img>` width/height (attr, inline, or aspect-ratio) | inspect-agent-layout |
 | `horizontal-overflow-375` | rendered scrollWidth at 375px, or a static fixed-width heuristic | inspect-agent-layout |
-| `contrast-ratio` (critical) | WCAG AA ratio from computed styles, or inline color over a resolved background | inspect-agent-a11y |
+| `contrast-ratio` (critical when computed) | WCAG AA ratio from computed styles; render-free it is a non-critical CSS-cascade estimate that skips what it cannot know | inspect-agent-a11y |
 | `contrast-exempt-undeclared` | `data-contrast-exempt` carries a known code and a stated reason | inspect-agent-a11y |
 | `html-lang` | `<html lang>` present and non-empty | inspect-agent-a11y |
 | `robots-disallow` (critical) | `Disallow` rules in robots.txt matching the page | seo-agent-technical |

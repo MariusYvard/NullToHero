@@ -206,6 +206,65 @@ const viaDefault = sec("default-src 'self' 'unsafe-inline'; frame-ancestors 'non
 ok("script-src inherits from default-src when absent", viaDefault.value.weak.some(w => /script-src/.test(w)));
 ok("'unsafe-eval' is still caught", sec("script-src 'self' 'unsafe-eval'").value.weak.some(w => /unsafe-eval/.test(w)));
 
+// ---------------------------------------------------------------------------
+// The static contrast path: an estimate that knows what it cannot see.
+//
+// It ran a themed page and reported 4 failures, worst 1.06:1, where the rendered pass
+// measured 0. Same fault as the two the rendered path was cleaned of in v1.34.0, still
+// alive here because nobody had run this path against a site that re-themes. The eval
+// did not drift when it was fixed, which means the 68 fixtures never covered any of
+// this: hence these.
+console.log("\n── static contrast: skips what a render-free cascade cannot know ──");
+const stat = (body, css) => runChecks({ rawHtml: `<html><head><style>${css}</style></head><body>${body}</body></html>` })
+  .find(c => c.id === "contrast-ratio");
+
+// Single-token selectors throughout: the CSS model matches tag, .class and #id only
+// and skips compound ones on purpose (css.mjs, selectorMatches). Writing `p.ink` here
+// tests nothing, because the rule never applies.
+//
+// A themed page: the light block re-points --paper, the model resolves the light ink
+// from :root, and the pair lands light-on-light. Exactly the shape that produced
+// 1.06:1 on a wordmark a viewer reads at 16:1.
+const themed = stat(
+  `<div class="light"><p class="ink">NullToHero</p></div>`,
+  `:root{--ink:#ffffff}.light{background:#fbfaf7}.ink{color:var(--ink)}`
+);
+ok("light ink on light paper is not reported as a failure",
+  themed.verdict !== "FAIL");
+ok("...and the skip is stated, not silent",
+  themed.value?.notJudged?.cascadeArtifacts >= 1 && /light-on-light/.test(themed.detail));
+
+// mix-blend-mode: the cascade's colour is the source of a blend, not the paint. A ratio
+// from it is a number no pixel holds, however plausible it looks.
+const blend = stat(
+  `<div class="wrap"><p class="cap">02 a page exists</p></div>`,
+  `.wrap{background:#ffffff}.cap{color:#8a8a86;mix-blend-mode:difference}`
+);
+ok("blended text is not judged", blend.value?.notJudged?.blended === 1 && !/below AA/.test(blend.detail));
+
+// The exemption is a fact in the markup, so it must hold without a browser. Honouring
+// it on one path and not the other made the verdict depend on which flag you ran.
+const exemptStatic = stat(
+  `<div class="card"><b data-contrast-exempt="staging" data-contrast-exempt-reason="depicts the audit overlay">WARN</b></div>`,
+  `.card{background:#dca744}b{color:#ffffff}`
+);
+ok("a declared exemption is honoured render-free too",
+  exemptStatic.verdict !== "FAIL" && exemptStatic.value?.notJudged?.exempt === 1);
+
+// ...but only a well-formed one. The rule has to be identical on both paths.
+const bogusStatic = stat(
+  `<div class="card"><b data-contrast-exempt="because-i-said-so" data-contrast-exempt-reason="trust me">WARN</b></div>`,
+  `.card{background:#dca744}b{color:#ffffff}`
+);
+ok("an invented code excuses nothing here either", bogusStatic.verdict === "FAIL");
+
+// The guards must not swallow the real thing: mid-grey on white is a genuine defect
+// with no cascade excuse, and it still has to fail.
+const realFail = stat(`<div class="s"><p>hello there</p></div>`, `.s{background:#ffffff}p{color:#aaaaaa}`);
+ok("a real static failure still fails", realFail.verdict === "FAIL" && realFail.value.failures === 1);
+ok("...and names the colours so a reader can check it",
+  /#aaaaaa/.test(realFail.detail) && realFail.value.worstSamples?.[0]?.fg === "#aaaaaa");
+
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {
   console.error(`❌  unit tests FAILED: ${failures} failure(s).`);
