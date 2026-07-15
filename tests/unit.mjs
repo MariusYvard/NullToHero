@@ -5,6 +5,7 @@
 import { resolveInRoot, looksGenerated } from "../skills/siteasy/scripts/live-core.mjs";
 import { parseColor, ratioOf } from "../tools/audit/lib/contrast.mjs";
 import { runChecks } from "../tools/audit/lib/checks.mjs";
+import { dedupeSamples } from "../tools/audit/fetch.mjs";
 import { resolve } from "node:path";
 
 let failures = 0;
@@ -127,6 +128,39 @@ ok("code plus a real reason passes",
 // Static by design: it must work on a page that never booted.
 ok("it works render-free, straight off the markup",
   check(runChecks({ rawHtml: declHtml('data-contrast-exempt="staging"') }), "contrast-exempt-undeclared").method === "static");
+
+// ---------------------------------------------------------------------------
+// dedupeSamples: the sweep must not inflate the count.
+//
+// Sweeping pages x scroll stops x viewports measures the same element many times.
+// If those reach the report raw, one defect becomes ten and the failure count grows
+// with how hard you looked — a number that rewards thoroughness with a worse score
+// is a units error, and it would push people to sweep less.
+console.log("\n── dedupeSamples: one row per element, worst state kept ──");
+const smp = (o) => ({ ratio: 5, threshold: 4.5, domPath: "0/1", page: "/", ...o });
+
+ok("the same element across ten states collapses to one",
+  dedupeSamples([smp({ ratio: 5 }), smp({ ratio: 6 }), smp({ ratio: 9 })]).length === 1);
+ok("...and the survivor is the worst state, not the first or last",
+  dedupeSamples([smp({ ratio: 9 }), smp({ ratio: 3.1 }), smp({ ratio: 6 })])[0].ratio === 3.1);
+// The nav-theme bug in one line: readable over the first act, failing once the dark
+// page slides under it. Averaging or first-seen would both have called this fine.
+ok("a pass at scroll 0 does not excuse a failure further down",
+  dedupeSamples([smp({ ratio: 5.86, scrollY: 0 }), smp({ ratio: 3.68, scrollY: 2400 })])[0].scrollY === 2400);
+ok("the same path on a different page stays a separate finding",
+  dedupeSamples([smp({ page: "/" }), smp({ page: "/journey/" })]).length === 2);
+
+// Severity, not raw ratio: responsive type moves the threshold under you, so 3.9:1
+// is a pass as large desktop text and a failure as normal mobile text. Comparing raw
+// ratios would keep the wrong one and report the page as clean.
+const large = smp({ ratio: 3.9, threshold: 3.0 });   // passes: 1.30 severity
+const small = smp({ ratio: 4.4, threshold: 4.5 });   // fails:  0.98 severity
+ok("worst is measured against the threshold, not by raw ratio",
+  dedupeSamples([large, small])[0].ratio === 4.4);
+
+// An element we could not identify must never be merged with another one.
+ok("samples without a path are never collapsed together",
+  dedupeSamples([smp({ domPath: null }), smp({ domPath: null })]).length === 2);
 
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {

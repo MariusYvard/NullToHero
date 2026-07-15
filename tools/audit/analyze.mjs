@@ -12,6 +12,11 @@
  *   node tools/audit/analyze.mjs <url|file> [--render] [--robots] [--out SITE-AUDIT.json]
  *   node tools/audit/analyze.mjs --from fetch.json [--out SITE-AUDIT.json]
  *
+ * --render sweeps: sitemap pages x scroll states x viewports, because a verdict from
+ * one page at scroll 0 is a verdict about one page at scroll 0 and nothing more. Tune
+ * with --pages N (cap, default 10), --scroll N (stops, default 5), --viewports
+ * mobile,desktop, or --page-urls a,b,c to name them yourself.
+ *
  * Exit 0 always (analysis is reporting, not gating — see gate.mjs for CI).
  */
 
@@ -33,9 +38,16 @@ if (args.length === 0 || (args[0].startsWith("-") && !opt("--from"))) {
 const outFile = val("--out", null);
 const fromFile = val("--from", null);
 
+const renderOpts = {
+  pages: parseInt(val("--pages", "10"), 10),
+  scroll: parseInt(val("--scroll", "5"), 10),
+  viewports: val("--viewports", "mobile,desktop").split(",").map(s => s.trim()).filter(Boolean),
+  explicitPages: val("--page-urls", "") ? val("--page-urls", "").split(",").map(s => s.trim()).filter(Boolean) : null,
+};
+
 const fetchResult = fromFile
   ? JSON.parse(readFileSync(fromFile, "utf8"))
-  : await fetchTarget({ target: args[0], render: opt("--render"), robots: opt("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
+  : await fetchTarget({ target: args[0], render: opt("--render"), robots: opt("--robots"), timeout: parseInt(val("--timeout", "15000"), 10), renderOpts });
 
 if (fromFile) warnClientRendered(fetchResult);
 

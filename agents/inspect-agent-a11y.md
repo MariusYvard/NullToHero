@@ -66,6 +66,14 @@ still in the failure count and you treat them as ordinary defects.
 alongside a non-zero `unmeasured` is a PASS over part of the page: say how much you
 could not see rather than reporting a clean sweep.
 
+**On `value.coverage`.** What the verdict is a verdict over: `{pages, scrollStates,
+viewports}`. Quote it. "Contrast passes" and "contrast passes across 3 pages, 10 scroll
+states, mobile and desktop" are different claims, and only one of them is falsifiable.
+Coverage of 1 page / 1 scroll state means the sweep did not run: the page beyond the
+fold and every other route are unmeasured, so scope the finding rather than generalising
+from it. `value.worstSamples` carries page, viewport and scrollY for each failure: cite
+them, because a defect a reader cannot reproduce is a defect they will not fix.
+
 ### Focus visibility
 - [ ] Every interactive element shows a visible focus indicator
 - [ ] :focus-visible used; outline:none never left without a replacement

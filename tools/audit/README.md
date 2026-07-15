@@ -40,6 +40,34 @@ hand an agent its ground truth.
 or `not-measured` (needs a render or an input that was not supplied). A
 `not-measured` check never moves a score.
 
+## What `--render` measures
+
+A verdict from one page at scroll 0 is a verdict about one page at scroll 0. So the
+render sweeps three axes, and each default is a real defect that shipped past the
+old single-shot pass:
+
+| Axis | Default | The bug it exists for |
+|------|---------|----------------------|
+| pages | sitemap.xml, else same-origin links, cap 10 | a CTA failed on `/journey` while the audited home page passed |
+| scroll | 5 stops, actual `scrollY` read back | a nav button re-themed past the first act and dropped to 3.68:1 |
+| viewports | mobile 375 + desktop 1280 | desktop-only nav links are `display:none` at 375, so nothing measured them |
+
+```bash
+--pages 10                 # cap on discovered pages
+--scroll 5                 # scroll stops per page (1 = scroll 0 only)
+--viewports mobile,desktop # any of: mobile, desktop
+--page-urls a,b,c          # name them yourself, skips discovery
+```
+
+`contrast-ratio.value.coverage` reports what the verdict actually covered, and
+`target.pagesFetched` / `target.measured` carry it into SITE-AUDIT.json. Samples are
+deduped per element per page keeping the **worst** state, so the failure count is
+distinct failing elements and does not grow just because the sweep got wider.
+
+The other checks (title, meta description, heading order, canonical, robots) still
+read the entry page only: they are per-page questions and aggregating them is a
+different job. `pagesFetched` tells you the difference rather than hiding it.
+
 ## Quick start
 
 ```bash

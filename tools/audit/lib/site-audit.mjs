@@ -127,7 +127,12 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
     target: {
       url: fetchResult.url || null,
       file: fetchResult.file || null,
-      pagesFetched: 1,
+      // The real number, not a hardcoded 1. It sat at 1 while the schema advertised
+      // the field, which is a claim the tool was not entitled to make.
+      pagesFetched: fetchResult.computed?.contrastCoverage?.pages || 1,
+      // What the rendered sweep actually covered. A verdict over one page at scroll 0
+      // and a verdict over the whole site are different claims and must not look alike.
+      measured: fetchResult.computed?.contrastCoverage || null,
       render: fetchResult.render || "none",
       clientRendered: fetchResult.clientRendered === undefined ? "unknown" : fetchResult.clientRendered,
       previewHost,

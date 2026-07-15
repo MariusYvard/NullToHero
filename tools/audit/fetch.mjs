@@ -340,31 +340,194 @@ function ratioFromSample(s) {
   return contrastRatio(fg, bg);
 }
 
+/* Collapse the sweep back to one row per element.
+
+   Sweeping five scroll stops across two viewports measures the same nav link ten
+   times. Reported raw, that turns one defect into ten and multiplies the count by the
+   thoroughness of the audit — a number that grows when you look harder is not a
+   measurement, it is a units error. So: one row per element per page, keeping its
+   WORST state.
+
+   Worst is ratio/threshold, not ratio. Responsive type changes the threshold under
+   you: 24px on desktop is large text needing 3.0, the same element at 15px on mobile
+   needs 4.5, and 3.9:1 is a pass in one and a failure in the other. Severity compares
+   them; the raw ratio does not.
+
+   Keeping the worst is the whole point of scrolling. The nav button that reads at
+   5.86:1 over the first act and 3.68:1 once the dark page slides under it IS a defect,
+   and an average, a first-seen or a last-seen would each have hidden it. */
+export function dedupeSamples(samples) {
+  const worst = new Map();
+  for (const s of samples) {
+    const key = s.domPath == null ? Symbol() : `${s.page || ""}|${s.domPath}`;
+    const prev = worst.get(key);
+    if (!prev || s.ratio / s.threshold < prev.ratio / prev.threshold) worst.set(key, s);
+  }
+  return [...worst.values()];
+}
+
 // Render with Playwright. Returns { renderedHtml, overflow, contrastSamples } or
 // null when Playwright is unavailable (import or launch failure).
-async function render(url, timeout) {
+
+/* The measured surface. Every default here was a real bug we had to find by hand,
+   one per axis:
+     pages    /journey's CTA failed while the audited home page passed
+     scroll   the nav button re-themed past the first act and dropped to 3.68:1
+     viewport the nav's desktop links are display:none at 375, so nothing measured them
+   375 is the overflow check's viewport and stays first; 1280 is where desktop-only
+   chrome exists at all. */
+const VIEWPORTS = { mobile: { width: 375, height: 812 }, desktop: { width: 1280, height: 900 } };
+const DEFAULTS = { pages: 10, scroll: 5, viewports: ["mobile", "desktop"] };
+// A scroll-linked page needs its rAF to run after the jump before anything is true.
+const SETTLE_MS = 420;
+
+/* Which pages. The sitemap is the list the site declares about itself, so it beats
+   guessing from links; links are the fallback for a site that ships none. Same-origin
+   only, capped, entry URL always first and always kept. */
+async function discoverPages(baseUrl, entryHtml, timeout, explicit, cap) {
+  const entry = baseUrl.replace(/#.*$/, "");
+  if (explicit && explicit.length) return [entry, ...explicit.filter(u => u !== entry)].slice(0, cap);
+  const origin = new URL(entry).origin;
+  const seen = new Set([entry]);
+  const out = [entry];
+  const add = (href) => {
+    try {
+      const u = new URL(href, entry);
+      u.hash = "";
+      const s = u.toString();
+      if (u.origin !== origin || seen.has(s)) return;
+      if (/\.(png|jpe?g|svg|webp|avif|gif|pdf|zip|xml|txt|ico|css|js|woff2?)$/i.test(u.pathname)) return;
+      seen.add(s); out.push(s);
+    } catch { /* not a URL we can use */ }
+  };
+  try {
+    const sm = await rawFetch(new URL("/sitemap.xml", origin).toString(), true, timeout);
+    if (sm.status === 200 && /<loc>/i.test(sm.html)) {
+      for (const m of sm.html.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)) add(m[1]);
+      if (out.length > 1) {
+        console.error(`[fetch] sitemap.xml lists ${out.length} same-origin page(s); measuring up to ${cap}.`);
+        return out.slice(0, cap);
+      }
+    }
+  } catch { /* no sitemap: fall through to links */ }
+  for (const m of (entryHtml || "").matchAll(/<a\b[^>]*\bhref\s*=\s*["']([^"']+)["']/gi)) add(m[1]);
+  console.error(out.length > 1
+    ? `[fetch] no sitemap; crawled ${out.length - 1} same-origin link(s) from the entry page, measuring up to ${cap}.`
+    : `[fetch] no sitemap and no same-origin links; measuring the entry page only.`);
+  return out.slice(0, cap);
+}
+
+/* Measure one page in one viewport at N scroll stops.
+
+   scrollTo is a request, not a fact: a smooth-scroll library can animate it, clamp it
+   or ignore it outright, and the previous session lost hours to exactly that. So we
+   ask, let rAF settle, then read back where we ACTUALLY are and record that. Two stops
+   that land on the same pixel collapse to one, and a page that refuses to move is
+   measured once instead of five times pretending otherwise. */
+async function measureStates(page, url, viewportName, stops) {
+  const height = await page.evaluate(() => Math.max(0, document.documentElement.scrollHeight - window.innerHeight));
+  const targets = height < 4 ? [0] : Array.from({ length: stops }, (_, i) => Math.round((height * i) / (stops - 1 || 1)));
+  const all = [];
+  const skipped = [];
+  const visited = new Set();
+  for (const target of targets) {
+    await page.evaluate((y) => window.scrollTo(0, y), target);
+    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await page.waitForTimeout(SETTLE_MS);
+    const actual = await page.evaluate(() => Math.round(window.scrollY));
+    if (visited.has(actual)) continue;   // the page did not move: measuring again would only repeat ourselves
+    visited.add(actual);
+    const raw = await page.evaluate(SAMPLER);
+    const r = await resolveRootBackdrops(page, raw);
+    for (const s of r.samples) all.push({ ...s, page: url, viewport: viewportName, scrollY: actual });
+    for (const s of r.skipped) skipped.push({ ...s, page: url });
+  }
+  return { samples: all, skipped, states: visited.size };
+}
+
+async function render(url, timeout, opts = {}) {
   let chromium;
   try { ({ chromium } = await import("playwright")); }
   catch { console.error("[fetch] --render requested but Playwright is not installed; degrading to raw fetch. Install: npm i -D playwright && npx playwright install chromium"); return null; }
+  const cap = opts.pages ?? DEFAULTS.pages;
+  const stops = Math.max(1, opts.scroll ?? DEFAULTS.scroll);
+  const wanted = (opts.viewports ?? DEFAULTS.viewports).filter(v => VIEWPORTS[v]);
+  const views = wanted.length ? wanted : DEFAULTS.viewports;
   let browser;
   try {
     browser = await chromium.launch();
-    const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
-    const page = await ctx.newPage();
-    await page.goto(url, { waitUntil: "networkidle", timeout });
+    // The entry page at 375, scroll 0: the state every other check is computed from.
+    // Captured before the sweep so widening coverage cannot quietly move those verdicts.
+    const ctx0 = await browser.newContext({ viewport: VIEWPORTS.mobile });
+    const p0 = await ctx0.newPage();
+    await p0.goto(url, { waitUntil: "networkidle", timeout });
     // A hidden page runs no requestAnimationFrame, and every scroll library drives
     // its progress from rAF. Measuring computed styles there reads a page whose
     // animations never started — silently, since the DOM still answers. Cheap assert.
-    const visibility = await page.evaluate(() => document.visibilityState);
+    const visibility = await p0.evaluate(() => document.visibilityState);
     if (visibility !== "visible") {
       console.error(`[fetch] page reports visibilityState="${visibility}": rAF is suspended, so any animated or scroll-linked state is frozen at its start value. Computed measurements below cover the static page only.`);
     }
-    const renderedHtml = await page.content();
-    const overflow = await page.evaluate(() => {
+    const renderedHtml = await p0.content();
+    const overflow = await p0.evaluate(() => {
       const de = document.documentElement;
       return { scrollWidth: de.scrollWidth, clientWidth: de.clientWidth, overflow: de.scrollWidth > de.clientWidth + 1 };
     });
-    const contrastSamples = await page.evaluate(() => {
+    const pages = await discoverPages(url, renderedHtml, timeout, opts.explicitPages, cap);
+    await ctx0.close();
+
+    const samples = [];
+    const skipped = [];
+    let states = 0;
+    const measured = [];
+    for (const view of views) {
+      const ctx = await browser.newContext({ viewport: VIEWPORTS[view] });
+      const page = await ctx.newPage();
+      for (const target of pages) {
+        try {
+          const resp = await page.goto(target, { waitUntil: "networkidle", timeout });
+          if (resp && resp.status() >= 400) { console.error(`[fetch] ${target} returned ${resp.status()}; skipped.`); continue; }
+        } catch (e) { console.error(`[fetch] ${target} did not load (${e.message}); skipped.`); continue; }
+        const r = await measureStates(page, target, view, stops);
+        samples.push(...r.samples);
+        skipped.push(...r.skipped);
+        states += r.states;
+        if (view === views[0]) measured.push(target);
+      }
+      await ctx.close();
+    }
+    /* Unmeasured in ELEMENTS, not attempts.
+       Counted raw this was 490 against 1 failure, because 30 states re-drop the same
+       offscreen paragraph 30 times. Two numbers in different units side by side is the
+       units error the dedupe exists to prevent, and here it read as "the audit is blind"
+       when the truth was "the audit looked 30 times". An element also only counts as
+       unmeasured if NO state ever measured it: text that is offscreen at one stop and
+       measured at the next is measured. */
+    const measuredKeys = new Set(samples.map(s => `${s.page}|${s.domPath}`));
+    const blind = new Map();
+    for (const s of skipped) {
+      const k = `${s.page}|${s.domPath}`;
+      if (!measuredKeys.has(k) && !blind.has(k)) blind.set(k, s.unmeasurable);
+    }
+    const reasons = {};
+    for (const why of blind.values()) reasons[why] = (reasons[why] || 0) + 1;
+    console.error(`[fetch] contrast measured across ${measured.length} page(s) x ${states} scroll state(s) x ${views.length} viewport(s); ${measuredKeys.size} element(s) measured, ${blind.size} never measurable${blind.size ? ` (${Object.entries(reasons).map(([k, v]) => `${k}: ${v}`).join(", ")})` : ""}.`);
+    return {
+      renderedHtml, overflow,
+      contrastSamples: samples,
+      contrastUnmeasured: blind.size,
+      contrastUnmeasuredReasons: reasons,
+      coverage: { pages: measured.length, scrollStates: states, viewports: views, urls: measured },
+    };
+  } catch (e) {
+    console.error(`[fetch] render failed: ${e.message}; degrading to raw fetch.`);
+    return null;
+  } finally { if (browser) await browser.close(); }
+}
+
+/* The in-page contrast sampler. Serialised into the browser by page.evaluate, so it
+   closes over nothing and takes no arguments: everything it needs must be inside it. */
+function SAMPLER() {
       const out = [];
       /* Resolve any CSS colour through the browser itself, by painting one pixel and
          reading it back. A regex for rgba() cannot do this job: Chrome serialises
@@ -403,6 +566,27 @@ async function render(url, timeout) {
            does not lie: no box, no pixels, no reader, nothing to judge. */
         const rect = el.getBoundingClientRect();
         if (rect.width < 1 || rect.height < 1) continue;
+        /* Identity first: an element we skip still has to be nameable, or "could not
+           measure this" degrades into silence, which is the thing we keep fixing. */
+        const path = [];
+        for (let n = el; n && n !== document.body; n = n.parentElement) {
+          path.push(Array.prototype.indexOf.call(n.parentNode.children, n));
+        }
+        const domPath = path.reverse().join("/");
+        /* mix-blend-mode makes getComputedStyle a liar about the one thing we need.
+           Under `difference`, cs.color is the SOURCE colour, and what lands on screen is
+           |backdrop - source|: a caption computing as 3.47:1 was painting at 3.88:1. Both
+           fail here, so the verdict survived by luck, and luck is not a method. Blend the
+           other way and we would fail readable text with a number no pixel ever held.
+           Computing the blend properly means implementing 16 modes against a backdrop we
+           already only estimate. Not worth it: report it unmeasurable, name it, and let a
+           human look. Missing beats inventing. */
+        let blended = null;
+        for (let n = el; n && n !== document.body; n = n.parentElement) {
+          const b = getComputedStyle(n).mixBlendMode;
+          if (b && b !== "normal") { blended = b; break; }
+        }
+        if (blended) { out.push({ unmeasurable: `mix-blend-mode:${blended}`, domPath }); continue; }
         // Gradient-filled text (background-clip:text + transparent colour) has no
         // single foreground to measure. Report it as its own defect, do not average
         // it into a ratio that means nothing.
@@ -429,6 +613,10 @@ async function render(url, timeout) {
            author states it in the markup, the audit reports it, and nobody's judgment is
            silently overridden. Scope is this element, never the subtree. */
         const exempt = el.getAttribute("data-contrast-exempt");
+        /* domPath is this element's stable identity, so the same text measured at
+           several scroll stops and viewports collapses to ONE finding instead of ten.
+           Position among siblings, root-ward: it survives restyling and reflow, which
+           is exactly what changes between the states we are comparing. */
         out.push({
           color, bg, fromRoot,
           rect: { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
@@ -436,17 +624,12 @@ async function render(url, timeout) {
           weight: parseInt(cs.fontWeight, 10) || 400,
           exempt: exempt || null,
           exemptReason: el.getAttribute("data-contrast-exempt-reason") || null,
+          domPath,
+          text: (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 60),
         });
         count++;
       }
       return out;
-    });
-    const { samples: resolved, dropped } = await resolveRootBackdrops(page, contrastSamples);
-    return { renderedHtml, overflow, contrastSamples: resolved, contrastUnmeasured: dropped };
-  } catch (e) {
-    console.error(`[fetch] render failed: ${e.message}; degrading to raw fetch.`);
-    return null;
-  } finally { if (browser) await browser.close(); }
 }
 
 /* Second pass, for the samples whose backdrop the DOM only guessed (nothing painted
@@ -467,14 +650,18 @@ async function render(url, timeout) {
    were taken at scroll 0, so every coordinate would land on the wrong pixels. It would
    not widen coverage, it would fabricate it. Below-the-fold text on a bare root
    background is reported unmeasured instead. */
-async function resolveRootBackdrops(page, samples) {
+async function resolveRootBackdrops(page, entries) {
+  // Entries the sampler already gave up on (blended text) travel through untouched:
+  // they carry an identity and a reason, and the caller tallies them as coverage.
+  const samples = entries.filter(s => !s.unmeasurable);
+  const skipped = entries.filter(s => s.unmeasurable);
   const needed = samples.filter(s => s.fromRoot);
-  if (!needed.length) return { samples, dropped: 0 };
+  if (!needed.length) return { samples, skipped };
   let shot;
   try { shot = await page.screenshot({ type: "png" }); }
   catch (e) {
     console.error(`[fetch] backdrop screenshot failed (${e.message}); dropping ${needed.length} sample(s) whose background could not be confirmed.`);
-    return { samples: samples.filter(s => !s.fromRoot), dropped: needed.length };
+    return { samples: samples.filter(s => !s.fromRoot), skipped: [...skipped, ...needed.map(s => ({ unmeasurable: "backdrop-screenshot-failed", domPath: s.domPath }))] };
   }
   const verdicts = await page.evaluate(async ({ b64, boxes }) => {
     const img = new Image();
@@ -506,15 +693,14 @@ async function resolveRootBackdrops(page, samples) {
   const byIndex = new Map();
   needed.forEach((s, i) => byIndex.set(s, verdicts[i]));
   const kept = [];
-  let dropped = 0;
+  const out = [...skipped];
   for (const s of samples) {
     if (!s.fromRoot) { kept.push(s); continue; }
     const px = byIndex.get(s);
-    if (!px) { dropped++; continue; }
+    if (!px) { out.push({ unmeasurable: "backdrop-not-confirmable", domPath: s.domPath }); continue; }
     kept.push({ ...s, bg: px });
   }
-  if (dropped) console.error(`[fetch] ${dropped} text sample(s) sit on a backdrop we could not confirm from pixels (offscreen or non-flat); dropped rather than guessed.`);
-  return { samples: kept, dropped };
+  return { samples: kept, skipped: out };
 }
 
 // Decide the client-rendered verdict from the signals we have.
@@ -530,7 +716,7 @@ function classifyClientRendered({ rawTextLen, renderedTextLen, shell, renderAvai
   return "unknown";
 }
 
-export async function fetchTarget({ target, render: wantRender = false, robots: wantRobots = false, timeout = 15000, assets: wantAssets = true, assetsDir = null } = {}) {
+export async function fetchTarget({ target, render: wantRender = false, robots: wantRobots = false, timeout = 15000, assets: wantAssets = true, assetsDir = null, renderOpts = {} } = {}) {
   const isUrl = isUrlStr(target);
   const { html, status, finalUrl, headers } = await rawFetch(target, isUrl, timeout);
   const baseUrl = finalUrl || (isUrl ? target : null);
@@ -558,7 +744,7 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
   if (wantRender) {
     if (!isUrl) console.error("[fetch] --render needs a URL; using raw HTML for the local file.");
     else {
-      const r = await render(baseUrl, timeout);
+      const r = await render(baseUrl, timeout, renderOpts);
       if (r) {
         renderAvailable = true;
         renderedHtml = r.renderedHtml;
@@ -566,13 +752,18 @@ export async function fetchTarget({ target, render: wantRender = false, robots: 
           horizontalOverflow375: r.overflow.overflow,
           scrollWidth375: r.overflow.scrollWidth,
           contrastUnmeasured: r.contrastUnmeasured || 0,
-          contrastSamples: (r.contrastSamples || []).map(s => {
+          contrastUnmeasuredReasons: r.contrastUnmeasuredReasons || null,
+          contrastCoverage: r.coverage || null,
+          contrastSamples: dedupeSamples((r.contrastSamples || []).map(s => {
             const large = s.fontSizePx >= 24 || (s.weight >= 700 && s.fontSizePx >= 18.66);
+            const threshold = large ? 3.0 : 4.5;
             return {
-              ratio: ratioFromSample(s), threshold: large ? 3.0 : 4.5, fontSizePx: s.fontSizePx,
+              ratio: ratioFromSample(s), threshold, fontSizePx: s.fontSizePx,
               exempt: s.exempt || null, exemptReason: s.exemptReason || null,
+              page: s.page || null, viewport: s.viewport || null, scrollY: s.scrollY ?? null,
+              domPath: s.domPath || null, text: s.text || null,
             };
-          }),
+          })),
         };
       }
     }

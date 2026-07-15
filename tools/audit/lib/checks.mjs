@@ -361,7 +361,21 @@ function checkContrast(doc, computed, cssModel) {
     // Samples whose backdrop the render could not confirm from pixels. Coverage, not
     // a verdict: a PASS over 74 of 79 samples is not the same claim as a clean page.
     const unmeasured = computed.contrastUnmeasured || 0;
-    const value = { failures: fails.length, exempt: exempt.length, unmeasured, worst: fails.length ? fails.reduce((a, b) => a.ratio < b.ratio ? a : b).ratio : null };
+    const cov = computed.contrastCoverage || null;
+    const value = {
+      failures: fails.length, exempt: exempt.length, unmeasured,
+      worst: fails.length ? fails.reduce((a, b) => a.ratio < b.ratio ? a : b).ratio : null,
+      // What this verdict is a verdict OVER. Without it a PASS is unfalsifiable: the
+      // reader cannot tell a clean site from one corner of one page at scroll 0.
+      coverage: cov ? { pages: cov.pages, scrollStates: cov.scrollStates, viewports: cov.viewports } : null,
+      // Where each failure actually is. Sweeping is worthless if the report cannot say
+      // which page and which state, since that is the half a reader has to reproduce.
+      worstSamples: fails
+        .slice()
+        .sort((a, b) => a.ratio / a.threshold - b.ratio / b.threshold)
+        .slice(0, 10)
+        .map(s => ({ ratio: s.ratio, threshold: s.threshold, page: s.page, viewport: s.viewport, scrollY: s.scrollY, text: s.text })),
+    };
     /* The exempt count is never folded into the verdict and never omitted from the
        report. An audit you can drive to zero by annotation is a machine for producing
        clean reports on dirty pages. */
@@ -371,16 +385,23 @@ function checkContrast(doc, computed, cssModel) {
           ? "; these are the author's choice, not WCAG exceptions, so the page stays non-conformant at those points."
           : ".")
       : "";
-    const cover = unmeasured ? ` ${unmeasured} sample(s) unmeasured: backdrop not confirmable from pixels (offscreen or non-flat).` : "";
+    const why = computed.contrastUnmeasuredReasons;
+    const cover = unmeasured
+      ? ` ${unmeasured} element(s) never measurable in any state${why ? ` (${Object.entries(why).map(([k, v]) => `${k}: ${v}`).join(", ")})` : ""}.`
+      : "";
+    const scope = cov
+      ? ` Measured across ${cov.pages} page(s), ${cov.scrollStates} scroll state(s), ${cov.viewports.join(" + ")}.`
+      : " Measured on one page at scroll 0 only.";
     if (fails.length) {
       const worst = fails.reduce((a, b) => a.ratio < b.ratio ? a : b);
+      const at = worst.page ? ` (${worst.page} @ y=${worst.scrollY}, ${worst.viewport}${worst.text ? `, "${worst.text.slice(0, 30)}"` : ""})` : "";
       return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "FAIL", critical: true,
         method: "computed", value,
-        detail: `${fails.length} text sample(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1).${note}${cover}` });
+        detail: `${fails.length} text element(s) below AA; worst ${worst.ratio}:1 (need ${worst.threshold}:1)${at}.${note}${cover}${scope}` });
     }
     return mk({ id: "contrast-ratio", label: "Color contrast (AA)", ...A11Y, verdict: "PASS", critical: true,
       method: "computed", value: { ...value, samples: computed.contrastSamples.length },
-      detail: `All measured text meets AA contrast.${note}${cover}` });
+      detail: `All measured text meets AA contrast.${note}${cover}${scope}` });
   }
 
   // Static path. With a CSS model (inline <style> + linked stylesheets) resolve

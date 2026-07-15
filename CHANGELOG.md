@@ -11,6 +11,30 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.35.0] - 2026-07-15
+
+### Added
+
+- **`--render` measures the site, not one corner of it.** It rendered a single page, at scroll 0, at 375px wide, and reported a verdict phrased as though it covered the site. Three axes, and each default is a defect that shipped straight past the old pass:
+  - **Pages.** `sitemap.xml` if there is one (the list a site declares about itself beats guessing), else same-origin links from the entry page, capped at 10. `/journey` shipped a CTA at 3.68:1 while the audited home page passed.
+  - **Scroll.** 5 stops per page. A nav button read 5.86:1 over the first act and 3.68:1 once the dark page slid under it, and only one of those states existed at scroll 0. `scrollTo` is a request, not a fact, so each stop reads back the real `window.scrollY` and records that: a smooth-scroll library that animates or ignores the jump gets measured where the page actually went, and stops that land on the same pixel collapse instead of being counted twice.
+  - **Viewports.** 375 and 1280. The desktop nav links are `display:none` at 375, so nothing had ever measured them: they were 2.69:1.
+  - Tunable: `--pages N`, `--scroll N`, `--viewports mobile,desktop`, `--page-urls a,b,c`. Proven on a fixture carrying one defect per axis: the old settings report PASS with 0 failures, the new default reports FAIL with 4.
+- **`value.coverage` on `contrast-ratio`**, plus `target.pagesFetched` and `target.measured` in SITE-AUDIT.json. "Contrast passes" and "contrast passes across 3 pages, 30 scroll states, mobile and desktop" are different claims and only one of them is falsifiable. `pagesFetched` had been hardcoded to `1` while the schema advertised the field.
+- **`value.worstSamples`**: page, viewport, scrollY and text for each failure. Sweeping is worthless if the report cannot say which state to look at, since that is the half a reader has to reproduce.
+
+### Fixed
+
+- **Ratios were fabricated for text under `mix-blend-mode`.** `getComputedStyle` returns the SOURCE colour; under `difference` what lands on screen is `|backdrop - source|`. A caption computing as 3.47:1 was painting at 3.88:1. Both fail, so the verdict survived on luck. Blend the other way and we would fail readable text with a number no pixel ever held, which is the exact sin this detector was cleaned of in v1.34.0. Blended text is now reported unmeasurable and named, because implementing 16 blend modes against a backdrop we already only estimate buys less than admitting we cannot see.
+- **`unmeasured` counted attempts, not elements**, so it read 490 against 1 failure: 30 scroll states re-drop the same offscreen paragraph 30 times. Two numbers in different units side by side is the same units error the sample dedupe exists to prevent, and it read as "the audit is blind" when the truth was "the audit looked 30 times". Now: distinct elements that no state ever measured, with reasons. 490 became 10.
+
+### Changed
+
+- Samples are deduped per element per page, keeping the **worst** state. Without it, sweeping ten states turns one defect into ten and the failure count grows with how hard you looked, which would punish the thoroughness this release adds. Worst is `ratio/threshold`, not raw ratio: responsive type moves the threshold, so 3.9:1 is a pass as large desktop text and a failure as normal mobile text.
+- Static checks (title, meta description, heading order, canonical, robots) still read the entry page only. They are per-page questions and aggregating them is a different job; `pagesFetched` states the difference rather than hiding it.
+
+---
+
 ## [1.34.0] - 2026-07-15
 
 ### Fixed
