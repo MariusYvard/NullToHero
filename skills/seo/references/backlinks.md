@@ -6,7 +6,7 @@ description: >
   (Moz, Bing, Common Crawl). Use for: "backlinks", "link profile", "link building",
   "backlink audit", "toxic links", "competitor links", "anchor text", "domain authority",
   "referring domains".
-version: 1.8.1
+version: 1.39.0
 ---
 
 # Backlink Profile Analysis
@@ -125,7 +125,13 @@ Ranked by effort-to-reward ratio for sites without a dedicated link team:
 3. Update outdated resources (find articles citing outdated data → offer your updated resource)
 
 **Medium effort, medium-high value:**
-4. HARO / Source Bottle / Qwoted (respond to journalist queries, get cited in articles)
+4. Journalist-query platforms (answer a reporter's question, get cited in the article). Verified July 2026, because this list churns and half the advice online names a service that no longer exists:
+   - **Source of Sources (SOS)** — sourceofsources.com. Free, no paid tier. Shankman's rebuild after he sold HARO; the practitioner default now.
+   - **HARO** — helpareporter.com. Free. **Note the discontinuity**: Cision killed it on 9 Dec 2024, then Featured.com bought the brand in Apr 2025 and relaunched the free query emails. Advice written in between says HARO is dead. It is not.
+   - **SourceBottle** — sourcebottle.com. Free. AU/NZ-weighted.
+   - **Qwoted** — qwoted.com. Freemium, and the free tier is throttled in a way that matters: 2 pitches/month behind a 2-hour delay, so paying sources see every query first. Recommending it without that caveat sets someone up to lose every race.
+   - **Featured** — featured.com. Freemium, 2-3 opportunities/week free.
+   - **Connectively is dead** (Cision, 9 Dec 2024). It is still recommended all over the web. Do not.
 5. Guest posts on industry publications (one high-DA guest post > 20 low-DA ones)
 6. Create linkable assets: original research, free tools, comprehensive guides
 

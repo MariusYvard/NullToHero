@@ -6,7 +6,7 @@ description: >
   "GEO", "llms.txt", "AI crawler", "passage citability", "ChatGPT visibility",
   "Perplexity ranking", "brand mentions", "AI citation", "AI search visibility",
   "geo quick", "geo compare".
-version: 1.38.0
+version: 1.39.0
 ---
 
 # AI Search / GEO Optimization
@@ -79,6 +79,25 @@ the table above, the finding is the thing that needs evidence, not Google. Where
 still recommends `llms.txt` or passage shaping, that advice is scoped to the engines that
 have not said otherwise (Perplexity, ChatGPT and Claude publish no equivalent guidance) and
 must be labelled as such rather than sold as universal.
+
+### Stop inferring when you can measure: connect Search Console
+
+Everything this skill computes from HTML is **inference from the outside**. Search Console
+is the only place your real queries, impressions and positions exist, and it is reachable
+from Claude: read-only **MCP connectors for GSC and GA4 exist** and mount via Settings →
+Connectors with a Google OAuth flow, no vendor account. If the user has one connected,
+its numbers outrank anything on this page. Say which you used.
+
+Two cautions, both from inspecting one:
+
+- **Know which backend answered.** At least one vendor's GSC MCP serves three things down
+  one endpoint: your OAuth'd Search Console data (provenance clear, it is yours), their own
+  crawler's audit, and rank-tracker figures like "organic keywords" and "AI Overview
+  references" that cannot come from GSC and whose source is undisclosed. Treat the GSC rows
+  as measurement and the rest as a vendor's estimate, because that is what they are.
+- **Google's own warning applies to the connector too**: no third-party tool reads Google's
+  internal ranking or AI systems. A tool that reports "AI Overview references" is inferring,
+  the same as we are.
 
 ### Two real requirements the industry mostly misses
 

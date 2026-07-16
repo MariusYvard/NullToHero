@@ -11,6 +11,26 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.39.0] - 2026-07-16
+
+v1.38.0 shipped after reading **12 of the academy's 107 lessons** and phrased the verdict as though it covered the site. That is the v1.36.0 bug ("the home page vouched for the site") committed in prose, by the person who had just fixed it in code. Read all 106 lessons plus the index. The v1.38.0 conclusion held, but it had not been earned, and two things were missed.
+
+### Added
+
+- **`geo.md`: connect Search Console instead of inferring.** Everything this skill computes from HTML is inference from outside; GSC is where the real queries, impressions and positions are, and read-only MCP connectors for GSC and GA4 mount into Claude over Google OAuth with no vendor account. If one is connected, its numbers outrank this skill's, and the report says which was used. Missed in v1.38.0 because the chapter was called "Claude MCP" and never opened: the single most relevant thing on the site to a Claude plugin.
+- Two cautions from actually inspecting one such connector: it serves **three backends down one endpoint** (your OAuth'd GSC data, their own crawler's audit, and rank-tracker figures like "AI Overview references" that cannot come from GSC and whose source is undisclosed), so know which one answered. And Google's warning that no third-party tool reads its internal systems applies to the connector too: a tool reporting "AI Overview references" is inferring, exactly as we are.
+- **`backlinks.md`: the journalist-query list, verified July 2026.** Adds **Source of Sources** (free, no paid tier, the practitioner default) and **Featured** (freemium), and states Qwoted's free-tier throttle: 2 pitches/month behind a 2-hour delay, so paying sources see every query first. Recommending it without that sets someone up to lose every race. **Connectively is dead** (Cision, 9 Dec 2024) and is still recommended across the web.
+- Recorded the HARO discontinuity, because it is a trap for anyone reading advice written in the gap: Cision killed HARO on 9 Dec 2024, then Featured.com bought the brand in Apr 2025 and relaunched the free query emails. Advice from that window says HARO is dead. It is not.
+
+### Notes
+
+- **Nearly broke a correct line by believing a subagent.** One reported HARO and Connectively both dead and "the single most concrete factual error" on the vendor's site. Verification: HARO is alive under new ownership, so the vendor was right and the agent was wrong, and `backlinks.md`'s existing HARO/SourceBottle/Qwoted line was already correct. Earlier the same day the opposite happened: an agent was accused of conflating two Google pages and turned out right, the wrong URL having been fetched. Two agents, two confident claims, two different failure directions, both caught only by checking. A subagent's report is a lead, not a source.
+- The remaining 94 lessons confirmed the v1.38.0 read: 45 of them under 250 words with **5 citations across all of them**, no procedure behind any "how-to", and an internal contradiction (content clusters are 3-4 pages in the glossary and 5-7 in the 100-day plan). Nothing importable.
+- Two errors in their corpus worth knowing rather than absorbing: their `dofollow-vs-nofollow` table states flatly that nofollow passes no ranking credit, contradicting its own FAQ below it and Google's 2019 hint change; and their link-building chapter sells an automated reciprocal link-exchange network inside a lesson, which is the pattern Google's link spam policy names. `backlinks.md` already warns against exactly this (L85), which is the check that mattered.
+- Mirror checks run against our own references, all clean: `technical.md` states all three Core Web Vitals thresholds correctly (2.5s / 200ms / 0.1); their CWV page cites web.dev but gives only LCP. `competitor-pages.md` already records the FAQ rich-result removal, with a **more current date than the subagent had** (7 May 2026, all sites).
+
+---
+
 ## [1.38.0] - 2026-07-16
 
 Went to mine a vendor's SEO academy for material. Found nothing worth importing: the skill already named 9 AI crawler user-agents to its 2, and its 107 lessons run 150-250 words each with not one primary source cited across the flagship chapter. But holding it next to `geo.md` was the point, because `geo.md` had the same disease.
