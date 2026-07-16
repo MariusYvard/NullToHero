@@ -6,7 +6,7 @@ description: >
   "GEO", "llms.txt", "AI crawler", "passage citability", "ChatGPT visibility",
   "Perplexity ranking", "brand mentions", "AI citation", "AI search visibility",
   "geo quick", "geo compare".
-version: 1.9.0
+version: 1.38.0
 ---
 
 # AI Search / GEO Optimization
@@ -23,18 +23,89 @@ version: 1.9.0
 
 ## Key Statistics (2026)
 
-*Figures below reflect industry data available as of early 2026 and decay quickly; re-verify before quoting.*
+*Figures decay fast, so every row names its measurer, its sample and its date. "Industry
+data" is not a source: it hides a single vendor study behind a word that sounds like a
+consensus. Every row below that once said it turned out to have a traceable origin, and
+four of them were being misreported. Re-verify before quoting, and quote the sample.*
 
-| Metric | Value | Source |
+| Metric | Value | Source, sample, date |
 |--------|-------|--------|
 | AI Overviews reach | 1.5B users/month across 200+ countries | Google |
-| AI Overviews query coverage | 50%+ of all queries | Industry data |
-| AI-referred sessions growth | +527% (Jan–May 2025) | SparkToro |
+| AI Overviews query coverage | **9.5%–60%, depending entirely on the sample.** Pew: **18%** | Pew Research, 68,879 real searches by 900 US adults, Mar 2025 (the only non-vendor sample of actual human queries). Ahrefs 9.5% (keyword DB), Semrush 15.7% Nov 2025 (10M tracked keywords, peaked 24.6% Jul 2025 then fell), AWR 60% (tracked US keywords) |
+| AI-referred sessions growth | +527% (Jan–May 2025), off a base of 17,076 sessions | **Previsible** (NOT SparkToro), 19 GA4 properties, Jan–May 2025 |
 | ChatGPT weekly active users | 900 million | OpenAI |
 | Perplexity monthly queries | 500+ million | Perplexity |
-| AI traffic conversion vs organic | 4.4x higher | Industry data |
-| Brand mentions vs backlinks for AI | 3x stronger correlation | Ahrefs Dec 2025 |
-| Domains cited by both ChatGPT and Google AIO | Only 11% | Industry research |
+| AI traffic is "4.4x as valuable" | Value modelled from conversion rate. **Not** a 4.4x conversion rate | Semrush, 21 Jul 2025, ~500 digital-marketing topics (Semrush's own vertical) |
+| Brand mentions vs backlinks for AI | Spearman 0.664 vs 0.218 (=3.05x). **Correlation only**; Ahrefs itself says all factors studied were moderate-to-weak and warns against causal reading | Ahrefs, **26 May 2025** (not Dec) |
+| Domains cited by both ChatGPT and **Perplexity** | 11% | Profound, 100k prompts, 1 Jul 2025. **ChatGPT ∩ Google AIO is not published.** AIO ∩ Copilot 6%, Perplexity ∩ AIO 16.4% |
+
+**On the coverage row.** The 9.5%–60% spread is not a dispute about a fact, it is four
+different denominators. Keyword databases and rank-tracker panels over-weight the
+informational long-tail that triggers AI Overviews; real human query streams are full of
+navigational and short queries that do not. Any single number here is wrong. Quote the
+range and name the sample, or say nothing. Note also that Semrush's own series is not
+monotonic (24.6% in Jul 2025, 15.7% by Nov), so "AIO coverage is growing to X" is
+unsupported by the only long time series that exists.
+
+---
+
+## What Google says you do NOT need to do
+
+Primary source, and the one every GEO vendor talks around:
+[Optimizing for generative AI](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
+(Google Search Central, updated 2026-07-10) has a section titled *"Mythbusting generative
+AI search: what you don't need to do"*. **Scope it honestly: this is Google speaking about
+Google.** It does not bind ChatGPT, Perplexity or Claude, and saying it does would be the
+same overreach in the opposite direction. But for Google AI Overviews and AI Mode it is
+the only authority that exists, and it contradicts most of the GEO industry:
+
+| The tactic | Google's position |
+|---|---|
+| `llms.txt` and other AI files | "You don't need to create new machine readable files, AI text files, markup, or Markdown... **Google Search ignores them**." Publishing one "will neither harm nor help your site's visibility or rankings in Google Search." |
+| "Chunking" content | "There's no requirement to break your content into tiny pieces... **There's no ideal page length**." |
+| Rewriting content for AI | "You don't need to write in a specific way just for generative AI search." |
+| Chasing brand mentions | "Seeking inauthentic 'mentions' across the web isn't as helpful as it might seem." |
+| Structured data for AI | "Structured data isn't required for generative AI search, and there's no special schema.org markup you need to add." Keep it for rich results, not for AI. |
+| "AEO" / "GEO" as separate disciplines | "From Google Search's perspective, optimizing for generative AI search is optimizing for the search experience, and thus **still SEO**." |
+
+Google also states there is **no additional requirement** to appear in AI Overviews or AI
+Mode beyond being indexed and snippet-eligible, and warns: *"Be wary of third-party tools
+that promise ranking success or claim to use 'internal' Google metrics. No third-party
+tool has access to our internal ranking or AI systems."* That warning includes this one.
+Report a GEO score as a heuristic we defined, never as a reading of Google's systems.
+
+**Use this as the audit's spine for the Google platform.** When a GEO finding contradicts
+the table above, the finding is the thing that needs evidence, not Google. Where the skill
+still recommends `llms.txt` or passage shaping, that advice is scoped to the engines that
+have not said otherwise (Perplexity, ChatGPT and Claude publish no equivalent guidance) and
+must be labelled as such rather than sold as universal.
+
+### Two real requirements the industry mostly misses
+
+- **Search Console opt-in is a hard eligibility gate.** A site must be
+  [included in Search generative AI features](https://support.google.com/webmasters/answer/16908024)
+  to be eligible for display in them. That is a switch, not a tactic, and it outranks every
+  passage-shaping trick on this page.
+- **The only first-party measurement is the
+  [Generative AI performance report](https://support.google.com/webmasters/answer/16984139)**
+  in Search Console. Everything else, including this skill, is inference from the outside.
+
+### Query fan-out is real, and documented
+
+Google confirms both mechanisms the vendors gesture at: **RAG/grounding** (responses are
+grounded in pages retrieved by core Search ranking) and **query fan-out** (the model issues
+concurrent related queries; Google's own example expands "how to fix a lawn that's full of
+weeds" into herbicide, chemical-free and prevention queries). The correct inference is NOT
+to build a page per fan-out query: Google names that as
+[scaled content abuse](https://developers.google.com/search/docs/essentials/spam-policies#scaled-content).
+
+### Agentic experiences (emerging, watch it)
+
+Browser agents read sites by screenshot, DOM and **the accessibility tree**. Google points
+to [agent-friendly website best practices](https://web.dev/articles/ai-agent-site-ux) and the
+[Universal Commerce Protocol](https://ucp.dev/latest/). Note what that implies for this
+plugin: the accessibility work `/inspect` already enforces is becoming machine-readability
+work too. Semantic HTML and a clean a11y tree stop being only an ethical argument.
 
 ---
 
@@ -77,17 +148,30 @@ version: 1.9.0
 
 ### Dimension 1: Citability Score (25%)
 
-**Optimal passage length for AI citation: roughly 120–180 words per self-contained block.** (Citation-extraction studies cluster citable units in this range; treat the figure as a guideline, not a hard target.)
-
 AI systems extract self-contained passages that directly answer a question. Every key claim should exist as an extractable unit.
+
+> A "120–180 words per block" optimum lived here until v1.38.0, credited to
+> "citation-extraction studies" with none named. Unnamed studies are not a source, and the
+> only length statement from a primary source points the other way: Google's generative-AI
+> guide says there is no ideal page length and no requirement to chunk. Cut, because a
+> number nobody can trace is worse than no number: it survives review by looking precise.
 
 **Strong citability signals:**
 - Clear, quotable sentences with specific facts or statistics
 - Self-contained answer blocks (can be understood without surrounding context)
-- Direct answer in first 40–60 words of a section
+- The answer stated before the elaboration, not after it
 - Claims attributed to specific sources ("According to [Source], [year]...")
 - Definition patterns: "X is..." / "X refers to..." / "X means..."
 - Unique data points not found elsewhere online
+
+> **There is no 40–60 word rule.** This reference carried one until v1.38.0 and it had no
+> primary source. It is a descriptive artifact of vendor snippet-scrapes (most paragraph
+> featured snippets land in that band because that is where Google *truncates*) reversed
+> into a prescription. Google states it publishes no minimum length for featured snippets,
+> and its generative-AI guide is blunter: **"There's no ideal page length"** and there is
+> **no requirement to "chunk"** content. Put the answer first because a reader scanning a
+> section wants it first. Do not count the words. If you meet a number like this in the
+> wild, ask who measured it: this one traces back to nobody.
 
 **Weak citability signals:**
 - Vague, general statements without evidence

@@ -11,6 +11,30 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.38.0] - 2026-07-16
+
+Went to mine a vendor's SEO academy for material. Found nothing worth importing: the skill already named 9 AI crawler user-agents to its 2, and its 107 lessons run 150-250 words each with not one primary source cited across the flagship chapter. But holding it next to `geo.md` was the point, because `geo.md` had the same disease.
+
+### Fixed
+
+- **`geo.md`'s statistics table cited "Industry data". Of its six load-bearing rows, zero were stated accurately.** On a skill whose pitch is verdicts you can recompute, a stats table sourced to a phrase that sounds like a consensus is the one lie that costs the argument. Every "Industry data" label turned out to be concealing a single traceable vendor study, so the label was hiding a source, not standing in for a missing one:
+  - **AI Overviews coverage "50%+ of all queries"** was a keyword-panel figure sold as a query figure. Real measurements span **9.5%–60%** and the spread is not a dispute, it is four different denominators: keyword databases over-weight the informational long-tail that triggers AIOs, real human query streams do not. Pew is the only non-vendor sample of actual searches (68,879 searches, 900 US adults, Mar 2025) and gives **18%**. Now a range with every sample named. Also noted: Semrush's own series is non-monotonic (24.6% Jul 2025 → 15.7% Nov), so any "growing to X" framing is unsupported by the only long time series that exists.
+  - **"+527%, SparkToro"** — the figure is real, the attribution was wrong. It is **Previsible**, 19 GA4 properties, off a base of 17,076 sessions.
+  - **"4.4x conversion"** — Semrush said 4.4x as *valuable*, modelled from conversion rate, in ~500 digital-marketing topics, which is Semrush's own vertical.
+  - **"Ahrefs Dec 2025"** — May 2025, seven months off. The table also dropped the caveat Ahrefs leads with: correlation only, all factors moderate-to-weak. Big brands get both mentions and citations; that confounder is the whole story.
+  - **"11% of domains cited by both ChatGPT and Google AIO"** — wrong engines. Profound measured ChatGPT ∩ **Perplexity**. ChatGPT ∩ AIO is not published by anyone.
+- **The "40-60 word answer" rule had no primary source, and Google now contradicts its premise.** It is a descriptive artifact of vendor snippet-scrapes (that band is where Google *truncates*) reversed into a prescription. Google publishes no minimum length for featured snippets, and its generative-AI guide states there is **no ideal page length** and no requirement to chunk. Cut. A "120-180 words per block" optimum credited to unnamed "citation-extraction studies" went with it: a number nobody can trace is worse than no number, because it survives review by looking precise.
+
+### Added
+
+- **A "What Google says you do NOT need to do" section in `geo.md`**, from the primary source every GEO vendor talks around: Google Search Central's *Mythbusting generative AI search* ([ai-optimization-guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), updated 2026-07-10). Google states it **ignores `llms.txt`** ("neither harm nor help"), requires no chunking, requires no special schema, says chasing mentions "isn't as helpful as it might seem", and that GEO/AEO is "still SEO". Scoped honestly: this is Google speaking about Google, and it does not bind ChatGPT, Perplexity or Claude. Where the skill still recommends `llms.txt` or passage shaping, that advice is now labelled as scoped to the engines that have published no such guidance, rather than sold as universal.
+- Google's warning that no third-party tool reads its internal ranking or AI systems, **applied to this plugin**: a GEO score is a heuristic we defined, never a reading of Google's systems.
+- Two real requirements the industry misses: Search Console **opt-in is a hard eligibility gate** for generative AI features, and the **Generative AI performance report** is the only first-party measurement that exists. Everything else, this skill included, is inference from outside.
+- Query fan-out and RAG grounding documented from Google's own description, with the trap named: do not build a page per fan-out query, Google calls that scaled content abuse.
+- Agentic experiences flagged: browser agents read the **accessibility tree**, so the a11y work `/inspect` already enforces is turning into machine-readability work. Semantic HTML stops being only an ethical argument.
+
+---
+
 ## [1.37.0] - 2026-07-15
 
 ### Fixed
