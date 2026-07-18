@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.40.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.41.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.40.0** · 4 skills · 66 commands · 118 reference docs · 15 audit sub-agents
+**v1.41.0** · 4 skills · 63 commands · 119 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -44,16 +44,16 @@ You do not learn commands by heart. You say what you want ("make this landing pa
 
 | I want to | Type this | What you get back |
 |-----------|-----------|-------------------|
-| Start a brand-new site | `/siteasy setup` then `/siteasy build` | A brand file, then a styled, responsive first page |
-| Make a page look more professional | `/siteasy amplify index.html` | Stronger type, color and spacing, same content |
-| Be found on Google | `/seo audit yoursite.com` | A scored report and a prioritized action plan |
-| Add Google rich results | `/seo schema yoursite.com` | Valid Schema.org JSON-LD, ready to paste |
-| Show up in AI answers (ChatGPT, Perplexity) | `/seo geo yoursite.com` | A visibility score with per-engine fixes |
-| Catch problems before publishing | `/inspect detect index.html` | A checklist of issues, each with its fix |
+| Start from nothing | `/siteasy express "a coffee shop site"` | Brief to styled landing page: concept, tokens, build, checks |
+| Build a page or component | `/siteasy build` | Real, production-ready front-end that matches your brand file |
+| Make it better (bland, busy, static, off) | `/siteasy improve index.html` | The right axis picked from your complaint and applied |
+| Check the whole site | `/audit yoursite.com` | One site health score and one merged action plan |
+| Fix what the audit found | `/siteasy fix` | Findings executed batch by batch through the remediation map |
+| Rework an existing site | `/siteasy overhaul yoursite.com` | Baseline, fixes, before/after proof the score moved |
+| Finish and ship | `/siteasy ship` | Polish, defect scan, deterministic audit and hardening, in order |
+| Be found on Google and in AI answers | `/seo yoursite.com` | A scored report and a prioritized action plan |
+| Get a client-ready report | `/audit report` | Deliverable Markdown, self-contained HTML page, or PDF |
 | See it the way a real browser does | `/inspect preview index.html` | Desktop and mobile screenshots, bugs fixed in a loop |
-| Check the whole site in one pass | `/audit yoursite.com` | One site health score and one merged action plan |
-| Make a background video play everywhere (even iOS Low Power Mode) | `/siteasy video hero.mp4` | A canvas-decoded loop with poster, fallbacks and zero CLS |
-| Finish and ship, gates included | `/siteasy ship` | Polish, defect scan, deterministic audit and hardening, in order |
 
 ---
 
@@ -139,7 +139,7 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
 <details>
-<summary><b>All 33 commands</b></summary>
+<summary><b>All 35 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -156,11 +156,13 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `tokens [project]` | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode |
 | `critique [target]` | UX design review with heuristic scoring |
 | `audit [target]` | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) |
+| `improve [target]` | One door for "make it better": symptom-to-axis dispatch to the right refine or enhance pass |
+| `fix [target]` | Execute audit findings by remediation route: triage, per-command batches, verify |
 | `polish [target]` | Final quality pass before shipping |
 | `amplify [target]` | Amplify safe or bland designs — bolder typography, stronger color, more presence |
 | `simplify [target]` | Reduce visual noise, tone down, strip to essence |
 | `clarify [target]` | UX copy, error messages, button labels, empty states |
-| `launch [target]` | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals |
+| `harden [target]` | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals |
 | `onboard [target]` | First-run flows, empty states, feature discovery, activation |
 | `animate [target]` | Add purposeful animations and motion |
 | `typeset [target]` | Typography audit, font selection, hierarchy |
@@ -177,7 +179,7 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `overhaul [url]` | Audit-driven rework: baseline, triage by remediation route, execute, compare |
 | `express [brief]` | Zero-to-landing: setup, concept, tokens, plan, build, motion, checks, launch |
 
-Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt` → `amplify` → `launch`), a refresh (`critique` → `amplify` → `polish`), a design system (`document` → `extract` → `tokens`).
+Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt` → `amplify` → `harden`), a refresh (`improve` → `polish`), after an audit (`fix` → `ship`), a design system (`document` → `extract` → `tokens`).
 
 </details>
 
@@ -186,7 +188,7 @@ Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt`
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
 
 <details>
-<summary><b>All 20 commands</b></summary>
+<summary><b>All 19 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -209,9 +211,8 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
-| `report [url\|file\|generate]` | Format any audit output as a client-ready Markdown report or PDF with score gauges |
 
-Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
+Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `/audit report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
 </details>
 
@@ -237,15 +238,11 @@ Common runs: before every ship (`detect` → `preview` → `review`).
 Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 <details>
-<summary><b>All 10 commands</b></summary>
+<summary><b>All 6 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
-| `full [url]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan |
-| `seo [url]` | Search-visibility group only (5 SEO sub-agents) |
-| `defects [url]` | Front-end defect group only (4 inspect sub-agents) |
-| `design [url]` | Design-quality group only (5 siteasy sub-agents) |
-| `quick [url]` | One representative sub-agent per group for a fast triage |
+| `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) |
 | `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas |
@@ -381,8 +378,8 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 /seo images             image SEO
 /seo geo                AI-search visibility
      |
-/siteasy launch         harden for production
-/seo report             client-ready report
+/siteasy harden         harden for production
+/audit report           client-ready report
 /seo drift              watch for regressions
 ```
 

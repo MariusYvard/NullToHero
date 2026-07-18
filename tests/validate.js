@@ -131,7 +131,6 @@ const FILE_INTEGRITY = {
   "skills/seo/references/drift.md":             { minLines:  80 },
   "skills/seo/references/backlinks.md":         { minLines:  80 },
   "skills/seo/references/ecommerce.md":         { minLines:  80 },
-  "skills/seo/references/report.md":            { minLines:  80 },
   "skills/seo/references/action-plan.md":       { minLines:  80 },
   "agents/seo-agent-technical.md":      { minLines:  60 },
   "agents/seo-agent-content.md":        { minLines:  60 },
@@ -155,6 +154,8 @@ const FILE_INTEGRITY = {
   "skills/siteasy/references/craft.md":                     { minLines: 180 },  // actual: 194
   "skills/siteasy/references/accessibility-engineering.md": { minLines: 230 },
   "skills/siteasy/references/critique.md":                  { minLines: 200 },  // actual: 214
+  "skills/siteasy/references/improve.md":                   { minLines:  70 },
+  "skills/siteasy/references/fix.md":                       { minLines:  60 },
   "skills/siteasy/references/polish.md":                    { minLines: 200 },
   "skills/siteasy/references/css-architecture.md":          { minLines: 200 },
   "skills/siteasy/references/animation-engineering.md":     { minLines: 200 },
@@ -212,7 +213,7 @@ const FILE_INTEGRITY = {
   // -- audit (meta-orchestrator) ------------------------------------------
   "skills/audit/SKILL.md":                      { minLines:  60 },
   "skills/audit/references/full.md":            { minLines: 150 },
-  "skills/audit/references/report.md":          { minLines:  60 },
+  "skills/audit/references/report.md":          { minLines: 130 },
   "skills/audit/references/html-report.md": { minLines: 80 },
   "skills/audit/references/checks.md":          { minLines:  90 },
 };
@@ -1351,6 +1352,116 @@ section("37. Canonical laws: laws.csv well-formed and every law cited");
     if (uncited.length) uncited.forEach(id => fail(`law never cited in any skill: ${id}`));
     else pass("every law id is cited at least once in the skills");
   }
+}
+
+
+// ─── Check 38: intent routes and alias registry ───────────────────────────────
+// The command surface is governed: every route in tools/data/intents.csv points
+// at a live command, aliases never mask a live command and never linger in the
+// docs as canonical usage, the README doors resolve, and the marketplace
+// description's counts match reality (they have drifted before).
+section("38. Intent routes, aliases, doors and marketplace counts");
+{
+  const SKILL_NAMES = ["siteasy", "seo", "inspect", "audit"];
+  const AUDIT_SCOPES = new Set(["seo", "defects", "design", "quick"]);
+  const liveCmds = {};
+  for (const s of SKILL_NAMES) {
+    liveCmds[s] = new Set(Object.keys(
+      extractCommandRefs(readFile(path.join(ROOT, "skills", s, "SKILL.md")) || "")
+    ));
+  }
+  const isLive = (skill, cmd) =>
+    (liveCmds[skill] && liveCmds[skill].has(cmd)) ||
+    (skill === "audit" && AUDIT_SCOPES.has(cmd));
+
+  const intentsPath = path.join(ROOT, "tools", "data", "intents.csv");
+  if (!fs.existsSync(intentsPath)) {
+    fail("tools/data/intents.csv missing");
+  } else {
+    const lines = fs.readFileSync(intentsPath, "utf8").trim().split(/\r?\n/);
+    if (lines[0] !== "intent,phrases,command,status")
+      fail(`intents.csv: unexpected header "${lines[0]}"`);
+    const aliases = [];
+    let routeErrors = 0;
+    for (const line of lines.slice(1)) {
+      const cols = line.split(",");
+      const [intent, , command, status] = [cols[0], cols[1], cols[2], cols[3]];
+      if (!["current", "alias"].includes(status)) {
+        fail(`intents.csv: "${intent}" has unknown status "${status}"`); routeErrors++; continue;
+      }
+      const m = (command || "").match(/^\/([a-z-]+) ([a-z-]+)/);
+      if (!m || !SKILL_NAMES.includes(m[1]) || !isLive(m[1], m[2])) {
+        fail(`intents.csv: "${intent}" routes to "${command}" which is not a live command`); routeErrors++; continue;
+      }
+      if (status === "alias") {
+        const a = intent.match(/^\/([a-z-]+) ([a-z-]+)$/);
+        if (!a || !SKILL_NAMES.includes(a[1])) {
+          fail(`intents.csv: alias "${intent}" is not of the form "/skill name"`); routeErrors++;
+        } else if (liveCmds[a[1]].has(a[2])) {
+          fail(`intents.csv: alias "${intent}" masks a live command of the same name`); routeErrors++;
+        } else {
+          aliases.push(intent);
+        }
+      }
+    }
+    if (!routeErrors) pass(`intents.csv: ${lines.length - 1} routes, every command live, ${aliases.length} alias(es) clean`);
+
+    // Aliased legacy names must not survive as canonical usage in the docs.
+    const staleTargets = [];
+    const collect = (dir) => {
+      for (const name of fs.readdirSync(dir)) {
+        const p2 = path.join(dir, name);
+        if (fs.statSync(p2).isDirectory()) collect(p2);
+        else if (name.endsWith(".md")) staleTargets.push(p2);
+      }
+    };
+    collect(path.join(ROOT, "skills"));
+    if (fs.existsSync(path.join(ROOT, "docs"))) collect(path.join(ROOT, "docs"));
+    if (fs.existsSync(path.join(ROOT, "agents"))) collect(path.join(ROOT, "agents"));
+    staleTargets.push(path.join(ROOT, "README.md"));
+    staleTargets.push(path.join(ROOT, "tools", "data", "remediation-map.csv"));
+    let stale = 0;
+    for (const f of staleTargets) {
+      const txt = fs.readFileSync(f, "utf8");
+      for (const a of aliases) {
+        if (txt.includes(a)) {
+          fail(`stale legacy name "${a}" still used in ${f.slice(ROOT.length + 1)} — use its canonical command (see intents.csv)`);
+          stale++;
+        }
+      }
+    }
+    if (!stale) pass("no aliased legacy name survives in skills/, docs/, agents/, README or the remediation map");
+  }
+
+  // README doors: every backticked /skill command in "Pick your goal" resolves.
+  const readme = readFile(path.join(ROOT, "README.md")) || "";
+  const doorsSection = readme.match(/## Pick your goal([\s\S]*?)\n## /);
+  if (!doorsSection) fail("README: 'Pick your goal' section not found");
+  else {
+    let doorErrors = 0, doorCount = 0;
+    for (const m of doorsSection[1].matchAll(/`\/([a-z-]+)(?: ([a-z-]+)(?![\w.]))?[^`]*`/g)) {
+      if (!SKILL_NAMES.includes(m[1])) continue;
+      doorCount++;
+      if (m[2] && !isLive(m[1], m[2])) {
+        fail(`README door \`/${m[1]} ${m[2]}\` is not a live command`); doorErrors++;
+      }
+    }
+    if (!doorErrors) pass(`README doors: ${doorCount} invocation(s) in 'Pick your goal', all resolve`);
+  }
+
+  // Marketplace description counts match reality.
+  const mkt = JSON.parse(readFile(path.join(ROOT, ".claude-plugin", "marketplace.json")) || "{}");
+  const desc = (mkt.plugins && mkt.plugins[0] && mkt.plugins[0].description) || "";
+  const totalCmds = SKILL_NAMES.reduce((n, s) => n + liveCmds[s].size, 0);
+  const agentCount = fs.readdirSync(path.join(ROOT, "agents")).filter(f => f.endsWith(".md")).length;
+  const mc = desc.match(/(\d+)\s+commands/);
+  const ma = desc.match(/(\d+)\s+(?:parallel\s+)?sub-agents/);
+  if (!mc) fail("marketplace description: no command count found");
+  else if (Number(mc[1]) !== totalCmds) fail(`marketplace description says ${mc[1]} commands, actual ${totalCmds}`);
+  else pass(`marketplace description command count ${mc[1]} matches actual`);
+  if (!ma) fail("marketplace description: no sub-agent count found");
+  else if (Number(ma[1]) !== agentCount) fail(`marketplace description says ${ma[1]} sub-agents, actual ${agentCount}`);
+  else pass(`marketplace description sub-agent count ${ma[1]} matches actual`);
 }
 
 // --- Summary --------------------------------------------------------------------

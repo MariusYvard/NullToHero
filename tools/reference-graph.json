@@ -35,7 +35,6 @@
     "skills/seo/references/plan.md",
     "skills/seo/references/privacy-consent.md",
     "skills/seo/references/programmatic.md",
-    "skills/seo/references/report.md",
     "skills/seo/references/schema.md",
     "skills/seo/references/sitemap.md",
     "skills/seo/references/sxo.md",
@@ -70,12 +69,14 @@
     "skills/siteasy/references/elevation.md",
     "skills/siteasy/references/extract.md",
     "skills/siteasy/references/fetch-asset.md",
+    "skills/siteasy/references/fix.md",
     "skills/siteasy/references/form-patterns.md",
     "skills/siteasy/references/gestalt.md",
     "skills/siteasy/references/handoff.md",
     "skills/siteasy/references/harden.md",
     "skills/siteasy/references/heuristics-scoring.md",
     "skills/siteasy/references/image-strategy.md",
+    "skills/siteasy/references/improve.md",
     "skills/siteasy/references/information-architecture.md",
     "skills/siteasy/references/inspiration.md",
     "skills/siteasy/references/interaction-design.md",
@@ -198,7 +199,7 @@
     },
     {
       "from": "skills/audit/references/report.md",
-      "to": "skills/seo/references/report.md"
+      "to": "skills/audit/references/html-report.md"
     },
     {
       "from": "skills/inspect/SKILL.md",
@@ -219,6 +220,10 @@
     {
       "from": "skills/inspect/references/review.md",
       "to": "skills/inspect/references/code-quality.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/audit/references/report.md"
     },
     {
       "from": "skills/seo/SKILL.md",
@@ -279,10 +284,6 @@
     {
       "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/programmatic.md"
-    },
-    {
-      "from": "skills/seo/SKILL.md",
-      "to": "skills/seo/references/report.md"
     },
     {
       "from": "skills/seo/SKILL.md",
@@ -478,6 +479,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/fix.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/form-patterns.md"
     },
     {
@@ -495,6 +500,10 @@
     {
       "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/image-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/improve.md"
     },
     {
       "from": "skills/siteasy/SKILL.md",
@@ -801,6 +810,30 @@
       "to": "skills/siteasy/references/sourcing-external-code.md"
     },
     {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/audit/references/compare.md"
+    },
+    {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/audit/references/full.md"
+    },
+    {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/siteasy/references/improve.md"
+    },
+    {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/siteasy/references/journey-overhaul.md"
+    },
+    {
+      "from": "skills/siteasy/references/fix.md",
+      "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
       "from": "skills/siteasy/references/form-patterns.md",
       "to": "skills/siteasy/references/accessibility-engineering.md"
     },
@@ -875,6 +908,30 @@
     {
       "from": "skills/siteasy/references/image-strategy.md",
       "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/audit/references/checks.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/siteasy/references/audit.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/siteasy/references/critique.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/siteasy/references/fix.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/siteasy/references/journey-overhaul.md"
+    },
+    {
+      "from": "skills/siteasy/references/improve.md",
+      "to": "skills/siteasy/references/journey-ship.md"
     },
     {
       "from": "skills/siteasy/references/information-architecture.md",
@@ -971,6 +1028,10 @@
     {
       "from": "skills/siteasy/references/journey-overhaul.md",
       "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-overhaul.md",
+      "to": "skills/siteasy/references/fix.md"
     },
     {
       "from": "skills/siteasy/references/journey-overhaul.md",

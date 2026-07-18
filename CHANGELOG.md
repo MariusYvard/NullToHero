@@ -11,6 +11,27 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.41.0] - 2026-07-18
+
+The catalog problem, addressed at the surface: 66 commands were well-connected underneath (graph, remediation map, shared state) and undiscoverable on top. A newcomer had no obvious way in, "audit" lived in three skills, and the "from zero knowledge" promise depended on already knowing the names. This release reshapes the surface around ten intent doors without deleting or breaking anything.
+
+### Added
+
+- **Ten doors.** The README "Pick your goal" table is now the canonical surface: express, build, improve, /audit, fix, overhaul, ship, /seo, report, preview. Each SKILL.md opens with a short "Start here" section routing the same way; everything else remains a documented specialist command in the per-skill tables.
+- **`/siteasy improve`** (`improve.md`): the door for every "make it better" request that does not name an axis. A closed symptom table (16 rows, first match wins) dispatches to exactly one of the refine and enhance passes; three or more matching rows means it is a rework and routes to overhaul. One axis per pass, no blending.
+- **`/siteasy fix`** (`fix.md`): the door for "the audit found problems, now make them go away". Reads `SITE-AUDIT.json` (or the action plan), groups findings by their `fixWith` remediation route, runs the mapped commands critical-first in per-command batches, verifies with a same-settings `/audit checks` re-run. Extracted from journey-overhaul's triage and execute stages; the journey now delegates to it, so the doctrine lives in one place and is callable standalone.
+- **`tools/data/intents.csv`**: the versioned intent-and-alias registry. Current rows map door phrases to canonical commands; alias rows keep retired names accepted (`/siteasy launch` routes to `harden`, the retired seo report name routes to `/audit report`). Policy: any future rename adds an alias row, the old name stays accepted for at least two releases, and the deprecation is recorded here and in the CHANGELOG.
+- **Check 38**: every intents.csv route points at a live command; aliases never mask a live command; retired names may not survive as canonical usage anywhere in skills/, docs/, agents/, the README or the remediation map; every README door resolves; and the marketplace description's command and sub-agent counts must match reality (they had drifted to "57 commands" and "14 sub-agents" against an actual 66 and 15).
+
+### Changed
+
+- **`/siteasy launch` is now `/siteasy harden`.** The old name collided with the ship journey and the express "Launch" stage while the command itself was production hardening. 13 remediation routes, both journeys, six references and the README moved to the new name; the old one remains accepted via the alias table.
+- **The two report formatters are one.** `/audit report` now owns both skeletons (unified and SEO-scope) plus the PDF mechanics that previously lived in the seo reference it delegated to; `skills/seo/references/report.md` is deleted and the retired `/seo` sub-command routes to `/audit report`. 63 commands, 119 references.
+- **`/audit` group runs are scopes of `full`**, not four separate table rows: `full [url] [seo|defects|design|quick]`. The legacy first-token form (`/audit seo [url]`) still works. `checks`, `verify`, `compare`, `learnings` and `report` stay as commands.
+- **Stale counts in the audit skill corrected**: the frontmatter and the closing prose claimed 13 sub-agents (actual 15), the prose claimed nine commands, and the relationship table and report appendix listed 4 design agents instead of 6 (claims and memorability were missing).
+
+---
+
 ## [1.40.0] - 2026-07-18
 
 ### Added

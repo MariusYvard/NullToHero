@@ -1,0 +1,13 @@
+intent,phrases,command,status
+start-from-nothing,start from scratch; new site; from zero; I have nothing yet,/siteasy express,current
+build,build a page; add a section; new component; make me a landing page,/siteasy build,current
+improve,make it better; more premium; looks bland; too busy; feels dead,/siteasy improve,current
+check,is my site good; check everything; full review; audit my site,/audit full,current
+fix-findings,fix what the audit found; apply the action plan; clear the findings,/siteasy fix,current
+rework,redesign; revamp; overhaul this site; start over from what exists,/siteasy overhaul,current
+ship,ready to ship; publish; go live; final gates,/siteasy ship,current
+be-found,not on google; seo; show up in AI answers; get more traffic,/seo audit,current
+client-report,client report; deliverable; export as PDF; format for a client,/audit report,current
+see-it,screenshot; how does it look; view it like a browser,/inspect preview,current
+/siteasy launch,production hardening; performance pass; core web vitals,/siteasy harden,alias
+/seo report,seo report; format seo audit,/audit report,alias

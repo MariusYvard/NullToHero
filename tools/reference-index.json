@@ -55,11 +55,13 @@
   {
     "skill": "audit",
     "path": "skills/audit/references/report.md",
-    "title": "Unified Audit Report",
+    "title": "Report: any audit into a deliverable",
     "keywords": [
       "report",
-      "unified",
-      "audit"
+      "any",
+      "audit",
+      "into",
+      "deliverable"
     ]
   },
   {
@@ -368,16 +370,6 @@
     "keywords": [
       "programmatic",
       "seo"
-    ]
-  },
-  {
-    "skill": "seo",
-    "path": "skills/seo/references/report.md",
-    "title": "SEO Report Generator",
-    "keywords": [
-      "report",
-      "seo",
-      "generator"
     ]
   },
   {
@@ -695,6 +687,19 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/fix.md",
+    "title": "Fix: execute audit findings by remediation route",
+    "keywords": [
+      "fix",
+      "execute",
+      "audit",
+      "findings",
+      "remediation",
+      "route"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/form-patterns.md",
     "title": "Form Patterns",
     "keywords": [
@@ -745,6 +750,17 @@
     "keywords": [
       "image",
       "strategy"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/improve.md",
+    "title": "Improve: symptom-to-axis dispatch",
+    "keywords": [
+      "improve",
+      "symptom",
+      "axis",
+      "dispatch"
     ]
   },
   {

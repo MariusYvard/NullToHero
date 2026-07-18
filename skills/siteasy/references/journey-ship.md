@@ -15,7 +15,7 @@ The pipeline that takes a built feature or site from "works" to "shipped". It cr
 | 1 | Polish | `/siteasy polish` ([polish.md](polish.md)) | No open build TODOs; states and edge cases covered |
 | 2 | Defect scan | `/inspect detect` ([../../inspect/references/detect.md](../../inspect/references/detect.md)) | Zero CRITICAL and zero HIGH findings |
 | 3 | Deterministic audit | `/audit checks` ([../../audit/references/checks.md](../../audit/references/checks.md)) | Floor >= 80, no critical FAIL; every FAIL routed through its remediation entry (`tools/data/remediation-map.csv`) and fixed |
-| 4 | Hardening | `/siteasy launch` ([harden.md](harden.md), [optimize.md](optimize.md), [ship-checklist.md](ship-checklist.md)) | Ship checklist clean, Core Web Vitals within budget; changed URLs pinged via [/seo indexnow](../../seo/references/indexnow.md) on content and brand sites |
+| 4 | Hardening | `/siteasy harden` ([harden.md](harden.md), [optimize.md](optimize.md), [ship-checklist.md](ship-checklist.md)) | Ship checklist clean, Core Web Vitals within budget; changed URLs pinged via [/seo indexnow](../../seo/references/indexnow.md) on content and brand sites |
 | 5 | Full audit (brand register only) | `/audit full` ([../../audit/references/full.md](../../audit/references/full.md)) | Band Good or better; memorability not the weakest dimension |
 
 ## Rules

@@ -1,9 +1,9 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 1.40.0
+version: 1.41.0
 user-invocable: true
-argument-hint: "[build|plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset · adapt|mobile|clarify · launch|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
+argument-hint: "[express|build|improve|fix|ship|overhaul · plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
 allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
@@ -130,6 +130,15 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 - Every word earns its place. No restated headings, no intros that repeat the title.
 - **No em dashes.** Use commas, colons, semicolons, or parentheses.
 
+## Start here
+
+Six doors cover most requests. Nothing yet: `express [brief]`. Add to what
+exists: `build [feature]`. "Make it better" without a named axis:
+`improve [target]`. An audit produced findings: `fix [target]`. Finish and
+publish, gates included: `ship`. Rework a whole site: `overhaul [url]`. For a
+whole-site check use `/audit [url]`; to be found on Google and in AI answers,
+`/seo [url]`. Everything else below is a specialist pass.
+
 ## Commands
 
 | Command | Category | Description | Reference |
@@ -147,11 +156,13 @@ Match-and-refuse. If you're about to write any of these, rewrite with different 
 | `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) + [references/color-systems.md](references/color-systems.md) + [references/elevation.md](references/elevation.md) |
 | `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) + [references/memorability.md](references/memorability.md) |
 | `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |
+| `improve [target]` | Refine | One door for "make it better": symptom-to-axis dispatch to the right refine or enhance pass | [references/improve.md](references/improve.md) |
+| `fix [target]` | Refine | Execute audit findings by remediation route: triage, per-command batches, verify | [references/fix.md](references/fix.md) |
 | `polish [target]` | Refine | Final quality pass before shipping | [references/polish.md](references/polish.md) |
 | `amplify [target]` | Refine | Amplify safe or bland designs — bolder typography, stronger color, more presence | [references/bolder.md](references/bolder.md) + [references/colorize.md](references/colorize.md) + [references/style-systems.md](references/style-systems.md) + [references/brand-identity.md](references/brand-identity.md) |
 | `simplify [target]` | Refine | Reduce visual noise, tone down, strip to essence | [references/quieter.md](references/quieter.md) + [references/distill.md](references/distill.md) |
 | `clarify [target]` | Refine | UX copy, error messages, button labels, empty states | [references/clarify.md](references/clarify.md) |
-| `launch [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) + [references/ship-checklist.md](references/ship-checklist.md) |
+| `harden [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) + [references/ship-checklist.md](references/ship-checklist.md) |
 | `onboard [target]` | Refine | First-run flows, empty states, feature discovery, activation | [references/onboard.md](references/onboard.md) |
 | `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) + [references/motion-choreography.md](references/motion-choreography.md) |
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
@@ -176,3 +187,7 @@ When the user invokes a command:
 3. Apply the shared design laws above throughout
 
 If no command is specified, treat the request as `build` for new work, or `critique` for existing work.
+
+Legacy names and synonyms registered in `tools/data/intents.csv` are accepted
+and route to their canonical command (for example the retired `launch` name
+runs `harden`).

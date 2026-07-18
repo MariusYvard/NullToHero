@@ -19,7 +19,7 @@ The zero-to-landing pipeline. Eight stages, each an existing command, each writi
 | 5 | Build | `/siteasy build` ([craft.md](craft.md)) | Landing built to the production bar, direction honored |
 | 6 | Motion | `/siteasy animate` ([animate.md](animate.md)) | The ONE signature moment from `DIRECTION.md`, decorative loops <= 2, reduced-motion guarded |
 | 7 | Checks | `/inspect detect` then `/audit checks` | Zero CRITICAL/HIGH; deterministic floor >= 80 |
-| 8 | Launch | `/siteasy launch` ([ship-checklist.md](ship-checklist.md)) | Checklist clean, media within budget (video <= 10 MB) |
+| 8 | Harden | `/siteasy harden` ([ship-checklist.md](ship-checklist.md)) | Checklist clean, media within budget (video <= 10 MB) |
 
 ## Rules
 

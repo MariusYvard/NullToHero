@@ -261,4 +261,4 @@ Add image metadata to XML sitemap for enhanced Google Images indexing:
 | Image sitemap | `/seo sitemap` |
 | Core Web Vitals deep dive | `/seo technical` |
 | Design-side image optimization (AVIF, picture element) | `/siteasy audit` |
-| LCP optimization | `/siteasy launch` |
+| LCP optimization | `/siteasy harden` |

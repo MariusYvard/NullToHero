@@ -136,6 +136,6 @@ Use these criteria consistently across all commands:
 
 | Need | Skill |
 |------|-------|
-| Format action plan as deliverable | `/seo report [file]` |
+| Format action plan as deliverable | `/audit report [file]` |
 | Track changes over time | `/seo drift [url] compare` |
 | Re-audit after fixes | `/seo audit [url]` |
