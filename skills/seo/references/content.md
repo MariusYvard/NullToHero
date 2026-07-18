@@ -118,20 +118,9 @@ Optimize for AI search engines (ChatGPT, Perplexity, Google AI Overviews):
 - Tables and lists for comparative data
 - Clear attribution and source citations
 
-### AI Search Visibility & GEO (2025-2026)
+### Where the GEO doctrine lives
 
-**Google AI Mode** launched publicly in May 2025 as a separate tab in Google Search, available in 180+ countries. Unlike AI Overviews (which appear above organic results), AI Mode provides a fully conversational search experience with **zero organic blue links**, making AI citation the only visibility mechanism.
-
-**Key optimization strategies for AI citation:**
-- **Structured answers:** Clear question-answer formats, definition patterns, and step-by-step instructions that AI systems can extract and cite
-- **First-party data:** Original research, statistics, case studies, and unique datasets are highly cited by AI systems
-- **Schema markup:** Article, FAQ (for non-Google AI platforms), and structured content schemas help AI systems parse and attribute content
-- **Topical authority:** AI systems preferentially cite sources that demonstrate deep expertise. Build content clusters, not isolated pages
-- **Entity clarity:** Ensure brand, authors, and key concepts are clearly defined with structured data (Organization, Person schema)
-- **Multi-platform tracking:** Monitor visibility across Google AI Overviews, AI Mode, ChatGPT, Perplexity, and Bing Copilot, not just traditional rankings. Treat AI citation as a standalone KPI alongside organic rankings and traffic.
-
-**Generative Engine Optimization (GEO):**
-GEO is the emerging discipline of optimizing content specifically for AI-generated answers. Key GEO signals include: quotability (clear, concise extractable facts), attribution (source citations within your content), structure (well-organized heading hierarchy), and freshness (regularly updated data). Cross-reference the `/seo geo` skill for detailed GEO workflows.
+The checklist above is this dimension's scoring hook. The discipline itself (per-engine workflows for Google AI Mode and AI Overviews, ChatGPT, Perplexity and Bing Copilot, entity and topical-authority strategy, citation tracking as a KPI, llms.txt) belongs to [geo.md](geo.md): run `/seo geo` and do not restate it here.
 
 ## Content Freshness
 

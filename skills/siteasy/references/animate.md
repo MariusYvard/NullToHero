@@ -103,6 +103,8 @@ Use appropriate techniques for each animation:
 
 ### Timing & Easing
 
+Canonical law: L-MOTION-1 (tools/data/laws.csv).
+
 **Durations by purpose:**
 - **100-150ms**: Instant feedback (button press, toggle)
 - **200-300ms**: State changes (hover, menu open)

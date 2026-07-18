@@ -1,6 +1,6 @@
 ---
 name: journey-mapping
-description: "Methods for visualizing how users move through a product or service over time, what they think and feel at each step, and which moments break the experience. Use this reference."
+description: "Methods for visualizing how users move through a product or service over time, what they think and feel at each step, and which moments break the experience. Use it for empathy maps, journey maps and service blueprints."
 version: 1.6.0
 ---
 

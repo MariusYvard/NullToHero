@@ -1,6 +1,6 @@
 ---
 name: improve
-description: "Single door for 'make it better' requests. Deterministic symptom-to-axis dispatch: reads the complaint, picks exactly one improvement axis (amplify, simplify, animate, typeset, layout, adapt, mobile, clarify, delight, onboard, charts, overdrive, video, parallax, live, polish), loads that reference and runs it. Never invents its own fixes."
+description: "Single door for 'make it better' requests. Deterministic symptom-to-axis dispatch: reads the complaint, picks exactly one improvement axis (amplify, simplify, animate, typeset, layout, adapt, mobile, clarify, delight, onboard, charts, overdrive, video, parallax, live, polish, harden), loads that reference and runs it. Never invents its own fixes."
 version: 1.0.0
 ---
 
@@ -44,7 +44,8 @@ First match wins. Symptoms are what users say, not what the code says.
 | 13 | "background video will not play", "video kills the page", "iOS pauses it" | `video` |
 | 14 | "scroll story", "depth", "layers that move at different speeds" | `parallax` |
 | 15 | "let me try variants live", "tweak it while it runs" | `live` |
-| 16 | "final once-over", "last pass", "anything embarrassing before I send it" | `polish` |
+| 16 | "slow", "breaks with long text", "errors look raw", "not translated" | `harden` |
+| 17 | "final once-over", "last pass", "anything embarrassing before I send it" | `polish` |
 
 ## When more than one row matches
 

@@ -119,6 +119,7 @@ Load from `assets/` directory:
 | Need | Skill |
 |---------------|-------|
 | SEO audit to inform strategy | `/seo audit` |
+| Keyword clustering for the content plan | `/seo cluster` |
 | SERP & competitor data | (not included) |
 | Web research for content gaps | (not included) |
 | Content production | (not included) |

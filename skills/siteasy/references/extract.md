@@ -77,7 +77,7 @@ Remember: A good design system is a living system. Extract patterns as they emer
 
 ## Design-system audit
 
-Beyond pulling tokens and components, audit the system for the drift that accumulates as a codebase grows.
+Beyond pulling tokens and components, audit the system for the drift that accumulates as a codebase grows. The token-layer audit doctrine itself lives in [design-tokens.md](design-tokens.md); `/siteasy tokens` runs that pass in depth.
 
 ### Naming consistency
 

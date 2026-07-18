@@ -84,6 +84,8 @@ Systematically increase impact across these dimensions:
 - **Custom elements**: Illustrative elements, custom icons, decorative details that reinforce brand
 
 ### Motion & Animation
+
+Motion accents only: the motion doctrine itself (durations, easing, restraint, L-MOTION-1 and L-MOTION-2) belongs to [animate.md](animate.md) and [delight.md](delight.md); load them for anything beyond these amplification accents.
 - **Entrance choreography**: Staggered, dramatic page load animations with 50-100ms delays
 - **Scroll effects**: Parallax, reveal animations, scroll-triggered sequences
 - **Micro-interactions**: Satisfying hover effects, click feedback, state changes

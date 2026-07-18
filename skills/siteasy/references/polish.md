@@ -142,6 +142,8 @@ Every interactive element needs all states:
 
 ### Edge Cases & Error States
 
+Final-pass verification only; the doctrine and the fixes live in [harden.md](harden.md).
+
 - **Loading states**: All async actions have loading feedback
 - **Empty states**: Helpful empty states, not just blank space
 - **Error states**: Clear error messages with recovery paths
@@ -159,6 +161,8 @@ Every interactive element needs all states:
 - **Appropriate reflow**: Content adapts logically
 
 ### Performance
+
+Final-pass verification only; the doctrine and the fixes live in [optimize.md](optimize.md).
 
 - **Fast initial load**: Optimize critical path
 - **No layout shift**: Elements don't jump after load (CLS)

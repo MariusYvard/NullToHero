@@ -8,6 +8,8 @@ version: 1.9.0
 
 ## Duration: The 100/300/500 Rule
 
+Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quoting the range.
+
 | Duration | Use Case | Examples |
 |----------|----------|----------|
 | **100-150ms** | Instant feedback | Button press, toggle, color change |

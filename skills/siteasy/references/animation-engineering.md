@@ -1,6 +1,6 @@
 ---
 name: animation-engineering
-description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil."
+description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil Kowalski's motion principles."
 version: 1.12.0
 ---
 

@@ -51,6 +51,8 @@ Charts and dashboards — the "wow" is in fluidity: GPU-accelerated rendering vi
 
 ## The Toolkit
 
+Implementation doctrine for spring physics and the View Transitions API lives in [animation-engineering.md](animation-engineering.md) (loaded by `/siteasy animate`); this toolkit lists when to reach for each capability.
+
 Organized by what you're trying to achieve, not by technology name.
 
 ### Make transitions feel cinematic

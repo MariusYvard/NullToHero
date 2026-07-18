@@ -69,6 +69,8 @@ Systematically reduce intensity across these dimensions:
 - **Borders & lines**: Reduce thickness, decrease opacity, or remove entirely
 
 ### Simplification
+
+Reducing QUANTITY (elements, choices, copy) is [distill.md](distill.md)'s ground; this pass reduces INTENSITY. Overlap items below stay verification-level.
 - **Remove decorative elements**: Gradients, shadows, patterns, textures that don't serve purpose
 - **Simplify shapes**: Reduce border radius extremes, simplify custom shapes
 - **Reduce layering**: Flatten visual hierarchy where possible

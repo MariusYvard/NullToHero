@@ -93,6 +93,9 @@ Allow: /
 - Mobile-first indexing: Google indexes mobile version. **Mobile-first indexing is 100% complete as of July 5, 2024.** Google now crawls and indexes ALL websites exclusively with the mobile Googlebot user-agent.
 
 ### 6. Core Web Vitals
+
+Ownership: this section holds the targets; image-specific LCP/CLS tactics live in [images.md](images.md) and the remediation deep-dive in [performance.md](performance.md).
+
 - **LCP** (Largest Contentful Paint): target <2.5s
 - **INP** (Interaction to Next Paint): target <200ms
   - INP replaced FID on March 12, 2024. FID was fully removed from all Chrome tools (CrUX API, PageSpeed Insights, Lighthouse) on September 9, 2024. Do NOT reference FID anywhere.

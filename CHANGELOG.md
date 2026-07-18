@@ -11,6 +11,29 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.2.0] - 2026-07-19
+
+A content-level pass over the whole knowledge base: five parallel reviews read the references behind every command family (motion, refine and evaluate, project and build, the seo boundaries, the deterministic layer) looking for doctrine that overlaps, contradicts itself or has drifted. The conclusion that matters: no further command merges are justified. Every remaining command owns real doctrine; a clean plugin is not a smaller one, it is a bounded one. What follows closes every boundary defect the pass found.
+
+### Fixed
+
+- **The siteasy audit reference contradicted itself**: "a code-level audit, not a design critique" two paragraphs above the section that dispatches four design-dimension agents. The intro now describes the actual architecture and points to critique.md for the heuristic pass.
+- **`/siteasy improve` could not reach `harden`**: no symptom row routed to it, so slow pages, raw errors and untranslated strings dead-ended. Row 16 added (polish moves to 17), and the dispatcher's own frontmatter now lists all 17 axes.
+- **The evaluators could not recommend `mobile` or `charts`**: both "Suggested command" menus (critique and audit, two spots each) omitted them while improve routes to both.
+- **content.md restated ~26 lines of geo doctrine** (AI Mode, per-engine strategy, GEO signals). Replaced with the dimension's scoring hook plus a pointer: geo.md owns the discipline.
+- **Five reference descriptions ended mid-sentence** (animation-engineering "Based on Emil.", critique "anchors them to.", design-tokens "build it right once, and.", ux-research "your aesthetic.", journey-mapping "Use this reference."). All completed.
+- **teach.md claimed to write two files**; it writes PRODUCT.md and delegates DESIGN.md to /siteasy document (its own Step 5), and it listed "layout" in a DESIGN.md that document.md forbids from having a Layout section.
+- **docs/ARCHITECTURE.md still said 14 sub-agents** (four spots) and drew the design group with 4 agents instead of 6.
+- **motion-design.md was cross-referenced by four files but bundled by none**; it now ships in the `/siteasy animate` bundle, and both duration tables cite L-MOTION-1.
+- Boundary notes added where checklists brush against another command's doctrine: polish defers to harden.md and optimize.md, quieter's simplification step to distill.md, bolder's motion accents to animate and delight, overdrive's springs and View Transitions to animation-engineering.md, extract's system audit to design-tokens.md, technical.md's Core Web Vitals section names images.md and performance.md as the deep dives.
+- Consistency: `express` stage list said "plan" one release after the rename to `shape`; seo's argument-hint and quick reference omitted `indexnow`; audit's hint omitted `learnings` and offered `report` a URL it does not take; inspect `review` takes `[target]`, not `[file]`; the seo action-plan output standard is now wired from the seo SKILL instead of claiming a scope nothing enforced; plan.md links cluster.
+
+### Added
+
+- **Check 39**: every command appears in its skill's argument-hint (this is what caught concept, indexnow and learnings), every remediation-map route points at a live command, and ARCHITECTURE.md's agent-count claims must match the agents directory.
+
+---
+
 ## [2.1.0] - 2026-07-19
 
 Consolidation pass over the command set, driven by the Phase 1 connectivity data (internal call counts, remediation routes, journey usage). Three commands folded into the command that already owned their ground, one renamed to kill the plugin's last name collision. Nothing deleted: every reference file stays, every retired name routes through the alias table.

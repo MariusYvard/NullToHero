@@ -1,9 +1,9 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 2.1.0
+version: 2.2.0
 user-invocable: true
-argument-hint: "[express|build|improve|fix|ship|overhaul · shape|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · live] [target]"
+argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · live] [target]"
 allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
@@ -162,7 +162,7 @@ whole-site check use `/audit [url]`; to be found on Google and in AI answers,
 | `clarify [target]` | Refine | UX copy, error messages, button labels, empty states | [references/clarify.md](references/clarify.md) |
 | `harden [target]` | Refine | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals | [references/harden.md](references/harden.md) + [references/optimize.md](references/optimize.md) + [references/ship-checklist.md](references/ship-checklist.md) |
 | `onboard [target]` | Refine | First-run flows, empty states, feature discovery, activation | [references/onboard.md](references/onboard.md) |
-| `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) + [references/motion-choreography.md](references/motion-choreography.md) |
+| `animate [target]` | Enhance | Add purposeful animations and motion | [references/animate.md](references/animate.md) + [references/animation-engineering.md](references/animation-engineering.md) + [references/motion-choreography.md](references/motion-choreography.md) + [references/motion-design.md](references/motion-design.md) |
 | `typeset [target]` | Enhance | Typography audit, font selection, hierarchy | [references/typeset.md](references/typeset.md) + [references/typography.md](references/typography.md) |
 | `layout [target]` | Enhance | Spacing systems, visual rhythm, grid tools | [references/layout.md](references/layout.md) |
 | `charts [target]` | Enhance | Accessible data visualization: chart-type choice, a11y grades, non-color fallbacks | [references/data-viz.md](references/data-viz.md) |
@@ -175,7 +175,7 @@ whole-site check use `/audit [url]`; to be found on Google and in AI answers,
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 | `ship [scope]` | Journeys | Finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit | [references/journey-ship.md](references/journey-ship.md) |
 | `overhaul [url]` | Journeys | Audit-driven rework: baseline, fix by remediation route, before/after compare, ship | [references/journey-overhaul.md](references/journey-overhaul.md) |
-| `express [brief]` | Journeys | Zero-to-landing: setup, concept, tokens, plan, build, motion, checks, harden | [references/journey-express.md](references/journey-express.md) |
+| `express [brief]` | Journeys | Zero-to-landing: setup, concept, tokens, shape, build, motion, checks, harden | [references/journey-express.md](references/journey-express.md) |
 
 ## Running commands
 

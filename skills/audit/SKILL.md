@@ -1,9 +1,9 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 2.1.0
+version: 2.2.0
 user-invocable: true
-argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks|report] [url|file] | compare [A] [B]"
+argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
 allowed-tools:
   - Read
   - Write
@@ -28,7 +28,7 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures | [references/learnings.md](references/learnings.md) |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF | [references/report.md](references/report.md) + [references/html-report.md](references/html-report.md) |
 
-Six commands, five references. The agent run scopes (`full` and its group scopes `seo`, `defects`, `design`, `quick`) share the orchestration playbook in [references/full.md](references/full.md) and differ only in which agent group is dispatched; the legacy first-token form (`/audit seo [url]`) remains accepted and routes to `full` with that scope. `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. `checks` runs the deterministic pre-pass with no sub-agents and is documented in [references/checks.md](references/checks.md); it is also the ground-truth layer the agent modes consume in their fetch phase. `compare` diffs two targets ([references/compare.md](references/compare.md)) and `report` formats an already-produced audit ([references/report.md](references/report.md)).
+Six commands, six references. The agent run scopes (`full` and its group scopes `seo`, `defects`, `design`, `quick`) share the orchestration playbook in [references/full.md](references/full.md) and differ only in which agent group is dispatched; the legacy first-token form (`/audit seo [url]`) remains accepted and routes to `full` with that scope. `verify` additionally re-runs the gating dimensions and reconciles them by majority vote. `checks` runs the deterministic pre-pass with no sub-agents and is documented in [references/checks.md](references/checks.md); it is also the ground-truth layer the agent modes consume in their fetch phase. `compare` diffs two targets ([references/compare.md](references/compare.md)) and `report` formats an already-produced audit ([references/report.md](references/report.md)).
 
 ## How to run a command
 

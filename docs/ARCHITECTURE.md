@@ -1,6 +1,6 @@
 # Multi-Agent Architecture
 
-How NullToHero's `/audit` orchestrator and its 14 specialist sub-agents are
+How NullToHero's `/audit` orchestrator and its 15 specialist sub-agents are
 designed, and which production multi-agent principles apply to a Claude Code
 plugin made of Markdown and a few local scripts. This document is the rationale
 record for the agent layer. The operational security policy lives in
@@ -25,7 +25,7 @@ returned sections into one score.
    +----------------+----------------+----------------+
    |                |                |                |
  SEO group     defects group    design group    (verify: gating
- 5 agents       4 agents         4 agents         dimensions x K)
+ 5 agents       4 agents         6 agents         dimensions x K)
    |                |                |                |
    +----------------+----------------+----------------+
                               |
@@ -44,7 +44,7 @@ without re-auditing the whole site.
 A single agent stays preferable for a single-dimension request. The `/audit`
 "When NOT to use" table routes a search-only ask to `/seo audit`, a defect-only
 ask to `/inspect` and a design-only ask to `/siteasy audit`. The whole-site pass
-earns 14 agents for two reasons that match the production literature:
+earns 15 agents for two reasons that match the production literature:
 
 1. Crossing dimension boundaries. A whole-site review pulls technical SEO,
    content, schema, performance, GEO, accessibility, interaction, layout, code,
@@ -97,7 +97,7 @@ non-deterministic misses (self-consistency) but not a blind spot the model holds
 on every sample. `verify` therefore surfaces disagreement rather than claiming to
 remove it. The cost is stated in the playbook: roughly K times the tokens and
 latency for the re-run dimensions, which is why `verify` re-runs only the gating
-group by default, not all 14 agents.
+group by default, not all 15 agents.
 
 ## Context efficiency
 
@@ -198,7 +198,7 @@ reporting process are in [SECURITY.md](../SECURITY.md). Summary:
   a followed instruction has no dangerous tool to call. Instructional: every agent
   carries a Trust boundary block that treats fetched content as data to analyze
   and never as instructions to follow. It reports a suspected injection as a finding.
-  `tests/validate.js` enforces that the block is present in all 14 agents.
+  `tests/validate.js` enforces that the block is present in all 15 agents.
 - No secrets in the tree. Repository secret scanning and push protection stay on.
   No token, key, or credential is committed.
 

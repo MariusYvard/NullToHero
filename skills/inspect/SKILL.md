@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'."
-version: 2.1.0
+version: 2.2.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 allowed-tools:
@@ -35,7 +35,7 @@ want the scan or the code review on its own. For a whole-site pass use
 |---------|-------------|-----------|
 | `detect [target]` | Deterministic anti-pattern scan — finds missing focus rings, clipped dropdowns, pure black/white, tiny touch targets, missing reduced-motion, and more | [references/detect.md](references/detect.md) |
 | `preview [target]` | Real Chromium screenshot — desktop + mobile viewports, reads back visually, fixes bugs in a loop | [references/preview.md](references/preview.md) |
-| `review [file]` | Design engineering code review — motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) | [references/review.md](references/review.md) + [references/code-quality.md](references/code-quality.md) |
+| `review [target]` | Design engineering code review — motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) | [references/review.md](references/review.md) + [references/code-quality.md](references/code-quality.md) |
 
 ## When to use which
 

@@ -1,9 +1,9 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, build local SEO, handle hreflang/i18n, generate sitemaps, optimize images, run programmatic SEO, build competitor comparison pages, cluster keywords, optimize for Search Experience (SXO), monitor SEO drift, analyze backlinks, handle e-commerce SEO, or export a client report. Covers full site audits with parallel sub-agents, single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, JSON-LD, E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, keyword clustering, SXO, drift monitoring, backlink analysis, e-commerce SEO, and PDF report export. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local SEO, hreflang, backlinks, programmatic, ecommerce, or visibility."
-version: 2.1.0
+version: 2.2.0
 user-invocable: true
-argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce] [url | business-type]"
+argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce|indexnow] [url | business-type | keyword]"
 allowed-tools:
   - Read
   - Write
@@ -58,6 +58,8 @@ If `PRODUCT.md` or `DIRECTION.md` exist at the project root, read them first: br
 When the user invokes a command:
 1. Load the matching reference file using the Read tool
 2. Follow the instructions in that reference exactly
+Every command that produces recommendations formats them per [references/action-plan.md](references/action-plan.md).
+
 3. If no command is specified:
    - With a URL → default to `audit`
    - With a business type → default to `plan`
@@ -75,6 +77,7 @@ When the user invokes a command:
 | "content quality" / "E-E-A-T" / "improve my article" | `content` |
 | "AI search" / "ChatGPT visibility" / "AI Overviews" | `geo` |
 | "generate sitemap" / "sitemap validation" | `sitemap` |
+| "index this now" / "ping Bing" / "instant indexing" | `indexnow` |
 | "image SEO" / "alt text" / "WebP conversion" | `images` |
 | "local SEO" / "Google Business Profile" / "NAP" | `local` |
 | "hreflang" / "multilingual SEO" / "i18n SEO" | `hreflang` |

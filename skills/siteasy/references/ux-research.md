@@ -1,6 +1,6 @@
 ---
 name: ux-research
-description: "Research is the foundation that prevents design from collapsing into self-projection. The first axiom: You ≠ User. Your mental models, your fluency with the tool, your aesthetic."
+description: "Research is the foundation that prevents design from collapsing into self-projection. The first axiom: You ≠ User. Your mental models, your fluency with the tool, your aesthetic preferences are not the user's."
 version: 1.6.0
 ---
 

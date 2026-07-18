@@ -1473,6 +1473,39 @@ section("38. Intent routes, aliases, doors and marketplace counts");
   else pass(`marketplace description sub-agent count ${ma[1]} matches actual`);
 }
 
+
+// ─── Check 39: hints cover the tables, remediation routes are live, docs agent counts match ─
+section("39. Argument-hint coverage, remediation routes live, doc agent counts");
+{
+  const SKILLS39 = ["siteasy", "seo", "inspect", "audit"];
+  const live39 = {};
+  for (const s of SKILLS39) {
+    const txt = readFile(path.join(ROOT, "skills", s, "SKILL.md")) || "";
+    live39[s] = new Set(Object.keys(extractCommandRefs(txt)));
+    const hint = (txt.match(/argument-hint:\s*"([^"]+)"/) || [])[1] || "";
+    const missing = [...live39[s]].filter(c => !hint.includes(c));
+    if (missing.length) fail(`${s}: argument-hint omits command(s): ${missing.join(", ")}`);
+    else pass(`${s}: argument-hint covers all ${live39[s].size} commands`);
+  }
+  const AUDIT_SCOPES39 = new Set(["seo", "defects", "design", "quick"]);
+  const remLines = (readFile(path.join(ROOT, "tools", "data", "remediation-map.csv")) || "").trim().split(/\r?\n/).slice(1);
+  let deadRoutes = 0;
+  for (const line of remLines) {
+    const cmd = line.split(",")[2] || "";
+    const m = cmd.match(/^\/([a-z-]+) ([a-z-]+)$/);
+    if (!m || !(live39[m[1]] && (live39[m[1]].has(m[2]) || (m[1] === "audit" && AUDIT_SCOPES39.has(m[2]))))) {
+      fail(`remediation-map routes to "${cmd}" which is not a live command`); deadRoutes++;
+    }
+  }
+  if (!deadRoutes) pass(`remediation-map: all ${remLines.length} routes point at live commands`);
+  const agentCount39 = fs.readdirSync(path.join(ROOT, "agents")).filter(f => f.endsWith(".md")).length;
+  const arch = readFile(path.join(ROOT, "docs", "ARCHITECTURE.md")) || "";
+  const claims39 = [...arch.matchAll(/(?:its|all|earns) (\d+) (?:specialist )?(?:sub-)?agents/g)].map(m => Number(m[1]));
+  const wrong39 = claims39.filter(n => n !== agentCount39);
+  if (wrong39.length) fail(`ARCHITECTURE.md agent-count claim(s) ${wrong39.join(", ")} do not match actual ${agentCount39}`);
+  else pass(`ARCHITECTURE.md: all ${claims39.length} agent-count claims match actual ${agentCount39}`);
+}
+
 // --- Summary --------------------------------------------------------------------
 
 console.log("\n" + "═".repeat(50));

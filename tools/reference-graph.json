@@ -227,6 +227,10 @@
     },
     {
       "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/audit.md"
     },
     {
@@ -306,6 +310,10 @@
       "to": "skills/seo/references/action-plan.md"
     },
     {
+      "from": "skills/seo/references/content.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
       "from": "skills/seo/references/geo.md",
       "to": "skills/seo/references/indexnow.md"
     },
@@ -368,6 +376,10 @@
     {
       "from": "skills/seo/references/technical.md",
       "to": "skills/seo/references/head-meta.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/images.md"
     },
     {
       "from": "skills/seo/references/technical.md",
@@ -559,6 +571,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/onboard.md"
     },
     {
@@ -690,6 +706,18 @@
       "to": "skills/siteasy/references/resource-recommendations.md"
     },
     {
+      "from": "skills/siteasy/references/audit.md",
+      "to": "skills/siteasy/references/critique.md"
+    },
+    {
+      "from": "skills/siteasy/references/bolder.md",
+      "to": "skills/siteasy/references/animate.md"
+    },
+    {
+      "from": "skills/siteasy/references/bolder.md",
+      "to": "skills/siteasy/references/delight.md"
+    },
+    {
       "from": "skills/siteasy/references/bolder.md",
       "to": "skills/siteasy/references/typography.md"
     },
@@ -808,6 +836,10 @@
     {
       "from": "skills/siteasy/references/delight.md",
       "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/extract.md",
+      "to": "skills/siteasy/references/design-tokens.md"
     },
     {
       "from": "skills/siteasy/references/extract.md",
@@ -1171,6 +1203,10 @@
     },
     {
       "from": "skills/siteasy/references/overdrive.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/overdrive.md",
       "to": "skills/siteasy/references/parallax.md"
     },
     {
@@ -1200,6 +1236,18 @@
     {
       "from": "skills/siteasy/references/parallax.md",
       "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/polish.md",
+      "to": "skills/siteasy/references/harden.md"
+    },
+    {
+      "from": "skills/siteasy/references/polish.md",
+      "to": "skills/siteasy/references/optimize.md"
+    },
+    {
+      "from": "skills/siteasy/references/quieter.md",
+      "to": "skills/siteasy/references/distill.md"
     },
     {
       "from": "skills/siteasy/references/resource-recipes.md",
@@ -1264,6 +1312,10 @@
     {
       "from": "skills/siteasy/references/style-systems.md",
       "to": "skills/siteasy/references/elevation.md"
+    },
+    {
+      "from": "skills/siteasy/references/teach.md",
+      "to": "skills/siteasy/references/document.md"
     },
     {
       "from": "skills/siteasy/references/tokens.md",

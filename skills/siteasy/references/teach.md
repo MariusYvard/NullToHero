@@ -1,15 +1,15 @@
 ---
 name: teach
-description: "Interactive teaching mode: inspects a project and writes two complementary files at the project root to explain its design system."
+description: "Interactive teaching mode: inspects a project, writes PRODUCT.md at the project root and delegates DESIGN.md to /siteasy document, so the two files explain the design system together."
 version: 1.9.0
 ---
 
 # Teach Flow
 
-Gathers design context for a project and writes two complementary files at the project root:
+Gathers design context for a project and produces two complementary files at the project root (PRODUCT.md directly; DESIGN.md via [document.md](document.md), see Step 5):
 
 - **PRODUCT.md** (strategic): register, target users, product purpose, brand personality, anti-references, strategic design principles. Answers "who/what/why".
-- **DESIGN.md** (visual): visual theme, color palette, typography, components, layout. Follows the [Google Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format/). Answers "how it looks".
+- **DESIGN.md** (visual): visual theme, color palette, typography, components. Follows the [Google Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format/). Answers "how it looks".
 
 Every other siteasy command reads these files before doing any work.
 

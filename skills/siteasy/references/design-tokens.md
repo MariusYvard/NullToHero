@@ -1,6 +1,6 @@
 ---
 name: design-tokens
-description: "Reference for /siteasy tokens, /siteasy extract, and /siteasy document. A token system is the foundation of every maintainable design - build it right once, and."
+description: "Reference for /siteasy tokens, /siteasy extract, and /siteasy document. A token system is the foundation of every maintainable design - build it right once, and every surface stays consistent."
 version: 1.9.0
 ---
 
