@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.0.1] - 2026-07-19
+
+A line-by-line read of the README against the repository, hunting the hand-written prose the checks do not guard. Four more drifts found and closed.
+
+### Fixed
+
+- **"What is inside" claimed 110 reference docs against an actual 119.** Check 18 verified only the first "N reference docs" occurrence (the headline), so the second one slept through releases. The check now verifies every occurrence.
+- The `express` row still ended its stage list with "launch", one release after that stage and command became `harden`.
+- The `overhaul` row described the pre-2.0.0 pipeline ("triage, execute"); it now names its actual stages (baseline, fix by remediation route, before/after compare, ship).
+- The `detect` row promised the scan "finds focus rings"; it finds their absence.
+
+### Changed
+
+- The project-setup block now names all four project files: the two the user creates (`PRODUCT.md`, `DESIGN.md`) and the two that appear while working (`DIRECTION.md` from `/siteasy concept`, `LOG.md` from the journeys).
+
+---
+
 ## [2.0.0] - 2026-07-18
 
 v1.41.0 re-issued under the number it deserved. A command renamed (`launch` to `harden`), a command retired into an alias (the seo report formatter), four table rows folded into scopes and the whole surface reorganized around ten doors is a major change of the published surface, even though every old invocation still routes through the alias table. Same content as v1.41.0 plus the fixes below; both tags point at the same day.

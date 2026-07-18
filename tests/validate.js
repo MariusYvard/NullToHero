@@ -832,6 +832,15 @@ claims.forEach(([label, claimed, actual]) => {
   else fail(`README "${label}" count ${claimed} does not match actual ${actual}`);
 });
 
+// Every occurrence must match, not just the first: the second "reference docs"
+// claim drifted to 110 against an actual 119 and slept through releases.
+{
+  const all = [...readmeTxt.matchAll(/(\d+)\s+reference docs/g)].map(m => Number(m[1]));
+  const wrong = all.filter(n => n !== actualRefDocs);
+  if (wrong.length) fail(`README: ${wrong.length} "reference docs" occurrence(s) say ${wrong.join(", ")} but actual is ${actualRefDocs}`);
+  else pass(`README: all ${all.length} "reference docs" occurrences match actual ${actualRefDocs}`);
+}
+
 // Per-skill "All N commands" collapsible counts, in README order.
 {
   const perSkill = [...readmeTxt.matchAll(/All (\d+) commands/g)].map(m => Number(m[1]));
