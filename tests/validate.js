@@ -340,7 +340,7 @@ Object.entries(FILE_INTEGRITY).forEach(([relPath, { minLines }]) => {
 
 section("7. seo command count");
 
-const seoExpectedMinimum = 19; // minimum floor
+const seoExpectedMinimum = 18; // minimum floor (sxo folded into page in v2.1.0)
 const seoActual = Object.keys(commandReferenceMap).length;
 if (seoActual >= seoExpectedMinimum) {
   pass(`${seoActual} commands declared (minimum: ${seoExpectedMinimum})`);

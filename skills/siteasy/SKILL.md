@@ -1,9 +1,9 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research methodology, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 2.0.1
+version: 2.1.0
 user-invocable: true
-argument-hint: "[express|build|improve|fix|ship|overhaul · plan|research|ia|journey · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|handoff|tokens · live] [target]"
+argument-hint: "[express|build|improve|fix|ship|overhaul · shape|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · live] [target]"
 allowed-tools:
   - Bash(npx impeccable *)
   - Bash(npx playwright *)
@@ -38,7 +38,7 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 | Direction | If DIRECTION.md exists at the project root, it is read and honored (central idea, register, signature moment). | Commands that change the visual language re-read it. If the task contradicts the committed direction, surface the conflict; never silently override it. |
 | Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never synthesize PRODUCT.md from the user's prompt alone. |
 | Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
-| Craft | `/siteasy build` has a user-confirmed shape brief for this task. `setup` / PRODUCT.md never counts as shape. | Run `/siteasy plan` and wait for explicit brief confirmation. |
+| Craft | `/siteasy build` has a user-confirmed shape brief for this task. `setup` / PRODUCT.md never counts as shape. | Run `/siteasy shape` and wait for explicit brief confirmation. |
 | Mutation | All active gates above pass. | Do not edit files yet. |
 
 ### 1. Context gathering
@@ -52,7 +52,7 @@ Three files in the workspace or project root form the shared project state every
 
 Use the Read tool to check for these files. If already read in this session, don't re-read.
 
-If PRODUCT.md is missing, empty, or placeholder: run `/siteasy setup`, then resume. If the original task was `/siteasy build`, resume into `/siteasy plan` before any implementation.
+If PRODUCT.md is missing, empty, or placeholder: run `/siteasy setup`, then resume. If the original task was `/siteasy build`, resume into `/siteasy shape` before any implementation.
 
 If DIRECTION.md is missing on a brand-register project: nudge once (*"Run `/siteasy concept` so every command pulls in the same direction"*), then proceed.
 
@@ -144,15 +144,13 @@ whole-site check use `/audit [url]`; to be found on Google and in AI answers,
 | Command | Category | Description | Reference |
 |---|---|---|---|
 | `build [feature]` | Build | Shape, then build a feature end-to-end | [references/craft.md](references/craft.md) + [references/css-architecture.md](references/css-architecture.md) + [references/component-patterns.md](references/component-patterns.md) + [references/assets-library.md](references/assets-library.md) + [references/stock-media.md](references/stock-media.md) + [references/resource-recommendations.md](references/resource-recommendations.md) + [references/resource-recipes.md](references/resource-recipes.md) + [references/fetch-asset.md](references/fetch-asset.md) + [references/sourcing-external-code.md](references/sourcing-external-code.md) |
-| `plan [feature]` | Build | Plan UX/UI before writing code | [references/shape.md](references/shape.md) + [references/landing-patterns.md](references/landing-patterns.md) |
+| `shape [feature]` | Build | Shape the UX/UI before writing code | [references/shape.md](references/shape.md) + [references/landing-patterns.md](references/landing-patterns.md) |
 | `setup` | Build | Create PRODUCT.md and DESIGN.md context | [references/teach.md](references/teach.md) |
 | `concept [project]` | Build | Set the creative direction before building: idea, anti-reference, signature moment | [references/concept.md](references/concept.md) + [references/memorability.md](references/memorability.md) |
-| `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |
+| `research [scope]` | Build | UX research planning, methods selection, persona and journey synthesis; generates empathy maps, journey maps and service blueprints | [references/ux-research.md](references/ux-research.md) + [references/personas.md](references/personas.md) + [references/journey-mapping.md](references/journey-mapping.md) |
 | `ia [target]` | Build | Information architecture, card sorting, tree testing, navigation patterns | [references/information-architecture.md](references/information-architecture.md) |
-| `journey [persona]` | Build | Generate empathy maps, journey maps, or service blueprints from research | [references/journey-mapping.md](references/journey-mapping.md) |
 | `document` | Build | Generate DESIGN.md from existing project code | [references/document.md](references/document.md) |
-| `extract [target]` | Build | Pull reusable tokens and components into a design system | [references/extract.md](references/extract.md) |
-| `handoff [target]` | Build | Developer handoff spec: layout, tokens, props, states, breakpoints, edge cases, motion, accessibility | [references/handoff.md](references/handoff.md) |
+| `extract [target]` | Build | Pull reusable tokens and components into a design system; the `handoff` deliverable emits the developer spec (layout, tokens, props, states, breakpoints, motion, accessibility) | [references/extract.md](references/extract.md) + [references/handoff.md](references/handoff.md) |
 | `tokens [project]` | Build | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode | [references/tokens.md](references/tokens.md) + [references/color-systems.md](references/color-systems.md) + [references/elevation.md](references/elevation.md) |
 | `critique [target]` | Evaluate | UX design review with heuristic scoring | [references/critique.md](references/critique.md) + [references/memorability.md](references/memorability.md) |
 | `audit [target]` | Evaluate | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) | [references/audit.md](references/audit.md) + [references/accessibility-engineering.md](references/accessibility-engineering.md) + [references/wcag-2-2.md](references/wcag-2-2.md) + [references/image-strategy.md](references/image-strategy.md) + [references/form-patterns.md](references/form-patterns.md) |

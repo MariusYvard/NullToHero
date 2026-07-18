@@ -205,5 +205,5 @@ Ordered by priority:
 | Content quality for cluster pages | `/seo content` |
 | Competitor comparison cluster pages | `/seo competitor-pages` |
 | Programmatic SEO for large clusters | `/seo programmatic` |
-| SXO — matching intent to experience | `/seo sxo` |
+| SXO — matching intent to experience | `/seo page` |
 | Full site audit | `/seo audit` |

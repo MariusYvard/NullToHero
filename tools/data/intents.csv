@@ -11,3 +11,7 @@ client-report,client report; deliverable; export as PDF; format for a client,/au
 see-it,screenshot; how does it look; view it like a browser,/inspect preview,current
 /siteasy launch,production hardening; performance pass; core web vitals,/siteasy harden,alias
 /seo report,seo report; format seo audit,/audit report,alias
+/siteasy plan,shape the ux before code; design brief,/siteasy shape,alias
+/siteasy journey,empathy map; journey map; service blueprint,/siteasy research,alias
+/siteasy handoff,developer handoff; spec for devs,/siteasy extract,alias
+/seo sxo,search experience; intent alignment,/seo page,alias

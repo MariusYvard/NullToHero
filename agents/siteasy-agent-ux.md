@@ -122,5 +122,5 @@ Quick wins:
 |------|-------|
 | Research | `/siteasy research` |
 | Information architecture | `/siteasy ia` |
-| Journey mapping | `/siteasy journey` |
+| Journey mapping | `/siteasy research` |
 | Onboarding flows | `/siteasy onboard` |

@@ -1,9 +1,9 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, build local SEO, handle hreflang/i18n, generate sitemaps, optimize images, run programmatic SEO, build competitor comparison pages, cluster keywords, optimize for Search Experience (SXO), monitor SEO drift, analyze backlinks, handle e-commerce SEO, or export a client report. Covers full site audits with parallel sub-agents, single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, JSON-LD, E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, keyword clustering, SXO, drift monitoring, backlink analysis, e-commerce SEO, and PDF report export. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local SEO, hreflang, backlinks, programmatic, ecommerce, or visibility."
-version: 2.0.1
+version: 2.1.0
 user-invocable: true
-argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|sxo|drift|backlinks|ecommerce] [url | business-type]"
+argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce] [url | business-type]"
 allowed-tools:
   - Read
   - Write
@@ -29,7 +29,7 @@ checked in one pass. Everything else in the table below is a specialist pass.
 | Command | What it does | Reference |
 |---------|-------------|-----------|
 | `audit [url]` | Full site SEO audit — crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md | [references/audit.md](references/audit.md) |
-| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, score | [references/page.md](references/page.md) |
+| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, search-experience alignment (intent, page-type match), score | [references/page.md](references/page.md) + [references/sxo.md](references/sxo.md) |
 | `plan [business-type]` | Complete SEO strategy — architecture, content pillars, keyword plan, 4-phase roadmap | [references/plan.md](references/plan.md) + [references/plan-assets/](references/plan-assets/) |
 | `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering | [references/technical.md](references/technical.md) |
 | `schema [url]` | Detect, validate, and generate Schema.org JSON-LD — Organization, Article, Product, etc. | [references/schema.md](references/schema.md) |
@@ -43,7 +43,6 @@ checked in one pass. Everything else in the table below is a specialist pass.
 | `programmatic [url]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication | [references/programmatic.md](references/programmatic.md) |
 | `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks | [references/competitor-pages.md](references/competitor-pages.md) |
 | `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis | [references/cluster.md](references/cluster.md) |
-| `sxo [url]` | Search Experience Optimization — intent alignment, page-type matching, persona analysis | [references/sxo.md](references/sxo.md) |
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking | [references/drift.md](references/drift.md) |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) | [references/backlinks.md](references/backlinks.md) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema | [references/ecommerce.md](references/ecommerce.md) |
@@ -82,7 +81,7 @@ When the user invokes a command:
 | "programmatic SEO" / "scale pages" / "template pages" | `programmatic` |
 | "vs page" / "alternatives to X" / "comparison page" | `competitor-pages` |
 | "keyword clusters" / "content architecture" / "gap analysis" | `cluster` |
-| "search experience" / "intent alignment" / "SXO" | `sxo` |
+| "search experience" / "intent alignment" / "SXO" | `page` |
 | "SEO drift" / "baseline" / "track ranking changes" | `drift` |
 | "backlinks" / "link profile" / "link building" | `backlinks` |
 | "e-commerce SEO" / "product pages" / "faceted nav" | `ecommerce` |

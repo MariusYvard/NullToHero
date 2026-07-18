@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-2.0.1-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-2.1.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v2.0.1** · 4 skills · 63 commands · 119 reference docs · 15 audit sub-agents
+**v2.1.0** · 4 skills · 60 commands · 119 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -141,20 +141,18 @@ The doors above are the way in. The four skills below are the full reference beh
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
 <details>
-<summary><b>All 35 commands</b></summary>
+<summary><b>All 33 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
 | `build [feature]` | Shape, then build a feature end-to-end |
-| `plan [feature]` | Plan UX/UI before writing code |
+| `shape [feature]` | Shape the UX/UI before writing code |
 | `setup` | Create PRODUCT.md and DESIGN.md context |
 | `concept [project]` | Set the creative direction before building: idea, anti-reference, signature moment |
-| `research [scope]` | UX research planning, methods selection, persona and journey synthesis |
+| `research [scope]` | UX research planning, methods selection, persona and journey synthesis; generates empathy maps, journey maps and service blueprints |
 | `ia [target]` | Information architecture, card sorting, tree testing, navigation patterns |
-| `journey [persona]` | Generate empathy maps, journey maps, or service blueprints from research |
 | `document` | Generate DESIGN.md from existing project code |
-| `extract [target]` | Pull reusable tokens and components into a design system |
-| `handoff [target]` | Developer handoff spec: layout, tokens, props, states, breakpoints, edge cases, motion, accessibility |
+| `extract [target]` | Pull reusable tokens and components into a design system; the `handoff` deliverable emits the developer spec (layout, tokens, props, states, breakpoints, motion, accessibility) |
 | `tokens [project]` | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode |
 | `critique [target]` | UX design review with heuristic scoring |
 | `audit [target]` | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) |
@@ -181,7 +179,7 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `overhaul [url]` | Audit-driven rework: baseline, fix by remediation route, before/after compare, ship |
 | `express [brief]` | Zero-to-landing: setup, concept, tokens, plan, build, motion, checks, harden |
 
-Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt` → `amplify` → `harden`), a refresh (`improve` → `polish`), after an audit (`fix` → `ship`), a design system (`document` → `extract` → `tokens`).
+Common runs: a new page (`setup` → `shape` → `build` → `layout` → `adapt` → `amplify` → `harden`), a refresh (`improve` → `polish`), after an audit (`fix` → `ship`), a design system (`document` → `extract` → `tokens`).
 
 </details>
 
@@ -190,12 +188,12 @@ Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt`
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
 
 <details>
-<summary><b>All 19 commands</b></summary>
+<summary><b>All 18 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
 | `audit [url]` | Full site SEO audit — crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md |
-| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, score |
+| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, search-experience alignment (intent, page-type match), score |
 | `plan [business-type]` | Complete SEO strategy — architecture, content pillars, keyword plan, 4-phase roadmap |
 | `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering |
 | `schema [url]` | Detect, validate, and generate Schema.org JSON-LD — Organization, Article, Product, etc. |
@@ -209,12 +207,11 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `programmatic [url]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
 | `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks |
 | `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis |
-| `sxo [url]` | Search Experience Optimization — intent alignment, page-type matching, persona analysis |
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
 
-Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `/audit report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema` → `sxo`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
+Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `/audit report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
 </details>
 
@@ -251,7 +248,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.0.1`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.1.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -369,9 +366,8 @@ Reworking an existing site instead: `/siteasy overhaul` chains the baseline audi
 ```
 /siteasy research       understand the users
 /siteasy ia             validate the structure
-/siteasy journey        map empathy and journeys
 /siteasy setup          define brand, audience, tone
-/siteasy plan           plan UX before coding
+/siteasy shape          shape the UX before coding
 /seo plan               build the SEO strategy in parallel
 /seo cluster            group keywords by intent
      |

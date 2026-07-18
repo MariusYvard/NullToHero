@@ -330,6 +330,10 @@
       "to": "skills/seo/references/content.md"
     },
     {
+      "from": "skills/seo/references/page.md",
+      "to": "skills/seo/references/sxo.md"
+    },
+    {
       "from": "skills/seo/references/plan.md",
       "to": "skills/seo/references/ecommerce.md"
     },
@@ -804,6 +808,10 @@
     {
       "from": "skills/siteasy/references/delight.md",
       "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/extract.md",
+      "to": "skills/siteasy/references/handoff.md"
     },
     {
       "from": "skills/siteasy/references/fetch-asset.md",

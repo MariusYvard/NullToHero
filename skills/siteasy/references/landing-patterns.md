@@ -8,7 +8,7 @@ version: 1.15.0
 
 A landing page is a sequence, not a canvas. The order of sections is the argument: each one answers the objection the previous one raised. Pick a pattern by the visitor's starting state (cold, comparing, ready) and let it set the spine, then design within it.
 
-These patterns inform planning a page; pair this reference with [shape.md](shape.md) when you run `/siteasy plan`.
+These patterns inform planning a page; pair this reference with [shape.md](shape.md) when you run `/siteasy shape`.
 
 ## Patterns
 

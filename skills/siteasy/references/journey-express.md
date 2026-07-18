@@ -15,7 +15,7 @@ The zero-to-landing pipeline. Eight stages, each an existing command, each writi
 | 1 | Setup | `/siteasy setup` ([teach.md](teach.md)) | `PRODUCT.md` real (no placeholders) |
 | 2 | Direction | `/siteasy concept` ([concept.md](concept.md)) | `DIRECTION.md` committed: one idea, one anti-reference, one signature moment |
 | 3 | Tokens | `/siteasy tokens` ([tokens.md](tokens.md)) | Two-layer token system aligned with the direction; no factory gradients |
-| 4 | Plan | `/siteasy plan` ([shape.md](shape.md), [landing-patterns.md](landing-patterns.md)) | Shape brief confirmed by the user |
+| 4 | Shape | `/siteasy shape` ([shape.md](shape.md), [landing-patterns.md](landing-patterns.md)) | Shape brief confirmed by the user |
 | 5 | Build | `/siteasy build` ([craft.md](craft.md)) | Landing built to the production bar, direction honored |
 | 6 | Motion | `/siteasy animate` ([animate.md](animate.md)) | The ONE signature moment from `DIRECTION.md`, decorative loops <= 2, reduced-motion guarded |
 | 7 | Checks | `/inspect detect` then `/audit checks` | Zero CRITICAL/HIGH; deterministic floor >= 80 |

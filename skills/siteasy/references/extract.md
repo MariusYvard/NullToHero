@@ -99,3 +99,5 @@ Score each component against the states it owes: default, hover, focus-visible, 
 | Button | 6 / 8 | 3 | partial | needs work |
 
 A component missing its error or empty state will be reinvented inconsistently the first time someone needs it.
+
+For the developer-facing handoff spec (layout, tokens, props, states, breakpoints, motion, accessibility), follow [handoff.md](handoff.md).

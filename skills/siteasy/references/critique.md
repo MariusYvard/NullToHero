@@ -138,7 +138,7 @@ For each issue, tag with **P0-P3 severity** (consult [heuristics-scoring](heuris
 - **[P?] What**: Name the problem clearly
 - **Why it matters**: How this hurts users or undermines goals
 - **Fix**: What to do about it (be concrete)
-- **Suggested command**: Which command could address this (from: /siteasy adapt, /siteasy amplify, /siteasy animate, /siteasy audit, /siteasy clarify, /siteasy critique, /siteasy delight, /siteasy document, /siteasy harden, /siteasy layout, /siteasy onboard, /siteasy overdrive, /siteasy plan, /siteasy polish, /siteasy simplify, /siteasy typeset)
+- **Suggested command**: Which command could address this (from: /siteasy adapt, /siteasy amplify, /siteasy animate, /siteasy audit, /siteasy clarify, /siteasy critique, /siteasy delight, /siteasy document, /siteasy harden, /siteasy layout, /siteasy onboard, /siteasy overdrive, /siteasy shape, /siteasy polish, /siteasy simplify, /siteasy typeset)
 
 #### Persona Red Flags
 > *Consult [personas](personas.md)*
@@ -203,7 +203,7 @@ List recommended commands in priority order, based on the user's answers:
 ...
 
 **Rules for recommendations**:
-- Only recommend commands from: /siteasy adapt, /siteasy amplify, /siteasy animate, /siteasy audit, /siteasy clarify, /siteasy critique, /siteasy delight, /siteasy document, /siteasy harden, /siteasy layout, /siteasy onboard, /siteasy overdrive, /siteasy plan, /siteasy polish, /siteasy simplify, /siteasy typeset
+- Only recommend commands from: /siteasy adapt, /siteasy amplify, /siteasy animate, /siteasy audit, /siteasy clarify, /siteasy critique, /siteasy delight, /siteasy document, /siteasy harden, /siteasy layout, /siteasy onboard, /siteasy overdrive, /siteasy shape, /siteasy polish, /siteasy simplify, /siteasy typeset
 - Order by the user's stated priorities first, then by impact
 - Each item's description should carry enough context that the command knows what to focus on
 - Map each Priority Issue to the appropriate command

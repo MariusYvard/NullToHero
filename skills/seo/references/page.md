@@ -93,3 +93,5 @@ Ready-to-use JSON-LD code for detected opportunities
 | Schema & structured data | `/seo schema` |
 | Page image optimization | `/seo images` |
 | Page AI citability | `/seo geo` |
+
+For the search-experience dimension (intent alignment, page-type matching, persona fit), follow [sxo.md](sxo.md).

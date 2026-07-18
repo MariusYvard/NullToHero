@@ -207,6 +207,6 @@ Over 60% of searches happen on mobile. SXO includes mobile-specific experience:
 | Content depth and E-E-A-T | `/seo content` |
 | UX research and personas | `/siteasy research` |
 | Information architecture | `/siteasy ia` |
-| Journey mapping | `/siteasy journey` |
+| Journey mapping | `/siteasy research` |
 | Mobile and responsive design | `/siteasy adapt` |
 | Full audit | `/seo audit` |

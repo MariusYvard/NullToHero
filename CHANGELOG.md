@@ -11,6 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.1.0] - 2026-07-19
+
+Consolidation pass over the command set, driven by the Phase 1 connectivity data (internal call counts, remediation routes, journey usage). Three commands folded into the command that already owned their ground, one renamed to kill the plugin's last name collision. Nothing deleted: every reference file stays, every retired name routes through the alias table.
+
+### Changed
+
+- **`/siteasy journey` folded into `/siteasy research`.** It was a pure subset: its only reference (journey-mapping.md) was already loaded by research, whose description already promised journey synthesis. Research now states it generates the artifacts (empathy maps, journey maps, service blueprints).
+- **`/siteasy handoff` folded into `/siteasy extract`.** The least-connected command in the plugin (zero internal calls, zero remediation routes, zero journeys). Extract now names the handoff deliverable and loads handoff.md alongside its own reference.
+- **`/seo sxo` folded into `/seo page`.** One internal call, no routes; intent-page alignment is single-page analysis. Page loads sxo.md for the search-experience dimension. The seo command floor moves 19 to 18 accordingly.
+- **`/siteasy plan` renamed `/siteasy shape`**, closing the last name collision (`/siteasy plan` vs `/seo plan`, different meanings). Its reference was already called shape.md. Nine call sites migrated (craft, the critique and audit command menus, journey-express, the claims agent, the README ladder).
+- 60 commands (siteasy 33, seo 18, inspect 3, audit 6); four alias rows added to `tools/data/intents.csv`, all guarded by check 38.
+
+---
+
 ## [2.0.1] - 2026-07-19
 
 A line-by-line read of the README against the repository, hunting the hand-written prose the checks do not guard. Four more drifts found and closed.

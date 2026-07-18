@@ -107,5 +107,5 @@ Claims to substantiate or soften:
 | Need | Skill |
 |------|-------|
 | UX writing | `/siteasy clarify` |
-| Landing structure and proof | `/siteasy plan` |
+| Landing structure and proof | `/siteasy shape` |
 | E-E-A-T and content SEO | `/seo content` |
