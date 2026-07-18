@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.41.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-2.0.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.41.0** · 4 skills · 63 commands · 119 reference docs · 15 audit sub-agents
+**v2.0.0** · 4 skills · 63 commands · 119 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -105,7 +105,7 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 
 ![siteasy](https://img.shields.io/badge/siteasy-4f46e5)<br>
 **Design and build.** Plan, build, make it responsive, add motion.<br>
-`/siteasy build` · `/siteasy amplify` · `/siteasy tokens`
+`/siteasy express` · `/siteasy build` · `/siteasy improve`
 
 </td>
 <td valign="top" width="50%">
@@ -411,9 +411,9 @@ NullToHero ships **110 reference docs** that Claude loads only when it needs the
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (77):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand-identity, brand, clarify, cognitive-load, color-and-contrast, color-systems, colorize, component-patterns, component-recipes, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, data-viz, delight, design-tokens, distill, document, elevation, extract, fetch-asset, form-patterns, gestalt, handoff, harden, heuristics-scoring, image-strategy, information-architecture, inspiration, interaction-design, journey-express, journey-mapping, journey-overhaul, journey-ship, landing-patterns, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, print-styles, product, quieter, resource-recipes, resource-recommendations, responsive-design, shape, ship-checklist, signature-moments, spatial-design, stock-media, style-systems, teach, testing-strategy, tokens, typeset, typography, ux-research, ux-writing, video, wcag-2-2
+**siteasy, design (80):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, brand-identity, clarify, cognitive-load, color-and-contrast, color-systems, colorize, component-patterns, component-recipes, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, data-viz, delight, design-tokens, distill, document, elevation, extract, fetch-asset, fix, form-patterns, gestalt, handoff, harden, heuristics-scoring, image-strategy, improve, information-architecture, inspiration, interaction-design, journey-express, journey-mapping, journey-overhaul, journey-ship, landing-patterns, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, print-styles, product, quieter, resource-recipes, resource-recommendations, responsive-design, shape, ship-checklist, signature-moments, sourcing-external-code, spatial-design, stock-media, style-systems, teach, testing-strategy, tokens, typeset, typography, ux-research, ux-writing, video, wcag-2-2
 
-**seo, search (23):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, head-meta, hreflang, images, local, page, performance, plan, privacy-consent, programmatic, report, schema, sitemap, sxo, technical
+**seo, search (23):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, head-meta, hreflang, images, indexnow, local, page, performance, plan, privacy-consent, programmatic, schema, sitemap, sxo, technical
 
 **seo, plan assets (6):** agency, ecommerce, generic, local-service, publisher, saas
 
@@ -455,7 +455,7 @@ node tests/validate.js   # run before opening a PR
 
 <div align="center">
 
-Built by [Marius Yvard](https://lecvdemarius.netlify.app/) · [Releases](https://github.com/MariusYvard/NullToHero/releases) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+Built by [Marius Yvard](https://mariusweb.fr/cv) · [Releases](https://github.com/MariusYvard/NullToHero/releases) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 License: Apache 2.0. See [LICENSE](LICENSE).
 

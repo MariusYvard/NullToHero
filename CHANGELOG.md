@@ -11,6 +11,17 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.0.0] - 2026-07-18
+
+v1.41.0 re-issued under the number it deserved. A command renamed (`launch` to `harden`), a command retired into an alias (the seo report formatter), four table rows folded into scopes and the whole surface reorganized around ten doors is a major change of the published surface, even though every old invocation still routes through the alias table. Same content as v1.41.0 plus the fixes below; both tags point at the same day.
+
+### Fixed
+
+- **The hand-maintained knowledge-base list in the README had drifted silently**: `sourcing-external-code` was never added, `indexnow` was missed at v1.40.0, and the deleted seo `report` reference was still listed. The four lists are now regenerated from the files on disk (siteasy 80, seo 23, inspect 4, audit 6; total still 119 with the six plan assets).
+- The four-skills grid now shows the door commands for siteasy (`express`, `build`, `improve`) instead of a pre-doors trio.
+
+---
+
 ## [1.41.0] - 2026-07-18
 
 The catalog problem, addressed at the surface: 66 commands were well-connected underneath (graph, remediation map, shared state) and undiscoverable on top. A newcomer had no obvious way in, "audit" lived in three skills, and the "from zero knowledge" promise depended on already knowing the names. This release reshapes the surface around ten intent doors without deleting or breaking anything.
