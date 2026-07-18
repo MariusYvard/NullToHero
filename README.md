@@ -99,6 +99,8 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 
 ## The four skills
 
+The doors above are the way in. The four skills below are the full reference behind them: every command stays callable on its own.
+
 <table>
 <tr>
 <td valign="top" width="50%">
@@ -249,7 +251,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (32 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v1.14.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.0.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -343,6 +345,27 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 
 ## How a project flows
 
+The doors are the flow. A project usually walks through five of them:
+
+```
+/siteasy express        nothing yet: brief to a first shippable page
+        or
+/siteasy build          something exists: add the next piece
+     |
+/siteasy improve        "make it better": the right axis, one pass at a time
+     |
+/audit                  the whole site, scored, every finding routed to its fix
+     |
+/siteasy fix            execute the findings, batch by batch
+     |
+/siteasy ship           polish, scans, hardening, gates: out the door
+```
+
+Reworking an existing site instead: `/siteasy overhaul` chains the baseline audit, the fixes and the before/after proof. Growing traffic after launch: `/seo plan` sets the strategy and names the specialist passes to run; `/seo drift` watches for regressions.
+
+<details>
+<summary><b>The same flow, specialist by specialist</b></summary>
+
 ```
 /siteasy research       understand the users
 /siteasy ia             validate the structure
@@ -382,6 +405,8 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 /audit report           client-ready report
 /seo drift              watch for regressions
 ```
+
+</details>
 
 > [!TIP]
 > In a hurry, `/audit yoursite.com` runs the whole check in a single pass.
