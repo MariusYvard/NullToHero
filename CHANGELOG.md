@@ -11,6 +11,14 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [1.40.0] - 2026-07-18
+
+### Added
+
+- IndexNow made operative: the references already told sites to ping IndexNow (technical section 9, sitemap step 3, ship-checklist) without providing the how. New `/seo indexnow` command with `indexnow.md` (participants Bing/Yandex/Naver/Seznam/Yep and the explicit Google abstention, key-file setup, single GET vs batch POST up to 10,000 URLs, response-code readings, when to ping and when not to, the GEO angle: Bing's index feeds ChatGPT search and Copilot) and `skills/seo/scripts/indexnow.mjs` (key generation, submit single/batch with dry-run, sitemap mode extracting and submitting `<loc>` entries). Existing mentions in technical.md, sitemap.md, geo.md and the ship checklist now link to the reference; the journey-ship hardening stage pings changed URLs on content and brand sites. One resources.csv row (open protocol).
+
+---
+
 ## [1.39.0] - 2026-07-16
 
 v1.38.0 shipped after reading **12 of the academy's 107 lessons** and phrased the verdict as though it covered the site. That is the v1.36.0 bug ("the home page vouched for the site") committed in prose, by the person who had just fixed it in code. Read all 106 lessons plus the index. The v1.38.0 conclusion held, but it had not been earned, and two things were missed.

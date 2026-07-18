@@ -32,7 +32,7 @@ Quality gates, all of which must pass:
 - [ ] Smoke-test the preview: load the home page, follow the primary user flow end to end, submit one form.
 - [ ] Confirm the build output is the intended one (right branch, right commit, no stray debug build).
 - [ ] Promote to production.
-- [ ] If the site is meant to be indexed, ping the search engines: submit the sitemap and, where supported, send the changed URLs to IndexNow.
+- [ ] If the site is meant to be indexed, ping the search engines: submit the sitemap and, where supported, send the changed URLs to IndexNow ([/seo indexnow](../../seo/references/indexnow.md)).
 
 ## After deploy
 

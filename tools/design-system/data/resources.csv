@@ -1039,3 +1039,4 @@ motion,css-animation,more,free,open-source library,tw-animate-css,https://github
 build,react-ui,more,free,open-source library,react-tweet,https://react-tweet.vercel.app,live,Static tweet rendering without widgets.js |
 scaffold,dev-resources,more,free,open-source library,Shiki,https://shiki.style,live,Build-time syntax highlighting |
 imagery,svg,more,free,open-source library,svg-dotted-map,https://www.npmjs.com/package/svg-dotted-map,live,Dotted world maps as pure SVG |
+ship,seo,more,free,open protocol,IndexNow,https://www.indexnow.org,live,"Instant-indexing pings shared by Bing, Yandex, Naver, Seznam and Yep; Google abstains — keep sitemaps |"

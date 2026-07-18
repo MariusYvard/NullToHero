@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-1.39.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-1.40.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v1.39.0** · 4 skills · 65 commands · 117 reference docs · 15 audit sub-agents
+**v1.40.0** · 4 skills · 66 commands · 118 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -186,7 +186,7 @@ Common runs: a new page (`setup` → `plan` → `build` → `layout` → `adapt`
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
 
 <details>
-<summary><b>All 19 commands</b></summary>
+<summary><b>All 20 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -198,6 +198,7 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness |
 | `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals |
 | `sitemap [url]` | XML sitemap validation and generation with industry-specific templates |
+| `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam — key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers |
 | `images [url]` | Image SEO audit — alt text, formats (WebP/AVIF), lazy loading, CLS, LCP |
 | `local [business]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
 | `hreflang [url]` | Hreflang validation and generation for multilingual and multi-region sites |

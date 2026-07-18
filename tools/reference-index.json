@@ -235,6 +235,14 @@
   },
   {
     "skill": "seo",
+    "path": "skills/seo/references/indexnow.md",
+    "title": "IndexNow",
+    "keywords": [
+      "indexnow"
+    ]
+  },
+  {
+    "skill": "seo",
     "path": "skills/seo/references/local.md",
     "title": "Local SEO Analysis",
     "keywords": [

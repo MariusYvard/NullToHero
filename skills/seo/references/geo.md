@@ -472,3 +472,5 @@ Backed by: Reddit, Yahoo, Medium, Quora, Cloudflare, Akamai, Creative Commons
 | Organic SEO strategy | `/seo plan` |
 | Technical SEO (JS rendering, robots.txt) | `/seo technical` |
 | SEO change tracking over time | `/seo drift` |
+
+Freshness lever: the Bing index feeds ChatGPT search and Copilot answers, and IndexNow puts changed URLs into it within minutes — see [indexnow.md](indexnow.md).

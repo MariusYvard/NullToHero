@@ -22,6 +22,7 @@
     "skills/seo/references/head-meta.md",
     "skills/seo/references/hreflang.md",
     "skills/seo/references/images.md",
+    "skills/seo/references/indexnow.md",
     "skills/seo/references/local.md",
     "skills/seo/references/page.md",
     "skills/seo/references/performance.md",
@@ -261,6 +262,10 @@
     },
     {
       "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/indexnow.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/local.md"
     },
     {
@@ -300,6 +305,26 @@
       "to": "skills/seo/references/action-plan.md"
     },
     {
+      "from": "skills/seo/references/geo.md",
+      "to": "skills/seo/references/indexnow.md"
+    },
+    {
+      "from": "skills/seo/references/indexnow.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/indexnow.md",
+      "to": "skills/seo/references/sitemap.md"
+    },
+    {
+      "from": "skills/seo/references/indexnow.md",
+      "to": "skills/seo/references/technical.md"
+    },
+    {
+      "from": "skills/seo/references/indexnow.md",
+      "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
       "from": "skills/seo/references/page.md",
       "to": "skills/seo/references/content.md"
     },
@@ -332,8 +357,16 @@
       "to": "skills/seo/references/plan-assets/saas.md"
     },
     {
+      "from": "skills/seo/references/sitemap.md",
+      "to": "skills/seo/references/indexnow.md"
+    },
+    {
       "from": "skills/seo/references/technical.md",
       "to": "skills/seo/references/head-meta.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/indexnow.md"
     },
     {
       "from": "skills/seo/references/technical.md",
@@ -961,6 +994,10 @@
     },
     {
       "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/seo/references/indexnow.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
       "to": "skills/siteasy/references/harden.md"
     },
     {
@@ -1126,6 +1163,10 @@
     {
       "from": "skills/siteasy/references/shape.md",
       "to": "skills/siteasy/references/spatial-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/ship-checklist.md",
+      "to": "skills/seo/references/indexnow.md"
     },
     {
       "from": "skills/siteasy/references/ship-checklist.md",
