@@ -11,6 +11,14 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.2.1] - 2026-07-19
+
+### Fixed
+
+- A repo-wide sweep for the truncated-description class (found five in v2.2.0's reviewed families) caught two more in files no reviewer had opened: `brand.md` ("The deliverable is the design itself - a.") and `wcag-2-2.md` ("motor impairments, and."). Both completed from their own body text. The class is now swept across all 119 references, not just the reviewed families.
+
+---
+
 ## [2.2.0] - 2026-07-19
 
 A content-level pass over the whole knowledge base: five parallel reviews read the references behind every command family (motion, refine and evaluate, project and build, the seo boundaries, the deterministic layer) looking for doctrine that overlaps, contradicts itself or has drifted. The conclusion that matters: no further command merges are justified. Every remaining command owns real doctrine; a clean plugin is not a smaller one, it is a bounded one. What follows closes every boundary defect the pass found.

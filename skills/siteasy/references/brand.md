@@ -1,6 +1,6 @@
 ---
 name: brand
-description: "When design IS the product: brand sites, landing pages, marketing surfaces, campaign pages, portfolios, long-form content, about pages. The deliverable is the design itself - a."
+description: "When design IS the product: brand sites, landing pages, marketing surfaces, campaign pages, portfolios, long-form content, about pages. The deliverable is the design itself - a visitor's impression is the thing being made."
 version: 1.9.0
 ---
 
