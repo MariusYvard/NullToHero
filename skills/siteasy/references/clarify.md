@@ -45,6 +45,31 @@ Create a strategy for clearer communication:
 
 ## Improve Copy Systematically
 
+Work in passes, one dimension at a time, and re-check the earlier passes after each one.
+A single sweep that tries to fix clarity, proof and emotion at once fixes none of them:
+tightening a sentence for clarity often removes the specific number that was carrying the
+proof, which is exactly what the return pass is for.
+
+| Pass | Question it asks | What it kills |
+|------|------------------|---------------|
+| 1. Clarity | Can a first-time reader say what this is, in their own words | Jargon, abstraction, sentences carrying two ideas |
+| 2. Voice and tone | Does this sound like the same product throughout | Register drift, borrowed startup cadence |
+| 3. So what | For each claim, ask "ok, and so what" until a benefit answers | Features stated with no consequence attached |
+| 4. Prove it | What makes this believable to someone who does not trust us yet | Adjectives standing in for evidence |
+| 5. Specificity | Replace every vague quantity with the real one | "Save time" where "save 4 hours a week" was available |
+| 6. Emotion | Does the copy name the frustration the reader actually has | Neutral description of a painful situation |
+| 7. Zero risk | What is the reader afraid of, and does the page answer it | Unanswered objections next to the buy button |
+
+After each pass, return to the passes before it. The sequence matters: specificity added
+in pass 5 frequently breaks the voice set in pass 2.
+
+Passes 3, 4 and 7 have their own references. The claim and evidence work belongs to
+[../../../agents/siteasy-agent-claims.md](../../../agents/siteasy-agent-claims.md), the
+objection inventory to [objections.md](objections.md), and the risk reversal to
+[offer-diagnostic.md](offer-diagnostic.md).
+
+
+
 Refine text across these common areas:
 
 ### Error Messages
@@ -204,6 +229,13 @@ Name the specific consequence and object: "Delete the Q3 report? This cannot be 
 Write like a competent person, not a mascot and not a manual. Drop filler ("please note that", "in order to"). Match the moment: plain in errors, warmer in success, never jokey in a failure the reader did not cause.
 
 ## Spotting machine-written copy
+
+The rhythm-level tells are below. The lexical tells, with a penalty per pattern and a
+banded score, are in [slop-patterns.md](slop-patterns.md), and the deterministic
+measurement of sentence rhythm and phrase density is
+[../../../tools/content/score.mjs](../../../tools/content/score.mjs). This section is the
+short read; that pair is the scored version.
+
 
 Generated copy has tells. When auditing or editing site text, watch for and remove these:
 

@@ -1,0 +1,58 @@
+{
+  "$schema_note": "Profiles select a subset of the behavior corpus. mode 'named' lists case ids explicitly, mode 'type' selects every case of one type, mode 'all' selects the whole corpus. run.mjs validates that every named id resolves.",
+  "profiles": {
+    "smoke": {
+      "mode": "named",
+      "description": "Pre-release review checklist. Enumerated by name rather than computed, so a case can never leave the profile through a filter change. Twenty three sentinels, at least two per risk family.",
+      "families": {
+        "guarantee-refusal": 4,
+        "score-without-data": 3,
+        "untraceable-numbers": 3,
+        "command-boundaries": 5,
+        "accessibility-and-dark-patterns": 4,
+        "data-edge-cases": 2,
+        "scope": 2
+      },
+      "cases": [
+        "seo-guarantee-first-position",
+        "seo-guarantee-ai-citations",
+        "audit-guarantee-perfect-health-score",
+        "siteasy-guaranteed-conversion-lift",
+
+        "seo-score-without-url",
+        "seo-backlinks-without-source",
+        "inspect-scan-without-target",
+
+        "seo-citation-passage-word-count",
+        "seo-featured-snippet-length-rule",
+        "siteasy-form-field-cost-as-finding",
+
+        "siteasy-improve-vs-fix",
+        "siteasy-audit-vs-audit-full",
+        "seo-content-vs-siteasy-clarify",
+        "audit-verify-vs-compare",
+        "seo-page-vs-audit",
+
+        "siteasy-remove-focus-rings",
+        "siteasy-resetting-countdown",
+        "siteasy-shaming-decline-label",
+        "siteasy-remove-reduced-motion",
+
+        "seo-gsc-export-below-threshold",
+        "seo-url-returns-403",
+
+        "siteasy-scope-backend-api",
+        "seo-scope-ad-campaign"
+      ]
+    },
+    "risk": {
+      "mode": "type",
+      "type": "risk",
+      "description": "Every case of type risk: guarantee framing, scoring without data, untraceable numbers, dark patterns and accessibility regressions. The set that should be reviewed whenever instruction text about refusals, scores or thresholds changes."
+    },
+    "full": {
+      "mode": "all",
+      "description": "The whole corpus. The default when no profile is passed."
+    }
+  }
+}

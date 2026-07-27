@@ -26,8 +26,12 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from "no
 import { resolve, dirname, join } from "node:path";
 import { parse, textContent, queryAll } from "./lib/html.mjs";
 import { flatten, contrastRatio } from "./lib/contrast.mjs";
+import { PROBE_AGENTS } from "./lib/ai-access.mjs";
 
 const UA = "NullToHero-audit/1.0 (+https://github.com/MariusYvard/NullToHero)";
+// Baseline for the differential fetch: what an ordinary visitor's browser sends.
+// The comparison is bot-status against this, so it has to look like a browser.
+const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
 const isUrlStr = (t) => /^https?:\/\//i.test(t);
 
 // Bounded asset collection: enough to give agents the real CSS/JS without
@@ -110,6 +114,69 @@ async function probeUrl(u, timeout) {
   finally { clearTimeout(t); }
 }
 
+// Same request with a different user-agent, and with the body read when the caller
+// wants to inspect it. Used for the AI-surface probes below.
+async function probeAs(u, timeout, { ua = UA, accept = null, body = false, method = "GET" } = {}) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const headers = { "user-agent": ua };
+    if (accept) headers.accept = accept;
+    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", method, headers });
+    let text = null;
+    if (body) {
+      // Capped: a discovery file that is megabytes long is itself the finding, and
+      // we never need more than the head of it to grade the structure.
+      const raw = await res.text();
+      text = raw.length > 256 * 1024 ? raw.slice(0, 256 * 1024) : raw;
+    } else {
+      try { await res.body?.cancel(); } catch { /* ignore */ }
+    }
+    return { status: res.status, finalUrl: res.url, ok: res.ok, contentType: res.headers.get("content-type") || "", body: text };
+  } catch (e) { return { error: e.name === "AbortError" ? "timeout" : e.message }; }
+  finally { clearTimeout(t); }
+}
+
+// robots.txt answers what a site says. It does not answer what the edge does. A WAF
+// or bot-management rule can return 403 to a declared bot on a site whose robots.txt
+// welcomes it, and the robots-only reading calls that site reachable when it is
+// invisible. Three HEAD-weight requests settle it.
+async function probeAiCrawlerHttp(url, timeout) {
+  const pt = Math.min(timeout, 8000);
+  const base = await probeAs(url, pt, { ua: BROWSER_UA });
+  if (base.error || base.status == null) return { tested: true, baseline: null, error: base.error || "no-status", agents: [] };
+  const agents = [];
+  for (const a of PROBE_AGENTS) {
+    const r = await probeAs(url, pt, { ua: a.ua });
+    agents.push({ id: a.id, status: r.error ? null : r.status, error: r.error || null });
+  }
+  return { tested: true, baseline: base.status, agents };
+}
+
+// One grouped pass over the discovery paths. Grouped deliberately: probing them
+// one command at a time would not justify the request budget on its own.
+const AI_FILE_PATHS = ["/llms.txt", "/llms-full.txt", "/ai.txt", "/.well-known/ai-plugin.json", "/.well-known/rsl.json"];
+
+async function probeAiFiles(origin, timeout) {
+  const pt = Math.min(timeout, 6000);
+  const out = {};
+  for (const p of AI_FILE_PATHS) {
+    // Only llms.txt needs its body: the others are presence questions.
+    const wantBody = p === "/llms.txt";
+    const r = await probeAs(origin + p, pt, { body: wantBody });
+    out[p] = r.error
+      ? { tested: true, status: null, error: r.error }
+      : { tested: true, status: r.status, contentType: r.contentType, body: wantBody ? r.body : null };
+  }
+  return out;
+}
+
+async function probeMarkdownNegotiation(url, timeout) {
+  const r = await probeAs(url, Math.min(timeout, 8000), { accept: "text/markdown" });
+  if (r.error) return { tested: true, error: r.error };
+  return { tested: true, status: r.status, contentType: r.contentType, markdown: /^text\/markdown\b/i.test(r.contentType || "") };
+}
+
 async function runProbes(baseUrl, timeout) {
   const out = { httpsRedirect: { tested: false }, hostCanonical: { tested: false }, securityTxt: { tested: false } };
   let parsed; try { parsed = new URL(baseUrl); } catch { return out; }
@@ -136,6 +203,13 @@ async function runProbes(baseUrl, timeout) {
     const r = await probeUrl(parsed.protocol + "//" + parsed.host + "/.well-known/security.txt", pt);
     out.securityTxt = { tested: true, found: !r.error && r.status >= 200 && r.status < 300 };
   } catch { /* keep default */ }
+  const origin = parsed.protocol + "//" + parsed.host;
+  try { out.aiCrawlerHttp = await probeAiCrawlerHttp(baseUrl, timeout); }
+  catch (e) { out.aiCrawlerHttp = { tested: true, baseline: null, error: e.message, agents: [] }; }
+  try { out.aiFiles = await probeAiFiles(origin, timeout); }
+  catch { /* keep undefined so the check reports NOT_MEASURED */ }
+  try { out.markdownNegotiation = await probeMarkdownNegotiation(baseUrl, timeout); }
+  catch (e) { out.markdownNegotiation = { tested: true, error: e.message }; }
   return out;
 }
 

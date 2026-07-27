@@ -10,6 +10,37 @@ A landing page is a sequence, not a canvas. The order of sections is the argumen
 
 These patterns inform planning a page; pair this reference with [shape.md](shape.md) when you run `/siteasy shape`.
 
+## Where the headline starts
+
+Two scales decide it, and they are not the same scale. Awareness describes the individual
+reader. Sophistication describes the market they are shopping in. A reader can be highly
+aware in a market that has heard every promise already, and the copy that works there is
+not the copy that works for the same reader in a young market.
+
+| Reader awareness | Where the headline starts | Pattern that fits |
+|------------------|---------------------------|-------------------|
+| Unaware of the problem | Name the situation, not the product. The headline's only job is to earn the first sentence. | Story or problem-led |
+| Problem-aware | Name the problem in their words, then the shape of a solution | Problem-led |
+| Solution-aware | Name your category and what makes yours different | Comparison, feature-led |
+| Product-aware | Name the offer, the proof and the risk reversal | Pricing-led, offer-led |
+| Most aware | Name the deal and get out of the way | Direct offer |
+
+| Market sophistication | What the headline must do |
+|-----------------------|---------------------------|
+| First to market | State the promise plainly. It is new, so it is enough. |
+| Competitors present | Enlarge the promise, or make it more specific than theirs |
+| Promises exhausted | Introduce a mechanism. Nobody believes the claim any more, so explain why yours works. |
+| Mechanisms competing | Elaborate the mechanism, or make it simpler than theirs |
+| Market jaded | Stop arguing and switch to identification: who this is for, and who it is not for |
+
+Diagnose both before choosing a pattern below. The most common failure is writing
+solution-aware copy for a problem-aware reader, which reads as a product nobody asked
+about, and the second most common is stating a plain promise into an exhausted market,
+which reads as noise.
+
+Whether the offer under the copy is worth buying at all is a different question, and it
+is in [offer-diagnostic.md](offer-diagnostic.md).
+
 ## Patterns
 
 | Pattern | Use when | Section order | Primary CTA | Note |

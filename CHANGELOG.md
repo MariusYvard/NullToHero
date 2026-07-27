@@ -11,6 +11,44 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.3.0] - 2026-07-27
+
+Harvest of seven SEO and marketing repositories, checked against primary sources before
+anything shipped. The through-line: the plugin measured what a site **is** (crawl, HTML,
+contrast, schema, accessibility) and had no way to measure what a site **obtains**
+(positions, clicks, citations). That gap is now closed, and a factual defect in the
+crawler table is fixed.
+
+### Fixed
+
+- **The AI crawler table was missing the three tokens that decide whether an assistant can cite a site.** `Claude-SearchBot`, `Claude-User` and `Perplexity-User` appeared nowhere in the repository. A site that blocked `ClaudeBot` believing it only refused training was also losing Claude search citations, and `geo.md` could not say so. The table is rebuilt from operator documentation, with `Amazonbot`, `GoogleOther`, `OAI-AdsBot` and `Meta-ExternalAgent` added, a tier column, and a column recording whether each fetcher applies robots.txt at all. Two do not, by their operators' own documentation, so a robots.txt entry is not a control for them. `Claude-User` is the exception that honours it.
+- Crawler reachability is now weighted rather than counted. Tier 1 carries 50 percent, tier 2 carries 25, absence of a blanket block 15, discovery files 10, and tier 3 carries none: blocking a training crawler is a licensing decision, not a visibility defect. The old `(allowed bots / 14) x 100` priced `CCBot` and `OAI-SearchBot` identically.
+
+### Added
+
+- **`/seo performance`**, the first command that reads real performance data. `skills/seo/scripts/gsc-analyze.mjs` ingests a Search Console CSV or JSON export (no OAuth, no Cloud project, no quota) and computes striking distance across two bands, cannibalisation, an **auto-calibrated CTR curve** built from the site's own rows rather than an untraceable market table, CTR gap, full-outer-join period comparison, decay with a volume floor, and a four-quadrant refresh matrix. `references/search-console.md` documents the window-alignment trap that silently biases every naive comparison.
+- **`/seo migrate`**, a six-step migration protocol with a state freeze, a risk map, redirect chain and loop rules, a day-one rollback trigger, and T+1 / T+7 / T+30 diffs.
+- **`ADVISORY`**, a fourth verdict state for signals that are measured but deliberately not scored, because the standard behind them is an IETF draft or an early-adoption feature. It is excluded from scoring exactly as `NOT_MEASURED` is. This is the door through which Content-Signal, RFC 8288 Link relations and Markdown negotiation enter without pricing sites against specs that may not ship.
+- Eight AI-surface checks in `tools/audit/lib/ai-access.mjs`: per-bot robots.txt evaluation across six states (not the old binary), a differential fetch that catches an edge returning 403 to bots the robots.txt welcomes, page and header level `noai` directives, graded llms.txt validation on seven structural rules where a 403 is a misconfiguration and not an absence, Content-Signal parsing, discovery-file probing, Link-header service discovery surfaced only on API-first sites, and Markdown content negotiation.
+- Deterministic content tooling, so the code scores prose and the model does not: `tools/content/score.mjs` (five weighted dimensions, sentence-rhythm measurement by standard deviation, a keyword-density calculation that counts words covered rather than occurrences over word count) and `skills/seo/scripts/scrub.mjs` (fifteen invisible codepoints, context-aware dash resolution across nine ordered rules, idempotent and self-testing).
+- `skills/seo/scripts/parasite.mjs`, section-level site-reputation-abuse detection aggregated by first URL segment on the post-redirect URL, with a floor below which a section is not judged.
+- `tools/audit/lib/url-safety.mjs`: SSRF guard with authority-trick rejection, address canonicalisation across decimal, hex and octal spellings, resolve-then-check on every DNS answer, and per-hop revalidation of redirect targets.
+- Entity disambiguation as a first-rank GEO diagnosis, with the Wikipedia and Wikidata API calls that replace a web search prone to false negatives. `speakable` and a graded `sameAs` priority list added to `schema.md`.
+- Conversion and copy references for `/siteasy`: offer diagnosis (value equation, offer anatomy, eight guarantee types, honest against fabricated scarcity with detectable code patterns), a fifteen-row objection inventory mapped to the page element that answers each, an advisory conversion rubric with brand-maturity adjustment, and a test-hypothesis catalogue. Awareness and market-sophistication scales added to `landing-patterns.md`; the seven-pass copy sweep and a scored lexical tell list added around `clarify.md`.
+- A measurement protocol separating four latency layers, with the rule that a missing citation must never be read as weak content before crawler access confirms a 200 was served.
+- Repository engineering: a context-budget guard and a routing guard in CI, a 49-case behavior corpus testing what the skills make the agent *say* (refusing rank guarantees, refusing to score without inputs, routing across the fuzzy command boundaries) under an evidence rule where a simulated case is explicitly non-validating, and validator checks 40 to 42 guarding crawler-registry consistency across its three homes, the ADVISORY wiring, and tool presence.
+
+### Changed
+
+- `/audit` now separates `status` (did it run) from `verdict` (does it ship), types missing evidence as `unknown` without renormalising weights around it, and **refuses to emit a number** for a dimension with fewer than half its inputs. A score built on air reads as a finding when it is an artefact.
+- Eight canonical laws added (`L-CONTENT-1` to `4`, `L-GEO-1`, `L-GEO-2`, `L-DATA-1`, `L-DATA-2`).
+
+### Not adopted
+
+Deliberately left on the floor, with reasons in the harvest report: the untraceable GEO numbers present in four of the seven repositories (the 134-167 and 40-60 word passage bands, the citation multipliers), three mutually contradictory unsourced CTR-by-position curves, competing composite score rubrics, paid-API dependencies, editorial-bias instructions, and any framing of content work as detection evasion.
+
+---
+
 ## [2.2.1] - 2026-07-19
 
 ### Fixed

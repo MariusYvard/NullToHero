@@ -340,28 +340,125 @@ Changes detected:
 
 ## AI Crawler Detection
 
-Check `robots.txt` for these AI crawlers (14 tracked):
+Check `robots.txt` for these crawlers. The machine-readable registry, with the
+operator documentation URL for every row, is
+[tools/data/ai-crawlers.csv](../../../tools/data/ai-crawlers.csv); the deterministic
+per-bot evaluation is the `ai-crawler-robots` check in
+[tools/audit/lib/ai-access.mjs](../../../tools/audit/lib/ai-access.mjs).
 
-| Crawler | Owner | Purpose | Recommendation |
-|---------|-------|---------|----------------|
-| GPTBot | OpenAI | AI model training | **Allow** for AI visibility |
-| OAI-SearchBot | OpenAI | OpenAI search features | **Allow** |
-| ChatGPT-User | OpenAI | ChatGPT browsing | **Allow** |
-| ClaudeBot | Anthropic | Claude web features | **Allow** |
-| PerplexityBot | Perplexity | Perplexity AI search | **Allow** |
-| anthropic-ai | Anthropic | Claude training | Block if desired |
-| CCBot | Common Crawl | Training data | Block if desired |
-| Bytespider | ByteDance | TikTok/Douyin AI | Block if desired |
-| cohere-ai | Cohere | Cohere models | Block if desired |
-| Diffbot | Diffbot | AI training/search | Context-dependent |
-| AI2Bot | Allen Institute | Research | Context-dependent |
-| Applebot-Extended | Apple | Siri/Apple AI | **Allow** for Apple AI |
-| FacebookBot | Meta | Meta AI search | **Allow** for Meta AI |
-| PetalBot | Huawei | Petal Search AI | Context-dependent |
+Tiers exist because the crawlers are not interchangeable. Tier 1 decides whether an
+assistant can cite the site at all. Tier 2 governs training and secondary surfaces.
+Tier 3 is corpus-only: blocking it is a licensing decision, not a visibility defect,
+so it carries no weight in the score.
 
-**Key distinction:**
-- Blocking `GPTBot` stops OpenAI training but does NOT prevent ChatGPT from citing your content via browsing (`ChatGPT-User`)
-- Blocking `Google-Extended` stops Gemini training but does NOT affect Google Search or AI Overviews (those use `Googlebot`)
+| Crawler | Operator | Tier | Applies robots.txt | What blocking it costs |
+|---------|----------|------|--------------------|------------------------|
+| OAI-SearchBot | OpenAI | 1 | Yes | ChatGPT search answers. A site opted out is not shown in them. |
+| ChatGPT-User | OpenAI | 1 | **No** | Live user-initiated retrieval. OpenAI states robots.txt rules may not apply because the action is user-initiated. |
+| Claude-SearchBot | Anthropic | 1 | Yes | Claude search citations. This is the token that decides them. |
+| Claude-User | Anthropic | 1 | Yes | Live user-initiated retrieval. Anthropic documents that this fetcher honours robots.txt. |
+| PerplexityBot | Perplexity | 1 | Yes | Perplexity results and their citations. |
+| Perplexity-User | Perplexity | 1 | **No** | Live user-initiated retrieval. Perplexity documents that it generally ignores robots.txt. |
+| Googlebot | Google | 1 | Yes | Google Search, and with it AI Overviews. There is no separate opt-out. |
+| GPTBot | OpenAI | 2 | Yes | Training corpus only. Blocking it does not remove the site from ChatGPT search answers. |
+| ClaudeBot | Anthropic | 2 | Yes | Training corpus. Blocking it alone does not remove Claude search citations. |
+| Google-Extended | Google | 2 | Yes (control token) | Gemini training and grounding. Not a crawler: no separate user-agent string, used in a control capacity only. |
+| GoogleOther | Google | 2 | Yes | Nothing product-specific. One-off internal crawls. |
+| Applebot | Apple | 2 | Yes | Siri and Spotlight surfaces. |
+| Applebot-Extended | Apple | 2 | Yes (control token) | Apple model training only, not Applebot crawling for search. |
+| Amazonbot | Amazon | 2 | Yes | Alexa answers and Amazon AI surfaces. |
+| OAI-AdsBot | OpenAI | 3 | Unstated | Nothing organic. Visits only pages submitted as ads, and its data is not used for model training. |
+| anthropic-ai | Anthropic | 3 | Yes | Nothing current. Legacy token superseded by the three named Anthropic tokens. |
+| Meta-ExternalAgent | Meta | 3 | Yes | Meta AI training corpus. |
+| FacebookBot | Meta | 3 | Yes | Meta model improvement corpora. |
+| Bytespider | ByteDance | 3 | Contested | Training corpus. Compliance has been publicly disputed, so treat an entry as a request. |
+| CCBot | Common Crawl | 3 | Yes | Common Crawl inclusion, and indirectly anything trained on it. No live surface. |
+| cohere-ai | Cohere | 3 | Yes | Cohere training corpus. |
+| YouBot | You.com | 3 | Yes | You.com results. |
+
+**Four distinctions that decide the diagnosis:**
+
+- Blocking `ClaudeBot` stops Anthropic training but does NOT stop Claude citing the
+  site in search, which runs through `Claude-SearchBot`. A site that blocks the first
+  believing it only refused training, and never names the second, loses citations it
+  meant to keep. The same shape applies at OpenAI between `GPTBot` and `OAI-SearchBot`.
+- Blocking `Google-Extended` stops Gemini training but does NOT affect Google Search or
+  AI Overviews, which use `Googlebot`. Google states it is not a ranking signal and does
+  not change crawl rate.
+- Two of the user-triggered fetchers do not apply robots.txt at all by their operators'
+  own documentation (`ChatGPT-User`, `Perplexity-User`). A robots.txt entry is not a
+  control for them. `Claude-User` is the exception that does honour it.
+- robots.txt describes intent, not outcome. A WAF or bot-management rule can return 403
+  to a crawler the robots.txt welcomes, which reads as reachable and behaves as invisible.
+  The `ai-crawler-http` check settles that by fetching the page once per bot user-agent
+  and comparing the status to a browser baseline. Never conclude on access from
+  robots.txt alone.
+
+**Scoring.** Reachability is weighted, not counted: tier 1 carries 50 percent, tier 2
+carries 25 percent, the absence of a blanket wildcard block carries 15 percent, and the
+discovery-file probe carries the remaining 10. The two fetchers that do not apply
+robots.txt are reported but excluded from the robots-derived score, because scoring a
+site against a directive its target ignores measures the wrong thing.
+
+---
+
+## Entity Disambiguation
+
+When several organisations share a brand name, a model cannot resolve which one the
+page is about. It then cites the wrong company, or declines to answer. This is upstream
+of every other GEO signal: no amount of citable phrasing fixes an ambiguous entity.
+
+**Detection.** Query the Wikidata search endpoint for the brand name and read the
+returned descriptions. Several entities with diverging descriptions, or no exact title
+match in the first Wikipedia API result, is the signal. Use the APIs, not a web search:
+a search result that fails to surface an existing page is a false negative, and the API
+answer is authoritative.
+
+- `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={brand}&format=json`,
+  read `query.search[0].title`, and treat the page as existing only when the brand name
+  is contained in that title.
+- `https://www.wikidata.org/w/api.php?action=wbsearchentities&search={brand}&language=en&format=json`,
+  read `search[0].id` and `search[0].description`.
+
+**Remedies**, in order of effect: use the fully qualified name consistently across every
+surface, create a Wikidata item carrying precise external identifiers, and publish
+Organization schema with a complete address and a founding date so the entity has
+attributes a model can match on.
+
+---
+
+## Agent-Readiness Signals (non-scoring)
+
+These checks never deduct. The standards behind them are IETF drafts or early-adoption
+features, and penalising their absence would price a site against a spec that may not
+ship. They emit the `ADVISORY` verdict, which the scorer excludes the same way it
+excludes `NOT_MEASURED`. A section that does not apply is omitted from the report rather
+than rendered empty.
+
+**Content-Signal** (`content-signal` check). A `Content-Signal:` line in robots.txt
+declaring downstream AI usage separately from access, for example
+`Content-Signal: ai-train=no, search=yes, ai-retrieval=yes`. Valid keys are `ai-train`,
+`search`, `ai-personalization` and `ai-retrieval`; the only valid values are `yes` and
+`no`. The spec is the IETF draft `draft-romm-aipref-contentsignals` and Google has
+stated publicly that it has no effect on its systems, so absence is never a defect and
+an unrecognised key is a note rather than an error.
+
+**RFC 8288 Link header** (`agent-link-header` check). Machine-readable service
+discovery without HTML parsing, through relations such as `api-catalog`, `describedby`,
+`service-doc` and `mcp-server-card`. Only surfaced when the site itself looks API-first;
+a brochure site has no reason to publish an API catalogue and the section is omitted.
+
+**Markdown content negotiation** (`markdown-negotiation` check). Whether the server
+answers `text/markdown` when asked for it, which removes the de-boilerplating step for
+an agent reading the page. Observed so far at CDN level rather than as an application
+setting, so treat it as an experiment and not a one-line configuration change.
+
+**Page-level AI directives** (`ai-meta-directives` check). `noai` and `noimageai` in
+meta tags or `X-Robots-Tag`, plus bot-specific forms such as
+`<meta name="GPTBot" content="noindex">`. Headers take precedence over meta tags and
+also cover non-HTML resources. Opting out is legitimate, so the check reports rather
+than deducts. What it guards against is doing it by accident and then wondering about
+the silence.
 
 ---
 
@@ -389,7 +486,43 @@ The **llms.txt** standard provides AI crawlers with structured content guidance.
 - Audience: [target users]
 ```
 
-**Generate llms.txt if absent.** Build it from the sitemap + page metadata. Include the most important, most authoritative, and most citation-worthy pages.
+**Generate llms.txt if absent.** Build it from the sitemap plus page metadata. Include the
+most important, most authoritative and most citation-worthy pages.
+
+**Scope.** Google states it ignores these files, and that position is recorded in the
+mythbusting section above. This section is scoped to the engines that have not said so.
+Treat the file as optional, and skip it when the site is under about ten pages, when the
+platform cannot serve custom paths, or when nobody will keep it current.
+
+**Validation, graded rather than binary.** The `llms-txt` check
+([tools/audit/lib/ai-access.mjs](../../../tools/audit/lib/ai-access.mjs)) grades seven
+structural rules and reports which failed, instead of scoring presence at 100 or 0.
+
+| Rule | Severity |
+|------|----------|
+| First line is an H1 title | Critical |
+| A blockquote summary line is present | High |
+| At least one H2 section | Critical |
+| At least 5 link entries | High |
+| Link targets are absolute URLs | High |
+| Entries carry a description after the link | Medium |
+| File length between 30 and 200 lines | Low |
+
+A critical failure downgrades the verdict to a warning: a parser that cannot find the
+title or the sections gets nothing from the file, so a malformed llms.txt is closer to
+no file than to a valid one.
+
+**Response codes are not interchangeable.** 200 validates the body. 404 is an absence and
+becomes a recommendation. **403 is a misconfiguration and a real failure**: the file is
+published and the edge refuses it, so no assistant can read the thing that was written
+for them. 301 and 302 are followed and noted.
+
+**llms-full.txt** is the long form, roughly 150 to 500 lines and 30 to 100 entries against
+50 to 150 lines and 10 to 30 entries for llms.txt. Its presence is reported alongside.
+
+One useful side effect: building the file is an internal-linking audit in disguise, since
+drawing every page as a node and every internal link as an edge makes the orphan pages
+obvious.
 
 ---
 

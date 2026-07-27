@@ -205,6 +205,62 @@ critical defect cannot be hidden by passing layout or code checks. Because the t
 is a specific check verdict and not a borderline judgment, the cap no longer toggles
 between runs.
 
+## Status is not verdict
+
+Two independent axes, and collapsing them produces a report nobody can act on.
+
+`status` is execution state: did the audit run to completion. `verdict` is the gate
+decision: does this ship. An audit that completed cleanly and found two blocking defects
+is `status: DONE` with `verdict: BLOCK`. It is never `status: BLOCKED`, which would say
+the audit failed to run when in fact it ran and answered.
+
+| status | verdict | Meaning |
+|--------|---------|---------|
+| DONE | SHIP | Ran, passed |
+| DONE | FIX | Ran, one blocking defect, score capped |
+| DONE | BLOCK | Ran, two or more blocking defects, no comparable final score |
+| NEEDS_INPUT | UNDECIDED | A blocking input was missing, nothing was scored |
+| BLOCKED | UNDECIDED | The audit itself could not run (target unreachable, render unavailable) |
+
+## Missing evidence is not failure
+
+An item nobody could measure is `unknown`. It is never scored as a failure, and it is
+never quietly dropped either.
+
+| Item state | Contributes | Notes |
+|------------|-------------|-------|
+| pass | full weight | |
+| partial | half weight | |
+| fail | zero | Counts toward the failure tally |
+| unknown | nothing | Excluded from the numerator AND the denominator |
+| not applicable | nothing | Excluded, and only valid for conditional items |
+
+**Do not renormalise weights around unknown items.** Redistributing a missing item's
+weight across the ones that were measured turns "we could not see half of this" into a
+confident number. List every unknown item explicitly by check id in the report; a prose
+line saying "some evidence was unavailable" is not a substitute for the mapping.
+
+The `ADVISORY` verdict is a third thing again: the fact WAS measured, and the check
+deliberately does not score it because the standard behind it is a draft or an
+early-adoption feature. See the agent-readiness signals in
+[../../seo/references/geo.md](../../seo/references/geo.md).
+
+## Refuse to score rather than score on air
+
+A numeric score built from too few inputs is worse than no score: it reads as a finding
+when it is an artefact of missing data, and it survives review precisely because it looks
+precise.
+
+When fewer than half the inputs a dimension needs are available, do not emit a number for
+that dimension. Emit `INSUFFICIENT DATA (n/N inputs)` and name which inputs are missing
+and how to supply them. This applies hardest where the plugin has no first-party data:
+backlink profiles, search performance, and anything asking what an AI engine actually
+answered.
+
+The same rule governs the overall score. If two or more scored dimensions come back
+`INSUFFICIENT DATA`, the report carries no overall number, because averaging the
+dimensions that happened to be measurable silently reweights the audit.
+
 ## Consensus verification (verify mode)
 
 `verify` is a higher-confidence re-check of the dimensions that gate the score. It

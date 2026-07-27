@@ -54,6 +54,16 @@
   },
   {
     "skill": "audit",
+    "path": "skills/audit/references/refine.md",
+    "title": "Bounded Refinement",
+    "keywords": [
+      "refine",
+      "bounded",
+      "refinement"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/report.md",
     "title": "Report: any audit into a deliverable",
     "keywords": [
@@ -115,6 +125,16 @@
       "plan",
       "output",
       "standard"
+    ]
+  },
+  {
+    "skill": "seo",
+    "path": "skills/seo/references/ai-overview-recovery.md",
+    "title": "AI Overview Click Recovery",
+    "keywords": [
+      "overview",
+      "recovery",
+      "click"
     ]
   },
   {
@@ -255,6 +275,24 @@
   },
   {
     "skill": "seo",
+    "path": "skills/seo/references/measurement.md",
+    "title": "Measurement and Attribution",
+    "keywords": [
+      "measurement",
+      "attribution"
+    ]
+  },
+  {
+    "skill": "seo",
+    "path": "skills/seo/references/migration.md",
+    "title": "Site Migration",
+    "keywords": [
+      "migration",
+      "site"
+    ]
+  },
+  {
+    "skill": "seo",
     "path": "skills/seo/references/page.md",
     "title": "Single Page Analysis",
     "keywords": [
@@ -381,6 +419,17 @@
       "markup",
       "analysis",
       "generation"
+    ]
+  },
+  {
+    "skill": "seo",
+    "path": "skills/seo/references/search-console.md",
+    "title": "Search Console Performance Data",
+    "keywords": [
+      "search",
+      "console",
+      "performance",
+      "data"
     ]
   },
   {
@@ -565,6 +614,24 @@
       "art",
       "direction",
       "gate"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/conversion-experiments.md",
+    "title": "Conversion Experiments",
+    "keywords": [
+      "conversion",
+      "experiments"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/conversion-quality.md",
+    "title": "Conversion Quality",
+    "keywords": [
+      "conversion",
+      "quality"
     ]
   },
   {
@@ -891,6 +958,23 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/objections.md",
+    "title": "Objections",
+    "keywords": [
+      "objections"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/offer-diagnostic.md",
+    "title": "Offer Diagnostic",
+    "keywords": [
+      "offer",
+      "diagnostic"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/onboard.md",
     "title": "onboard",
     "keywords": [
@@ -1021,6 +1105,15 @@
     "keywords": [
       "signature",
       "moments"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/slop-patterns.md",
+    "title": "Slop Patterns",
+    "keywords": [
+      "slop",
+      "patterns"
     ]
   },
   {

@@ -1506,6 +1506,91 @@ section("39. Argument-hint coverage, remediation routes live, doc agent counts")
   else pass(`ARCHITECTURE.md: all ${claims39.length} agent-count claims match actual ${agentCount39}`);
 }
 
+// ─── Check 40: AI crawler registry is consistent across its three homes ──────
+// The registry lives in tools/data/ai-crawlers.csv (with the operator doc URL), is
+// mirrored inline in tools/audit/lib/ai-access.mjs (so the analyzer has no runtime
+// file read), and is published as a table in skills/seo/references/geo.md. Three
+// copies drift. This check makes drift a build failure rather than a wrong answer,
+// which is the exact defect that shipped before: a crawler table missing the three
+// bots that decide assistant citations.
+section("40. AI crawler registry consistency (csv, analyzer, geo.md)");
+{
+  const csvPath = path.join(ROOT, "tools/data/ai-crawlers.csv");
+  const modPath = path.join(ROOT, "tools/audit/lib/ai-access.mjs");
+  const geoPath = path.join(ROOT, "skills/seo/references/geo.md");
+  const csvTxt = readFile(csvPath), modTxt = readFile(modPath), geoTxt = readFile(geoPath);
+  if (!csvTxt || !modTxt || !geoTxt) {
+    fail("AI crawler registry: one of csv / ai-access.mjs / geo.md is missing");
+  } else {
+    const rows = csvTxt.split("\n").filter(l => l.trim()).slice(1);
+    const csvIds = rows.map(l => l.split(",")[0].trim()).filter(Boolean);
+    const modIds = [...modTxt.matchAll(/\{\s*id:\s*"([^"]+)",\s*operator:/g)].map(m => m[1]);
+    const missingInMod = csvIds.filter(id => !modIds.includes(id));
+    const extraInMod = modIds.filter(id => !csvIds.includes(id));
+    if (missingInMod.length) fail(`ai-access.mjs is missing crawler(s) present in the CSV: ${missingInMod.join(", ")}`);
+    if (extraInMod.length) fail(`ai-access.mjs declares crawler(s) absent from the CSV: ${extraInMod.join(", ")}`);
+    if (!missingInMod.length && !extraInMod.length) pass(`ai-crawlers.csv and ai-access.mjs agree on ${csvIds.length} crawlers`);
+
+    const missingInGeo = csvIds.filter(id => !geoTxt.includes(id));
+    if (missingInGeo.length) fail(`geo.md crawler table is missing: ${missingInGeo.join(", ")}`);
+    else pass(`geo.md documents all ${csvIds.length} crawlers`);
+
+    // The three tokens whose absence caused a real false negative. Named explicitly so
+    // a future edit cannot quietly drop them again.
+    const SENTINELS = ["Claude-SearchBot", "Claude-User", "Perplexity-User"];
+    const lostSentinels = SENTINELS.filter(id => !csvIds.includes(id));
+    if (lostSentinels.length) fail(`crawler registry lost the citation-deciding token(s): ${lostSentinels.join(", ")}`);
+    else pass("the three citation-deciding fetchers are still registered");
+
+    // Every row must carry an operator documentation URL: this registry is the kind of
+    // data that rots into folklore without a primary source attached to each line.
+    const noSource = rows.filter(l => !/https?:\/\//.test(l)).length;
+    if (noSource) fail(`${noSource} crawler row(s) carry no operator documentation URL`);
+    else pass(`all ${rows.length} crawler rows cite an operator source`);
+  }
+}
+
+// ─── Check 41: the ADVISORY verdict is declared and excluded from scoring ────
+// ADVISORY exists so an emerging standard can be reported without being priced. If
+// the schema forgets it, valid reports fail validation; if the scorer forgets it, a
+// draft spec starts costing sites points. Both directions are guarded here.
+section("41. ADVISORY verdict wired end to end");
+{
+  const schema = readFile(path.join(ROOT, "tools/audit/schema/site-audit.schema.json")) || "";
+  const checksMjs = readFile(path.join(ROOT, "tools/audit/lib/checks.mjs")) || "";
+  let ok = true;
+  try {
+    const enumVals = JSON.parse(schema).properties.checks.items.properties.verdict.enum;
+    if (!enumVals.includes("ADVISORY")) { fail("site-audit.schema.json verdict enum does not allow ADVISORY"); ok = false; }
+    else pass(`schema verdict enum carries ADVISORY (${enumVals.length} values)`);
+  } catch { fail("could not read the verdict enum from site-audit.schema.json"); ok = false; }
+  if (!/verdict !== "ADVISORY"/.test(checksMjs)) {
+    fail("scoreFromChecks does not exclude ADVISORY: a non-scoring signal would cost points");
+  } else pass("scoreFromChecks excludes ADVISORY from the scored set");
+}
+
+// ─── Check 42: new deterministic tooling is present and self-describing ──────
+section("42. Deterministic tooling present");
+{
+  const TOOLS = [
+    "skills/seo/scripts/gsc-analyze.mjs",
+    "skills/seo/scripts/scrub.mjs",
+    "skills/seo/scripts/parasite.mjs",
+    "tools/content/score.mjs",
+    "tools/check-context-budget.mjs",
+    "tools/check-routing.mjs",
+    "tools/audit/lib/ai-access.mjs",
+    "tools/audit/lib/url-safety.mjs",
+    "tests/behavior/run.mjs",
+  ];
+  let missingTools = 0;
+  TOOLS.forEach(rel => {
+    if (!fs.existsSync(path.join(ROOT, rel))) { fail(`missing tool: ${rel}`); missingTools++; }
+  });
+  if (!missingTools) pass(`all ${TOOLS.length} deterministic tools present`);
+}
+
+
 // --- Summary --------------------------------------------------------------------
 
 console.log("\n" + "═".repeat(50));

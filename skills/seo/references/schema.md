@@ -134,6 +134,45 @@ When generating schema for a page:
 }
 ```
 
+## Entity properties that AI answer engines read
+
+`sameAs` is the property that lets a model tie a page to a known entity instead of
+guessing. Publish it in priority order, highest-signal first: Wikipedia, Wikidata,
+LinkedIn, YouTube, X, Facebook, Crunchbase, GitHub, Google Scholar, ORCID, Instagram,
+app store listings, sector directories.
+
+Graded, because two links and twelve links are not the same claim:
+
+| Platforms in `sameAs` | Reading |
+|------|---------|
+| 1 to 2 | Present but thin |
+| 3 to 4 | A resolvable entity |
+| 5 or more including Wikipedia | Strong, and the ceiling worth aiming for |
+
+Audit every entry rather than counting them: each URL must resolve with a 200 (not a
+404, not a redirect to a homepage), and the name, description and founding date must
+agree across the platforms. Inconsistent attributes across profiles are worse than
+fewer profiles, since they give a model contradictory evidence.
+
+`knowsAbout` on `Organization` or `Person` carries topical scope. It earns its place
+when it names at least three subjects the entity demonstrably covers.
+
+`speakable` (`SpeakableSpecification`) is the only schema.org markup that explicitly
+designates passages meant to be read aloud by an assistant. It takes CSS selectors:
+
+```json
+"speakable": {
+  "@type": "SpeakableSpecification",
+  "cssSelector": [".article-summary", ".key-takeaway"]
+}
+```
+
+Point it at the passages that answer the page's question directly. Pointing it at
+whole articles defeats the purpose.
+
+See [geo.md](geo.md) for entity disambiguation, which is upstream of all of this: none
+of these properties helps while several organisations share the brand name.
+
 ## Output
 
 - `SCHEMA-REPORT.md`: detection and validation results

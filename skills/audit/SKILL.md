@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
-version: 2.2.1
+version: 2.3.0
 user-invocable: true
 argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
 allowed-tools:
@@ -21,7 +21,7 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 
 | Command | What it does | Reference |
 |---------|-------------|-----------|
-| `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) |
+| `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) + [references/refine.md](references/refine.md) |
 | `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
@@ -72,3 +72,10 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 | You want to build, fix, or redesign the interface | /siteasy build |
 
 A single-dimension request does not need all 15 agents. Routing it to the one owning skill is faster and cheaper. The audit skill is for the whole-site, cross-dimension pass.
+
+## Canonical thresholds
+
+L-DATA-2 in `tools/data/laws.csv` governs when this skill refuses to produce a number:
+a dimension with fewer than half its inputs available reports insufficient data instead
+of a score, and two such dimensions suppress the overall score. See
+[references/full.md](references/full.md).

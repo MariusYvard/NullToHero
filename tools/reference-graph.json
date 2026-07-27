@@ -5,12 +5,14 @@
     "skills/audit/references/full.md",
     "skills/audit/references/html-report.md",
     "skills/audit/references/learnings.md",
+    "skills/audit/references/refine.md",
     "skills/audit/references/report.md",
     "skills/inspect/references/code-quality.md",
     "skills/inspect/references/detect.md",
     "skills/inspect/references/preview.md",
     "skills/inspect/references/review.md",
     "skills/seo/references/action-plan.md",
+    "skills/seo/references/ai-overview-recovery.md",
     "skills/seo/references/audit.md",
     "skills/seo/references/backlinks.md",
     "skills/seo/references/cluster.md",
@@ -24,6 +26,8 @@
     "skills/seo/references/images.md",
     "skills/seo/references/indexnow.md",
     "skills/seo/references/local.md",
+    "skills/seo/references/measurement.md",
+    "skills/seo/references/migration.md",
     "skills/seo/references/page.md",
     "skills/seo/references/performance.md",
     "skills/seo/references/plan-assets/agency.md",
@@ -36,6 +40,7 @@
     "skills/seo/references/privacy-consent.md",
     "skills/seo/references/programmatic.md",
     "skills/seo/references/schema.md",
+    "skills/seo/references/search-console.md",
     "skills/seo/references/sitemap.md",
     "skills/seo/references/sxo.md",
     "skills/seo/references/technical.md",
@@ -56,6 +61,8 @@
     "skills/siteasy/references/component-patterns.md",
     "skills/siteasy/references/component-recipes.md",
     "skills/siteasy/references/concept.md",
+    "skills/siteasy/references/conversion-experiments.md",
+    "skills/siteasy/references/conversion-quality.md",
     "skills/siteasy/references/craft.md",
     "skills/siteasy/references/creative-patterns.md",
     "skills/siteasy/references/critique.md",
@@ -91,6 +98,8 @@
     "skills/siteasy/references/mobile-ergonomics.md",
     "skills/siteasy/references/motion-choreography.md",
     "skills/siteasy/references/motion-design.md",
+    "skills/siteasy/references/objections.md",
+    "skills/siteasy/references/offer-diagnostic.md",
     "skills/siteasy/references/onboard.md",
     "skills/siteasy/references/optimize.md",
     "skills/siteasy/references/overdrive.md",
@@ -106,6 +115,7 @@
     "skills/siteasy/references/shape.md",
     "skills/siteasy/references/ship-checklist.md",
     "skills/siteasy/references/signature-moments.md",
+    "skills/siteasy/references/slop-patterns.md",
     "skills/siteasy/references/sourcing-external-code.md",
     "skills/siteasy/references/spatial-design.md",
     "skills/siteasy/references/stock-media.md",
@@ -143,6 +153,10 @@
     },
     {
       "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/refine.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
       "to": "skills/audit/references/report.md"
     },
     {
@@ -182,6 +196,10 @@
       "to": "skills/audit/references/report.md"
     },
     {
+      "from": "skills/audit/references/full.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
       "from": "skills/audit/references/learnings.md",
       "to": "skills/audit/references/checks.md"
     },
@@ -192,6 +210,10 @@
     {
       "from": "skills/audit/references/learnings.md",
       "to": "skills/inspect/references/detect.md"
+    },
+    {
+      "from": "skills/audit/references/refine.md",
+      "to": "skills/audit/references/full.md"
     },
     {
       "from": "skills/audit/references/report.md",
@@ -228,6 +250,10 @@
     {
       "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/ai-overview-recovery.md"
     },
     {
       "from": "skills/seo/SKILL.md",
@@ -279,6 +305,14 @@
     },
     {
       "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/measurement.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/migration.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/page.md"
     },
     {
@@ -295,6 +329,10 @@
     },
     {
       "from": "skills/seo/SKILL.md",
+      "to": "skills/seo/references/search-console.md"
+    },
+    {
+      "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/sitemap.md"
     },
     {
@@ -304,6 +342,22 @@
     {
       "from": "skills/seo/SKILL.md",
       "to": "skills/seo/references/technical.md"
+    },
+    {
+      "from": "skills/seo/references/ai-overview-recovery.md",
+      "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/references/ai-overview-recovery.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/ai-overview-recovery.md",
+      "to": "skills/seo/references/measurement.md"
+    },
+    {
+      "from": "skills/seo/references/ai-overview-recovery.md",
+      "to": "skills/seo/references/search-console.md"
     },
     {
       "from": "skills/seo/references/audit.md",
@@ -332,6 +386,38 @@
     {
       "from": "skills/seo/references/indexnow.md",
       "to": "skills/siteasy/references/journey-ship.md"
+    },
+    {
+      "from": "skills/seo/references/measurement.md",
+      "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/references/measurement.md",
+      "to": "skills/seo/references/ai-overview-recovery.md"
+    },
+    {
+      "from": "skills/seo/references/measurement.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/measurement.md",
+      "to": "skills/seo/references/search-console.md"
+    },
+    {
+      "from": "skills/seo/references/migration.md",
+      "to": "skills/seo/references/ai-overview-recovery.md"
+    },
+    {
+      "from": "skills/seo/references/migration.md",
+      "to": "skills/seo/references/indexnow.md"
+    },
+    {
+      "from": "skills/seo/references/migration.md",
+      "to": "skills/seo/references/measurement.md"
+    },
+    {
+      "from": "skills/seo/references/migration.md",
+      "to": "skills/seo/references/search-console.md"
     },
     {
       "from": "skills/seo/references/page.md",
@@ -368,6 +454,26 @@
     {
       "from": "skills/seo/references/plan.md",
       "to": "skills/seo/references/plan-assets/saas.md"
+    },
+    {
+      "from": "skills/seo/references/schema.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/search-console.md",
+      "to": "skills/seo/references/action-plan.md"
+    },
+    {
+      "from": "skills/seo/references/search-console.md",
+      "to": "skills/seo/references/ai-overview-recovery.md"
+    },
+    {
+      "from": "skills/seo/references/search-console.md",
+      "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/search-console.md",
+      "to": "skills/seo/references/measurement.md"
     },
     {
       "from": "skills/seo/references/sitemap.md",
@@ -448,6 +554,14 @@
     {
       "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/concept.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/conversion-experiments.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/conversion-quality.md"
     },
     {
       "from": "skills/siteasy/SKILL.md",
@@ -575,6 +689,14 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/objections.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/onboard.md"
     },
     {
@@ -628,6 +750,10 @@
     {
       "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/signature-moments.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/slop-patterns.md"
     },
     {
       "from": "skills/siteasy/SKILL.md",
@@ -722,6 +848,18 @@
       "to": "skills/siteasy/references/typography.md"
     },
     {
+      "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/objections.md"
+    },
+    {
+      "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/slop-patterns.md"
+    },
+    {
       "from": "skills/siteasy/references/color-and-contrast.md",
       "to": "skills/siteasy/references/resource-recommendations.md"
     },
@@ -756,6 +894,54 @@
     {
       "from": "skills/siteasy/references/component-recipes.md",
       "to": "skills/siteasy/references/video.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/seo/references/sxo.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/siteasy/references/conversion-quality.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/siteasy/references/objections.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-experiments.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/conversion-experiments.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/heuristics-scoring.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/objections.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/references/conversion-quality.md",
+      "to": "skills/siteasy/references/ux-writing.md"
     },
     {
       "from": "skills/siteasy/references/craft.md",
@@ -1123,6 +1309,10 @@
     },
     {
       "from": "skills/siteasy/references/landing-patterns.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/references/landing-patterns.md",
       "to": "skills/siteasy/references/shape.md"
     },
     {
@@ -1188,6 +1378,38 @@
     {
       "from": "skills/siteasy/references/motion-design.md",
       "to": "skills/siteasy/references/resource-recommendations.md"
+    },
+    {
+      "from": "skills/siteasy/references/objections.md",
+      "to": "skills/siteasy/references/conversion-quality.md"
+    },
+    {
+      "from": "skills/siteasy/references/objections.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/objections.md",
+      "to": "skills/siteasy/references/offer-diagnostic.md"
+    },
+    {
+      "from": "skills/siteasy/references/objections.md",
+      "to": "skills/siteasy/references/ux-writing.md"
+    },
+    {
+      "from": "skills/siteasy/references/offer-diagnostic.md",
+      "to": "skills/siteasy/references/conversion-experiments.md"
+    },
+    {
+      "from": "skills/siteasy/references/offer-diagnostic.md",
+      "to": "skills/siteasy/references/conversion-quality.md"
+    },
+    {
+      "from": "skills/siteasy/references/offer-diagnostic.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/offer-diagnostic.md",
+      "to": "skills/siteasy/references/objections.md"
     },
     {
       "from": "skills/siteasy/references/optimize.md",
@@ -1292,6 +1514,10 @@
     {
       "from": "skills/siteasy/references/signature-moments.md",
       "to": "skills/siteasy/references/parallax.md"
+    },
+    {
+      "from": "skills/siteasy/references/slop-patterns.md",
+      "to": "skills/siteasy/references/clarify.md"
     },
     {
       "from": "skills/siteasy/references/sourcing-external-code.md",

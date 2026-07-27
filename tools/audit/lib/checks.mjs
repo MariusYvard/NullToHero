@@ -9,6 +9,7 @@
 import { parse, queryAll, first, textContent, styleMap, resolveBackgroundStr, ancestors, walk } from "./html.mjs";
 import { ratioOf, aaThreshold, parseColor, luminance } from "./contrast.mjs";
 import { parseStylesheet, computeElementStyle, pageBackground, pickColor } from "./css.mjs";
+import { runAiAccessChecks } from "./ai-access.mjs";
 
 // dimension/agent constants — kept in lockstep with agents/*.md
 const A11Y    = { agent: "inspect-agent-a11y",     dimension: "Front-end Defects" };
@@ -1330,6 +1331,9 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkHostCanonical(probes),
     checkSecurityTxt(probes),
     checkMediaWeight(probes),
+    // AI-surface access: robots.txt per bot, edge-level blocks, page directives,
+    // llms.txt and the non-scoring agent-readiness signals.
+    ...runAiAccessChecks({ doc: activeDoc, rawHtml, headers, robotsTxt, probes }),
   ];
   return checks;
 }
@@ -1337,7 +1341,10 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
 // Deterministic health floor computed from the objective checks only. This is a
 // SUBSET of each agent's full checklist, so it is a floor, not the agent score.
 export function scoreFromChecks(checks) {
-  const measured = checks.filter(c => c.verdict !== "NOT_MEASURED");
+  // ADVISORY is excluded alongside NOT_MEASURED, for a different reason: the fact
+  // was measured, but the standard behind it is a draft or an early-adoption feature
+  // and penalising its absence would price the site against a spec that may not ship.
+  const measured = checks.filter(c => c.verdict !== "NOT_MEASURED" && c.verdict !== "ADVISORY");
   const fails = measured.filter(c => c.verdict === "FAIL");
   const warns = measured.filter(c => c.verdict === "WARN");
   const criticalFails = fails.filter(c => c.critical).map(c => c.id);
@@ -1359,7 +1366,8 @@ export function scoreFromChecks(checks) {
     score,
     fails: fails.length,
     warns: warns.length,
-    notMeasured: checks.length - measured.length,
+    notMeasured: checks.filter(c => c.verdict === "NOT_MEASURED").length,
+    advisory: checks.filter(c => c.verdict === "ADVISORY").length,
     criticalFails,
     byAgent,
   };

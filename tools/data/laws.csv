@@ -15,3 +15,11 @@ L-PERF-2,performance,CLS,0.1,Cumulative Layout Shift under 0.1.,skills/siteasy/r
 L-PERF-3,performance,INP,200ms,Interaction to Next Paint under 200ms at p75.,skills/siteasy/references/optimize.md
 L-WEBGL-1,webgl,Draw call ceiling,~300 target / 1000 max,A WebGL scene aims for a few hundred draw calls and never exceeds 1000; instancing beyond.,skills/siteasy/references/overdrive.md
 L-WEBGL-2,webgl,Pixel ratio cap,2,Renderer pixel ratio is capped at 2.,skills/siteasy/references/overdrive.md
+L-CONTENT-1,content,Editorial quality gate,70/100,"Composite editorial quality reaches 70 out of 100 before publication, on the five weighted dimensions.",skills/siteasy/references/slop-patterns.md
+L-CONTENT-2,content,Sentence rhythm,std dev 8-15 words,"Sentence-length standard deviation sits between 8 and 15 words, peaking near 10; flat rhythm is the most reliable tell of unedited generation.",skills/siteasy/references/slop-patterns.md
+L-CONTENT-3,content,Prose to structure balance,50-75% prose,"Between half and three quarters of a document is prose; over-listing is penalised harder than under-listing.",skills/siteasy/references/slop-patterns.md
+L-CONTENT-4,content,Keyword density ceiling,3%,"Main keyword occupies under 3 percent of the words, measured as words covered by matches and not as occurrences over word count.",skills/seo/references/content.md
+L-GEO-1,geo,Tier 1 AI crawler access,all reachable,"Every tier 1 AI crawler reaches the site; a blocked search or user fetcher costs citations, unlike a blocked training crawler.",skills/seo/references/geo.md
+L-GEO-2,geo,Crawler access is HTTP-level,browser parity,"Bot user-agents receive the same HTTP status as a browser; robots.txt states intent and the edge decides outcome.",skills/seo/references/geo.md
+L-DATA-1,measurement,Aligned comparison windows,equal length,"Two compared periods are of strictly equal length and end at least three days back, because Search Console has no data for the current day.",skills/seo/references/search-console.md
+L-DATA-2,measurement,Refusal to score,half the inputs,"No numeric score is emitted for a dimension with fewer than half its inputs available; report insufficient data instead.",skills/audit/references/full.md

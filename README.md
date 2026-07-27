@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-2.2.1-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-2.3.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v2.2.1** · 4 skills · 60 commands · 119 reference docs · 15 audit sub-agents
+**v2.3.0** · 4 skills · 62 commands · 129 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -188,7 +188,7 @@ Common runs: a new page (`setup` → `shape` → `build` → `layout` → `adapt
 Your search expert. It audits a whole site or a single page, writes the structured data Google wants, builds sitemaps, and checks how visible you are in AI answers.
 
 <details>
-<summary><b>All 18 commands</b></summary>
+<summary><b>All 20 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -248,7 +248,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.2.1`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.3.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -429,7 +429,7 @@ The `assets/` folder ships an original, license-clean starter library: 139 icons
 
 ## What is inside
 
-NullToHero ships **119 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **129 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>

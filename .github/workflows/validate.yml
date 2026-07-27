@@ -36,3 +36,19 @@ jobs:
       - name: Run Python unit tests
         if: always()
         run: python3 tests/test_design_system.py
+
+      - name: Context budget guard
+        if: always()
+        run: node tools/check-context-budget.mjs
+
+      - name: Routing guard
+        if: always()
+        run: node tools/check-routing.mjs
+
+      - name: Behavior corpus is well formed
+        if: always()
+        run: node tests/behavior/run.mjs
+
+      - name: Content scrubber self-test
+        if: always()
+        run: node skills/seo/scripts/scrub.mjs --selftest

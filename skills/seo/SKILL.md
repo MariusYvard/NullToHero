@@ -1,9 +1,9 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines, build local SEO, handle hreflang/i18n, generate sitemaps, optimize images, run programmatic SEO, build competitor comparison pages, cluster keywords, optimize for Search Experience (SXO), monitor SEO drift, analyze backlinks, handle e-commerce SEO, or export a client report. Covers full site audits with parallel sub-agents, single-page analysis, SEO strategy with industry templates, robots.txt, sitemaps, Core Web Vitals, JSON-LD, E-E-A-T, content quality, GEO, llms.txt, AI crawler access, local SEO, hreflang, programmatic SEO, keyword clustering, SXO, drift monitoring, backlink analysis, e-commerce SEO, and PDF report export. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local SEO, hreflang, backlinks, programmatic, ecommerce, or visibility."
-version: 2.2.1
+version: 2.3.0
 user-invocable: true
-argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce|indexnow] [url | business-type | keyword]"
+argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce|indexnow|performance|migrate] [url | business-type | keyword | export.csv]"
 allowed-tools:
   - Read
   - Write
@@ -34,7 +34,7 @@ checked in one pass. Everything else in the table below is a specialist pass.
 | `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering | [references/technical.md](references/technical.md) |
 | `schema [url]` | Detect, validate, and generate Schema.org JSON-LD — Organization, Article, Product, etc. | [references/schema.md](references/schema.md) |
 | `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness | [references/content.md](references/content.md) |
-| `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals | [references/geo.md](references/geo.md) |
+| `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals | [references/geo.md](references/geo.md) + [references/ai-overview-recovery.md](references/ai-overview-recovery.md) |
 | `sitemap [url]` | XML sitemap validation and generation with industry-specific templates | [references/sitemap.md](references/sitemap.md) |
 | `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam — key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers | [references/indexnow.md](references/indexnow.md) |
 | `images [url]` | Image SEO audit — alt text, formats (WebP/AVIF), lazy loading, CLS, LCP | [references/images.md](references/images.md) |
@@ -45,6 +45,8 @@ checked in one pass. Everything else in the table below is a specialist pass.
 | `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis | [references/cluster.md](references/cluster.md) |
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking | [references/drift.md](references/drift.md) |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) | [references/backlinks.md](references/backlinks.md) |
+| `performance [export]` | Real performance data (Search Console export): striking distance, cannibalisation, auto-calibrated CTR curve, period comparison, decay, four-quadrant refresh matrix | [references/search-console.md](references/search-console.md) + [references/measurement.md](references/measurement.md) |
+| `migrate [url]` | Site migration protocol: state freeze, risk map, redirect map, cutover checklist, T+1/T+7/T+30 diffs | [references/migration.md](references/migration.md) |
 | `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema | [references/ecommerce.md](references/ecommerce.md) |
 
 Legacy name: `report` (the retired `/seo` sub-command) now routes to `/audit report`
@@ -88,7 +90,20 @@ Every command that produces recommendations formats them per [references/action-
 | "SEO drift" / "baseline" / "track ranking changes" | `drift` |
 | "backlinks" / "link profile" / "link building" | `backlinks` |
 | "e-commerce SEO" / "product pages" / "faceted nav" | `ecommerce` |
+| "why did traffic drop" / "Search Console" / "striking distance" / "which pages to refresh" | `performance` |
+| "we are changing our URLs" / "site migration" / "replatforming" | `migrate` |
+| "AI Overview is eating my clicks" | `geo` |
 | "SEO report" / "client report" / "export PDF" | `/audit report` |
+
+## Canonical thresholds
+
+Numeric thresholds live once, with stable identifiers, in `tools/data/laws.csv`. Cite the
+identifier instead of restating the number: L-CONTENT-4 (keyword density under 3 percent,
+measured as words covered and not occurrences over word count), L-GEO-1 (every tier 1 AI
+crawler reachable), L-GEO-2 (bot user-agents get the same HTTP status as a browser),
+L-DATA-1 (compared periods of strictly equal length, ending at least three days back).
+The validator fails if a law stops being cited anywhere: when a threshold changes, change
+it in laws.csv and follow the citations.
 
 ## Plan templates
 
@@ -115,6 +130,10 @@ The `plan` command uses industry-specific templates in [references/plan-assets/]
 **E-commerce launch:** `ecommerce` → `schema` → `technical` → `audit`
 
 **Programmatic site:** `programmatic` → `cluster` → `plan` → `audit`
+
+**Traffic dropped:** `performance` → `page` → `content`
+
+**Replatforming:** `migrate` → `technical` → `audit` → `performance`
 
 **Client deliverable:** `audit` → `/audit report`
 

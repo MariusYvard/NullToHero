@@ -30,8 +30,9 @@ const PER_PAGE = new Set([
        (security headers, CSS/JS bundle checks, robots.txt, the probes)
    Re-running those per page would multiply one fact into N identical ones. */
 
-// FAIL beats WARN beats PASS. NOT_MEASURED is not a severity: a page we could not
-// judge must never outrank a page we judged and failed.
+// FAIL beats WARN beats PASS. NOT_MEASURED and ADVISORY are not severities: a page
+// we could not judge, and a signal we chose not to score, must never outrank a page
+// we judged and failed.
 const RANK = { FAIL: 3, WARN: 2, PASS: 1 };
 
 export function aggregateChecks({ entry, pages = [], robotsTxt = null }) {

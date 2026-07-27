@@ -74,7 +74,15 @@ On the top 3-5 most important pages:
 - [ ] No paywalled content on pages intended for AI citation
 
 ### Brand authority signals
-- [ ] Wikipedia article exists (strongest signal)
+- [ ] Wikipedia article exists (strongest signal). Check it through the API, not a web
+      search: `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={brand}&format=json`,
+      and treat the page as existing only when the brand name appears in `query.search[0].title`.
+      If the API says a page exists, it exists; do not overturn that with a search result
+      that failed to find it.
+- [ ] Wikidata item exists and is unambiguous:
+      `https://www.wikidata.org/w/api.php?action=wbsearchentities&search={brand}&language=en&format=json`.
+      Several entities with diverging descriptions is an entity-disambiguation finding,
+      which outranks every other GEO signal on this page.
 - [ ] Google Knowledge Panel active (check by searching brand name)
 - [ ] Social profiles present: LinkedIn, Twitter/X, YouTube
 - [ ] External mentions on authoritative sites (estimate from search `site:domain.com` results)
@@ -88,8 +96,14 @@ On the top 3-5 most important pages:
 ## Scoring (weighted)
 
 Deterministic scoring. Each dimension sub-score comes from the counted signals, not a
-feel estimate, so equal inputs return equal scores. AI crawler access = (allowed bots /
-14) x 100. llms.txt = 100 when present and valid, else 0. Citability, brand authority,
+feel estimate, so equal inputs return equal scores. AI crawler access is weighted, not
+counted: tier 1 crawlers carry 50 percent, tier 2 carry 25, the absence of a blanket
+wildcard block carries 15, and the discovery-file probe carries 10. Tier 3 is corpus-only
+and carries none, and the two user-triggered fetchers that their operators document as
+not applying robots.txt are reported but excluded from the robots-derived score. Read
+the tiers from tools/data/ai-crawlers.csv, never from memory. llms.txt is graded on its
+seven structural rules, not scored on presence: a 403 on the file is a failure and not an
+absence. Citability, brand authority,
 content-for-AI and platform optimization follow the per-dimension rules in the checklist.
 Overall = the weighted sum below. Put the inputs on the score line.
 
@@ -117,7 +131,7 @@ Return ONLY this section. No preamble, no postamble, no file paths, no notes abo
 ```
 ### GEO Visibility — Score: XX/100  (weighted sum of the dimension scores below)
 
-AI crawler access: X/14 bots allowed
+AI crawler access: weighted score, with any blocked tier 1 crawler named
 llms.txt: present / missing
 Brand authority: strong / moderate / weak
 

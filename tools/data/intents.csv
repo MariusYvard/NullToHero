@@ -15,3 +15,6 @@ see-it,screenshot; how does it look; view it like a browser,/inspect preview,cur
 /siteasy journey,empathy map; journey map; service blueprint,/siteasy research,alias
 /siteasy handoff,developer handoff; spec for devs,/siteasy extract,alias
 /seo sxo,search experience; intent alignment,/seo page,alias
+measure,why did traffic drop; search console data; which pages to refresh; striking distance,/seo performance,current
+move-site,site migration; changing our urls; replatforming; redirect map,/seo migrate,current
+sell-better,page does not convert; improve conversion; is my offer clear; objections,/siteasy critique,current
