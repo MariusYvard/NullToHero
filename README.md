@@ -26,7 +26,7 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 
 <div align="center">
 
-[What it is](#what-is-nulltohero) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows) · [Assets](#ready-made-assets)
+[What it is](#what-is-nulltohero) · [See it built](#see-what-it-builds) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows) · [Assets](#ready-made-assets)
 
 </div>
 
@@ -37,6 +37,44 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 Claude already writes code. NullToHero gives it the taste and the checklists of a senior web team: a designer, an SEO specialist, a quality inspector, and a reviewer who looks at the whole site at once.
 
 You do not learn commands by heart. You say what you want ("make this landing page look more premium", "why am I not on Google", "is this ready to ship"), and Claude picks the right tool. The sections below show what each tool produces so you know what to expect.
+
+---
+
+## See what it builds
+
+[**nulltohero.netlify.app**](https://nulltohero.netlify.app) is the plugin's own site, and
+it is the honest answer to "what can I actually get out of this". Nothing on it is a
+mockup: it is a scroll-driven story that writes the logo onto a blank sheet, opens a
+terminal, raises a generic template page, then audits that page on screen and corrects it.
+
+<div align="center">
+  <a href="https://nulltohero.netlify.app">
+    <img src="docs/showcase-site.gif" alt="The nulltohero.netlify.app homepage scrolling through its seven acts: a blank sheet where the logo draws itself, a terminal typing a command, a plain page, a slop page dressed in effects, the audit overlay stamping that page with its defects, the corrected version, and the finished hero" width="860">
+  </a>
+  <br>
+  <sub><a href="https://nulltohero.netlify.app">Open the live version</a> (the motion is scroll-driven, so it responds to you rather than to a timer)</sub>
+</div>
+
+The site holds itself to the rules it ships. Its source carries the plugin's own audit
+annotations: where a low-contrast element is deliberate, it declares
+`data-contrast-exempt-reason` and says why, which is the same mechanism `/audit` reads
+when it decides whether a contrast finding is a defect or a documented exception. The one
+place it shows unreadable text on purpose is the specimen page being audited, and that is
+written down in the code rather than left for a reviewer to guess.
+
+You can check the claim rather than take it:
+
+```bash
+node tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-score 90
+#   deterministic score: 100/100   FAIL: 0   WARN: 0   critical FAIL: 0
+#   RESULT: PASS
+```
+
+Each act names the commands that do that stage of the work, on screen as you scroll:
+`/siteasy setup` and `/siteasy research` while the page is still blank, `/siteasy concept`
+where the voice gets decided, `/siteasy amplify` and `/siteasy animate` over the generic
+template, and the inspection pass where the overlay stamps its findings. The site is
+therefore both the output and the table of contents.
 
 ---
 
@@ -478,7 +516,7 @@ node tests/validate.js   # run before opening a PR
 
 <div align="center">
 
-Built by [Marius Yvard](https://mariusweb.fr/cv) · [Releases](https://github.com/MariusYvard/NullToHero/releases) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+Built by [Marius Yvard](https://mariusweb.fr/cv) · [Live showcase](https://nulltohero.netlify.app) · [Releases](https://github.com/MariusYvard/NullToHero/releases) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 License: Apache 2.0. See [LICENSE](LICENSE).
 
