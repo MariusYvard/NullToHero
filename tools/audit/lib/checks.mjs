@@ -240,6 +240,51 @@ function checkRobots(robotsTxt, url) {
     method: "static", value: { disallows }, detail: disallows.length ? `Page allowed; ${disallows.length} Disallow rule(s) do not match ${path}.` : "robots.txt present, nothing disallowed." });
 }
 
+
+// ── viewport unit consistency (L-VIEWPORT-1, L-VIEWPORT-2) ────────────────────
+// vh, svh and lvh resolve to three different heights on a phone and are identical on a
+// desktop, so a mismatch is invisible on the machine that authored it. Two consequences
+// are worth a verdict: a full-bleed section in svh stops growing when the browser bar
+// retracts and lets the page background show under it, and a scroll track measured in vh
+// with a platter measured in svh buys a different number of platter heights than written,
+// which retimes every step of the sequence.
+function checkViewportUnits(styleText) {
+  const css = String(styleText || "");
+  if (!css.trim()) {
+    return mk({ id: "viewport-unit-consistency", label: "Viewport unit consistency", ...LAYOUT,
+      verdict: "NOT_MEASURED", method: "not-measured", value: null, detail: "No stylesheet available to the analyzer." });
+  }
+  // Only height-ish properties: vh in a translate or a font-size is a different question.
+  const decl = /(?:^|[;{])\s*(height|min-height|max-height)\s*:\s*([^;}]+)/gi;
+  const found = { vh: [], svh: [], lvh: [], dvh: [] };
+  let m;
+  while ((m = decl.exec(css)) !== null) {
+    const value = m[2];
+    const u = /(\d+(?:\.\d+)?)(dvh|svh|lvh|vh)\b/gi;
+    let n;
+    while ((n = u.exec(value)) !== null) {
+      const unit = n[2].toLowerCase();
+      if (found[unit]) found[unit].push(`${m[1].toLowerCase()}: ${n[1]}${unit}`);
+    }
+  }
+  const used = Object.keys(found).filter(k => found[k].length);
+  if (!used.length) {
+    return mk({ id: "viewport-unit-consistency", label: "Viewport unit consistency", ...LAYOUT,
+      verdict: "PASS", method: "static", value: { used: [] }, detail: "No viewport-height units in the stylesheet." });
+  }
+  // svh or lvh alongside vh is the mismatch: those three are the ones that disagree on a phone.
+  const disagreeing = used.filter(u => u !== "dvh");
+  if (disagreeing.length > 1) {
+    return mk({ id: "viewport-unit-consistency", label: "Viewport unit consistency", ...LAYOUT,
+      verdict: "WARN", method: "static",
+      value: { used, samples: Object.fromEntries(disagreeing.map(u => [u, found[u].slice(0, 4)])) },
+      detail: `Stylesheet sizes heights in ${disagreeing.join(" and ")}, which resolve to different heights on a phone and to the same height on a desktop. If these belong to one scroll system, the track and the platter are being measured against different viewports. Use dvh for full-bleed sections (L-VIEWPORT-1) and one unit per scroll system (L-VIEWPORT-2).` });
+  }
+  return mk({ id: "viewport-unit-consistency", label: "Viewport unit consistency", ...LAYOUT,
+    verdict: "PASS", method: "static", value: { used, samples: Object.fromEntries(used.map(u => [u, found[u].slice(0, 3)])) },
+    detail: `Viewport heights use ${used.join(" and ")} consistently.` });
+}
+
 // ── contrast (token-aware static path) ─────────────────────────────────────────
 
 function hasDirectText(el) {
@@ -1331,6 +1376,7 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkHostCanonical(probes),
     checkSecurityTxt(probes),
     checkMediaWeight(probes),
+    checkViewportUnits(styleText),
     // AI-surface access: robots.txt per bot, edge-level blocks, page directives,
     // llms.txt and the non-scoring agent-readiness signals.
     ...runAiAccessChecks({ doc: activeDoc, rawHtml, headers, robotsTxt, probes }),

@@ -11,6 +11,30 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.4.0] - 2026-07-31
+
+Lessons from building and shipping the plugin's own site, folded back in. The site is now
+the README's showcase, and the work of capturing it surfaced one place where the plugin
+contradicted itself.
+
+### Fixed
+
+- **The plugin prescribed three different viewport units for the same job.** `parallax.md` sized its pinned track in `vh` (line 341) and its hero example in `svh` (line 464), while `inspect/references/review.md` prescribed `dvh`. Three files, three answers, no doctrine, and the disagreement is invisible on a desktop because `vh`, `svh` and `lvh` are all equal when there are no retractable browser bars. On a phone they are not: a full-bleed section sized in `svh` stops growing when the bar retracts and leaves a band of page background under it, and a `940vh` track with a `100svh` platter buys 1061 platter heights instead of the 940 that were authored, running every act short. The hero example is now `dvh` and the pinned pattern states the consistency rule.
+
+### Added
+
+- **`viewport-unit-consistency`**, a deterministic check. It reads height, min-height and max-height declarations only (a `vh` inside a `translate` is a different question) and warns when a stylesheet mixes the units that disagree on a phone, naming the samples. `dvh` alone or any single unit passes. New fixture `viewport-unit-mismatch.html`, 69 in the eval set.
+- `L-VIEWPORT-1` (full-bleed sections are sized in `dvh`) and `L-VIEWPORT-2` (one viewport unit per scroll system), plus inspect rule 72 and its remediation route to `/siteasy adapt`.
+- **Generic font families resolve per platform, so measuring one is not measuring the other.** `ui-serif` resolves to Georgia on Windows and to New York on iOS, and New York is wider: a line count taken through `canvas.measureText` in a desktop browser reported three lines where the phone rendered four. `responsive-design.md` now says to measure with the stack the target will resolve, or on the device, and to leave headroom in any height that depends on a generic family.
+- **Content squeezed between two fixed obstacles.** A full-height section usually has something fixed at each end. Centring in the viewport puts the content behind both, and clearing only one end moves the defect to the other. Measure both and centre in what remains, and apply the offset at every place the content is positioned, or it jumps between states meant to look identical.
+- **A sub-agent report is a lead, not a source** (`audit/references/full.md`). A sub-agent states findings with the same confidence whether it read the thing or inferred it, and confidence is not provenance. Verify before acting on any claim that would change a file, retract a published line or contradict the repo. Both failure directions have happened here: an agent asserting a defect in a line that was correct as written, and an agent blamed for an error that belonged to the supervisor who had fetched the wrong page.
+
+### Changed
+
+- The README's showcase section documents the seven build steps and what each produced, and links the live site from the nav, the body and the footer.
+
+---
+
 ## [2.3.0] - 2026-07-27
 
 Harvest of seven SEO and marketing repositories, checked against primary sources before

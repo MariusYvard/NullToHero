@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-2.3.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-2.4.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v2.3.0** · 4 skills · 62 commands · 129 reference docs · 15 audit sub-agents
+**v2.4.0** · 4 skills · 62 commands · 129 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -70,26 +70,21 @@ node tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-score 90
 #   RESULT: PASS
 ```
 
-It started with three commands and a brief: `/siteasy research`, `/siteasy concept` and
-`/siteasy shape`, given "show what the plugin does best, Awwwards-grade, with parallax and
-scrollytelling". Each act then names on screen the commands that do that stage of the
-work, so the page doubles as the table of contents.
+### How it was built
 
-**The more useful thing is what building it did to the plugin.** A showcase that runs the
-tool against itself finds the faults a test fixture never will, and three releases exist
-because this site broke something:
+| Step | Commands | What came out |
+|------|----------|---------------|
+| 1. Frame the brief | `/siteasy research` | The audience, what they need to understand in the first ten seconds, and the references worth beating |
+| 2. Set the direction | `/siteasy concept` | `PRODUCT.md` and `DIRECTION.md`: the idea, the anti-reference, the one signature moment, the single accent colour |
+| 3. Shape before code | `/siteasy shape` | The section order and the seven acts, validated as a brief before a line was written |
+| 4. Build the acts | `/siteasy build`, `/siteasy parallax` | The pinned scroll track, the act transitions, the reduced-motion fallback |
+| 5. Set the type and colour | `/siteasy typeset`, `/siteasy layout` | The type scale, the spacing rhythm, the one-accent discipline held across every act |
+| 6. Look at it | `/inspect preview` | Desktop and phone screenshots at real viewports, read back and fixed in a loop |
+| 7. Gate it | `/audit full`, `/siteasy fix` | Findings routed to the command that fixes each one, then re-run until the gate came back clean |
 
-| Release | What the site exposed |
-|---------|-----------------------|
-| [1.34.0](CHANGELOG.md) | The contrast detector reported 14 samples below AA here. Six were invented: a fixed nav over a full-bleed hero resolved its backdrop by ancestry instead of by paint, so text a reader sees at 16.27:1 was reported at 1.11:1. |
-| [1.36.0](CHANGELOG.md) | The document checks only ever asked about the entry page while phrasing the answer as if it covered the site. `/journey` had shipped a 187-character meta description and every previous audit had said PASS. |
-| [1.37.0](CHANGELOG.md) | `data-contrast-exempt` was honoured by the rendered path and ignored by the static one, so the same page passed or failed depending on the flag. |
-
-That exemption attribute exists because of act 4. The act stages a page committing the
-contrast crime the rules forbid, and the detector had no way to tell a demonstration from
-a defect. Rather than soften the rule or special-case the site, the plugin grew a way for
-an author to declare the intent and give a reason, which the audit then reads. The site is
-the reason the mechanism is there, and it is still the thing being checked by it.
+The brief that started it was one sentence: show what the plugin does best, Awwwards-grade,
+with parallax and scrollytelling. Steps 1 to 3 produced no visible output at all, which is
+the point of doing them first.
 
 ---
 
@@ -301,7 +296,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.3.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.4.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 

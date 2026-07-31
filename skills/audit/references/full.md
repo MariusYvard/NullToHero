@@ -144,6 +144,25 @@ defect is counted in exactly one dimension, and other sections may reference it
 without re-penalizing. Conflicting verdicts on the same fact go to the agent
 that owns the dimension; note the disagreement in the report appendix.
 
+## A sub-agent report is a lead, not a source
+
+A sub-agent states its findings with the same confidence whether it read the thing or
+inferred it. Confidence is not provenance, and a finding that arrives phrased as a fact
+has still only been asserted.
+
+Verify before acting on any sub-agent claim that would change a file, retract a published
+line or contradict something already in the repo. Two failure directions are equally
+common, and both have happened here: an agent asserting a defect that turned out to be
+correct as written (retracting it would have broken a good line), and an agent being
+accused of an error that belonged to the supervisor who had fetched the wrong page. The
+cost of checking is one fetch. The cost of not checking is a confident correction in the
+wrong direction, which is worse than the original error because it now carries a
+justification.
+
+What this does NOT mean: re-running every sub-agent. The verification is targeted at
+claims with consequences, and it is cheapest at the moment the claim arrives, before the
+reconciliation has folded it into a dimension.
+
 ## Scoring
 
 Each agent returns a 0-100 score computed by the deterministic rubric in its own

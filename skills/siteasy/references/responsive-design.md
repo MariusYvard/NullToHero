@@ -58,6 +58,35 @@ Don't chase device sizes—let content tell you where to break. Start narrow, st
 
 **Critical**: Don't rely on hover for functionality. Touch users can't hover.
 
+## Viewport units: three of them, and two are usually wrong
+
+`vh` is the large viewport (browser bars retracted). `svh` is the small viewport (bars
+shown). `dvh` follows the bar as it moves. Picking one without saying which problem you
+are solving produces one of two defects, and they look nothing alike.
+
+| Unit | What it does on a phone | Where it bites |
+|------|-------------------------|----------------|
+| `100vh` | Taller than the visible area while the bars are shown | Content clipped below the fold on first paint, the classic "the button is off screen until I scroll" |
+| `100svh` | Shorter than the visible area once the bars retract | A band of page background appears under a full-bleed section, because the section stopped growing and the body did not |
+| `100dvh` | Matches the visible area at all times | The element resizes once when the bar retracts, which is visible on a pinned section |
+
+**For a full-bleed section that must never show the page behind it, use `dvh`.** The
+one-time resize when the bar retracts costs less than a permanent band of the wrong
+colour under a hero. Reserve `svh` for content that must fit without scrolling from the
+first frame (a splash, a login card) where a later resize would move a control under the
+user's thumb.
+
+**Keep the units consistent within one scroll system.** A pinned scrollytelling section
+usually has a tall track and a full-height platter pinned inside it. If the track is
+`940vh` and the platter is `100svh`, the browser is measuring them against two different
+heights: on a phone where `vh` is 745px and `svh` is 660px, that track buys 1061 platter
+heights instead of the 940 you wrote, and every act runs shorter than designed. Mixing
+units silently retimes the whole sequence. See
+[parallax.md](parallax.md) for the pinned pattern.
+
+**Do not test this in a desktop browser.** All three units are equal when there are no
+retractable bars, so the defect is invisible on the machine you are authoring on.
+
 ## Safe Areas: Handle the Notch
 
 Modern phones have notches, rounded corners, and home indicators. Use `env()`:
@@ -118,6 +147,33 @@ When you need different crops/compositions (not just resolutions):
 ## Layout Adaptation Patterns
 
 **Navigation**: Three stages—hamburger + drawer on mobile, horizontal compact on tablet, full with labels on desktop. **Tables**: Transform to cards on mobile using `display: block` and `data-label` attributes. **Progressive disclosure**: Use `<details>/<summary>` for content that can collapse on mobile.
+
+## Generic font families resolve differently per platform
+
+`system-ui`, `ui-serif`, `ui-sans-serif` and `ui-monospace` are instructions to the
+platform, not fonts. `ui-serif` resolves to Georgia on Windows and to New York on iOS,
+and New York is wider. A line count or a text width measured in a desktop browser through
+`canvas.measureText` therefore under-reports what the same string does on a phone: three
+lines on the machine that measured it, four on the device that renders it.
+
+Two consequences. Measure with the font stack the target platform will actually resolve,
+or measure on the device. And leave headroom in any layout whose height depends on a
+generic family resolving to a particular metric, because it will not resolve the same way
+twice. A device screenshot stays the instrument here; a computed measurement is a
+shortcut that is only as good as the font it happened to load.
+
+## Content squeezed between two fixed obstacles
+
+A full-height section commonly has something fixed at each end: a fixed or sticky header
+at the top, and a docked card, toolbar or cookie bar at the bottom. Centring content in
+the viewport ignores both, so the content sits behind them.
+
+Fixing only one end moves the defect rather than clearing it: pad the bottom to clear the
+docked card and the content rises into the header instead. Measure both obstacles and
+centre the content in what is left, not in the viewport. When the same content is
+positioned in more than one place (an absolutely positioned variant inside its own grid,
+say), apply the offset at every one of them, or the element will jump between the states
+that were supposed to look identical.
 
 ## Testing: Don't Trust DevTools Alone
 

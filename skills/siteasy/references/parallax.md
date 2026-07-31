@@ -338,6 +338,12 @@ The Apple-style product fly-through: a pinned stage whose video time or frame in
 
 ### Track sizing and progress
 
+- Use ONE viewport unit across the track and the platter. A `940vh` track with a
+  `100svh` platter is measured against two different heights: where `vh` is 745px and
+  `svh` is 660px, that track buys 1061 platter heights instead of 940 and every act runs
+  short. `dvh` on a full-bleed platter also stops the page background showing under it
+  when the phone browser bar retracts. Full table in
+  [responsive-design.md](responsive-design.md).
 - Reserve real scroll track: an N-vh container with a `position: sticky; top: 0; height: 100vh` child (no pin-spacer, no de-pin layout shift). Budget 1.5 to 2.5vh of track per second of scrubbed footage.
 - Leave ~10% of the track as a dead margin at the end so the final frame settles before the stage unpins.
 - Think in progress units (0 to 100% of the section), never in seconds. "The overlay enters at 60% and is gone by 100%" survives resizes and content changes; a duration does not.
@@ -461,7 +467,7 @@ Copy and adapt. All assume the reduced-motion reset and governance layer are alr
 ```
 
 ```css
-.hero { position: relative; height: 100svh; overflow: clip; isolation: isolate; }
+.hero { position: relative; height: 100dvh; overflow: clip; isolation: isolate; }
 .parallax-layer { position: absolute; inset: 0; }
 .parallax-layer img { width: 100%; height: 100%; object-fit: cover; }
 

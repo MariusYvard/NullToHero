@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pinned scroll story with mismatched viewport units</title>
+  <meta name="description" content="A pinned scrollytelling track whose platter is sized in a different viewport unit from the track it lives in, which retimes every act on a phone.">
+  <style>
+    :root { color-scheme: light; }
+    body { margin: 0; background: #ffffff; color: #1a1a1a; font: 16px/1.6 system-ui, sans-serif; }
+    /* The track is measured against the large viewport. */
+    .story { position: relative; height: 940vh; }
+    /* The platter pinned inside it is measured against the small viewport.
+       On a phone those are two different heights, so the track buys more platter
+       heights than were authored and every act runs short. */
+    .story__platter { position: sticky; top: 0; height: 100svh; overflow: clip; }
+    .act { position: absolute; inset: 0; display: grid; place-items: center; }
+    main { padding: 2rem; }
+    a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Pinned scroll story</h1>
+    <section class="story">
+      <div class="story__platter">
+        <div class="act">
+          <h2>First act</h2>
+          <p>The platter is pinned for the length of the track above it.</p>
+        </div>
+      </div>
+    </section>
+    <h2>After the story</h2>
+    <p>Regular page content resumes here, below the pinned track.</p>
+    <p><a href="/next/">Continue reading</a></p>
+  </main>
+</body>
+</html>

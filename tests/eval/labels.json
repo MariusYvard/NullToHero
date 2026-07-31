@@ -1,834 +1,853 @@
 [
- {
-  "name": "clean-pass",
-  "file": "clean-pass.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS",
-   "invalid-dom-nesting": "PASS",
-   "invalid-aria-attribute": "PASS"
-  }
- },
- {
-  "name": "clean-blog",
-  "file": "clean-blog.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "img-all-dims",
-  "file": "img-all-dims.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "contrast-pass-teal",
-  "file": "contrast-pass-teal.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "heading-good-deep",
-  "file": "heading-good-deep.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "viewport-missing",
-  "file": "viewport-missing.html",
-  "expect": {
-   "viewport-meta": "FAIL",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "viewport-no-zoom",
-  "file": "viewport-no-zoom.html",
-  "expect": {
-   "viewport-meta": "WARN",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "viewport-no-device-width",
-  "file": "viewport-no-device-width.html",
-  "expect": {
-   "viewport-meta": "WARN",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "img-missing-some",
-  "file": "img-missing-some.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "WARN",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "img-missing-many",
-  "file": "img-missing-many.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "FAIL",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "overflow-vw",
-  "file": "overflow-vw.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "WARN",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "contrast-fail-grey",
-  "file": "contrast-fail-grey.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "FAIL",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "contrast-large-ok",
-  "file": "contrast-large-ok.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "html-lang-missing",
-  "file": "html-lang-missing.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "FAIL",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "title-missing",
-  "file": "title-missing.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "FAIL",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "title-too-long",
-  "file": "title-too-long.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "WARN",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "title-too-short",
-  "file": "title-too-short.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "WARN",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "meta-desc-missing",
-  "file": "meta-desc-missing.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "WARN",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "meta-desc-too-long",
-  "file": "meta-desc-too-long.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "WARN",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "heading-skip",
-  "file": "heading-skip.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "FAIL"
-  }
- },
- {
-  "name": "heading-multi-h1",
-  "file": "heading-multi-h1.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "WARN"
-  }
- },
- {
-  "name": "heading-none",
-  "file": "heading-none.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "WARN"
-  }
- },
- {
-  "name": "overflow-fixed-width",
-  "file": "overflow-fixed-width.html",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "WARN",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "NOT_MEASURED",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "robots-disallow-all",
-  "file": "robots-disallow-all.html",
-  "url": "https://example.com/page",
-  "robots": "User-agent: *\nDisallow: /\n",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "FAIL",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "robots-allowed",
-  "file": "robots-allowed.html",
-  "url": "https://example.com/",
-  "robots": "User-agent: *\nDisallow: /admin\n",
-  "expect": {
-   "viewport-meta": "PASS",
-   "img-dimensions": "PASS",
-   "horizontal-overflow-375": "PASS",
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS",
-   "robots-disallow": "PASS",
-   "title-tag": "PASS",
-   "meta-description": "PASS",
-   "heading-order": "PASS"
-  }
- },
- {
-  "name": "token-contrast-fail",
-  "file": "token-contrast-fail.html",
-  "expect": {
-   "contrast-ratio": "FAIL",
-   "html-lang": "PASS"
-  }
- },
- {
-  "name": "token-contrast-pass",
-  "file": "token-contrast-pass.html",
-  "expect": {
-   "contrast-ratio": "PASS",
-   "html-lang": "PASS"
-  }
- },
- {
-  "name": "security-headers-pass",
-  "file": "security-headers.html",
-  "url": "https://production-site.example/",
-  "headers": {
-   "strict-transport-security": "max-age=63072000",
-   "x-content-type-options": "nosniff",
-   "x-frame-options": "DENY",
-   "referrer-policy": "strict-origin-when-cross-origin",
-   "content-security-policy": "default-src 'self'"
+  {
+    "name": "clean-pass",
+    "file": "clean-pass.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS",
+      "invalid-dom-nesting": "PASS",
+      "invalid-aria-attribute": "PASS",
+      "viewport-unit-consistency": "NOT_MEASURED"
+    }
   },
-  "expect": {
-   "security-headers": "PASS",
-   "cors-credentialed-wildcard": "PASS",
-   "session-cookie-flags": "PASS"
-  }
- },
- {
-  "name": "security-headers-fail",
-  "file": "security-headers.html",
-  "url": "https://production-site.example/",
-  "headers": {
-   "x-content-type-options": "nosniff"
+  {
+    "name": "clean-blog",
+    "file": "clean-blog.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "security-headers": "FAIL"
-  }
- },
- {
-  "name": "preview-canonical",
-  "file": "preview-canonical.html",
-  "url": "https://feature-branch.netlify.app/",
-  "expect": {
-   "canonical-url": "PASS"
-  }
- },
- {
-  "name": "canonical-cross-domain",
-  "file": "canonical-cross.html",
-  "url": "https://production-site.example/",
-  "expect": {
-   "canonical-url": "WARN"
-  }
- },
- {
-  "name": "nesting-invalid",
-  "file": "nesting-invalid.html",
-  "expect": {
-   "invalid-dom-nesting": "FAIL"
-  }
- },
- {
-  "name": "aria-invalid",
-  "file": "aria-invalid.html",
-  "expect": {
-   "invalid-aria-attribute": "FAIL"
-  }
- },
- {
-  "name": "charset-missing",
-  "file": "charset-missing.html",
-  "expect": {
-   "charset-early": "WARN"
-  }
- },
- {
-  "name": "sri-missing",
-  "file": "sri-missing.html",
-  "url": "https://mysite.example/",
-  "expect": {
-   "subresource-integrity": "WARN"
-  }
- },
- {
-  "name": "open-redirect",
-  "file": "open-redirect.html",
-  "url": "https://mysite.example/",
-  "expect": {
-   "open-redirect-param": "WARN"
-  }
- },
- {
-  "name": "cors-wildcard",
-  "file": "security-headers.html",
-  "url": "https://production-site.example/",
-  "headers": {
-   "access-control-allow-origin": "*",
-   "access-control-allow-credentials": "true"
+  {
+    "name": "img-all-dims",
+    "file": "img-all-dims.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "cors-credentialed-wildcard": "FAIL"
-  }
- },
- {
-  "name": "cookie-insecure",
-  "file": "security-headers.html",
-  "url": "https://production-site.example/",
-  "headers": {
-   "set-cookie": "sid=abc123; Path=/"
+  {
+    "name": "contrast-pass-teal",
+    "file": "contrast-pass-teal.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "session-cookie-flags": "WARN"
-  }
- },
- {
-  "name": "head-meta-complete",
-  "file": "head-meta-complete.html",
-  "expect": {
-   "head-meta": "PASS"
-  }
- },
- {
-  "name": "head-meta-absent",
-  "file": "minimal-head.html",
-  "expect": {
-   "head-meta": "WARN"
-  }
- },
- {
-  "name": "compression-br",
-  "file": "minimal-head.html",
-  "headers": {
-   "content-encoding": "br"
+  {
+    "name": "heading-good-deep",
+    "file": "heading-good-deep.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "compression-enabled": "PASS"
-  }
- },
- {
-  "name": "compression-none",
-  "file": "minimal-head.html",
-  "headers": {
-   "content-type": "text/html; charset=utf-8"
+  {
+    "name": "viewport-missing",
+    "file": "viewport-missing.html",
+    "expect": {
+      "viewport-meta": "FAIL",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "compression-enabled": "WARN"
-  }
- },
- {
-  "name": "server-clean",
-  "file": "minimal-head.html",
-  "headers": {
-   "server": "cloudflare"
+  {
+    "name": "viewport-no-zoom",
+    "file": "viewport-no-zoom.html",
+    "expect": {
+      "viewport-meta": "WARN",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "server-fingerprint": "PASS"
-  }
- },
- {
-  "name": "server-leak",
-  "file": "minimal-head.html",
-  "headers": {
-   "x-powered-by": "Express"
+  {
+    "name": "viewport-no-device-width",
+    "file": "viewport-no-device-width.html",
+    "expect": {
+      "viewport-meta": "WARN",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "server-fingerprint": "WARN"
-  }
- },
- {
-  "name": "https-redirect-yes",
-  "file": "minimal-head.html",
-  "probes": {
-   "httpsRedirect": {
-    "tested": true,
-    "redirectsToHttps": true,
-    "status": 301,
-    "location": "https://example.com/"
-   }
+  {
+    "name": "img-missing-some",
+    "file": "img-missing-some.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "WARN",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "https-redirect": "PASS"
-  }
- },
- {
-  "name": "https-redirect-no",
-  "file": "minimal-head.html",
-  "probes": {
-   "httpsRedirect": {
-    "tested": true,
-    "redirectsToHttps": false,
-    "reachable": true,
-    "status": 200
-   }
+  {
+    "name": "img-missing-many",
+    "file": "img-missing-many.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "FAIL",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "https-redirect": "FAIL"
-  }
- },
- {
-  "name": "host-canonical-redirects",
-  "file": "minimal-head.html",
-  "probes": {
-   "hostCanonical": {
-    "tested": true,
-    "altRedirects": true,
-    "altHost": "www.example.com"
-   }
+  {
+    "name": "overflow-vw",
+    "file": "overflow-vw.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "WARN",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "host-canonicalization": "PASS"
-  }
- },
- {
-  "name": "host-canonical-dup",
-  "file": "minimal-head.html",
-  "probes": {
-   "hostCanonical": {
-    "tested": true,
-    "altRedirects": false,
-    "altReachable": true,
-    "altHost": "www.example.com"
-   }
+  {
+    "name": "contrast-fail-grey",
+    "file": "contrast-fail-grey.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "FAIL",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "host-canonicalization": "WARN"
-  }
- },
- {
-  "name": "securitytxt-found",
-  "file": "minimal-head.html",
-  "probes": {
-   "securityTxt": {
-    "tested": true,
-    "found": true
-   }
+  {
+    "name": "contrast-large-ok",
+    "file": "contrast-large-ok.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "security-txt": "PASS"
-  }
- },
- {
-  "name": "securitytxt-missing",
-  "file": "minimal-head.html",
-  "probes": {
-   "securityTxt": {
-    "tested": true,
-    "found": false
-   }
+  {
+    "name": "html-lang-missing",
+    "file": "html-lang-missing.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "FAIL",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "security-txt": "WARN"
-  }
- },
- {
-  "name": "video-autoplay-bad",
-  "file": "video-autoplay-bad.html",
-  "expect": {
-   "video-embed-hygiene": "FAIL",
-   "title-tag": "PASS"
-  }
- },
- {
-  "name": "video-autoplay-noposter",
-  "file": "video-autoplay-noposter.html",
-  "expect": {
-   "video-embed-hygiene": "WARN"
-  }
- },
- {
-  "name": "video-autoplay-good",
-  "file": "video-autoplay-good.html",
-  "expect": {
-   "video-embed-hygiene": "PASS",
-   "scrollbar-hidden": "PASS",
-   "mixed-script-homoglyph": "PASS",
-   "frame-sequence-preload": "PASS",
-   "motion-reduced-guard": "PASS",
-   "media-weight": "NOT_MEASURED"
-  }
- },
- {
-  "name": "motion-noguard",
-  "file": "motion-noguard.html",
-  "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } });",
-  "expect": {
-   "motion-reduced-guard": "FAIL"
-  }
- },
- {
-  "name": "motion-cssonly",
-  "file": "motion-cssonly.html",
-  "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } });",
-  "expect": {
-   "motion-reduced-guard": "WARN"
-  }
- },
- {
-  "name": "motion-guarded",
-  "file": "motion-guarded.html",
-  "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } }); const rm = matchMedia(\"(prefers-reduced-motion: reduce)\"); if (rm.matches) ScrollTrigger.disable();",
-  "expect": {
-   "motion-reduced-guard": "PASS"
-  }
- },
- {
-  "name": "scrollbar-suppressed",
-  "file": "scrollbar-suppressed.html",
-  "expect": {
-   "scrollbar-hidden": "WARN"
-  }
- },
- {
-  "name": "frame-seq-warn",
-  "file": "frame-seq-warn.html",
-  "js": "const FRAMES = [\"frames/ezgif-frame-001.webp\",\"frames/ezgif-frame-002.webp\",\"frames/ezgif-frame-003.webp\",\"frames/ezgif-frame-004.webp\",\"frames/ezgif-frame-005.webp\",\"frames/ezgif-frame-006.webp\",\"frames/ezgif-frame-007.webp\",\"frames/ezgif-frame-008.webp\",\"frames/ezgif-frame-009.webp\",\"frames/ezgif-frame-010.webp\",\"frames/ezgif-frame-011.webp\",\"frames/ezgif-frame-012.webp\",\"frames/ezgif-frame-013.webp\",\"frames/ezgif-frame-014.webp\",\"frames/ezgif-frame-015.webp\",\"frames/ezgif-frame-016.webp\",\"frames/ezgif-frame-017.webp\",\"frames/ezgif-frame-018.webp\",\"frames/ezgif-frame-019.webp\",\"frames/ezgif-frame-020.webp\",\"frames/ezgif-frame-021.webp\",\"frames/ezgif-frame-022.webp\",\"frames/ezgif-frame-023.webp\",\"frames/ezgif-frame-024.webp\",\"frames/ezgif-frame-025.webp\",\"frames/ezgif-frame-026.webp\",\"frames/ezgif-frame-027.webp\",\"frames/ezgif-frame-028.webp\",\"frames/ezgif-frame-029.webp\",\"frames/ezgif-frame-030.webp\",\"frames/ezgif-frame-031.webp\",\"frames/ezgif-frame-032.webp\",\"frames/ezgif-frame-033.webp\",\"frames/ezgif-frame-034.webp\",\"frames/ezgif-frame-035.webp\",\"frames/ezgif-frame-036.webp\",\"frames/ezgif-frame-037.webp\",\"frames/ezgif-frame-038.webp\",\"frames/ezgif-frame-039.webp\",\"frames/ezgif-frame-040.webp\",\"frames/ezgif-frame-041.webp\",\"frames/ezgif-frame-042.webp\",\"frames/ezgif-frame-043.webp\",\"frames/ezgif-frame-044.webp\",\"frames/ezgif-frame-045.webp\",\"frames/ezgif-frame-046.webp\",\"frames/ezgif-frame-047.webp\",\"frames/ezgif-frame-048.webp\",\"frames/ezgif-frame-049.webp\",\"frames/ezgif-frame-050.webp\",\"frames/ezgif-frame-051.webp\",\"frames/ezgif-frame-052.webp\",\"frames/ezgif-frame-053.webp\",\"frames/ezgif-frame-054.webp\",\"frames/ezgif-frame-055.webp\",\"frames/ezgif-frame-056.webp\",\"frames/ezgif-frame-057.webp\",\"frames/ezgif-frame-058.webp\",\"frames/ezgif-frame-059.webp\",\"frames/ezgif-frame-060.webp\"]; FRAMES.forEach(src => { const im = new Image(); im.src = src; });",
-  "expect": {
-   "frame-sequence-preload": "WARN"
-  }
- },
- {
-  "name": "frame-seq-fail",
-  "file": "frame-seq-fail.html",
-  "js": "const FRAMES = [\"frames/ezgif-frame-001.webp\",\"frames/ezgif-frame-002.webp\",\"frames/ezgif-frame-003.webp\",\"frames/ezgif-frame-004.webp\",\"frames/ezgif-frame-005.webp\",\"frames/ezgif-frame-006.webp\",\"frames/ezgif-frame-007.webp\",\"frames/ezgif-frame-008.webp\",\"frames/ezgif-frame-009.webp\",\"frames/ezgif-frame-010.webp\",\"frames/ezgif-frame-011.webp\",\"frames/ezgif-frame-012.webp\",\"frames/ezgif-frame-013.webp\",\"frames/ezgif-frame-014.webp\",\"frames/ezgif-frame-015.webp\",\"frames/ezgif-frame-016.webp\",\"frames/ezgif-frame-017.webp\",\"frames/ezgif-frame-018.webp\",\"frames/ezgif-frame-019.webp\",\"frames/ezgif-frame-020.webp\",\"frames/ezgif-frame-021.webp\",\"frames/ezgif-frame-022.webp\",\"frames/ezgif-frame-023.webp\",\"frames/ezgif-frame-024.webp\",\"frames/ezgif-frame-025.webp\",\"frames/ezgif-frame-026.webp\",\"frames/ezgif-frame-027.webp\",\"frames/ezgif-frame-028.webp\",\"frames/ezgif-frame-029.webp\",\"frames/ezgif-frame-030.webp\",\"frames/ezgif-frame-031.webp\",\"frames/ezgif-frame-032.webp\",\"frames/ezgif-frame-033.webp\",\"frames/ezgif-frame-034.webp\",\"frames/ezgif-frame-035.webp\",\"frames/ezgif-frame-036.webp\",\"frames/ezgif-frame-037.webp\",\"frames/ezgif-frame-038.webp\",\"frames/ezgif-frame-039.webp\",\"frames/ezgif-frame-040.webp\",\"frames/ezgif-frame-041.webp\",\"frames/ezgif-frame-042.webp\",\"frames/ezgif-frame-043.webp\",\"frames/ezgif-frame-044.webp\",\"frames/ezgif-frame-045.webp\",\"frames/ezgif-frame-046.webp\",\"frames/ezgif-frame-047.webp\",\"frames/ezgif-frame-048.webp\",\"frames/ezgif-frame-049.webp\",\"frames/ezgif-frame-050.webp\",\"frames/ezgif-frame-051.webp\",\"frames/ezgif-frame-052.webp\",\"frames/ezgif-frame-053.webp\",\"frames/ezgif-frame-054.webp\",\"frames/ezgif-frame-055.webp\",\"frames/ezgif-frame-056.webp\",\"frames/ezgif-frame-057.webp\",\"frames/ezgif-frame-058.webp\",\"frames/ezgif-frame-059.webp\",\"frames/ezgif-frame-060.webp\",\"frames/ezgif-frame-061.webp\",\"frames/ezgif-frame-062.webp\",\"frames/ezgif-frame-063.webp\",\"frames/ezgif-frame-064.webp\",\"frames/ezgif-frame-065.webp\",\"frames/ezgif-frame-066.webp\",\"frames/ezgif-frame-067.webp\",\"frames/ezgif-frame-068.webp\",\"frames/ezgif-frame-069.webp\",\"frames/ezgif-frame-070.webp\",\"frames/ezgif-frame-071.webp\",\"frames/ezgif-frame-072.webp\",\"frames/ezgif-frame-073.webp\",\"frames/ezgif-frame-074.webp\",\"frames/ezgif-frame-075.webp\",\"frames/ezgif-frame-076.webp\",\"frames/ezgif-frame-077.webp\",\"frames/ezgif-frame-078.webp\",\"frames/ezgif-frame-079.webp\",\"frames/ezgif-frame-080.webp\",\"frames/ezgif-frame-081.webp\",\"frames/ezgif-frame-082.webp\",\"frames/ezgif-frame-083.webp\",\"frames/ezgif-frame-084.webp\",\"frames/ezgif-frame-085.webp\",\"frames/ezgif-frame-086.webp\",\"frames/ezgif-frame-087.webp\",\"frames/ezgif-frame-088.webp\",\"frames/ezgif-frame-089.webp\",\"frames/ezgif-frame-090.webp\",\"frames/ezgif-frame-091.webp\",\"frames/ezgif-frame-092.webp\",\"frames/ezgif-frame-093.webp\",\"frames/ezgif-frame-094.webp\",\"frames/ezgif-frame-095.webp\",\"frames/ezgif-frame-096.webp\",\"frames/ezgif-frame-097.webp\",\"frames/ezgif-frame-098.webp\",\"frames/ezgif-frame-099.webp\",\"frames/ezgif-frame-100.webp\",\"frames/ezgif-frame-101.webp\",\"frames/ezgif-frame-102.webp\",\"frames/ezgif-frame-103.webp\",\"frames/ezgif-frame-104.webp\",\"frames/ezgif-frame-105.webp\",\"frames/ezgif-frame-106.webp\",\"frames/ezgif-frame-107.webp\",\"frames/ezgif-frame-108.webp\",\"frames/ezgif-frame-109.webp\",\"frames/ezgif-frame-110.webp\",\"frames/ezgif-frame-111.webp\",\"frames/ezgif-frame-112.webp\",\"frames/ezgif-frame-113.webp\",\"frames/ezgif-frame-114.webp\",\"frames/ezgif-frame-115.webp\",\"frames/ezgif-frame-116.webp\",\"frames/ezgif-frame-117.webp\",\"frames/ezgif-frame-118.webp\",\"frames/ezgif-frame-119.webp\",\"frames/ezgif-frame-120.webp\",\"frames/ezgif-frame-121.webp\",\"frames/ezgif-frame-122.webp\",\"frames/ezgif-frame-123.webp\",\"frames/ezgif-frame-124.webp\",\"frames/ezgif-frame-125.webp\",\"frames/ezgif-frame-126.webp\",\"frames/ezgif-frame-127.webp\",\"frames/ezgif-frame-128.webp\",\"frames/ezgif-frame-129.webp\",\"frames/ezgif-frame-130.webp\",\"frames/ezgif-frame-131.webp\",\"frames/ezgif-frame-132.webp\",\"frames/ezgif-frame-133.webp\",\"frames/ezgif-frame-134.webp\",\"frames/ezgif-frame-135.webp\",\"frames/ezgif-frame-136.webp\",\"frames/ezgif-frame-137.webp\",\"frames/ezgif-frame-138.webp\",\"frames/ezgif-frame-139.webp\",\"frames/ezgif-frame-140.webp\",\"frames/ezgif-frame-141.webp\",\"frames/ezgif-frame-142.webp\",\"frames/ezgif-frame-143.webp\",\"frames/ezgif-frame-144.webp\",\"frames/ezgif-frame-145.webp\",\"frames/ezgif-frame-146.webp\",\"frames/ezgif-frame-147.webp\",\"frames/ezgif-frame-148.webp\",\"frames/ezgif-frame-149.webp\",\"frames/ezgif-frame-150.webp\",\"frames/ezgif-frame-151.webp\",\"frames/ezgif-frame-152.webp\",\"frames/ezgif-frame-153.webp\",\"frames/ezgif-frame-154.webp\",\"frames/ezgif-frame-155.webp\",\"frames/ezgif-frame-156.webp\",\"frames/ezgif-frame-157.webp\",\"frames/ezgif-frame-158.webp\",\"frames/ezgif-frame-159.webp\",\"frames/ezgif-frame-160.webp\"]; FRAMES.forEach(src => { const im = new Image(); im.src = src; });",
-  "expect": {
-   "frame-sequence-preload": "FAIL"
-  }
- },
- {
-  "name": "homoglyph-cyrillic",
-  "file": "homoglyph-cyrillic.html",
-  "expect": {
-   "mixed-script-homoglyph": "WARN"
-  }
- },
- {
-  "name": "title-default-bundler",
-  "file": "title-default-bundler.html",
-  "expect": {
-   "title-tag": "FAIL"
-  }
- },
- {
-  "name": "media-heavy",
-  "file": "media-probe.html",
-  "probes": {
-   "mediaWeight": {
-    "tested": true,
-    "videos": [
-     {
-      "url": "videos/hero.mp4",
-      "bytes": 52428800
-     }
-    ],
-    "models": [],
-    "videoBytes": 52428800,
-    "modelBytes": 0,
-    "unresolved": 0
-   }
+  {
+    "name": "title-missing",
+    "file": "title-missing.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "FAIL",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "media-weight": "FAIL"
-  }
- },
- {
-  "name": "media-warn-model",
-  "file": "media-probe.html",
-  "probes": {
-   "mediaWeight": {
-    "tested": true,
-    "videos": [
-     {
-      "url": "videos/hero.mp4",
-      "bytes": 2097152
-     }
-    ],
-    "models": [
-     {
-      "url": "planet.glb",
-      "bytes": 18874368
-     }
-    ],
-    "videoBytes": 2097152,
-    "modelBytes": 18874368,
-    "unresolved": 0
-   }
+  {
+    "name": "title-too-long",
+    "file": "title-too-long.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "WARN",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "media-weight": "WARN"
-  }
- },
- {
-  "name": "media-ok",
-  "file": "media-probe.html",
-  "probes": {
-   "mediaWeight": {
-    "tested": true,
-    "videos": [
-     {
-      "url": "videos/hero.mp4",
-      "bytes": 2097152
-     }
-    ],
-    "models": [],
-    "videoBytes": 2097152,
-    "modelBytes": 0,
-    "unresolved": 0
-   }
+  {
+    "name": "title-too-short",
+    "file": "title-too-short.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "WARN",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
   },
-  "expect": {
-   "media-weight": "PASS",
-   "video-embed-hygiene": "PASS"
+  {
+    "name": "meta-desc-missing",
+    "file": "meta-desc-missing.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "WARN",
+      "heading-order": "PASS"
+    }
+  },
+  {
+    "name": "meta-desc-too-long",
+    "file": "meta-desc-too-long.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "WARN",
+      "heading-order": "PASS"
+    }
+  },
+  {
+    "name": "heading-skip",
+    "file": "heading-skip.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "FAIL"
+    }
+  },
+  {
+    "name": "heading-multi-h1",
+    "file": "heading-multi-h1.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "WARN"
+    }
+  },
+  {
+    "name": "heading-none",
+    "file": "heading-none.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "WARN"
+    }
+  },
+  {
+    "name": "overflow-fixed-width",
+    "file": "overflow-fixed-width.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "WARN",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
+  },
+  {
+    "name": "robots-disallow-all",
+    "file": "robots-disallow-all.html",
+    "url": "https://example.com/page",
+    "robots": "User-agent: *\nDisallow: /\n",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "FAIL",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
+  },
+  {
+    "name": "robots-allowed",
+    "file": "robots-allowed.html",
+    "url": "https://example.com/",
+    "robots": "User-agent: *\nDisallow: /admin\n",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "PASS",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS"
+    }
+  },
+  {
+    "name": "token-contrast-fail",
+    "file": "token-contrast-fail.html",
+    "expect": {
+      "contrast-ratio": "FAIL",
+      "html-lang": "PASS"
+    }
+  },
+  {
+    "name": "token-contrast-pass",
+    "file": "token-contrast-pass.html",
+    "expect": {
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS"
+    }
+  },
+  {
+    "name": "security-headers-pass",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "strict-transport-security": "max-age=63072000",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "content-security-policy": "default-src 'self'"
+    },
+    "expect": {
+      "security-headers": "PASS",
+      "cors-credentialed-wildcard": "PASS",
+      "session-cookie-flags": "PASS"
+    }
+  },
+  {
+    "name": "security-headers-fail",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "x-content-type-options": "nosniff"
+    },
+    "expect": {
+      "security-headers": "FAIL"
+    }
+  },
+  {
+    "name": "preview-canonical",
+    "file": "preview-canonical.html",
+    "url": "https://feature-branch.netlify.app/",
+    "expect": {
+      "canonical-url": "PASS"
+    }
+  },
+  {
+    "name": "canonical-cross-domain",
+    "file": "canonical-cross.html",
+    "url": "https://production-site.example/",
+    "expect": {
+      "canonical-url": "WARN"
+    }
+  },
+  {
+    "name": "nesting-invalid",
+    "file": "nesting-invalid.html",
+    "expect": {
+      "invalid-dom-nesting": "FAIL"
+    }
+  },
+  {
+    "name": "aria-invalid",
+    "file": "aria-invalid.html",
+    "expect": {
+      "invalid-aria-attribute": "FAIL"
+    }
+  },
+  {
+    "name": "charset-missing",
+    "file": "charset-missing.html",
+    "expect": {
+      "charset-early": "WARN"
+    }
+  },
+  {
+    "name": "sri-missing",
+    "file": "sri-missing.html",
+    "url": "https://mysite.example/",
+    "expect": {
+      "subresource-integrity": "WARN"
+    }
+  },
+  {
+    "name": "open-redirect",
+    "file": "open-redirect.html",
+    "url": "https://mysite.example/",
+    "expect": {
+      "open-redirect-param": "WARN"
+    }
+  },
+  {
+    "name": "cors-wildcard",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true"
+    },
+    "expect": {
+      "cors-credentialed-wildcard": "FAIL"
+    }
+  },
+  {
+    "name": "cookie-insecure",
+    "file": "security-headers.html",
+    "url": "https://production-site.example/",
+    "headers": {
+      "set-cookie": "sid=abc123; Path=/"
+    },
+    "expect": {
+      "session-cookie-flags": "WARN"
+    }
+  },
+  {
+    "name": "head-meta-complete",
+    "file": "head-meta-complete.html",
+    "expect": {
+      "head-meta": "PASS"
+    }
+  },
+  {
+    "name": "head-meta-absent",
+    "file": "minimal-head.html",
+    "expect": {
+      "head-meta": "WARN"
+    }
+  },
+  {
+    "name": "compression-br",
+    "file": "minimal-head.html",
+    "headers": {
+      "content-encoding": "br"
+    },
+    "expect": {
+      "compression-enabled": "PASS"
+    }
+  },
+  {
+    "name": "compression-none",
+    "file": "minimal-head.html",
+    "headers": {
+      "content-type": "text/html; charset=utf-8"
+    },
+    "expect": {
+      "compression-enabled": "WARN"
+    }
+  },
+  {
+    "name": "server-clean",
+    "file": "minimal-head.html",
+    "headers": {
+      "server": "cloudflare"
+    },
+    "expect": {
+      "server-fingerprint": "PASS"
+    }
+  },
+  {
+    "name": "server-leak",
+    "file": "minimal-head.html",
+    "headers": {
+      "x-powered-by": "Express"
+    },
+    "expect": {
+      "server-fingerprint": "WARN"
+    }
+  },
+  {
+    "name": "https-redirect-yes",
+    "file": "minimal-head.html",
+    "probes": {
+      "httpsRedirect": {
+        "tested": true,
+        "redirectsToHttps": true,
+        "status": 301,
+        "location": "https://example.com/"
+      }
+    },
+    "expect": {
+      "https-redirect": "PASS"
+    }
+  },
+  {
+    "name": "https-redirect-no",
+    "file": "minimal-head.html",
+    "probes": {
+      "httpsRedirect": {
+        "tested": true,
+        "redirectsToHttps": false,
+        "reachable": true,
+        "status": 200
+      }
+    },
+    "expect": {
+      "https-redirect": "FAIL"
+    }
+  },
+  {
+    "name": "host-canonical-redirects",
+    "file": "minimal-head.html",
+    "probes": {
+      "hostCanonical": {
+        "tested": true,
+        "altRedirects": true,
+        "altHost": "www.example.com"
+      }
+    },
+    "expect": {
+      "host-canonicalization": "PASS"
+    }
+  },
+  {
+    "name": "host-canonical-dup",
+    "file": "minimal-head.html",
+    "probes": {
+      "hostCanonical": {
+        "tested": true,
+        "altRedirects": false,
+        "altReachable": true,
+        "altHost": "www.example.com"
+      }
+    },
+    "expect": {
+      "host-canonicalization": "WARN"
+    }
+  },
+  {
+    "name": "securitytxt-found",
+    "file": "minimal-head.html",
+    "probes": {
+      "securityTxt": {
+        "tested": true,
+        "found": true
+      }
+    },
+    "expect": {
+      "security-txt": "PASS"
+    }
+  },
+  {
+    "name": "securitytxt-missing",
+    "file": "minimal-head.html",
+    "probes": {
+      "securityTxt": {
+        "tested": true,
+        "found": false
+      }
+    },
+    "expect": {
+      "security-txt": "WARN"
+    }
+  },
+  {
+    "name": "video-autoplay-bad",
+    "file": "video-autoplay-bad.html",
+    "expect": {
+      "video-embed-hygiene": "FAIL",
+      "title-tag": "PASS"
+    }
+  },
+  {
+    "name": "video-autoplay-noposter",
+    "file": "video-autoplay-noposter.html",
+    "expect": {
+      "video-embed-hygiene": "WARN"
+    }
+  },
+  {
+    "name": "video-autoplay-good",
+    "file": "video-autoplay-good.html",
+    "expect": {
+      "video-embed-hygiene": "PASS",
+      "scrollbar-hidden": "PASS",
+      "mixed-script-homoglyph": "PASS",
+      "frame-sequence-preload": "PASS",
+      "motion-reduced-guard": "PASS",
+      "media-weight": "NOT_MEASURED"
+    }
+  },
+  {
+    "name": "motion-noguard",
+    "file": "motion-noguard.html",
+    "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } });",
+    "expect": {
+      "motion-reduced-guard": "FAIL"
+    }
+  },
+  {
+    "name": "motion-cssonly",
+    "file": "motion-cssonly.html",
+    "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } });",
+    "expect": {
+      "motion-reduced-guard": "WARN"
+    }
+  },
+  {
+    "name": "motion-guarded",
+    "file": "motion-guarded.html",
+    "js": "import gsap from \"gsap\"; import { ScrollTrigger } from \"gsap/ScrollTrigger\"; gsap.registerPlugin(ScrollTrigger); gsap.to(\".hero\", { yPercent: -20, ease: \"none\", scrollTrigger: { trigger: \".hero\", scrub: true } }); const rm = matchMedia(\"(prefers-reduced-motion: reduce)\"); if (rm.matches) ScrollTrigger.disable();",
+    "expect": {
+      "motion-reduced-guard": "PASS"
+    }
+  },
+  {
+    "name": "scrollbar-suppressed",
+    "file": "scrollbar-suppressed.html",
+    "expect": {
+      "scrollbar-hidden": "WARN"
+    }
+  },
+  {
+    "name": "frame-seq-warn",
+    "file": "frame-seq-warn.html",
+    "js": "const FRAMES = [\"frames/ezgif-frame-001.webp\",\"frames/ezgif-frame-002.webp\",\"frames/ezgif-frame-003.webp\",\"frames/ezgif-frame-004.webp\",\"frames/ezgif-frame-005.webp\",\"frames/ezgif-frame-006.webp\",\"frames/ezgif-frame-007.webp\",\"frames/ezgif-frame-008.webp\",\"frames/ezgif-frame-009.webp\",\"frames/ezgif-frame-010.webp\",\"frames/ezgif-frame-011.webp\",\"frames/ezgif-frame-012.webp\",\"frames/ezgif-frame-013.webp\",\"frames/ezgif-frame-014.webp\",\"frames/ezgif-frame-015.webp\",\"frames/ezgif-frame-016.webp\",\"frames/ezgif-frame-017.webp\",\"frames/ezgif-frame-018.webp\",\"frames/ezgif-frame-019.webp\",\"frames/ezgif-frame-020.webp\",\"frames/ezgif-frame-021.webp\",\"frames/ezgif-frame-022.webp\",\"frames/ezgif-frame-023.webp\",\"frames/ezgif-frame-024.webp\",\"frames/ezgif-frame-025.webp\",\"frames/ezgif-frame-026.webp\",\"frames/ezgif-frame-027.webp\",\"frames/ezgif-frame-028.webp\",\"frames/ezgif-frame-029.webp\",\"frames/ezgif-frame-030.webp\",\"frames/ezgif-frame-031.webp\",\"frames/ezgif-frame-032.webp\",\"frames/ezgif-frame-033.webp\",\"frames/ezgif-frame-034.webp\",\"frames/ezgif-frame-035.webp\",\"frames/ezgif-frame-036.webp\",\"frames/ezgif-frame-037.webp\",\"frames/ezgif-frame-038.webp\",\"frames/ezgif-frame-039.webp\",\"frames/ezgif-frame-040.webp\",\"frames/ezgif-frame-041.webp\",\"frames/ezgif-frame-042.webp\",\"frames/ezgif-frame-043.webp\",\"frames/ezgif-frame-044.webp\",\"frames/ezgif-frame-045.webp\",\"frames/ezgif-frame-046.webp\",\"frames/ezgif-frame-047.webp\",\"frames/ezgif-frame-048.webp\",\"frames/ezgif-frame-049.webp\",\"frames/ezgif-frame-050.webp\",\"frames/ezgif-frame-051.webp\",\"frames/ezgif-frame-052.webp\",\"frames/ezgif-frame-053.webp\",\"frames/ezgif-frame-054.webp\",\"frames/ezgif-frame-055.webp\",\"frames/ezgif-frame-056.webp\",\"frames/ezgif-frame-057.webp\",\"frames/ezgif-frame-058.webp\",\"frames/ezgif-frame-059.webp\",\"frames/ezgif-frame-060.webp\"]; FRAMES.forEach(src => { const im = new Image(); im.src = src; });",
+    "expect": {
+      "frame-sequence-preload": "WARN"
+    }
+  },
+  {
+    "name": "frame-seq-fail",
+    "file": "frame-seq-fail.html",
+    "js": "const FRAMES = [\"frames/ezgif-frame-001.webp\",\"frames/ezgif-frame-002.webp\",\"frames/ezgif-frame-003.webp\",\"frames/ezgif-frame-004.webp\",\"frames/ezgif-frame-005.webp\",\"frames/ezgif-frame-006.webp\",\"frames/ezgif-frame-007.webp\",\"frames/ezgif-frame-008.webp\",\"frames/ezgif-frame-009.webp\",\"frames/ezgif-frame-010.webp\",\"frames/ezgif-frame-011.webp\",\"frames/ezgif-frame-012.webp\",\"frames/ezgif-frame-013.webp\",\"frames/ezgif-frame-014.webp\",\"frames/ezgif-frame-015.webp\",\"frames/ezgif-frame-016.webp\",\"frames/ezgif-frame-017.webp\",\"frames/ezgif-frame-018.webp\",\"frames/ezgif-frame-019.webp\",\"frames/ezgif-frame-020.webp\",\"frames/ezgif-frame-021.webp\",\"frames/ezgif-frame-022.webp\",\"frames/ezgif-frame-023.webp\",\"frames/ezgif-frame-024.webp\",\"frames/ezgif-frame-025.webp\",\"frames/ezgif-frame-026.webp\",\"frames/ezgif-frame-027.webp\",\"frames/ezgif-frame-028.webp\",\"frames/ezgif-frame-029.webp\",\"frames/ezgif-frame-030.webp\",\"frames/ezgif-frame-031.webp\",\"frames/ezgif-frame-032.webp\",\"frames/ezgif-frame-033.webp\",\"frames/ezgif-frame-034.webp\",\"frames/ezgif-frame-035.webp\",\"frames/ezgif-frame-036.webp\",\"frames/ezgif-frame-037.webp\",\"frames/ezgif-frame-038.webp\",\"frames/ezgif-frame-039.webp\",\"frames/ezgif-frame-040.webp\",\"frames/ezgif-frame-041.webp\",\"frames/ezgif-frame-042.webp\",\"frames/ezgif-frame-043.webp\",\"frames/ezgif-frame-044.webp\",\"frames/ezgif-frame-045.webp\",\"frames/ezgif-frame-046.webp\",\"frames/ezgif-frame-047.webp\",\"frames/ezgif-frame-048.webp\",\"frames/ezgif-frame-049.webp\",\"frames/ezgif-frame-050.webp\",\"frames/ezgif-frame-051.webp\",\"frames/ezgif-frame-052.webp\",\"frames/ezgif-frame-053.webp\",\"frames/ezgif-frame-054.webp\",\"frames/ezgif-frame-055.webp\",\"frames/ezgif-frame-056.webp\",\"frames/ezgif-frame-057.webp\",\"frames/ezgif-frame-058.webp\",\"frames/ezgif-frame-059.webp\",\"frames/ezgif-frame-060.webp\",\"frames/ezgif-frame-061.webp\",\"frames/ezgif-frame-062.webp\",\"frames/ezgif-frame-063.webp\",\"frames/ezgif-frame-064.webp\",\"frames/ezgif-frame-065.webp\",\"frames/ezgif-frame-066.webp\",\"frames/ezgif-frame-067.webp\",\"frames/ezgif-frame-068.webp\",\"frames/ezgif-frame-069.webp\",\"frames/ezgif-frame-070.webp\",\"frames/ezgif-frame-071.webp\",\"frames/ezgif-frame-072.webp\",\"frames/ezgif-frame-073.webp\",\"frames/ezgif-frame-074.webp\",\"frames/ezgif-frame-075.webp\",\"frames/ezgif-frame-076.webp\",\"frames/ezgif-frame-077.webp\",\"frames/ezgif-frame-078.webp\",\"frames/ezgif-frame-079.webp\",\"frames/ezgif-frame-080.webp\",\"frames/ezgif-frame-081.webp\",\"frames/ezgif-frame-082.webp\",\"frames/ezgif-frame-083.webp\",\"frames/ezgif-frame-084.webp\",\"frames/ezgif-frame-085.webp\",\"frames/ezgif-frame-086.webp\",\"frames/ezgif-frame-087.webp\",\"frames/ezgif-frame-088.webp\",\"frames/ezgif-frame-089.webp\",\"frames/ezgif-frame-090.webp\",\"frames/ezgif-frame-091.webp\",\"frames/ezgif-frame-092.webp\",\"frames/ezgif-frame-093.webp\",\"frames/ezgif-frame-094.webp\",\"frames/ezgif-frame-095.webp\",\"frames/ezgif-frame-096.webp\",\"frames/ezgif-frame-097.webp\",\"frames/ezgif-frame-098.webp\",\"frames/ezgif-frame-099.webp\",\"frames/ezgif-frame-100.webp\",\"frames/ezgif-frame-101.webp\",\"frames/ezgif-frame-102.webp\",\"frames/ezgif-frame-103.webp\",\"frames/ezgif-frame-104.webp\",\"frames/ezgif-frame-105.webp\",\"frames/ezgif-frame-106.webp\",\"frames/ezgif-frame-107.webp\",\"frames/ezgif-frame-108.webp\",\"frames/ezgif-frame-109.webp\",\"frames/ezgif-frame-110.webp\",\"frames/ezgif-frame-111.webp\",\"frames/ezgif-frame-112.webp\",\"frames/ezgif-frame-113.webp\",\"frames/ezgif-frame-114.webp\",\"frames/ezgif-frame-115.webp\",\"frames/ezgif-frame-116.webp\",\"frames/ezgif-frame-117.webp\",\"frames/ezgif-frame-118.webp\",\"frames/ezgif-frame-119.webp\",\"frames/ezgif-frame-120.webp\",\"frames/ezgif-frame-121.webp\",\"frames/ezgif-frame-122.webp\",\"frames/ezgif-frame-123.webp\",\"frames/ezgif-frame-124.webp\",\"frames/ezgif-frame-125.webp\",\"frames/ezgif-frame-126.webp\",\"frames/ezgif-frame-127.webp\",\"frames/ezgif-frame-128.webp\",\"frames/ezgif-frame-129.webp\",\"frames/ezgif-frame-130.webp\",\"frames/ezgif-frame-131.webp\",\"frames/ezgif-frame-132.webp\",\"frames/ezgif-frame-133.webp\",\"frames/ezgif-frame-134.webp\",\"frames/ezgif-frame-135.webp\",\"frames/ezgif-frame-136.webp\",\"frames/ezgif-frame-137.webp\",\"frames/ezgif-frame-138.webp\",\"frames/ezgif-frame-139.webp\",\"frames/ezgif-frame-140.webp\",\"frames/ezgif-frame-141.webp\",\"frames/ezgif-frame-142.webp\",\"frames/ezgif-frame-143.webp\",\"frames/ezgif-frame-144.webp\",\"frames/ezgif-frame-145.webp\",\"frames/ezgif-frame-146.webp\",\"frames/ezgif-frame-147.webp\",\"frames/ezgif-frame-148.webp\",\"frames/ezgif-frame-149.webp\",\"frames/ezgif-frame-150.webp\",\"frames/ezgif-frame-151.webp\",\"frames/ezgif-frame-152.webp\",\"frames/ezgif-frame-153.webp\",\"frames/ezgif-frame-154.webp\",\"frames/ezgif-frame-155.webp\",\"frames/ezgif-frame-156.webp\",\"frames/ezgif-frame-157.webp\",\"frames/ezgif-frame-158.webp\",\"frames/ezgif-frame-159.webp\",\"frames/ezgif-frame-160.webp\"]; FRAMES.forEach(src => { const im = new Image(); im.src = src; });",
+    "expect": {
+      "frame-sequence-preload": "FAIL"
+    }
+  },
+  {
+    "name": "homoglyph-cyrillic",
+    "file": "homoglyph-cyrillic.html",
+    "expect": {
+      "mixed-script-homoglyph": "WARN"
+    }
+  },
+  {
+    "name": "title-default-bundler",
+    "file": "title-default-bundler.html",
+    "expect": {
+      "title-tag": "FAIL"
+    }
+  },
+  {
+    "name": "media-heavy",
+    "file": "media-probe.html",
+    "probes": {
+      "mediaWeight": {
+        "tested": true,
+        "videos": [
+          {
+            "url": "videos/hero.mp4",
+            "bytes": 52428800
+          }
+        ],
+        "models": [],
+        "videoBytes": 52428800,
+        "modelBytes": 0,
+        "unresolved": 0
+      }
+    },
+    "expect": {
+      "media-weight": "FAIL"
+    }
+  },
+  {
+    "name": "media-warn-model",
+    "file": "media-probe.html",
+    "probes": {
+      "mediaWeight": {
+        "tested": true,
+        "videos": [
+          {
+            "url": "videos/hero.mp4",
+            "bytes": 2097152
+          }
+        ],
+        "models": [
+          {
+            "url": "planet.glb",
+            "bytes": 18874368
+          }
+        ],
+        "videoBytes": 2097152,
+        "modelBytes": 18874368,
+        "unresolved": 0
+      }
+    },
+    "expect": {
+      "media-weight": "WARN"
+    }
+  },
+  {
+    "name": "media-ok",
+    "file": "media-probe.html",
+    "probes": {
+      "mediaWeight": {
+        "tested": true,
+        "videos": [
+          {
+            "url": "videos/hero.mp4",
+            "bytes": 2097152
+          }
+        ],
+        "models": [],
+        "videoBytes": 2097152,
+        "modelBytes": 0,
+        "unresolved": 0
+      }
+    },
+    "expect": {
+      "media-weight": "PASS",
+      "video-embed-hygiene": "PASS"
+    }
+  },
+  {
+    "name": "three-dup",
+    "file": "three-dup.html",
+    "js": "const REVISION = '160'; export { REVISION }; /* second bundle */ var REVISION2; REVISION = '178';",
+    "expect": {
+      "three-duplicate-copies": "FAIL"
+    }
+  },
+  {
+    "name": "three-clean",
+    "file": "three-clean.html",
+    "js": "const REVISION = '178'; console.log(REVISION);",
+    "expect": {
+      "three-duplicate-copies": "PASS",
+      "frame-loop-alloc": "PASS"
+    }
+  },
+  {
+    "name": "frame-alloc",
+    "file": "frame-alloc.html",
+    "js": "useFrame(() => { const v = new THREE.Vector3(1, 2, 3); mesh.position.copy(v); });",
+    "expect": {
+      "frame-loop-alloc": "WARN"
+    }
+  },
+  {
+    "name": "video-interactive",
+    "file": "video-interactive.html",
+    "expect": {
+      "video-embed-hygiene": "PASS"
+    }
+  },
+  {
+    "name": "viewport-unit-mismatch",
+    "file": "viewport-unit-mismatch.html",
+    "expect": {
+      "viewport-meta": "PASS",
+      "img-dimensions": "PASS",
+      "horizontal-overflow-375": "PASS",
+      "contrast-ratio": "PASS",
+      "html-lang": "PASS",
+      "robots-disallow": "NOT_MEASURED",
+      "title-tag": "PASS",
+      "meta-description": "PASS",
+      "heading-order": "PASS",
+      "invalid-dom-nesting": "PASS",
+      "invalid-aria-attribute": "PASS",
+      "viewport-unit-consistency": "WARN"
+    }
   }
- },
- {
-  "name": "three-dup",
-  "file": "three-dup.html",
-  "js": "const REVISION = '160'; export { REVISION }; /* second bundle */ var REVISION2; REVISION = '178';",
-  "expect": {
-   "three-duplicate-copies": "FAIL"
-  }
- },
- {
-  "name": "three-clean",
-  "file": "three-clean.html",
-  "js": "const REVISION = '178'; console.log(REVISION);",
-  "expect": {
-   "three-duplicate-copies": "PASS",
-   "frame-loop-alloc": "PASS"
-  }
- },
- {
-  "name": "frame-alloc",
-  "file": "frame-alloc.html",
-  "js": "useFrame(() => { const v = new THREE.Vector3(1, 2, 3); mesh.position.copy(v); });",
-  "expect": {
-   "frame-loop-alloc": "WARN"
-  }
- },
- {
-  "name": "video-interactive",
-  "file": "video-interactive.html",
-  "expect": {
-   "video-embed-hygiene": "PASS"
-  }
- }
 ]

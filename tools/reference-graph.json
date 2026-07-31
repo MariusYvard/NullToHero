@@ -1492,6 +1492,10 @@
       "to": "skills/siteasy/references/stock-media.md"
     },
     {
+      "from": "skills/siteasy/references/responsive-design.md",
+      "to": "skills/siteasy/references/parallax.md"
+    },
+    {
       "from": "skills/siteasy/references/shape.md",
       "to": "skills/siteasy/references/interaction-design.md"
     },
