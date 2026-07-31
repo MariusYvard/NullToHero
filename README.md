@@ -52,7 +52,7 @@ terminal, raises a generic template page, then audits that page on screen and co
     <img src="docs/showcase-site.gif" alt="The nulltohero.netlify.app homepage scrolling through its seven acts: a blank sheet where the logo draws itself, a terminal typing a command, a plain page, a slop page dressed in effects, the audit overlay stamping that page with its defects, the corrected version, and the finished hero" width="860">
   </a>
   <br>
-  <sub><a href="https://nulltohero.netlify.app">Open the live version</a> (the motion is scroll-driven, so it responds to you rather than to a timer)</sub>
+  <sub><a href="https://nulltohero.netlify.app">Open the live version</a>: the motion is scroll-driven, so it answers your wheel rather than a timer, and the capture above only walks it at one fixed pace</sub>
 </div>
 
 The site holds itself to the rules it ships. Its source carries the plugin's own audit
@@ -70,11 +70,26 @@ node tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-score 90
 #   RESULT: PASS
 ```
 
-Each act names the commands that do that stage of the work, on screen as you scroll:
-`/siteasy setup` and `/siteasy research` while the page is still blank, `/siteasy concept`
-where the voice gets decided, `/siteasy amplify` and `/siteasy animate` over the generic
-template, and the inspection pass where the overlay stamps its findings. The site is
-therefore both the output and the table of contents.
+It started with three commands and a brief: `/siteasy research`, `/siteasy concept` and
+`/siteasy shape`, given "show what the plugin does best, Awwwards-grade, with parallax and
+scrollytelling". Each act then names on screen the commands that do that stage of the
+work, so the page doubles as the table of contents.
+
+**The more useful thing is what building it did to the plugin.** A showcase that runs the
+tool against itself finds the faults a test fixture never will, and three releases exist
+because this site broke something:
+
+| Release | What the site exposed |
+|---------|-----------------------|
+| [1.34.0](CHANGELOG.md) | The contrast detector reported 14 samples below AA here. Six were invented: a fixed nav over a full-bleed hero resolved its backdrop by ancestry instead of by paint, so text a reader sees at 16.27:1 was reported at 1.11:1. |
+| [1.36.0](CHANGELOG.md) | The document checks only ever asked about the entry page while phrasing the answer as if it covered the site. `/journey` had shipped a 187-character meta description and every previous audit had said PASS. |
+| [1.37.0](CHANGELOG.md) | `data-contrast-exempt` was honoured by the rendered path and ignored by the static one, so the same page passed or failed depending on the flag. |
+
+That exemption attribute exists because of act 4. The act stages a page committing the
+contrast crime the rules forbid, and the detector had no way to tell a demonstration from
+a defect. Rather than soften the rule or special-case the site, the plugin grew a way for
+an author to declare the intent and give a reason, which the audit then reads. The site is
+the reason the mechanism is there, and it is still the thing being checked by it.
 
 ---
 
