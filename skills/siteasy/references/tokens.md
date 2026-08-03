@@ -26,6 +26,10 @@ find [path] \( -name "*token*" -o -name "*theme*" -o -name "*variable*" \) \
   -not -path "*/node_modules/*" | head -20
 ```
 
+Then read the conventions that govern those tokens: any charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the class naming convention visible in the code (BEM, utility classes, CSS modules), and the fonts already loaded and used.
+
+Project conventions are binding and outrank every generic recommendation in this reference. When a recommendation here contradicts the project's charter, the charter wins: report the conflict to the user instead of settling it silently. Never rename an existing token, never add a web font to a project that uses none, and never add motion to a project that has none, without asking first.
+
 ## Step 2 — What to Look For
 
 **Problem 1: Named by value, not role**

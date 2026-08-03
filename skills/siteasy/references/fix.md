@@ -27,12 +27,19 @@ user wants the findings addressed without the full rework pipeline.
 
 | # | Stage | Run | Exit criterion |
 |---|-------|-----|----------------|
-| 1 | Triage | Group findings by their `fixWith` route (each check carries one in `SITE-AUDIT.json`; rules map via `tools/data/remediation-map.csv`) | An ordered plan: critical first, then per-command batches, quick wins flagged |
-| 2 | Execute | Run each mapped command with its reference loaded, one batch at a time | Each batch's findings addressed or consciously deferred with a reason |
-| 3 | Verify | Re-run `/audit checks` with the SAME settings as the source audit | No regression; the targeted findings resolved |
+| 1 | Conventions | Read the project's own conventions: charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS custom properties already defined, the class naming convention visible in the code (BEM, utility classes, CSS modules), the fonts already loaded and used | The binding conventions are known before any batch edits a file |
+| 2 | Triage | Group findings by their `fixWith` route (each check carries one in `SITE-AUDIT.json`; rules map via `tools/data/remediation-map.csv`) | An ordered plan: critical first, then per-command batches, quick wins flagged |
+| 3 | Execute | Run each mapped command with its reference loaded, one batch at a time | Each batch's findings addressed or consciously deferred with a reason |
+| 4 | Verify | Re-run `/audit checks` with the SAME settings as the source audit | No regression; the targeted findings resolved |
 
 ## Rules
 
+- Project conventions are binding and outrank every generic recommendation in
+  the references a batch loads. When a reference recommends what the project's
+  charter forbids, the charter wins: report the conflict to the user instead of
+  settling it silently. Never rename an existing token, never add a web font to
+  a project that uses none, and never add motion to a project that has none,
+  without asking first.
 - Never fix findings ad hoc from the report prose: always through the mapped
   command, so the right reference is loaded and the fix follows the plugin's
   own doctrine.

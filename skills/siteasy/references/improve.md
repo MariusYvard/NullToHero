@@ -14,14 +14,19 @@ command directly.
 
 ## How to dispatch
 
-1. Read the complaint and the target (file, folder or URL). If `DESIGN.md` or
-   `DIRECTION.md` exists, read them first: the axis must move toward the
+1. Read the project's own conventions first and treat them as binding: any
+   charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE,
+   CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS custom
+   properties already defined, the class naming convention visible in the code
+   (BEM, utility classes, CSS modules), and the fonts already loaded and used.
+2. Read the complaint and the target (file, folder or URL). If `DESIGN.md` or
+   `DIRECTION.md` exists, read them too: the axis must move toward the
    committed direction, not toward taste.
-2. Match the complaint against the symptom table below. Take the FIRST row that
+3. Match the complaint against the symptom table below. Take the FIRST row that
    matches. One pass, one axis.
-3. Load the axis command's reference file(s) from the Commands table in
+4. Load the axis command's reference file(s) from the Commands table in
    `SKILL.md` and execute exactly as written there.
-4. After the pass, offer the single most likely next axis (one line, no menu).
+5. After the pass, offer the single most likely next axis (one line, no menu).
 
 ## Symptom table
 
@@ -66,6 +71,11 @@ First match wins. Symptoms are what users say, not what the code says.
   pull in opposite directions and the result is mush.
 - The axis reference is law. This file never overrides what the axis reference
   prescribes.
+- Project conventions outrank both this file and the axis reference. When an
+  axis reference recommends what the project's charter forbids, the charter
+  wins: report the conflict to the user instead of settling it silently. Never
+  rename an existing token, never add a web font to a project that uses none,
+  and never add motion to a project that has none, without asking first.
 - Improvement is not remediation. If a deterministic audit already produced
   findings, [fix.md](fix.md) owns the work: it batches by remediation route.
 - Respect the shared design laws in `SKILL.md` throughout, including the

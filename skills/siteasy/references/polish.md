@@ -12,11 +12,14 @@ Perform a meticulous final pass to catch all the small details that separate goo
 
 Aligning the feature to the design system is **not optional**. Polish without alignment is decoration on top of drift, and it makes the next person's job harder. Discovery comes before any other polish work.
 
-1. **Find the design system**: Search for design system documentation, component libraries, style guides, or token definitions. Study the core patterns: design principles, target audience, color tokens, spacing scale, typography styles, component API, motion conventions.
-2. **Note the conventions**: How are shared components imported? What spacing scale is used? Which colors come from tokens vs hard-coded values? What motion and interaction patterns are established? What flow shapes are used for comparable actions (modal vs full-page, inline vs route, save-on-blur vs explicit submit)?
-3. **Identify drift, then name the root cause**: For every deviation, classify it as a **missing token** (the value should exist in the system but doesn't), a **one-off implementation** (a shared component already exists but wasn't used), or a **conceptual misalignment** (the feature's flow, IA, or hierarchy doesn't match neighboring features). The fix differs by category — patch the value, swap to the shared component, or rework the flow. Fixing the symptom without naming the cause is how drift compounds.
+1. **Read the project's own conventions**: Search the root and `docs/` for a charter or style guide (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), then read the CSS custom properties already defined, the class naming convention visible in the code (BEM, utility classes, CSS modules), and the fonts already loaded and used. These are binding.
+2. **Find the design system**: Search for design system documentation, component libraries, style guides, or token definitions. Study the core patterns: design principles, target audience, color tokens, spacing scale, typography styles, component API, motion conventions.
+3. **Note the conventions**: How are shared components imported? What spacing scale is used? Which colors come from tokens vs hard-coded values? What motion and interaction patterns are established? What flow shapes are used for comparable actions (modal vs full-page, inline vs route, save-on-blur vs explicit submit)?
+4. **Identify drift, then name the root cause**: For every deviation, classify it as a **missing token** (the value should exist in the system but doesn't), a **one-off implementation** (a shared component already exists but wasn't used), or a **conceptual misalignment** (the feature's flow, IA, or hierarchy doesn't match neighboring features). The fix differs by category — patch the value, swap to the shared component, or rework the flow. Fixing the symptom without naming the cause is how drift compounds.
 
 If a design system exists, polish **must** align the feature with it. If none exists, polish against the conventions visible in the codebase. **If anything about the system is ambiguous, ask — never guess at design system principles.**
+
+Project conventions are binding and outrank every generic recommendation in this reference. When a recommendation here contradicts the project's charter, the charter wins: report the conflict to the user instead of settling it silently. Never rename an existing token, never add a web font to a project that uses none, and never add motion to a project that has none, without asking first.
 
 ## Pre-Polish Assessment
 
