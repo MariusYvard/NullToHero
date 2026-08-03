@@ -1008,6 +1008,10 @@
       "to": "skills/siteasy/references/personas.md"
     },
     {
+      "from": "skills/siteasy/references/dark-mode-engineering.md",
+      "to": "skills/siteasy/references/design-tokens.md"
+    },
+    {
       "from": "skills/siteasy/references/data-viz.md",
       "to": "skills/siteasy/references/parallax.md"
     },
@@ -1022,6 +1026,14 @@
     {
       "from": "skills/siteasy/references/delight.md",
       "to": "skills/siteasy/references/component-recipes.md"
+    },
+    {
+      "from": "skills/siteasy/references/design-tokens.md",
+      "to": "skills/siteasy/references/dark-mode-engineering.md"
+    },
+    {
+      "from": "skills/siteasy/references/design-tokens.md",
+      "to": "skills/siteasy/references/spatial-design.md"
     },
     {
       "from": "skills/siteasy/references/extract.md",
