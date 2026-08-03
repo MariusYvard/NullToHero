@@ -862,5 +862,12 @@
       "decorative-loop-budget": "WARN",
       "scrub-easing-linear": "FAIL"
     }
+  },
+  {
+    "name": "consent-tracker-unblocked",
+    "file": "consent-tracker-unblocked.html",
+    "expect": {
+      "consent-required-tracker": "FAIL"
+    }
   }
 ]

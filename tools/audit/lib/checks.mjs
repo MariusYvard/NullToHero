@@ -1345,6 +1345,78 @@ function checkFrameLoopAlloc(js) {
     detail: windows ? `No per-frame allocation detected across ${windows} frame loop(s).` : "No frame loops detected." });
 }
 
+// ── consent exposure ──────────────────────────────────────────────────────────
+
+/* A tracker that reads or writes on the visitor's device needs consent before it
+   runs, and a script tag in the served HTML runs on load. That makes the exposure
+   statically decidable, which matters because it is otherwise invisible here: a page
+   can score 100/100 and still be collecting without consent.
+   The exemption is not a matter of opinion either. The CNIL states the conditions
+   (audience measurement only, anonymous statistics, for the publisher alone, no
+   cross-site tracking, no non-anonymous transmission to a third party), so a tool
+   that can meet them is NOT flagged. See references/privacy-consent.md. */
+const CONSENT_TRACKERS = [
+  [/googletagmanager\.com|gtag\/js|google-analytics\.com/i, "Google Analytics / Tag Manager"],
+  [/connect\.facebook\.net|fbevents\.js/i, "Meta Pixel"],
+  [/static\.hotjar\.com|hotjar-\d/i, "Hotjar"],
+  [/clarity\.ms/i, "Microsoft Clarity"],
+  [/cdn\.segment\.com/i, "Segment"],
+  [/cdn\.mxpnl\.com|mixpanel/i, "Mixpanel"],
+  [/cdn\.amplitude\.com|amplitude\.js/i, "Amplitude"],
+  [/fullstory\.com|edge\.fullstory/i, "FullStory"],
+  [/cdn\.mouseflow\.com/i, "Mouseflow"],
+  [/snap\.licdn\.com/i, "LinkedIn Insight"],
+  [/analytics\.tiktok\.com/i, "TikTok Pixel"],
+  [/doubleclick\.net|googlesyndication\.com/i, "Google advertising"],
+];
+// Measurement that can meet the exemption. Named, so a finding can say what to move
+// to instead of only what is wrong.
+const EXEMPT_CAPABLE = /plausible\.io\/js|usefathom\.com|umami|goatcounter|simpleanalytics|cabin\.js|counter\.dev|pirsch\.io|matomo/i;
+// Consent platforms. Presence proves intent, never that the tag is actually held.
+const CMP_HINT = /cookiebot|onetrust|osano|klaro|axeptio|didomi|termly|cookieyes|tarteaucitron|cookieconsent|iubenda|usercentrics|quantcast/i;
+// How a CMP neutralises a tag until consent: the type stops being executable JS.
+const BLOCKED_TYPE = /^(text\/plain|javascript\/blocked|text\/x-cookie)/i;
+
+function checkConsentTrackers(doc) {
+  const scripts = queryAll(doc, "script");
+  const unblocked = [], blocked = [], exempt = new Set();
+  let cmp = false;
+  for (const s of scripts) {
+    const src = s.attrs.src || "";
+    const hay = src + " " + (src ? "" : (textContent(s) || "").slice(0, 600));
+    if (CMP_HINT.test(hay)) cmp = true;
+    const ex = hay.match(EXEMPT_CAPABLE);
+    if (ex) { exempt.add(ex[0].slice(0, 24)); continue; }
+    const hit = CONSENT_TRACKERS.find(([re]) => re.test(hay));
+    if (!hit) continue;
+    const isBlocked = BLOCKED_TYPE.test(String(s.attrs.type || "")) ||
+      Object.keys(s.attrs).some(a => /^data-(cookieconsent|cookieblock|cmp|consent|cookiecategory)/i.test(a));
+    (isBlocked ? blocked : unblocked).push(hit[1]);
+  }
+  const found = [...new Set(unblocked)], held = [...new Set(blocked)];
+  const exemptNote = exempt.size ? ` Consent-exempt measurement is present (${[...exempt].join(", ")}).` : "";
+  const L = "Trackers that require consent";
+
+  if (!found.length && !held.length) {
+    return mk({ id: "consent-required-tracker", label: L, ...TECH, verdict: "PASS", critical: false,
+      method: "static", value: { requiring: 0, held: 0, exemptCapable: [...exempt] },
+      detail: `No tracker requiring prior consent is served in the HTML.${exemptNote}` });
+  }
+  if (!found.length) {
+    return mk({ id: "consent-required-tracker", label: L, ...TECH, verdict: "PASS", critical: false,
+      method: "static", value: { requiring: 0, held: held.length, heldTrackers: held },
+      detail: `${held.length} consent-requiring tag(s) are held until consent (${held.join(", ")}).${exemptNote}` });
+  }
+  if (cmp) {
+    return mk({ id: "consent-required-tracker", label: L, ...TECH, verdict: "WARN", critical: false,
+      method: "static", value: { requiring: found.length, trackers: found, cmp: true },
+      detail: `${found.length} tracker(s) load unconditionally (${found.join(", ")}) on a page that also ships a consent platform. The platform may hold them at runtime, which this static pass cannot see: verify the tag is actually held before consent, not merely declared to a CMP.${exemptNote}` });
+  }
+  return mk({ id: "consent-required-tracker", label: L, ...TECH, verdict: "FAIL", critical: false,
+    method: "static", value: { requiring: found.length, trackers: found, cmp: false },
+    detail: `${found.length} tracker(s) run on load with no consent mechanism on the page (${found.join(", ")}). They read or write on the visitor's device before any choice is offered. Either hold them until consent, or move to audience measurement that meets the exemption conditions (references/privacy-consent.md).${exemptNote}` });
+}
+
 // ── declared-value laws ───────────────────────────────────────────────────────
 
 /* Seven laws the corpus stated in prose and nothing enforced. A number nobody
@@ -1712,6 +1784,7 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkUiMotionDuration(cssModel),
     checkDecorativeLoopBudget(cssModel),
     checkScrubEasingLinear(cssModel),
+    checkConsentTrackers(activeDoc),
     checkHttpsRedirect(probes),
     checkHostCanonical(probes),
     checkSecurityTxt(probes),

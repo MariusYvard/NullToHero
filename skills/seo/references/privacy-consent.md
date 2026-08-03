@@ -21,6 +21,16 @@ Signals of a compliant setup:
 - a genuine reject path that is as easy as accept,
 - essential cookies (session, security) documented as exempt.
 
+The deterministic pass reads this from the served HTML: the `consent-required-tracker` check names every tag that runs on load without a consent mechanism, and does not flag measurement that can meet the exemption below.
+
+### The exemption is the cheaper answer than the banner
+
+Most sites reach for a consent platform when the actual requirement is analytics they do not need consent for. Audience measurement can be exempt from consent, and the conditions are published rather than a matter of interpretation. The CNIL states them as: a purpose strictly limited to measuring the audience of the site (performance, navigation problems, technical optimisation, server sizing), anonymous statistics only, for the publisher alone, with no cross-referencing against other processing, no transmission of non-anonymous data to a third party, and no tracking of the visitor across other sites or applications. Recommended lifespans are 13 months for the tracker and 25 months for the data ([CNIL, updated 4 July 2025](https://www.cnil.fr/fr/cookies-solutions-pour-les-outils-de-mesure-daudience), legal basis article 82 of the loi Informatique et Libertés).
+
+What that changes for a build: a site whose only tracker is exempt measurement needs no consent banner at all. The banner disappears, and with it the reject-path design work, the consent log, and the layout shift the banner caused. Tools built for this exist (Plausible, Fathom, Umami, GoatCounter, Simple Analytics, Matomo configured without cookies); which one matters less than the audit of the conditions above, since the exemption follows what the tool does, not its name. Verify the configuration rather than the marketing page: the same product can be exempt in one setup and not in another.
+
+The exemption does not cover advertising, remarketing, A/B testing tied to an identifier, session replay or heatmaps. Those need consent whatever the vendor claims.
+
 ## Third-party cookies and embeds
 
 A YouTube embed, a map or a social widget sets third-party cookies on load. Use a click-to-load placeholder or a privacy variant (for example the no-cookie embed domain) so nothing tracks the visitor until they engage.
