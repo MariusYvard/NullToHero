@@ -47,7 +47,7 @@ Layer order determines priority: later layers win. `overrides` always beats `com
 }
 ```
 
-**Why this matters:** Without layers, you fight specificity constantly. You end up with `!important`, doubled selectors (`.button.button`), or arbitrary specificity games. With layers, you declare intent: "utilities should always win over components" — and that just works.
+**Why this matters:** Without layers, you fight specificity constantly. You end up with `!important`, doubled selectors (`.button.button`), or arbitrary specificity games. With layers, you declare intent: "utilities should always win over components", and that just works.
 
 **Third-party CSS:** Wrap it in a layer so it can't accidentally override your styles:
 ```css
@@ -68,7 +68,7 @@ Scope CSS to a subtree without increasing specificity. Solves the component isol
   p { color: var(--color-text-secondary); }
 }
 
-/* Scope with a lower boundary — stop at .card-footer */
+/* Scope with a lower boundary, stop at .card-footer */
 @scope (.card) to (.card-footer) {
   p { margin-bottom: var(--space-sm); }       /* Doesn't affect .card-footer p */
 }
@@ -92,7 +92,7 @@ Scope CSS to a subtree without increasing specificity. Solves the component isol
 
 ---
 
-## `:has()` — The Parent Selector
+## `:has()`: The Parent Selector
 
 The most transformative CSS selector addition in years. Select an element based on its descendants.
 
@@ -134,7 +134,7 @@ ul:has(> li:nth-child(6)) { /* 6 or more */ }
 
 ---
 
-## `@property` — Typed Custom Properties
+## `@property`: Typed Custom Properties
 
 Makes CSS variables typed, inheritable, and animatable:
 
@@ -173,7 +173,7 @@ Makes CSS variables typed, inheritable, and animatable:
 }
 ```
 
-Without `@property`, `transition` on a custom property snaps — the browser doesn't know it's a number/colour/angle. With `@property`, it interpolates correctly.
+Without `@property`, `transition` on a custom property snaps, the browser doesn't know it's a number/colour/angle. With `@property`, it interpolates correctly.
 
 ---
 
@@ -227,7 +227,7 @@ No preprocessor needed. Nesting is now native CSS:
 
 ## Specificity Utilities: `:is()`, `:where()`, `:not()`
 
-### `:is()` — Forgiving selector list, takes the highest specificity of its arguments
+### `:is()`: Forgiving selector list, takes the highest specificity of its arguments
 
 ```css
 /* Instead of: h1 a, h2 a, h3 a, h4 a, h5 a, h6 a */
@@ -237,16 +237,16 @@ No preprocessor needed. Nesting is now native CSS:
 .button:is(:hover, :focus-visible) { background: var(--color-accent-hover); }
 ```
 
-### `:where()` — Same as `:is()` but zero specificity. Great for resets and base styles.
+### `:where()`: Same as `:is()` but zero specificity. Great for resets and base styles.
 
 ```css
-/* Zero specificity — easy to override without specificity wars */
+/* Zero specificity, easy to override without specificity wars */
 :where(ul, ol) { list-style: none; padding: 0; margin: 0; }
 :where(button) { cursor: pointer; border: none; background: none; }
 :where(a) { color: inherit; text-decoration: none; }
 ```
 
-### `:not()` — Accepts complex selectors
+### `:not()`: Accepts complex selectors
 
 ```css
 /* Anything that isn't the last child gets a border */
@@ -284,9 +284,11 @@ Logical properties adapt to writing direction (LTR/RTL) and writing mode automat
   padding-block: var(--space-lg);
   margin-inline: auto;
   max-inline-size: 65ch;
-  border-inline-start: 2px solid var(--color-accent);
+  border-block-end: 1px solid var(--color-border-default);
 }
 ```
+
+The example deliberately avoids `border-inline-start` with an accent colour: that is the side-stripe border the parent skill bans outright. Logical properties are the lesson here, not the decoration.
 
 Even if you don't support RTL today, logical properties are more semantic and future-proof.
 
@@ -294,7 +296,7 @@ Even if you don't support RTL today, logical properties are more semantic and fu
 
 ## Container Queries
 
-Viewport queries for page layout, container queries for components. A component shouldn't know about the viewport — it should respond to its own container.
+Viewport queries for page layout, container queries for components. A component shouldn't know about the viewport, it should respond to its own container.
 
 ```css
 /* Define a containment context */
@@ -328,7 +330,7 @@ Viewport queries for page layout, container queries for components. A component 
 
 ## CSS Subgrid
 
-Align elements to an ancestor's grid — solves the "card header alignment across a row" problem natively.
+Align elements to an ancestor's grid, solves the "card header alignment across a row" problem natively.
 
 ```css
 .card-grid {
@@ -357,7 +359,7 @@ Align elements to an ancestor's grid — solves the "card header alignment acros
 /* clamp(minimum, preferred, maximum) */
 font-size: clamp(1rem, 2.5vw, 1.5rem);
 
-/* For spacing — fluid between breakpoints */
+/* For spacing, fluid between breakpoints */
 padding-inline: clamp(1rem, 5vw, 3rem);
 
 /* Max-width: readable measure that adapts */
@@ -366,7 +368,7 @@ max-inline-size: clamp(45ch, 80%, 75ch);
 
 **Rule:** Keep `max ≤ 2.5× min` for type. Beyond that, the size change is too dramatic.
 
-**Don't use fluid type for app UI** — use fixed rem scales with breakpoint overrides. Fluid type is for marketing/editorial pages where content breathes.
+**Don't use fluid type for app UI**: use fixed rem scales with breakpoint overrides. Fluid type is for marketing/editorial pages where content breathes.
 
 ---
 
