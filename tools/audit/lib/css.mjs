@@ -41,7 +41,43 @@ export function pickColor(val) {
   return m ? m[0] : null;
 }
 
-function walkRules(css, vars, rules, depth) {
+// Selectors that reach every element in the document, so a token defined there is
+// the page's baseline and may be believed without knowing which element asks.
+const UNIVERSAL_SELECTOR = /^(:root|html|body|\*)$/i;
+function isUniversalSelector(sel) { return UNIVERSAL_SELECTOR.test(String(sel || "").trim()); }
+
+// Can we decide, for an arbitrary element, whether this selector matches it? Single
+// tag, class and id tokens: yes. Compound, descendant, attribute and state selectors:
+// no, and saying "no" out loud is the point.
+function isDecidableSelector(sel) {
+  const base = String(sel || "").trim().replace(/::?[\w-]+(\([^)]*\))?$/, "");
+  if (!base) return false;
+  return /^[a-z][\w-]*$/i.test(base) || /^\.[\w-]+$/.test(base) || /^#[\w-]+$/.test(base);
+}
+
+/* Where a token is defined decides whether we may believe it.
+   On :root (or html/body/*) it reaches every element, so it is the page baseline.
+   On a selector we can match it reaches only the elements it matches, so it belongs
+   to the rule and not to the page: folding those into one global last-wins map was
+   how a rule matching NOTHING repainted the whole document, and how text a browser
+   paints at 1.82:1 came back PASS.
+   Behind a selector we cannot evaluate it is neither, so we only record that a
+   competing value exists, and the caller declines to judge instead of inventing an
+   answer in either direction. */
+function classifyCustomProps(selectors, custom, vars, opaqueVars) {
+  if (selectors.some(isUniversalSelector)) {
+    for (const k of Object.keys(custom)) vars.set(k, custom[k]);
+    return;
+  }
+  if (selectors.some(s => !isDecidableSelector(s))) {
+    for (const k of Object.keys(custom)) {
+      if (!opaqueVars.has(k)) opaqueVars.set(k, new Set());
+      opaqueVars.get(k).add(custom[k]);
+    }
+  }
+}
+
+function walkRules(css, vars, rules, depth, opaqueVars) {
   if (depth > 8) return;
   let i = 0; const n = css.length; let sel = "";
   while (i < n) {
@@ -54,16 +90,20 @@ function walkRules(css, vars, rules, depth) {
       sel = "";
       if (selector.startsWith("@")) {
         // conditional group rules carry nested style rules; recurse into them.
-        if (/^@(media|supports|container|layer|scope)/i.test(selector)) walkRules(body, vars, rules, depth + 1);
+        if (/^@(media|supports|container|layer|scope)/i.test(selector)) walkRules(body, vars, rules, depth + 1, opaqueVars);
         // @font-face, @keyframes, @import etc. carry no contrast-relevant rules.
       } else if (selector && body.indexOf("{") === -1) {
         const decls = parseDecls(body);
-        for (const k of Object.keys(decls)) if (k.startsWith("--")) vars.set(k, decls[k]);
-        rules.push({ selectors: selector.split(",").map(s => s.trim()).filter(Boolean), decls });
+        const selectors = selector.split(",").map(s => s.trim()).filter(Boolean);
+        const custom = {};
+        for (const k of Object.keys(decls)) if (k.startsWith("--")) custom[k] = decls[k];
+        if (Object.keys(custom).length) classifyCustomProps(selectors, custom, vars, opaqueVars);
+        rules.push({ selectors, decls, custom });
       } else if (selector) {
         // Nested rule (CSS nesting). Best-effort: capture the child rules; the
-        // parent selector context is dropped.
-        walkRules(body, vars, rules, depth + 1);
+        // parent selector context is dropped, so any token it defines is recorded
+        // as a competing value rather than applied to everything.
+        walkRules(body, vars, rules, depth + 1, opaqueVars);
       }
       i = j;
     } else if (ch === "}") {
@@ -74,14 +114,19 @@ function walkRules(css, vars, rules, depth) {
   }
 }
 
-// Parse a stylesheet into { vars: Map, rules: [{selectors, decls}] }. Custom
-// properties from any rule (typically :root) are collected into one map; the last
-// definition wins, matching cascade order for simple sheets.
+// Parse a stylesheet into { vars, rules, opaqueVars }.
+//   vars       page-baseline custom properties (:root / html / body / *), last wins.
+//   rules      source-ordered [{selectors, decls, custom}]; `custom` is applied only
+//              to elements the rule actually matches (see varScopeFor).
+//   opaqueVars name -> Set(values) for tokens defined behind a selector this model
+//              cannot evaluate. Not applied, never guessed: their presence is what
+//              lets a caller answer "we did not see this one".
 export function parseStylesheet(cssText) {
   const vars = new Map();
   const rules = [];
-  walkRules(stripComments(String(cssText || "")), vars, rules, 0);
-  return { vars, rules };
+  const opaqueVars = new Map();
+  walkRules(stripComments(String(cssText || "")), vars, rules, 0, opaqueVars);
+  return { vars, rules, opaqueVars };
 }
 
 // Resolve var(--x, fallback) references against the custom-property map. Bounded
@@ -110,20 +155,90 @@ function selectorMatches(sel, tag, classes, id) {
   return false;
 }
 
+function selectorKeyFor(el) {
+  return {
+    tag: (el.tag || "").toLowerCase(),
+    classes: new Set((((el.attrs && el.attrs.class) || "")).split(/\s+/).filter(Boolean)),
+    id: (el.attrs && el.attrs.id) || "",
+  };
+}
+
+// Self and ancestors, outermost first, so nearer definitions overwrite farther ones.
+function elementChain(el) {
+  const chain = [];
+  for (let n = el; n && n.type === "element"; n = n.parent) chain.unshift(n);
+  return chain;
+}
+
+/* The custom properties in force ON THIS ELEMENT: the page baseline, then every
+   rule that matches the element or one of its ancestors, nearest last, then its
+   inline style. Custom properties inherit, so the ancestor walk is not a nicety:
+   `.panel { --ink: cream }` is how a themed section repaints the text inside it,
+   and an element-local view would miss it and report the baseline colour. */
+export function varScopeFor(el, model, inlineStyle = {}) {
+  const scope = new Map(model.vars);
+  for (const node of elementChain(el)) {
+    const { tag, classes, id } = selectorKeyFor(node);
+    for (const rule of model.rules) {
+      if (!rule.custom) continue;
+      const names = Object.keys(rule.custom);
+      if (!names.length) continue;
+      if (!rule.selectors.some(s => selectorMatches(s, tag, classes, id))) continue;
+      for (const k of names) scope.set(k, rule.custom[k]);
+    }
+  }
+  for (const k of Object.keys(inlineStyle)) if (k.startsWith("--")) scope.set(k, inlineStyle[k]);
+  return scope;
+}
+
+// Every token a value ends up reading, following references through the scope.
+function consumedTokens(value, scope, depth = 0, out = new Set()) {
+  if (value == null || depth > 12) return out;
+  const s = String(value);
+  if (s.indexOf("var(") === -1) return out;
+  const re = /var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)/g;
+  let m;
+  while ((m = re.exec(s))) {
+    out.add(m[1]);
+    if (scope.has(m[1])) consumedTokens(scope.get(m[1]), scope, depth + 1, out);
+    if (m[2]) consumedTokens(m[2], scope, depth + 1, out);
+  }
+  return out;
+}
+
 // Compute an element's effective declaration map: matching tag/class/id rules in
-// source order, then inline styles last. var() is resolved on color-bearing and
-// font props. `inlineStyle` is the element's parsed inline style attribute.
+// source order, then inline styles last. var() is resolved against the element's own
+// token scope, not a page-wide map.
+//
+// When a token this element reads is ALSO defined behind a selector we cannot
+// evaluate, and with a different value, the honest answer is that we do not know
+// which one paints: the names land on a non-enumerable `$ambiguousTokens` so the
+// caller can decline to judge. Inventing a pass here is worse than inventing a
+// failure, because nobody re-checks a green verdict.
 export function computeElementStyle(el, model, inlineStyle = {}) {
-  const tag = (el.tag || "").toLowerCase();
-  const classes = new Set((((el.attrs && el.attrs.class) || "")).split(/\s+/).filter(Boolean));
-  const id = (el.attrs && el.attrs.id) || "";
+  const { tag, classes, id } = selectorKeyFor(el);
   const merged = {};
   for (const rule of model.rules) {
     if (rule.selectors.some(s => selectorMatches(s, tag, classes, id))) Object.assign(merged, rule.decls);
   }
   Object.assign(merged, inlineStyle);
+  const scope = varScopeFor(el, model, inlineStyle);
+  const ambiguous = new Set();
   for (const key of ["color", "background-color", "background", "font-size", "font-weight"]) {
-    if (merged[key] != null) merged[key] = resolveValue(merged[key], model.vars);
+    if (merged[key] == null) continue;
+    const raw = merged[key];
+    if (model.opaqueVars && model.opaqueVars.size) {
+      for (const name of consumedTokens(raw, scope)) {
+        const competing = model.opaqueVars.get(name);
+        if (!competing) continue;
+        const here = scope.has(name) ? String(scope.get(name)).trim() : null;
+        for (const v of competing) if (String(v).trim() !== here) { ambiguous.add(name); break; }
+      }
+    }
+    merged[key] = resolveValue(raw, scope);
+  }
+  if (ambiguous.size) {
+    Object.defineProperty(merged, "$ambiguousTokens", { value: [...ambiguous], enumerable: false });
   }
   return merged;
 }

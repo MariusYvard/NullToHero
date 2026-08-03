@@ -336,6 +336,11 @@ function bgResolve(el, model, memo, pageBg) {
   for (const node of [el, ...ancestors(el)]) {
     if (node.type !== "element") continue;
     const st = styleFor(node, model, memo);
+    // A background painted from a token that has a competing definition behind a
+    // selector we cannot evaluate is not a background we know. Skip, and say so.
+    if (st.$ambiguousTokens && (st["background-color"] || st["background"] || st["background-image"])) {
+      return { bg: null, unresolved: true, ambiguous: true };
+    }
     const bc = (st["background-color"] || "").trim();
     if (bc) {
       const low = bc.toLowerCase();
@@ -474,7 +479,7 @@ function checkContrast(doc, computed, cssModel) {
   // Not measured, and each for its own stated reason. Counted rather than dropped:
   // the whole point of this pass is that it is an estimate, so what it did not look at
   // is part of the answer.
-  let blended = 0, exemptCount = 0, artifacts = 0;
+  let blended = 0, exemptCount = 0, artifacts = 0, ambiguousTokens = 0;
   if (cssModel) {
     const memo = new Map();
     const pageBg = pageBackground(cssModel);
@@ -500,7 +505,13 @@ function checkContrast(doc, computed, cssModel) {
               // A malformed exemption excuses nothing here either, so fall through and
               // measure it: the rule has to be the same on both paths or it is not a rule.
             }
-            const { bg, unresolved, explicit } = bgResolve(c, cssModel, memo, pageBg);
+            /* The text colour itself came from a token with a competing definition
+               we cannot place. Neither answer is ours to give: this is the failure
+               mode that returned PASS on 1.82:1 text because one unused rule
+               redefined the token the paragraph reads. */
+            if (cu.st.$ambiguousTokens) { ambiguousTokens++; visit(c); continue; }
+            const { bg, unresolved, explicit, ambiguous } = bgResolve(c, cssModel, memo, pageBg);
+            if (ambiguous) { ambiguousTokens++; visit(c); continue; }
             const fgc = parseColor(cu.color), bgc = bg ? parseColor(bg) : null;
             if (!unresolved && bg && fgc && bgc) {
               const lf = luminance(fgc), lb = luminance(bgc);
@@ -573,12 +584,13 @@ function checkContrast(doc, computed, cssModel) {
   // spots is just a guess wearing a verdict.
   const notJudged = [
     artifacts ? `${artifacts} light-on-light cascade artifact(s)` : null,
+    ambiguousTokens ? `${ambiguousTokens} with a token defined behind a selector this pass cannot evaluate` : null,
     blended ? `${blended} under mix-blend-mode` : null,
     exemptCount ? `${exemptCount} declared intentional` : null,
   ].filter(Boolean);
   const skipNote = notJudged.length ? ` Not judged: ${notJudged.join(", ")}.` : "";
-  const skipValue = (artifacts || blended || exemptCount)
-    ? { notJudged: { cascadeArtifacts: artifacts, blended, exempt: exemptCount } } : {};
+  const skipValue = (artifacts || blended || exemptCount || ambiguousTokens)
+    ? { notJudged: { cascadeArtifacts: artifacts, ambiguousTokens, blended, exempt: exemptCount } } : {};
 
   if (samples.length === 0) {
     /* Nothing measured, and the reader is owed the reason. A page whose only text we
