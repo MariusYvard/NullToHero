@@ -140,13 +140,29 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       scrolly: (fetchResult.signals && fetchResult.signals.scrolly) || null,
       libs: (fetchResult.signals && fetchResult.signals.libs) || null,
     },
-    scores: {
-      overall: det.score,
-      groups,
-      agents,
-      band: band(det.score),
-      note: "Scores are the deterministic floor from objective checks only (mode=checks). A full /audit blends all 14 agent scores; see SITE-AUDIT-REPORT.md.",
-    },
+    /* An `overall` of 100 with a `band` of "Excellent" is a claim about the whole
+       site. In mode=checks it is not: design quality has not run, and the objective
+       checks cannot see whether a page is ugly, which is the half this tool exists
+       to judge. So when a group scored null, the headline number and its band are
+       withheld and the reader is told which half is missing. The floor stays
+       available under `deterministic` for gates and CI, which is what needs a number. */
+    scores: (() => {
+      const unscored = Object.keys(groups).filter(g => groups[g] === null);
+      if (!unscored.length) {
+        return {
+          overall: det.score, groups, agents, band: band(det.score),
+          note: "Scores are the deterministic floor from objective checks only (mode=checks). A full /audit blends all 15 agent scores; see SITE-AUDIT-REPORT.md.",
+        };
+      }
+      return {
+        overall: null,
+        groups,
+        agents,
+        band: null,
+        deterministicFloor: det.score,
+        note: `No overall score: ${unscored.join(", ")} did not run in mode=${mode}, so a headline number would rate the site on the half that was measured and stay silent about the half that was not. The deterministic floor over the checks that did run is ${det.score}/100. Run a full /audit (all 15 agents) for a site-level score.`,
+      };
+    })(),
     deterministic: {
       score: det.score, fails: det.fails, warns: det.warns,
       notMeasured: det.notMeasured, criticalFails: det.criticalFails,
