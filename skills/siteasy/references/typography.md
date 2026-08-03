@@ -1,6 +1,6 @@
 ---
 name: typography
-description: "Typographic scale, line-height, and measure with a 24px spacing baseline for readable, well-proportioned type."
+description: "Typographic scale, line-height, and measure on the shared 4pt spacing scale for readable, well-proportioned type."
 version: 1.9.0
 ---
 
@@ -10,7 +10,7 @@ version: 1.9.0
 
 ### Vertical Rhythm
 
-Your line-height should be the base unit for ALL vertical spacing. If body text has `line-height: 1.5` on `16px` type (= 24px), spacing values should be multiples of 24px. This creates subconscious harmony — text and space share a mathematical foundation.
+Anchor vertical spacing on the text's own line box. If body text has `line-height: 1.5` on `16px` type (= 24px), that 24px step is the section rhythm to return to. The values themselves come from the 4pt scale ([spatial-design.md](spatial-design.md), [design-tokens.md](design-tokens.md)), which is the token system: 24px is the rhythm you land on, not a rule that forbids the 8, 12, 16 and 32 steps between. Text and space then share one mathematical foundation.
 
 ### Modular Scale & Hierarchy
 
@@ -28,9 +28,9 @@ Popular ratios: 1.25 (major third), 1.333 (perfect fourth), 1.5 (perfect fifth).
 
 ### Readability & Measure
 
-Use `ch` units for character-based measure (`max-width: 65ch`). Line-height scales inversely with line length — narrow columns need tighter leading, wide columns need more.
+Use `ch` units for character-based measure (`max-width: 65ch`). Line-height scales inversely with line length: narrow columns need tighter leading, wide columns need more.
 
-**Non-obvious**: Light text on dark backgrounds needs compensation on three axes. Bump line-height by 0.05–0.1, add a touch of letter-spacing (0.01–0.02em), and optionally step the body weight up one notch.
+**Non-obvious**: Light text on dark backgrounds needs compensation on three axes. Bump line-height by 0.05 to 0.1, add a touch of letter-spacing (0.01 to 0.02em), and optionally step the body weight up one notch.
 
 ## Font Selection & Pairing
 
@@ -60,7 +60,7 @@ Setting two typefaces side by side in one lockup (a wordmark, a logo, a display 
 
 **`align-items: baseline` is not alignment.** It aligns the baselines the FONTS declare, and two faces have unrelated metrics. The typographically correct alignment is routinely the visually wrong one. When two words look off and nudging one by a few pixels seems to almost fix it, stop: the offset is a symptom, and hand-tuning it just buries a structural error under a second wrong number.
 
-**Match cap height, not font-size.** At the same `font-size`, two faces have different cap heights — a display face's caps can be 25% taller than a text face's. Measure both and scale one:
+**Match cap height, not font-size.** At the same `font-size`, two faces have different cap heights: a display face's caps can be 25% taller than a text face's. Measure both and scale one:
 
 ```js
 const c = document.createElement("canvas").getContext("2d");
@@ -68,7 +68,7 @@ const cap = (font, ch) => { c.font = font; return c.measureText(ch).actualBoundi
 const ratio = cap("900 100px Satoshi", "T") / cap("100px Display", "N");  // e.g. 74/71 = 1.042
 ```
 
-**Centre on painted ink, effects included.** Once the words have different total heights, no baseline can level them. Take each word's painted box — `actualBoundingBoxAscent` + `actualBoundingBoxDescent`, **plus any shadow, extrusion or glow you drew** — find its centre, and shift each word onto the common centre. A text-shadow extrusion hanging 0.14em below the baseline is ink the reader sees; excluding it from the height is measuring the wrong object.
+**Centre on painted ink, effects included.** Once the words have different total heights, no baseline can level them. Take each word's painted box, `actualBoundingBoxAscent` + `actualBoundingBoxDescent`, **plus any shadow, extrusion or glow you drew**, find its centre, and shift each word onto the common centre. A text-shadow extrusion hanging 0.14em below the baseline is ink the reader sees; excluding it from the height is measuring the wrong object.
 
 **Fit letters on side bearings, not on guesses.** Ink gaps between the words are not the margins you set. An italic face's terminal can overhang its own advance width, and a heavy `H` carries a real left side bearing:
 
@@ -126,7 +126,7 @@ Use `clamp(min, preferred, max)` for headings and display text on marketing/cont
 
 **Bound your clamp()**: keep `max-size ≤ ~2.5 × min-size`.
 
-**Use fixed `rem` scales for app UIs**: No major app design system uses fluid type in product UI — fixed scales with optional breakpoint adjustments give the spatial predictability that container-based layouts need.
+**Use fixed `rem` scales for app UIs**: No major app design system uses fluid type in product UI, fixed scales with optional breakpoint adjustments give the spatial predictability that container-based layouts need.
 
 ### OpenType Features
 
@@ -157,7 +157,7 @@ article p { text-wrap: pretty; }
 body { font-optical-sizing: auto; }
 ```
 
-**ALL-CAPS tracking**: Add 5–12% letter-spacing (`letter-spacing: 0.05em` to `0.12em`) to short all-caps labels and headings.
+**ALL-CAPS tracking**: Add 5 to 12% letter-spacing (`letter-spacing: 0.05em` to `0.12em`) to short all-caps labels and headings.
 
 ## Accessibility Considerations
 

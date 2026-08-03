@@ -6,7 +6,7 @@ version: 1.6.0
 
 # Accessibility Engineering
 
-*Deep reference for `/siteasy audit`, `/siteasy harden`, and any build work. Accessibility is not a checklist — it's a design constraint that improves every interface.*
+*Deep reference for `/siteasy audit`, `/siteasy harden`, and any build work. Accessibility is not a checklist, it's a design constraint that improves every interface.*
 
 ---
 
@@ -14,10 +14,10 @@ version: 1.6.0
 
 Accessibility means the interface works for people who navigate differently. Four categories:
 
-- **Visual** — blind (screen readers), low vision (zoom, high contrast), colour blind
-- **Motor** — keyboard-only, switch access, voice control (Dragon, Voice Control)
-- **Cognitive** — attention, memory, reading difficulties
-- **Auditory** — captions, transcripts, visual alternatives to sound
+- **Visual**: blind (screen readers), low vision (zoom, high contrast), colour blind
+- **Motor**: keyboard-only, switch access, voice control (Dragon, Voice Control)
+- **Cognitive**: attention, memory, reading difficulties
+- **Auditory**: captions, transcripts, visual alternatives to sound
 
 WCAG 2.1 has three levels: A (minimum), AA (standard target), AAA (enhanced). Target AA for everything. AAA where it's achievable without architectural cost.
 
@@ -45,7 +45,7 @@ Every interactive element needs an accessible name. Three ways, in priority orde
 | `aria-label` | No visible label possible (icon buttons, close buttons) | `<button aria-label="Close dialog">×</button>` |
 | `title` | Last resort. Not announced by all screen readers. | Avoid |
 
-**`aria-describedby`** is for supplementary description (hint text, error messages) — it's announced after the name and role, not instead of it.
+**`aria-describedby`** is for supplementary description (hint text, error messages), it's announced after the name and role, not instead of it.
 
 ```html
 <!-- Correct: label + description -->
@@ -62,8 +62,8 @@ Every interactive element needs an accessible name. Three ways, in priority orde
 
 ### Buttons and Links
 
-- `<button>` — activates on Space and Enter
-- `<a href>` — activates on Enter only
+- `<button>`: activates on Space and Enter
+- `<a href>`: activates on Enter only
 - Never use `<div>` or `<span>` for interactive elements. If you must: `role="button"`, `tabindex="0"`, handle both `click` and `keydown` (Enter + Space).
 
 ### Modal / Dialog
@@ -77,7 +77,7 @@ Every interactive element needs an accessible name. Three ways, in priority orde
 </dialog>
 ```
 
-- Use native `<dialog>` — it handles focus trap and Escape natively via `showModal()`
+- Use native `<dialog>`: it handles focus trap and Escape natively via `showModal()`
 - On open: move focus to first interactive element or the dialog itself
 - On close: return focus to the element that triggered the dialog
 - Escape must close
@@ -178,7 +178,7 @@ function rovingTabindex(container) {
 
 - `aria-activedescendant` points to the currently highlighted option ID
 - Update it as the user arrows through results
-- Don't move actual focus to the list — keep it on the input
+- Don't move actual focus to the list, keep it on the input
 
 ### Toast / Alert
 
@@ -192,7 +192,7 @@ For dynamic content injected after page load, use live regions:
 <div role="alert">Something went wrong</div>
 ```
 
-Inject messages into the live region container — don't toggle visibility on the container itself (some screen readers won't announce it). Create and append a new element each time.
+Inject messages into the live region container, don't toggle visibility on the container itself (some screen readers won't announce it). Create and append a new element each time.
 
 ---
 
@@ -213,7 +213,7 @@ Inject messages into the live region container — don't toggle visibility on th
 **Requirements:**
 - Minimum 3:1 contrast against adjacent colours
 - At least 2px thick
-- Must be visible against both light and dark backgrounds — use two-colour outline or box-shadow trick:
+- Must be visible against both light and dark backgrounds, use two-colour outline or box-shadow trick:
 
 ```css
 :focus-visible {
@@ -258,8 +258,8 @@ Use the right element and most ARIA becomes unnecessary.
 
 | Element | Role conveyed |
 |---------|--------------|
-| `<main>` | `role="main"` — one per page |
-| `<nav>` | `role="navigation"` — label with `aria-label` if multiple |
+| `<main>` | `role="main"`: one per page |
+| `<nav>` | `role="navigation"`: label with `aria-label` if multiple |
 | `<header>` | `role="banner"` when direct child of `<body>` |
 | `<footer>` | `role="contentinfo"` when direct child of `<body>` |
 | `<aside>` | `role="complementary"` |
@@ -278,11 +278,11 @@ Use the right element and most ARIA becomes unnecessary.
 <!-- Informative image -->
 <img src="chart.png" alt="Revenue grew 40% in Q3, driven by enterprise segment">
 
-<!-- Decorative image — empty alt, not omitted -->
+<!-- Decorative image, empty alt, not omitted -->
 <img src="decoration.png" alt="">
 
-<!-- Functional image (button/link) — describe the action -->
-<a href="/home"><img src="logo.png" alt="Acme — go to homepage"></a>
+<!-- Functional image (button/link), describe the action -->
+<a href="/home"><img src="logo.png" alt="Acme, go to homepage"></a>
 
 <!-- Complex image (chart, diagram) -->
 <figure>
@@ -303,18 +303,18 @@ Use the right element and most ARIA becomes unnecessary.
 <svg aria-hidden="true" focusable="false">...</svg>
 ```
 
-Always add `focusable="false"` on SVGs in IE/Edge — they receive focus by default.
+Always add `focusable="false"` on SVGs in IE/Edge, they receive focus by default.
 
 ---
 
 ## Forms
 
-- **Label above input, always.** Placeholder is not a label — it disappears on input.
+- **Label above input, always.** Placeholder is not a label, it disappears on input.
 - **Validate on blur**, not on keystroke. Don't show errors until the user leaves a field.
 - **Error messages below the field**, connected with `aria-describedby`.
-- **Error summary at top** of form on submit failure — move focus to it.
+- **Error summary at top** of form on submit failure, move focus to it.
 - **Required fields**: use `required` attribute AND visible indicator. Don't rely on colour alone. Announce via `aria-required="true"` or native `required`.
-- **Autocomplete attributes**: `autocomplete="email"`, `"name"`, `"current-password"` etc. — required for WCAG 1.3.5.
+- **Autocomplete attributes**: `autocomplete="email"`, `"name"`, `"current-password"` etc., required for WCAG 1.3.5.
 
 ```html
 <div>
@@ -331,10 +331,10 @@ Always add `focusable="false"` on SVGs in IE/Edge — they receive focus by defa
 
 | Content | AA minimum | AAA |
 |---------|-----------|-----|
-| Body text (< 18px regular, < 14px bold) | 4.5:1 | 7:1 |
-| Large text (≥ 18px regular, ≥ 14px bold) | 3:1 | 4.5:1 |
-| UI components, icons, focus rings | 3:1 | — |
-| Decorative elements | None | — |
+| Body text (< 24px regular, < 18.66px bold) | 4.5:1 | 7:1 |
+| Large text (≥ 24px regular, ≥ 18.66px bold) | 3:1 | 4.5:1 |
+| UI components, icons, focus rings | 3:1 | n/a |
+| Decorative elements | None | n/a |
 
 Use [whocanuse.com](https://whocanuse.com) to test across vision types, not just contrast ratios. A colour combination can pass WCAG and still fail for deuteranopia.
 
@@ -352,7 +352,7 @@ Use [whocanuse.com](https://whocanuse.com) to test across vision types, not just
 }
 ```
 
-Reduced motion means fewer and gentler animations — not zero. Crossfades are fine. Position changes and scale animations are not.
+Reduced motion means fewer and gentler animations, not zero. Crossfades are fine. Position changes and scale animations are not.
 
 ```jsx
 const shouldReduce = useReducedMotion();
@@ -367,7 +367,7 @@ const transition = shouldReduce
 
 ### Keyboard test (do this on every component)
 
-1. Tab to every interactive element — can you reach it?
+1. Tab to every interactive element, can you reach it?
 2. Activate every button, link, control with Enter/Space
 3. Use arrow keys in menus, tabs, and other composite widgets
 4. Open and close every modal, drawer, dropdown with Escape
@@ -376,14 +376,14 @@ const transition = shouldReduce
 
 ### Screen reader test
 
-**macOS + Safari — VoiceOver:**
+**macOS + Safari, VoiceOver:**
 - Turn on: `Cmd + F5`
 - Navigate: `VO + Arrow` (VO = Ctrl + Option)
 - Headings: `VO + Cmd + H`
 - Landmarks: `VO + Cmd + L`
 - Forms: `VO + Cmd + J`
 
-**Windows + Chrome — NVDA (free):**
+**Windows + Chrome, NVDA (free):**
 - Navigate: Arrow keys in browse mode
 - Headings: `H`
 - Forms: `F`
@@ -396,7 +396,9 @@ What to verify:
 - Dynamic content updates (toasts, inline messages) are announced
 - Images have meaningful alt text (or are silent when decorative)
 
-### Automated testing (catches ~30–40% of issues)
+### Automated testing (partial coverage)
+
+How much automation catches depends on what you count. Across Deque's audit sample, automated tests identified 57.38% of total issues, while automated rules covered 16 of the 50 WCAG 2.1 Level AA success criteria ([Deque Systems, 2025](https://www.deque.com/automated-accessibility-coverage-report/)). Neither figure means a page is compliant.
 
 ```bash
 # axe-core via CLI
@@ -422,7 +424,7 @@ Automated tools are a floor, not a ceiling. Keyboard and screen reader testing i
 6. Add `lang="en"` (or appropriate language) to `<html>`
 7. Ensure heading hierarchy is sequential (no jumping from h1 to h4)
 8. Add `role="alert"` to dynamically injected error messages
-9. Test Tab order — does it follow visual reading order?
+9. Test Tab order, does it follow visual reading order?
 10. Verify `<title>` is unique and descriptive on every page
 
 ## Cross-References

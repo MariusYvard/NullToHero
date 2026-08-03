@@ -2,13 +2,13 @@ id,area,name,value,statement,anchor
 L-MOTION-1,motion,UI feedback duration,150-300ms (large surfaces up to 500ms),UI feedback animates between 150 and 300ms; modals and drawers may take up to 500ms.,skills/siteasy/references/animation-engineering.md
 L-MOTION-2,motion,Decorative loop budget,2 per view,"At most two infinite decorative loops per view, each guarded for reduced motion.",skills/siteasy/references/delight.md
 L-MOTION-3,motion,Scrub easing,linear,Scrubbed tweens use linear easing; perceived easing comes from the visitor's scroll.,skills/siteasy/references/parallax.md
-L-TOUCH-1,touch,Tap target size,44x44px,Tap targets are at least 44 by 44 CSS pixels.,skills/siteasy/references/mobile-ergonomics.md
+L-TOUCH-1,touch,Tap target size,24x24px floor (44x44px recommended),"Tap targets clear 24 by 24 CSS pixels, the WCAG 2.5.8 AA conformance floor; 44 by 44 is the recommended comfort target on touch.",skills/siteasy/references/mobile-ergonomics.md
 L-TOUCH-2,touch,Target spacing,8px,Adjacent tap targets keep at least 8px of separation.,skills/siteasy/references/mobile-ergonomics.md
 L-MEDIA-1,media,Referenced video budget,10MB warn / 30MB fail,Referenced video stays under 10 MB; 30 MB is the hard failure line.,skills/siteasy/references/parallax.md
 L-MEDIA-2,media,3D model budget,5MB,A 3D model stays under 5 MB or ships Draco/meshopt compression.,skills/siteasy/references/overdrive.md
 L-MEDIA-3,media,Frame sequence staging,50 warn / 150 fail,Fifty-plus eagerly loaded sequential frames is a burst; stage in a window around the scroll position.,skills/siteasy/references/parallax.md
 L-TYPE-1,typography,Body size,16px,Base body text is at least 16px.,skills/siteasy/references/typography.md
-L-TYPE-2,typography,Measure,65-75ch,Body line length sits between 65 and 75 characters.,skills/siteasy/references/typography.md
+L-TYPE-2,typography,Measure,45-75ch (65-75ch optimal),"Body line length sits between 45 and 75 characters, with 65 to 75 the optimal band.",skills/siteasy/references/typography.md
 L-CONTRAST-1,color,Text contrast,4.5:1 (3:1 large),Body text hits 4.5:1 against its background; 3:1 for large or bold-large text.,skills/siteasy/references/color-and-contrast.md
 L-PERF-1,performance,LCP,2.5s,Largest Contentful Paint under 2.5 seconds on a mid-range mobile.,skills/siteasy/references/optimize.md
 L-PERF-2,performance,CLS,0.1,Cumulative Layout Shift under 0.1.,skills/siteasy/references/optimize.md

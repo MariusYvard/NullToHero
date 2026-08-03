@@ -17,7 +17,7 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quotin
 | **300-500ms** | Layout changes | Accordion, modal, drawer |
 | **500-800ms** | Entrance animations | Page load, hero reveals |
 
-**Exit animations are faster than entrances** — use ~75% of enter duration.
+**Exit animations are faster than entrances**, use ~75% of enter duration.
 
 ## Easing: Pick the Right Curve
 
@@ -37,7 +37,7 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quotin
 --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);   /* Snappy, confident */
 ```
 
-**Avoid bounce and elastic curves.** They were trendy in 2015 but now feel tacky and amateurish. Real objects don't bounce when they stop — they decelerate smoothly.
+**Avoid bounce and elastic curves.** They were trendy in 2015 but now feel tacky and amateurish. Real objects don't bounce when they stop, they decelerate smoothly.
 
 ## Premium Motion Materials
 
@@ -51,11 +51,11 @@ The hard rule is not "transform and opacity only." The hard rule is: avoid anima
 
 ## Staggered Animations
 
-Use CSS custom properties for cleaner stagger: `animation-delay: calc(var(--i, 0) * 50ms)` with `style="--i: 0"` on each item. **Cap total stagger time** — 10 items at 50ms = 500ms total.
+Use CSS custom properties for cleaner stagger: `animation-delay: calc(var(--i, 0) * 50ms)` with `style="--i: 0"` on each item. **Cap total stagger time**, 10 items at 50ms = 500ms total.
 
 ## Reduced Motion
 
-This is not optional. Vestibular disorders affect ~35% of adults over 40, and around 70 million people live with diagnosable vestibular conditions. For parallax-specific reduced-motion patterns plus the manual toggle required by WCAG 2.2.2, see [parallax.md](parallax.md).
+This is not optional. Vestibular dysfunction was measured in 35.4% of US adults aged 40 and over, about 69 million people ([Agrawal et al., Archives of Internal Medicine, 2009](https://pubmed.ncbi.nlm.nih.gov/19468085/), NHANES 2001-2004). That figure is US-only and comes from a balance test, not a diagnosis count. For parallax-specific reduced-motion patterns plus the manual toggle required by WCAG 2.2.2, see [parallax.md](parallax.md).
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -75,6 +75,6 @@ This is not optional. Vestibular disorders affect ~35% of adults over 40, and ar
 
 ---
 
-**Avoid**: Animating everything (animation fatigue is real). Using >500ms for UI feedback. Ignoring `prefers-reduced-motion`. Using animation to hide slow loading.
+**Avoid**: Animating everything (animation fatigue is real). Using >300ms for UI feedback (L-MOTION-1; modals and drawers may take up to 500ms). Ignoring `prefers-reduced-motion`. Using animation to hide slow loading.
 
 For sites to source this from at build time, see [resource-recommendations.md](resource-recommendations.md).

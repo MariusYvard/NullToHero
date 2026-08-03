@@ -10,6 +10,7 @@ Depth illusion through differential scroll velocity. Use as the operational refe
 
 The 2026 baseline assumes hardware-accelerated composition, native CSS Scroll-Driven Animations, and full compliance with WCAG 2.2.2 (Pause, Stop, Hide). Anything below that ships disabled.
 
+
 ## Decision Gate
 
 Run this gate before touching code. If any answer is unclear, call AskUserQuestion.
@@ -191,7 +192,7 @@ Target benchmarks: LCP under 2.5s, CLS under 0.1, INP under 200ms (canonical: L-
 
 ## Vestibular Accessibility (non-negotiable)
 
-Around 70 million people live with vestibular disorders. Parallax can trigger nausea, vertigo and migraine. The hard rules:
+Vestibular dysfunction was measured in 35.4% of US adults aged 40 and over, about 69 million people ([Agrawal et al., Archives of Internal Medicine, 2009](https://pubmed.ncbi.nlm.nih.gov/19468085/), NHANES 2001-2004; a US balance-test prevalence, not a worldwide diagnosis count). Parallax can trigger nausea, vertigo and migraine. The hard rules:
 
 ### 1. Honor `prefers-reduced-motion: reduce`
 
@@ -298,7 +299,7 @@ Scroll-scrubbing is for anything the reader should feel they pilot. It is wrong 
 
 ### Scrub easing (L-MOTION-3)
 
-Scrubbed tweens are linear; the perceived easing comes from the visitor's scroll. Reusing a time-based curve here is the most common way to break that law, because the curve looks right in isolation. Concrete diagnostic: **an expo-out tween is ~90% complete at the midpoint of its scroll window** — it snaps shut and then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. If it is nearly finished, the curve is fighting the scrollbar.
+Scrubbed tweens are linear; the perceived easing comes from the visitor's scroll. Reusing a time-based curve here is the most common way to break that law, because the curve looks right in isolation. Concrete diagnostic: **an expo-out tween is ~90% complete at the midpoint of its scroll window**, it snaps shut and then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. If it is nearly finished, the curve is fighting the scrollbar.
 
 Data stories add four disciplines on top of the pillars:
 
