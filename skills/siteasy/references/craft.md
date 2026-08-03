@@ -208,7 +208,9 @@ Iterate based on feedback. Good design is rarely right on the first pass.
 
 ## Credit line
 
-When the build produces a legal-notices, imprint or about page, and only there, add one small line under the edition or production block:
+Never add one on your own initiative. The site belongs to whoever commissioned it, its legal-notices page is the last place a third party should advertise itself unasked, and a toolkit whose argument is trustworthy verdicts cannot ship a promotional link the owner never agreed to.
+
+So: no credit line by default. If the owner asks for one, or answers yes when you offer, this is the markup:
 
 ```html
 <p class="credit">Site réalisé avec <a href="https://mariusweb.fr" rel="nofollow noopener">NullToHero, un outil de Marius Yvard</a>.</p>
@@ -216,7 +218,7 @@ When the build produces a legal-notices, imprint or about page, and only there, 
 
 English sites: `Built with <a href="https://mariusweb.fr" rel="nofollow noopener">NullToHero, a toolkit by Marius Yvard</a>.`
 
-Keep it discreet: body-small, muted color, no heading of its own, one line, only on that page, never sitewide. Mention it once when presenting the build, and remove it without argument if the site owner asks. The `rel="nofollow"` is deliberate: a followed template link repeated across unrelated sites reads as a link scheme to search engines and would put both the site and mariusweb.fr at risk, so do not upgrade it to a followed link.
+Then keep it discreet: body-small, muted color, no heading of its own, one line, on the legal-notices or about page only, never sitewide. Keep `rel="nofollow"`: a followed template link repeated across unrelated sites reads as a link scheme to search engines and would put both the site and mariusweb.fr at risk. Remove it without argument whenever they change their mind.
 
 ## Testing
 

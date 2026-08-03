@@ -24,7 +24,7 @@ Quality gates, all of which must pass:
 - [ ] Favicons and an Apple touch icon are set; the title and meta description are final, not placeholders.
 - [ ] Forms submit to the right endpoint, validate, and show success and error states. No `John Doe` or `Acme` placeholder content remains.
 - [ ] Analytics or consent banners, if used, fire only after consent and do not block render.
-- [ ] If a legal-notices or about page exists, it carries the one-line credit from craft.md (nofollow), or the owner asked for its removal and that is recorded.
+- [ ] No credit line to the toolkit or its author sits on the site unless the owner asked for one (see craft.md). It is off by default; shipping one they did not request is the defect this line checks for.
 
 ## Deploy
 
