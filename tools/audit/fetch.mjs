@@ -27,6 +27,7 @@ import { resolve, dirname, join } from "node:path";
 import { parse, textContent, queryAll } from "./lib/html.mjs";
 import { flatten, contrastRatio } from "./lib/contrast.mjs";
 import { PROBE_AGENTS } from "./lib/ai-access.mjs";
+import { safeFetch, validateUrl, UrlSafetyError } from "./lib/url-safety.mjs";
 
 const UA = "NullToHero-audit/1.0 (+https://github.com/MariusYvard/NullToHero)";
 // Baseline for the differential fetch: what an ordinary visitor's browser sends.
@@ -79,9 +80,20 @@ async function rawFetch(target, isUrl, timeout) {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), timeout);
     try {
-      const res = await fetch(target, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+      const { res, chain } = await safeFetch(target, { signal: ctrl.signal, headers: { "user-agent": UA } });
       const html = await res.text();
-      return { html, status: res.status, finalUrl: res.url, headers: headersToObject(res.headers) };
+      const finalUrl = (chain.length ? chain[chain.length - 1].url : null) || res.url;
+      return { html, status: res.status, finalUrl, headers: headersToObject(res.headers) };
+    } catch (e) {
+      /* A refusal is not a network hiccup and must not read like one. The target,
+         or something it redirected to, points at an address this machine can reach
+         and the caller cannot: loopback, the private network, or a cloud metadata
+         endpoint. Refusing is the whole job. */
+      if (e instanceof UrlSafetyError) {
+        console.error(`[fetch] refused to fetch ${target}: ${e.message} (${e.code}).`);
+        process.exit(2);
+      }
+      throw e;
     } finally { clearTimeout(t); }
   }
   const p = resolve(target);
@@ -93,7 +105,7 @@ async function fetchRobots(baseUrl, isUrl) {
   if (!isUrl) return null;
   try {
     const u = new URL("/robots.txt", baseUrl);
-    const res = await fetch(u, { redirect: "follow", headers: { "user-agent": UA } });
+    const { res } = await safeFetch(u.toString(), { headers: { "user-agent": UA } });
     if (!res.ok) return null;
     return await res.text();
   } catch { return null; }
@@ -107,9 +119,9 @@ async function probeUrl(u, timeout) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
   try {
-    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    const { res, chain } = await safeFetch(String(u), { signal: ctrl.signal, headers: { "user-agent": UA } });
     try { await res.body?.cancel(); } catch { /* ignore */ }
-    return { status: res.status, finalUrl: res.url, ok: res.ok };
+    return { status: res.status, finalUrl: (chain.length ? chain[chain.length - 1].url : null) || res.url, ok: res.ok };
   } catch (e) { return { error: e.name === "AbortError" ? "timeout" : e.message }; }
   finally { clearTimeout(t); }
 }
@@ -122,7 +134,7 @@ async function probeAs(u, timeout, { ua = UA, accept = null, body = false, metho
   try {
     const headers = { "user-agent": ua };
     if (accept) headers.accept = accept;
-    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", method, headers });
+    const { res } = await safeFetch(String(u), { signal: ctrl.signal, method, headers });
     let text = null;
     if (body) {
       // Capped: a discovery file that is megabytes long is itself the finding, and
@@ -275,10 +287,10 @@ async function headBytes(u, timeout) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
   try {
-    let res = await fetch(u, { method: "HEAD", signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    let res = (await safeFetch(String(u), { method: "HEAD", signal: ctrl.signal, headers: { "user-agent": UA } })).res;
     let cl = res.ok ? res.headers.get("content-length") : null;
     if (!cl) {
-      res = await fetch(u, { method: "GET", signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA, range: "bytes=0-0" } });
+      res = (await safeFetch(String(u), { method: "GET", signal: ctrl.signal, headers: { "user-agent": UA, range: "bytes=0-0" } })).res;
       const cr = res.headers.get("content-range");
       try { await res.body?.cancel(); } catch { /* ignore */ }
       const mm = cr && cr.match(/\/(\d+)$/);
@@ -348,7 +360,7 @@ async function fetchOne(u, timeout) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
   try {
-    const res = await fetch(u, { signal: ctrl.signal, redirect: "follow", headers: { "user-agent": UA } });
+    const { res } = await safeFetch(String(u), { signal: ctrl.signal, headers: { "user-agent": UA } });
     if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
     return { ok: true, text: await res.text() };
   } catch (e) { return { ok: false, reason: e.name === "AbortError" ? "timeout" : e.message }; }
@@ -527,6 +539,10 @@ async function render(url, timeout, opts = {}) {
   const stops = Math.max(1, opts.scroll ?? DEFAULTS.scroll);
   const wanted = (opts.viewports ?? DEFAULTS.viewports).filter(v => VIEWPORTS[v]);
   const views = wanted.length ? wanted : DEFAULTS.viewports;
+  /* Headless Chromium resolves DNS itself, so the SSRF guard cannot sit on the
+     browser's own request path. Validation therefore happens HERE, before the
+     browser is handed anything, which is the contract lib/url-safety.mjs states. */
+  await validateUrl(url);
   let browser;
   try {
     browser = await chromium.launch();
@@ -562,6 +578,9 @@ async function render(url, timeout, opts = {}) {
       const page = await ctx.newPage();
       for (const target of pages) {
         try {
+          // Same contract as the entry page: nothing reaches the browser unvalidated.
+          // Discovered pages are same-origin, but --pages takes URLs from the caller.
+          await validateUrl(target);
           const resp = await page.goto(target, { waitUntil: "networkidle", timeout });
           if (resp && resp.status() >= 400) { console.error(`[fetch] ${target} returned ${resp.status()}; skipped.`); continue; }
         } catch (e) { console.error(`[fetch] ${target} did not load (${e.message}); skipped.`); continue; }
