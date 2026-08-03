@@ -37,10 +37,22 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 | Context | PRODUCT.md and DESIGN.md are read from the workspace. | Use Read to look for PRODUCT.md; if missing, run `/siteasy setup` first. |
 | Conventions | On a project that already has code, its own conventions are read BEFORE any edit: a charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS custom properties already defined, the class naming convention visible in the code, and the fonts already loaded. | Read them first. They bind every command below, including the ones that only mean to improve something. |
 | Direction | If DIRECTION.md exists at the project root, it is read and honored (central idea, register, signature moment). | Commands that change the visual language re-read it. If the task contradicts the committed direction, surface the conflict; never silently override it. |
-| Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never synthesize PRODUCT.md from the user's prompt alone. |
+| Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never invent PRODUCT.md silently from the prompt alone: ask, and if no answer is obtainable, fall back to the rule below and mark what you assumed. |
 | Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
 | Craft | `/siteasy build` has a user-confirmed shape brief for this task. `setup` / PRODUCT.md never counts as shape. | Run `/siteasy shape` and wait for explicit brief confirmation. |
 | Mutation | All active gates above pass. | Do not edit files yet. |
+
+### When a question cannot be answered
+
+Every gate above starts by asking. None of them may end by waiting forever.
+
+Ask first, with the question tool or in conversation. If no answer is obtainable, because the tool is unavailable, the user has stepped away, or (most often) they simply do not know, then: **pick the most reasonable option, state it in one line, mark it `[ASSUMED]` where the decision is recorded, and continue.** Surface every assumption again when presenting the work, so it is corrected by someone reading the result rather than by nobody.
+
+An assumption is not a placeholder. `[TODO]` means nothing was decided and the Product gate rejects it; `[ASSUMED]` means a decision was made on thin evidence and is waiting to be confirmed. The build proceeds on the second, never on the first.
+
+Two reasons this is a rule and not a convenience. A beginner cannot answer "what is your brand personality" or "what counts as a conversion", and that is the question failing them, not the person: stopping there abandons exactly the user this skill exists to serve. And a flow that cannot end without an answer it cannot obtain does not stay safe, it stalls, and a stalled command teaches nobody anything.
+
+The exception, and it is narrow: an action that destroys or publishes still stops and waits. Overwriting a file that already exists, deleting, deploying. Assuming there costs work that cannot be recovered, which is a different thing from starting on a guess that can be corrected.
 
 ### 1. Context gathering
 
