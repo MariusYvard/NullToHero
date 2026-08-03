@@ -54,7 +54,7 @@ Analyze existing comparison or alternatives pages for:
 
 ## Generation Mode
 
-### Step 1 — Gather competitive intelligence
+### Step 1: Gather competitive intelligence
 
 Before writing, collect accurate data on each competitor:
 
@@ -72,7 +72,7 @@ For each competitor, document:
 - Product Hunt comments
 - Twitter/X mentions
 
-### Step 2 — Structure the page
+### Step 2: Structure the page
 
 **Standard "X vs Y" page structure:**
 
@@ -81,7 +81,7 @@ H1: [Product A] vs [Product B]: [Year] Comparison
 Intro (100-150 words): Who this page is for, what you'll learn
 
 Section 1: Quick comparison table
-  - Side-by-side feature matrix (5–10 key factors)
+  - Side-by-side feature matrix (5 to 10 key factors)
   - Ratings from G2/Capterra if available
   - Pricing comparison
 
@@ -104,7 +104,7 @@ Section 5: Who should choose which?
   - Choose [A] if: [specific conditions]
   - Choose [B] if: [specific conditions]
 
-Section 6: FAQ (5–8 questions)
+Section 6: FAQ (5 to 8 questions)
   - "Is [Product A] better than [Product B]?"
   - "Which is cheaper, [A] or [B]?"
   - "Does [B] have [feature X]?"
@@ -121,10 +121,10 @@ H1: [X] Best [Product] Alternatives in [Year]
 Intro: Why people look for alternatives (3 common reasons), what this list covers
 
 For each alternative (structured consistently):
-  - H2: [Alternative Name] — [2-word positioning]
+  - H2: [Alternative Name], [2-word positioning]
   - What it is (1 sentence)
   - Best for (1 sentence)
-  - Key features (3–5 bullets)
+  - Key features (3 to 5 bullets)
   - Pricing (specific numbers)
   - Pros (3) / Cons (3)
   - G2 / Capterra rating if available
@@ -134,10 +134,10 @@ Comparison table: all alternatives side by side
 
 CTA: [Your Product] as alternative
 
-FAQ (4–6 questions)
+FAQ (4 to 6 questions)
 ```
 
-### Step 3 — Feature matrix
+### Step 3: Feature matrix
 
 Feature matrices are the highest-value element for comparison pages. They must be:
 - Truthful: only check boxes that genuinely exist in the product
@@ -165,7 +165,7 @@ Feature matrices are the highest-value element for comparison pages. They must b
 </table>
 ```
 
-### Step 4 — Schema markup
+### Step 4: Schema markup
 
 **For the comparison page itself:**
 ```json
@@ -200,7 +200,7 @@ Feature matrices are the highest-value element for comparison pages. They must b
 }
 ```
 
-Note: FAQ rich results were removed from Google Search for all sites on May 7, 2026 (FAQPage remains a valid Schema.org type that Google still parses, the visible SERP feature is gone). The markup still provides value for AI platforms (ChatGPT, Perplexity) that use it for citation.
+Note: Google deprecated the FAQ rich result, which stopped appearing in Search on May 7, 2026, and removed the feature's documentation in June 2026 ([Google Search Central, 2026](https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature)). FAQPage remains a valid Schema.org type, the visible SERP feature is gone. Keep the markup only if a non-Google consumer of it justifies the maintenance.
 
 **Product schema for review aggregation:**
 ```json
@@ -218,7 +218,7 @@ Note: FAQ rich results were removed from Google Search for all sites on May 7, 2
 }
 ```
 
-### Step 5 — Internal linking
+### Step 5: Internal linking
 
 Comparison pages capture high-intent bottom-of-funnel traffic. Link to them from:
 - Product/feature pages ("See how we compare to [Competitor]")

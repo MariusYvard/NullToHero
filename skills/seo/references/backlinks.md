@@ -1,7 +1,7 @@
 ---
 name: seo-backlinks
 description: >
-  Backlink profile analysis — link quality, anchor text distribution, competitor
+  Backlink profile analysis, link quality, anchor text distribution, competitor
   link gap, toxic links, and link building opportunities using free data sources
   (Moz, Bing, Common Crawl). Use for: "backlinks", "link profile", "link building",
   "backlink audit", "toxic links", "competitor links", "anchor text", "domain authority",
@@ -15,12 +15,12 @@ version: 1.39.0
 
 | Source | Data type | How to access |
 |--------|-----------|---------------|
-| **Moz Link Explorer** | Domain Authority, top linking domains, anchor text | `moz.com/link-explorer` — 10 free queries/month |
-| **Bing Webmaster Tools** | Inbound links for verified domains | `bing.com/webmasters` — free, requires verification |
-| **Common Crawl** | Raw crawl data, large-scale link data | `commoncrawl.org` — free, technical |
-| **Google Search Console** | Links from Google's perspective (if verified) | `search.google.com/search-console` — free, verified only |
-| **Ahrefs Free Tools** | Limited backlink overview | `ahrefs.com/backlink-checker` — 1 free check/domain |
-| **Semrush Free** | Limited overview | `semrush.com` — 10 free queries/day |
+| **Moz Link Explorer** | Domain Authority, top linking domains, anchor text | `moz.com/link-explorer`: 10 free queries/month |
+| **Bing Webmaster Tools** | Inbound links for verified domains | `bing.com/webmasters`: free, requires verification |
+| **Common Crawl** | Raw crawl data, large-scale link data | `commoncrawl.org`: free, technical |
+| **Google Search Console** | Links from Google's perspective (if verified) | `search.google.com/search-console`: free, verified only |
+| **Ahrefs Free Tools** | Limited backlink overview | `ahrefs.com/backlink-checker`: 1 free check/domain |
+| **Semrush Free** | Limited overview | `semrush.com`: 10 free queries/day |
 
 **Recommended approach:** Start with Moz Link Explorer for a quick overview. Use GSC if the user has access. Note all data limitations transparently.
 
@@ -34,10 +34,10 @@ version: 1.39.0
 
 | Metric | What it means |
 |--------|---------------|
-| Domain Authority (Moz DA) or Domain Rating (Ahrefs DR) | Aggregate link authority score (0–100). Useful for comparison, not a Google metric. |
+| Domain Authority (Moz DA) or Domain Rating (Ahrefs DR) | Aggregate link authority score (0 to 100). Useful for comparison, not a Google metric. |
 | Referring domains | Number of unique domains linking to the site. More important than raw backlink count. |
 | Total backlinks | Total link count (including multiple links from same domain). |
-| Follow vs nofollow ratio | Most natural profiles are 60-80% dofollow. |
+| Follow vs nofollow ratio | Share of links passing ranking credit. Google publishes no target ratio, so read the shape (a profile that is almost entirely one or the other is worth investigating), not a score. |
 | Link velocity | Rate at which new links are acquired. Sudden spikes = potential manipulation signal. |
 
 **Healthy profile indicators:**
@@ -63,16 +63,18 @@ version: 1.39.0
 
 ### 3. Anchor Text Distribution
 
-Natural anchor text profiles are diverse. Red flags:
+Natural anchor text profiles are diverse. Google publishes no target distribution, so report the shape of the profile and flag concentration instead of scoring against fixed percentages.
 
-| Anchor type | Healthy % | Red flag threshold |
-|-------------|-----------|-------------------|
-| Branded (company/product name) | 30-50% | < 10% (no brand recognition) |
-| Naked URL (example.com) | 10-20% | — |
-| Generic ("click here", "website", "here") | 5-15% | > 30% (unnatural) |
-| Exact match keyword | 2-5% | > 15% (over-optimization risk) |
-| Partial match keyword | 10-20% | — |
-| Topic/contextual variations | 15-30% | — |
+| Anchor type | What a high share suggests |
+|-------------|----------------------------|
+| Branded (company/product name) | Normal for a recognized brand. A very low share can mean the brand is rarely cited by name. |
+| Naked URL (example.com) | Typical of citations, directories and forum posts. |
+| Generic ("click here", "website", "here") | Common in editorial writing, but carries little topical signal when it dominates. |
+| Exact match keyword | The pattern most associated with manipulation. Google treats links with optimized anchor text in advertorials, guest posts and distributed press releases as link spam ([Google Search Central](https://developers.google.com/search/docs/essentials/spam-policies)). |
+| Partial match keyword | Reads naturally when it varies across sources. |
+| Topic/contextual variations | The signature of editorially placed links. |
+
+Report the distribution together with how the links were acquired. A concentration of exact-match anchors on paid or guest-post placements is the actionable finding, not any single percentage.
 
 ### 4. Toxic Link Detection
 
@@ -126,11 +128,11 @@ Ranked by effort-to-reward ratio for sites without a dedicated link team:
 
 **Medium effort, medium-high value:**
 4. Journalist-query platforms (answer a reporter's question, get cited in the article). Verified July 2026, because this list churns and half the advice online names a service that no longer exists:
-   - **Source of Sources (SOS)** — sourceofsources.com. Free, no paid tier. Shankman's rebuild after he sold HARO; the practitioner default now.
-   - **HARO** — helpareporter.com. Free. **Note the discontinuity**: Cision killed it on 9 Dec 2024, then Featured.com bought the brand in Apr 2025 and relaunched the free query emails. Advice written in between says HARO is dead. It is not.
-   - **SourceBottle** — sourcebottle.com. Free. AU/NZ-weighted.
-   - **Qwoted** — qwoted.com. Freemium, and the free tier is throttled in a way that matters: 2 pitches/month behind a 2-hour delay, so paying sources see every query first. Recommending it without that caveat sets someone up to lose every race.
-   - **Featured** — featured.com. Freemium, 2-3 opportunities/week free.
+   - **Source of Sources (SOS)**: sourceofsources.com. Free, no paid tier. Shankman's rebuild after he sold HARO; the practitioner default now.
+   - **HARO**: helpareporter.com. Free. **Note the discontinuity**: Cision killed it on 9 Dec 2024, then Featured.com bought the brand in Apr 2025 and relaunched the free query emails. Advice written in between says HARO is dead. It is not.
+   - **SourceBottle**: sourcebottle.com. Free. AU/NZ-weighted.
+   - **Qwoted**: qwoted.com. Freemium, and the free tier is throttled in a way that matters: 2 pitches/month behind a 2-hour delay, so paying sources see every query first. Recommending it without that caveat sets someone up to lose every race.
+   - **Featured**: featured.com. Freemium, 2-3 opportunities/week free.
    - **Connectively is dead** (Cision, 9 Dec 2024). It is still recommended all over the web. Do not.
 5. Guest posts on industry publications (one high-DA guest post > 20 low-DA ones)
 6. Create linkable assets: original research, free tools, comprehensive guides

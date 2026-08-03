@@ -24,7 +24,7 @@ version: 1.9.0
 ### Content Quality
 - Word count vs page type minimums (see [content.md](content.md))
 - Readability: Flesch Reading Ease score, grade level
-- Keyword density: natural (1-3%), semantic variations present
+- Keyword usage: natural phrasing (no target density, see [content.md](content.md)), semantic variations present
 - E-E-A-T signals: author bio, credentials, first-hand experience markers
 - Content freshness: publication date, last updated date
 

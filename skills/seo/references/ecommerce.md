@@ -1,7 +1,7 @@
 ---
 name: seo-ecommerce
 description: >
-  E-commerce SEO — product pages, category pages, faceted navigation, product
+  E-commerce SEO, product pages, category pages, faceted navigation, product
   schema, marketplace intelligence, review schema, inventory SEO. Use for:
   "ecommerce SEO", "product page SEO", "category page SEO", "product schema",
   "WooCommerce SEO", "Shopify SEO", "faceted navigation", "product reviews SEO",
@@ -21,9 +21,9 @@ Product pages are the primary conversion and ranking asset. Each should be treat
 
 | Element | Requirement |
 |---------|-------------|
-| Title tag | `[Product Name] — [Brand] | [Category]` or `[Product Name] | Buy [Product] Online` |
+| Title tag | `[Product Name], [Brand] | [Category]` or `[Product Name] | Buy [Product] Online` |
 | H1 | Exact product name matching how users search |
-| URL | `/category/product-name/` — no IDs (`/p?id=12345`), no parameters in canonical URL |
+| URL | `/category/product-name/`: no IDs (`/p?id=12345`), no parameters in canonical URL |
 | Description | Unique per product. Minimum 200 words. Not manufacturer copy-paste (duplicate content). |
 | Images | Multiple angles. Alt text = product name + key attribute. WebP format. |
 | Price | Visible on page, not JS-only. Matches schema. |
@@ -46,10 +46,10 @@ Category pages capture high-volume head terms ("men's running shoes", "wireless 
 
 | Element | Requirement |
 |---------|-------------|
-| H1 | Category name — the most searched form |
+| H1 | Category name, the most searched form |
 | Introductory text | 100-300 words describing the category. Placed above or below the product grid. |
 | Filter navigation | Faceted navigation handled correctly (see section 4) |
-| Product count | Show product count ("143 products") — trust signal |
+| Product count | Show product count ("143 products"), trust signal |
 | Sorting | Default sort by relevance or bestseller |
 | Pagination | Use `?page=N` or `/page/N/`. Correct canonical per page. |
 | Breadcrumbs | Department > Category (with schema) |
@@ -103,11 +103,11 @@ Category pages capture high-volume head terms ("men's running shoes", "wireless 
 ```
 
 **Availability values (must match actual stock):**
-- `https://schema.org/InStock` — available
-- `https://schema.org/OutOfStock` — sold out
-- `https://schema.org/PreOrder` — pre-order
-- `https://schema.org/Discontinued` — permanently gone
-- `https://schema.org/LimitedAvailability` — few remaining
+- `https://schema.org/InStock`: available
+- `https://schema.org/OutOfStock`: sold out
+- `https://schema.org/PreOrder`: pre-order
+- `https://schema.org/Discontinued`: permanently gone
+- `https://schema.org/LimitedAvailability`: few remaining
 
 **April 2025 addition: Product Certification Markup**
 ```json
@@ -134,8 +134,8 @@ Faceted navigation (filters: color, size, brand, price range) is one of the most
 |-------------|----------------------|
 | Color / size / style variants | Canonical to base category. Block with `noindex` or robots.txt. |
 | Brand filter (creates distinct, rankable content) | Allow indexing if the brand page has unique content and search demand. |
-| Price range filter | Block — no SEO value, pure utility. |
-| Sort order (`?sort=price_asc`) | Block — pure utility, no unique content. |
+| Price range filter | Block, no SEO value, pure utility. |
+| Sort order (`?sort=price_asc`) | Block, pure utility, no unique content. |
 | Condition filter (new/used) | Allow if substantial search demand for "used [product]". |
 
 **Implementation:**
@@ -179,7 +179,7 @@ For large catalogs:
 
 ### 7. Review Schema (Review Snippets)
 
-Customer reviews with aggregated ratings generate star snippets in SERPs, significantly improving CTR.
+Customer reviews with aggregated ratings make a product page eligible for review snippets, the star rating Google can show in results ([Google Search Central](https://developers.google.com/search/docs/appearance/structured-data/review-snippet)). Eligibility is not a guarantee that the snippet appears.
 
 **Requirements for Google to show review snippets:**
 - `AggregateRating` schema on product pages

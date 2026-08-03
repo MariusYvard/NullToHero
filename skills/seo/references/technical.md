@@ -39,7 +39,7 @@ As of 2025-2026, AI companies actively crawl the web to train models and power A
 **Key distinctions:**
 - Blocking `Google-Extended` prevents Gemini training use but does NOT affect Google Search indexing or AI Overviews (those use `Googlebot`)
 - Blocking `GPTBot` prevents OpenAI training but does NOT prevent ChatGPT from citing your content via browsing (`ChatGPT-User`)
-- ~3-5% of websites now use AI-specific robots.txt rules
+- Among the top 10,000 domains where a robots.txt file was found, about 14% carried allow or disallow directives aimed specifically at AI bots ([Cloudflare, 2025](https://blog.cloudflare.com/from-googlebot-to-gptbot-whos-crawling-your-site-in-2025/)). GPTBot was the most frequently disallowed.
 
 **Example, selective AI crawler blocking:**
 ```
@@ -90,7 +90,7 @@ Allow: /
 - Touch targets: 24x24px CSS minimum (WCAG 2.5.8 AA), 44x44px recommended for comfortable touch, with adequate spacing
 - Font size: minimum 16px base
 - No horizontal scroll
-- Mobile-first indexing: Google indexes mobile version. **Mobile-first indexing is 100% complete as of July 5, 2024.** Google now crawls and indexes ALL websites exclusively with the mobile Googlebot user-agent.
+- Mobile-first indexing: **after July 5, 2024, Google crawls and indexes sites for Search with Googlebot Smartphone** ([Google Search Central, 2024](https://developers.google.com/search/blog/2024/06/mobile-indexing-vlast-final-final.doc)). A site whose content is not accessible on a mobile device is no longer indexable. Googlebot Desktop can still appear in server logs for a few other features (product listings, Google for Jobs), so treat "mobile only" as a statement about Search indexing, not about every Google fetch.
 
 ### 6. Core Web Vitals
 
@@ -98,7 +98,7 @@ Ownership: this section holds the targets; image-specific LCP/CLS tactics live i
 
 - **LCP** (Largest Contentful Paint): target <2.5s
 - **INP** (Interaction to Next Paint): target <200ms
-  - INP replaced FID on March 12, 2024. FID was fully removed from all Chrome tools (CrUX API, PageSpeed Insights, Lighthouse) on September 9, 2024. Do NOT reference FID anywhere.
+  - INP became a Core Web Vital and replaced FID on March 12, 2024 ([web.dev, 2024](https://web.dev/blog/inp-cwv-march-12)). September 9, 2024 was the announced deadline for moving off FID ([web.dev, 2024](https://web.dev/blog/inp-cwv-launch)), and Chrome ended FID support in its tools (PageSpeed Insights and its API, CrUX API and History API, CrUX Dashboard, web-vitals.js) in September 2024 ([web.dev, 2024](https://web.dev/blog/fid)). Do NOT reference FID anywhere.
 - **CLS** (Cumulative Layout Shift): target <0.1
 - Evaluation uses 75th percentile of real user data
 - Use PageSpeed Insights API or CrUX data if MCP available

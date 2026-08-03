@@ -41,11 +41,11 @@ Organization, LocalBusiness, SoftwareApplication, WebApplication, Product (with 
 BroadcastEvent, Clip, SeekToAction, SoftwareSourceCode
 
 
-> **JSON-LD and JavaScript rendering:** Per Google's December 2025 JS SEO guidance, structured data injected via JavaScript may face delayed processing. For time-sensitive markup (especially Product, Offer), include JSON-LD in the initial server-rendered HTML.
+> **JSON-LD and JavaScript rendering:** Google supports generating JSON-LD with JavaScript and injecting it into the page, but JS-injected markup is only visible once the page is rendered, and a page "may stay on this queue for a few seconds, but it can take longer than that" ([Google Search Central](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)). For time-sensitive markup (especially Product, Offer), include JSON-LD in the initial server-rendered HTML.
 
 ### DEPRECATED (never recommend):
-- **FAQ**: Rich results removed for all sites May 7, 2026 (previously restricted to government and healthcare authority sites in Aug 2023)
-- **HowTo**: Rich results removed September 2023
+- **FAQ**: Rich result deprecated, no longer shown in Search from May 7, 2026 ([Google Search Central, 2026](https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature)). Previously restricted to well-known authoritative government and health sites in Aug 2023 ([Google Search Central, 2023](https://developers.google.com/search/blog/2023/08/howto-faq-changes))
+- **HowTo**: Rich results limited to desktop in Aug 2023, then dropped from desktop as of September 13, 2023, which deprecated the type ([Google Search Central, 2023](https://developers.google.com/search/blog/2023/08/howto-faq-changes))
 - **SpecialAnnouncement**: Deprecated July 31, 2025
 - **CourseInfo, EstimatedSalary, LearningVideo**: Retired June 2025
 - **ClaimReview**: Retired from rich results June 2025

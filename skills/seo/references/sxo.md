@@ -1,7 +1,7 @@
 ---
 name: seo-sxo
 description: >
-  Search Experience Optimization — aligns search intent with on-page user
+  Search Experience Optimization, aligns search intent with on-page user
   experience. Page-type matching, user journey analysis, persona alignment,
   satisfaction signals. Use for: "SXO", "search experience", "user intent",
   "page type mismatch", "bounce rate SEO", "dwell time", "pogo-sticking",
@@ -13,7 +13,7 @@ version: 1.9.0
 
 ## What SXO is
 
-SXO is the intersection of SEO and UX. A page can rank for a keyword but still fail if users land on it and immediately bounce — signaling to Google that the page didn't satisfy the query intent. SXO audits whether the page experience matches what the user expected when they clicked.
+SXO is the intersection of SEO and UX. A page can rank for a keyword but still fail if users land on it and immediately bounce, signaling to Google that the page didn't satisfy the query intent. SXO audits whether the page experience matches what the user expected when they clicked.
 
 **The core question:** "Does this page deliver exactly what a user searching for [keyword] would expect and need?"
 
@@ -150,7 +150,7 @@ Different personas have different content needs even for the same keyword.
 
 ### 8. Mobile Search Experience
 
-Over 60% of searches happen on mobile. SXO includes mobile-specific experience:
+Google crawls and indexes sites for Search with Googlebot Smartphone ([Google Search Central, 2024](https://developers.google.com/search/blog/2024/06/mobile-indexing-vlast-final-final.doc)), so the mobile rendering of a page is the one that has to hold up. SXO includes mobile-specific experience:
 
 - Touch targets ≥ 44px (24px WCAG 2.5.8 AA minimum)
 - No horizontal scroll

@@ -61,7 +61,7 @@ Compare against page type minimums:
 
 ### Keyword Optimization
 - Primary keyword in title, H1, first 100 words
-- Natural density (1-3%)
+- Natural keyword usage, not a target density. Google publishes no density figure and treats unnatural repetition as keyword stuffing ([Google Search Central](https://developers.google.com/search/docs/essentials/spam-policies)). Any percentage you use is an internal editing heuristic, not a ranking threshold
 - Semantic variations present
 - No keyword stuffing
 
@@ -105,7 +105,7 @@ Google's raters now formally assess whether content appears AI-generated.
 - No author attribution
 - Factual inaccuracies
 
-> **Helpful Content System (March 2024):** The Helpful Content System was merged into Google's core ranking algorithm during the March 2024 core update. It no longer operates as a standalone classifier. Helpfulness signals are now weighted within every core update. The same principles apply (people-first content, demonstrating E-E-A-T, satisfying user intent), but enforcement is continuous rather than through separate HCU updates.
+> **Helpful Content System (March 2024):** Google lists the helpful content system among its retired systems: announced in 2022, "in March 2024, it evolved and became part of our core ranking systems" ([Google Search Central](https://developers.google.com/search/docs/appearance/ranking-systems-guide)). It no longer operates as a standalone classifier. Helpfulness signals are now weighted within every core update. The same principles apply (people-first content, demonstrating E-E-A-T, satisfying user intent), but enforcement is continuous rather than through separate HCU updates.
 
 ## AI Citation Readiness (GEO signals)
 

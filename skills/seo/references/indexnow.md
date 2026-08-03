@@ -8,13 +8,14 @@ version: 1.0.0
 
 IndexNow is a shared protocol: ping one participating engine when a URL changes
 and it propagates to all of them. Participants (2026): Microsoft Bing, Yandex,
-Naver, Seznam.cz and Yep. Google does NOT support it (tested since 2021, never
-adopted): the Google path remains sitemaps plus Search Console, so IndexNow
+Naver, Seznam.cz and Yep, the participants IndexNow itself lists
+([IndexNow.org](https://www.indexnow.org/)). Google is not among them: the Google
+path remains sitemaps plus Search Console, so IndexNow
 complements [sitemap.md](sitemap.md), never replaces it.
 
 Why it still matters beyond Bing's own search share: Bing's index feeds the AI
 answer surfaces (ChatGPT search, Copilot). Being indexed there within minutes
-instead of days is a GEO lever — see [geo.md](geo.md). The tooling lives in
+instead of days is a GEO lever, see [geo.md](geo.md). The tooling lives in
 [../scripts/indexnow.mjs](../scripts/indexnow.mjs).
 
 ## Setup (once per site)
@@ -27,21 +28,21 @@ instead of days is a GEO lever — see [geo.md](geo.md). The tooling lives in
 
 ## Submitting
 
-- One URL: a simple GET — `https://api.indexnow.org/indexnow?url=<url>&key=<key>`.
+- One URL: a simple GET, `https://api.indexnow.org/indexnow?url=<url>&key=<key>`.
 - Many URLs: POST JSON `{ host, key, urlList: [...] }` to `api.indexnow.org/indexnow`
   (up to 10,000 per call). One call, all engines.
 - From the sitemap: `indexnow.mjs sitemap <sitemap-url> --key <key>` extracts the
   `<loc>` entries and submits the batch (`--limit` to cap it).
 
 Responses, honestly read: `200`/`202` accepted (202 means accepted, verification
-pending — normal). `403` the key file does not match. `422` URLs do not belong to
+pending, normal). `403` the key file does not match. `422` URLs do not belong to
 the host. `429` you are spamming; back off.
 
 ## When to ping (and when not to)
 
 Ping on real change: a page published, meaningfully updated, newly redirected
 (301) or gone (410). Do not re-submit unchanged URLs on every deploy, do not ping
-on a schedule, and never submit URLs you noindex — repeated noise gets a host
+on a schedule, and never submit URLs you noindex, repeated noise gets a host
 throttled (429) and wastes the fast lane.
 
 Wiring: a post-deploy CI step submitting the URLs that changed in the release is
