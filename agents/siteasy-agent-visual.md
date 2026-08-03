@@ -1,6 +1,6 @@
 ---
 name: siteasy-agent-visual
-description: Sub-agent for the Visual Design dimension of /audit (and /siteasy). Evaluates the typographic system, color system, spacing and rhythm, Gestalt grouping, visual hierarchy, layout composition, and brand alignment.
+description: Sub-agent for the Visual Design dimension of /audit (and /siteasy). Evaluates the typographic system, color system, spacing and rhythm, Gestalt grouping, visual hierarchy, layout composition, and brand alignment. Not for whether the design is distinctive, use siteasy-agent-memorability instead; not for CSS-level token discipline, use inspect-agent-code.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

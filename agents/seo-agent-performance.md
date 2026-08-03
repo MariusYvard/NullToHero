@@ -1,6 +1,6 @@
 ---
 name: seo-agent-performance
-description: Sub-agent for the Performance dimension of /audit (and /seo audit). Evaluates page speed signals, image optimization, font loading, render-blocking resources, and Core Web Vitals readiness.
+description: Sub-agent for the Performance dimension of /audit (and /seo audit). Evaluates page speed signals, image optimization, font loading, render-blocking resources, and Core Web Vitals readiness. Not for layout shift caused by CSS bugs, use inspect-agent-layout instead; not for perceived speed of animation, use siteasy-agent-motion.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

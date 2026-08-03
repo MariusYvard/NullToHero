@@ -1580,6 +1580,14 @@
       "to": "skills/siteasy/references/typography.md"
     },
     {
+      "from": "skills/siteasy/references/typography.md",
+      "to": "skills/siteasy/references/design-tokens.md"
+    },
+    {
+      "from": "skills/siteasy/references/typography.md",
+      "to": "skills/siteasy/references/spatial-design.md"
+    },
+    {
       "from": "skills/siteasy/references/ux-research.md",
       "to": "skills/siteasy/references/heuristics-scoring.md"
     },

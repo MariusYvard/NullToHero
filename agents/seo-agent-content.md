@@ -1,6 +1,6 @@
 ---
 name: seo-agent-content
-description: Sub-agent for the Content quality dimension of /audit (and /seo audit). Evaluates E-E-A-T signals, title tags, meta descriptions, heading structure, keyword usage, readability, thin content, and AI citation readiness.
+description: Sub-agent for the Content quality dimension of /audit (and /seo audit). Evaluates E-E-A-T signals, title tags, meta descriptions, heading structure, keyword usage, readability, thin content, and AI citation readiness. Not for whether the copy reads well as interface writing, use siteasy-agent-content instead; not for whether a claim is defensible, use siteasy-agent-claims.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

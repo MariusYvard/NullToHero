@@ -1,6 +1,6 @@
 ---
 name: inspect-agent-layout
-description: Sub-agent for the Layout dimension of /audit (and /inspect). Evaluates overflow and clipping, z-index conflicts, horizontal scroll at 375px, CLS sources, responsive breakpoint breakage, viewport meta, and sticky or fixed positioning bugs.
+description: Sub-agent for the Layout dimension of /audit (and /inspect). Evaluates overflow and clipping, z-index conflicts, horizontal scroll at 375px, CLS sources, responsive breakpoint breakage, viewport meta, and sticky or fixed positioning bugs. Not for the taste of a composition, use siteasy-agent-visual instead; not for load speed, use seo-agent-performance.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

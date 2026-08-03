@@ -1,6 +1,6 @@
 ---
 name: siteasy-agent-motion
-description: Sub-agent for the Motion dimension of /audit (and /siteasy). Evaluates animation purpose, timing and easing taste, micro-interaction polish, scroll and parallax restraint, perceived performance, choreography, and delight without distraction.
+description: Sub-agent for the Motion dimension of /audit (and /siteasy). Evaluates animation purpose, timing and easing taste, micro-interaction polish, scroll and parallax restraint, perceived performance, choreography, and delight without distraction. Not for reduced-motion compliance as an accessibility failure, use inspect-agent-a11y instead; not for animation code smells, use inspect-agent-code.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

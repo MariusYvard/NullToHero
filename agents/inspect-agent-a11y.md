@@ -1,6 +1,6 @@
 ---
 name: inspect-agent-a11y
-description: Sub-agent for the Accessibility dimension of /audit (and /inspect). Evaluates color contrast ratios, visible focus indicators, keyboard operability, ARIA correctness, alt text, form labels, color-only meaning, and reduced-motion handling.
+description: Sub-agent for the Accessibility dimension of /audit (and /inspect). Evaluates color contrast ratios, visible focus indicators, keyboard operability, ARIA correctness, alt text, form labels, color-only meaning, and reduced-motion handling. Not for target size and interactive states, use inspect-agent-interaction instead; not for colour as a design system, use siteasy-agent-visual.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

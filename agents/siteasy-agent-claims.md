@@ -1,6 +1,6 @@
 ---
 name: siteasy-agent-claims
-description: Sub-agent for the Claims and credibility dimension of /audit (and /siteasy critique). Red-teams the marketing claims on the page with the Toulmin model: unsupported superlatives, missing or undated evidence, unattributed social proof, and the strongest objection the page leaves unanswered.
+description: Sub-agent for the Claims and credibility dimension of /audit (and /siteasy critique). Red-teams the marketing claims on the page with the Toulmin model: unsupported superlatives, missing or undated evidence, unattributed social proof, and the strongest objection the page leaves unanswered. Not for how the claim is worded, use siteasy-agent-content instead; not for whether search engines can read it, use seo-agent-content.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

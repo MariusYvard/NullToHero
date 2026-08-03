@@ -1,6 +1,6 @@
 ---
 name: siteasy-agent-content
-description: Sub-agent for the Content dimension of /audit (and /siteasy). Evaluates microcopy clarity, voice and tone consistency, CTA wording, error and empty-state messaging, label scannability, terminology consistency, i18n readiness, and inclusive plain language.
+description: Sub-agent for the Content dimension of /audit (and /siteasy). Evaluates microcopy clarity, voice and tone consistency, CTA wording, error and empty-state messaging, label scannability, terminology consistency, i18n readiness, and inclusive plain language. Not for search ranking and keyword fit, use seo-agent-content instead; not for the truth of a marketing claim, use siteasy-agent-claims.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

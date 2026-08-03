@@ -1,6 +1,6 @@
 ---
 name: seo-agent-geo
-description: Sub-agent for the GEO (Generative Engine Optimization) dimension of /audit (and /seo audit). Evaluates AI crawler access, llms.txt compliance, passage citability, brand authority signals, and platform-specific visibility.
+description: Sub-agent for the GEO (Generative Engine Optimization) dimension of /audit (and /seo audit). Evaluates AI crawler access, llms.txt compliance, passage citability, brand authority signals, and platform-specific visibility. Not for classic crawlability and indexing, use seo-agent-technical instead; not for the substance of the text being cited, use seo-agent-content.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

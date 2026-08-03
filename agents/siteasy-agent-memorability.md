@@ -1,6 +1,6 @@
 ---
 name: siteasy-agent-memorability
-description: Sub-agent for the Memorability dimension of /audit (and /siteasy). Evaluates point of view, a signature element, distinctive typography, ownable color, surprise and voice, and restraint against template-shaped design.
+description: Sub-agent for the Memorability dimension of /audit (and /siteasy). Evaluates point of view, a signature element, distinctive typography, ownable color, surprise and voice, and restraint against template-shaped design. Not for whether the system is internally consistent, use siteasy-agent-visual instead; not for motion as a signature, use siteasy-agent-motion.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---

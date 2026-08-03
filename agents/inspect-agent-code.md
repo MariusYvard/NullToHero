@@ -1,6 +1,6 @@
 ---
 name: inspect-agent-code
-description: Sub-agent for the Front-end Code dimension of /audit (and /inspect). Evaluates semantic HTML and landmarks, valid markup, design-token discipline, forbidden CSS patterns, deterministic motion crimes, and inline-style sprawl.
+description: Sub-agent for the Front-end Code dimension of /audit (and /inspect). Evaluates semantic HTML and landmarks, valid markup, design-token discipline, forbidden CSS patterns, deterministic motion crimes, and inline-style sprawl. Not for whether the rendered result looks right, use siteasy-agent-visual instead; not for runtime layout breakage, use inspect-agent-layout.
 model: sonnet
 tools: Read, Grep, Glob, WebFetch
 ---
