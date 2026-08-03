@@ -11,6 +11,27 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [2.6.0] - 2026-08-02
+
+The corpus loses the half a current model already knows. Measured before cutting and
+re-measured after, because "the model knows this" is a claim, not a licence.
+
+### Changed
+
+- **1,642 lines of platform documentation cut to 448, across four references.** `css-architecture.md`, `design-tokens.md`, `component-patterns.md` and `dark-mode-engineering.md` were between 56 and 79 percent code blocks explaining how standard web platform features work. A current model writes `@layer`, `@scope`, `:has()`, `@property`, container queries, `color-mix()`, compound components and controlled state correctly without being taught the syntax, so those lines were MDN sitting in the context window. 56 KB down to 32 KB, and the heaviest activation chain moves off `/siteasy build` (71.1 KB across 9 references) to `/siteasy audit` (57.7 KB across 5).
+- **The rule applied was: keep what is a choice, drop what is a capability.** Kept: the decision trees, the layer order and its migration path, the token vocabulary that makes two sessions land on the same names, the dark-mode elevation and accent values, the component API conventions, the failure modes. Dropped: feature explanations, the logical-property mapping table, a 171-line example token file, React pattern tutorials, and a `:has()` section duplicated within the same file.
+- `FILE_INTEGRITY` minimums lowered to match the new sizes (200 to 110, 200 to 55, 200 to 110, 180 to 105). Stated plainly because lowering an anti-truncation guard is exactly the move that can hide a real loss: the guard stays armed, at the new floor.
+
+### Why this is a doctrine change and not a cleanup
+
+Two tests decided the shape of the cut, and the second one changed it.
+
+On a component task demanding eight named features (cascade layers, `:has()`, `@scope` with a lower boundary, a typed animatable `@property`, container queries, zero-specificity base styles, keyboard-only focus, colour derived by mixing), output was equivalent with and without the reference loaded, verified file by file rather than taken from the agents' own reports. The one that read nothing wrote 317 lines where the one that read 457 lines of reference wrote 514.
+
+On an open beginner question ("my rule is ignored so I put `!important` everywhere"), the two answers diverged: with the file, cascade layers and a migration path; without it, an explanation of specificity that stopped there. Both correct, one architectural. So the value of these files is not the syntax, which the model has, it is what the model REACHES FOR. Cutting the prescriptions would have cost something real, cutting the syntax cost nothing.
+
+Re-verified after cutting: the reduced file still produces the layered answer with its migration path, in 730 words instead of 903. It had lost the "read the struck-through rules in the inspector" habit a beginner uses, so that came back as one sentence.
+
 ## [2.5.0] - 2026-08-02
 
 The first audit by someone outside this repository. Fourteen findings, two of them in the
