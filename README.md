@@ -201,23 +201,23 @@ Your design partner. It plans the look, builds the pages, fixes spacing and type
 | `ia [target]` | Information architecture, card sorting, tree testing, navigation patterns |
 | `document` | Generate DESIGN.md from existing project code |
 | `extract [target]` | Pull reusable tokens and components into a design system; the `handoff` deliverable emits the developer spec (layout, tokens, props, states, breakpoints, motion, accessibility) |
-| `tokens [project]` | Audit or create a two-layer CSS token system — primitives + semantic layer + dark mode |
+| `tokens [project]` | Audit or create a two-layer CSS token system, primitives + semantic layer + dark mode |
 | `critique [target]` | UX design review with heuristic scoring |
 | `audit [target]` | Technical quality checks (a11y, perf, responsive, WCAG 2.2, image strategy, forms) |
 | `improve [target]` | One door for "make it better": symptom-to-axis dispatch to the right refine or enhance pass |
 | `fix [target]` | Execute audit findings by remediation route: triage, per-command batches, verify |
 | `polish [target]` | Final quality pass before shipping |
-| `amplify [target]` | Amplify safe or bland designs — bolder typography, stronger color, more presence |
+| `amplify [target]` | Amplify safe or bland designs, bolder typography, stronger color, more presence |
 | `simplify [target]` | Reduce visual noise, tone down, strip to essence |
 | `clarify [target]` | UX copy, error messages, button labels, empty states |
-| `harden [target]` | Production hardening + performance — errors, i18n, edge cases, Core Web Vitals |
+| `harden [target]` | Production hardening + performance, errors, i18n, edge cases, Core Web Vitals |
 | `onboard [target]` | First-run flows, empty states, feature discovery, activation |
 | `animate [target]` | Add purposeful animations and motion |
 | `typeset [target]` | Typography audit, font selection, hierarchy |
 | `layout [target]` | Spacing systems, visual rhythm, grid tools |
 | `charts [target]` | Accessible data visualization: chart-type choice, a11y grades, non-color fallbacks |
 | `adapt [target]` | Mobile/tablet/desktop/print adaptation |
-| `mobile [target]` | Phone-specific ergonomics — thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit |
+| `mobile [target]` | Phone-specific ergonomics, thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit |
 | `delight [target]` | Micro-interactions, personality in copy, satisfying feedback |
 | `overdrive [target]` | View Transitions API, WebGL, scroll-driven animations |
 | `video [target]` | Guaranteed-play decorative video: classify, transcode to a canvas-decodable asset (WASM decoder), emit the drop-in component |
@@ -240,24 +240,24 @@ Your search expert. It audits a whole site or a single page, writes the structur
 
 | Command | What it does |
 |---------|-------------|
-| `audit [url]` | Full site SEO audit — crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md |
-| `page [url]` | Deep single-page analysis — title, meta, H1-H6, schema, images, content quality, search-experience alignment (intent, page-type match), score |
-| `plan [business-type]` | Complete SEO strategy — architecture, content pillars, keyword plan, 4-phase roadmap |
-| `technical [url]` | Technical audit — robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering |
-| `schema [url]` | Detect, validate, and generate Schema.org JSON-LD — Organization, Article, Product, etc. |
+| `audit [url]` | Full site SEO audit, crawls up to 500 pages, scores 7 dimensions, outputs ACTION-PLAN.md |
+| `page [url]` | Deep single-page analysis, title, meta, H1-H6, schema, images, content quality, search-experience alignment (intent, page-type match), score |
+| `plan [business-type]` | Complete SEO strategy, architecture, content pillars, keyword plan, 4-phase roadmap |
+| `technical [url]` | Technical audit, robots.txt, sitemaps, Core Web Vitals, mobile, security, JS rendering |
+| `schema [url]` | Detect, validate, and generate Schema.org JSON-LD, Organization, Article, Product, etc. |
 | `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness |
-| `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals |
+| `geo [url]` | AI search optimization, Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals |
 | `sitemap [url]` | XML sitemap validation and generation with industry-specific templates |
-| `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam — key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers |
-| `images [url]` | Image SEO audit — alt text, formats (WebP/AVIF), lazy loading, CLS, LCP |
-| `local [business]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
+| `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam, key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers |
+| `images [url]` | Image SEO audit, alt text, formats (WebP/AVIF), lazy loading, CLS, LCP |
+| `local [business]` | Local SEO, Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
 | `hreflang [url]` | Hreflang validation and generation for multilingual and multi-region sites |
-| `programmatic [url]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
+| `programmatic [url]` | Programmatic SEO, URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
 | `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks |
-| `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis |
-| `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking |
+| `cluster [keyword]` | Semantic keyword clustering, intent-based grouping, content architecture, gap analysis |
+| `drift [url]` | SEO drift monitoring, baseline capture, change detection, history tracking |
 | `backlinks [url]` | Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC) |
-| `ecommerce [url]` | E-commerce SEO — product pages, category pages, faceted navigation, Product schema |
+| `ecommerce [url]` | E-commerce SEO, product pages, category pages, faceted navigation, Product schema |
 
 Common runs: new site (`plan` → build → `technical` → `schema` → `sitemap` → `audit` → `/audit report`), existing site (`audit` → `technical` → `content` → `geo` → `backlinks`), a page that will not rank (`page` → `content` → `schema`), local business (`local` → `schema` → `geo`), before a redesign (`drift baseline` → redesign → `drift compare`).
 
@@ -272,9 +272,9 @@ Your quality gate. Three quick checks to run before you ship.
 
 | Command | What it does |
 |---------|-------------|
-| `detect [target]` | Deterministic anti-pattern scan — finds missing focus rings, clipped dropdowns, pure black/white, tiny touch targets, missing reduced-motion, and more |
-| `preview [target]` | Real Chromium screenshot — desktop + mobile viewports, reads back visually, fixes bugs in a loop |
-| `review [file]` | Design engineering code review — motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) |
+| `detect [target]` | Deterministic anti-pattern scan, finds missing focus rings, clipped dropdowns, pure black/white, tiny touch targets, missing reduced-motion, and more |
+| `preview [target]` | Real Chromium screenshot, desktop + mobile viewports, reads back visually, fixes bugs in a loop |
+| `review [file]` | Design engineering code review, motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) |
 
 Common runs: before every ship (`detect` → `preview` → `review`).
 
@@ -296,7 +296,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (33 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight and more), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.4.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (49 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight, AI crawler access, plus the declared-value laws for tap target size and spacing, base body size, line measure, feedback duration, decorative loop budget and scrub easing), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v2.4.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -367,20 +367,20 @@ NullToHero overlaps four kinds of tool. The honest comparison: each column is ex
 
 | Capability | **NullToHero** | AI site builders<br><sub>v0 · Lovable · Bolt</sub> | Audit tools<br><sub>Lighthouse · axe</sub> | SEO suites<br><sub>Semrush · Ahrefs</sub> | Design skills<br><sub>ui-ux-pro-max · ux-ui-mastery · Taste</sub> |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Designs and builds real pages | ✅ | ✅ | — | — | 🟡 |
-| Audits an existing site | ✅ | — | ✅ | ✅ | — |
-| Routes every finding to the command that fixes it | ✅ | — | — | — | — |
-| Deterministic 0-100 score, reproducible in CI | ✅ | — | 🟡 | 🟡 | — |
-| Design taste scored (memorability, motion, Gestalt) | ✅ | 🟡 | — | — | 🟡 |
-| SEO with structured data | ✅ | — | 🟡 | ✅ | — |
-| AI-search visibility (GEO, llms.txt) | ✅ | — | — | 🟡 | — |
-| Accessibility: WCAG 2.2 rules and contrast checks | ✅ | 🟡 | ✅ | — | 🟡 |
-| CI gate on every push | ✅ | — | ✅ | — | — |
-| Runs inside Claude, on your own files | ✅ | — | — | — | ✅ |
-| Free, open source, no account | ✅ | — | ✅ | — | ✅ |
-| Editable knowledge (rules, laws, resources as CSV) | ✅ | — | — | — | 🟡 |
+| Designs and builds real pages | ✅ | ✅ |, |, | 🟡 |
+| Audits an existing site | ✅ |, | ✅ | ✅ |, |
+| Routes every finding to the command that fixes it | ✅ |, |, |, |, |
+| Deterministic 0-100 score, reproducible in CI | ✅ |, | 🟡 | 🟡 |, |
+| Design taste scored (memorability, motion, Gestalt) | ✅ | 🟡 |, |, | 🟡 |
+| SEO with structured data | ✅ |, | 🟡 | ✅ |, |
+| AI-search visibility (GEO, llms.txt) | ✅ |, |, | 🟡 |, |
+| Accessibility: WCAG 2.2 rules and contrast checks | ✅ | 🟡 | ✅ |, | 🟡 |
+| CI gate on every push | ✅ |, | ✅ |, |, |
+| Runs inside Claude, on your own files | ✅ |, |, |, | ✅ |
+| Free, open source, no account | ✅ |, | ✅ |, | ✅ |
+| Editable knowledge (rules, laws, resources as CSV) | ✅ |, |, |, | 🟡 |
 
-<sub>✅ yes · 🟡 partial · — no. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
+<sub>✅ yes · 🟡 partial ·, no. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
 
 </details>
 

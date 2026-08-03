@@ -849,5 +849,18 @@
       "invalid-aria-attribute": "PASS",
       "viewport-unit-consistency": "WARN"
     }
+  },
+  {
+    "name": "laws-declared-violations",
+    "file": "laws-declared-violations.html",
+    "expect": {
+      "tap-target-size": "FAIL",
+      "tap-target-spacing": "WARN",
+      "body-font-size": "FAIL",
+      "line-measure": "WARN",
+      "ui-motion-duration": "FAIL",
+      "decorative-loop-budget": "WARN",
+      "scrub-easing-linear": "FAIL"
+    }
   }
 ]

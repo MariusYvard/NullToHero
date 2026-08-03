@@ -8,7 +8,7 @@
 
 import { parse, queryAll, first, textContent, styleMap, resolveBackgroundStr, ancestors, walk } from "./html.mjs";
 import { ratioOf, aaThreshold, parseColor, luminance } from "./contrast.mjs";
-import { parseStylesheet, computeElementStyle, pageBackground, pickColor } from "./css.mjs";
+import { parseStylesheet, computeElementStyle, pageBackground, pickColor, resolveValue } from "./css.mjs";
 import { runAiAccessChecks } from "./ai-access.mjs";
 
 // dimension/agent constants — kept in lockstep with agents/*.md
@@ -1345,6 +1345,327 @@ function checkFrameLoopAlloc(js) {
     detail: windows ? `No per-frame allocation detected across ${windows} frame loop(s).` : "No frame loops detected." });
 }
 
+// ── declared-value laws ───────────────────────────────────────────────────────
+
+/* Seven laws the corpus stated in prose and nothing enforced. A number nobody
+   checks drifts, because nothing fails when it does: that is how L-TOUCH-1 came to
+   say 44px while the reference it cites as its own anchor said 24, for months.
+   Enforcing them closes the class, the way L-VIEWPORT-1 and L-VIEWPORT-2 closed
+   the three-answers-to-one-question bug.
+   Every check here judges ONLY what a rule explicitly declares, and returns
+   NOT_MEASURED otherwise. A button sized by its text content is a button this pass
+   cannot measure, and saying so is the discipline: the static path already shipped
+   invented failures through five releases, and this file does not add more. */
+
+const LEN_RE = /^(-?[\d.]+)\s*(px|rem|em|pt|%)?$/;
+function lenPx(v, rootPx = 16) {
+  if (v == null) return null;
+  const m = String(v).trim().match(LEN_RE);
+  if (!m) return null;
+  const n = parseFloat(m[1]);
+  if (!Number.isFinite(n)) return null;
+  switch (m[2]) {
+    case "rem": case "em": return n * rootPx;
+    case "pt": return n * 4 / 3;
+    case "%": return n / 100 * rootPx;
+    case "px": return n;
+    default: return n === 0 ? 0 : null;   // unitless is only legal at zero
+  }
+}
+
+// Declared padding on one axis. Absent parts count as zero, which OVER-estimates the
+// box: an over-estimate can only hide a failure, never invent one.
+function padSum(d, axis) {
+  const two = (a, b) => {
+    const va = lenPx(d[a]), vb = lenPx(d[b]);
+    return (va == null && vb == null) ? null : (va || 0) + (vb || 0);
+  };
+  const logical = axis === "block" ? two("padding-block-start", "padding-block-end")
+                                   : two("padding-inline-start", "padding-inline-end");
+  if (logical != null) return logical;
+  const short = d[axis === "block" ? "padding-block" : "padding-inline"];
+  if (short) {
+    const p = String(short).trim().split(/\s+/).map(x => lenPx(x)).filter(v => v != null);
+    if (p.length === 1) return p[0] * 2;
+    if (p.length >= 2) return p[0] + p[1];
+  }
+  const phys = axis === "block" ? two("padding-top", "padding-bottom") : two("padding-left", "padding-right");
+  if (phys != null) return phys;
+  if (d["padding"]) {
+    const p = String(d["padding"]).trim().split(/\s+/).map(x => lenPx(x));
+    if (p.some(v => v == null)) return 0;
+    if (p.length === 1) return p[0] * 2;
+    if (p.length === 2) return axis === "block" ? p[0] * 2 : p[1] * 2;
+    if (p.length === 3) return axis === "block" ? p[0] + p[2] : p[1] * 2;
+    if (p.length >= 4) return axis === "block" ? p[0] + p[2] : p[1] + p[3];
+  }
+  return 0;
+}
+
+const INTERACTIVE_SEL = /(^|[\s,>+~])(a|button|input|select|textarea|summary)([.:#\[\s]|$)|\[role=["']?(button|link|tab|menuitem|checkbox|radio|switch)["']?\]/i;
+/* A pseudo-element is a decoration drawn on the control, never the control itself:
+   `.site-nav a::after { height: 2px }` is an underline, and reading it as a 2px tap
+   target was this check's first false positive. */
+const PSEUDO_ELEMENT = /::(before|after|marker|placeholder|selection|backdrop|first-line|first-letter)/i;
+const isInteractiveRule = (rule) =>
+  rule.selectors.some(s => INTERACTIVE_SEL.test(s.trim()) && !PSEUDO_ELEMENT.test(s));
+
+/* Declarations are read through the token map, because this plugin builds
+   token-based stylesheets: `font-size: var(--font-size-base)` is the normal case,
+   not the exotic one, and a check that reads the raw string is blind on exactly the
+   sites this tool produces. Page-level scope only; a token this pass cannot resolve
+   returns null and the sample goes unmeasured rather than guessed. */
+function decl(rule, model, ...props) {
+  for (const p of props) {
+    const raw = rule.decls[p];
+    if (raw == null) continue;
+    const v = model && model.vars ? resolveValue(raw, model.vars) : raw;
+    if (v != null && String(v).trim() !== "") return String(v).trim();
+  }
+  return null;
+}
+
+function checkTapTargetSize(model) {
+  const NM = (why) => mk({ id: "tap-target-size", label: "Tap target size (L-TOUCH-1)", ...A11Y,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const fails = [], warns = [];
+  let measured = 0;
+  for (const rule of model.rules) {
+    if (!isInteractiveRule(rule)) continue;
+    const d = rule.decls;
+    /* `min-width: 0` is the flexbox overflow reset, not a claim about size. Reading
+       it as a zero-wide target is the same mistake in a different costume. */
+    const size = (...props) => { const v = lenPx(decl(rule, model, ...props)); return v === 0 ? null : v; };
+    const h = size("height", "min-height", "block-size", "min-block-size");
+    const w = size("width", "min-width", "inline-size", "min-inline-size");
+    if (h == null && w == null) continue;
+    measured++;
+    const sides = [];
+    if (h != null) sides.push(h + padSum(d, "block"));
+    if (w != null) sides.push(w + padSum(d, "inline"));
+    const worst = Math.min(...sides);
+    const sel = rule.selectors.join(", ").slice(0, 60);
+    if (worst < 24) fails.push({ selector: sel, px: Math.round(worst) });
+    else if (worst < 44) warns.push({ selector: sel, px: Math.round(worst) });
+  }
+  if (!measured) return NM("No interactive rule declares an explicit size; the targets are sized by their content, which needs --render to measure.");
+  if (fails.length) {
+    return mk({ id: "tap-target-size", label: "Tap target size (L-TOUCH-1)", ...A11Y, verdict: "FAIL", critical: false,
+      method: "static", value: { measured, below24: fails.length, below44: warns.length, worst: fails.slice(0, 4) },
+      detail: `${fails.length} interactive rule(s) declare a target under 24x24 CSS px, which fails WCAG 2.5.8 AA (smallest ${Math.min(...fails.map(f => f.px))}px on \`${fails[0].selector}\`). Declared sizes only, padding counted in.` });
+  }
+  if (warns.length) {
+    return mk({ id: "tap-target-size", label: "Tap target size (L-TOUCH-1)", ...A11Y, verdict: "WARN", critical: false,
+      method: "static", value: { measured, below24: 0, below44: warns.length, worst: warns.slice(0, 4) },
+      detail: `${warns.length} interactive rule(s) clear the 24px WCAG floor but stay under the 44x44 comfort target (smallest ${Math.min(...warns.map(w => w.px))}px on \`${warns[0].selector}\`).` });
+  }
+  return mk({ id: "tap-target-size", label: "Tap target size (L-TOUCH-1)", ...A11Y, verdict: "PASS", critical: false,
+    method: "static", value: { measured, below24: 0, below44: 0 },
+    detail: `${measured} interactive rule(s) declare a size, all at or above 44x44 CSS px.` });
+}
+
+// Only containers that exist to hold controls, so a 4px gap in a card grid is not
+// read as two buttons touching.
+const CONTROL_CONTAINER = /(^|[\s,>+~])(nav|menu)([.:#\[\s]|$)|\[role=["']?(toolbar|tablist|menubar|group)["']?\]|\.(nav|navbar|menu|toolbar|tabs|tablist|pagination|button-group|btn-group)\b/i;
+
+function checkTapTargetSpacing(model) {
+  const NM = (why) => mk({ id: "tap-target-spacing", label: "Tap target spacing (L-TOUCH-2)", ...A11Y,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const tight = [];
+  let measured = 0;
+  for (const rule of model.rules) {
+    if (!rule.selectors.some(s => CONTROL_CONTAINER.test(s.trim()))) continue;
+    const d = rule.decls;
+    const disp = String(decl(rule, model, "display") || "").toLowerCase();
+    if (!/flex|grid|inline-flex|inline-grid/.test(disp)) continue;
+    const gapRaw = decl(rule, model, "gap", "column-gap", "row-gap");
+    if (gapRaw == null) continue;
+    const gaps = String(gapRaw).trim().split(/\s+/).map(x => lenPx(x)).filter(v => v != null);
+    if (!gaps.length) continue;
+    measured++;
+    const smallest = Math.min(...gaps);
+    if (smallest < 8) tight.push({ selector: rule.selectors.join(", ").slice(0, 60), px: smallest });
+  }
+  if (!measured) return NM("No control container declares an explicit gap.");
+  if (tight.length) {
+    return mk({ id: "tap-target-spacing", label: "Tap target spacing (L-TOUCH-2)", ...A11Y, verdict: "WARN", critical: false,
+      method: "static", value: { measured, tight: tight.length, worst: tight.slice(0, 4) },
+      detail: `${tight.length} control container(s) declare a gap under the 8px minimum (smallest ${Math.min(...tight.map(t => t.px))}px on \`${tight[0].selector}\`). Adjacent targets that close need 8px of separation (L-TOUCH-2).` });
+  }
+  return mk({ id: "tap-target-spacing", label: "Tap target spacing (L-TOUCH-2)", ...A11Y, verdict: "PASS", critical: false,
+    method: "static", value: { measured, tight: 0 },
+    detail: `${measured} control container(s) declare a gap, all at 8px or more.` });
+}
+
+function checkBodyFontSize(model) {
+  const NM = (why) => mk({ id: "body-font-size", label: "Base body size (L-TYPE-1)", ...A11Y,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  let rootPx = 16, declared = null, where = null;
+  for (const rule of model.rules) {
+    const isRoot = rule.selectors.some(s => /^(html|:root)$/i.test(s.trim()));
+    if (isRoot && rule.decls["font-size"]) {
+      const v = lenPx(decl(rule, model, "font-size"));
+      if (v != null) { rootPx = v; declared = v; where = rule.selectors.join(", "); }
+    }
+  }
+  for (const rule of model.rules) {
+    if (!rule.selectors.some(s => /^body$/i.test(s.trim()))) continue;
+    if (!rule.decls["font-size"]) continue;
+    const v = lenPx(decl(rule, model, "font-size"), rootPx);
+    if (v != null) { declared = v; where = "body"; }
+  }
+  if (declared == null) return NM("Neither html/:root nor body declares an explicit font-size; the base size is the browser default (16px).");
+  if (declared < 16) {
+    return mk({ id: "body-font-size", label: "Base body size (L-TYPE-1)", ...A11Y, verdict: "FAIL", critical: false,
+      method: "static", value: { declaredPx: Math.round(declared * 100) / 100, selector: where },
+      detail: `Base body text is declared at ${Math.round(declared * 100) / 100}px on \`${where}\`, under the 16px floor (L-TYPE-1). Below 16px, mobile browsers also zoom on focus of a form field.` });
+  }
+  return mk({ id: "body-font-size", label: "Base body size (L-TYPE-1)", ...A11Y, verdict: "PASS", critical: false,
+    method: "static", value: { declaredPx: Math.round(declared * 100) / 100, selector: where },
+    detail: `Base body text is declared at ${Math.round(declared * 100) / 100}px on \`${where}\`, at or above the 16px floor.` });
+}
+
+// Display type: headings by tag, and the class names that carry a headline.
+const HEADINGISH = /(^|[\s,>+~.#])(h[1-6])([.:#\[\s,]|$)|\b(hero|title|heading|headline|display|lede|lead|kicker|eyebrow|subtitle|tagline|wordmark|logo)\b/i;
+
+function checkLineMeasure(model) {
+  const NM = (why) => mk({ id: "line-measure", label: "Body line length (L-TYPE-2)", ...LAYOUT,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const out = [];
+  let skippedDisplay = 0;
+  for (const rule of model.rules) {
+    /* L-TYPE-2 is a law about BODY text. A headline is supposed to be short: the
+       first run of this check called a 17ch hero title a defect, which is the
+       invented-failure trap this file exists to avoid. Two guards, both cheap:
+       the selector names display type, or the rule sets a display-sized font. */
+    const sel = rule.selectors.join(", ");
+    if (HEADINGISH.test(sel)) { skippedDisplay++; continue; }
+    const fs = lenPx(decl(rule, model, "font-size"));
+    if (fs != null && fs >= 24) { skippedDisplay++; continue; }
+    for (const prop of ["max-width", "max-inline-size"]) {
+      const v = decl(rule, model, prop);
+      if (!v) continue;
+      const m = String(v).trim().match(/^(-?[\d.]+)\s*ch$/);
+      if (!m) continue;                       // only ch is a measure; px is a column width
+      out.push({ selector: sel.slice(0, 60), ch: parseFloat(m[1]) });
+    }
+  }
+  if (!out.length) return NM(`No body rule declares a measure in \`ch\`${skippedDisplay ? ` (${skippedDisplay} display-type rule(s) skipped)` : ""}; a width in px is a column, not a measure this pass can judge.`);
+  /* Only over-wide measures are judged. A 24ch max-width on a reassurance line or a
+     caption is a deliberate choice, and this pass cannot tell running prose from a
+     short label, so calling it a defect would invent one. A line past 75 characters
+     is hard to track back to the next line whatever the element is. */
+  const bad = out.filter(o => o.ch > 75);
+  if (bad.length) {
+    return mk({ id: "line-measure", label: "Body line length (L-TYPE-2)", ...LAYOUT, verdict: "WARN", critical: false,
+      method: "static", value: { measured: out.length, outside: bad.length, worst: bad.slice(0, 4) },
+      detail: `${bad.length} of ${out.length} declared measure(s) run past 75ch (\`${bad[0].selector}\` at ${bad[0].ch}ch). L-TYPE-2 puts body text between 45 and 75 characters, 65 to 75 optimal; past 75 the eye loses the start of the next line. Short measures are not judged here: this pass cannot tell running prose from a caption.` });
+  }
+  return mk({ id: "line-measure", label: "Body line length (L-TYPE-2)", ...LAYOUT, verdict: "PASS", critical: false,
+    method: "static", value: { measured: out.length, outside: 0 },
+    detail: `${out.length} declared measure(s), none past the 75ch ceiling.` });
+}
+
+function checkUiMotionDuration(model) {
+  const NM = (why) => mk({ id: "ui-motion-duration", label: "UI feedback duration (L-MOTION-1)", ...CODE,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const slow = [];
+  let measured = 0;
+  for (const rule of model.rules) {
+    /* L-MOTION-1 governs UI FEEDBACK, so only transitions on a control or on a state
+       pseudo-class are judged. An entrance or scroll reveal is a different budget the
+       corpus sets itself: motion-design.md sanctions 500-800ms for entrances, so
+       flagging a `.reveal` at 800ms would have this checker contradict the doctrine
+       it is supposed to enforce. Anything that is not feedback goes unjudged. */
+    const isFeedback = rule.selectors.some(s =>
+      INTERACTIVE_SEL.test(s.trim()) || /:(hover|focus|focus-visible|focus-within|active|checked|disabled)\b/i.test(s));
+    if (!isFeedback) continue;
+    const raw = decl(rule, model, "transition-duration", "transition");
+    if (raw == null) continue;
+    const times = [...String(raw).matchAll(/(-?[\d.]+)\s*(ms|s)\b/g)]
+      .map(m => (m[2] === "s" ? parseFloat(m[1]) * 1000 : parseFloat(m[1])))
+      .filter(n => Number.isFinite(n));
+    if (!times.length) continue;
+    measured++;
+    const worst = Math.max(...times);
+    // 500ms is the ceiling even for a modal or drawer, so past it the surface type
+    // cannot excuse the duration and no guess about it is needed.
+    if (worst > 500) slow.push({ selector: rule.selectors.join(", ").slice(0, 60), ms: worst });
+  }
+  if (!measured) return NM("No control or state rule declares a transition duration; entrance and reveal timings are a different budget and are not judged here.");
+  if (slow.length) {
+    return mk({ id: "ui-motion-duration", label: "UI feedback duration (L-MOTION-1)", ...CODE, verdict: "FAIL", critical: false,
+      method: "static", value: { measured, over500: slow.length, worst: slow.slice(0, 4) },
+      detail: `${slow.length} transition(s) run longer than 500ms (worst ${Math.max(...slow.map(s => s.ms))}ms on \`${slow[0].selector}\`). L-MOTION-1 puts UI feedback at 150-300ms and allows 500ms only for large surfaces such as modals and drawers.` });
+  }
+  return mk({ id: "ui-motion-duration", label: "UI feedback duration (L-MOTION-1)", ...CODE, verdict: "PASS", critical: false,
+    method: "static", value: { measured, over500: 0 },
+    detail: `${measured} feedback rule(s) declare a transition duration, none over 500ms.` });
+}
+
+function checkDecorativeLoopBudget(model) {
+  const NM = (why) => mk({ id: "decorative-loop-budget", label: "Decorative loop budget (L-MOTION-2)", ...CODE,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const loops = [];
+  for (const rule of model.rules) {
+    const iter = String(rule.decls["animation-iteration-count"] || "");
+    const short = String(rule.decls["animation"] || "");
+    if (/\binfinite\b/i.test(iter) || /\binfinite\b/i.test(short)) {
+      loops.push(rule.selectors.join(", ").slice(0, 50));
+    }
+  }
+  if (!loops.length) {
+    return mk({ id: "decorative-loop-budget", label: "Decorative loop budget (L-MOTION-2)", ...CODE, verdict: "PASS", critical: false,
+      method: "static", value: { infinite: 0 }, detail: "No infinite animation loops declared." });
+  }
+  if (loops.length > 2) {
+    return mk({ id: "decorative-loop-budget", label: "Decorative loop budget (L-MOTION-2)", ...CODE, verdict: "WARN", critical: false,
+      method: "static", value: { infinite: loops.length, selectors: loops.slice(0, 6) },
+      detail: `${loops.length} infinite animation loops declared (\`${loops.slice(0, 3).join("`, `")}\`). L-MOTION-2 allows two per view; this count is per stylesheet, so confirm how many run on one screen before acting.` });
+  }
+  return mk({ id: "decorative-loop-budget", label: "Decorative loop budget (L-MOTION-2)", ...CODE, verdict: "PASS", critical: false,
+    method: "static", value: { infinite: loops.length, selectors: loops },
+    detail: `${loops.length} infinite animation loop(s) declared, within the budget of two per view.` });
+}
+
+function checkScrubEasingLinear(model) {
+  const NM = (why) => mk({ id: "scrub-easing-linear", label: "Scrubbed easing is linear (L-MOTION-3)", ...CODE,
+    verdict: "NOT_MEASURED", critical: false, method: "not-measured", value: null, detail: why });
+  if (!model) return NM("No stylesheet to read.");
+  const bad = [], bare = [];
+  let scrubbed = 0;
+  for (const rule of model.rules) {
+    const tl = String(decl(rule, model, "animation-timeline") || "");
+    if (!/\b(scroll|view)\s*\(/i.test(tl)) continue;
+    scrubbed++;
+    const ease = String(decl(rule, model, "animation-timing-function", "animation") || "");
+    const sel = rule.selectors.join(", ").slice(0, 60);
+    if (/\blinear\b/i.test(ease)) continue;
+    if (/\b(ease(-in|-out|-in-out)?|cubic-bezier|steps|spring)\b/i.test(ease)) bad.push({ selector: sel, easing: ease.slice(0, 40) });
+    else bare.push({ selector: sel });
+  }
+  if (!scrubbed) return NM("No scroll-driven animation declared (`animation-timeline: scroll()` or `view()`).");
+  if (bad.length) {
+    return mk({ id: "scrub-easing-linear", label: "Scrubbed easing is linear (L-MOTION-3)", ...CODE, verdict: "FAIL", critical: false,
+      method: "static", value: { scrubbed, nonLinear: bad.length, bare: bare.length, worst: bad.slice(0, 4) },
+      detail: `${bad.length} of ${scrubbed} scroll-driven animation(s) declare a time-based easing (\`${bad[0].easing}\` on \`${bad[0].selector}\`). A scrubbed tween is linear: the perceived easing comes from the visitor's scroll (L-MOTION-3), and a curve on top retimes the whole act.` });
+  }
+  if (bare.length) {
+    return mk({ id: "scrub-easing-linear", label: "Scrubbed easing is linear (L-MOTION-3)", ...CODE, verdict: "WARN", critical: false,
+      method: "static", value: { scrubbed, nonLinear: 0, bare: bare.length, worst: bare.slice(0, 4) },
+      detail: `${bare.length} of ${scrubbed} scroll-driven animation(s) declare no timing function, and the CSS default is \`ease\`, not \`linear\`. State \`linear\` explicitly (L-MOTION-3) unless it is set on another rule this pass cannot see.` });
+  }
+  return mk({ id: "scrub-easing-linear", label: "Scrubbed easing is linear (L-MOTION-3)", ...CODE, verdict: "PASS", critical: false,
+    method: "static", value: { scrubbed, nonLinear: 0, bare: 0 },
+    detail: `${scrubbed} scroll-driven animation(s), all declared linear.` });
+}
+
 // ── engine ────────────────────────────────────────────────────────────────────
 
 export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", js = "", probes = null } = {}) {
@@ -1384,6 +1705,13 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkMixedScriptText(activeDoc),
     checkThreeDuplicate(js),
     checkFrameLoopAlloc(js),
+    checkTapTargetSize(cssModel),
+    checkTapTargetSpacing(cssModel),
+    checkBodyFontSize(cssModel),
+    checkLineMeasure(cssModel),
+    checkUiMotionDuration(cssModel),
+    checkDecorativeLoopBudget(cssModel),
+    checkScrubEasingLinear(cssModel),
     checkHttpsRedirect(probes),
     checkHostCanonical(probes),
     checkSecurityTxt(probes),

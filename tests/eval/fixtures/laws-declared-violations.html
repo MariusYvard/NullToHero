@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page fautive sur les sept lois chiffrees</title><meta name="description" content="Fixture qui viole delibrement chacune des sept lois nouvellement appliquees par les checks."><style>
+:root { --tiny: 18px; --slow: 900ms; }
+html { font-size: 13px; }
+body { color: #111; background: #fff; }
+button.mini { height: var(--tiny); width: 18px; }
+a.compact { min-height: 30px; min-width: 30px; }
+nav.menu { display: flex; gap: 4px; }
+.prose { max-width: 96ch; }
+button:hover { transition: background var(--slow) ease; }
+.halo1 { animation: pulse 3s infinite; }
+.halo2 { animation: pulse 4s infinite; }
+.halo3 { animation-name: pulse; animation-iteration-count: infinite; }
+.parallax { animation: slide both; animation-timeline: scroll(block nearest); animation-timing-function: ease-out; }
+</style></head><body>
+<nav class="menu"><a class="compact" href="#a">Un</a><a class="compact" href="#b">Deux</a></nav>
+<main><p class="prose">Un paragraphe de corps dont la mesure depasse largement le plafond de soixante-quinze caracteres par ligne.</p>
+<button class="mini">x</button><button>Valider</button></main>
+</body></html>
