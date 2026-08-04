@@ -1,7 +1,7 @@
 ---
 name: creative-patterns
 description: "Arsenal of bold creative techniques for /siteasy overdrive, delight, and build. Use selectively; the point is intentionality, not novelty for its own sake."
-version: 1.10.0
+version: 1.10.1
 ---
 
 # Creative Patterns
@@ -51,15 +51,7 @@ Mobile override: at variance 4–10, any asymmetric layout above `md:` must coll
 
 ## Layout Patterns
 
-**Bento Grid** — asymmetric tile-based grouping (Apple Control Center aesthetic). Recommended structure:
-
-```css
-.bento {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;   /* or: repeat(3, 1fr) with spanning cells */
-  gap: 1.5rem;
-}
-```
+**Bento Grid** — asymmetric tile-based grouping (Apple Control Center aesthetic). Grid columns `2fr 1fr 1fr`, or `repeat(3, 1fr)` with spanning cells; `gap: 1.5rem`.
 
 Palette: `bg-[#f9fafb]` base, pure white cards with `border border-slate-200/50`, `rounded-[2.5rem]`, diffusion shadow `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`. Labels outside and below cards. `p-8` or `p-10` inside.
 
@@ -99,12 +91,7 @@ Palette: `bg-[#f9fafb]` base, pure white cards with `border border-slate-200/50`
 
 **Scroll Progress Path** — SVG lines that draw themselves as the user scrolls. Use `pathLength` in Framer or `stroke-dashoffset` driven by scroll position.
 
-**Scroll-triggered image reveal:**
-```js
-// Use IntersectionObserver or Framer's useInView
-const { ref, inView } = useInView({ once: true, rootMargin: '-100px' });
-// When inView: clip-path: inset(0 0 0 0); from inset(0 0 100% 0)
-```
+**Scroll-triggered image reveal** — IntersectionObserver, or Framer's `useInView` with `{ once: true, rootMargin: '-100px' }`, animating `clip-path` from `inset(0 0 100% 0)` to `inset(0 0 0 0)`.
 
 Never use `window.addEventListener('scroll')` directly. Use IntersectionObserver or Framer's scroll hooks.
 

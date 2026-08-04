@@ -1,7 +1,7 @@
 ---
 name: onboard
 description: "Create or improve onboarding experiences that help users understand, adopt, and succeed with the product quickly."
-version: 1.6.0
+version: 1.6.1
 ---
 
 > **Additional context needed**: the "aha moment" you want users to reach, and users' experience level.
@@ -36,14 +36,10 @@ Understand what users need to learn and why:
 Follow these core principles:
 
 ### Show, Don't Tell
-- Demonstrate with working examples, not just descriptions
-- Provide real functionality in onboarding, not separate tutorial mode
-- Use progressive disclosure, teach one thing at a time
+Onboarding runs on the real product, never in a parallel tutorial mode. A separate mode drifts from the product it teaches, and everything the user built in it is thrown away at the end.
 
 ### Make It Optional (When Possible)
-- Let experienced users skip onboarding
-- Don't block access to product
-- Provide "Skip" or "I'll explore on my own" options
+Skipping is a first-class path, not an escape hatch. Experienced users are the ones most likely to convert and the ones most damaged by being held.
 
 ### Time to Value
 - Get users to their "aha moment" ASAP
@@ -67,45 +63,16 @@ Create appropriate onboarding for the context:
 
 ### Initial Product Onboarding
 
-**Welcome Screen**:
-- Clear value proposition (what is this product?)
-- What users will learn/accomplish
-- Time estimate (honest about commitment)
-- Option to skip (for experienced users)
+The four beats are welcome, setup, concept, first success. What decides whether they work:
 
-**Account Setup**:
-- Minimal required information (collect more later)
-- Explain why you're asking for each piece of information
-- Smart defaults where possible
-- Social login when appropriate
-
-**Core Concept Introduction**:
-- Introduce 1-3 core concepts (not everything)
-- Use simple language and examples
-- Interactive when possible (do, don't just read)
-- Progress indication (step 1 of 3)
-
-**First Success**:
-- Guide users to accomplish something real
-- Pre-populated examples or templates
-- Celebrate completion (but don't overdo it)
-- Clear next steps
+- **An honest time estimate on the welcome screen**, and a skip that is as visible as the start. A time estimate that undershoots costs more trust than no estimate at all.
+- **Ask for the minimum, and say why for each field.** Everything else is collected later, in context, when the user has a reason to care.
+- **Introduce 1 to 3 core concepts, never the full model.** More than three and none of them are retained.
+- **The first success has to be real work, not a simulation.** Pre-populate an example so the action succeeds, but let the artifact it produces survive onboarding.
 
 ### Feature Discovery & Adoption
 
-**Empty States**:
-Instead of blank space, show:
-- What will appear here (description + screenshot/illustration)
-- Why it's valuable
-- Clear CTA to create first item
-- Example or template option
-
-Example:
-```
-No projects yet
-Projects help you organize your work and collaborate with your team.
-[Create your first project] or [Start from template]
-```
+**Empty States**: the single largest onboarding surface most products leave blank. Anatomy and the five types are below, under Empty State Design.
 
 **Contextual Tooltips**:
 - Appear at relevant moment (first time user sees feature)
@@ -127,68 +94,24 @@ Projects help you organize your work and collaborate with your team.
 
 ### Guided Tours & Walkthroughs
 
-**When to use**:
-- Complex interfaces with many features
-- Significant changes to existing product
-- Industry-specific tools needing domain knowledge
+A tour earns its cost on complex interfaces, after a significant redesign, and in domain tools where the vocabulary itself has to be taught. Outside those three, contextual tooltips do the same job for less.
 
-**How to design**:
-- Spotlight specific UI elements (dim rest of page)
-- Keep steps short (3-7 steps max per tour)
-- Allow users to click through tour freely
-- Include "Skip tour" option
-- Make replayable (help menu)
-
-**Best practices**:
-- Interactive over passive (let users click real buttons)
-- Focus on workflow, not features ("Create a project" not "This is the project button")
-- Provide sample data so actions work
+- **3 to 7 steps maximum per tour.** Beyond seven nobody finishes, and the steps after the seventh are the ones that were not worth a tour.
+- **Steps name a workflow, not a control.** "Create a project", not "This is the project button". A tour that labels the UI teaches nothing the UI was not already saying.
+- **Interactive over passive**, on real controls with real sample data, so the tour and the product cannot drift apart.
+- Free navigation, a visible "Skip tour", and replayable from the help menu.
 
 ### Interactive Tutorials
 
-**When to use**:
-- Users need hands-on practice
-- Concepts are complex or unfamiliar
-- High stakes (better to practice in safe environment)
-
-**How to design**:
-- Sandbox environment with sample data
-- Clear objectives ("Create a chart showing sales by region")
-- Step-by-step guidance
-- Validation (confirm they did it right)
-- Graduation moment (you're ready!)
+Reach for a sandbox when the concepts are unfamiliar or the real thing is high-stakes enough that practising on it is expensive. A tutorial needs a stated objective ("Create a chart showing sales by region"), validation that the user actually did it, and a graduation moment. Without validation it is a tour with extra steps.
 
 ### Documentation & Help
 
-**In-product help**:
-- Contextual help links throughout interface
-- Keyboard shortcut reference
-- Search-able help center
-- Video tutorials for complex workflows
-
-**Help patterns**:
-- `?` icon near complex features
-- "Learn more" links in tooltips
-- Keyboard shortcut hints (`⌘K` shown on search box)
+In-product help beats a help centre for anything a user hits mid-task: a `?` next to the complex control, "Learn more" inside the tooltip, the shortcut hint printed on the search box. Reserve the searchable centre and the video for what cannot be answered in place.
 
 ## Empty State Design
 
-Every empty state needs:
-
-### What Will Be Here
-"Your recent projects will appear here"
-
-### Why It Matters
-"Projects help you organize your work and collaborate with your team"
-
-### How to Get Started
-[Create project] or [Import from template]
-
-### Visual Interest
-Illustration or icon (not just text on blank page)
-
-### Contextual Help
-"Need help getting started? [Watch 2-min tutorial]"
+Every empty state answers four things: what will appear here, why that matters, how to start, and where to get help. Add an illustration so the state reads as designed rather than broken. An empty state that only says "No projects" is the one place a product tells a new user nothing, at the exact moment they have nothing else to read.
 
 **Empty state types**:
 - **First use**: Never used this feature (emphasize value, provide template)
@@ -199,20 +122,7 @@ Illustration or icon (not just text on blank page)
 
 ## Implementation Patterns
 
-### Technical approaches:
-
-**Tooltip libraries**: Tippy.js, Popper.js
-**Tour libraries**: Intro.js, Shepherd.js, React Joyride
-**Modal patterns**: Focus trap, backdrop, ESC to close
-**Progress tracking**: LocalStorage for "seen" states
-**Analytics**: Track completion, drop-off points
-
-**Storage patterns**:
-```javascript
-// Track which onboarding steps user has seen
-localStorage.setItem('onboarding-completed', 'true');
-localStorage.setItem('feature-tooltip-seen-reports', 'true');
-```
+Track seen-state per step, not per flow, so adding a step later does not re-trigger the whole tour for existing users. Instrument drop-off per step: the step users quit on is the one that failed, and it is the only measurement that tells you which one.
 
 **IMPORTANT**: Don't show same onboarding twice (annoying). Track completion and respect dismissals.
 

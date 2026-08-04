@@ -1,7 +1,7 @@
 ---
 name: resource-recipes
 description: "From a recommended resource to working code: how to fetch, optimize and wire each kind of asset (fonts, icons, color, illustrations, backgrounds, animation, charts)."
-version: 1.24.0
+version: 1.24.1
 ---
 
 # Resource recipes
@@ -10,18 +10,9 @@ For the sources with an open API, fetch the asset directly with the fetcher (see
 
 ## Fonts
 
-Self-host over a third-party CDN, it is faster, private and never breaks. Download the woff2 from the foundry or Google Fonts, subset it to the characters you ship, then declare it.
+Self-host over a third-party CDN, it is faster, private and never breaks. Download the woff2 from the foundry or Google Fonts, subset it to the characters you ship, then declare it with `font-display: swap` and a variable weight range where the face has one.
 
-```css
-@font-face {
-  font-family: "Brand";
-  src: url("/fonts/brand.woff2") format("woff2");
-  font-weight: 400 700;
-  font-display: swap;
-}
-```
-
-Preload the one weight above the fold: `<link rel="preload" as="font" type="font/woff2" href="/fonts/brand.woff2" crossorigin>`. If you must use a CDN, add `<link rel="preconnect">` to its origin.
+Preload the one weight above the fold: `<link rel="preload" as="font" type="font/woff2" href="/fonts/brand.woff2" crossorigin>`. The `crossorigin` attribute is required even same-origin, or the preload is fetched twice and buys nothing. If you must use a CDN, add `<link rel="preconnect">` to its origin.
 
 ### Subset a display face to its literal string
 
@@ -43,30 +34,13 @@ Three ways, in order of preference. Inline the SVG for the few icons a page uses
 
 ## Color
 
-Turn a picked palette into CSS custom properties, one scale per role, not scattered hex.
-
-```css
-:root {
-  --accent-500: #6d28d9;
-  --accent-600: #5b21b6;
-  --ink: #1e293b;
-  --surface: #ffffff;
-}
-```
+Turn a picked palette into CSS custom properties, one scale per role, not scattered hex. Roles first (`--ink`, `--surface`, `--accent-500`), never a raw hex at a use site.
 
 Generate the tokens with `tools/design-system/scripts/theme_css.py`, which also checks the pairs for WCAG contrast.
 
 ## Illustrations
 
-For SVG, download it, run it through SVGO, then inline it or reference it with `<img>`. For raster, convert to AVIF and WebP and serve responsive sizes.
-
-```html
-<picture>
-  <source type="image/avif" srcset="hero.avif">
-  <source type="image/webp" srcset="hero.webp">
-  <img src="hero.jpg" width="1200" height="800" alt="...">
-</picture>
-```
+For SVG, download it, run it through SVGO, then inline it or reference it with `<img>`. For raster, convert to AVIF and WebP and serve them through `<picture>` with the original as the `<img>` fallback, ordered AVIF then WebP then legacy since the browser takes the first source it understands. Keep `width` and `height` on the `<img>` in every case.
 
 ## Backgrounds and patterns
 

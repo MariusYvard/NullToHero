@@ -1,7 +1,7 @@
 ---
 name: image-strategy
 description: "Image decisions determine Largest Contentful Paint, bandwidth cost, and perceived quality. The wrong format ships 800 KB where 80 KB would suffice. The wrong markup blocks."
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Image Strategy
@@ -132,18 +132,7 @@ Target: LCP under 2.5 seconds at 75th percentile, measured in real user data, no
 
 ## Lazy Loading and Below-the-Fold
 
-Every image below the initial viewport should be lazy.
-
-```html
-<img src="thumb-400.webp"
-     srcset="thumb-400.webp 400w, thumb-800.webp 800w"
-     sizes="(min-width: 768px) 400px, 50vw"
-     width="400"
-     height="300"
-     loading="lazy"
-     decoding="async"
-     alt="">
-```
+Every image below the initial viewport should be lazy: `loading="lazy"` and `decoding="async"`, on top of the `srcset`, `sizes`, `width` and `height` the canonical block above already carries.
 
 Caveats:
 - Native `loading="lazy"` triggers from the viewport plus a buffer (browser-defined). Do not rely on a tight visibility margin.
@@ -154,21 +143,7 @@ Caveats:
 
 SVG is the highest-leverage format when it fits. Inline for hot assets, external file for cold ones.
 
-Inline SVG (for icons used at small sizes, animated, or themed):
-
-```html
-<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-  <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/>
-</svg>
-```
-
-Inline SVG inherits `currentColor`, which means it themes for free with text. External `<img>` does not.
-
-External SVG (for logos, large illustrations, content):
-
-```html
-<img src="logo.svg" width="120" height="32" alt="Company Name">
-```
+Inline SVG (icons at small sizes, animated, or themed) inherits `currentColor`, so it themes for free with the text around it. An external `<img src="logo.svg">` does not, and that is the whole reason to inline an icon and leave a logo external. Give an inline decorative icon `viewBox`, explicit `width` and `height`, `aria-hidden="true"` and `focusable="false"`.
 
 SVG optimization:
 - Run through SVGO with default settings. Strip metadata, comments, hidden layers.
@@ -182,29 +157,17 @@ Never:
 
 ## Art Direction
 
-When the image needs to be cropped or composed differently per viewport, use `<picture>` with media queries.
+When the image needs to be cropped or composed differently per viewport, use `<picture>` with `media` on the sources.
+
+The trap: `media` and `type` multiply. One `<source>` per crop AND per format, widest `media` first, because the browser takes the first source whose `media` matches and whose `type` it supports.
 
 ```html
 <picture>
-  <source media="(min-width: 1024px)"
-          type="image/avif"
-          srcset="hero-wide-1600.avif 1600w, hero-wide-2400.avif 2400w"
-          sizes="100vw">
-  <source media="(min-width: 1024px)"
-          type="image/webp"
-          srcset="hero-wide-1600.webp 1600w, hero-wide-2400.webp 2400w"
-          sizes="100vw">
-  <source type="image/avif"
-          srcset="hero-portrait-600.avif 600w, hero-portrait-1200.avif 1200w"
-          sizes="100vw">
-  <source type="image/webp"
-          srcset="hero-portrait-600.webp 600w, hero-portrait-1200.webp 1200w"
-          sizes="100vw">
-  <img src="hero-portrait-600.jpg"
-       width="1200"
-       height="1800"
-       alt="..."
-       fetchpriority="high">
+  <source media="(min-width: 1024px)" type="image/avif" srcset="hero-wide-1600.avif 1600w, hero-wide-2400.avif 2400w" sizes="100vw">
+  <source media="(min-width: 1024px)" type="image/webp" srcset="hero-wide-1600.webp 1600w, hero-wide-2400.webp 2400w" sizes="100vw">
+  <source type="image/avif" srcset="hero-portrait-600.avif 600w, hero-portrait-1200.avif 1200w" sizes="100vw">
+  <source type="image/webp" srcset="hero-portrait-600.webp 600w, hero-portrait-1200.webp 1200w" sizes="100vw">
+  <img src="hero-portrait-600.jpg" width="1200" height="1800" alt="..." fetchpriority="high">
 </picture>
 ```
 
@@ -212,23 +175,10 @@ Art direction is for true crops, not just sizes. If the desktop and mobile show 
 
 ## Alt Text Rules
 
-`alt` is not optional. It is a content attribute and a legal accessibility requirement.
+`alt` is not optional. It is a content attribute and a legal accessibility requirement. The decision tree per image kind (informative, decorative, functional, complex, SVG) belongs to [accessibility-engineering.md](accessibility-engineering.md). Two rulings are this file's own:
 
-Decision tree:
-- Image conveys information not present elsewhere → describe the information, not the image.
-- Image is purely decorative → `alt=""` (empty string, not omitted).
-- Image is a functional control (icon button) → `alt` describes the action.
-- Image is a logo → `alt="<Brand name>"`, not `alt="<Brand name> logo"`.
-- Image is a complex chart → short `alt` plus a long description in adjacent text or `aria-describedby`.
-
-Patterns:
-- "Photo of three engineers reviewing code on a whiteboard" describes the image, weaker.
-- "Three engineers reviewing the API design on a whiteboard" describes the content, stronger.
-
-Never:
-- `alt="image"` or `alt="photo"` (zero information).
-- File name as alt (`alt="IMG_4827.jpg"`).
-- Stuffing keywords (`alt="best cheap running shoes 2025 buy online"`).
+- A logo takes `alt="<Brand name>"`, not `alt="<Brand name> logo"`. The word "logo" is noise a screen reader repeats on every page.
+- A decorative image takes `alt=""`, an empty string, never an omitted attribute. Omitted is not empty, and the checklist below tests for exactly that.
 
 ## Image Audit Checklist
 
@@ -272,14 +222,7 @@ For every shipped page:
 
 ## External tools
 
-- **Squoosh** (client-side image compression and format conversion). https://squoosh.app/
-- **SvgOMG** (web UI for SVGO with per-option control). https://jakearchibald.github.io/svgomg/
-- **TinyPNG** (lossy compression for PNG and JPEG). https://tinypng.com/
-- **Optimizilla** (JPEG and PNG optimizer with quality control). https://imagecompressor.com/
-- **Vecta Nano** (lossless SVG compression that strips redundant data). https://vecta.io/nano
-- **Watermarkly Compress** (client-side JPEG compression without upload). https://watermarkly.com/compress-jpeg/
-- **CompressImage.io** (offline compression with WebP output). https://compressimage.io/
-- **EZGif** (GIF editing with WebP conversion). https://ezgif.com/
+Read the `image-optimizer` and `svg-optimizer` rows of `tools/design-system/data/generators.csv` (Squoosh, TinyPNG, Optimizilla, SvgOMG, Vecta Nano and peers) rather than naming a tool from memory. The CSV carries the URL and the cost column, and it is the copy the liveness check maintains. `skills/seo/references/images.md` points at the same rows.
 
 ## Where to source images
 

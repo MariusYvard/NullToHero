@@ -1,26 +1,26 @@
 ---
 name: gestalt
 description: "Gestalt principles of perception (proximity, similarity, closure, continuity, figure-ground) applied to layout, grouping, and visual hierarchy."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Gestalt Principles
 
 The cognitive laws that govern how humans perceive visual groupings. Every layout choice activates one or more of these principles, whether the designer intends it or not. Use this reference whenever a composition feels cluttered, ambiguous, or arbitrary. Pair with [layout.md](layout.md), [cognitive-load.md](cognitive-load.md), and [shape.md](shape.md).
 
-The Gestalt school (Wertheimer, Koffka, Köhler, 1920s) established the foundational claim that the brain perceives unified wholes, not isolated parts. Modern interface design rests on this premise. A page is not a list of elements, it is a perceived structure.
-
 ## The Seven Principles
 
-| Principle | Definition | UI lever | Failure mode if violated |
-|---|---|---|---|
-| Proximity | Elements close in space are perceived as related | Spacing scale, gap utilities | Form labels read as belonging to the wrong field |
-| Similarity | Elements sharing visual traits are perceived as a group | Color, shape, typography, weight | Inconsistent button styles fracture the action vocabulary |
-| Closure | The mind completes incomplete shapes | Implied bounds, partial dividers, focus rings | Over-drawn containers add noise without informing |
-| Continuity | The eye follows the smoothest path | Baselines, gridlines, motion trails | Misaligned columns force the eye to jump |
-| Figure-Ground | Foreground separates from background | Contrast, elevation, depth cues | Text floats over an active background, illegible |
-| Common Fate | Elements moving together are perceived as related | Stagger, shared animation timeline | Two related items animate independently, breaking the group |
-| Symmetry and Order | Symmetric arrangements feel stable and balanced | Centering, mirrored layouts, balanced asymmetry | Random offsets read as broken, not intentional |
+The definitions are assumed. What follows is the lever each principle gives you and what breaks when it is violated.
+
+| Principle | UI lever | Failure mode if violated |
+|---|---|---|
+| Proximity | Spacing scale, gap utilities | Form labels read as belonging to the wrong field |
+| Similarity | Color, shape, typography, weight | Inconsistent button styles fracture the action vocabulary |
+| Closure | Implied bounds, partial dividers, focus rings | Over-drawn containers add noise without informing |
+| Continuity | Baselines, gridlines, motion trails | Misaligned columns force the eye to jump |
+| Figure-Ground | Contrast, elevation, depth cues | Text floats over an active background, illegible |
+| Common Fate | Stagger, shared animation timeline | Two related items animate independently, breaking the group |
+| Symmetry and Order | Centering, mirrored layouts, balanced asymmetry | Random offsets read as broken, not intentional |
 
 ## Operational Translations
 
@@ -55,16 +55,7 @@ A focus ring is a closure cue. A card outline is a closure cue. Each one adds vi
 
 ### Continuity governs alignment
 
-A baseline grid is a continuity device. Alignment to a visible or implied vertical line lets the eye glide. Random margins break the line and add cognitive cost.
-
-```css
-:root {
-  --grid: 4px;
-  --gutter: calc(var(--grid) * 6); /* 24px */
-}
-
-main { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gutter); }
-```
+A baseline grid is a continuity device. Alignment to a visible or implied vertical line lets the eye glide. Random margins break the line and add cognitive cost. Derive the gutter from the grid unit (4px base, 24px gutter on a 12-column layout is the common resting point) rather than picking it per section.
 
 ### Figure-Ground demands contrast
 

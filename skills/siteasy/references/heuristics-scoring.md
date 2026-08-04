@@ -1,7 +1,7 @@
 ---
 name: heuristics-scoring
 description: "Score each of Nielsen's 10 Usability Heuristics on a 0-4 scale. Be honest - a 4 means genuinely excellent, not 'good enough.'"
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Heuristics Scoring Guide
@@ -11,15 +11,6 @@ Score each of Nielsen's 10 Usability Heuristics on a 0–4 scale. Be honest — 
 ## Nielsen's 10 Heuristics
 
 ### 1. Visibility of System Status
-
-Keep users informed about what's happening through timely, appropriate feedback.
-
-**Check for**:
-- Loading indicators during async operations
-- Confirmation of user actions (save, submit, delete)
-- Progress indicators for multi-step processes
-- Current location in navigation (breadcrumbs, active states)
-- Form validation feedback (inline, not just on submit)
 
 **Scoring**:
 | Score | Criteria |
@@ -32,15 +23,6 @@ Keep users informed about what's happening through timely, appropriate feedback.
 
 ### 2. Match Between System and Real World
 
-Speak the user's language. Follow real-world conventions. Information appears in natural, logical order.
-
-**Check for**:
-- Familiar terminology (no unexplained jargon)
-- Logical information order matching user expectations
-- Recognizable icons and metaphors
-- Domain-appropriate language for the target audience
-- Natural reading flow (left-to-right, top-to-bottom priority)
-
 **Scoring**:
 | Score | Criteria |
 |-------|----------|
@@ -51,15 +33,6 @@ Speak the user's language. Follow real-world conventions. Information appears in
 | 4 | Speaks the user's language fluently throughout |
 
 ### 3. User Control and Freedom
-
-Users need a clear "emergency exit" from unwanted states without extended dialogue.
-
-**Check for**:
-- Undo/redo functionality
-- Cancel buttons on forms and modals
-- Clear navigation back to safety (home, previous)
-- Easy way to clear filters, search, selections
-- Escape from long or multi-step processes
 
 **Scoring**:
 | Score | Criteria |
@@ -72,15 +45,6 @@ Users need a clear "emergency exit" from unwanted states without extended dialog
 
 ### 4. Consistency and Standards
 
-Users shouldn't wonder whether different words, situations, or actions mean the same thing.
-
-**Check for**:
-- Consistent terminology throughout the interface
-- Same actions produce same results everywhere
-- Platform conventions followed (standard UI patterns)
-- Visual consistency (colors, typography, spacing, components)
-- Consistent interaction patterns (same gesture = same behavior)
-
 **Scoring**:
 | Score | Criteria |
 |-------|----------|
@@ -91,15 +55,6 @@ Users shouldn't wonder whether different words, situations, or actions mean the 
 | 4 | Fully consistent — cohesive system, predictable behavior |
 
 ### 5. Error Prevention
-
-Better than good error messages is a design that prevents problems in the first place.
-
-**Check for**:
-- Confirmation before destructive actions (delete, overwrite)
-- Constraints preventing invalid input (date pickers, dropdowns)
-- Smart defaults that reduce errors
-- Clear labels that prevent misunderstanding
-- Autosave and draft recovery
 
 **Scoring**:
 | Score | Criteria |
@@ -112,15 +67,6 @@ Better than good error messages is a design that prevents problems in the first 
 
 ### 6. Recognition Rather Than Recall
 
-Minimize memory load. Make objects, actions, and options visible or easily retrievable.
-
-**Check for**:
-- Visible options (not buried in hidden menus)
-- Contextual help when needed (tooltips, inline hints)
-- Recent items and history
-- Autocomplete and suggestions
-- Labels on icons (not icon-only navigation)
-
 **Scoring**:
 | Score | Criteria |
 |-------|----------|
@@ -131,15 +77,6 @@ Minimize memory load. Make objects, actions, and options visible or easily retri
 | 4 | Everything discoverable — users never need to memorize |
 
 ### 7. Flexibility and Efficiency of Use
-
-Accelerators — invisible to novices — speed up expert interaction.
-
-**Check for**:
-- Keyboard shortcuts for common actions
-- Customizable interface elements
-- Recent items and favorites
-- Bulk/batch actions
-- Power user features that don't complicate the basics
 
 **Scoring**:
 | Score | Criteria |
@@ -152,15 +89,6 @@ Accelerators — invisible to novices — speed up expert interaction.
 
 ### 8. Aesthetic and Minimalist Design
 
-Interfaces should not contain irrelevant or rarely needed information. Every element should serve a purpose.
-
-**Check for**:
-- Only necessary information visible at each step
-- Clear visual hierarchy directing attention
-- Purposeful use of color and emphasis
-- No decorative clutter competing for attention
-- Focused, uncluttered layouts
-
 **Scoring**:
 | Score | Criteria |
 |-------|----------|
@@ -172,15 +100,6 @@ Interfaces should not contain irrelevant or rarely needed information. Every ele
 
 ### 9. Help Users Recognize, Diagnose, and Recover from Errors
 
-Error messages should use plain language, precisely indicate the problem, and constructively suggest a solution.
-
-**Check for**:
-- Plain language error messages (no error codes for users)
-- Specific problem identification ("Email is missing @" not "Invalid input")
-- Actionable recovery suggestions
-- Errors displayed near the source of the problem
-- Non-blocking error handling (don't wipe the form)
-
 **Scoring**:
 | Score | Criteria |
 |-------|----------|
@@ -191,15 +110,6 @@ Error messages should use plain language, precisely indicate the problem, and co
 | 4 | Perfect recovery — pinpoints issue, suggests fix, preserves user work |
 
 ### 10. Help and Documentation
-
-Even if the system is usable without docs, help should be easy to find, task-focused, and concise.
-
-**Check for**:
-- Searchable help or documentation
-- Contextual help (tooltips, inline hints, guided tours)
-- Task-focused organization (not feature-organized)
-- Concise, scannable content
-- Easy access without leaving current context
 
 **Scoring**:
 | Score | Criteria |

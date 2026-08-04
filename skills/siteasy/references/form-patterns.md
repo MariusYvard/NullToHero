@@ -1,7 +1,7 @@
 ---
 name: form-patterns
 description: "Forms are the highest-friction surface of most products. Every additional field, every ambiguous label, every late-fire validation message increases drop-off. This reference."
-version: 1.10.0
+version: 1.10.1
 ---
 
 # Form Patterns
@@ -22,14 +22,7 @@ Exceptions where side-by-side is acceptable:
 Never:
 - Stack independent fields side by side to "save vertical space". Vertical space is cheap, attention is not.
 
-```css
-.form-field-group { display: grid; gap: 6px; }
-.form { display: grid; gap: 20px; max-width: 480px; }
-
-@media (min-width: 600px) {
-  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-}
-```
+Working defaults: form capped around `480px`, `20px` between fields, `6px` between a label and its input, and the two-up row only above `600px` so it stacks on a phone without a second rule.
 
 ### Label placement
 
@@ -40,25 +33,13 @@ Top-aligned labels are the default. Eye movement is uniform (label → input →
 | Top | Default for all forms | Never (this is the default) |
 | Inline (left) | Dense admin forms, predictable scan path | Mobile, internationalization (label length varies) |
 | Floating | Branded marketing forms, when space is constrained | High-stakes flows (label disappears, accessibility risk) |
-| Placeholder-as-label | Never | Always — fails WCAG 2.5.3 and disappears on focus |
+| Placeholder-as-label | Never | Always: fails WCAG 2.5.3 and disappears on focus |
 
-Required indicator: asterisk after the label, with an aria-label or sr-only explanation:
-
-```html
-<label for="email">Email <span aria-hidden="true">*</span><span class="sr-only">required</span></label>
-<input id="email" type="email" required autocomplete="email">
-```
+Required indicator: asterisk after the label, `aria-hidden` on the glyph and an sr-only "required" beside it. The asterisk alone is silent to a screen reader, and `aria-label` on the label element would replace the visible text rather than add to it.
 
 ### Group related fields
 
 Wrap semantically related groups (shipping address, card details) in `<fieldset>` with a `<legend>`. Screen readers announce the legend with each field, preserving the context that sighted users get from proximity.
-
-```html
-<fieldset>
-  <legend>Shipping address</legend>
-  <!-- address fields -->
-</fieldset>
-```
 
 ## Autocomplete Vocabulary
 
@@ -113,22 +94,7 @@ Rules:
 - Adjacent. Error appears next to the field, not at the top of the form (or both, with a link to the field).
 - Persistent. The message stays until the user corrects the field.
 - Polite tone. Errors are not the user's fault first, they are the system's failure to communicate.
-- Accessible. `aria-describedby` on the input pointing to the error message.
-
-```html
-<div class="field" data-error="true">
-  <label for="email">Email</label>
-  <input id="email"
-         type="email"
-         autocomplete="email"
-         aria-invalid="true"
-         aria-describedby="email-error"
-         required>
-  <p id="email-error" class="error" role="alert">
-    Email must include an @ symbol, for example name@example.com.
-  </p>
-</div>
-```
+- Accessible. `aria-describedby` on the input pointing to the error message, `aria-invalid="true"` on the input, and `role="alert"` on the message so it is announced when it appears rather than only when the field is next focused.
 
 ### Inline success feedback
 
@@ -162,20 +128,11 @@ Avoid for:
 - Postal codes (international variance)
 - Anything with a less-strict format
 
-When using a mask, also include a visible format hint in the label or below the input:
-
-```html
-<label for="phone">Phone <span class="hint">(US format: 555-555-5555)</span></label>
-<input id="phone" type="tel" autocomplete="tel" pattern="\d{3}-\d{3}-\d{4}">
-```
+When using a mask, also include a visible format hint in the label itself ("Phone (US format: 555-555-5555)"), not in the placeholder, and back it with `pattern` so the constraint survives a paste.
 
 ### Numeric inputs
 
-Always use `inputmode` to control the mobile keyboard:
-
-```html
-<input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="postal-code">
-```
+Always use `inputmode` to control the mobile keyboard: `type="text" inputmode="numeric" pattern="[0-9]*"` plus the matching `autocomplete`.
 
 `type="number"` is risky: it allows scroll wheel changes, has spinner controls, and rejects non-numeric pastes (which can confuse password manager fills). For postal codes, card numbers, and codes, prefer `type="text"` with `inputmode="numeric"`.
 
@@ -193,15 +150,7 @@ Always use `inputmode` to control the mobile keyboard:
 
 ### File upload
 
-Native file inputs are ugly but accessible. Style by hiding the input and pairing with a label:
-
-```html
-<label for="file-upload" class="file-upload-button">
-  Choose a file
-  <input id="file-upload" type="file" accept="image/png, image/jpeg, image/avif">
-</label>
-<output id="file-name" aria-live="polite"></output>
-```
+Native file inputs are ugly but accessible. Style by visually hiding the input inside its own `<label>` (never `display: none`, which removes it from the tab order), constrain with `accept`, and echo the chosen filename into an `<output aria-live="polite">`: the native control announces the selection, a styled one does not.
 
 Drag-and-drop is enhancement, not replacement. The `<input type="file">` must always work. See WCAG 2.5.7 in [wcag-2-2.md](wcag-2-2.md).
 
@@ -232,18 +181,7 @@ See [wcag-2-2.md](wcag-2-2.md) for the full 3.3.8 spec. Operational rules:
 - Support password managers via `autocomplete="username"` and `autocomplete="current-password"`.
 - Offer at least one non-cognitive alternative: magic link, OAuth, passkey, biometric.
 - CAPTCHA, when used, must have an accessible audio or non-image alternative.
-- Two-factor flows: allow paste of the code, and accept the code as a single field, not six split inputs (or use `autocomplete="one-time-code"` on a single field, which iOS auto-fills from SMS).
-
-```html
-<label for="otp">One-time code</label>
-<input id="otp"
-       type="text"
-       inputmode="numeric"
-       autocomplete="one-time-code"
-       pattern="\d{6}"
-       maxlength="6"
-       required>
-```
+- Two-factor flows: allow paste of the code, and accept the code as a single field, not six split inputs (or use `autocomplete="one-time-code"` on a single field, which iOS auto-fills from SMS). One `type="text"` with `inputmode="numeric"`, `pattern="\d{6}"` and `maxlength="6"` does everything six boxes do, and it can be pasted into.
 
 ## Form Audit Checklist
 

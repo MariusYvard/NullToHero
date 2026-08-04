@@ -1,7 +1,7 @@
 ---
 name: extract
 description: "Identify reusable patterns, components, and design tokens, then extract and consolidate them into the design system for systematic reuse."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Extract Flow
@@ -29,41 +29,21 @@ Assess value: only extract things used 3+ times with the same intent. Premature 
 
 ## Step 3: Plan Extraction
 
-Create a systematic plan:
-
-- **Components to extract**: Which UI elements become reusable components?
-- **Tokens to create**: Which hard-coded values become design tokens?
-- **Variants to support**: What variations does each component need?
-- **Naming conventions**: Component names, token names, prop names that match existing patterns
-- **Migration path**: How to refactor existing uses to consume the new shared versions
+Decide, before writing anything: which elements become components, which hard-coded values become tokens, which variants each component owes, what the names are (matching the project's existing conventions, not your preferred ones), and how existing call sites migrate.
 
 **IMPORTANT**: Design systems grow incrementally. Extract what is clearly reusable now, not everything that might someday be reusable.
 
 ## Step 4: Extract & Enrich
 
-Build improved, reusable versions:
-
-- **Components**: Clear props API with sensible defaults, proper variants for different use cases, accessibility built in (ARIA, keyboard navigation, focus management), documentation and usage examples
-- **Design tokens**: Clear naming (primitive vs semantic), proper hierarchy and organization, documentation of when to use each token
-- **Patterns**: When to use this pattern, code examples, variations and combinations
+Build improved, reusable versions. The extracted component is not a copy of the best of the three call sites: it owes a props API with sensible defaults, the variants the three sites actually differed on, and accessibility built in (ARIA, keyboard navigation, focus management) even where the originals lacked it. Tokens get primitive-versus-semantic naming and a stated rule for when to use each. Patterns get the "when to use this" that a code sample cannot carry.
 
 ## Step 5: Migrate
 
-Replace existing uses with the new shared versions:
-
-- **Find all instances**: Search for the patterns you extracted
-- **Replace systematically**: Update each use to consume the shared version
-- **Test thoroughly**: Ensure visual and functional parity
-- **Delete dead code**: Remove the old implementations
+Extraction is not done until the old implementations are deleted. Find every instance, replace it with the shared version, verify visual and functional parity, then remove the originals. A shared component sitting beside the three copies it was meant to replace has made the codebase worse, not better.
 
 ## Step 6: Document
 
-Update design system documentation:
-
-- Add new components to the component library
-- Document token usage and values
-- Add examples and guidelines
-- Update any Storybook or component catalog
+Add the new components to the library, document token values and their usage rule, and update Storybook or whatever catalog the project keeps. An undocumented shared component is re-implemented by the next person who needs it.
 
 **NEVER**:
 - Extract one-off, context-specific implementations without generalization

@@ -1,14 +1,14 @@
 ---
 name: wcag-2-2
 description: "The Web Content Accessibility Guidelines 2.2 (W3C Recommendation, October 2023) adds nine success criteria to WCAG 2.1, targeting cognitive disabilities, motor impairments, and touch interaction."
-version: 1.10.0
+version: 1.10.1
 ---
 
 # WCAG 2.2 Compliance Reference
 
 The Web Content Accessibility Guidelines 2.2 (W3C Recommendation, October 2023) adds nine success criteria to WCAG 2.1, targeting cognitive disabilities, motor impairments, and low-vision mobile users. This reference is the operational checklist for every shipped interface. Pair with [accessibility-engineering.md](accessibility-engineering.md), [parallax.md](parallax.md), and [form-patterns.md](form-patterns.md).
 
-WCAG is structured around four principles (POUR): Perceivable, Operable, Understandable, Robust. Compliance levels: A (minimum), AA (standard target), AAA (enhanced). Ship to AA across the board. Reach AAA where structural cost is acceptable.
+Ship to AA across the board. Reach AAA only where the structural cost is acceptable, which in practice means 2.4.12 and 2.4.13 on a focus system you already control, and rarely the rest.
 
 ## New Criteria in WCAG 2.2
 
@@ -28,12 +28,7 @@ WCAG is structured around four principles (POUR): Perceivable, Operable, Underst
 
 Sticky headers, cookie banners, chat widgets, and floating CTAs are the primary offenders. When focus moves to an element behind one of these, the user navigating by keyboard sees nothing.
 
-Failure pattern:
-
-```css
-.sticky-header { position: sticky; top: 0; }
-/* Tab to a link near the top of the article → focus ring hidden behind header */
-```
+The failure is silent: `.sticky-header { position: sticky; top: 0 }` plus a Tab into the top of an article, and the focus ring sits behind the header with nothing on screen to say where focus went.
 
 Fix with `scroll-padding`:
 
@@ -65,15 +60,7 @@ Acceptable alternatives:
 - Numeric input next to a slider
 - Zoom in/out buttons next to a pannable map
 
-```html
-<div role="list" aria-label="Priority order">
-  <div role="listitem">
-    <span>Task A</span>
-    <button aria-label="Move Task A up">↑</button>
-    <button aria-label="Move Task A down">↓</button>
-  </div>
-</div>
-```
+The alternative has to be visible and reachable, not a hidden keyboard shortcut. Per-item up and down buttons with individual labels ("Move Task A up") are the cheapest compliant pattern for a reorderable list.
 
 ## 2.5.8 Target Size
 
@@ -154,13 +141,6 @@ Implementation patterns:
 - Auto-fill name and email at checkout when the user is logged in.
 - Browser autofill attributes on form fields.
 
-```html
-<input type="email" name="email" autocomplete="email" required>
-<input type="text" name="given-name" autocomplete="given-name" required>
-<input type="text" name="family-name" autocomplete="family-name" required>
-<input type="tel" name="phone" autocomplete="tel">
-```
-
 See [form-patterns.md](form-patterns.md) for the full autocomplete vocabulary.
 
 ## 3.3.8 Accessible Authentication
@@ -180,44 +160,18 @@ Anti-patterns that fail this criterion:
 - Password complexity rules that exceed what a manager can handle
 - Two-factor flows that require copying a code under a 30-second timer
 
-```html
-<!-- Compliant: password manager friendly, paste enabled, toggle visible -->
-<form>
-  <label for="email">Email</label>
-  <input id="email" type="email" autocomplete="email" required>
-
-  <label for="password">Password</label>
-  <input id="password" type="password" autocomplete="current-password" required>
-
-  <button type="button" aria-pressed="false" data-toggle="password">Show password</button>
-  <button type="submit">Sign in</button>
-</form>
-```
-
-```css
-/* Never disable paste */
-input[type="password"] { user-select: text; -webkit-user-select: text; }
-```
+A compliant login is unremarkable: `autocomplete="email"` and `autocomplete="current-password"` so managers fill it, no `onpaste` handler anywhere near the password field, and a `Show password` toggle carrying `aria-pressed`. The failure is almost always something the team added on purpose.
 
 ## Carry-Forward Criteria from WCAG 2.1
 
-These remain in force at AA. Verify alongside 2.2 additions.
+2.2 is a superset, so an audit that checks only the nine new criteria has checked a tenth of the standard. Contrast (1.4.3, 1.4.11) is measured in [color-and-contrast.md](color-and-contrast.md), keyboard and focus (2.1.1, 2.4.7, 4.1.2) in [accessibility-engineering.md](accessibility-engineering.md), errors (3.3.1, 3.3.3) in [form-patterns.md](form-patterns.md).
 
-| Criterion | Level | What it requires |
-|---|---|---|
-| 1.4.3 Contrast (Minimum) | AA | Text contrast ratio ≥ 4.5:1 (3:1 for large text) |
-| 1.4.10 Reflow | AA | Content reflows to 320px width without horizontal scroll |
-| 1.4.11 Non-Text Contrast | AA | UI components and graphics ≥ 3:1 against adjacent colors |
-| 1.4.12 Text Spacing | AA | User-adjusted spacing does not break the layout |
-| 2.1.1 Keyboard | A | All functionality available via keyboard |
-| 2.1.4 Character Key Shortcuts | A | Single-character shortcuts can be disabled or remapped |
-| 2.4.7 Focus Visible | AA | Keyboard focus indicator is visible |
-| 2.5.3 Label in Name | A | Visible label is part of the accessible name |
-| 3.2.3 Consistent Navigation | AA | Navigation appears in the same relative order across pages |
-| 3.3.1 Error Identification | A | Errors are identified and described in text |
-| 3.3.3 Error Suggestion | AA | When known, the system suggests how to fix the error |
-| 4.1.2 Name, Role, Value | A | All interactive elements expose name, role, value to AT |
-| 4.1.3 Status Messages | AA | Status changes are programmatically determinable (aria-live) |
+The four that teams skip because no automated tool flags them:
+
+- **1.4.10 Reflow.** 320px wide, no horizontal scroll. Data tables and fixed-width hero art are where it breaks.
+- **1.4.12 Text Spacing.** The user overrides line-height and letter-spacing; nothing may clip or overlap. Fixed-height buttons and single-line truncation fail here.
+- **2.1.4 Character Key Shortcuts.** A single-letter shortcut must be disableable or remappable, otherwise voice-control users trigger it by speaking.
+- **2.5.3 Label in Name.** The accessible name starts with the visible text. `aria-label="Submit"` on a button reading "Send" breaks every voice command aimed at it.
 
 ## Audit Checklist
 
@@ -239,7 +193,7 @@ Per shipped page, every release:
 | Reflow at 320px | Resize window | Polypane, browser devtools |
 | Reduced motion | Toggle OS setting, verify behavior | Manual |
 
-Automated tools catch roughly 30 percent of issues. The other 70 percent require manual testing. Do not ship on a green axe scan alone.
+Automated coverage is partial, and the measured figures are in [accessibility-engineering.md](accessibility-engineering.md) with their source. Whichever number you use, the rows above marked Manual are the ones no scanner reaches. Do not ship on a green axe scan alone.
 
 ## Accessible vs Inclusive vs Universal
 

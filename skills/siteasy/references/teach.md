@@ -1,7 +1,7 @@
 ---
 name: teach
 description: "Interactive teaching mode: inspects a project, writes PRODUCT.md at the project root and delegates DESIGN.md to /siteasy document, so the two files explain the design system together."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Teach Flow
@@ -38,12 +38,7 @@ If teach was invoked as a setup blocker by another command, such as `/siteasy bu
 
 Before asking questions, thoroughly scan the project to discover what you can:
 
-- **README and docs**: Project purpose, target audience, any stated goals
-- **Package.json / config files**: Tech stack, dependencies, existing design libraries
-- **Existing components**: Current design patterns, spacing, typography in use
-- **Brand assets**: Logos, favicons, color values already defined
-- **Design tokens / CSS variables**: Existing color palettes, font stacks, spacing scales
-- **Any style guides or brand documentation**
+README and docs, package and config files, existing components, brand assets (logos, favicons, committed color values), design tokens and CSS variables, and any style guide or brand documentation.
 
 Also form a **register hypothesis** from what you find:
 
@@ -64,16 +59,11 @@ If the tool is unavailable or the user cannot answer, do not stall the setup. Ap
 
 If the repo is empty or the user's brief is sparse, run a short interview before proposing PRODUCT.md. Do **not** turn a one-sentence request into a complete inferred PRODUCT.md and ask for blanket confirmation.
 
-- Use the harness's structured question tool when one exists. Otherwise, ask directly in chat and stop.
 - Ask **2-3 questions per round**, then wait for answers.
-- Use inferred answers as hypotheses or options, not as finished facts.
+- Round 1 establishes register, users/purpose, and desired outcome. Round 2 establishes brand personality or references, anti-references, and accessibility needs.
 - Complete at least one real user-answer round before drafting PRODUCT.md, unless every required answer is directly discoverable from repo docs.
-- Round 1 should establish register, users/purpose, and desired outcome.
-- Round 2 should establish brand personality or references, anti-references, and accessibility needs.
-
-### Minimum viable interview
-
-Ask enough to complete PRODUCT.md. At minimum, cover register confirmation, users and purpose, brand personality, anti-references, and accessibility needs unless each answer is directly discoverable from repo context. After at least one interview round, you may propose inferred answers, but the user must confirm them before you write PRODUCT.md. Never synthesize PRODUCT.md from the original task prompt alone.
+- After that round you may propose inferred answers, as hypotheses or options rather than finished facts, but the user confirms them before you write the file.
+- Never synthesize PRODUCT.md from the original task prompt alone.
 
 ### Register (ask first, it shapes everything below)
 
@@ -84,29 +74,25 @@ If Step 2 produced a clear hypothesis, lead with it: *"From the codebase, this l
 If the signal is genuinely split (e.g. a product with a big marketing landing), STOP and call the AskUserQuestion tool to clarify. Ask which register describes the **primary** surface. The register can be overridden per task later, but PRODUCT.md carries one default.
 
 ### Users & Purpose
-- Who uses this? What's their context when using it?
-- What job are they trying to get done?
-- For brand: what emotions should the interface evoke? (confidence, delight, calm, urgency)
-- For product: what workflow are they in? What's the primary task on any given screen?
+
+Who uses this, in what context, for what job. Then split by register: for brand, what emotions the interface should evoke (confidence, delight, calm, urgency); for product, what workflow they are in and the primary task on any given screen.
 
 ### Brand & Personality
-- How would you describe the brand personality in 3 words?
-- Reference sites or apps that capture the right feel? What specifically about them?
-  - For brand, push for real-world references in the right lane (tech-minimal, editorial-magazine, consumer-warm, brutalist-grid, etc.): not generic "modern" adjectives.
-  - For product, push for category best-tool references (Linear, Figma, Notion, Raycast, Stripe).
-- What should this explicitly NOT look like? Any anti-references?
+
+Brand personality in 3 words, plus references and anti-references. Push for real examples, never generic "modern" adjectives:
+- For brand, references in a named lane (tech-minimal, editorial-magazine, consumer-warm, brutalist-grid).
+- For product, category best-tool references (Linear, Figma, Notion, Raycast, Stripe).
+- Ask what this should explicitly NOT look like. The anti-reference constrains more than the reference does.
 
 ### Accessibility & Inclusion
-- Specific accessibility requirements? (WCAG level, known user needs)
-- Considerations for reduced motion, color blindness, or other accommodations?
+
+WCAG level, known user needs, reduced motion, color blindness, other accommodations.
 
 Skip questions where the answer is already clear. **Do NOT ask about colors, fonts, radii, or visual styling here**: those belong in DESIGN.md, not PRODUCT.md.
 
 ## Step 4: Write PRODUCT.md
 
-Write PRODUCT.md only after the user has confirmed the strategic answers from Step 3. If an inferred answer is uncertain or unconfirmed, ask before writing.
-
-Synthesize into a strategic document:
+Synthesize the confirmed answers into a strategic document:
 
 ```markdown
 # Product

@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Run systematic technical quality checks and generate a comprehensive report. Don't fix issues - document them for other commands to address."
-version: 1.9.0
+version: 1.9.1
 ---
 
 Run systematic **technical** quality checks and generate a comprehensive report. Don't fix issues — document them for other commands to address.
@@ -114,7 +114,7 @@ For each issue, document:
 - **Impact**: How it affects users
 - **WCAG/Standard**: Which standard it violates (if applicable)
 - **Recommendation**: How to fix it
-- **Suggested command**: Which command to use (prefer: /siteasy adapt, /siteasy amplify, /siteasy animate, /siteasy audit, /siteasy charts, /siteasy clarify, /siteasy critique, /siteasy delight, /siteasy document, /siteasy harden, /siteasy layout, /siteasy mobile, /siteasy onboard, /siteasy overdrive, /siteasy shape, /siteasy polish, /siteasy simplify, /siteasy typeset)
+- **Suggested command**: which command fixes it, drawn from the allowed list under Recommended Actions below
 
 ### Patterns & Systemic Issues
 

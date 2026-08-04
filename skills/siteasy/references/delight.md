@@ -1,7 +1,7 @@
 ---
 name: delight
 description: "Identify opportunities to add moments of joy, personality, and unexpected polish that transform functional interfaces into delightful experiences."
-version: 1.7.0
+version: 1.7.1
 ---
 
 > **Additional context needed**: what's appropriate for the domain (playful vs professional vs quirky vs elegant).
@@ -22,14 +22,7 @@ Product: delight at specific moments, not pages. Completion, first-time actions,
 
 Identify where delight would enhance (not distract from) the experience:
 
-1. **Find natural delight moments**:
-   - **Success states**: Completed actions (save, send, publish)
-   - **Empty states**: First-time experiences, onboarding
-   - **Loading states**: Waiting periods that could be entertaining
-   - **Achievements**: Milestones, streaks, completions
-   - **Interactions**: Hover states, clicks, drags
-   - **Errors**: Softening frustrating moments
-   - **Easter eggs**: Hidden discoveries for curious users
+1. **Find natural delight moments**: success, empty, loading, achievement, interaction, error, easter egg. Rank them by how often the user actually lands there, and treat the rare ones as the expensive ones.
 
 2. **Understand the context**:
    - What's the brand personality? (Playful? Professional? Quirky? Elegant?)
@@ -81,24 +74,7 @@ Add personality and joy through these methods:
 
 ### Micro-interactions & Animation
 
-**Button delight**:
-```css
-/* Satisfying button press */
-.button {
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-.button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Ripple effect on click */
-/* Smooth lift on hover */
-.button:hover {
-  transform: translateY(-2px);
-  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1); /* ease-out-quart */
-}
-```
+**Button delight**: press translates down 2px over 100ms, hover lifts 2px over 200ms on `cubic-bezier(0.25, 1, 0.5, 1)` (ease-out-quart). The press is faster than the lift because a press is a confirmation and a hover is an invitation.
 
 **Loading delight**:
 - Playful loading animations (not just spinners)
@@ -120,90 +96,23 @@ Add personality and joy through these methods:
 
 ### Personality in Copy
 
-**Playful error messages**:
-```
-"Error 404"
-"This page is playing hide and seek. (And winning)"
+The rewrite pattern is the same everywhere: keep the system message accurate, replace its register. `Error 404` becomes a line with a voice, `No projects` becomes an invitation, `Delete` stays `Delete` if the stakes are real.
 
-"Connection failed"
-"Looks like the internet took a coffee break. Want to retry?"
-```
-
-**Encouraging empty states**:
-```
-"No projects"
-"Your canvas awaits. Create something amazing."
-
-"No messages"
-"Inbox zero! You're crushing it today."
-```
-
-**Playful labels & tooltips**:
-```
-"Delete"
-"Send to void" (for playful brand)
-
-"Help"
-"Rescue me" (tooltip)
-```
-
-**IMPORTANT**: Match copy personality to brand. Banks shouldn't be wacky, but they can be warm.
+**IMPORTANT**: Match copy personality to brand. Banks shouldn't be wacky, but they can be warm. Never buy voice with clarity: a destructive or irreversible action keeps its plain label.
 
 ### Illustrations & Visual Personality
 
-**Custom illustrations**:
-- Empty state illustrations (not stock icons)
-- Error state illustrations (friendly monsters, quirky characters)
-- Loading state illustrations (animated characters)
-- Success state illustrations (celebrations)
+Four states deserve a drawn asset rather than an icon, because they are the moments a page is otherwise empty: empty, error, loading, success. A commissioned set across those four does more for identity than decorating the states that already have content.
 
-**Icon personality**:
-- Custom icon set matching brand personality
-- Animated icons (subtle motion on hover/click)
-- Illustrative icons (more detailed than generic)
-- Consistent style across all icons
-
-**Background effects**:
-- Subtle particle effects
-- Gradient mesh backgrounds
-- Geometric patterns
-- Parallax depth
-- Time-of-day themes (morning vs night)
+Background effects (particles, mesh gradients, geometric fields, time-of-day themes) are the highest-cost, lowest-return category here. They read as decoration on every project that did not earn them, and they compete with the content for the same attention the illustrations are trying to win.
 
 ### Satisfying Interactions
 
-**Drag and drop delight**:
-- Lift effect on drag (shadow, scale)
-- Snap animation when dropped
-- Satisfying placement sound
-- Undo toast ("Dropped in wrong place? [Undo]")
+The rule for direct manipulation: the element acknowledges the grab, and the drop is reversible. Lift on drag, snap on release, and an undo affordance on anything that moved something the user cannot easily put back.
 
-**Toggle switches**:
-- Smooth slide with spring physics
-- Color transition
-- Haptic feedback on mobile
-- Optional sound effect
-
-**Progress & achievements**:
-- Streak counters with celebratory milestones
-- Progress bars that "celebrate" at 100%
-- Badge unlocks with animation
-- Playful stats ("You're on fire! 5 days in a row")
-
-**Form interactions**:
-- Input fields that animate on focus
-- Checkboxes with a satisfying scale pulse when checked
-- Success state that celebrates valid input
-- Auto-grow textareas
+Toggles, checkboxes and focused inputs earn a short transition because they are state changes the user caused and needs confirmed. Auto-grow textareas and celebratory valid-input states are the two that most often overshoot into noise.
 
 ### Sound Design
-
-**Subtle audio cues** (when appropriate):
-- Notification sounds (distinctive but not annoying)
-- Success sounds (satisfying "ding")
-- Error sounds (empathetic, not harsh)
-- Typing sounds for chat/messaging
-- Ambient background audio (very subtle)
 
 **IMPORTANT**:
 - Respect system sound settings
@@ -213,33 +122,13 @@ Add personality and joy through these methods:
 
 ### Easter Eggs & Hidden Delights
 
-**Discovery rewards**:
-- Konami code unlocks special theme
-- Hidden keyboard shortcuts (Cmd+K for special features)
-- Hover reveals on logos or illustrations
-- Alt text jokes on images (for screen reader users too!)
-- Console messages for developers ("Like what you see? We're hiring!")
+A hidden delight has to survive being found. The test is whether it still reads as intentional the third time, which rules out the ones everyone already knows (the Konami code, the hiring message in the console) and favours the ones tied to this product: a reveal on the site's own mark, a joke in alt text that a screen reader user gets and a sighted user never sees.
 
-**Seasonal touches**:
-- Holiday themes (subtle, tasteful)
-- Seasonal color shifts
-- Weather-based variations
-- Time-based changes (dark at night, light during day)
-
-**Contextual personality**:
-- Different messages based on time of day
-- Responses to specific user actions
-- Randomized variations (not same every time)
-- Progressive reveals with continued use
+Seasonal and time-of-day variation is the cheapest recurring delight, and the one most likely to age badly. Ship it only if someone owns turning it off.
 
 ### Loading & Waiting States
 
-**Make waiting engaging**:
-- Interesting loading messages that rotate
-- Progress bars with personality
-- Mini-games during long loads
-- Fun facts or tips while waiting
-- Countdown with encouraging messages
+The waiting screen is the one surface where personality is free: the user is already stalled, so copy costs nothing. It is also where generated copy is most visible, because a rotating message list is read attentively by someone with nothing else to do.
 
 ```
 Loading messages — write ones specific to your product, not generic AI filler:
@@ -253,34 +142,11 @@ Loading messages — write ones specific to your product, not generic AI filler:
 
 ### Celebration Moments
 
-**Success celebrations**:
-- Confetti for major milestones
-- Animated checkmarks for completions
-- Progress bar celebrations at 100%
-- "Achievement unlocked" style notifications
-- Personalized messages ("You published your 10th article!")
+Celebration scales with rarity, and the scale is the whole design. A first-time action, a tenth article, a year on the product: those carry confetti. A completed form carries a checkmark. Spend the biggest celebration on the thing that happens least, or the biggest one stops meaning anything.
 
-**Milestone recognition**:
-- First-time actions get special treatment
-- Streak tracking and celebration
-- Progress toward goals
-- Anniversary celebrations
+Personalise with a fact the product actually knows ("your 10th article") rather than a generic superlative. The specific number is what makes the moment land.
 
 ## Implementation Patterns
-
-**Animation libraries**:
-- Framer Motion (React)
-- GSAP (universal)
-- Lottie (After Effects animations)
-- Canvas confetti (party effects)
-
-**Sound libraries**:
-- Howler.js (audio management)
-- Use-sound (React hook)
-
-**Physics libraries**:
-- React Spring (spring physics)
-- Popmotion (animation primitives)
 
 **IMPORTANT**: File size matters. Compress images, optimize animations, lazy load delight features.
 

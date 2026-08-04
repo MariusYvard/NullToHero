@@ -1,7 +1,7 @@
 ---
 name: information-architecture
 description: "IA is the invisible structure that determines whether users can find what they need. Navigation is the visible manifestation. Both must match the user's mental model, not the org."
-version: 1.10.0
+version: 1.10.1
 ---
 
 # Information Architecture
@@ -87,7 +87,7 @@ Mobile-first navigation: design the constrained version first, then expand. A ha
 
 ### Mobile navigation
 
-Most phone use is one-handed. In Steven Hoober's field observations, 49 percent of users operate the phone with one thumb, 36 percent cradle it and tap with a finger, and 15 percent type with both thumbs. Design for the thumb: the bottom half of the screen is the comfort zone, the top corners are the stretch zone.
+Most phone use is one-handed (the grip distribution is in [mobile-ergonomics.md](mobile-ergonomics.md)). Design for the thumb: the bottom half of the screen is the comfort zone, the top corners are the stretch zone.
 
 | Pattern | Strengths | Trade-offs | Use for |
 |---|---|---|---|
@@ -143,11 +143,7 @@ Required when:
 - The dominant access mode is item-centric, not browse-centric
 - Users know exactly what they want but the IA does not surface it in one click
 
-Quality search needs:
-- Autocomplete and suggested queries
-- Forgiving matching (typos, synonyms, plurals)
-- Faceted filtering on results
-- Analytics on zero-result queries (these are IA gaps)
+Beyond the usual autocomplete, forgiving matching and faceted results: instrument zero-result queries. Every one of them is an IA gap stated in the user's own words, and it is the cheapest structured feedback the site will ever produce.
 
 ## Labeling
 
@@ -162,16 +158,11 @@ Rules:
 
 ## URL Structure as IA
 
-URLs are part of IA. They are bookmarkable, shareable, and crawled.
+URLs are part of IA: bookmarkable, shareable, crawled, and quoted back to support. The path should read as the tree does (`/products/shoes/running`, not `/p/12345`).
 
-Rules:
-- Reflect hierarchy: `/products/shoes/running` not `/p/12345`.
-- Use hyphens, not underscores or camelCase.
-- Lowercase always.
-- Stable. URLs should not change when the IA shifts. Use redirects, never break inbound links.
-- Avoid trailing slashes inconsistently. Pick one and enforce.
+The rule that costs money when broken: a URL outlives the IA that produced it. Restructuring the navigation is not a licence to renumber the paths. Redirect every moved URL, and treat an inbound link that 404s as a regression, not a cleanup.
 
-See [../../seo/references/technical.md](../../seo/references/technical.md) for SEO implications.
+Casing, separators and trailing-slash policy are settled in [../../seo/references/technical.md](../../seo/references/technical.md); pick the convention there and enforce it site-wide.
 
 ## Audit Checklist
 

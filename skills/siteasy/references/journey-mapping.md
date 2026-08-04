@@ -1,7 +1,7 @@
 ---
 name: journey-mapping
 description: "Methods for visualizing how users move through a product or service over time, what they think and feel at each step, and which moments break the experience. Use it for empathy maps, journey maps and service blueprints."
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Journey Mapping
@@ -24,9 +24,7 @@ Pick one. Combining methods in a single artifact produces something nobody reads
 
 ## Empathy Map
 
-Captures what a persona says, thinks, feels, and does at a specific moment. Built quickly, used during ideation.
-
-Layout: a 4-quadrant grid centered on the persona's name.
+Captures what a persona says, thinks, feels, and does at a specific moment. Built quickly, used during ideation. Layout: a 4-quadrant grid centered on the persona's name.
 
 | Quadrant | Captures |
 |---|---|
@@ -43,31 +41,11 @@ Time to produce: 30 to 60 minutes per persona. Use immediately after interviews 
 
 ## User Flow
 
-A diagram of the logical steps to complete one task. Decision points are diamonds, screens are rectangles, errors are red.
+A diagram of the logical steps to complete one task. Decision points are diamonds, screens are rectangles, errors are red. Draw one before wireframes, to audit an existing flow for redundancy, or to align engineering on the happy path plus its edge cases.
 
-When to use:
-- Designing a new flow before wireframes
-- Auditing an existing flow for redundancy
-- Aligning engineering on the happy path plus edge cases
-
-What to include:
-- Entry points (every way a user arrives at the flow)
-- Screens or states
-- Decisions the user makes
-- Decisions the system makes
-- Success exits
-- Failure exits
+Two inclusions decide whether the diagram is worth drawing: *every* entry point (users rarely arrive where the designer assumes) and the decisions the system makes, kept visually distinct from the decisions the user makes. Both success and failure exits terminate the diagram; a flow that only shows success is a wish, not a map.
 
 Tools: FigJam, Whimsical, Miro, draw.io, Mermaid for code-friendly diagrams.
-
-```mermaid
-flowchart LR
-  Start([User arrives]) --> Check{Logged in?}
-  Check -->|Yes| Dashboard
-  Check -->|No| Login
-  Login -->|Success| Dashboard
-  Login -->|Fail x3| Lockout([Account locked])
-```
 
 A user flow with more than 15 nodes is too granular for a map. Split it.
 
@@ -103,13 +81,11 @@ A journey map is a communication tool. Distribute it as a single-page PDF, paste
 
 ## Experience Map
 
-Broader than a journey map. Covers a topic, not a single persona's path. Used for strategy.
+Broader than a journey map: it covers a topic across several personas and channels rather than one persona's path, and it is a strategy artifact. A hospital's "patient experience" spans patient, family member and referring doctor across admission, waiting room, treatment, billing and follow-up.
 
-Example: a hospital's "patient experience" across multiple personas (patient, family member, referring doctor) and channels (admission, waiting room, treatment, billing, follow-up).
+Structure: same rows as a journey map, but with persona or topic swimlanes instead of stages.
 
-Structure: same rows as a journey map, but with persona swimlanes or topic swimlanes instead of stages.
-
-Best produced after multiple journey maps for individual personas exist. The experience map is the synthesis.
+Best produced after multiple journey maps for individual personas exist. The experience map is the synthesis, never the starting point.
 
 ## Service Blueprint
 

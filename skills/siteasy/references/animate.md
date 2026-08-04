@@ -1,7 +1,7 @@
 ---
 name: animate
 description: "Analyze a feature and strategically add animations and micro-interactions that enhance understanding, provide feedback, and create delight."
-version: 1.7.0
+version: 1.7.1
 ---
 
 > **Additional context needed**: performance constraints.
@@ -14,7 +14,7 @@ Analyze a feature and strategically add animations and micro-interactions that e
 
 Brand: orchestrated page-load sequences, staggered reveals, scroll-driven animation. Motion is part of the voice; one well-rehearsed entrance beats scattered micro-interactions.
 
-Product: 150–250 ms on most transitions. Motion conveys state — feedback, reveal, loading, transitions between views. No page-load choreography; users are in a task and won't wait for it.
+Product: 150-250 ms on most transitions. Motion conveys state, feedback, reveal, loading, transitions between views. No page-load choreography; users are in a task and won't wait for it.
 
 ---
 
@@ -52,64 +52,24 @@ Create a purposeful animation plan:
 
 ## Implement Animations
 
-Add motion systematically across these categories:
+Work the layers in order. Feedback and transitions earn their place first; entrances and delight are what you add once the functional layer is complete.
 
-### Entrance Animations
-- **Page load choreography**: Stagger element reveals (100-150ms delays), fade + slide combinations
-- **Hero section**: Dramatic entrance for primary content (scale, parallax, or creative effects)
-- **Content reveals**: Scroll-triggered animations using intersection observer
-- **Modal/drawer entry**: Smooth slide + fade, backdrop fade, focus management
+| Layer | Where it lands | Calibration |
+|---|---|---|
+| Entrance | Page load, hero, scroll reveals, modal and drawer entry | Stagger element reveals at 100-150ms delays; fade plus slide, not slide alone |
+| Micro-interaction | Buttons, inputs, toggles, checkboxes, favorites | Hover scale 1.02-1.05; press scale per animation-engineering.md; toggles 200-300ms |
+| State transition | Show/hide, expand/collapse, loading, success/error, enable/disable | Expand/collapse transitions the height container, never the content height |
+| Navigation | Route changes, tabs, carousels, scroll effects | Shared-element transitions over crossfades where a spatial link exists |
+| Feedback and guidance | Hover hints, drag and drop, copy confirmations, focus flow | Drag lifts (shadow plus scale); drop zones highlight before release |
+| Delight | Empty states, completions, easter eggs, contextual themes | Rare-frequency surfaces only; anything seen daily drops out of this layer |
 
-### Micro-interactions
-- **Button feedback**:
-  - Hover: Subtle scale (1.02-1.05), color shift, shadow increase
-  - Click: Quick scale down then up (0.95 → 1), ripple effect
-  - Loading: Spinner or pulse state
-- **Form interactions**:
-  - Input focus: Border color transition, slight scale or glow
-  - Validation: Shake on error, check mark on success, smooth color transitions
-- **Toggle switches**: Smooth slide + color transition (200-300ms)
-- **Checkboxes/radio**: Check mark animation, ripple effect
-- **Like/favorite**: Scale + rotation, particle effects, color transition
-
-### State Transitions
-- **Show/hide**: Fade + slide (not instant), appropriate timing (200-300ms)
-- **Expand/collapse**: Height transition with overflow handling, icon rotation
-- **Loading states**: Skeleton screen fades, spinner animations, progress bars
-- **Success/error**: Color transitions, icon animations, gentle scale pulse
-- **Enable/disable**: Opacity transitions, cursor changes
-
-### Navigation & Flow
-- **Page transitions**: Crossfade between routes, shared element transitions
-- **Tab switching**: Slide indicator, content fade/slide
-- **Carousel/slider**: Smooth transforms, snap points, momentum
-- **Scroll effects**: Parallax layers, sticky headers with state changes, scroll progress indicators. For any parallax work, load [parallax.md](parallax.md) before writing code.
-
-### Feedback & Guidance
-- **Hover hints**: Tooltip fade-ins, cursor changes, element highlights
-- **Drag & drop**: Lift effect (shadow + scale), drop zone highlights, smooth repositioning
-- **Copy/paste**: Brief highlight flash on paste, "copied" confirmation
-- **Focus flow**: Highlight path through form or workflow
-
-### Delight Moments
-- **Empty states**: Subtle floating animations on illustrations
-- **Completed actions**: Confetti, check mark flourish, success celebrations
-- **Easter eggs**: Hidden interactions for discovery
-- **Contextual animation**: Weather effects, time-of-day themes, seasonal touches
+For any parallax or scroll-driven work, load [parallax.md](parallax.md) before writing code.
 
 ## Technical Implementation
 
-Use appropriate techniques for each animation:
-
 ### Timing & Easing
 
-Canonical law: L-MOTION-1 (tools/data/laws.csv).
-
-**Durations by purpose:**
-- **100-150ms**: Instant feedback (button press, toggle)
-- **200-300ms**: State changes (hover, menu open)
-- **300-500ms**: Layout changes (accordion, modal)
-- **500-800ms**: Entrance animations (page load)
+Canonical law: L-MOTION-1 (tools/data/laws.csv). Entrance choreography on page load is the one tier above the law's range, at 500-800ms.
 
 **Easing curves (use these, not CSS defaults):**
 ```css
@@ -125,23 +85,6 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv).
 
 **Exit animations are faster than entrances.** Use ~75% of enter duration.
 
-### CSS Animations
-```css
-/* Prefer for simple, declarative animations */
-- transitions for state changes
-- @keyframes for complex sequences
-- transform and opacity for reliable movement
-- blur, filters, masks, clip paths, shadows, and color shifts for premium atmospheric effects when verified smooth
-```
-
-### JavaScript Animation
-```javascript
-/* Use for complex, interactive animations */
-- Web Animations API for programmatic control
-- Framer Motion for React
-- GSAP for complex sequences
-```
-
 ### Performance
 - **Motion materials**: Use transform/opacity for reliable movement, but use blur, filters, masks, shadows, and color shifts when they materially improve the effect
 - **Layout safety**: Avoid casual animation of layout-driving properties (`width`, `height`, `top`, `left`, margins)
@@ -150,23 +93,16 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv).
 - **Monitor FPS**: Ensure 60fps on target devices
 
 ### Accessibility
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
+
+Ship a `prefers-reduced-motion: reduce` block that collapses durations to near-zero and caps iteration counts. Reduced motion removes the movement, never the state change or the content.
 
 **NEVER**:
-- Use bounce or elastic easing curves—they feel dated and draw attention to the animation itself
+- Use bounce or elastic easing curves, they feel dated and draw attention to the animation itself
 - Animate layout properties casually (`width`, `height`, `top`, `left`, margins) when transform, FLIP, or grid-based techniques would work
-- Use durations over 500ms for feedback—it feels laggy
-- Animate without purpose—every animation needs a reason
-- Ignore `prefers-reduced-motion`—this is an accessibility violation
-- Animate everything—animation fatigue makes interfaces feel exhausting
+- Use durations over 500ms for feedback, it feels laggy
+- Animate without purpose, every animation needs a reason
+- Ignore `prefers-reduced-motion`, this is an accessibility violation
+- Animate everything, animation fatigue makes interfaces feel exhausting
 - Block interaction during animations unless intentional
 
 ## Animated Component Loops and Entrances
@@ -176,7 +112,7 @@ Rules distilled from the animated-component ecosystem (registries, hero effects)
 - Two duration regimes coexist. Feedback and entrances live at 300-400ms ease-out; ambient loops (shimmer ~3s, border beams ~6s, marquees ~40s) live at 3-40s linear. Judge a decorative loop on its reduced-motion guard and its per-view budget, not on the 300ms feedback ceiling.
 - Scroll entrances: IntersectionObserver with `once: true` and a margin around -50px, near-zero base delay (~40ms), staggers around 50ms that compress with segment count (total duration divided by elements) so long lists do not make the reader wait.
 - Split-text accessibly: per-character spans are noise for a screen reader. Hide the animated copy (`aria-hidden`) and expose the intact text (`aria-label` or a visually-hidden duplicate).
-- Animated counters: `tabular-nums` so digits keep a stable width (no reflow), write `textContent` directly outside the render cycle, and format with the page locale — never a hardcoded one.
+- Animated counters: `tabular-nums` so digits keep a stable width (no reflow), write `textContent` directly outside the render cycle, and format with the page locale, never a hardcoded one.
 - Several beams or orbiters on one element: phase them with negative delays instead of duplicating keyframes.
 - Canvas and WebGL backgrounds: cut the rAF when off-viewport (IntersectionObserver), under reduced motion and on `visibilitychange`; listen for `webglcontextlost`.
 - `setInterval` is not an animation engine (background-tab throttling, drift): rAF or a CSS animation.
@@ -198,4 +134,4 @@ Test animations thoroughly:
 - **Doesn't block**: Users can interact during/after animations
 - **Adds value**: Makes interface clearer or more delightful
 
-Remember: Motion should enhance understanding and provide feedback, not just add decoration. Animate with purpose, respect performance constraints, and always consider accessibility. Great animation is invisible - it just makes everything feel right.
+Remember: Motion should enhance understanding and provide feedback, not just add decoration. Animate with purpose, respect performance constraints, and always consider accessibility. Great animation is invisible, it just makes everything feel right.

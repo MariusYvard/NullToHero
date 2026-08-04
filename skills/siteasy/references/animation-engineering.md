@@ -1,7 +1,7 @@
 ---
 name: animation-engineering
 description: "Deep technical reference for motion. Load alongside motion-design.md for /siteasy animate work, and parallax.md for scroll-driven multi-layer compositions. Based on Emil Kowalski's motion principles."
-version: 1.12.0
+version: 1.12.1
 ---
 
 # Animation Engineering
@@ -16,10 +16,10 @@ version: 1.12.0
 
 | Frequency | Decision |
 |-----------|----------|
-| 100+ times/day — command palette, keyboard shortcuts, typing | **No animation. Ever.** |
-| Tens of times/day — hover effects, list navigation | Remove or drastically reduce |
-| Occasional — modals, drawers, toasts | Standard animation |
-| Rare / first-time — onboarding, celebrations | Can add delight |
+| 100+ times/day, command palette, keyboard shortcuts, typing | **No animation. Ever.** |
+| Tens of times/day, hover effects, list navigation | Remove or drastically reduce |
+| Occasional, modals, drawers, toasts | Standard animation |
+| Rare or first-time, onboarding, celebrations | Can add delight |
 
 **Never animate keyboard-initiated actions.** Raycast has no open/close animation. That is the right call.
 
@@ -46,7 +46,7 @@ Is the element entering or exiting?
     Default → ease-out
 ```
 
-**Never use ease-in for UI animations.** It starts slow — the exact moment users are watching most closely. A dropdown with `ease-in` at 300ms *feels* slower than `ease-out` at the same duration.
+**Never use ease-in for UI animations.** It starts slow, the exact moment users are watching most closely. A dropdown with `ease-in` at 300ms *feels* slower than `ease-out` at the same duration.
 
 **Use custom curves, not built-in CSS easings.** The built-ins are too weak.
 
@@ -68,10 +68,10 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quotin
 
 | Element | Duration |
 |---------|----------|
-| Button press feedback | 100–160ms |
-| Tooltips, small popovers | 125–200ms |
-| Dropdowns, selects | 150–250ms |
-| Modals, drawers | 200–500ms |
+| Button press feedback | 100-160ms |
+| Tooltips, small popovers | 125-200ms |
+| Dropdowns, selects | 150-250ms |
+| Modals, drawers | 200-500ms |
 | Exit animations | ~75% of enter duration |
 
 **UI feedback animations (buttons, dropdowns, toggles, small reveals) must stay under 300ms; only large-surface choreography such as modals and drawers may use the 300-500ms end of the table.** A 180ms dropdown feels more responsive than a 400ms one. Faster-spinning spinners make loading *feel* faster even when load time is identical.
@@ -94,7 +94,7 @@ Swap the skeleton for content with a cross-fade of at least 200ms; an instant sw
 
 ## Spring Animations
 
-Springs simulate real physics — they don't have fixed durations, they settle based on parameters. Use them for:
+Springs simulate real physics, they don't have fixed durations, they settle based on parameters. Use them for:
 - Drag interactions with momentum
 - Elements that should feel "alive"
 - Gestures that can be interrupted mid-animation
@@ -110,22 +110,11 @@ Springs simulate real physics — they don't have fixed durations, they settle b
 { type: "spring", mass: 1, stiffness: 100, damping: 10 }
 ```
 
-Keep bounce subtle (0.1–0.3). Avoid bounce in most UI contexts. Use it for drag-to-dismiss and playful interactions.
+Keep bounce subtle (0.1-0.3). Avoid bounce in most UI contexts. Use it for drag-to-dismiss and playful interactions.
 
 **Spring advantage over CSS animations:** Springs maintain velocity when interrupted. CSS keyframes restart from zero. A spring-based accordion reverses smoothly when the user changes direction mid-motion.
 
-**Mouse-following with spring (decorative only):**
-```jsx
-import { useSpring } from 'framer-motion';
-
-// Without spring: feels artificial
-const rotation = mouseX * 0.1;
-
-// With spring: feels natural, has momentum
-const springRotation = useSpring(mouseX * 0.1, { stiffness: 100, damping: 10 });
-```
-
-This is *decorative*. Don't use it for functional UI.
+**Mouse-following:** run the raw pointer value through a spring (`stiffness: 100, damping: 10`) instead of using it directly; the unspringed value feels artificial. Decorative only, never functional UI.
 
 ---
 
@@ -142,23 +131,15 @@ This is *decorative*. Don't use it for functional UI.
 }
 ```
 
-`scale(0.97–0.98)` on `:active` makes the UI feel like it is truly listening. Apply to any pressable element.
+`scale(0.97-0.98)` on `:active` makes the UI feel like it is truly listening. Apply to any pressable element.
 
 ### Never animate from `scale(0)`
 
-Nothing in the real world appears from nothing. Start from `scale(0.95)` with opacity:
-
-```css
-/* Wrong */
-.entering { transform: scale(0); }
-
-/* Right */
-.entering { transform: scale(0.95); opacity: 0; }
-```
+Nothing in the real world appears from nothing. Start from `scale(0.95)` with `opacity: 0`, never `scale(0)`.
 
 ### Popovers must be origin-aware
 
-Popovers scale from their trigger, not from center. Only modals stay centered — they are not anchored to a specific trigger.
+Popovers scale from their trigger, not from center. Only modals stay centered, they are not anchored to a specific trigger.
 
 ```css
 /* Radix UI */
@@ -178,7 +159,7 @@ First hover delays (prevent accidental activation). Once any tooltip is open, ad
 
 ### Blur to mask imperfect crossfades
 
-When a crossfade between two states looks off — two distinct objects overlapping — add `filter: blur(2px)` during the transition. Blur bridges the visual gap, tricking the eye into seeing a single transformation instead of two objects swapping.
+When a crossfade between two states looks off, two distinct objects overlapping, add `filter: blur(2px)` during the transition. Blur bridges the visual gap, tricking the eye into seeing a single transformation instead of two objects swapping.
 
 Keep blur under 20px. Heavy blur is expensive in Safari.
 
@@ -186,46 +167,15 @@ Keep blur under 20px. Heavy blur is expensive in Safari.
 
 ## CSS Transitions vs. Keyframes
 
-**Use transitions for interruptible UI:**
-```css
-/* Interruptible — good for dynamic UI like toasts */
-.toast { transition: transform 400ms ease; }
-```
+**Use transitions for interruptible UI.** A toast on `transition: transform 400ms ease` can be caught mid-flight; the same move as `@keyframes` restarts from zero when interrupted, so keyframes are the wrong tool for anything rapidly retriggered.
 
-**Avoid keyframes for rapidly-triggered elements:**
-```css
-/* Not interruptible — restarts from zero on interruption */
-@keyframes slideIn { from { transform: translateY(100%); } }
-```
-
-### @starting-style — the modern CSS entry animation
-
-```css
-.toast {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 400ms ease, transform 400ms ease;
-
-  @starting-style {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-}
-```
-
-Replaces the React `useEffect → setMounted(true)` pattern. Use where browser support allows.
+`@starting-style` covers the entry case in CSS alone, replacing the React `useEffect → setMounted(true)` mount-flag pattern. Use it where browser support allows.
 
 ---
 
 ## clip-path: The Underused Tool
 
-`clip-path: inset(top right bottom left)` clips a rectangle. Each value "eats" into the element from that side.
-
-```css
-/* Hidden from right, reveal left-to-right */
-.hidden   { clip-path: inset(0 100% 0 0); }
-.visible  { clip-path: inset(0 0 0 0); }
-```
+Each `inset()` value eats into the element from that side, so a rectangular reveal is one composited property.
 
 ### Hold-to-delete pattern
 
@@ -246,98 +196,54 @@ Duplicate the tab list. Style the copy as active (different background/color). C
 
 ### Image reveals on scroll
 
-```css
-.image {
-  clip-path: inset(0 0 100% 0);   /* hidden from bottom */
-  transition: clip-path 600ms var(--ease-out-ui);
-}
-.image.in-view { clip-path: inset(0 0 0 0); }
-```
+Animate from `inset(0 0 100% 0)` to `inset(0 0 0 0)` over 600ms on `--ease-out-ui` when the element enters the viewport.
 
 ---
 
 ## CSS Transform Mastery
 
-**`translateY` with percentages** — relative to the element's own height. Use `translateY(100%)` to hide a drawer below the fold, regardless of its actual size. Prefer percentages over hardcoded pixels.
+**`translateY` with percentages** is relative to the element's own height. Use `translateY(100%)` to hide a drawer below the fold, regardless of its actual size. Prefer percentages over hardcoded pixels.
 
-**`scale()` affects children** — unlike `width`/`height`, scale transforms children proportionally. A button press scales its icon and label. This is a feature.
-
-**3D transforms for depth:**
-```css
-.wrapper { transform-style: preserve-3d; }
-
-@keyframes orbit {
-  from { transform: translate(-50%, -50%) rotateY(0deg)   translateZ(72px) rotateY(360deg); }
-  to   { transform: translate(-50%, -50%) rotateY(360deg) translateZ(72px) rotateY(0deg); }
-}
-```
+**`scale()` affects children.** Unlike `width`/`height`, scale transforms children proportionally. A button press scales its icon and label. This is a feature, not something to correct for.
 
 ---
 
 ## Gesture & Drag Interactions
 
-**Velocity-based dismissal** — don't require dragging past a distance threshold. A quick flick should dismiss:
+**Velocity-based dismissal.** Don't require dragging past a distance threshold. A quick flick should dismiss:
 ```js
 const timeTaken = new Date() - dragStartTime.current;
 const velocity = Math.abs(swipeAmount) / timeTaken;
 if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) { dismiss(); }
 ```
 
-**Friction at boundaries** — when a user drags past the natural limit, apply damping. The more they drag, the less the element moves. Real objects decelerate; they don't hit invisible walls.
+**Friction at boundaries.** When a user drags past the natural limit, apply damping. The more they drag, the less the element moves. Real objects decelerate; they don't hit invisible walls.
 
-**Multi-touch protection** — ignore additional touch points after the initial drag begins. Without this, switching fingers causes the element to jump.
+**Multi-touch protection.** Ignore additional touch points after the initial drag begins. Without this, switching fingers causes the element to jump.
 
-**Pointer capture for drag** — capture all pointer events once dragging starts. Ensures drag continues even when the pointer leaves the element bounds.
+**Pointer capture for drag.** Capture all pointer events once dragging starts. Ensures drag continues even when the pointer leaves the element bounds.
 
 ---
 
 ## Performance: JS vs. CSS
 
-**Only animate `transform` and `opacity`** — these run on the GPU, skipping layout and paint.
+**Only animate `transform` and `opacity`.** These run on the GPU, skipping layout and paint.
 
-**CSS variables on containers are expensive** — changing `--swipe-amount` on a parent recalculates styles for all children. Set `transform` directly on the element:
-```js
-// Expensive: triggers recalc on all children
-element.style.setProperty('--swipe-amount', `${distance}px`);
+**CSS variables on containers are expensive.** Setting `--swipe-amount` on a parent recalculates styles for all children; setting `element.style.transform` directly affects only that element.
 
-// Fast: only affects this element
-element.style.transform = `translateY(${distance}px)`;
-```
+**Framer Motion `x`/`y` props are NOT hardware-accelerated.** They use rAF on the main thread. `animate={{ transform: "translateX(100px)" }}` is GPU-accelerated where `animate={{ x: 100 }}` is not.
 
-**Framer Motion `x`/`y` props are NOT hardware-accelerated** — they use rAF on the main thread. For true GPU acceleration:
-```jsx
-// Not hardware accelerated
-<motion.div animate={{ x: 100 }} />
+**CSS animations beat JS under load.** CSS animations run off the main thread. When the browser is busy (loading pages, running scripts), Framer Motion drops frames. CSS animations stay smooth. Rule: CSS for predetermined animations, JS for dynamic or interruptible ones.
 
-// Hardware accelerated
-<motion.div animate={{ transform: "translateX(100px)" }} />
-```
-
-**CSS animations beat JS under load** — CSS animations run off the main thread. When the browser is busy (loading pages, running scripts), Framer Motion drops frames. CSS animations stay smooth. Rule: CSS for predetermined animations, JS for dynamic/interruptible ones.
-
-**WAAPI — programmatic CSS performance:**
-```js
-element.animate(
-  [{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }],
-  { duration: 1000, fill: 'forwards', easing: 'cubic-bezier(0.77, 0, 0.175, 1)' }
-);
-```
+**WAAPI** gives programmatic control at CSS performance: `element.animate(keyframes, { duration, fill: 'forwards', easing })` takes the same custom curves as the tokens above.
 
 ---
 
 ## Stagger
 
-```css
-.item {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: fadeIn 300ms ease-out forwards;
-  animation-delay: calc(var(--i, 0) * 50ms);
-}
-@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-```
+Drive per-item delay from an index custom property (`animation-delay: calc(var(--i, 0) * 50ms)`, with `style="--i: 0"` on each item) rather than hand-written nth-child rules.
 
-Set `style="--i: 0"` on each item. **Cap total stagger at ~500ms** (10 items × 50ms). Stagger is decorative — never block interaction while it plays.
+**Cap total stagger at ~500ms** (10 items x 50ms). Stagger is decorative, never block interaction while it plays.
 
 ---
 
@@ -352,7 +258,7 @@ Rules for pages that run continuous JS animation (WebGL scenes, custom cursors, 
 - **Cap the pixel ratio.** `renderer.setPixelRatio(Math.min(devicePixelRatio, 2))`. Uncapped DPR renders four times the pixels on dense mobile screens for an invisible gain.
 - **Mutate in the loop, never setState.** Continuous values (positions, scroll offsets, pointer trails) mutate refs or objects inside the frame loop; component state is for discrete transitions. A state update per frame or per pointermove routes 60+ renders a second through the framework for nothing.
 - **Advance by delta time.** `x += 0.1` per frame runs twice as fast on a 120Hz screen as on a 60Hz one; `x += speed * delta` is refresh-rate independent. Engine objects often also need their update flag (`.needsUpdate`, `updateProjectionMatrix()`) after a mutation.
-- **Zero allocation in the hot path.** No `new` and no `.clone()` inside a frame loop — allocate temporaries once (module scope or memo) and reuse them with `.set()`/`.copy()`. Sixty allocations a second is a GC hiccup on a timer.
+- **Zero allocation in the hot path.** No `new` and no `.clone()` inside a frame loop, allocate temporaries once (module scope or memo) and reuse them with `.set()`/`.copy()`. Sixty allocations a second is a GC hiccup on a timer.
 - **Tune with a bounded GUI, ship without it.** Subjective parameters (lerp ease, parallax intensity) get a dev panel with bounded ranges (lil-gui) during design, and the panel never reaches the production bundle, same rule as ScrollTrigger `markers`.
 
 ---
@@ -368,40 +274,18 @@ When reviewing motion in any UI:
 | `ease-in` on UI element | Switch to `ease-out` or custom curve |
 | `transform-origin: center` on popover | Use Radix/Base UI CSS variable (modals exempt) |
 | Animation on keyboard action | Remove entirely |
-| Duration > 300ms on UI | Reduce to 150–250ms |
+| Duration > 300ms on UI | Reduce to 150-250ms |
 | Hover animation without media query | Add `@media (hover: hover) and (pointer: fine)` |
 | Keyframes on rapidly-triggered element | Use CSS transitions instead |
 | Framer `x`/`y` props under load | Use `transform: "translateX()"` for GPU acceleration |
 | Same enter/exit speed | Exit at ~75% of enter duration |
-| All elements appear at once | Add stagger (30–80ms between items) |
+| All elements appear at once | Add stagger (30-80ms between items) |
 
 ## View Transitions API
 
-Animate between two DOM states (or two pages) without manual FLIP bookkeeping. The browser snapshots before and after, then cross-fades or morphs matched elements.
+Animate between two DOM states (or two pages) without manual FLIP bookkeeping. The browser snapshots before and after, then cross-fades or morphs matched elements. Same-document work goes through `document.startViewTransition(() => updateTheDOM())`; cross-document navigation opts in from CSS alone with `@view-transition { navigation: auto; }`.
 
-Same-document (SPA-style state change):
-
-```js
-if (document.startViewTransition) {
-  document.startViewTransition(() => updateTheDOM());
-} else {
-  updateTheDOM(); // graceful fallback, no animation
-}
-```
-
-Cross-document (multi-page, no JS) opts in via CSS:
-
-```css
-@view-transition { navigation: auto; }
-```
-
-Match elements across states so the browser tweens position and size instead of cross-fading:
-
-```css
-.card { view-transition-name: hero-card; } /* must be unique per snapshot */
-```
-
-Tune the morph; always gate motion:
+Match elements across states with `view-transition-name` so the browser tweens position and size instead of cross-fading. Then tune the morph and gate it:
 
 ```css
 ::view-transition-group(hero-card) { animation-duration: 250ms; }

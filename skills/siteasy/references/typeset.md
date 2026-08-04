@@ -1,7 +1,7 @@
 ---
 name: typeset
 description: "Assess and improve typography that feels generic, inconsistent, or poorly structured - turning default-looking text into intentional, well-crafted type."
-version: 1.9.2
+version: 1.9.3
 ---
 
 Assess and improve typography that feels generic, inconsistent, or poorly structured — turning default-looking text into intentional, well-crafted type.
@@ -20,30 +20,11 @@ Product: system fonts and familiar sans stacks are legitimate here. One well-tun
 
 Analyze what's weak or generic about the current type:
 
-1. **Font choices**:
-   - Are we using invisible defaults? (Inter, Roboto, Arial, Open Sans, system defaults)
-   - Does the font match the brand personality? (A playful brand shouldn't use a corporate typeface)
-   - Are there too many font families? (More than 2-3 is almost always a mess)
-
-2. **Hierarchy**:
-   - Can you tell headings from body from captions at a glance?
-   - Are font sizes too close together? (14px, 15px, 16px = muddy hierarchy)
-   - Are weight contrasts strong enough? (Medium vs Regular is barely visible)
-
-3. **Sizing & scale**:
-   - Is there a consistent type scale, or are sizes arbitrary?
-   - Does body text meet minimum readability? (16px+)
-   - Is the sizing strategy appropriate for the context? (Fixed `rem` scales for app UIs; fluid `clamp()` for marketing/content page headings)
-
-4. **Readability**:
-   - Are line lengths comfortable? (45-75 characters ideal)
-   - Is line-height appropriate for the font and context?
-   - Is there enough contrast between text and background?
-
-5. **Consistency**:
-   - Are the same elements styled the same way throughout?
-   - Are font weights used consistently? (Not bold in one section, semibold in another for the same role)
-   - Is letter-spacing intentional or default everywhere?
+1. **Font choices**: invisible defaults (Inter, Roboto, Arial, Open Sans, system stacks)? Does the face match the brand personality, or is a playful brand wearing a corporate typeface? More than 2-3 families is almost always a mess.
+2. **Hierarchy**: heading, body and caption distinguishable at a glance? Sizes too close together (14px, 15px, 16px) make muddy hierarchy, and Medium against Regular is a weight contrast nobody sees.
+3. **Sizing and scale**: a committed scale or arbitrary sizes? Body text at 16px or more? Fixed `rem` scales for app UIs, fluid `clamp()` for marketing and content headings.
+4. **Readability**: line length in the 45-75 character band, line-height suited to the face and the context, enough contrast against the background.
+5. **Consistency**: same role styled the same way throughout, each weight doing one job (not bold in one section and semibold in another for the same role), letter-spacing intentional rather than default everywhere.
 
 **CRITICAL**: The goal isn't to make text "fancier" — it's to make it clearer, more readable, and more intentional. Good typography is invisible; bad typography is distracting.
 
@@ -62,17 +43,13 @@ Create a systematic plan:
 
 ### Font Selection
 
-If fonts need replacing:
-- Choose fonts that reflect the brand personality
-- Pair with genuine contrast (serif + sans, geometric + humanist) — or use a single family in multiple weights
-- Ensure web font loading doesn't cause layout shift (`font-display: swap`, metric-matched fallbacks)
+If fonts need replacing, pair with genuine contrast (serif + sans, geometric + humanist), or commit to a single family in several weights. The failure is the middle ground: two faces close enough to look like an accident.
 
 ### Establish Hierarchy
 
 Build a clear type scale:
 - **5 sizes cover most needs**: caption, secondary, body, subheading, heading
-- **Use a consistent ratio** between levels (1.25, 1.333, or 1.5)
-- **Combine dimensions**: Size + weight + color + space for strong hierarchy — don't rely on size alone
+- **Combine dimensions**: size + weight + color + space. Size alone is the weakest hierarchy there is
 - **App UIs**: Use a fixed `rem`-based type scale, optionally adjusted at 1-2 breakpoints. Fluid sizing undermines the spatial predictability that dense, container-based layouts need
 - **Marketing / content pages**: Use fluid sizing via `clamp(min, preferred, max)` for headings and display text. Keep body text fixed
 
@@ -85,10 +62,8 @@ Build a clear type scale:
 
 ### Refine Details
 
-- Use `tabular-nums` for data tables and numbers that should align
 - Apply proper `letter-spacing`: slightly open for small caps and uppercase, default or tight for large display text
 - Use semantic token names (`--text-body`, `--text-heading`), not value names (`--font-16`)
-- Set `font-kerning: normal` and consider OpenType features where appropriate
 
 ### Weight Consistency
 
@@ -108,12 +83,7 @@ Build a clear type scale:
 
 ## Verify Typography Improvements
 
-- **Hierarchy**: Can you identify heading vs body vs caption instantly?
-- **Readability**: Is body text comfortable to read in long passages?
-- **Consistency**: Are same-role elements styled identically throughout?
-- **Personality**: Does the typography reflect the brand?
-- **Performance**: Are web fonts loading efficiently without layout shift?
-- **Accessibility**: Does text meet WCAG contrast ratios? Is it zoomable to 200%?
+Heading, body and caption identifiable instantly. Body comfortable over a long passage. Same-role elements styled identically. Type reflects the brand. Web fonts load without layout shift. Text meets WCAG contrast and survives a zoom to 200%.
 
 Remember: Typography is the foundation of interface design — it carries the majority of information. Getting it right is the highest-leverage improvement you can make.
 

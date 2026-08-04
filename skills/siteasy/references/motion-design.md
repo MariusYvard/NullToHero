@@ -1,7 +1,7 @@
 ---
 name: motion-design
 description: "Exit animations are faster than entrances - use ~75% of enter duration."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Motion Design
@@ -57,13 +57,9 @@ Use CSS custom properties for cleaner stagger: `animation-delay: calc(var(--i, 0
 
 This is not optional. Vestibular dysfunction was measured in 35.4% of US adults aged 40 and over, about 69 million people ([Agrawal et al., Archives of Internal Medicine, 2009](https://pubmed.ncbi.nlm.nih.gov/19468085/), NHANES 2001-2004). That figure is US-only and comes from a balance test, not a diagnosis count. For parallax-specific reduced-motion patterns plus the manual toggle required by WCAG 2.2.2, see [parallax.md](parallax.md).
 
-```css
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    animation: fade-in 200ms ease-out; /* Crossfade instead of motion */
-  }
-}
-```
+Substitute, never strip: under `prefers-reduced-motion: reduce`, swap the movement for a
+crossfade of about 200ms rather than a blanket `animation: none`, which removes the feedback
+along with the motion and leaves state changes unannounced.
 
 ## Perceived Performance
 

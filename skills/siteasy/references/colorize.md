@@ -1,7 +1,7 @@
 ---
 name: colorize
 description: "Strategically introduce color to designs that are too monochromatic, gray, or lacking in visual warmth and personality."
-version: 1.9.2
+version: 1.9.3
 ---
 
 > **Additional context needed**: existing brand colors.
@@ -12,9 +12,9 @@ Strategically introduce color to designs that are too monochromatic, gray, or la
 
 ## Register
 
-Brand: palette IS voice. Pick a color strategy first per SKILL.md (Restrained / Committed / Full palette / Drenched) and follow its dosage. Committed, Full palette, and Drenched deliberately exceed the ≤10% rule — that rule is Restrained only. Unexpected combinations are allowed; a dominant color can own the page when the chosen strategy calls for it.
+Brand: palette IS voice. Pick a color strategy first per SKILL.md (Restrained / Committed / Full palette / Drenched) and follow its dosage. Committed, Full palette, and Drenched deliberately exceed the ≤10% rule: that rule is Restrained only. Unexpected combinations are allowed; a dominant color can own the page when the chosen strategy calls for it.
 
-Product: semantic-first and almost always Restrained. Accent color is reserved for primary action, current selection, and state indicators — not decoration. Every color has a consistent meaning across every screen.
+Product: semantic-first and almost always Restrained. Accent color is reserved for primary action, current selection, and state indicators, not decoration. Every color has a consistent meaning across every screen.
 
 ---
 
@@ -56,22 +56,12 @@ Create a purposeful color introduction plan:
 Add color systematically across these dimensions:
 
 ### Semantic Color
-- **State indicators**:
-  - Success: Green tones (emerald, forest, mint)
-  - Error: Red/pink tones (rose, crimson, coral)
-  - Warning: Orange/amber tones
-  - Info: Blue tones (sky, ocean, indigo)
-  - Neutral: Gray/slate for inactive states
-
-- **Status badges**: Colored backgrounds or borders for states (active, pending, completed, etc.)
-- **Progress indicators**: Colored bars, rings, or charts showing completion or health
+- **State indicators**: the conventional success, error, warning, info and neutral mapping. The mapping itself is not the decision; holding it identically on every screen is, and that is where products drift.
+- **Status badges and progress**: tint the surface or the border, not both at full strength on the same element.
 
 ### Accent Color Application
-- **Primary actions**: Color the most important buttons/CTAs
-- **Links**: Add color to clickable text (maintain accessibility)
-- **Icons**: Colorize key icons for recognition and personality
-- **Headers/titles**: Add color to section headers or key labels
-- **Hover states**: Introduce color on interaction
+- **Spend the accent on the primary action first.** Links, key icons and hover states come next; section headings come last, and in Product register usually not at all.
+- **One accent per view.** Two accents means the user has to work out which one is the action.
 
 ### Background & Surfaces
 - **Tinted backgrounds**: Replace pure gray (`#f5f5f5`) with warm neutrals (`oklch(97% 0.01 60)`) or cool tints (`oklch(97% 0.01 250)`)
@@ -82,29 +72,22 @@ Add color systematically across these dimensions:
 **Use OKLCH for color**: It's perceptually uniform, meaning equal steps in lightness *look* equal. Great for generating harmonious scales.
 
 ### Data Visualization
-- **Charts & graphs**: Use color to encode categories or values
-- **Heatmaps**: Color intensity shows density or importance
-- **Comparison**: Color coding for different datasets or timeframes
+- Encode categories by hue and magnitude by lightness, never magnitude by hue. A categorical palette applied to an ordered series reads as unordered and the reader stops trusting the chart.
 
 ### Borders & Accents
-- **Hairline borders**: 1px colored borders on full perimeter (not side-stripes — see the absolute ban on `border-left/right > 1px`)
+- **Hairline borders**: 1px colored borders on full perimeter (not side-stripes; see the absolute ban on `border-left/right > 1px`)
 - **Underlines**: Color underlines for emphasis or active states
 - **Dividers**: Subtle colored dividers instead of gray lines
 - **Focus rings**: Colored focus indicators matching brand
 - **Surface tints**: A 4-8% background wash of the accent color instead of a stripe
 
-**NEVER**: `border-left` or `border-right` greater than 1px as a colored accent stripe. This is one of the three absolute bans in the parent skill. If you want to mark a card as "active" or "warning", use a full hairline border, a background tint, a leading glyph, or a numbered prefix — not a side stripe.
+**NEVER**: `border-left` or `border-right` greater than 1px as a colored accent stripe. This is one of the three absolute bans in the parent skill. If you want to mark a card as "active" or "warning", use a full hairline border, a background tint, a leading glyph, or a numbered prefix, not a side stripe.
 
 ### Typography Color
-- **Colored headings**: Use brand colors for section headings (maintain contrast)
-- **Highlight text**: Color for emphasis or categories
-- **Labels & tags**: Small colored labels for metadata or categories
+- Headings, highlights and small labels may carry brand color; a brand color that only clears 3:1 is a heading color, not a body color. Check before promoting it.
 
 ### Decorative Elements
-- **Illustrations**: Add colored illustrations or icons
-- **Shapes**: Geometric shapes in brand colors as background elements
-- **Gradients**: Colorful gradient overlays or mesh backgrounds
-- **Blobs/organic shapes**: Soft colored shapes for visual interest
+- Illustrations, geometric shapes, mesh gradients and soft organic forms in brand colors, sitting behind the content and never competing with it. Gradients are allowed here and banned in the NEVER list below when they are the generic purple-blue.
 
 ## Balance & Refinement
 
@@ -129,8 +112,8 @@ Ensure color addition improves rather than overwhelms:
 **NEVER**:
 - Use every color in the rainbow (choose 2-4 colors beyond neutrals)
 - Apply color randomly without semantic meaning
-- Put gray text on colored backgrounds—it looks washed out; use a darker shade of the background color or transparency instead
-- Use pure gray for neutrals—add subtle color tint (warm or cool) for sophistication
+- Put gray text on colored backgrounds, it looks washed out; use a darker shade of the background color or transparency instead
+- Use pure gray for neutrals, add a subtle color tint (warm or cool) for sophistication
 - Use pure black (`#000`) or pure white (`#fff`) for large areas
 - Violate WCAG contrast requirements
 - Use color as the only indicator (accessibility issue)
@@ -151,7 +134,7 @@ Remember: Color is emotional and powerful. Use it to create warmth, guide attent
 
 ## Live-mode signature params
 
-When invoked from live mode, each variant MUST declare a `color-amount` param so the user can dial between a restrained accent and a drenched surface without regeneration. Author the variant's CSS against `var(--p-color-amount, 0.5)` — typically as the alpha multiplier on backgrounds, or as a scaling factor on the chroma axis in an OKLCH expression. 0 = neutral/monochrome, 1 = full saturation / dominant coverage.
+When invoked from live mode, each variant MUST declare a `color-amount` param so the user can dial between a restrained accent and a drenched surface without regeneration. Author the variant's CSS against `var(--p-color-amount, 0.5)`, typically as the alpha multiplier on backgrounds, or as a scaling factor on the chroma axis in an OKLCH expression. 0 = neutral/monochrome, 1 = full saturation / dominant coverage.
 
 ```json
 {"id":"color-amount","kind":"range","min":0,"max":1,"step":0.05,"default":0.5,"label":"Color amount"}

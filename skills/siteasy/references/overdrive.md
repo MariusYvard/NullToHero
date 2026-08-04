@@ -1,7 +1,7 @@
 ---
 name: overdrive
 description: "Advanced visual effects for high-impact interfaces: the View Transitions API, WebGL, and scroll-driven animations."
-version: 1.11.0
+version: 1.11.1
 ---
 
 Start your response with:
@@ -57,8 +57,6 @@ Organized by what you're trying to achieve, not by technology name.
 
 ### Make transitions feel cinematic
 - **View Transitions API** (same-document: all browsers; cross-document: no Firefox) — shared element morphing between states. A list item expanding into a detail page. A button morphing into a dialog. This is the closest thing to native FLIP animations.
-- **`@starting-style`** (all browsers) — animate elements from `display: none` to visible with CSS only, including entry keyframes
-- **Spring physics** — natural motion with mass, tension, and damping instead of cubic-bezier. Libraries: motion (formerly Framer Motion), GSAP, or roll your own spring solver.
 
 ### Tie animation to scroll position
 - **Scroll-driven animations** (`animation-timeline: scroll()`) — CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Chrome/Edge/Safari; Firefox: flag only, always provide a static fallback). For full multi-layer parallax, scrollytelling architecture, and AI-adaptive governance, load [parallax.md](parallax.md) first.
@@ -66,26 +64,6 @@ Organized by what you're trying to achieve, not by technology name.
 ### Render beyond CSS
 - **WebGL** (all browsers) — shader effects, post-processing, particle systems. Libraries: Three.js, OGL (lightweight), regl. Use for effects CSS can't express. Gate it behind measured capability (GPU tier via detect-gpu, a quick fps sample, pointer type) with the DOM version as the default state; drive shader uniforms with scroll or drag velocity so the effect dies out when the user stops; keep models under ~5 MB with Draco/meshopt.
 - **WebGPU** (Chrome/Edge; Safari partial; Firefox: flag only) — next-gen GPU compute. More powerful than WebGL but limited browser support. Always fall back to WebGL2.
-- **Canvas 2D / OffscreenCanvas** — custom rendering, pixel manipulation, or moving heavy rendering off the main thread entirely via Web Workers + OffscreenCanvas.
-- **SVG filter chains** — displacement maps, turbulence, morphology for organic distortion effects. CSS-animatable.
-
-### Make data feel alive
-- **Virtual scrolling** — render only visible rows for tables/lists with tens of thousands of items. No library required for simple cases; TanStack Virtual for complex ones.
-- **GPU-accelerated charts** — Canvas or WebGL-rendered data visualization for datasets too large for SVG/DOM. Libraries: deck.gl, regl-based custom renderers.
-- **Animated data transitions** — morph between chart states rather than replacing. D3's `transition()` or View Transitions for DOM-based charts.
-
-### Animate complex properties
-- **`@property`** (all browsers) — register custom CSS properties with types, enabling animation of gradients, colors, and complex values that CSS can't normally interpolate.
-- **Web Animations API** (all browsers) — JavaScript-driven animations with the performance of CSS. Composable, cancellable, reversible. The foundation for complex choreography.
-
-### Push performance boundaries
-- **Web Workers** — move computation off the main thread. Heavy data processing, image manipulation, search indexing — anything that would cause jank.
-- **OffscreenCanvas** — render in a Worker thread. The main thread stays free while complex visuals render in the background.
-- **WASM** — near-native performance for computation-heavy features. Image processing, physics simulations, codecs.
-
-### Interact with the device
-- **Web Audio API** — spatial audio, audio-reactive visualizations, sonic feedback. Requires user gesture to start.
-- **Device APIs** — orientation, ambient light, geolocation. Use sparingly and always with user permission.
 
 **NOTE**: This command is about enhancing how an interface FEELS, not changing what a product DOES. Adding real-time collaboration, offline support, or new backend capabilities are product decisions, not UI enhancements. Focus on making existing features feel extraordinary.
 
@@ -93,19 +71,7 @@ Organized by what you're trying to achieve, not by technology name.
 
 ### Progressive enhancement is non-negotiable
 
-Every technique must degrade gracefully. The experience without the enhancement must still be good.
-
-```css
-@supports (animation-timeline: scroll()) {
-  .hero { animation-timeline: scroll(); }
-}
-```
-
-```javascript
-if ('gpu' in navigator) { /* WebGPU */ }
-else if (canvas.getContext('webgl2')) { /* WebGL2 fallback */ }
-/* CSS-only fallback must still look good */
-```
+Every technique must degrade gracefully, behind `@supports` or a capability probe. The experience without the enhancement must still be good.
 
 ### Performance rules
 

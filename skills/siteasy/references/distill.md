@@ -1,7 +1,7 @@
 ---
 name: distill
 description: "Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification."
-version: 1.6.0
+version: 1.6.1
 ---
 
 Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification.
@@ -14,12 +14,10 @@ Remove unnecessary complexity from designs, revealing the essential elements and
 Analyze what makes the design feel complex or cluttered:
 
 1. **Identify complexity sources**:
-   - **Too many elements**: Competing buttons, redundant information, visual clutter
-   - **Excessive variation**: Too many colors, fonts, sizes, styles without purpose
-   - **Information overload**: Everything visible at once, no progressive disclosure
-   - **Visual noise**: Unnecessary borders, shadows, backgrounds, decorations
-   - **Confusing hierarchy**: Unclear what matters most
-   - **Feature creep**: Too many options, actions, or paths forward
+   - **Too many elements**: competing buttons, redundant information, visual clutter
+   - **Excessive variation**: colors, fonts, sizes and styles that vary without purpose
+   - **Information overload**: everything visible at once, no progressive disclosure
+   - **Feature creep**: too many options, actions, or paths forward
 
 2. **Find the essence**:
    - What's the primary user goal? (There should be ONE)
@@ -47,52 +45,41 @@ Create a ruthless editing strategy:
 Systematically remove complexity across these dimensions:
 
 ### Information Architecture
-- **Reduce scope**: Remove secondary actions, optional features, redundant information
-- **Progressive disclosure**: Hide complexity behind clear entry points (accordions, modals, step-through flows)
-- **Combine related actions**: Merge similar buttons, consolidate forms, group related content
 - **Clear hierarchy**: ONE primary action, few secondary actions, everything else tertiary or hidden
+- **Progressive disclosure**: Hide complexity behind clear entry points (accordions, modals, step-through flows)
 - **Remove redundancy**: If it's said elsewhere, don't repeat it here
 
 ### Visual Simplification
 - **Reduce color palette**: Use 1-2 colors plus neutrals, not 5-7 colors
 - **Limit typography**: One font family, 3-4 sizes maximum, 2-3 weights
 - **Remove decorations**: Eliminate borders, shadows, backgrounds that don't serve hierarchy or function
-- **Flatten structure**: Reduce nesting, remove unnecessary containers—never nest cards inside cards
+- **Flatten structure**: Reduce nesting, remove unnecessary containers, and never nest cards inside cards
 - **Remove unnecessary cards**: Cards aren't needed for basic layout; use spacing and alignment instead
 - **Consistent spacing**: Use one spacing scale, remove arbitrary gaps
 
 ### Layout Simplification
-- **Linear flow**: Replace complex grids with simple vertical flow where possible
-- **Remove sidebars**: Move secondary content inline or hide it
-- **Full-width**: Use available space generously instead of complex multi-column layouts
-- **Consistent alignment**: Pick left or center, stick with it
-- **Generous white space**: Let content breathe, don't pack everything tight
+- **Linear flow**: A simple vertical flow beats a complex grid unless the content is genuinely tabular or comparative
+- **Consistent alignment**: Pick left or center, stick with it, and let white space do the separating instead of rules and boxes
 
 ### Interaction Simplification
-- **Reduce choices**: Fewer buttons, fewer options, clearer path forward (paradox of choice is real)
 - **Smart defaults**: Make common choices automatic, only ask when necessary
-- **Inline actions**: Replace modal flows with inline editing where possible
+- **Inline over modal**: Replace modal flows with inline editing where possible; a modal is an interruption you have to justify
 - **Remove steps**: Can signup be one step instead of three? Can checkout be simplified?
-- **Clear CTAs**: ONE obvious next step, not five competing actions
+- **Clear CTAs**: ONE obvious next step, not five competing actions (paradox of choice is real)
 
 ### Content Simplification
 - **Shorter copy**: Cut every sentence in half, then do it again
-- **Active voice**: "Save changes" not "Changes will be saved"
-- **Remove jargon**: Plain language always wins
-- **Scannable structure**: Short paragraphs, bullet points, clear headings
-- **Essential information only**: Remove marketing fluff, legalese, hedging
 - **Remove redundant copy**: No headers restating intros, no repeated explanations, say it once
+- **Essential information only**: Remove marketing fluff, legalese, hedging
 
 ### Code Simplification
 - **Remove unused code**: Dead CSS, unused components, orphaned files
-- **Flatten component trees**: Reduce nesting depth
-- **Consolidate styles**: Merge similar styles, use utilities consistently
 - **Reduce variants**: Does that component need 12 variations, or can 3 cover 90% of cases?
 
 **NEVER**:
-- Remove necessary functionality (simplicity ≠ feature-less)
+- Remove necessary functionality (simplicity is not feature-less)
 - Sacrifice accessibility for simplicity (clear labels and ARIA still required)
-- Make things so simple they're unclear (mystery ≠ minimalism)
+- Make things so simple they're unclear (mystery is not minimalism)
 - Remove information users need to make decisions
 - Eliminate hierarchy completely (some things should stand out)
 - Oversimplify complex domains (match complexity to actual task complexity)
@@ -105,7 +92,6 @@ Ensure simplification improves usability:
 - **Reduced cognitive load**: Is it easier to understand what to do?
 - **Still complete**: Are all necessary features still accessible?
 - **Clearer hierarchy**: Is it obvious what matters most?
-- **Better performance**: Does simpler design load faster?
 
 ## Document Removed Complexity
 

@@ -1,7 +1,7 @@
 ---
 name: typography
 description: "Typographic scale, line-height, and measure on the shared 4pt spacing scale for readable, well-proportioned type."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Typography
@@ -93,28 +93,7 @@ When pairing, contrast on multiple axes:
 
 ### Web Font Loading
 
-```css
-/* 1. Use font-display: swap for visibility */
-@font-face {
-  font-family: 'CustomFont';
-  src: url('font.woff2') format('woff2');
-  font-display: swap;
-}
-
-/* 2. Match fallback metrics to minimize shift */
-@font-face {
-  font-family: 'CustomFont-Fallback';
-  src: local('Arial');
-  size-adjust: 105%;
-  ascent-override: 90%;
-  descent-override: 20%;
-  line-gap-override: 10%;
-}
-
-body {
-  font-family: 'CustomFont', 'CustomFont-Fallback', sans-serif;
-}
-```
+`font-display: swap` and a `preload` on the one above-the-fold weight are the baseline. The step almost nobody takes is the second `@font-face`: declare a fallback family pointing at a `local()` face and override its metrics (`size-adjust`, `ascent-override`, `descent-override`, `line-gap-override`) so the fallback occupies the same box as the real font, then list it between the webfont and the generic. Typical Arial-to-custom correction lands near `size-adjust: 105%`, `ascent-override: 90%`, `descent-override: 20%`, `line-gap-override: 10%`, but the numbers are per-face and worth measuring. Without this, `swap` buys visibility and pays for it in CLS.
 
 **Variable fonts for 3+ weights or styles**: a single variable font file is usually smaller than three static weight files.
 
@@ -128,34 +107,9 @@ Use `clamp(min, preferred, max)` for headings and display text on marketing/cont
 
 **Use fixed `rem` scales for app UIs**: No major app design system uses fluid type in product UI, fixed scales with optional breakpoint adjustments give the spatial predictability that container-based layouts need.
 
-### OpenType Features
+### OpenType and rendering polish
 
-```css
-/* Tabular numbers for data alignment */
-.data-table { font-variant-numeric: tabular-nums; }
-
-/* Proper fractions */
-.recipe-amount { font-variant-numeric: diagonal-fractions; }
-
-/* Small caps for abbreviations */
-abbr { font-variant-caps: all-small-caps; }
-
-/* Enable kerning */
-body { font-kerning: normal; }
-```
-
-### Rendering polish
-
-```css
-/* Even out heading line lengths */
-h1, h2, h3 { text-wrap: balance; }
-
-/* Reduce orphans in long prose */
-article p { text-wrap: pretty; }
-
-/* Variable fonts: pick the right optical-size master */
-body { font-optical-sizing: auto; }
-```
+Four settings earn their place, each on the narrowest selector that needs it: `font-variant-numeric: tabular-nums` on any column of figures or animated counter (proportional digits reflow as they change), `font-variant-caps: all-small-caps` on `abbr`, `text-wrap: balance` on headings only, and `text-wrap: pretty` on long prose. `balance` is capped by engines at a handful of lines and costs layout work, so pointing it at body copy is both slower and a no-op. Add `font-optical-sizing: auto` when the family ships an optical-size axis.
 
 **ALL-CAPS tracking**: Add 5 to 12% letter-spacing (`letter-spacing: 0.05em` to `0.12em`) to short all-caps labels and headings.
 

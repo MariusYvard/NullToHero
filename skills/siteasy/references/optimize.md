@@ -1,7 +1,7 @@
 ---
 name: optimize
 description: "Identify and fix performance issues to create faster, smoother user experiences."
-version: 1.6.0
+version: 1.6.1
 ---
 
 Identify and fix performance issues to create faster, smoother user experiences.
@@ -11,235 +11,134 @@ Identify and fix performance issues to create faster, smoother user experiences.
 Understand current performance and identify problems:
 
 1. **Measure current state**:
-   - **Core Web Vitals**: LCP, INP, CLS scores
-   - **Load time**: Time to interactive, first contentful paint
-   - **Bundle size**: JavaScript, CSS, image sizes
-   - **Runtime performance**: Frame rate, memory usage, CPU usage
-   - **Network**: Request count, payload sizes, waterfall
+   - **Core Web Vitals**: LCP, INP, CLS
+   - **Load time**: time to interactive, first contentful paint
+   - **Bundle size**: JavaScript, CSS, image weight
+   - **Runtime performance**: frame rate, memory, CPU
+   - **Network**: request count, payload sizes, waterfall
 
 2. **Identify bottlenecks**:
-   - What's slow? (Initial load? Interactions? Animations?)
-   - What's causing it? (Large images? Expensive JavaScript? Layout thrashing?)
-   - How bad is it? (Perceivable? Annoying? Blocking?)
-   - Who's affected? (All users? Mobile only? Slow connections?)
+   - What is slow? (initial load, interactions, animations)
+   - What causes it? (large images, expensive JavaScript, layout thrashing)
+   - How bad is it? (perceivable, annoying, blocking)
+   - Who is affected? (all users, mobile only, slow connections)
 
-**CRITICAL**: Measure before and after. Premature optimization wastes time. Optimize what actually matters.
+**CRITICAL**: Measure before and after. Premature optimization wastes time. Optimize what actually matters, and take the biggest bottleneck first.
 
 ## Optimization Strategy
 
-Create systematic improvement plan:
-
 ### Loading Performance
 
-**Optimize Images**:
-- Use modern formats (WebP, AVIF)
-- Proper sizing (don't load 3000px image for 300px display)
-- Lazy loading for below-fold images
-- Responsive images (`srcset`, `picture` element)
-- Compress images (80-85% quality is usually imperceptible)
-- Use CDN for faster delivery
+**Optimize images**:
+- Modern formats (AVIF, WebP)
+- Correct intrinsic size: never a 3000px file for a 300px slot
+- `loading="lazy"` below the fold
+- Responsive delivery with `srcset` and `sizes`
+- Compression at 80-85% quality, usually imperceptible
+- CDN for delivery
 
-```html
-<img 
-  src="hero.webp"
-  srcset="hero-400.webp 400w, hero-800.webp 800w, hero-1200.webp 1200w"
-  sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px"
-  loading="lazy"
-  alt="Hero image"
-/>
-```
-
-**Reduce JavaScript Bundle**:
-- Code splitting (route-based, component-based)
-- Tree shaking (remove unused code)
-- Remove unused dependencies
+**Reduce the JavaScript bundle**:
+- Code splitting, by route and by component
+- Tree shaking, and removal of unused dependencies
+- Dynamic imports for large components
 - Lazy load non-critical code
-- Use dynamic imports for large components
-
-```javascript
-// Lazy load heavy component
-const HeavyChart = lazy(() => import('./HeavyChart'));
-```
 
 **Optimize CSS**:
-- Remove unused CSS
-- Critical CSS inline, rest async
-- Minimize CSS files
-- Use CSS containment for independent regions
+- Remove unused rules
+- Critical CSS inline, the rest async
+- Containment for independent regions
 
-**Optimize Fonts**:
-- Use `font-display: swap` or `optional`
-- Subset fonts (only characters you need)
-- Preload critical fonts
-- Use system fonts when appropriate
-- Limit font weights loaded
+**Optimize fonts**:
+- `font-display: swap` or `optional`
+- Subset to the characters actually used
+- Preload the critical face
+- Limit the number of loaded weights
+- System fonts are a legitimate answer here, not a concession
 
-```css
-@font-face {
-  font-family: 'CustomFont';
-  src: url('/fonts/custom.woff2') format('woff2');
-  font-display: swap; /* Show fallback immediately */
-  unicode-range: U+0020-007F; /* Basic Latin only */
-}
-```
-
-**Optimize Loading Strategy**:
-- Critical resources first (async/defer non-critical)
-- Preload critical assets
-- Prefetch likely next pages
-- Service worker for offline/caching
-- HTTP/2 or HTTP/3 for multiplexing
+**Optimize the loading strategy**:
+- Critical resources first, non-critical deferred
+- Preload what the first screen needs
+- Prefetch the likely next page
+- Service worker for repeat visits
+- HTTP/2 or HTTP/3 multiplexing
 
 ### Rendering Performance
 
-**Avoid Layout Thrashing**:
-```javascript
-// ❌ Bad: Alternating reads and writes (causes reflows)
-elements.forEach(el => {
-  const height = el.offsetHeight; // Read (forces layout)
-  el.style.height = height * 2; // Write
-});
+**Avoid layout thrashing**: batch all reads, then all writes. Alternating an `offsetHeight` read with a style write inside one loop forces a reflow per iteration.
 
-// ✅ Good: Batch reads, then batch writes
-const heights = elements.map(el => el.offsetHeight); // All reads
-elements.forEach((el, i) => {
-  el.style.height = heights[i] * 2; // All writes
-});
-```
+**Optimize rendering**:
+- `contain` on independent regions
+- `content-visibility: auto` on long lists
+- Virtual scrolling for very long lists
+- A DOM that stays shallow and small
 
-**Optimize Rendering**:
-- Use CSS `contain` property for independent regions
-- Minimize DOM depth (flatter is faster)
-- Reduce DOM size (fewer elements)
-- Use `content-visibility: auto` for long lists
-- Virtual scrolling for very long lists (react-window, react-virtualized)
-
-**Reduce Paint & Composite**:
-- Use `transform` and `opacity` for reliable movement, but allow blur, filters, masks, clip paths, shadows, and color shifts when they create meaningful polish
+**Reduce paint and composite**:
+- Use `transform` and `opacity` for reliable movement, but allow blur, filters, masks, clip paths, shadows and color shifts when they create meaningful polish
 - Avoid casual animation of layout-driving properties (`width`, `height`, `top`, `left`, margins)
-- Use `will-change` sparingly for known expensive operations
-- Bound expensive paint areas for blur/filter/shadow effects (smaller and isolated is faster)
+- Use `will-change` sparingly, for known expensive operations
+- Bound expensive paint areas: a smaller, isolated blur is a cheaper blur
 
 ### Animation Performance
 
-**GPU Acceleration**:
-```css
-/* ✅ GPU-accelerated (fast) */
-.animated {
-  transform: translateX(100px);
-  opacity: 0.5;
-}
-
-/* ❌ CPU-bound (slow) */
-.animated {
-  left: 100px;
-  width: 300px;
-}
-```
-
-**Smooth 60fps**:
 - Target 16ms per frame (60fps)
-- Use `requestAnimationFrame` for JS animations
-- Debounce/throttle scroll handlers
-- Use CSS animations when possible
-- Avoid long-running JavaScript during animations
-
-**Intersection Observer**:
-```javascript
-// Efficiently detect when elements enter viewport
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Element is visible, lazy load or animate
-    }
-  });
-});
-```
-
-### React/Framework Optimization
-
-**React-specific**:
-- Use `memo()` for expensive components
-- `useMemo()` and `useCallback()` for expensive computations
-- Virtualize long lists
-- Code split routes
-- Avoid inline function creation in render
-- Use React DevTools Profiler
-
-**Framework-agnostic**:
-- Minimize re-renders
-- Debounce expensive operations
-- Memoize computed values
-- Lazy load routes and components
+- `requestAnimationFrame` for JS animation, CSS animation wherever it suffices
+- Debounce or throttle scroll handlers
+- Prefer IntersectionObserver to a scroll listener for viewport detection
+- No long-running JavaScript while something is animating
 
 ### Network Optimization
 
-**Reduce Requests**:
-- Combine small files
-- Use SVG sprites for icons
-- Inline small critical assets
+**Reduce requests**:
+- SVG sprites for icons, inline small critical assets
 - Remove unused third-party scripts
 
 **Optimize APIs**:
-- Use pagination (don't load everything)
-- GraphQL to request only needed fields
-- Response compression (gzip, brotli)
-- HTTP caching headers
+- Pagination instead of loading everything
+- Response compression, HTTP caching headers
 - CDN for static assets
 
-**Optimize for Slow Connections**:
-- Adaptive loading based on connection (navigator.connection)
+**Optimize for slow connections**:
+- Adaptive loading from `navigator.connection`
 - Optimistic UI updates
-- Request prioritization
-- Progressive enhancement
+- Request prioritization, progressive enhancement
 
 ## Core Web Vitals Optimization
 
+Canonical thresholds: `L-PERF-1`, `L-PERF-2` and `L-PERF-3` in `tools/data/laws.csv`.
+
 ### Largest Contentful Paint (LCP < 2.5s)
-- Optimize hero images
+- Optimize the hero image
 - Inline critical CSS
 - Preload key resources
-- Use CDN
-- Server-side rendering
+- CDN, server-side rendering
 
 ### Interaction to Next Paint (INP < 200ms)
 - Break up long tasks
 - Defer non-critical JavaScript
-- Use web workers for heavy computation
-- Reduce JavaScript execution time
+- Move heavy computation to a web worker
+- Cut JavaScript execution time
 
 ### Cumulative Layout Shift (CLS < 0.1)
-- Set dimensions on images and videos
-- Don't inject content above existing content
-- Use `aspect-ratio` CSS property
-- Reserve space for ads/embeds
-- Avoid animations that cause layout shifts
-
-```css
-/* Reserve space for image */
-.image-container {
-  aspect-ratio: 16 / 9;
-}
-```
+- Set dimensions or `aspect-ratio` on images, videos and embeds
+- Reserve space for ads and embeds
+- Never inject content above existing content
+- No animation that shifts layout
 
 ## Performance Monitoring
 
 **Tools to use**:
 - Chrome DevTools (Lighthouse, Performance panel)
 - WebPageTest
-- Core Web Vitals (Chrome UX Report)
+- Chrome UX Report for field Core Web Vitals
 - Bundle analyzers (webpack-bundle-analyzer)
-- Performance monitoring (Sentry, DataDog, New Relic)
+- Real-user monitoring (Sentry, DataDog, New Relic)
 
 **Key metrics**:
 - LCP, INP, CLS (Core Web Vitals)
-- Time to Interactive (TTI)
-- First Contentful Paint (FCP)
-- Total Blocking Time (TBT)
-- Bundle size
-- Request count
+- Time to Interactive, First Contentful Paint, Total Blocking Time
+- Bundle size, request count
 
-**IMPORTANT**: Measure on real devices with real network conditions. Desktop Chrome with fast connection isn't representative.
+**IMPORTANT**: Measure on real devices with real network conditions. Desktop Chrome with a fast connection isn't representative.
 
 **NEVER**:
 - Optimize without measuring (premature optimization)
@@ -247,19 +146,19 @@ const observer = new IntersectionObserver((entries) => {
 - Break functionality while optimizing
 - Use `will-change` everywhere (creates new layers, uses memory)
 - Lazy load above-fold content
-- Optimize micro-optimizations while ignoring major issues (optimize the biggest bottleneck first)
+- Chase micro-optimizations while a major bottleneck stands
 - Forget about mobile performance (often slower devices, slower connections)
 
 ## Verify Improvements
 
 Test that optimizations worked:
 
-- **Before/after metrics**: Compare Lighthouse scores
-- **Real user monitoring**: Track improvements for real users
-- **Different devices**: Test on low-end Android, not just flagship iPhone
-- **Slow connections**: Throttle to 3G, test experience
-- **No regressions**: Ensure functionality still works
-- **User perception**: Does it *feel* faster?
+- **Before/after metrics**: compare Lighthouse scores
+- **Real user monitoring**: track the improvement for real users
+- **Different devices**: test on a low-end Android, not just a flagship iPhone
+- **Slow connections**: throttle to 3G and test the experience
+- **No regressions**: functionality still works
+- **User perception**: does it *feel* faster?
 
 Remember: Performance is a feature. Fast experiences feel more responsive, more polished, more professional. Optimize systematically, measure ruthlessly, and prioritize user-perceived performance.
 

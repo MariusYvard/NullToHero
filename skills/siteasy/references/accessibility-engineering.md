@@ -1,16 +1,14 @@
 ---
 name: accessibility-engineering
 description: "Deep reference for /siteasy audit, /siteasy harden, and any build work. Accessibility is not a checklist - it's a design constraint that improves every interface."
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Accessibility Engineering
 
 *Deep reference for `/siteasy audit`, `/siteasy harden`, and any build work. Accessibility is not a checklist, it's a design constraint that improves every interface.*
 
----
-
-## The Mental Model
+A current model writes a focus trap, a roving-tabindex handler and the WAI-ARIA keyboard maps correctly without being taught them, so this file no longer carries those implementations. It carries the calls that get made wrong: which pattern to prefer when several are valid, which default to refuse, the attribute wiring that is easy to get subtly wrong, and the numbers that decide a pass.
 
 Accessibility means the interface works for people who navigate differently. Four categories:
 
@@ -19,54 +17,38 @@ Accessibility means the interface works for people who navigate differently. Fou
 - **Cognitive**: attention, memory, reading difficulties
 - **Auditory**: captions, transcripts, visual alternatives to sound
 
-WCAG 2.1 has three levels: A (minimum), AA (standard target), AAA (enhanced). Target AA for everything. AAA where it's achievable without architectural cost.
+Target AA everywhere. AAA only where it costs nothing architectural.
 
 ---
 
-## ARIA: Use Only What's Needed
+## ARIA: the calls that go wrong
 
-ARIA overrides the accessibility tree. Bad ARIA is worse than no ARIA.
+ARIA overrides the accessibility tree, so bad ARIA is worse than none.
 
-**The five rules of ARIA:**
-1. Use semantic HTML first. `<button>` beats `<div role="button">` every time.
+1. Semantic HTML first. `<button>` beats `<div role="button">` every time.
 2. Never change native semantics unless necessary.
-3. All interactive ARIA controls must work with keyboard.
-4. Never hide focusable elements (`aria-hidden="true"` on a focused element).
-5. All interactive elements must have an accessible name.
+3. Every interactive ARIA control works with the keyboard.
+4. Never `aria-hidden` an element that can hold focus.
+5. Every interactive element has an accessible name.
 
-### The name triangle
+**Naming, in priority order:** `aria-labelledby` when the name already exists as visible text on the page, `<label>` for form fields, `aria-label` when no visible label is possible (icon buttons, close buttons). `title` is not a name: not every screen reader announces it. Refuse it as a naming strategy.
 
-Every interactive element needs an accessible name. Three ways, in priority order:
-
-| Method | When to use | Example |
-|--------|------------|---------|
-| `aria-labelledby` | Name comes from visible text on page | `<input aria-labelledby="label-id">` |
-| `<label>` | Standard form fields | `<label for="email">Email</label>` |
-| `aria-label` | No visible label possible (icon buttons, close buttons) | `<button aria-label="Close dialog">×</button>` |
-| `title` | Last resort. Not announced by all screen readers. | Avoid |
-
-**`aria-describedby`** is for supplementary description (hint text, error messages), it's announced after the name and role, not instead of it.
+`aria-describedby` carries supplementary text (hint, error) and is announced *after* the name and role, never instead of it. A field with a hint and an error needs both mechanisms: the label names it, the description explains it.
 
 ```html
-<!-- Correct: label + description -->
 <label for="pw">Password</label>
-<input id="pw" type="password"
-       aria-describedby="pw-hint pw-error">
+<input id="pw" type="password" aria-describedby="pw-hint pw-error">
 <p id="pw-hint">Minimum 8 characters</p>
 <p id="pw-error" role="alert" hidden>Too short</p>
 ```
 
 ---
 
-## Keyboard Interaction Patterns by Component
+## Keyboard patterns: what to prefer, what to refuse
 
-### Buttons and Links
+The WAI-ARIA Authoring Practices carry the full keyboard maps. These are the decisions the maps do not make for you, plus the attribute wiring worth having in front of you.
 
-- `<button>`: activates on Space and Enter
-- `<a href>`: activates on Enter only
-- Never use `<div>` or `<span>` for interactive elements. If you must: `role="button"`, `tabindex="0"`, handle both `click` and `keydown` (Enter + Space).
-
-### Modal / Dialog
+**Dialogs: native `<dialog>` with `showModal()`.** It gets the focus trap and the Escape key for free, and a hand-rolled trap is a thing you then maintain forever. Whatever you use: focus moves in on open, returns to the triggering element on close, and Escape closes.
 
 ```html
 <dialog aria-labelledby="dialog-title" aria-describedby="dialog-desc">
@@ -77,156 +59,65 @@ Every interactive element needs an accessible name. Three ways, in priority orde
 </dialog>
 ```
 
-- Use native `<dialog>`: it handles focus trap and Escape natively via `showModal()`
-- On open: move focus to first interactive element or the dialog itself
-- On close: return focus to the element that triggered the dialog
-- Escape must close
-- Clicks outside modal-backdrop should close (not required, but expected)
-
-**Focus trap (if not using `<dialog>`):**
-```js
-const focusable = modal.querySelectorAll(
-  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
-);
-const first = focusable[0];
-const last = focusable[focusable.length - 1];
-
-modal.addEventListener('keydown', e => {
-  if (e.key !== 'Tab') return;
-  if (e.shiftKey && document.activeElement === first) {
-    e.preventDefault(); last.focus();
-  } else if (!e.shiftKey && document.activeElement === last) {
-    e.preventDefault(); first.focus();
-  }
-});
-```
-
-### Dropdown Menu
+**Menus do not trap Tab.** Dialogs trap, menus do not. `Tab` closes the menu and moves on; arrow keys walk the items, `Home` and `End` jump to the ends, Escape closes and returns focus to the trigger, a printable character jumps to the matching item. Trapping Tab inside a menu is the most common over-application of the dialog pattern.
 
 ```html
-<button aria-haspopup="menu" aria-expanded="false" aria-controls="menu-id">
-  Options
-</button>
+<button aria-haspopup="menu" aria-expanded="false" aria-controls="menu-id">Options</button>
 <ul id="menu-id" role="menu" hidden>
   <li role="menuitem" tabindex="-1">Edit</li>
   <li role="menuitem" tabindex="-1">Delete</li>
 </ul>
 ```
 
-Keyboard behaviour:
-- `Enter`/`Space` on trigger: open menu, focus first item
-- `ArrowDown`/`ArrowUp`: navigate items (roving tabindex or focus management)
-- `Home`/`End`: jump to first/last item
-- `Escape`: close, return focus to trigger
-- `Tab`: close menu (don't trap tab in menus)
-- Printable character: jump to item starting with that character
+**Never build an interactive element from `<div>` or `<span>`.** If a design forces it: `role`, `tabindex="0"`, and a `keydown` handler for *both* Enter and Space, because a real `<button>` fires on both and a real link only on Enter.
 
-### Roving Tabindex
-
-For component groups where one item is tabbable at a time (tabs, toolbars, radio groups):
-
-```js
-function rovingTabindex(container) {
-  const items = [...container.querySelectorAll('[role="tab"]')];
-  let current = 0;
-
-  items.forEach((item, i) => {
-    item.tabIndex = i === 0 ? 0 : -1;
-    item.addEventListener('keydown', e => {
-      const map = {
-        ArrowRight: 1, ArrowLeft: -1,
-        Home: -current, End: items.length - 1 - current
-      };
-      if (!(e.key in map)) return;
-      e.preventDefault();
-      items[current].tabIndex = -1;
-      current = (current + map[e.key] + items.length) % items.length;
-      items[current].tabIndex = 0;
-      items[current].focus();
-    });
-  });
-}
-```
-
-### Accordion
+**Accordions get `role="region"` only when the panel is worth reaching as a landmark.** On an FAQ list it just floods the landmark map. Omit it, and toggle `aria-expanded` and `hidden` together.
 
 ```html
-<button aria-expanded="false" aria-controls="panel-1" id="btn-1">
-  Section title
-</button>
-<div id="panel-1" role="region" aria-labelledby="btn-1" hidden>
-  Content
-</div>
+<button aria-expanded="false" aria-controls="panel-1" id="btn-1">Section title</button>
+<div id="panel-1" aria-labelledby="btn-1" hidden>Content</div>
 ```
 
-- Toggle `aria-expanded` and `hidden` together
-- `role="region"` only if the content is a landmark worth navigating to. Omit for simple accordions.
-
-### Combobox / Autocomplete
+**Comboboxes keep real focus on the input.** Walk `aria-activedescendant` through the option ids as the user arrows; moving actual focus into the listbox breaks typing. This is the single most common combobox bug.
 
 ```html
-<label for="search">Search</label>
-<input id="search" type="text" role="combobox"
-       aria-autocomplete="list"
-       aria-expanded="false"
-       aria-controls="results"
-       aria-activedescendant="">
+<input id="search" type="text" role="combobox" aria-autocomplete="list"
+       aria-expanded="false" aria-controls="results" aria-activedescendant="">
 <ul id="results" role="listbox" hidden>
   <li role="option" id="opt-1">Result one</li>
 </ul>
 ```
 
-- `aria-activedescendant` points to the currently highlighted option ID
-- Update it as the user arrows through results
-- Don't move actual focus to the list, keep it on the input
-
-### Toast / Alert
-
-For dynamic content injected after page load, use live regions:
+**Live regions are containers you inject into, never containers you unhide.** Toggling visibility on the region itself is silent in several screen readers: create and append a fresh element each time. `aria-live="polite"` waits for the current speech to finish; `role="alert"` interrupts, so reserve it for errors.
 
 ```html
-<!-- Polite: announced after current speech finishes -->
 <div aria-live="polite" aria-atomic="true" class="sr-only" id="toasts"></div>
-
-<!-- Assertive: interrupts immediately. Only for errors. -->
 <div role="alert">Something went wrong</div>
 ```
 
-Inject messages into the live region container, don't toggle visibility on the container itself (some screen readers won't announce it). Create and append a new element each time.
+**Roving tabindex** (tabs, toolbars, radio groups) keeps exactly one item tabbable and moves the `0` as the arrows move focus, so the group is one stop in the tab order rather than one stop per item.
 
 ---
 
-## Focus Rings: The Correct Implementation
+## Focus rings
 
 ```css
-/* Remove default only where you replace it */
-:focus { outline: none; }
+:focus { outline: none; }          /* only where you replace it */
 
-/* Show ring only for keyboard navigation */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  box-shadow: 0 0 0 4px var(--color-accent-muted); /* halo: survives both themes */
 }
 ```
 
-**Requirements:**
-- Minimum 3:1 contrast against adjacent colours
-- At least 2px thick
-- Must be visible against both light and dark backgrounds, use two-colour outline or box-shadow trick:
-
-```css
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  box-shadow: 0 0 0 4px var(--color-accent-muted); /* halo for contrast */
-}
-```
+At least 2px thick, and 3:1 against the *adjacent* colours rather than against the page background. A single-colour ring that clears contrast on the light theme usually fails on the dark one; the halo above is what makes one declaration work on both.
 
 ---
 
-## Skip Links
+## Skip links
 
-Every page with navigation must have a skip link. Position off-screen, show on focus:
+Every page with navigation carries one. Position it off-screen and reveal it on focus, never `display: none`, because a hidden element is not focusable.
 
 ```html
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -237,93 +128,59 @@ Every page with navigation must have a skip link. Position off-screen, show on f
 ```css
 .skip-link {
   position: absolute;
-  transform: translateY(-100%);
   left: 1rem;
   top: 1rem;
+  transform: translateY(-100%);
   padding: 0.5rem 1rem;
   background: var(--color-accent);
   color: white;
   z-index: 9999;
 }
-.skip-link:focus {
-  transform: translateY(0);
-}
+.skip-link:focus { transform: translateY(0); }
 ```
+
+The target needs `tabindex="-1"` (`<main id="main-content" tabindex="-1">`), or several browsers scroll to it without moving focus and the next Tab drops the user back into the nav they were trying to skip.
 
 ---
 
-## Semantic HTML Reference
+## Semantics worth stating (the rest is obvious)
 
-Use the right element and most ARIA becomes unnecessary.
-
-| Element | Role conveyed |
-|---------|--------------|
-| `<main>` | `role="main"`: one per page |
-| `<nav>` | `role="navigation"`: label with `aria-label` if multiple |
-| `<header>` | `role="banner"` when direct child of `<body>` |
-| `<footer>` | `role="contentinfo"` when direct child of `<body>` |
-| `<aside>` | `role="complementary"` |
-| `<section>` | Landmark only with an accessible name (`aria-labelledby`) |
-| `<article>` | Self-contained content (cards, posts) |
-| `<figure>` + `<figcaption>` | Image with caption |
-| `<details>` + `<summary>` | Native disclosure widget |
-| `<dialog>` | Modal with built-in focus trap |
-| `<output>` | Live region for calculated results |
+| Element | The catch |
+|---------|-----------|
+| `<section>` | A landmark only when it has an accessible name. Unnamed, it is a `<div>` with extra steps. |
+| `<header>` / `<footer>` | `banner` / `contentinfo` only as a direct child of `<body>`. Inside an `<article>` they convey nothing. |
+| `<nav>` | Needs `aria-label` the moment there are two on a page. |
+| `<output>` | A live region for calculated results, polite by default. |
+| `<details>` / `<dialog>` | The native disclosure and the native modal. Prefer them to the hand-built equivalents. |
 
 ---
 
-## Images
+## Alt text: the decision, not the syntax
 
-```html
-<!-- Informative image -->
-<img src="chart.png" alt="Revenue grew 40% in Q3, driven by enterprise segment">
+- **Informative image:** describe the *conclusion*, not the picture. `alt="Revenue grew 40% in Q3, driven by enterprise"`, not `alt="bar chart"`.
+- **Decorative image:** `alt=""`. Empty, never absent, because an absent `alt` makes some screen readers read the filename aloud.
+- **Functional image** (inside a link or a button): describe the *action*, not the graphic. `alt="Acme, go to homepage"`.
+- **Complex image:** short `alt` plus the real explanation in a `<figcaption>` wired through `aria-describedby`.
+- **SVG:** `role="img"` with a `<title>` when it carries meaning, `aria-hidden="true"` when it does not.
 
-<!-- Decorative image, empty alt, not omitted -->
-<img src="decoration.png" alt="">
-
-<!-- Functional image (button/link), describe the action -->
-<a href="/home"><img src="logo.png" alt="Acme, go to homepage"></a>
-
-<!-- Complex image (chart, diagram) -->
-<figure>
-  <img src="diagram.png" alt="System architecture" aria-describedby="diagram-desc">
-  <figcaption id="diagram-desc">Three services communicate via a message queue...</figcaption>
-</figure>
-```
-
-**SVG accessibility:**
 ```html
 <svg role="img" aria-labelledby="svg-title svg-desc">
   <title id="svg-title">Upward trend</title>
   <desc id="svg-desc">Monthly users grew from 1k to 8k over 6 months</desc>
-  <!-- paths -->
 </svg>
 
-<!-- Decorative SVG -->
-<svg aria-hidden="true" focusable="false">...</svg>
+<svg aria-hidden="true">...</svg>
 ```
-
-Always add `focusable="false"` on SVGs in IE/Edge, they receive focus by default.
 
 ---
 
 ## Forms
 
-- **Label above input, always.** Placeholder is not a label, it disappears on input.
-- **Validate on blur**, not on keystroke. Don't show errors until the user leaves a field.
-- **Error messages below the field**, connected with `aria-describedby`.
-- **Error summary at top** of form on submit failure, move focus to it.
-- **Required fields**: use `required` attribute AND visible indicator. Don't rely on colour alone. Announce via `aria-required="true"` or native `required`.
-- **Autocomplete attributes**: `autocomplete="email"`, `"name"`, `"current-password"` etc., required for WCAG 1.3.5.
-
-```html
-<div>
-  <label for="email">Email <span aria-hidden="true">*</span></label>
-  <input id="email" type="email" required autocomplete="email"
-         aria-required="true" aria-describedby="email-error">
-  <p id="email-error" role="alert" hidden>Enter a valid email address</p>
-</div>
-```
+- **Label above the input, always.** A placeholder is not a label: it disappears exactly when the user needs it, and it fails at zoom.
+- **Validate on blur, not on keystroke.** Errors raised mid-word punish the user for not having finished typing.
+- **Error text below the field**, wired with `aria-describedby` and `role="alert"`, plus an error summary at the top of the form on submit failure with focus moved to it.
+- **Required fields carry the `required` attribute and a visible indicator.** Colour alone is not an indicator.
+- **`autocomplete` on every field that maps to a known token** (`email`, `name`, `current-password`). That is WCAG 1.3.5, not a convenience.
 
 ---
 
@@ -342,72 +199,43 @@ Use [whocanuse.com](https://whocanuse.com) to test across vision types, not just
 
 ## Motion and Vestibular
 
+Reduced motion means fewer and gentler animations, not zero. Crossfades stay. Position changes, scale and parallax go.
+
 ```css
 @media (prefers-reduced-motion: reduce) {
-  /* Keep opacity/color transitions that aid comprehension */
-  .card { transition: opacity 150ms ease; }
-
-  /* Remove movement */
-  .card { animation: none; transform: none; }
+  .card { animation: none; transform: none; transition: opacity 150ms ease; }
 }
 ```
 
-Reduced motion means fewer and gentler animations, not zero. Crossfades are fine. Position changes and scale animations are not.
-
-```jsx
-const shouldReduce = useReducedMotion();
-const transition = shouldReduce
-  ? { duration: 0.01 }
-  : { type: 'spring', duration: 0.5, bounce: 0.2 };
-```
+Stripping every transition is its own failure: a state change with no feedback reads as a dead click. Keep the opacity and colour transitions that tell the user something happened, and drop the ones that move things across the screen.
 
 ---
 
 ## Testing
 
-### Keyboard test (do this on every component)
+### Keyboard pass (every component, every time)
 
-1. Tab to every interactive element, can you reach it?
-2. Activate every button, link, control with Enter/Space
-3. Use arrow keys in menus, tabs, and other composite widgets
-4. Open and close every modal, drawer, dropdown with Escape
-5. Verify focus returns correctly after closing overlays
-6. Check focus is never lost or trapped unintentionally
+1. Tab to every interactive element. Can you reach it at all?
+2. Activate every control with Enter and with Space.
+3. Arrow through menus, tabs and the other composite widgets.
+4. Escape out of every modal, drawer and dropdown.
+5. Verify focus returns to the trigger after each overlay closes.
+6. Verify focus is never lost to `<body>` and never trapped where it should not be.
 
-### Screen reader test
+### Screen reader pass
 
-**macOS + Safari, VoiceOver:**
-- Turn on: `Cmd + F5`
-- Navigate: `VO + Arrow` (VO = Ctrl + Option)
-- Headings: `VO + Cmd + H`
-- Landmarks: `VO + Cmd + L`
-- Forms: `VO + Cmd + J`
+**macOS + Safari, VoiceOver:** turn on with `Cmd + F5`, navigate with `VO + Arrow` (VO = Ctrl + Option), headings `VO + Cmd + H`, landmarks `VO + Cmd + L`, forms `VO + Cmd + J`.
 
-**Windows + Chrome, NVDA (free):**
-- Navigate: Arrow keys in browse mode
-- Headings: `H`
-- Forms: `F`
-- Enter forms mode: `Enter` or `Space`
+**Windows + Chrome, NVDA (free):** arrow keys in browse mode, `H` for headings, `F` for forms, Enter or Space to enter forms mode.
 
-What to verify:
-- Every form field has an announced label
-- Error messages are announced when they appear
-- Modal announces its title on open
-- Dynamic content updates (toasts, inline messages) are announced
-- Images have meaningful alt text (or are silent when decorative)
+Verify, on both: every field announces a label, errors announce when they appear, the modal announces its title on open, injected content (toasts, inline messages) is announced, decorative images stay silent.
 
 ### Automated testing (partial coverage)
 
 How much automation catches depends on what you count. Across Deque's audit sample, automated tests identified 57.38% of total issues, while automated rules covered 16 of the 50 WCAG 2.1 Level AA success criteria ([Deque Systems, 2025](https://www.deque.com/automated-accessibility-coverage-report/)). Neither figure means a page is compliant.
 
 ```bash
-# axe-core via CLI
-npx @axe-core/cli https://localhost:3000
-
-# In test suite
-import { axe } from 'jest-axe';
-const results = await axe(container);
-expect(results).toHaveNoViolations();
+npx @axe-core/cli https://localhost:3000     # or jest-axe inside the test suite
 ```
 
 Automated tools are a floor, not a ceiling. Keyboard and screen reader testing is irreplaceable.

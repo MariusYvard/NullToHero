@@ -1,7 +1,7 @@
 ---
 name: responsive-design
 description: "Start with base styles for mobile, use min-width queries to layer complexity. Desktop-first (max-width) means mobile loads unnecessary styles first."
-version: 1.10.0
+version: 1.10.1
 ---
 
 # Responsive Design
@@ -28,35 +28,13 @@ Operational rules:
 
 ## Breakpoints: Content-Driven
 
-Don't chase device sizes—let content tell you where to break. Start narrow, stretch until design breaks, add breakpoint there. Three breakpoints usually suffice (640, 768, 1024px). Use `clamp()` for fluid values without breakpoints.
+Don't chase device sizes, let content tell you where to break. Start narrow, stretch until design breaks, add breakpoint there. Three breakpoints usually suffice (640, 768, 1024px). Use `clamp()` for fluid values without breakpoints.
 
 ## Detect Input Method, Not Just Screen Size
 
-**Screen size doesn't tell you input method.** A laptop with touchscreen, a tablet with keyboard—use pointer and hover queries:
+**Screen size doesn't tell you input method.** A laptop with touchscreen, a tablet with keyboard: branch on `(pointer: fine)` versus `(pointer: coarse)` for target sizing, and on `(hover: hover)` versus `(hover: none)` for hover affordances. A coarse pointer buys roughly 50% more padding than a fine one.
 
-```css
-/* Fine pointer (mouse, trackpad) */
-@media (pointer: fine) {
-  .button { padding: 8px 16px; }
-}
-
-/* Coarse pointer (touch, stylus) */
-@media (pointer: coarse) {
-  .button { padding: 12px 20px; }  /* Larger touch target */
-}
-
-/* Device supports hover */
-@media (hover: hover) {
-  .card:hover { transform: translateY(-2px); }
-}
-
-/* Device doesn't support hover (touch) */
-@media (hover: none) {
-  .card { /* No hover state - use active instead */ }
-}
-```
-
-**Critical**: Don't rely on hover for functionality. Touch users can't hover.
+**Critical**: Don't rely on hover for functionality. Touch users can't hover, and a hover state declared without the `(hover: hover)` guard sticks on after a tap on some engines.
 
 ## Viewport units: three of them, and two are usually wrong
 
@@ -89,64 +67,23 @@ retractable bars, so the defect is invisible on the machine you are authoring on
 
 ## Safe Areas: Handle the Notch
 
-Modern phones have notches, rounded corners, and home indicators. Use `env()`:
+Modern phones have notches, rounded corners, and home indicators. Pad with `env(safe-area-inset-*)`, and always inside a `max()` against your own minimum (`padding-bottom: max(1rem, env(safe-area-inset-bottom))`): on a device with no inset the variable resolves to `0` and a bare `env()` silently removes the padding you meant to keep.
 
-```css
-body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
+The insets are all zero until the meta tag opts in:
 
-/* With fallback */
-.footer {
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
-}
-```
-
-**Enable viewport-fit** in your meta tag:
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 ```
 
 ## Responsive Images: Get It Right
 
-### srcset with Width Descriptors
+Use `srcset` with `w` descriptors plus `sizes` for resolution switching, and `<picture>` with `media` sources only when the crop itself changes (a wide hero that becomes a tall one), not when only the resolution changes. The two are not interchangeable: `<picture>` overrides the browser's own choice, so using it for plain resolution switching throws away the device-pixel-ratio and network heuristics `srcset` would have applied.
 
-```html
-<img
-  src="hero-800.jpg"
-  srcset="
-    hero-400.jpg 400w,
-    hero-800.jpg 800w,
-    hero-1200.jpg 1200w
-  "
-  sizes="(max-width: 768px) 100vw, 50vw"
-  alt="Hero image"
->
-```
-
-**How it works**:
-- `srcset` lists available images with their actual widths (`w` descriptors)
-- `sizes` tells the browser how wide the image will display
-- Browser picks the best file based on viewport width AND device pixel ratio
-
-### Picture Element for Art Direction
-
-When you need different crops/compositions (not just resolutions):
-
-```html
-<picture>
-  <source media="(min-width: 768px)" srcset="wide.jpg">
-  <source media="(max-width: 767px)" srcset="tall.jpg">
-  <img src="fallback.jpg" alt="...">
-</picture>
-```
+`sizes` is the one that gets skipped and the one that decides the download: it states how wide the image will actually display (`(max-width: 768px) 100vw, 50vw`), and without it the browser assumes `100vw` and fetches the largest candidate on every layout. Full pipeline in [image-strategy.md](image-strategy.md).
 
 ## Layout Adaptation Patterns
 
-**Navigation**: Three stages—hamburger + drawer on mobile, horizontal compact on tablet, full with labels on desktop. **Tables**: Transform to cards on mobile using `display: block` and `data-label` attributes. **Progressive disclosure**: Use `<details>/<summary>` for content that can collapse on mobile.
+**Navigation**: Three stages, hamburger + drawer on mobile, horizontal compact on tablet, full with labels on desktop. **Tables**: Transform to cards on mobile using `display: block` and `data-label` attributes. **Progressive disclosure**: Use `<details>/<summary>` for content that can collapse on mobile.
 
 ## Generic font families resolve differently per platform
 
@@ -195,22 +132,6 @@ DevTools device emulation is useful for layout but misses:
 
 ## Container queries
 
-Media queries respond to the viewport. Container queries respond to the component's own available width, so the same component adapts correctly in a sidebar, a grid cell, or a full-bleed section without viewport-specific overrides.
-
-```css
-.card-list { container-type: inline-size; container-name: cards; }
-
-.card { display: grid; gap: 0.5rem; }
-
-@container cards (min-width: 30rem) {
-  .card { grid-template-columns: 8rem 1fr; } /* switch to horizontal when the container is wide */
-}
-```
-
-Container query length units (`cqi`, `cqw`, `cqb`) size type and spacing against the container:
-
-```css
-.card h3 { font-size: clamp(1rem, 4cqi, 1.5rem); }
-```
+Media queries respond to the viewport. Container queries respond to the component's own available width, so the same component adapts correctly in a sidebar, a grid cell, or a full-bleed section without viewport-specific overrides. Length units (`cqi`, `cqw`, `cqb`) size type and spacing against that container instead of the screen.
 
 Use container queries for reusable components placed in varying contexts. Keep media queries for page-level layout (global breakpoints, overall grid). Feature support is baseline across current browsers; for old engines the unqueried base styles remain the fallback.

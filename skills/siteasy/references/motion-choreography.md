@@ -1,7 +1,7 @@
 ---
 name: motion-choreography
 description: "How to make every piece of motion on a site feel authored rather than defaulted, with a consistent timing signature."
-version: 1.23.0
+version: 1.23.1
 ---
 
 # Motion Choreography
@@ -71,13 +71,9 @@ Scroll motion sits between, present but quiet, and it must never make the reader
 
 ## Perceived performance
 
-Animate `transform` and `opacity`.
-These are compositor properties, they run on the GPU and do not trigger layout or paint, so they stay smooth.
-Animating `width`, `height`, `top`, `left`, `margin` or anything that reflows the page forces layout on every frame and produces jank.
-A beautiful animation on a property that reflows is worse than no animation, because stutter reads as broken.
-
-Where an effect seems to need a layout property, find the transform equivalent: scale instead of width, translate instead of top, and reserve space ahead of time so nothing shifts.
-Promote a heavy element with `will-change` sparingly and remove it after, since leaving it on wastes memory.
+Animate `transform` and `opacity`, and where an effect seems to need a layout property, find the transform equivalent and reserve the space ahead of time so nothing shifts.
+A beautiful animation on a property that reflows is worse than no animation, because stutter reads as broken and the visitor blames the page rather than the effect.
+`will-change` is a promotion, not a decoration: put it on the one heavy element that earns it and take it off when the animation ends.
 Perceived performance is part of the aesthetic, smoothness is a feature the visitor feels even when they cannot name it.
 
 ## A moment-to-technique map

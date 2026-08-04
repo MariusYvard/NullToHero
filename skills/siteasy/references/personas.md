@@ -1,7 +1,7 @@
 ---
 name: personas
 description: "Test the interface through the eyes of 5 distinct user archetypes. Each persona exposes different failure modes that a single 'design director' perspective would miss."
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Persona-Based Design Testing
@@ -22,13 +22,7 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 - Tries to bulk-select, batch-edit, and automate
 - Gets frustrated by required steps that feel unnecessary
 - Abandons if anything feels slow or patronizing
-
-**Test Questions**:
-- Can Alex complete the core task in under 60 seconds?
-- Are there keyboard shortcuts for common actions?
-- Can onboarding be skipped entirely?
-- Do modals have keyboard dismiss (Esc)?
-- Is there a "power user" path (shortcuts, bulk actions)?
+- Budget: the core task completes in under 60 seconds, or Alex is gone
 
 **Red Flags** (report these specifically):
 - Forced tutorials or unskippable onboarding
@@ -49,13 +43,7 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 - Looks for help or support constantly
 - Misunderstands jargon and abbreviations
 - Takes the most literal interpretation of any label
-
-**Test Questions**:
-- Is the first action obviously clear within 5 seconds?
-- Are all icons labeled with text?
-- Is there contextual help at decision points?
-- Does terminology assume prior knowledge?
-- Is there a clear "back" or "undo" at every step?
+- Budget: the first action is obvious within 5 seconds, or Jordan stalls
 
 **Red Flags** (report these specifically):
 - Icon-only navigation with no labels
@@ -77,13 +65,6 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 - Needs adequate color contrast (4.5:1 minimum)
 - May use browser zoom up to 200%
 
-**Test Questions**:
-- Can the entire primary flow be completed keyboard-only?
-- Are all interactive elements focusable with visible focus indicators?
-- Do images have meaningful alt text?
-- Is color contrast WCAG AA compliant (4.5:1 for text)?
-- Does the screen reader announce state changes (loading, success, errors)?
-
 **Red Flags** (report these specifically):
 - Click-only interactions with no keyboard alternative
 - Missing or invisible focus indicators
@@ -104,13 +85,7 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 - Tries to break workflows by navigating backwards, refreshing mid-flow, or opening in multiple tabs
 - Looks for inconsistencies between what the UI promises and what actually happens
 - Documents problems methodically
-
-**Test Questions**:
-- What happens at the edges (0 items, 1000 items, very long text)?
-- Do error states recover gracefully or leave the UI in a broken state?
-- What happens on refresh mid-workflow? Is state preserved?
-- Are there features that appear to work but produce broken results?
-- How does the UI handle unexpected input (emoji, special chars, paste from Excel)?
+- Probe the edges at 0 items, 1 item and 1000 items, then refresh mid-workflow and paste from Excel
 
 **Red Flags** (report these specifically):
 - Features that appear to work but silently fail or produce wrong results
@@ -131,13 +106,7 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 - Switches between apps frequently
 - Has limited attention span and low patience
 - Types as little as possible, prefers taps and selections
-
-**Test Questions**:
-- Are primary actions in the thumb zone (bottom half of screen)?
-- Is state preserved if the user leaves and returns?
-- Does it work on slow connections (3G)?
-- Can forms leverage autocomplete and smart defaults?
-- Are touch targets at least 44×44pt?
+- Test on a throttled 3G connection, with touch targets at 44x44pt and primary actions in the bottom half of the screen
 
 **Red Flags** (report these specifically):
 - Important actions positioned at the top of the screen (unreachable by thumb)
@@ -169,16 +138,6 @@ If `CLAUDE.md` contains a `## Design Context` section (optionally written by `si
 
 1. Read the target audience description
 2. Identify the primary user archetype not covered by the 5 predefined personas
-3. Create a persona following this template:
-
-```
-### [Role] — "[Name]"
-
-**Profile**: [2-3 key characteristics derived from Design Context]
-
-**Behaviors**: [3-4 specific behaviors based on the described audience]
-
-**Red Flags**: [3-4 things that would alienate this specific user type]
-```
+3. Write it in the same shape as the five above: Profile, Behaviors, Red Flags, and nothing else
 
 Only generate project-specific personas when real Design Context data is available. Don't invent audience details — use the 5 predefined personas when no context exists.

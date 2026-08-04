@@ -825,7 +825,23 @@
     },
     {
       "from": "skills/siteasy/references/adapt.md",
+      "to": "skills/siteasy/references/image-strategy.md"
+    },
+    {
+      "from": "skills/siteasy/references/adapt.md",
+      "to": "skills/siteasy/references/mobile-ergonomics.md"
+    },
+    {
+      "from": "skills/siteasy/references/adapt.md",
       "to": "skills/siteasy/references/print-styles.md"
+    },
+    {
+      "from": "skills/siteasy/references/adapt.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/animate.md",
+      "to": "skills/siteasy/references/animation-engineering.md"
     },
     {
       "from": "skills/siteasy/references/animate.md",
@@ -865,6 +881,14 @@
     },
     {
       "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/information-architecture.md"
+    },
+    {
+      "from": "skills/siteasy/references/clarify.md",
       "to": "skills/siteasy/references/objections.md"
     },
     {
@@ -874,6 +898,10 @@
     {
       "from": "skills/siteasy/references/clarify.md",
       "to": "skills/siteasy/references/slop-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/clarify.md",
+      "to": "skills/siteasy/references/ux-writing.md"
     },
     {
       "from": "skills/siteasy/references/color-and-contrast.md",
@@ -1141,6 +1169,10 @@
     },
     {
       "from": "skills/siteasy/references/image-strategy.md",
+      "to": "skills/seo/references/images.md"
+    },
+    {
+      "from": "skills/siteasy/references/image-strategy.md",
       "to": "skills/seo/references/technical.md"
     },
     {
@@ -1198,6 +1230,10 @@
     {
       "from": "skills/siteasy/references/information-architecture.md",
       "to": "skills/siteasy/references/layout.md"
+    },
+    {
+      "from": "skills/siteasy/references/information-architecture.md",
+      "to": "skills/siteasy/references/mobile-ergonomics.md"
     },
     {
       "from": "skills/siteasy/references/information-architecture.md",
@@ -1489,6 +1525,10 @@
     },
     {
       "from": "skills/siteasy/references/polish.md",
+      "to": "skills/siteasy/references/form-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/polish.md",
       "to": "skills/siteasy/references/harden.md"
     },
     {
@@ -1518,6 +1558,10 @@
     {
       "from": "skills/siteasy/references/resource-recommendations.md",
       "to": "skills/siteasy/references/stock-media.md"
+    },
+    {
+      "from": "skills/siteasy/references/responsive-design.md",
+      "to": "skills/siteasy/references/image-strategy.md"
     },
     {
       "from": "skills/siteasy/references/responsive-design.md",
@@ -1634,6 +1678,10 @@
     {
       "from": "skills/siteasy/references/ux-research.md",
       "to": "skills/siteasy/references/shape.md"
+    },
+    {
+      "from": "skills/siteasy/references/ux-writing.md",
+      "to": "skills/siteasy/references/wcag-2-2.md"
     },
     {
       "from": "skills/siteasy/references/video.md",

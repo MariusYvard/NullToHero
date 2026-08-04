@@ -1,7 +1,7 @@
 ---
 name: cognitive-load
 description: "Cognitive load is the total mental effort required to use an interface. Overloaded users make mistakes, get frustrated, and leave. This reference helps identify and fix cognitive."
-version: 1.6.0
+version: 1.6.1
 ---
 
 # Cognitive Load Assessment
@@ -15,30 +15,11 @@ Cognitive load is the total mental effort required to use an interface. Overload
 ### Intrinsic Load — The Task Itself
 Complexity inherent to what the user is trying to do. You can't eliminate this, but you can structure it.
 
-**Manage it by**:
-- Breaking complex tasks into discrete steps
-- Providing scaffolding (templates, defaults, examples)
-- Progressive disclosure — show what's needed now, hide the rest
-- Grouping related decisions together
-
 ### Extraneous Load — Bad Design
 Mental effort caused by poor design choices. **Eliminate this ruthlessly** — it's pure waste.
 
-**Common sources**:
-- Confusing navigation that requires mental mapping
-- Unclear labels that force users to guess meaning
-- Visual clutter competing for attention
-- Inconsistent patterns that prevent learning
-- Unnecessary steps between user intent and result
-
 ### Germane Load — Learning Effort
 Mental effort spent building understanding. This is *good* cognitive load — it leads to mastery.
-
-**Support it by**:
-- Progressive disclosure that reveals complexity gradually
-- Consistent patterns that reward learning
-- Feedback that confirms correct understanding
-- Onboarding that teaches through action, not walls of text
 
 ---
 

@@ -1,92 +1,44 @@
 ---
 name: harden
 description: "Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs."
-version: 1.6.0
+version: 1.6.1
 ---
 
 Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs.
+
+
+## Make the demo data hostile, once, instead of hardening per symptom
+
+Long names, three thousand rows and a German locale are not three bugs. They are one bug: the
+seed data is polite. Fix that first and the rest stops arriving one support ticket at a time.
+
+The seed a project should ship with, and demo from: a 250-character name, a name with no spaces,
+one with an apostrophe and accents, an empty string, a null, an emoji, a right-to-left string, and
+a collection an order of magnitude past what anyone expects. If the interface holds on that, it
+holds in production. If the team demos on it, nobody has to remember to test it.
+
+Two follow-ons that only show up in production and are cheap to settle now: sort with a collator
+rather than a code-point comparison, or non-ASCII names order wrongly in every list; and confirm
+UTF-8 end to end, database, connection and headers, because the first CSV export is where a broken
+link in that chain surfaces, long after the interface looked fine.
 
 ## Assess Hardening Needs
 
 Identify weaknesses and edge cases:
 
-1. **Test with extreme inputs**:
-   - Very long text (names, descriptions, titles)
-   - Very short text (empty, single character)
-   - Special characters (emoji, RTL text, accents)
-   - Large numbers (millions, billions)
-   - Many items (1000+ list items, 50+ options)
-   - No data (empty states)
-
-2. **Test error scenarios**:
-   - Network failures (offline, slow, timeout)
-   - API errors (400, 401, 403, 404, 500)
-   - Validation errors
-   - Permission errors
-   - Rate limiting
-   - Concurrent operations
-
-3. **Test internationalization**:
-   - Long translations (German is often 30% longer than English)
-   - RTL languages (Arabic, Hebrew)
-   - Character sets (Chinese, Japanese, Korean, emoji)
-   - Date/time formats
-   - Number formats (1,000 vs 1.000)
-   - Currency symbols
+**Test with extreme inputs**:
+- Very long text (names, descriptions, titles)
+- Very short text (empty, single character)
+- Special characters (emoji, RTL text, accents)
+- Large numbers (millions, billions)
+- Many items (1000+ list items, 50+ options)
+- No data (empty states)
 
 **CRITICAL**: Designs that only work with perfect data aren't production-ready. Harden against reality.
 
 ## Hardening Dimensions
 
 Systematically improve resilience:
-
-### Text Overflow & Wrapping
-
-**Long text handling**:
-```css
-/* Single line with ellipsis */
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Multi-line with clamp */
-.line-clamp {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Allow wrapping */
-.wrap {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-```
-
-**Flex/Grid overflow**:
-```css
-/* Prevent flex items from overflowing */
-.flex-item {
-  min-width: 0; /* Allow shrinking below content size */
-  overflow: hidden;
-}
-
-/* Prevent grid items from overflowing */
-.grid-item {
-  min-width: 0;
-  min-height: 0;
-}
-```
-
-**Responsive text sizing**:
-- Use `clamp()` for fluid typography
-- Set minimum readable sizes (14px on mobile)
-- Test text scaling (zoom to 200%)
-- Ensure containers expand with text
 
 ### Internationalization (i18n)
 
@@ -95,52 +47,6 @@ Systematically improve resilience:
 - Use flexbox/grid that adapts to content
 - Test with longest language (usually German)
 - Avoid fixed widths on text containers
-
-```jsx
-// ❌ Bad: Assumes short English text
-<button className="w-24">Submit</button>
-
-// ✅ Good: Adapts to content
-<button className="px-4 py-2">Submit</button>
-```
-
-**RTL (Right-to-Left) support**:
-```css
-/* Use logical properties */
-margin-inline-start: 1rem; /* Not margin-left */
-padding-inline: 1rem; /* Not padding-left/right */
-border-inline-end: 1px solid; /* Not border-right */
-
-/* Or use dir attribute */
-[dir="rtl"] .arrow { transform: scaleX(-1); }
-```
-
-**Character set support**:
-- Use UTF-8 encoding everywhere
-- Test with Chinese/Japanese/Korean (CJK) characters
-- Test with emoji (they can be 2-4 bytes)
-- Handle different scripts (Latin, Cyrillic, Arabic, etc.)
-
-**Date/Time formatting**:
-```javascript
-// ✅ Use Intl API for proper formatting
-new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
-new Intl.DateTimeFormat('de-DE').format(date); // 15.1.2024
-
-new Intl.NumberFormat('en-US', { 
-  style: 'currency', 
-  currency: 'USD' 
-}).format(1234.56); // $1,234.56
-```
-
-**Pluralization**:
-```javascript
-// ❌ Bad: Assumes English pluralization
-`${count} item${count !== 1 ? 's' : ''}`
-
-// ✅ Good: Use proper i18n library
-t('items', { count }) // Handles complex plural rules
-```
 
 ### Error Handling
 
@@ -218,40 +124,7 @@ t('items', { count }) // Handles complex plural rules
 - Clear explanation of why
 
 **Browser compatibility**:
-- Polyfills for modern features
-- Fallbacks for unsupported CSS
-- Feature detection (not browser detection)
-- Test in target browsers
-
-### Input Validation & Sanitization
-
-**Client-side validation**:
-- Required fields
-- Format validation (email, phone, URL)
-- Length limits
-- Pattern matching
-- Custom validation rules
-
-**Server-side validation** (always):
-- Never trust client-side only
-- Validate and sanitize all inputs
-- Protect against injection attacks
-- Rate limiting
-
-**Constraint handling**:
-```html
-<!-- Set clear constraints -->
-<input 
-  type="text"
-  maxlength="100"
-  pattern="[A-Za-z0-9]+"
-  required
-  aria-describedby="username-hint"
-/>
-<small id="username-hint">
-  Letters and numbers only, up to 100 characters
-</small>
-```
+- Feature detection (not browser detection), with a fallback for every unsupported feature
 
 ### Accessibility Resilience
 
@@ -267,16 +140,7 @@ t('items', { count }) // Handles complex plural rules
 - Descriptive alt text
 - Semantic HTML
 
-**Motion sensitivity**:
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
+**Motion sensitivity**: honor `prefers-reduced-motion: reduce`, with a static alternative that still reads as designed.
 
 **High contrast mode**:
 - Test in Windows high contrast mode
@@ -297,25 +161,9 @@ t('items', { count }) // Handles complex plural rules
 - Clear timers/intervals
 - Abort pending requests on unmount
 
-**Throttling & Debouncing**:
-```javascript
-// Debounce search input
-const debouncedSearch = debounce(handleSearch, 300);
-
-// Throttle scroll handler
-const throttledScroll = throttle(handleScroll, 100);
-```
+**Throttling & Debouncing**: debounce search input at 300ms, throttle scroll handlers at 100ms.
 
 ## Testing Strategies
-
-**Manual testing**:
-- Test with extreme data (very long, very short, empty)
-- Test in different languages
-- Test offline
-- Test slow connection (throttle to 3G)
-- Test with screen reader
-- Test keyboard-only navigation
-- Test on old browsers
 
 **Automated testing**:
 - Unit tests for edge cases

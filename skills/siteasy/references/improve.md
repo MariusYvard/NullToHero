@@ -1,7 +1,7 @@
 ---
 name: improve
 description: "Single door for 'make it better' requests. Deterministic symptom-to-axis dispatch: reads the complaint, picks exactly one improvement axis (amplify, simplify, animate, typeset, layout, adapt, mobile, clarify, delight, onboard, charts, overdrive, video, parallax, live, polish, harden), loads that reference and runs it. Never invents its own fixes."
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Improve: symptom-to-axis dispatch
@@ -14,11 +14,11 @@ command directly.
 
 ## How to dispatch
 
-1. Read the project's own conventions first and treat them as binding: any
-   charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE,
-   CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS custom
-   properties already defined, the class naming convention visible in the code
-   (BEM, utility classes, CSS modules), and the fonts already loaded and used.
+1. Read the project's own conventions first (see Rules below for what they
+   outrank): any charter or style guide at the root or in `docs/` (STYLEGUIDE,
+   STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS
+   custom properties already defined, the class naming convention visible in
+   the code (BEM, utility classes, CSS modules), and the fonts already loaded.
 2. Read the complaint and the target (file, folder or URL). If `DESIGN.md` or
    `DIRECTION.md` exists, read them too: the axis must move toward the
    committed direction, not toward taste.
@@ -71,9 +71,9 @@ First match wins. Symptoms are what users say, not what the code says.
   pull in opposite directions and the result is mush.
 - The axis reference is law. This file never overrides what the axis reference
   prescribes.
-- Project conventions outrank both this file and the axis reference. When an
-  axis reference recommends what the project's charter forbids, the charter
-  wins: report the conflict to the user instead of settling it silently. Never
+- The conventions read in step 1 outrank both this file and the axis reference.
+  When an axis reference recommends what the project's charter forbids, the
+  charter wins: report the conflict instead of settling it silently. Never
   rename an existing token, never add a web font to a project that uses none,
   and never add motion to a project that has none, without asking first.
 - Improvement is not remediation. If a deterministic audit already produced

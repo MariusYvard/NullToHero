@@ -1,7 +1,7 @@
 ---
 name: interaction-design
 description: "Interactive-state design: the default, hover, focus, active, disabled, loading, and error states every control needs."
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Interaction Design
@@ -25,17 +25,9 @@ Every interactive element needs these states designed:
 
 ## Focus Rings: Do Them Right
 
-**Never `outline: none` without replacement.** Use `:focus-visible` to show focus only for keyboard users:
+**Never `outline: none` without replacement.** Use `:focus-visible` rather than `:focus`, so the ring shows for keyboard users and not on every mouse click.
 
-```css
-button:focus { outline: none; }
-button:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-```
-
-Focus ring design: high contrast (3:1 minimum), 2-3px thick, offset from element, consistent across all interactive elements.
+Focus ring design: high contrast (3:1 minimum), 2-3px thick, offset from the element, consistent across all interactive elements.
 
 ## Form Design: The Non-Obvious
 
@@ -43,25 +35,11 @@ Focus ring design: high contrast (3:1 minimum), 2-3px thick, offset from element
 
 ## Modals: The Inert Approach
 
-Use the native `<dialog>` element:
-
-```javascript
-const dialog = document.querySelector('dialog');
-dialog.showModal(); // Opens with focus trap, closes on Escape
-```
+Use the native `<dialog>` opened with `showModal()`. It brings the focus trap, the backdrop and Escape-to-close with it; a hand-rolled modal has to reimplement all three and usually reimplements two.
 
 ## The Popover API
 
-For tooltips, dropdowns, and non-modal overlays:
-
-```html
-<button popovertarget="menu">Open menu</button>
-<div id="menu" popover>
-  <button>Option 1</button>
-</div>
-```
-
-**Benefits**: Light-dismiss, proper stacking, no z-index wars, accessible by default.
+For tooltips, dropdowns and non-modal overlays, prefer the `popover` attribute. It buys light-dismiss, top-layer stacking, no z-index wars, and keyboard behavior by default.
 
 ## Dropdown & Overlay Positioning
 
@@ -83,14 +61,7 @@ Dropdowns inside `overflow: hidden` containers will be clipped. This is the sing
 
 ### Roving Tabindex
 
-For component groups (tabs, menu items, radio groups), one item is tabbable; arrow keys move within:
-
-```html
-<div role="tablist">
-  <button role="tab" tabindex="0">Tab 1</button>
-  <button role="tab" tabindex="-1">Tab 2</button>
-</div>
-```
+For component groups (tabs, menu items, radio groups), exactly one item carries `tabindex="0"` and the rest `tabindex="-1"`; arrow keys move the zero. Tab enters and leaves the group, it does not walk through it.
 
 ### Skip Links
 

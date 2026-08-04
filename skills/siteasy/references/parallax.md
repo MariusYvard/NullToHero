@@ -1,7 +1,7 @@
 ---
 name: parallax
 description: "Depth illusion through differential scroll velocity. Use as the operational reference whenever a project considers parallax, scrollytelling, multi-layer depth, or scroll-driven."
-version: 1.7.0
+version: 1.7.1
 ---
 
 # Parallax Engineering (2025 to 2026)
@@ -47,77 +47,15 @@ Pick the lightest path that satisfies the brief. Heavier paths are not better, t
 
 ### Path A. Pure CSS, perspective transform
 
-Cheapest, most stable, zero JavaScript thread cost. The browser compositor handles everything.
+Cheapest, most stable, zero JavaScript thread cost. The stage owns its own scroll container (`perspective: 1px; perspective-origin: 0 0`), layers sit absolute with `transform-origin: 0 0`, and each recedes by a negative `translateZ`.
 
-```css
-.parallax-stage {
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  perspective: 1px;
-  perspective-origin: 0 0;
-}
-
-.parallax-layer {
-  position: absolute;
-  inset: 0;
-  transform-origin: 0 0;
-}
-
-/* Background recedes (slower scroll, looks distant) */
-.parallax-layer.bg {
-  transform: translateZ(-2px) scale(3); /* scale = 1 + (Math.abs(z) / perspective) */
-}
-
-/* Midground */
-.parallax-layer.mid {
-  transform: translateZ(-1px) scale(2);
-}
-
-/* Foreground anchored to scroll */
-.parallax-layer.fg {
-  transform: translateZ(0);
-}
-```
-
-Scale compensation is `1 + (|translateZ| / perspective)`. Skip it and the scene shrinks. Use only when the section owns its own scroll container; do not stack two perspective stages.
+Scale compensation is `1 + (|translateZ| / perspective)`: a layer at `translateZ(-2px)` needs `scale(3)`. Skip it and the scene shrinks. Use only when the section owns its own scroll container; do not stack two perspective stages.
 
 ### Path B. CSS Scroll-Driven Animations (2026 baseline)
 
-Native API. Animations run off the main thread on the compositor, hitting 60 to 120 FPS on mid-range mobile. Falls back gracefully where unsupported.
+Native API, behind `@supports (animation-timeline: scroll())`. Animations run off the main thread on the compositor, hitting 60 to 120 FPS on mid-range mobile. Falls back gracefully where unsupported: the unanimated base styles are the fallback.
 
-```css
-@supports (animation-timeline: scroll()) {
-  .parallax-bg {
-    animation: shift-up linear both;
-    animation-timeline: scroll(block nearest);
-    animation-range: entry 0% exit 100%;
-  }
-
-  @keyframes shift-up {
-    from { transform: translateY(20%); }
-    to   { transform: translateY(-20%); }
-  }
-
-  .reveal-on-scroll {
-    animation: rise linear both;
-    animation-timeline: view();
-    animation-range: entry 10% cover 40%;
-  }
-
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(40px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .parallax-bg,
-  .reveal-on-scroll { animation: none !important; transform: none !important; opacity: 1 !important; }
-}
-```
-
-Pair `scroll()` (the scroll container's progress) with `view()` (an element's position in the viewport). Use `view()` for entry reveals, `scroll()` for page-long backgrounds.
+Pair `scroll()` (the scroll container's progress) with `view()` (an element's position in the viewport). Use `view()` for entry reveals, `scroll()` for page-long backgrounds. Working ranges: `entry 0% exit 100%` for a page-long background drift of about ±20%, `entry 10% cover 40%` for an entry reveal. Add the `prefers-reduced-motion` override in the same block, killing `animation`, `transform` and `opacity` together, or the layer stays stuck at its start keyframe.
 
 ### Path C. Orchestrated JS (Lenis plus GSAP ScrollTrigger)
 
@@ -196,19 +134,10 @@ Vestibular dysfunction was measured in 35.4% of US adults aged 40 and over, abou
 
 ### 1. Honor `prefers-reduced-motion: reduce`
 
-Drop in this CSS reset at the top of the stylesheet, then layer specific overrides:
+Put the global reset at the top of the stylesheet (durations to `0.01ms` rather than `none`, so `animationend` handlers still fire and no state machine hangs), then layer the parallax-specific overrides:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
   .parallax-bg,
   .parallax-layer { transform: none !important; }
   .parallax-bg { background-attachment: scroll !important; }
@@ -221,27 +150,17 @@ Mirror the check in JavaScript for any JS-driven motion (Lenis, GSAP). CSS alone
 
 Even with system-level reduced motion, expose a visible control such as "Reduce motion" in the footer or settings. Persist with `localStorage`. Required by WCAG 2.2.2 when any moving content auto-plays for more than five seconds.
 
+The toggle is a `<button aria-pressed>` (not a checkbox), it writes `data-motion="reduce"` on `<html>`, and the stylesheet keys off that attribute at zero specificity so it never fights a layer's own rule:
+
 ```html
 <button type="button" data-motion-toggle aria-pressed="false">Reduce motion</button>
-```
-
-```js
-const btn = document.querySelector('[data-motion-toggle]');
-const reduced = localStorage.getItem('reduceMotion') === '1';
-document.documentElement.dataset.motion = reduced ? 'reduce' : 'full';
-btn.setAttribute('aria-pressed', reduced);
-
-btn.addEventListener('click', () => {
-  const next = document.documentElement.dataset.motion === 'reduce' ? 'full' : 'reduce';
-  document.documentElement.dataset.motion = next;
-  btn.setAttribute('aria-pressed', next === 'reduce');
-  localStorage.setItem('reduceMotion', next === 'reduce' ? '1' : '0');
-});
 ```
 
 ```css
 :where([data-motion="reduce"]) .parallax-layer { transform: none !important; }
 ```
+
+Seed the attribute from `localStorage` before first paint, or the page starts in full motion and flips under a user who already opted out.
 
 ### 3. Preserve text contrast through motion
 
@@ -309,29 +228,7 @@ Data stories add four disciplines on top of the pillars:
 - The narrative column stays readable: 300 to 400px wide, 14pt minimum, on its own background. Teaching an unfamiliar chart form works well as a scrolly: first how to read the shape, then the data.
 
 
-Reference scaffold (Path B):
-
-```html
-<article class="story">
-  <section class="story__beat" data-beat="1">
-    <h2>First beat</h2>
-    <figure class="story__visual reveal-on-scroll">...</figure>
-  </section>
-  <section class="story__rest"></section>
-  <section class="story__beat" data-beat="2">...</section>
-</article>
-```
-
-```css
-.story__beat { min-height: 100vh; display: grid; place-items: center; }
-.story__rest { min-height: 30vh; }
-
-.story__visual {
-  animation: rise linear both;
-  animation-timeline: view();
-  animation-range: entry 15% cover 50%;
-}
-```
+Reference scaffold (Path B): beats are real `<section>` elements at `min-height: 100vh`, separated by rest sections of about `30vh`, and each beat's visual animates on `view()` over `entry 15% cover 50%` so it has landed before the beat is centred rather than arriving after it.
 
 ## Scrub Media (Video and Image Sequences)
 
@@ -376,58 +273,17 @@ The Apple-style product fly-through: a pinned stage whose video time or frame in
 
 By 2026, parallax intensity is no longer fixed at build time. It adapts to device, battery and user pace. Embed this governance layer alongside the motion code.
 
-```js
-// Adaptive parallax governance
-const governance = {
-  intensity: 1.0, // 0 disables, 1 is full
-  reasons: [],
-};
+One `--parallax-intensity` (0 disables, 1 is full) is clamped down by each signal in turn, taking the minimum and never raising it back. The ladder, in priority order, with the thresholds that matter:
 
-// 1. Hardware tier
-const cores = navigator.hardwareConcurrency || 4;
-const memory = navigator.deviceMemory || 4;
-if (cores <= 4 || memory <= 4) {
-  governance.intensity = Math.min(governance.intensity, 0.5);
-  governance.reasons.push('low-tier hardware');
-}
+| Signal | Read from | Condition | Intensity |
+|---|---|---|---|
+| Reduced motion | `matchMedia('(prefers-reduced-motion: reduce)')` | matches | `0`, and it wins over everything below |
+| Network | `navigator.connection` | `saveData`, or `effectiveType` matches `2g\|3g` | `0` |
+| Battery | `navigator.getBattery()` | `level < 0.2` **and** not charging | cap at `0.3` |
+| Hardware tier | `hardwareConcurrency`, `deviceMemory` (default 4 when absent) | either `<= 4` | cap at `0.5` |
+| Scroll velocity | `scroll` listener, `{ passive: true }`, px per ms | `> 3` fast / `< 0.5` slow / between | `--parallax-scale` `0.4` / `1` / `0.7` |
 
-// 2. Battery state
-if ('getBattery' in navigator) {
-  const b = await navigator.getBattery();
-  if (b.level < 0.2 && !b.charging) {
-    governance.intensity = Math.min(governance.intensity, 0.3);
-    governance.reasons.push('low battery');
-  }
-}
-
-// 3. Network conditions
-const conn = navigator.connection;
-if (conn && (conn.saveData || /2g|3g/.test(conn.effectiveType))) {
-  governance.intensity = 0;
-  governance.reasons.push('save-data or slow network');
-}
-
-// 4. Reduced motion (highest priority)
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  governance.intensity = 0;
-  governance.reasons.push('prefers-reduced-motion');
-}
-
-// 5. User velocity (calm intense scrollers, enrich slow ones)
-let lastScroll = 0, lastTime = performance.now();
-addEventListener('scroll', () => {
-  const now = performance.now();
-  const dt = now - lastTime;
-  const dy = Math.abs(scrollY - lastScroll);
-  const velocity = dy / dt; // px per ms
-  if (velocity > 3) { document.documentElement.style.setProperty('--parallax-scale', '0.4'); }
-  else if (velocity < 0.5) { document.documentElement.style.setProperty('--parallax-scale', '1'); }
-  else { document.documentElement.style.setProperty('--parallax-scale', '0.7'); }
-  lastScroll = scrollY; lastTime = now;
-}, { passive: true });
-
-document.documentElement.style.setProperty('--parallax-intensity', governance.intensity);
-```
+Battery is a cap and not a kill because a charging phone at 15% is not the same case as a Save-Data header; collapsing the two disables the effect on a device that could carry it. Record the reason alongside the value, so a reduced composition is explainable rather than mysterious.
 
 ```css
 .parallax-layer {
@@ -456,30 +312,7 @@ Copy and adapt. All assume the reduced-motion reset and governance layer are alr
 
 ### Hero with multi-layer scroll-driven depth
 
-```html
-<header class="hero parallax-stage">
-  <div class="parallax-layer bg" aria-hidden="true"><img src="bg.avif" width="1920" height="1080" alt=""></div>
-  <div class="parallax-layer mid" aria-hidden="true"><img src="mid.avif" width="1920" height="1080" alt=""></div>
-  <div class="parallax-layer fg">
-    <h1>Headline anchored to scroll</h1>
-    <p>Body copy stays still and readable.</p>
-  </div>
-</header>
-```
-
-```css
-.hero { position: relative; height: 100dvh; overflow: clip; isolation: isolate; }
-.parallax-layer { position: absolute; inset: 0; }
-.parallax-layer img { width: 100%; height: 100%; object-fit: cover; }
-
-@supports (animation-timeline: scroll()) {
-  .parallax-layer.bg  { animation: drift-slow  linear both; animation-timeline: scroll(); }
-  .parallax-layer.mid { animation: drift-med   linear both; animation-timeline: scroll(); }
-}
-
-@keyframes drift-slow { from { transform: translateY(0); } to { transform: translateY(-10%); } }
-@keyframes drift-med  { from { transform: translateY(0); } to { transform: translateY(-25%); } }
-```
+The hero is `height: 100dvh; overflow: clip; isolation: isolate`, decorative layers carry `aria-hidden="true"` and their images carry explicit `width`/`height`, and only the foreground holds text. Drift the background `-10%` and the midground `-25%` over `scroll()`: the ratio between the two is what reads as depth, the absolute travel is not.
 
 ### Horizontal pinned timeline
 
