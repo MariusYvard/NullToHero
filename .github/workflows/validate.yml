@@ -36,6 +36,9 @@ jobs:
       - name: Detector rules (fixtures both directions)
         run: node tests/inspect-rules.mjs
 
+      - name: Corpus divergence harness (registry and recorded results)
+        run: node tools/eval-corpus/run.mjs
+
       - name: Run Python unit tests
         if: always()
         run: python3 tests/test_design_system.py

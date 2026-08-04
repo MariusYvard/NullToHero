@@ -1,0 +1,113 @@
+{
+  "$comment": "Divergence cases for the corpus evaluation harness. Each case pairs one reference file with an open question a beginner would actually ask, and lists the markers that show the file changed what the model reached for. Markers are the point: a case whose markers a bare model produces on its own is a case that proves nothing, and the file it tests is a file that earns nothing.",
+  "version": 1,
+  "cases": [
+    {
+      "id": "css-architecture-important",
+      "file": "skills/siteasy/references/css-architecture.md",
+      "question": "Ma règle CSS est ignorée alors je mets !important partout. Comment je m'en sors ?",
+      "markers": [
+        "cascade layer",
+        "@layer",
+        "legacy",
+        "migration"
+      ],
+      "rationale": "A bare model explains specificity and stops. Reaching for cascade layers and a gradual migration path is the architectural answer.",
+      "origin": "v2.6.0, the case that decided the cut kept the prescriptions and dropped the syntax"
+    },
+    {
+      "id": "local-city-pages",
+      "file": "skills/seo/references/local.md",
+      "question": "Je suis plombier et j'interviens dans une soixantaine de communes. Je voudrais créer une page par commune. Comment je fais ça correctement ?",
+      "markers": [
+        "50",
+        "doorway",
+        "service area",
+        "GBP",
+        "cid"
+      ],
+      "rationale": "A bare model gives generic advice about unique content. It does not refuse at a numbered threshold, does not know a service-area business should hide its address, and does not produce the maps.google.com/?cid= form of sameAs.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "ecommerce-facets",
+      "file": "skills/seo/references/ecommerce.md",
+      "question": "Ma boutique a des filtres par couleur, taille et prix. Google m'indexe des milliers d'URL avec paramètres. Qu'est-ce que je dois faire ?",
+      "markers": [
+        "per-facet",
+        "brand",
+        "sort",
+        "robots.txt",
+        "never fetched"
+      ],
+      "rationale": "A bare model sorts parameters into broad families. The per-facet matrix and the trap where robots.txt prevents the canonical on that URL from ever being read are what the file adds.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "technical-react-invisible",
+      "file": "skills/seo/references/technical.md",
+      "question": "Mon site est en React et il ne remonte pas dans Google. Par quoi je commence pour diagnostiquer ?",
+      "markers": [
+        "December 2025",
+        "non-200",
+        "Googlebot Smartphone",
+        "canonical"
+      ],
+      "rationale": "A bare model gives good generic React SEO advice and produces none of the four documented pitfalls, in particular that Google does not execute JavaScript on a non-200 response.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "competitor-vs-page",
+      "file": "skills/seo/references/competitor-pages.md",
+      "question": "Je veux écrire une page qui compare mon produit à un concurrent. Comment je m'y prends pour que ça marche en SEO ?",
+      "markers": [
+        "AggregateRating",
+        "aggregate",
+        "FAQ",
+        "SERP"
+      ],
+      "rationale": "Narrow case, recorded as such. A bare model already produces two pages, an honest section on when the competitor wins, and the legal caveat. What only the file gives is the FAQ sizing, the dated FAQ rich-result removal and the prohibition on marking up third-party ratings.",
+      "origin": "v3 stage 3 gate, passed narrowly"
+    },
+    {
+      "id": "harden-real-clients",
+      "file": "skills/siteasy/references/harden.md",
+      "question": "Mon application marche en démo mais casse chez les vrais clients. Noms très longs, listes de 3000 lignes, un client en allemand. Comment je rends ça solide ?",
+      "markers": [
+        "30",
+        "expansion",
+        "hostile",
+        "collator"
+      ],
+      "rationale": "The narrowest pass in the set, recorded honestly. The bare answer was richer in places and produced min-width: 0 on flex children, which the cut had removed as capacity, confirming that removal. The expansion budget and the hostile seed practice are what the file now carries.",
+      "origin": "v3 stage 3 gate, passed narrowly, gaps filled from the control"
+    },
+    {
+      "id": "clarify-confusing-copy",
+      "file": "skills/siteasy/references/clarify.md",
+      "question": "Les textes de mon application sont confus, les gens ne comprennent pas les messages d'erreur et les boutons. Par où je commence ?",
+      "markers": [
+        "pass",
+        "voice",
+        "back",
+        "help text"
+      ],
+      "rationale": "A bare model produces inventory, prioritise, error formula, button formula, style guide. It does not produce an ordered set of passes, nor the rule that precision added in a later pass breaks the voice set in an earlier one.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "a11y-axe-is-green",
+      "file": "skills/siteasy/references/accessibility-engineering.md",
+      "question": "On me demande de rendre mon site accessible. J'ai lancé axe DevTools, tout est vert. C'est bon ?",
+      "markers": [
+        "57",
+        "Deque",
+        "title",
+        "activedescendant",
+        "adjacent"
+      ],
+      "rationale": "Both answers say no. The difference is that the bare one invents a 30 to 40 percent figure while the file carries the measured 57.38 percent with its source, and only the file produces the title-as-accessible-name trap, the combobox aria-activedescendant bug and the focus ring measured against adjacent colours rather than the page background.",
+      "origin": "v3 stage 3 gate"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "$comment": "Recorded outcomes. One run per case, n=1, no repeated sampling. Verdicts are DIVERGENT (the file changed what the model reached for, clearly), DIVERGENT_NARROW (it did, but the control was close or richer in places) and EQUIVALENT (it did not, which licenses a cut). Recorded honestly: two narrow passes and two cases where the control taught the corpus something are in here, because a benchmark that only records its wins is a marketing page.",
+  "protocol": "open-question divergence, one reader given only the reference file, one reader given nothing, same question, 400 words each",
+  "recorded": "2026-08-04",
+  "judge": "the same session that made the cuts, which is the harness's main weakness and is stated in run.mjs",
+  "runs": [
+    {
+      "case": "css-architecture-important",
+      "verdict": "DIVERGENT",
+      "note": "With the file: cascade layers plus a migration path through @layer legacy. Without: an explanation of specificity, correct, that stops there. This is the run that set the doctrine in v2.6.0.",
+      "decided": "keep the prescriptions, cut the syntax; file went 458 to 134 lines"
+    },
+    {
+      "case": "local-city-pages",
+      "verdict": "DIVERGENT",
+      "note": "With the file: opens on the numbered refusal at 50 pages with the doorway motive, puts the business profile before the pages, knows a service-area business should hide its address, produces the maps.google.com/?cid= form of sameAs, names Apple Maps and Bing Places, judges reviews as a monthly rate. Without: none of it.",
+      "decided": "cut of 39 percent validated"
+    },
+    {
+      "case": "ecommerce-facets",
+      "verdict": "DIVERGENT",
+      "note": "With the file: the per-facet matrix, colour and size consolidable, price and sort blocked, brand indexable if it has its own content, condition indexable if there is demand. Plus the trap where a robots.txt disallow means the canonical on that URL is never read. Without: three broad families, correct but undifferentiated.",
+      "decided": "cut of 39 percent validated"
+    },
+    {
+      "case": "technical-react-invisible",
+      "verdict": "DIVERGENT",
+      "note": "With the file: the four documented JavaScript pitfalls of December 2025, including that Google does not execute JavaScript on a non-200 response, plus Googlebot Smartphone since 5 July 2024 and the crawl budget threshold at 10k pages. Without: solid generic React SEO advice, none of the four, no dates.",
+      "decided": "cut of 41 percent validated"
+    },
+    {
+      "case": "competitor-vs-page",
+      "verdict": "DIVERGENT_NARROW",
+      "note": "The control independently produced two pages rather than one, an honest section on when the competitor wins, the comparative-advertising caveat and the link from the pricing page. What only the file gave: FAQ sizing at 5 to 8 and 4 to 6, the dated removal of the FAQ rich result, and the prohibition on marking up third-party ratings.",
+      "control_taught_us": "read the SERP first, and if review directories hold the top three the work is the G2 profile and not this page. Added to the file.",
+      "decided": "cut of 44 percent validated, gap filled from the control"
+    },
+    {
+      "case": "harden-real-clients",
+      "verdict": "DIVERGENT_NARROW",
+      "note": "The narrowest in the set. The control was richer in places. What only the file gave: the 30 to 40 percent translation expansion budget and the test thresholds. The control also produced min-width: 0 on flex children, which the cut had removed as capacity, confirming that particular removal was right.",
+      "control_taught_us": "make the demo seed data hostile once instead of hardening per symptom, plus collator-based sorting and UTF-8 end to end. Added to the file.",
+      "decided": "cut of 48 percent validated, gaps filled from the control"
+    },
+    {
+      "case": "clarify-confusing-copy",
+      "verdict": "DIVERGENT",
+      "note": "With the file: establish the reader's state before rewriting, then the ordered passes, and the rule that precision added in a later pass breaks the voice set in an earlier one, so you go back. Plus the help-text rule, that repeating the label in a tooltip teaches readers to ignore every tooltip. Without: inventory, prioritise, error formula, button formula, style guide. Good, and flat.",
+      "decided": "cut of 55 percent validated, the deepest in the corpus"
+    },
+    {
+      "case": "a11y-axe-is-green",
+      "verdict": "DIVERGENT",
+      "note": "Both answers correctly say no. The difference is sourcing and specificity: the file carries the measured 57.38 percent from Deque with its date where the control invents 30 to 40 percent, and only the file produces the title-as-accessible-name trap, the combobox aria-activedescendant bug and the focus ring measured against adjacent colours rather than the page background.",
+      "decided": "cut of 40 percent validated"
+    }
+  ]
+}
