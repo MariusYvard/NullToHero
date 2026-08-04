@@ -1337,29 +1337,94 @@ section("36. Reference graph: no orphan references, all data domains cited");
 
 
 // ─── Check 37: canonical laws registry ────────────────────────────────────────
-section("37. Canonical laws: laws.csv well-formed and every law cited");
+// Two guarantees, and the second exists because the first was not enough.
+//
+// The first is that every declared law is cited somewhere. That has held since
+// v2.5.0. It catches a law that nobody uses. It does not catch the opposite and
+// more damaging case: a threshold restated in prose, in its own words, with a
+// different number. v2.5.0 fixed five of those by hand. By v2.6.0 the seo corpus
+// had grown four more, and one of them mattered: the programmatic hard stop read
+// 5,000 in programmatic.md and 500 in both SKILL.md and the README, so the same
+// question got a refusal or an execution depending on which file loaded. Nothing
+// failed, because nothing was looking.
+//
+// The second guarantee closes that. A law may declare a `guard`: a regex that
+// matches the shape of the threshold being stated. Any file matching a guard must
+// cite the law id, or it fails. The law's own anchor file is exempt, since that is
+// where the value is defined. Guards are opt-in per law and deliberately narrow,
+// because a guard that cries wolf gets deleted and then guards nothing.
+section("37. Canonical laws: registry well-formed, every law cited, no restated threshold");
 {
   const lawsPath = path.join(ROOT, "tools", "data", "laws.csv");
   if (!fs.existsSync(lawsPath)) fail("tools/data/laws.csv missing");
   else {
-    const lines = fs.readFileSync(lawsPath, "utf8").trim().split(/\r?\n/);
-    const ids = lines.slice(1).map(l => l.split(",")[0]).filter(Boolean);
+    // RFC4180-ish: the statement column has embedded commas, so a naive split
+    // would shear the row. Only col 0 was read before, which worked by luck.
+    const parseCsv = (text) => {
+      const rows = []; let row = [], cell = "", q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (q) {
+          if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+          else if (c === '"') q = false;
+          else cell += c;
+        } else if (c === '"') q = true;
+        else if (c === ",") { row.push(cell); cell = ""; }
+        else if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; }
+        else if (c !== "\r") cell += c;
+      }
+      if (cell || row.length) { row.push(cell); rows.push(row); }
+      return rows.filter(r => r.length > 1 || r[0]);
+    };
+    const rows = parseCsv(fs.readFileSync(lawsPath, "utf8").trim());
+    const header = rows[0];
+    const col = (name) => header.indexOf(name);
+    const laws = rows.slice(1).map(r => ({
+      id: r[col("id")], anchor: r[col("anchor")], guard: (r[col("guard")] || "").trim(),
+    })).filter(l => l.id);
+
+    const ids = laws.map(l => l.id);
     const dupes = ids.filter((x, i) => ids.indexOf(x) !== i);
     if (dupes.length) fail(`laws.csv duplicate ids: ${dupes.join(", ")}`);
     else if (ids.length < 12) fail(`laws.csv has only ${ids.length} laws (expected >= 12)`);
     else pass(`laws.csv: ${ids.length} laws, unique ids`);
-    let corpus = "";
+
+    const files = [];
     const walkMd = (dir) => {
       for (const name of fs.readdirSync(dir)) {
         const p = path.join(dir, name);
         if (fs.statSync(p).isDirectory()) walkMd(p);
-        else if (name.endsWith(".md")) corpus += fs.readFileSync(p, "utf8");
+        else if (name.endsWith(".md")) files.push(p);
       }
     };
     walkMd(path.join(ROOT, "skills"));
+    const readmePath = path.join(ROOT, "README.md");
+    if (fs.existsSync(readmePath)) files.push(readmePath);
+
+    const texts = new Map(files.map(p => [p, fs.readFileSync(p, "utf8")]));
+    const corpus = [...texts.values()].join("\n");
     const uncited = ids.filter(id => !corpus.includes(id));
     if (uncited.length) uncited.forEach(id => fail(`law never cited in any skill: ${id}`));
     else pass("every law id is cited at least once in the skills");
+
+    let guarded = 0, breaches = 0;
+    for (const law of laws) {
+      if (!law.guard) continue;
+      guarded++;
+      let re;
+      try { re = new RegExp(law.guard, "g"); }
+      catch { fail(`${law.id}: guard is not a valid regex: ${law.guard}`); breaches++; continue; }
+      const anchorAbs = path.join(ROOT, law.anchor);
+      for (const [p, text] of texts) {
+        if (p === anchorAbs) continue;
+        const hits = text.match(re);
+        if (!hits) continue;
+        if (text.includes(law.id)) continue;
+        breaches++;
+        fail(`${path.relative(ROOT, p)} states the ${law.id} threshold ("${hits[0].trim().slice(0, 48)}") without citing ${law.id}`);
+      }
+    }
+    if (!breaches) pass(`${guarded} guarded laws: no threshold restated outside its anchor`);
   }
 }
 

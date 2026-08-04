@@ -24,7 +24,7 @@ Product pages are the primary conversion and ranking asset. Each should be treat
 | Title tag | `[Product Name], [Brand] | [Category]` or `[Product Name] | Buy [Product] Online` |
 | H1 | Exact product name matching how users search |
 | URL | `/category/product-name/`: no IDs (`/p?id=12345`), no parameters in canonical URL |
-| Description | Unique per product. Minimum 200 words. Not manufacturer copy-paste (duplicate content). |
+| Description | Unique per product, at the `L-WORD-1` floor for its page type. Not manufacturer copy-paste (duplicate content). |
 | Images | Multiple angles. Alt text = product name + key attribute. WebP format. |
 | Price | Visible on page, not JS-only. Matches schema. |
 | Availability | In stock / out of stock clearly stated. Affects schema. |

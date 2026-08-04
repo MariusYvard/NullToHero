@@ -40,6 +40,9 @@ version: 1.9.0
 ## Content Metrics
 
 ### Word Count Analysis
+
+This table is the anchor of `L-WORD-1`. It is the only place in the plugin that carries per-page-type
+word counts. Other references cite it; they do not restate it with their own numbers.
 Compare against page type minimums:
 | Page Type | Minimum |
 |-----------|---------|

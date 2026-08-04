@@ -126,7 +126,7 @@ Google updated its JavaScript SEO documentation in December 2025 with critical c
 **Best practice:** Serve critical SEO elements (canonical, meta robots, structured data, title, meta description) in the initial server-rendered HTML rather than relying on JavaScript injection.
 
 ### 9. IndexNow Protocol (setup and tooling: [indexnow.md](indexnow.md))
-- Check if site supports IndexNow for Bing, Yandex, Naver
+- Check if site supports IndexNow. Participants are listed and dated once, in `indexnow.md` (`L-INDEXNOW-1`)
 - Supported by search engines other than Google
 - Recommend implementation for faster indexing on non-Google engines
 

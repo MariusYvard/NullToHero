@@ -32,7 +32,9 @@ Programmatic SEO generates large numbers of pages from structured data sources (
 
 ## Quality Gates
 
-**These apply before and during any programmatic SEO project.**
+**These apply before and during any programmatic SEO project.** This table is the anchor of
+`L-PROG-1`. Four tiers, and the distance between the third and the fourth is the whole point: 500 pages
+buys a full audit, 5,000 buys a refusal. Any summary that collapses them relabels the alert as the stop.
 
 | Threshold | Action |
 |-----------|--------|

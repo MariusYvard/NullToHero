@@ -175,7 +175,7 @@ Sitemap: https://example.com/sitemap.xml
 
 1. Google Search Console → Sitemaps → Submit
 2. Bing Webmaster Tools → Sitemaps → Submit
-3. IndexNow (for Bing/Yandex/Naver) — instant notification of new/updated URLs; setup and tooling in [indexnow.md](indexnow.md)
+3. IndexNow (participants listed and dated in `indexnow.md`, `L-INDEXNOW-1`) — instant notification of new/updated URLs; setup and tooling in [indexnow.md](indexnow.md)
 
 ---
 

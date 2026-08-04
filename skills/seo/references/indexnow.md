@@ -7,7 +7,7 @@ version: 1.0.0
 # IndexNow
 
 IndexNow is a shared protocol: ping one participating engine when a URL changes
-and it propagates to all of them. Participants (2026): Microsoft Bing, Yandex,
+and it propagates to all of them. Participants, verified 2026 (`L-INDEXNOW-1`, the only enumeration in the plugin): Microsoft Bing, Yandex,
 Naver, Seznam.cz and Yep, the participants IndexNow itself lists
 ([IndexNow.org](https://www.indexnow.org/)). Google is not among them: the Google
 path remains sitemaps plus Search Console, so IndexNow

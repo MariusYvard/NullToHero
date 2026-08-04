@@ -36,11 +36,11 @@ checked in one pass. Everything else in the table below is a specialist pass.
 | `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness | [references/content.md](references/content.md) |
 | `geo [url]` | AI search optimization — Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals | [references/geo.md](references/geo.md) + [references/ai-overview-recovery.md](references/ai-overview-recovery.md) |
 | `sitemap [url]` | XML sitemap validation and generation with industry-specific templates | [references/sitemap.md](references/sitemap.md) |
-| `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam — key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers | [references/indexnow.md](references/indexnow.md) |
+| `indexnow [url]` | Instant-indexing pings to the IndexNow participants (`L-INDEXNOW-1`) — key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers | [references/indexnow.md](references/indexnow.md) |
 | `images [url]` | Image SEO audit — alt text, formats (WebP/AVIF), lazy loading, CLS, LCP | [references/images.md](references/images.md) |
 | `local [business]` | Local SEO — Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema | [references/local.md](references/local.md) |
 | `hreflang [url]` | Hreflang validation and generation for multilingual and multi-region sites | [references/hreflang.md](references/hreflang.md) |
-| `programmatic [url]` | Programmatic SEO — URL patterns, quality gates (warn 100+, hard stop 500+), deduplication | [references/programmatic.md](references/programmatic.md) |
+| `programmatic [url]` | Programmatic SEO — URL patterns, the four graduated quality gates of `L-PROG-1`, deduplication | [references/programmatic.md](references/programmatic.md) |
 | `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks | [references/competitor-pages.md](references/competitor-pages.md) |
 | `cluster [keyword]` | Semantic keyword clustering — intent-based grouping, content architecture, gap analysis | [references/cluster.md](references/cluster.md) |
 | `drift [url]` | SEO drift monitoring — baseline capture, change detection, history tracking | [references/drift.md](references/drift.md) |

@@ -115,13 +115,17 @@ TripAdvisor (hospitality), Houzz (home services), Healthgrades (healthcare), Avv
 
 Each location should have a dedicated, unique page. Generic templates with only the city name swapped are thin content.
 
-**Quality gates:**
+**Quality gates (`L-PROG-2`):**
 - Warning at 30+ location pages without strong unique content strategy
 - Hard stop at 50+ location pages without an audit for thin content
 
+These bite earlier than the generic programmatic gates of `L-PROG-1`, on purpose. A set of city-templated
+pages is the textbook doorway pattern, so the same page count carries more risk here than it does on a
+feature or integration set.
+
 **Location page requirements:**
 - Unique H1 including city/neighborhood: "Plumber in [City], [State]"
-- Unique descriptive content (minimum 400 words, not templated)
+- Unique descriptive content at the `L-WORD-1` floor for a location page, not templated
 - Embedded Google Maps with the GBP location pinned
 - Local phone number (not a national number)
 - Schema: LocalBusiness with geo coordinates

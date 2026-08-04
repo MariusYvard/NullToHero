@@ -248,11 +248,11 @@ Your search expert. It audits a whole site or a single page, writes the structur
 | `content [url]` | E-E-A-T analysis, readability, keyword density, AI citation readiness |
 | `geo [url]` | AI search optimization, Google AI Overviews, ChatGPT, Perplexity, llms.txt, brand signals |
 | `sitemap [url]` | XML sitemap validation and generation with industry-specific templates |
-| `indexnow [url]` | Instant-indexing pings to Bing, Yandex, Naver and Seznam, key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers |
+| `indexnow [url]` | Instant-indexing pings to the IndexNow participants, key setup, single/batch/sitemap submission; the fast lane into the indexes that feed AI answers |
 | `images [url]` | Image SEO audit, alt text, formats (WebP/AVIF), lazy loading, CLS, LCP |
 | `local [business]` | Local SEO, Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema |
 | `hreflang [url]` | Hreflang validation and generation for multilingual and multi-region sites |
-| `programmatic [url]` | Programmatic SEO, URL patterns, quality gates (warn 100+, hard stop 500+), deduplication |
+| `programmatic [url]` | Programmatic SEO, URL patterns, four graduated quality gates from a warning to a refusal, deduplication |
 | `competitor-pages [url]` | "X vs Y" and "alternatives to X" pages with feature matrices, FAQ schema, conversion hooks |
 | `cluster [keyword]` | Semantic keyword clustering, intent-based grouping, content architecture, gap analysis |
 | `drift [url]` | SEO drift monitoring, baseline capture, change detection, history tracking |

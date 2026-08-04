@@ -42,8 +42,8 @@ version: 1.8.1
 ## Quality Gates
 
 ### Location Page Limits
-- ⚠️ **WARNING** at 30+ location pages
-- 🛑 **HARD STOP** at 50+ location pages
+- ⚠️ **WARNING** at 30+ location pages (`L-PROG-2`)
+- 🛑 **HARD STOP** at 50+ location pages (`L-PROG-2`)
 
 ### Unique Content Requirements
 | Page Type | Min Words | Unique % |
