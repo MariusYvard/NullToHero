@@ -11,6 +11,72 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.0.0] - 2026-08-04
+
+The corpus stops being the product. Six stages, three instruments, and two of the
+three were wrong before they were right.
+
+### Changed
+
+- **2,696 lines cut, 20,687 to 17,991, across both skills.** seo lost 715 lines over
+  27 references, siteasy 1,968 over 85. Forty files were left untouched on purpose.
+  No `FILE_INTEGRITY` floor was lowered, which matters because lowering one twice in
+  three releases is how a real loss hides.
+- **The cut was gated by divergence, not by a size target.** Eight open beginner
+  questions, each answered twice, once by a reader given only the reduced file and
+  once by a reader given nothing. A cut ships only if the reduced file still makes
+  the model reach for what the bare model does not.
+
+### Added
+
+- **A deterministic detector of NullToHero's own**, `tools/inspect/detect.mjs`.
+  Thirteen registry rules made executable plus twenty-six static checks that already
+  existed to serve `/audit` on a URL and were unreachable from a local scan. Every
+  rule owes two fixtures, one that must fire and one that must not.
+- **A guard against restated thresholds.** A canonical law may declare a regex; any
+  file matching it must cite the law id or the build fails.
+- **A published divergence benchmark**, `tools/eval-corpus/`. Eight cases, eight
+  recorded runs, the protocol, and a section on what it cannot prove that is as long
+  as the section on what it can.
+
+### Fixed
+
+- Three shipped recommendations Google contradicts: the Search Console URL Parameters
+  tool, dead since March 2022; canonicalizing paginated pages to page 1, which Google
+  names and rejects; a seven-row table prescribing sitemap `priority` values Google
+  ignores.
+- `AggregateRating` markup for third-party review scores on a comparison page, which
+  the structured-data policy forbids and which `ecommerce.md` already stated correctly.
+- Six internal contradictions, including `geo.md` declaring that AI crawlers do not
+  execute JavaScript sixty lines after establishing that AI Overviews are served
+  through Googlebot.
+- Two of the plugin's own shipped templates broke its own laws: a contact form whose
+  primary call to action resolved to 3.74:1 against `L-CONTRAST-1`'s 4.5, and a skip
+  link animating `top`.
+
+### What the measurement changed about the plan
+
+Three methods gave three answers on the same corpus. A mechanical classifier said
+8.6 percent removable, a reviewer asked only for a verdict said 54, and a pass that
+forced every cut to name what it destroys said 22.9. The constraint moved the number,
+not the corpus.
+
+The classifier failed its own blind gate at 4 of 10 and the failure was the finding:
+it ranks code-form redundancy and cannot see prose. v2.6.0 cut four files on their
+code-block share and was right, but those four were code-heavy, which is why the
+signal found them. Its header records this rather than hiding it.
+
+Two further premises died on contact with measurement. Cross-file table duplication
+is negligible, 3 real cases in 278 tables. And the queryable data layer this release
+set out to build already existed: 2,900 rows behind `search.py`, invoked from 14 skill
+files. The defect was coverage, 3 of 13 query domains ever reached, so the work became
+wiring rather than extraction. Four domains were wired on a rule, query the base for
+facts and not for taste, and `colorize.md` now says why 160 ready-made palettes stay
+deliberately out of reach.
+
+Twice the control group taught the corpus something it lacked, and both are credited
+to it in `results.json`.
+
 ## [2.6.0] - 2026-08-02
 
 The corpus loses the half a current model already knows. Measured before cutting and

@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 $REPO      = "MariusYvard/NullToHero"
 $PLUGIN_DIR = Join-Path $env:USERPROFILE ".claude\plugins"
 $INSTALL_NAME = "null-to-hero"
-$PLUGIN_VERSION = "2.6.0"   # pinned release tag for the manual-clone fallback
+$PLUGIN_VERSION = "3.0.0"   # pinned release tag for the manual-clone fallback
 
 function Log   { param($msg) Write-Host "[NullToHero] $msg" -ForegroundColor Cyan }
 function Ok    { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
