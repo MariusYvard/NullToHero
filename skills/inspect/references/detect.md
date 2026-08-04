@@ -1,43 +1,66 @@
 ---
 name: detect
-description: "Run the deterministic impeccable detect CLI on code or a URL and present findings clearly."
-version: 1.6.0
+description: "Run NullToHero's own deterministic detector on local code and present findings clearly."
+version: 2.0.0
 ---
 
 # Anti-Pattern Detector
 
-Run the deterministic `impeccable detect` CLI on code or a URL and present findings clearly.
-
-## Running the Detector
-
 ```bash
-# Local file or folder
-npx impeccable@2.3.2 --json path/to/file.html
-npx impeccable@2.3.2 --json path/to/folder/
-
-# URL
-npx impeccable@2.3.2 --json https://example.com
+node tools/inspect/detect.mjs path/to/file-or-folder
+node tools/inspect/detect.mjs path/ --json
+node tools/inspect/detect.mjs path/ --fail-on important   # exit 1 for a hook or CI
 ```
 
-Pin the version. Bare `npx impeccable` fetches and executes whatever the registry
-serves that day, so the same page can produce two different verdicts on two days, and
-the code that ran was never the code this reference was tested against. 2.3.2 is the
-tested version; upstream is already at 3.x with different flags.
+Reads `.html`, `.css`, `.js`, `.jsx`, `.ts` and `.tsx`. No model call, no network, no page
+execution, so it costs nothing per run and is safe to point at a repository you did not write.
+
+## What it actually covers, and what it does not
+
+Two sources, both deterministic. Thirteen rules from `tools/data/inspect-rules.csv`, so every
+finding carries that registry's id, severity, rationale and standard. Plus twenty-six static
+checks from `tools/audit/lib/checks.mjs`, which existed to serve `/audit` on a URL and were
+never reachable from a local scan until now.
+
+The scope is source text, not layout. Whether a block overflows at 375px, whether a contrast
+ratio survives the resolved cascade, whether an animation janks: those need a rendered page and
+belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
+the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
+
+The registry holds 72 rules and 13 are executable. The rest still need a reader, which is what
+the sections further down this file are for. When a rule is implemented, its prose entry stays:
+the CSV is the single source of severity and rationale for both paths.
+
+## Lineage
+
+Before v2.7.0 this command shelled out to `npx impeccable@2.3.2` (Apache 2.0, Paul Bakaus).
+That tool is good and the pin was correct, since an unpinned `npx` makes the same page produce
+two verdicts on two days. But it froze detection on an old release of someone else's project.
+Nothing here is transcribed from it: these rules are NullToHero's own registry made executable.
+
+Worth knowing when choosing what to run: the two engines cover different axes. Impeccable's
+rules are largely aesthetic (gradient text, template palettes, kicker above heading). These are
+correctness (WCAG, CLS, security, dead interaction). Measured on its own 65 adversarial fixtures,
+this detector reports 20 findings that its rules never look for, and stays silent on the taste
+defects those fixtures were built to carry. Neither is a replacement for the other.
 
 ## Process
 
-1. **Identify the target** from the user's message. If not specified, ask: "What file, folder, or URL should I scan?"
-2. **Run** with `--json` flag
-3. **Parse**: each finding has: `rule`, `severity` (error|warning|info), `message`, `location`, `suggestion`
-4. **Present** grouped by severity, with concrete fix for each
-5. **Offer to fix**: "Would you like me to fix any of these?"
+1. **Identify the target** from the user's message. If not specified, ask: "What file or folder should I scan?"
+2. **Run** with `--json`
+3. **Parse**: each finding carries `id` (registry rule) or `check` (static check), `severity`,
+   `rule`, `file`, `evidence`, and where available `why` and `source`
+4. **Present** grouped by severity, with a concrete fix for each
+5. **Then read for what the detector cannot see.** The unimplemented registry rules and the
+   pattern lists below still need judgment. Do not present a clean scan as a clean page.
+6. **Offer to fix**: "Would you like me to fix any of these?"
 
 ## Output Format
 
 ```
 ## Anti-Pattern Report: [target]
 
-Found [N] issues: [E] errors · [W] warnings · [I] informational
+Found [N] issues: [C] critical · [I] important · [M] medium · [L] low
 
 ### Errors (must fix)
 **[rule-name]**: [file]:[line]
@@ -51,7 +74,8 @@ Found [N] issues: [E] errors · [W] warnings · [I] informational
 ...
 ```
 
-If 0 issues: "No anti-patterns detected."
+If 0 issues: "No named defect found. This covers the executable rules only, not layout or
+resolved contrast, which need `/inspect preview`."
 
 ## Common Anti-Patterns
 
@@ -68,7 +92,9 @@ If 0 issues: "No anti-patterns detected."
 
 ## If Node.js is Not Available
 
-> The detector requires Node.js. Install it from https://nodejs.org, then run `npx impeccable [target]`. In the meantime, I can do a manual review, share your file and I'll run `/siteasy audit` instead.
+> The detector needs Node.js. Install it from https://nodejs.org, then run
+> `node tools/inspect/detect.mjs [target]`. In the meantime I can review by hand: share the file
+> and I will run `/siteasy audit` instead.
 
 ## Parallax Anti-Patterns
 

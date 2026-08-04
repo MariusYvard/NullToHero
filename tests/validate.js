@@ -1429,6 +1429,33 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
 }
 
 
+// ─── Check 43: detector rules are coupled to the registry ─────────────────────
+// The detector reports against tools/data/inspect-rules.csv, so a rule id that
+// drifts out of the registry would emit a finding with no severity, no rationale
+// and no standard behind it. Cheap to assert, and it fails the build the moment
+// somebody renumbers the CSV without touching the engine.
+section("43. Detector rules resolve in the inspect registry");
+{
+  const rulesPath = path.join(ROOT, "tools", "inspect", "rules.mjs");
+  const csvPath = path.join(ROOT, "tools", "data", "inspect-rules.csv");
+  if (!fs.existsSync(rulesPath) || !fs.existsSync(csvPath)) {
+    fail("detector engine or inspect-rules.csv missing");
+  } else {
+    const known = new Set(
+      fs.readFileSync(csvPath, "utf8").trim().split(/\r?\n/).slice(1)
+        .map(l => l.split(",")[0]).filter(Boolean));
+    const implemented = [...fs.readFileSync(rulesPath, "utf8").matchAll(/^\s{4}id:\s*(\d+),/gm)]
+      .map(m => m[1]);
+    if (!implemented.length) fail("rules.mjs declares no rule ids");
+    else {
+      const orphans = implemented.filter(id => !known.has(id));
+      if (orphans.length) orphans.forEach(id => fail(`detector rule ${id} is not in inspect-rules.csv`));
+      else pass(`${implemented.length} detector rules all resolve in the registry of ${known.size}`);
+    }
+  }
+}
+
+
 // ─── Check 38: intent routes and alias registry ───────────────────────────────
 // The command surface is governed: every route in tools/data/intents.csv points
 // at a live command, aliases never mask a live command and never linger in the
