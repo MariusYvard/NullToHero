@@ -168,7 +168,10 @@ How to handle products that are no longer available:
 For large catalogs:
 
 - Use `?page=N` or `/page/N/` consistently
-- Page 1 is the canonical; all paginated pages can be self-canonicalized or canonicalized to page 1 depending on uniqueness
+- Every paginated page self-canonicalizes. Canonicalizing page 2 and beyond to page 1 is the one option
+  Google names and rejects: "Don't use the first page of a paginated sequence as the canonical page."
+  It also hides the tail of the catalogue from the index, which on a large store is most of it.
+  Source: https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading (verified August 2026)
 - Include paginated pages in sitemap only if they have distinct content value
 - Infinite scroll: must implement History API to create crawlable URLs or add a paginated fallback
 

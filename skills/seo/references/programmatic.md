@@ -87,7 +87,11 @@ Check for:
 
 **Canonical strategy:**
 - Each programmatic page should be self-canonical
-- Paginated variants must use correct canonical pointing to page 1 (or `rel="next"` if paginated)
+- Paginated variants must self-canonicalize. Do not point page 2 and beyond at page 1: Google's own
+  pagination guidance says "Don't use the first page of a paginated sequence as the canonical page.
+  Instead, give each page its own canonical URL." And `rel="next"` / `rel="prev"` stopped being an
+  indexing signal on 21 March 2019, so do not emit them for Google (other engines may still read them).
+  Source: https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading (verified August 2026)
 - Faceted navigation parameters must either have a canonical or be blocked via robots.txt
 
 **Index bloat prevention:**
@@ -96,7 +100,10 @@ Check for:
 - Empty result pages ("0 jobs found") must never be indexed
 
 **URL parameters:**
-- Parameters that create duplicate content (`?sort=`, `?color=`) → canonical to base URL or block in GSC
+- Parameters that create duplicate content (`?sort=`, `?color=`) → canonical to base URL, or disallow the
+  parameter pattern in robots.txt. The Search Console URL Parameters tool was deprecated on 28 March 2022
+  and switched off a month later, so there is nothing to configure there.
+  Source: https://developers.google.com/search/blog/2022/03/url-parameters-tool-deprecated (verified August 2026)
 - Parameters that create distinct indexable content → must have unique, crawlable URLs
 
 ---
@@ -211,7 +218,7 @@ Programmatic pages must be internally linked to be crawled and pass PageRank.
 | Doorway page patterns detected | Flag as high risk. Explain Google's doorway page policy. Recommend adding genuine unique value or consolidating pages. |
 | Hard stop threshold exceeded | Refuse to generate the full page set without a quality plan. Present the quality gate requirements explicitly. |
 | Zero-search-volume pages | Recommend noindexing or excluding from sitemap. These consume crawl budget without returning traffic. |
-| Faceted navigation creating duplicates | Recommend canonical strategy or parameter handling in Google Search Console. |
+| Faceted navigation creating duplicates | Recommend a canonical strategy, or robots.txt disallow rules. Never Search Console parameter handling, that tool is gone. |
 
 ## CROSS-SKILL REFERENCES
 

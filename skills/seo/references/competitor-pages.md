@@ -202,21 +202,16 @@ Feature matrices are the highest-value element for comparison pages. They must b
 
 Note: Google deprecated the FAQ rich result, which stopped appearing in Search on May 7, 2026, and removed the feature's documentation in June 2026 ([Google Search Central, 2026](https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature)). FAQPage remains a valid Schema.org type, the visible SERP feature is gone. Keep the markup only if a non-Google consumer of it justifies the maintenance.
 
-**Product schema for review aggregation:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "[Product A]",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.5",
-    "reviewCount": "1250",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
-}
-```
+**Do not mark up an aggregate rating on a comparison page.** The tempting move is to take the G2 or
+Capterra score you just cited and wrap it in `AggregateRating`. Google's structured data policy forbids
+exactly that: "Don't aggregate reviews or ratings from other websites." A rating you may mark up is one
+your own customers left, on your own product, displayed on that same page, which a comparison page by
+definition is not. Ratings that are not from actual users can draw a manual action.
+
+Source: https://developers.google.com/search/docs/appearance/structured-data/sd-policies (verified August 2026)
+
+Cite the third-party scores as plain text with their source and the date you read them. That is honest,
+it is what a reader wants, and it carries no policy risk.
 
 ### Step 5: Internal linking
 

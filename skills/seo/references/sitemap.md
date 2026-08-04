@@ -46,7 +46,8 @@ If none found: report as missing, recommend creation, proceed to Generation Mode
 - URL matches the canonical version of the page
 
 **Structural checks:**
-- Total URL count ≤ 50,000 per sitemap file (Google limit)
+- Total URL count ≤ 50,000 per sitemap file (sitemaps.org protocol limit, applied by Google and by every
+  other engine that implements the protocol, not a Google rule)
 - File size ≤ 50MB uncompressed
 - Sitemap index used for sites with >50,000 URLs
 - `<lastmod>` uses W3C Datetime format: `YYYY-MM-DD` or `YYYY-MM-DDThh:mm:ss+00:00`
@@ -55,8 +56,10 @@ If none found: report as missing, recommend creation, proceed to Generation Mode
 - Important pages present (homepage, key landing pages, product/category pages)
 - Orphan URLs: pages in sitemap not linked from anywhere on the site
 - Missing URLs: important pages found via crawl but absent from sitemap
-- `<priority>` values: flag if all set to 1.0 (meaningless inflation — use to reflect relative importance)
-- `<changefreq>` accuracy: flag "always" or "hourly" for static content
+- `<lastmod>` present, valid date format, and plausible. A file where every URL carries today's date is
+  the finding, not a file missing the element.
+- `<priority>` and `<changefreq>` present: note it as noise, never as a defect to score. Google reads
+  neither. Removing them is tidy, keeping them costs nothing.
 
 **Sitemap index checks (if present):**
 - All child sitemaps are reachable
@@ -75,7 +78,7 @@ If none found: report as missing, recommend creation, proceed to Generation Mode
 | Invalid XML format | Critical |
 | File >50MB or >50k URLs without index | High |
 | Incorrect `<lastmod>` format | Medium |
-| All `<priority>` = 1.0 | Medium |
+| `<lastmod>` identical across all URLs (stamped by the build, not by the edit) | Medium |
 | Orphan URLs in sitemap | Medium |
 | `<lastmod>` older than 12 months for frequently updated content | Low |
 
@@ -136,17 +139,20 @@ Detect site type from homepage signals, then use the appropriate template:
 </sitemapindex>
 ```
 
-### Priority guidelines
+### The three optional elements, and which one still counts
 
-| Page type | Priority | Changefreq |
-|-----------|----------|------------|
-| Homepage | 1.0 | monthly |
-| Top-level landing pages | 0.9 | monthly |
-| Blog index, product categories | 0.8 | weekly |
-| Individual blog posts | 0.7 | monthly |
-| Individual product pages | 0.7–0.8 | weekly |
-| Secondary pages (about, contact) | 0.6 | yearly |
-| Tag/archive pages | 0.4 | weekly |
+Google ignores `<priority>` and `<changefreq>` outright, and has restated it as recently as
+26 June 2023: "Google still doesn't use the changefreq or priority elements at all." Emitting a
+priority table is work that no consumer reads. Do not audit against one, and do not generate one.
+
+`<lastmod>` is the exception, and Google does use it to schedule recrawls, on one condition: it has to
+mean something. It must be a valid date, and it must reflect the last *significant* change. A build
+pipeline that stamps every file on every deploy, or a footer edit that touches every page, makes the
+value uniformly worthless, and the cost is not neutral. Google stops trusting the field for that site.
+So the audit rule is inverted from the usual one: a missing `lastmod` is a minor finding, a `lastmod`
+that is always today is a real one.
+
+Source: https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping (verified August 2026)
 
 ### What to exclude
 
