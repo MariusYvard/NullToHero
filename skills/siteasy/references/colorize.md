@@ -10,6 +10,17 @@ Strategically introduce color to designs that are too monochromatic, gray, or la
 
 ---
 
+## Why the palette catalogue stays unwired
+
+`tools/design-system/data/` carries 160 ready-made palettes and 84 named styles, and this file
+deliberately does not query them. The base is wired for facts, which face exists and which icon
+set has the glyph, and left unwired for taste. A catalogue of palettes makes two sessions produce
+the same page and makes every project using this plugin converge on the same 160 answers, which
+is the failure this file exists to prevent. Derive the palette from the brief.
+
+If you want a reference point rather than an answer, `--domain color` is one command away and
+nothing stops you. Knowing why it is not the default is the point.
+
 ## Register
 
 Brand: palette IS voice. Pick a color strategy first per SKILL.md (Restrained / Committed / Full palette / Drenched) and follow its dosage. Committed, Full palette, and Drenched deliberately exceed the ≤10% rule: that rule is Restrained only. Unexpected combinations are allowed; a dominant color can own the page when the chosen strategy calls for it.

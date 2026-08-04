@@ -6,6 +6,20 @@ version: 1.9.1
 
 # Typography
 
+## Look up the face before naming it
+
+Font names, available weights and real pairings are facts, and a model that recites them from
+memory invents variants that do not exist and pairs faces that were never designed to sit
+together. Query instead:
+
+```
+python3 tools/design-system/scripts/search.py "<brief or mood>" --domain typography
+python3 tools/design-system/scripts/search.py "<family name>" --domain google-fonts
+```
+
+`typography` returns pairings that someone shipped. `google-fonts` is the catalogue, 1,923
+families with their real weights, and it exists so that a specimen you name can be loaded.
+
 ## Classic Typography Principles
 
 ### Vertical Rhythm

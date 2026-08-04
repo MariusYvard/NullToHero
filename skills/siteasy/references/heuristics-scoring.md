@@ -8,6 +8,15 @@ version: 1.6.1
 
 Score each of Nielsen's 10 Usability Heuristics on a 0–4 scale. Be honest — a 4 means genuinely excellent, not "good enough."
 
+## Guideline lookup
+
+The scoring rubric below is ours. The underlying usability guidelines are a consultable base, not
+something to restate from memory during a review:
+
+```
+python3 tools/design-system/scripts/search.py "<pattern or problem>" --domain ux
+```
+
 ## Nielsen's 10 Heuristics
 
 ### 1. Visibility of System Status

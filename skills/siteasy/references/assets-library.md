@@ -10,6 +10,14 @@ The repository ships a `assets/` folder of original, license-clean visual assets
 
 Reference an asset by its path from the project root, or inline the SVG so it inherits the surrounding color.
 
+## Which set actually has the glyph
+
+Icon coverage is a fact and guessing it wastes a build. Query before committing to a set:
+
+```
+python3 tools/design-system/scripts/search.py "<icon or concept>" --domain icons
+```
+
 ## Icons (139)
 
 Line icons on a 24 by 24 grid drawn with `currentColor`, so they take the text color. Inline the SVG, or use `<img src="assets/icons/NAME.svg" width="24" height="24" alt="...">`.
