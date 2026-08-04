@@ -89,6 +89,47 @@ Tech / dev-tool brands are the exception where zero imagery can be correct — a
 - One well-orchestrated page-load with staggered reveals beats scattered micro-interactions — when the brand invites it. Tech-minimal brands often skip entrance motion entirely; the restraint is the voice.
 - For collapsing/expanding sections, transition `grid-template-rows` rather than `height`.
 
+## The current generated-design defaults, and why this list carries a date
+
+Observed August 2026. Every entry below is a look that is legitimate for some briefs and that
+appears regardless of brief, which is what makes it a default rather than a choice.
+
+**The warm-cream editorial palette.** A cream ground around `#F4F1EA`, `#f5f1ea` or `#faf7f1`, a
+high-contrast display serif, a terracotta or rust accent near `#b6553a`, near-black text around
+`#1a1714`. This one is triangulated: three projects with no relationship to each other named the
+same palette independently within months, Anthropic's frontend-design skill in its June 2026
+rewrite, Impeccable's `ai-color-palette` detector rule, and Taste Skill's premium-consumer ban
+which lists seven grounds and six accents by hex. Three unconnected observers converging on one
+palette is the strongest evidence available in this domain, and stronger than anything else on
+this page.
+
+**The eyebrow above every heading.** A small uppercase tracked label sitting over each section
+title, encoding nothing. Two of those three projects treat it as a primary tell and disagree only
+on the remedy: Impeccable bans it outright and says no brief earns it back, Taste Skill caps it at
+one per three sections and counts them mechanically. Our position is the cap, not the ban, because
+an eyebrow that carries a real sequence marker or a genuine category is doing work. The test is
+countable: if more than a third of the sections carry one, they are decoration.
+
+**The near-black page with one acid accent.** Near-black ground, a single acid green or vermilion
+accent, nothing else. Fine as a deliberate register, and it arrives unprompted on briefs that never
+asked for it.
+
+**Fraunces and Instrument Serif as the reflex display face.** Both are good typefaces. Both are the
+first thing reached for, which is the problem. If the pick survives the cross-check in the
+Typography section above, keep it.
+
+### Why the date matters more than the list
+
+Anthropic's frontend-design skill of November 2025 prescribed bold, maximalist, high-contrast
+editorial work. Its June 2026 rewrite names the warm-cream editorial look as an anti-pattern. The
+remedy of one release became the symptom of the next, in roughly seven months, because a
+prescription that spreads becomes the new distribution.
+
+So this section has a shelf life of about two release cycles. Re-verify it, do not inherit it: run
+a handful of briefs through a current model with no styling guidance and look at what it reaches
+for unprompted. What it produces is this list. If what you observe no longer matches what is
+written here, the list is what is wrong.
+
 ## Brand bans (on top of the shared absolute bans)
 
 - Monospace as lazy shorthand for "technical / developer." If the brand isn't technical, mono reads as costume.
