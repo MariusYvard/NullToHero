@@ -63,9 +63,10 @@
  */
 
 import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("../..", import.meta.url).pathname;
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const cases = JSON.parse(readFileSync(join(ROOT, "tools/eval-corpus/cases.json"), "utf8"));
 const resultsPath = join(ROOT, "tools/eval-corpus/results.json");
 const results = existsSync(resultsPath) ? JSON.parse(readFileSync(resultsPath, "utf8")) : { runs: [] };

@@ -16,11 +16,12 @@
 // the named defects are absent, not that the page is good.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, extname, relative } from "node:path";
+import { join, extname, relative, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { runRules, RULES } from "./rules.mjs";
 import { runChecks } from "../audit/lib/checks.mjs";
 
-const ROOT = new URL("../..", import.meta.url).pathname;
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const args = process.argv.slice(2);
 const target = args.find(a => !a.startsWith("--"));
 const asJson = args.includes("--json");
@@ -78,7 +79,7 @@ if (!files.length) {
 // its page is seen with it, and inline <style> is picked up from the markup.
 const byDir = new Map();
 for (const f of files) {
-  const d = f.slice(0, f.lastIndexOf("/"));
+  const d = dirname(f);   // not lastIndexOf("/"): Windows separates with a backslash
   if (!byDir.has(d)) byDir.set(d, { html: [], css: [], js: [] });
   const ext = extname(f).toLowerCase();
   byDir.get(d)[ext === ".css" ? "css" : ext === ".html" || ext === ".htm" ? "html" : "js"].push(f);

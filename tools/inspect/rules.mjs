@@ -206,10 +206,17 @@ export const RULES = [
     id: 69,
     name: "Invisible layers still take clicks",
     detect({ css }) {
-      const c = decomment(css);
+      // Strip @keyframes bodies first. A keyframe with opacity: 0 is a frame of
+      // an animation, not a layer sitting over the page, and flagging it is a
+      // false positive at the highest severity, which is the fastest way to
+      // teach someone to ignore the whole report. Found by pointing this
+      // detector at the plugin's own react-modal template.
+      let c = decomment(css);
+      c = c.replace(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\}\s*)*\}/g, "");
       return [...c.matchAll(/([^{}]+)\{([^}]*)\}/g)]
         .filter(m => /opacity\s*:\s*0\s*(;|$)/.test(m[2]))
         .filter(m => !/pointer-events\s*:\s*none/.test(m[2]))
+        .filter(m => !/^\s*(from|to|\d+%)\s*$/.test(m[1]))
         .slice(0, 3)
         .map(m => finding(69, "css", `${m[1].trim().slice(0, 40)} is opacity:0 and still takes clicks`));
     },

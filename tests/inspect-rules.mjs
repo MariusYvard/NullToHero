@@ -12,16 +12,18 @@
 // engine cannot drift while this passes.
 
 import { readFileSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { RULES, runRules } from "../tools/inspect/rules.mjs";
 
-const ROOT = new URL("..", import.meta.url).pathname;
-const FX = `${ROOT}tools/inspect/fixtures`;
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const FX = join(ROOT, "tools", "inspect", "fixtures");
 let failures = 0;
 const ok = (m) => console.log(`  \x1b[32mPASS\x1b[0m  ${m}`);
 const no = (m) => { failures++; console.log(`  \x1b[31mFAIL\x1b[0m  ${m}`); };
 
 // ── registry coupling ────────────────────────────────────────────────────────
-const csv = readFileSync(`${ROOT}tools/data/inspect-rules.csv`, "utf8").trim().split("\n");
+const csv = readFileSync(join(ROOT, "tools", "data", "inspect-rules.csv"), "utf8").trim().split("\n");
 const known = new Map();
 for (const line of csv.slice(1)) {
   const id = Number(line.split(",")[0]);
@@ -38,9 +40,9 @@ console.log("\nFixtures");
 const pad = (n) => String(n).padStart(2, "0");
 for (const r of RULES) {
   for (const kind of ["bad", "good"]) {
-    const htmlPath = `${FX}/${pad(r.id)}-${kind}.html`;
-    const cssPath = `${FX}/${pad(r.id)}-${kind}.css`;
-    const jsPath = `${FX}/${pad(r.id)}-${kind}.js`;
+    const htmlPath = join(FX, `${pad(r.id)}-${kind}.html`);
+    const cssPath = join(FX, `${pad(r.id)}-${kind}.css`);
+    const jsPath = join(FX, `${pad(r.id)}-${kind}.js`);
     const html = existsSync(htmlPath) ? readFileSync(htmlPath, "utf8") : "";
     const css = existsSync(cssPath) ? readFileSync(cssPath, "utf8") : "";
     const js = existsSync(jsPath) ? readFileSync(jsPath, "utf8") : "";
@@ -64,9 +66,9 @@ console.log("\nCross-contamination on clean fixtures");
 const ABSENCE_RULES = new Set([11, 13, 21]);
 let noise = 0;
 for (const r of RULES) {
-  const htmlPath = `${FX}/${pad(r.id)}-good.html`;
-  const cssPath = `${FX}/${pad(r.id)}-good.css`;
-  const jsPath = `${FX}/${pad(r.id)}-good.js`;
+  const htmlPath = join(FX, `${pad(r.id)}-good.html`);
+  const cssPath = join(FX, `${pad(r.id)}-good.css`);
+  const jsPath = join(FX, `${pad(r.id)}-good.js`);
   const html = existsSync(htmlPath) ? readFileSync(htmlPath, "utf8") : "";
   const css = existsSync(cssPath) ? readFileSync(cssPath, "utf8") : "";
   const js = existsSync(jsPath) ? readFileSync(jsPath, "utf8") : "";

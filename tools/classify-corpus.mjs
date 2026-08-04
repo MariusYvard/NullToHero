@@ -90,10 +90,13 @@
  */
 
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SKILLS = ["audit", "inspect", "seo", "siteasy"];
-const ROOT = new URL("..", import.meta.url).pathname;
+// fileURLToPath, not URL.pathname: on Windows the latter yields "/C:/..." and
+// joining that produces "C:\C:\...". The house convention is in tools/audit/eval.mjs.
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // A value the model would not produce on its own: hex colours, bezier control
 // points, numbers carrying a unit, and bare decimals that are not list markers.

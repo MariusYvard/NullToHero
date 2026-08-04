@@ -1,1 +1,3 @@
 .overlay { opacity: 0; pointer-events: none; position: fixed; inset: 0; }
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
