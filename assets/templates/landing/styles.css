@@ -67,16 +67,17 @@ a:focus-visible,
 .skip-link {
   position: absolute;
   left: var(--space-2);
-  top: -3rem;
+  top: var(--space-2);
+  transform: translateY(-200%);
   z-index: 10;
   background: var(--color-accent);
   color: var(--color-accent-ink);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
   text-decoration: none;
-  transition: top 0.15s ease;
+  transition: transform 0.15s ease;
 }
-.skip-link:focus { top: var(--space-2); }
+.skip-link:focus { transform: translateY(0); }
 
 @media (prefers-reduced-motion: reduce) {
   .skip-link { transition: none; }
