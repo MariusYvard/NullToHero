@@ -260,14 +260,18 @@ For GEO specifically, AI systems weigh:
 
 ### Dimension 5: Technical Accessibility (15%)
 
-**AI crawlers do NOT execute JavaScript.** Content must be in the initial HTML response.
+**Third-party AI fetchers do not execute JavaScript.** Content must be in the initial HTML response for
+them. This does not extend to AI Overviews and AI Mode, which are served through Googlebot, and Googlebot
+renders. Stating it as a blanket rule about "AI crawlers" contradicts the tier table above, where
+Googlebot is tier 1, and it produces the wrong diagnosis on a Google-only visibility problem.
 
 **Check for:**
 - Server-side rendering (SSR) vs client-only rendering
 - AI crawler access in `robots.txt`
 - `llms.txt` presence and quality
 - RSL 1.0 licensing implementation
-- HTTPS (required for AIO inclusion)
+- HTTPS. Worth having on every count, but not an AI Overviews gate: Google states there is no additional
+  requirement beyond being indexed and snippet-eligible (see the quotation above).
 - Core Web Vitals (especially LCP < 2.5s)
 
 ### Dimension 6: Platform Optimization (10%)

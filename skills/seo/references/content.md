@@ -88,7 +88,9 @@ Compare against page type minimums:
 
 ### External Linking
 - Cite authoritative sources
-- Open in new tab for user experience
+- Leave external links in the same tab unless the user is mid-task and would lose work. Forcing
+  `target="_blank"` takes the back button away from the visitor and is an accessibility defect, not a
+  courtesy. When it is genuinely warranted, say so in the link text so nobody is surprised.
 - Reasonable count (not excessive)
 
 ## AI Content Assessment (Sept 2025 QRG addition)

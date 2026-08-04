@@ -132,7 +132,7 @@ Faceted navigation (filters: color, size, brand, price range) is one of the most
 
 | Filter type | Recommended treatment |
 |-------------|----------------------|
-| Color / size / style variants | Canonical to base category. Block with `noindex` or robots.txt. |
+| Color / size / style variants | Canonical to base category, **or** `noindex`, **or** robots.txt. Never robots.txt combined with either of the others: a disallowed URL is never fetched, so the canonical and the noindex on it are never read. Pick the one that matches the goal, consolidate signal (canonical), keep out of the index (noindex), or save crawl budget (robots.txt). |
 | Brand filter (creates distinct, rankable content) | Allow indexing if the brand page has unique content and search demand. |
 | Price range filter | Block, no SEO value, pure utility. |
 | Sort order (`?sort=price_asc`) | Block, pure utility, no unique content. |

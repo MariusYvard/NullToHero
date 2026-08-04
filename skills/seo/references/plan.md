@@ -26,7 +26,7 @@ version: 1.9.0
 - Estimate their domain authority
 
 ### 3. Architecture Design
-- Load industry template from `assets/` directory
+- Load industry template from `plan-assets/`
 - Design URL hierarchy and content pillars
 - Plan internal linking strategy
 - Sitemap structure with quality gates applied
@@ -74,7 +74,7 @@ version: 1.9.0
 
 ## Industry Templates
 
-Load from `assets/` directory:
+Load from `plan-assets/`:
 - `saas.md`: SaaS/software companies
 - `local-service.md`: Local service businesses
 - `ecommerce.md`: E-commerce stores
@@ -112,7 +112,7 @@ Load from `assets/` directory:
 |----------|--------|
 | Unrecognized business type | Fall back to `generic.md` template. Inform user that no industry-specific template was found and proceed with the general business template. |
 | No website URL provided | Proceed with new-site planning mode. Skip current site assessment and competitive gap analysis that require a live URL. |
-| Industry template not found | Check `assets/` directory for available templates. If the requested template file is missing, use `generic.md` and note the missing template in output. |
+| Industry template not found | Check `plan-assets/` for available templates. If the requested template file is missing, use `generic.md` and note the missing template in output. |
 
 ## CROSS-SKILL REFERENCES
 
