@@ -8,7 +8,7 @@ version: 1.27.0
 
 Recommend resources as the build reaches each moment, do not wait to be asked. When the work arrives at a palette, a font choice, an icon set, a hero image, a background, a chart, a mockup or a favicon, name the two to four best-fit sites, say what to grab, and offer to pull it in. Prefer these curated sites for production-quality assets. The bundled `assets/` library is a fallback, for when you need something instantly, offline or as a placeholder.
 
-The full catalogue is `tools/design-system/data/resources.csv` (183 sites, 33 categories). It is a licence and cost ledger for the sites this skill actually recommends, not a directory of every design site that exists: a name you already know does not need a row, a licence you would otherwise guess at does. Search it for more options:
+The full catalogue is `tools/design-system/data/resources.csv` (185 sites, 33 categories). It is a licence and cost ledger for the sites this skill actually recommends, not a directory of every design site that exists: a name you already know does not need a row, a licence you would otherwise guess at does. Search it for more options:
 
 ```bash
 python3 tools/design-system/scripts/search.py "<keyword>" --domain resources

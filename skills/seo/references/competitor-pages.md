@@ -5,7 +5,7 @@ description: >
   "X vs Y" layouts, alternatives pages, feature matrices, schema markup, and FAQ
   sections. Use for: "vs page", "competitor comparison", "alternatives to X",
   "comparison page", "competitor landing page", "X vs Y", "best alternatives".
-version: 1.8.2
+version: 1.8.3
 ---
 
 # Competitor Comparison Page Generator
@@ -54,7 +54,18 @@ Analyze existing comparison or alternatives pages for:
 
 ## Generation Mode
 
-### Step 1: Gather competitive intelligence
+### Read the SERP before writing anything
+
+Search the target query and look at what ranks. If the first three results are review directories,
+G2, Capterra, Trustpilot, then the page you are about to write is not the highest-leverage work
+available: your profile on those directories is, because that is what the searcher will read and
+that is what an answer engine will cite. Say so rather than building the page anyway.
+
+When your own page is the right move, the SERP still tells you the shape to match: how deep the
+comparison tables go, whether screenshots are present, whether a visible update date is the norm.
+You have to deliver at least that.
+
+## Step 1: Gather competitive intelligence
 
 Before writing, collect accurate data on each competitor:
 
@@ -74,68 +85,17 @@ For each competitor, document:
 
 ### Step 2: Structure the page
 
-**Standard "X vs Y" page structure:**
+A "vs" page runs: dated H1, short intro, quick comparison table, one overview per product, a head-to-head
+by category, "who should choose which", FAQ, CTA. An alternatives page runs: dated H1, why people leave,
+one consistently structured block per alternative (what it is, best for, features, pricing, pros/cons,
+rating, link), a table of all of them, CTA, FAQ.
 
-```
-H1: [Product A] vs [Product B]: [Year] Comparison
-Intro (100-150 words): Who this page is for, what you'll learn
-
-Section 1: Quick comparison table
-  - Side-by-side feature matrix (5 to 10 key factors)
-  - Ratings from G2/Capterra if available
-  - Pricing comparison
-
-Section 2: [Product A] overview
-  - What it is, who it's for
-  - Key strengths (3-4)
-  - Key limitations (2-3, be honest)
-  - Best for: [specific use cases]
-  - Pricing summary
-
-Section 3: [Product B] overview
-  - Same structure
-
-Section 4: Detailed comparison by category
-  - Category 1 (e.g., Ease of use): Head-to-head
-  - Category 2 (e.g., Pricing): Head-to-head
-  - Category 3 (e.g., Integrations): Head-to-head
-
-Section 5: Who should choose which?
-  - Choose [A] if: [specific conditions]
-  - Choose [B] if: [specific conditions]
-
-Section 6: FAQ (5 to 8 questions)
-  - "Is [Product A] better than [Product B]?"
-  - "Which is cheaper, [A] or [B]?"
-  - "Does [B] have [feature X]?"
-
-CTA section: Try [Your Product] free / See [Your Product] pricing
-
-Footer note: "Last updated: [Month Year]. Pricing and features subject to change."
-```
-
-**Alternatives page structure:**
-
-```
-H1: [X] Best [Product] Alternatives in [Year]
-Intro: Why people look for alternatives (3 common reasons), what this list covers
-
-For each alternative (structured consistently):
-  - H2: [Alternative Name], [2-word positioning]
-  - What it is (1 sentence)
-  - Best for (1 sentence)
-  - Key features (3 to 5 bullets)
-  - Pricing (specific numbers)
-  - Pros (3) / Cons (3)
-  - G2 / Capterra rating if available
-  - Link to full review or official site
-
-Comparison table: all alternatives side by side
-
-CTA: [Your Product] as alternative
-
-FAQ (4 to 6 questions)
-```
+Three calls inside that structure are the ones that get dropped:
+- Each product overview carries **key limitations (2-3, be honest)**, including on your own product.
+- Size the FAQ: **5 to 8 questions on a "vs" page, 4 to 6 on an alternatives page.** Two questions is a
+  decorative FAQ that answers no objection.
+- Close on a footer note: "Last updated: [Month Year]. Pricing and features subject to change." The date
+  is what keeps the pricing claim honest a quarter later.
 
 ### Step 3: Feature matrix
 
@@ -144,61 +104,9 @@ Feature matrices are the highest-value element for comparison pages. They must b
 - Specific: "Advanced reporting with custom dashboards" not just "Reporting"
 - Verifiable: every claim checkable from official docs or reliable reviews
 
-```html
-<!-- Accessible table structure -->
-<table>
-  <caption>Feature Comparison: [Product A] vs [Product B]</caption>
-  <thead>
-    <tr>
-      <th scope="col">Feature</th>
-      <th scope="col">[Product A]</th>
-      <th scope="col">[Product B]</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Free plan</td>
-      <td>✅ Up to 3 users</td>
-      <td>❌ No free plan</td>
-    </tr>
-  </tbody>
-</table>
-```
-
 ### Step 4: Schema markup
 
-**For the comparison page itself:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "[Product A] vs [Product B]: 2026 Comparison",
-  "dateModified": "2026-01-15",
-  "description": "Detailed comparison of [A] and [B], covering pricing, features, and use cases.",
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [...]
-  }
-}
-```
-
-**FAQPage schema for the FAQ section:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is [Product A] better than [Product B]?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "It depends on your use case..."
-      }
-    }
-  ]
-}
-```
+Mark the page up as `WebPage` with `dateModified`, and attach a `breadcrumb` (`BreadcrumbList`) to it: the breadcrumb is the part routinely left off comparison pages.
 
 Note: Google deprecated the FAQ rich result, which stopped appearing in Search on May 7, 2026, and removed the feature's documentation in June 2026 ([Google Search Central, 2026](https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature)). FAQPage remains a valid Schema.org type, the visible SERP feature is gone. Keep the markup only if a non-Google consumer of it justifies the maintenance.
 
@@ -215,15 +123,9 @@ it is what a reader wants, and it carries no policy risk.
 
 ### Step 5: Internal linking
 
-Comparison pages capture high-intent bottom-of-funnel traffic. Link to them from:
-- Product/feature pages ("See how we compare to [Competitor]")
-- Blog posts covering the same category
-- Pricing page ("Switching from [Competitor]?")
+Comparison pages capture high-intent bottom-of-funnel traffic. Link to them from product and feature pages and from category blog posts, and link out to your own feature pages, pricing, and case studies relevant to the comparison.
 
-And link out to:
-- Your product's own feature pages
-- Pricing page
-- Case studies relevant to the comparison context
+Link from the **pricing page too ("Switching from [Competitor]?")**. A visitor already on pricing is the closest to converting, and it is the entry point nobody lists unprompted.
 
 ---
 
@@ -234,15 +136,6 @@ And link out to:
 - Missing elements: [list]
 - Inaccurate data points to fix: [list]
 - Schema status: present/missing/invalid
-
-### Generated Page
-Full HTML page with:
-- Complete copy following the appropriate structure
-- Feature matrix (markdown table or HTML)
-- FAQPage JSON-LD
-- Product JSON-LD for ratings
-- SEO metadata (title tag, meta description)
-- CTA placement recommendations
 
 ---
 

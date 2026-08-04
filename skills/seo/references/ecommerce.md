@@ -6,7 +6,7 @@ description: >
   "ecommerce SEO", "product page SEO", "category page SEO", "product schema",
   "WooCommerce SEO", "Shopify SEO", "faceted navigation", "product reviews SEO",
   "out of stock SEO".
-version: 1.8.1
+version: 1.8.2
 ---
 
 # E-commerce SEO
@@ -17,97 +17,23 @@ version: 1.8.1
 
 Product pages are the primary conversion and ranking asset. Each should be treated as a standalone landing page.
 
-**On-page requirements:**
-
-| Element | Requirement |
-|---------|-------------|
-| Title tag | `[Product Name], [Brand] | [Category]` or `[Product Name] | Buy [Product] Online` |
-| H1 | Exact product name matching how users search |
-| URL | `/category/product-name/`: no IDs (`/p?id=12345`), no parameters in canonical URL |
-| Description | Unique per product, at the `L-WORD-1` floor for its page type. Not manufacturer copy-paste (duplicate content). |
-| Images | Multiple angles. Alt text = product name + key attribute. WebP format. |
-| Price | Visible on page, not JS-only. Matches schema. |
-| Availability | In stock / out of stock clearly stated. Affects schema. |
-| Reviews | Customer reviews displayed (generates UGC, increases word count, builds trust) |
-| Breadcrumbs | Category > Subcategory > Product Name (with BreadcrumbList schema) |
-
 **Common product page SEO failures:**
-- Thin descriptions (1-2 sentences, or just manufacturer spec list)
+- Description not unique per product. Manufacturer copy-paste is duplicate content: write one description per product, at the `L-WORD-1` floor for its page type.
+- Thin descriptions (1-2 sentences, or just a manufacturer spec list)
 - Duplicate descriptions across variants (red vs blue same product = near-duplicate content)
-- Price shown only in JS (Google's crawler may not see it)
+- Price present only in JS. The price must be in the HTML Google receives, not injected client-side, and must match the schema.
 - Missing or wrong availability in schema (showing "In Stock" for sold-out products)
 - No internal links to related products or categories
 
 ### 2. Category Pages
 
-Category pages capture high-volume head terms ("men's running shoes", "wireless headphones"). They are often the most important pages for organic traffic.
-
-**Requirements:**
-
-| Element | Requirement |
-|---------|-------------|
-| H1 | Category name, the most searched form |
-| Introductory text | 100-300 words describing the category. Placed above or below the product grid. |
-| Filter navigation | Faceted navigation handled correctly (see section 4) |
-| Product count | Show product count ("143 products"), trust signal |
-| Sorting | Default sort by relevance or bestseller |
-| Pagination | Use `?page=N` or `/page/N/`. Correct canonical per page. |
-| Breadcrumbs | Department > Category (with schema) |
-
-**Category page content strategy:**
-- Target the head keyword as primary, plus modifiers (best, buy, price, review)
-- Avoid keyword stuffing in the intro paragraph
-- Include filtering/sorting options that users expect
+Category pages capture high-volume head terms ("men's running shoes", "wireless headphones"). They are often the most important pages for organic traffic, which is why they are audited before product pages when time is short.
 
 ### 3. Product Schema
 
-**Product schema (required for price and availability rich results):**
+**Product schema (required for price and availability rich results):** emit `Product` with `name`, `description`, `brand`, `sku`, `mpn`, an `image` array holding several angles rather than a single hero shot, an `offers` block and `aggregateRating` where reviews exist. Inside `offers`, `url`, `priceCurrency`, `price` and `availability` are the properties a model emits unprompted; `priceValidUntil`, `itemCondition` and `seller` are the three it omits, and the offer is incomplete without them.
 
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Wireless Noise-Cancelling Headphones XB900",
-  "description": "Premium wireless headphones with 30-hour battery life...",
-  "image": [
-    "https://example.com/images/headphones-front.webp",
-    "https://example.com/images/headphones-side.webp"
-  ],
-  "brand": {
-    "@type": "Brand",
-    "name": "SoundBrand"
-  },
-  "sku": "XB900-BLK",
-  "mpn": "XB900",
-  "offers": {
-    "@type": "Offer",
-    "url": "https://example.com/products/headphones-xb900/",
-    "priceCurrency": "USD",
-    "price": "249.99",
-    "priceValidUntil": "2026-12-31",
-    "availability": "https://schema.org/InStock",
-    "itemCondition": "https://schema.org/NewCondition",
-    "seller": {
-      "@type": "Organization",
-      "name": "Example Store"
-    }
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.6",
-    "reviewCount": "312",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
-}
-```
-
-**Availability values (must match actual stock):**
-- `https://schema.org/InStock`: available
-- `https://schema.org/OutOfStock`: sold out
-- `https://schema.org/PreOrder`: pre-order
-- `https://schema.org/Discontinued`: permanently gone
-- `https://schema.org/LimitedAvailability`: few remaining
+`availability` must match actual stock.
 
 **April 2025 addition: Product Certification Markup**
 ```json
@@ -150,6 +76,8 @@ Disallow: /*?size=
 Disallow: /*?sort=
 ```
 
+Where the filter layer is supplied by a platform app or extension (Shopify apps, WooCommerce plugins, Magento layered navigation), confirm the robots.txt it generates is not over-blocking.
+
 ### 5. Out-of-Stock Product Handling
 
 How to handle products that are no longer available:
@@ -161,18 +89,16 @@ How to handle products that are no longer available:
 | Seasonal product (returns next year) | Keep live with `PreOrder` or `OutOfStock` schema. Update content for the new season. |
 | Product that was very well-linked | Extra important to 301 to preserve link equity. Never 404 a page with significant backlinks. |
 
-**Never 404 a product page directly.** Always redirect.
+**404 is a last resort, not a forbidden one.** Redirect to a relevant successor where one exists: the replacement product, the nearest alternative, the parent category when it genuinely answers the same intent. Where no relevant successor exists, return 410 and let the URL go. Redirecting a whole discontinued range to a generic category page is treated as a soft 404, which costs the crawl budget the redirect was meant to save.
 
 ### 6. Pagination and Crawl Budget
 
 For large catalogs:
 
-- Use `?page=N` or `/page/N/` consistently
 - Every paginated page self-canonicalizes. Canonicalizing page 2 and beyond to page 1 is the one option
   Google names and rejects: "Don't use the first page of a paginated sequence as the canonical page."
   It also hides the tail of the catalogue from the index, which on a large store is most of it.
   Source: https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading (verified August 2026)
-- Include paginated pages in sitemap only if they have distinct content value
 - Infinite scroll: must implement History API to create crawlable URLs or add a paginated fallback
 
 **Crawl budget for large catalogs (>10k products):**
@@ -185,35 +111,13 @@ For large catalogs:
 Customer reviews with aggregated ratings make a product page eligible for review snippets, the star rating Google can show in results ([Google Search Central](https://developers.google.com/search/docs/appearance/structured-data/review-snippet)). Eligibility is not a guarantee that the snippet appears.
 
 **Requirements for Google to show review snippets:**
-- `AggregateRating` schema on product pages
 - Ratings submitted by real users (not self-generated by the site owner for their own products, which violates Google policy)
-- Minimum 1 review and a rating count
 
 Reviews from a third-party platform (Trustpilot, Yotpo, Bazaarvoice) that are embedded and marked up with schema are acceptable.
 
 ---
 
-## Platform-Specific Notes
-
-**Shopify:**
-- Built-in JSON-LD is basic. Add Yoast SEO or Schema Plus for richer markup.
-- Default theme canonical handles variants correctly.
-- Faceted navigation via apps: confirm robots.txt is not over-blocking.
-
-**WooCommerce:**
-- Yoast WooCommerce SEO plugin adds Product schema correctly.
-- Default URLs can be configured: `/product/[slug]/` is clean.
-- Pagination: uses `?paged=N` which should be canonicalized.
-
-**Magento 2:**
-- Built-in canonical tag support per product/category.
-- Faceted navigation layers need explicit disallow rules or canonical configuration.
-
----
-
 ## Output
-
-### E-commerce SEO Score: XX/100
 
 ### Product Pages (sampled)
 | Issue | Count | Severity |
@@ -228,8 +132,6 @@ Reviews from a third-party platform (Trustpilot, Yotpo, Bazaarvoice) that are em
 |-------|-------|----------|
 | No introductory text | X | Medium |
 | Faceted nav creating duplicates | X | High |
-
-### Priority Fixes
 
 ---
 

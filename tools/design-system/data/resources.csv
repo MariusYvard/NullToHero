@@ -168,6 +168,8 @@ scaffold,dev-resources,top,free,"asset or tool, check per item",DevDocs,https://
 scaffold,dev-resources,top,free,"asset or tool, check per item",Shields,https://shields.io,live,Generates status badges for READMEs with custom styling
 scaffold,dev-resources,top,free,"asset or tool, check per item",tldraw,https://www.tldraw.com,live,Open source whiteboard with an embeddable canvas SDK
 scaffold,dev-resources,more,free,"asset or tool, check per item",DebugBear Speed Test,https://www.debugbear.com/test/website-speed,live,Page speed test with Core Web Vitals breakdown
+scaffold,dev-resources,top,free,"asset or tool, check per item",PageSpeed Insights,https://pagespeed.web.dev/,live,"Core Web Vitals field data from CrUX plus a Lighthouse lab run for one URL; field and lab disagree by design"
+scaffold,dev-resources,top,freemium,"asset or tool, check per item",WebPageTest,https://www.webpagetest.org/,live,"Load waterfall, filmstrip and multi-location timing runs; the free public instance is rate-limited"
 motion,scrollytelling,top,free,open-source library,Lenis,https://github.com/darkroomengineering/lenis,live,Lightweight smooth scroll; drive ScrollTrigger.update from its rAF and destroy it under prefers-reduced-motion |
 motion,scrollytelling,top,free,open-source library,Scrollama,https://github.com/russellsamora/scrollama,live,"Step-based scrollytelling on IntersectionObserver, the data-journalism standard |"
 motion,scrollytelling,more,free,open-source library,Closeread,https://closeread.dev,live,"Quarto extension for declarative scrollytelling (sticky visuals, focus-on steps, pan and zoom), MIT |"

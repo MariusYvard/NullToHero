@@ -5,7 +5,7 @@ description: >
   URL structure, mobile, Core Web Vitals, structured data, JavaScript rendering,
   international. Use for: "technical SEO", "crawl issues", "robots.txt", "Core
   Web Vitals", "mobile SEO", "canonical".
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Technical SEO Audit
@@ -13,106 +13,34 @@ version: 1.9.0
 ## Categories
 
 ### 1. Crawlability
-- robots.txt: exists, valid, not blocking important resources
-- XML sitemap: exists, referenced in robots.txt, valid format
-- Noindex tags: intentional vs accidental
-- Crawl depth: important pages within 3 clicks of homepage
-- JavaScript rendering: check if critical content requires JS execution
-- Crawl budget: for large sites (>10k pages), efficiency matters
-
-#### AI Crawler Management
-
-As of 2025-2026, AI companies actively crawl the web to train models and power AI search. Managing these crawlers via robots.txt is a critical technical SEO consideration.
-
-**Known AI crawlers:**
-
-| Crawler | Company | robots.txt token | Purpose |
-|---------|---------|-----------------|---------|
-| GPTBot | OpenAI | `GPTBot` | Model training |
-| ChatGPT-User | OpenAI | `ChatGPT-User` | Real-time browsing |
-| ClaudeBot | Anthropic | `ClaudeBot` | Model training |
-| PerplexityBot | Perplexity | `PerplexityBot` | Search index + training |
-| Bytespider | ByteDance | `Bytespider` | Model training |
-| Google-Extended | Google | `Google-Extended` | Gemini training (NOT search) |
-| CCBot | Common Crawl | `CCBot` | Open dataset |
-
-**Key distinctions:**
-- Blocking `Google-Extended` prevents Gemini training use but does NOT affect Google Search indexing or AI Overviews (those use `Googlebot`)
-- Blocking `GPTBot` prevents OpenAI training but does NOT prevent ChatGPT from citing your content via browsing (`ChatGPT-User`)
-- Among the top 10,000 domains where a robots.txt file was found, about 14% carried allow or disallow directives aimed specifically at AI bots ([Cloudflare, 2025](https://blog.cloudflare.com/from-googlebot-to-gptbot-whos-crawling-your-site-in-2025/)). GPTBot was the most frequently disallowed.
-
-**Example, selective AI crawler blocking:**
-```
-# Allow search indexing, block AI training crawlers
-User-agent: GPTBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-# Allow all other crawlers (including Googlebot for search)
-User-agent: *
-Allow: /
-```
-
-**Recommendation:** Consider your AI visibility strategy before blocking. Being cited by AI systems drives brand awareness and referral traffic. Cross-reference the `/seo geo` skill for full AI visibility optimization.
-
-### 2. Indexability
-- Canonical tags: self-referencing, no conflicts with noindex
-- Duplicate content: near-duplicates, parameter URLs, www vs non-www
-- Thin content: pages below minimum word counts per type
-- Pagination: rel=next/prev or load-more pattern
-- Hreflang: correct for multi-language/multi-region sites
+- robots.txt and XML sitemap: exist, valid, sitemap referenced in robots.txt; noindex and canonical tags intentional and free of conflicts; important pages within 3 clicks of the homepage
+- Crawl budget matters above 10k pages. Below that threshold it is not the constraint, so do not open the subject
 - Index bloat: unnecessary pages consuming crawl budget
+- HTTPS enforced, no mixed content, and HSTS preload list checked on high-security sites. The remaining security headers carry no ranking effect
+- AI crawler management, the robots.txt tokens and what blocking each one costs: [geo.md](geo.md)
 
-### 3. Security
-- HTTPS: enforced, valid SSL certificate, no mixed content
-- Security headers:
-  - Content-Security-Policy (CSP)
-  - Strict-Transport-Security (HSTS)
-  - X-Frame-Options
-  - X-Content-Type-Options
-  - Referrer-Policy
-- HSTS preload: check preload list inclusion for high-security sites
+### 2. URL Structure
+- Descriptive hyphenated URLs in a logical hierarchy, no content behind query parameters, 301 with no redirect chain (max 1 hop), flag over 100 characters, trailing slashes consistent
 
-### 4. URL Structure
-- Clean URLs: descriptive, hyphenated, no query parameters for content
-- Hierarchy: logical folder structure reflecting site architecture
-- Redirects: no chains (max 1 hop), 301 for permanent moves
-- URL length: flag >100 characters
-- Trailing slashes: consistent usage
-
-### 5. Mobile Optimization
+### 3. Mobile Optimization
 - Responsive design: viewport meta tag, responsive CSS
 - Touch targets: 24x24px CSS minimum (WCAG 2.5.8 AA), 44x44px recommended for comfortable touch, with adequate spacing
 - Font size: minimum 16px base
 - No horizontal scroll
 - Mobile-first indexing: **after July 5, 2024, Google crawls and indexes sites for Search with Googlebot Smartphone** ([Google Search Central, 2024](https://developers.google.com/search/blog/2024/06/mobile-indexing-vlast-final-final.doc)). A site whose content is not accessible on a mobile device is no longer indexable. Googlebot Desktop can still appear in server logs for a few other features (product listings, Google for Jobs), so treat "mobile only" as a statement about Search indexing, not about every Google fetch.
 
-### 6. Core Web Vitals
+### 4. Core Web Vitals
 
 Ownership: this section holds the targets; image-specific LCP/CLS tactics live in [images.md](images.md) and the remediation deep-dive in [performance.md](performance.md).
 
-- **LCP** (Largest Contentful Paint): target <2.5s
-- **INP** (Interaction to Next Paint): target <200ms
-  - INP became a Core Web Vital and replaced FID on March 12, 2024 ([web.dev, 2024](https://web.dev/blog/inp-cwv-march-12)). September 9, 2024 was the announced deadline for moving off FID ([web.dev, 2024](https://web.dev/blog/inp-cwv-launch)), and Chrome ended FID support in its tools (PageSpeed Insights and its API, CrUX API and History API, CrUX Dashboard, web-vitals.js) in September 2024 ([web.dev, 2024](https://web.dev/blog/fid)). Do NOT reference FID anywhere.
-- **CLS** (Cumulative Layout Shift): target <0.1
-- Evaluation uses 75th percentile of real user data
+- Targets, measured at the 75th percentile of real user data: LCP <2.5s, INP <200ms, CLS <0.1
+- INP became a Core Web Vital and replaced FID on March 12, 2024 ([web.dev, 2024](https://web.dev/blog/inp-cwv-march-12)). September 9, 2024 was the announced deadline for moving off FID ([web.dev, 2024](https://web.dev/blog/inp-cwv-launch)), and Chrome ended FID support in its tools (PageSpeed Insights and its API, CrUX API and History API, CrUX Dashboard, web-vitals.js) in September 2024 ([web.dev, 2024](https://web.dev/blog/fid)). Do NOT reference FID anywhere.
 - Use PageSpeed Insights API or CrUX data if MCP available
 
-### 7. Structured Data
-- Detection: JSON-LD (preferred), Microdata, RDFa
-- Validation against Google's supported types
-- See seo-schema skill for full analysis
+### 5. Structured Data
+- Detection and validation: see the `/seo schema` skill for full analysis
 
-### 8. JavaScript Rendering
-- Check if content visible in initial HTML vs requires JS
-- Identify client-side rendered (CSR) vs server-side rendered (SSR)
-- Flag SPA frameworks (React, Vue, Angular) that may cause indexing issues
-- Verify dynamic rendering setup if applicable
+### 6. JavaScript Rendering
 
 #### JavaScript SEO: Canonical & Indexing Guidance (December 2025)
 
@@ -125,10 +53,8 @@ Google updated its JavaScript SEO documentation in December 2025 with critical c
 
 **Best practice:** Serve critical SEO elements (canonical, meta robots, structured data, title, meta description) in the initial server-rendered HTML rather than relying on JavaScript injection.
 
-### 9. IndexNow Protocol (setup and tooling: [indexnow.md](indexnow.md))
-- Check if site supports IndexNow. Participants are listed and dated once, in `indexnow.md` (`L-INDEXNOW-1`)
-- Supported by search engines other than Google
-- Recommend implementation for faster indexing on non-Google engines
+### 7. IndexNow Protocol (setup and tooling: [indexnow.md](indexnow.md))
+- Check if the site supports IndexNow. Participants are listed and dated once, in `indexnow.md` (`L-INDEXNOW-1`)
 
 ## Output
 

@@ -5,32 +5,30 @@ description: >
   format. Use for: "schema markup", "structured data", "rich results", "JSON-
   LD", "FAQ schema", "Article schema", "Product schema", "LocalBusiness schema",
   "HowTo schema", "schema errors".
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Schema Markup Analysis & Generation
 
 ## Detection
 
-1. Scan page source for JSON-LD `<script type="application/ld+json">`
-2. Check for Microdata (`itemscope`, `itemprop`)
-3. Check for RDFa (`typeof`, `property`)
-4. Always recommend JSON-LD as primary format (Google's stated preference)
+JSON-LD, Microdata and RDFa are all valid encodings. Whichever one the page already uses, always
+recommend JSON-LD as the primary format (Google's stated preference).
 
 ## Validation
 
 - Check required properties per schema type
 - Validate against Google's supported rich result types
-- Test for common errors:
-  - Missing @context
-  - Invalid @type
-  - Wrong data types
+- Test for the errors a generated block actually ships with:
   - Placeholder text
   - Relative URLs (should be absolute)
-  - Invalid date formats
 - Flag deprecated types (see below)
 
 ## Schema Type Status (as of June 2026)
+
+*This is the reference copy of the type status catalogue. `page.md`, `competitor-pages.md`,
+`ai-overview-recovery.md` and `plan-assets/generic.md` point here instead of restating it: five
+copies of a dated list rot at five different speeds.*
 
 *Statuses change as Google updates its rich results support. Re-verify dated retirements against Google Search Central before quoting them.*
 
@@ -56,83 +54,16 @@ BroadcastEvent, Clip, SeekToAction, SoftwareSourceCode
 
 ## Generation
 
-When generating schema for a page:
-1. Identify page type from content analysis
-2. Select appropriate schema type(s)
-3. Generate valid JSON-LD with all required + recommended properties
-4. Include only truthful, verifiable data. Use placeholders clearly marked for user to fill
-5. Validate output before presenting
+Include only truthful, verifiable data. Use placeholders clearly marked for the user to fill.
 
-## Common Schema Templates
+Three conventions the boilerplate templates carried, and that a block written from memory tends to
+get wrong:
 
-### Organization
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "[Company Name]",
-  "url": "[Website URL]",
-  "logo": "[Logo URL]",
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "[Phone]",
-    "contactType": "customer service"
-  },
-  "sameAs": [
-    "[Facebook URL]",
-    "[LinkedIn URL]",
-    "[Twitter URL]"
-  ]
-}
-```
-
-### LocalBusiness
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "[Business Name]",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "[Street]",
-    "addressLocality": "[City]",
-    "addressRegion": "[State]",
-    "postalCode": "[ZIP]",
-    "addressCountry": "US"
-  },
-  "telephone": "[Phone]",
-  "openingHours": "Mo-Fr 09:00-17:00",
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "[Lat]",
-    "longitude": "[Long]"
-  }
-}
-```
-
-### Article/BlogPosting
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "[Title]",
-  "author": {
-    "@type": "Person",
-    "name": "[Author Name]"
-  },
-  "datePublished": "[YYYY-MM-DD]",
-  "dateModified": "[YYYY-MM-DD]",
-  "image": "[Image URL]",
-  "publisher": {
-    "@type": "Organization",
-    "name": "[Publisher]",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "[Logo URL]"
-    }
-  }
-}
-```
+- `openingHours` takes the schema.org string form `"Mo-Fr 09:00-17:00"`, not free text such as
+  "Monday to Friday, 9am to 5pm".
+- `publisher.logo` is a nested `ImageObject` carrying a `url`, never a bare URL string.
+- Placeholders are written in the `[Company Name]` bracket form. The Validation rule on placeholder
+  text above looks for exactly that shape, so filling them any other way makes the check blind.
 
 ## Entity properties that AI answer engines read
 

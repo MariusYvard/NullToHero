@@ -5,37 +5,16 @@ description: >
   citation readiness, and thin content. Use for: "content quality", "E-E-A-T",
   "content analysis", "readability score", "thin content", "content audit",
   "improve article", "AI citation readiness".
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Content Quality & E-E-A-T Analysis
 
 ## E-E-A-T Framework (updated Sept 2025 QRG)
 
-### Experience (first-hand signals)
-- Original research, case studies, before/after results
-- Personal anecdotes, process documentation
-- Unique data, proprietary insights
-- Photos/videos from direct experience
-
-### Expertise
-- Author credentials, certifications, bio
-- Professional background relevant to topic
-- Technical depth appropriate for audience
-- Accurate, well-sourced claims
-
-### Authoritativeness
-- External citations, backlinks from authoritative sources
-- Brand mentions, industry recognition
-- Published in recognized outlets
-- Cited by other experts
-
-### Trustworthiness
-- Contact information, physical address
-- Privacy policy, terms of service
-- Customer testimonials, reviews
-- Date stamps, transparent corrections
-- Secure site (HTTPS)
+Four dimensions, scored in the E-E-A-T Breakdown table under Output. One assignment is not obvious
+and is what keeps the overall score from counting a signal twice: HTTPS and a physical address are
+counted under Trustworthiness, not under the Technical dimension.
 
 ## Content Metrics
 
@@ -58,7 +37,6 @@ Compare against page type minimums:
 - Flesch Reading Ease: target 60-70 for general audience
 
 > **Note:** Flesch Reading Ease is a useful proxy for content accessibility but is NOT a direct Google ranking factor. John Mueller has confirmed Google does not use basic readability scores for ranking. Yoast deprioritized Flesch scores in v19.3. Use readability analysis as a content quality indicator, not as an SEO metric to optimize directly.
-- Grade level: match target audience
 - Sentence length: average 15-20 words
 - Paragraph length: 2-4 sentences
 
@@ -68,30 +46,21 @@ Compare against page type minimums:
 - Semantic variations present
 - No keyword stuffing
 
-### Content Structure
-- Logical heading hierarchy (H1 -> H2 -> H3)
-- Scannable sections with descriptive headings
-- Bullet/numbered lists where appropriate
-- Table of contents for long-form content
+### Structure and media
 
-### Multimedia
-- Relevant images with proper alt text
-- Videos where appropriate
-- Infographics for complex data
-- Charts/graphs for statistics
+Heading hierarchy, scannability, lists, tables and media coverage are dimension 2 of the GEO score
+in [geo.md](geo.md). Read them there rather than scoring them twice.
 
 ### Internal Linking
-- 3-5 relevant internal links per 1000 words
+- Link to related content wherever it genuinely helps the reader. Google publishes no links-per-word
+  ratio, so any figure you adopt is an internal editing heuristic, not a ranking threshold
 - Descriptive anchor text
-- Links to related content
 - No orphan pages
 
 ### External Linking
-- Cite authoritative sources
 - Leave external links in the same tab unless the user is mid-task and would lose work. Forcing
   `target="_blank"` takes the back button away from the visitor and is an accessibility defect, not a
   courtesy. When it is genuinely warranted, say so in the link text so nobody is surprised.
-- Reasonable count (not excessive)
 
 ## AI Content Assessment (Sept 2025 QRG addition)
 
@@ -163,9 +132,9 @@ The checklist above is this dimension's scoring hook. The discipline itself (per
 | Need | Skill |
 |---------------|-------|
 | Full SEO audit | `/seo audit` |
-| Keyword data for content | (not included) |
 | AI search optimization | `/seo geo` |
-| Content production | (not included) |
 | Competitor comparison pages | `/seo competitor-pages` |
-| Topic & source research | (not included) |
 | SEO content strategy | `/seo plan` |
+
+Keyword volume data, content production and topic or source research are outside this plugin's
+scope: bring them from your own tooling.

@@ -429,10 +429,6 @@
     },
     {
       "from": "skills/seo/references/plan.md",
-      "to": "skills/seo/references/ecommerce.md"
-    },
-    {
-      "from": "skills/seo/references/plan.md",
       "to": "skills/seo/references/plan-assets/agency.md"
     },
     {
@@ -457,7 +453,23 @@
     },
     {
       "from": "skills/seo/references/schema.md",
+      "to": "skills/seo/references/ai-overview-recovery.md"
+    },
+    {
+      "from": "skills/seo/references/schema.md",
+      "to": "skills/seo/references/competitor-pages.md"
+    },
+    {
+      "from": "skills/seo/references/schema.md",
       "to": "skills/seo/references/geo.md"
+    },
+    {
+      "from": "skills/seo/references/schema.md",
+      "to": "skills/seo/references/page.md"
+    },
+    {
+      "from": "skills/seo/references/schema.md",
+      "to": "skills/seo/references/plan-assets/generic.md"
     },
     {
       "from": "skills/seo/references/search-console.md",
@@ -478,6 +490,10 @@
     {
       "from": "skills/seo/references/sitemap.md",
       "to": "skills/seo/references/indexnow.md"
+    },
+    {
+      "from": "skills/seo/references/technical.md",
+      "to": "skills/seo/references/geo.md"
     },
     {
       "from": "skills/seo/references/technical.md",

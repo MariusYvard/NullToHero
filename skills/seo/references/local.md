@@ -6,17 +6,14 @@ description: >
   reviews, local schema, location page quality. Use for: "local SEO", "Google
   Business Profile", "GBP", "NAP", "citations", "local rankings", "map pack",
   "near me", "local business", "Google Maps".
-version: 1.8.1
+version: 1.8.2
 ---
 
 # Local SEO Analysis
 
-## Business types covered
-
-- **Brick-and-mortar** — physical storefront customers visit (restaurant, salon, shop)
-- **Service Area Business (SAB)** — travels to customers, no public address (plumber, cleaner)
-- **Multi-location** — same brand with multiple physical addresses
-- **Hybrid** — serves both in-store and service area customers
+Establish the business type first. A service area business (SAB) travels to customers and publishes
+no address, so an absent address is correct for a SAB and a defect for a storefront, a multi-location
+brand or a hybrid. That distinction conditions every later finding.
 
 ---
 
@@ -29,35 +26,16 @@ Google Business Profile is the single most impactful local SEO factor. Analyze t
 **Completeness checklist:**
 - [ ] Business name matches the real-world signage exactly (no keyword stuffing)
 - [ ] Category: primary category is the most specific match available
-- [ ] Secondary categories added (up to 9 additional)
-- [ ] Address accurate and consistent with website
 - [ ] Phone number: local area code preferred over toll-free for local signals
-- [ ] Website URL pointing to the correct page (homepage or location-specific page)
 - [ ] Hours of operation complete, including holidays
-- [ ] Business description: 750 chars max, includes primary keyword naturally in first 250 chars
 - [ ] Photos: minimum 10 photos (exterior, interior, products/services, team)
-- [ ] Services/Products section populated
-- [ ] Attributes relevant to business type selected (wheelchair accessible, outdoor seating, etc.)
-- [ ] Questions & Answers: seed with common questions and answers
-
-**GBP signals that impact Map Pack ranking:**
-- Relevance: how well the profile matches the search query
-- Distance: proximity of business to searcher or searched location
-- Prominence: how well-known the business is (reviews, citations, links)
+- [ ] The rest of the profile filled in and consistent with the site: address, website URL, description, services, attributes, Q&A
 
 ### 2. NAP Consistency (Name, Address, Phone)
 
 **NAP must be identical across all platforms.** Even minor variations ("St" vs "Street", "+1" vs local format) weaken local signals.
 
-**Check consistency across:**
-- Website (footer, contact page, LocalBusiness schema)
-- Google Business Profile
-- Facebook Business Page
-- Yelp
-- Apple Maps
-- Bing Places
-- Yellow Pages / industry directories
-- Chamber of Commerce listings
+**Check consistency across** the site (footer, contact page, LocalBusiness schema), the GBP listing and every directory carrying the business, Apple Maps and Bing Places included: those two get forgotten far more often than Yelp or Facebook.
 
 **Common inconsistencies to flag:**
 - Street abbreviation variations (Ave / Avenue / Av)
@@ -70,21 +48,9 @@ Google Business Profile is the single most impactful local SEO factor. Analyze t
 
 Reviews are a major local ranking factor AND conversion signal.
 
-**Metrics to assess:**
-- Review count (Google, Yelp, industry-specific platforms)
-- Average rating (Google My Business: 4.0+ is the floor for Map Pack)
-- Review recency (Google weights recent reviews heavily)
-- Response rate and response quality
-- Review diversity across platforms
+**Metrics to assess:** count, recency, response rate, average rating on Google Business Profile and on the industry platforms, and review diversity across platforms. No public Google documentation sets a minimum rating for Map Pack inclusion, so read the average against local competitors and never quote a floor as a published threshold.
 
-**Review velocity: what's healthy**
-
-| Business type | Target monthly cadence |
-|---------------|----------------------|
-| Restaurant | 10–20+ reviews/month |
-| Service business | 2–5 reviews/month |
-| Retail | 5–10 reviews/month |
-| Professional services | 1–3 reviews/month |
+Judge the count as a monthly flow and not as a lifetime total, calibrated to the business type: a restaurant gaining two reviews a month is stalling, a professional services firm at that cadence is healthy.
 
 **Review response analysis:**
 - Responding to all reviews (especially negative) is a ranking and trust signal
@@ -95,11 +61,8 @@ Reviews are a major local ranking factor AND conversion signal.
 
 Citations are any mention of the business NAP data on the web. They remain a local ranking signal even without backlinks.
 
-**Tier 1 citations (highest authority):**
-Google Business Profile, Apple Maps, Bing Places, Facebook, Yelp, Yellow Pages, BBB
-
-**Tier 2 citations (industry/regional):**
-TripAdvisor (hospitality), Houzz (home services), Healthgrades (healthcare), Avvo (legal), Angi (contractors), Justdial (India), etc.
+Two tiers, and the tier drives the correction order: tier 1 is the general-purpose directories
+every business belongs in, tier 2 the industry or regional ones. Tier 1 is fixed first.
 
 **Citation audit process:**
 1. Search Google for `"business name" "city" "phone number"` and `"business name" "city" "address"`
@@ -134,13 +97,6 @@ feature or integration set.
 - Local service area description (for SABs)
 - Internal links from and to other location pages
 
-**URL structure:**
-```
-/locations/city-name/
-/cities/city-state/
-/service-area/city-name/
-```
-
 ### 6. On-Site Local Signals
 
 **Homepage and contact page:**
@@ -149,53 +105,13 @@ feature or integration set.
 - `LocalBusiness` schema with complete data
 - `sameAs` linking to all major profile URLs (GBP, Facebook, Yelp)
 
-**Title tags for local pages:**
-`[Primary Service] in [City, State] | [Brand Name]`
-
-**Meta descriptions:**
-Include city name, phone number or a local call-to-action.
-
-**Content signals:**
-- Mention neighborhood names, landmarks, local events
-- Local team/staff pages
-- Local case studies, testimonials, press mentions
-
 ### 7. LocalBusiness Schema
 
 Generate or validate schema for the business. See `/seo schema` for full templates.
 
-**Required properties for Map Pack eligibility:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Business Name",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "123 Main Street",
-    "addressLocality": "City",
-    "addressRegion": "ST",
-    "postalCode": "12345",
-    "addressCountry": "US"
-  },
-  "telephone": "+1-555-555-5555",
-  "url": "https://example.com",
-  "openingHoursSpecification": [...],
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 40.7128,
-    "longitude": -74.0060
-  },
-  "sameAs": [
-    "https://maps.google.com/?cid=...",
-    "https://www.facebook.com/...",
-    "https://www.yelp.com/biz/..."
-  ]
-}
-```
+Markup does not create Map Pack eligibility, which is settled on the GBP listing itself; what it buys is a machine-readable identity. Two properties are worth checking by hand because a generated block rarely emits them: `sameAs` has to carry the Google Maps listing URL in its `https://maps.google.com/?cid=...` form next to the Facebook and Yelp profiles, since that URL is what binds the page to the listing rather than to a matching name.
 
-**Use the most specific `@type` available:**
-`Restaurant`, `MedicalClinic`, `LegalService`, `HomeAndConstructionBusiness`, `BeautySalon`, etc. They inherit all LocalBusiness properties.
+The second is the `geo` (GeoCoordinates) and `openingHoursSpecification` pair: coordinates without hours, or hours left as footer prose, leaves the listing half-readable. Use the most specific `@type` available rather than plain `LocalBusiness`; the subtypes inherit every LocalBusiness property.
 
 ---
 
@@ -214,26 +130,6 @@ Generate or validate schema for the business. See `/seo schema` for full templat
 ## Output
 
 ### Local SEO Score: XX/100
-
-### GBP Audit
-- Completeness: XX%
-- Missing/incomplete fields: [list]
-- Photo count: X (target: 10+)
-
-### NAP Consistency
-- Inconsistencies found: X
-- Platforms checked: [list]
-- Priority fixes: [list]
-
-### Reviews
-- Google rating: X.X (X reviews)
-- Review recency: last review X days ago
-- Response rate: XX%
-
-### Citation Coverage
-- Tier 1 citations: X/7
-- Tier 2 citations: X relevant platforms
-- Inconsistencies: X
 
 ### Location Page Quality (if applicable)
 | Location | Word Count | Schema | Maps | Local Content |

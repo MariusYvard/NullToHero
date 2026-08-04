@@ -5,82 +5,49 @@ description: >
   templates (SaaS, e-commerce, local, publisher, agency), competitive analysis,
   content strategy, implementation roadmap. Use for: "SEO strategy", "SEO plan",
   "content roadmap", "keyword strategy", "site planning".
-version: 1.9.0
+version: 1.9.1
 ---
 
 # Strategic SEO Planning
 
 ## Process
 
+The order is the method, not a presentation convenience. Architecture is designed before any content is written, so pages are planned rather than accumulated. The technical foundation is set after the editorial strategy, so schema, performance budgets and AI-search readiness are chosen for pages that already exist on paper.
+
 ### 1. Discovery
 - Business type, target audience, competitors, goals
-- Current site assessment (if exists)
-- Budget and timeline constraints
-- Key performance indicators (KPIs)
+- Current site assessment (if it exists), budget and timeline constraints
+- Key performance indicators agreed before any work starts
 
 ### 2. Competitive Analysis
-- Identify top 5 competitors
-- Analyze their content strategy, schema usage, technical setup
-- Identify keyword gaps and content opportunities
-- Assess their E-E-A-T signals
-- Estimate their domain authority
+- Top 5 competitors: content strategy, schema usage, technical setup
+- Keyword and content gaps against them
+- E-E-A-T signals they carry and the site does not
 
 ### 3. Architecture Design
 - Load industry template from `plan-assets/`
-- Design URL hierarchy and content pillars
-- Plan internal linking strategy
+- URL hierarchy, content pillars, internal linking strategy
 - Sitemap structure with quality gates applied
 - Information architecture for user journeys
 
 ### 4. Content Strategy
-- Content gaps vs competitors
-- Page types and estimated counts
+- Page types and estimated counts, content gaps vs competitors
 - Blog/resource topics and publishing cadence
 - E-E-A-T building plan (author bios, credentials, experience signals)
 - Content calendar with priorities
 
 ### 5. Technical Foundation
-- Hosting and performance requirements
 - Schema markup plan per page type
 - Core Web Vitals baseline targets
-- AI search readiness requirements
-- Mobile-first considerations
+- Hosting and performance requirements
+- AI search readiness and mobile-first considerations
 
 ### 6. Implementation Roadmap (4 phases)
 
-#### Phase 1: Foundation (weeks 1-4)
-- Technical setup and infrastructure
-- Core pages (home, about, contact, main services)
-- Essential schema implementation
-- Analytics and tracking setup
-
-#### Phase 2: Expansion (weeks 5-12)
-- Content creation for primary pages
-- Blog launch with initial posts
-- Internal linking structure
-- Local SEO setup (if applicable)
-
-#### Phase 3: Scale (weeks 13-24)
-- Advanced content development
-- Link building and outreach
-- GEO optimization
-- Performance optimization
-
-#### Phase 4: Authority (months 7-12)
-- Thought leadership content
-- PR and media mentions
-- Advanced schema implementation
-- Continuous optimization
-
-## Industry Templates
-
-Load from `plan-assets/`:
-- `saas.md`: SaaS/software companies
-- `local-service.md`: Local service businesses
-- `ecommerce.md`: E-commerce stores
-- `publisher.md`: Content publishers/media
-- `agency.md`: Agencies and consultancies
-- `generic.md`: General business template
+- Phase 1, weeks 1-4, foundation: technical setup, core pages, essential schema, analytics.
+- Phase 2, weeks 5-12, expansion: content for primary pages, blog launch, internal linking.
+- Phase 3, weeks 13-24, scale: advanced content, outreach, GEO, performance work.
+- Phase 4, months 7-12, authority: thought leadership, PR, advanced schema, continuous optimization.
 
 ## Output
 
@@ -96,15 +63,9 @@ Load from `plan-assets/`:
 |--------|----------|---------|---------|----------|
 | Organic Traffic | ... | ... | ... | ... |
 | Keyword Rankings | ... | ... | ... | ... |
-| Domain Authority | ... | ... | ... | ... |
+| Search Console impressions | ... | ... | ... | ... |
 | Indexed Pages | ... | ... | ... | ... |
 | Core Web Vitals | ... | ... | ... | ... |
-
-### Success Criteria
-- Clear, measurable goals per phase
-- Resource requirements defined
-- Dependencies identified
-- Risk mitigation strategies
 
 ## Error Handling
 
@@ -120,14 +81,11 @@ Load from `plan-assets/`:
 |---------------|-------|
 | SEO audit to inform strategy | `/seo audit` |
 | Keyword clustering for the content plan | `/seo cluster` |
-| SERP & competitor data | (not included) |
-| Web research for content gaps | (not included) |
-| Content production | (not included) |
 | Programmatic SEO strategy | `/seo programmatic` |
 | Site architecture & build | `/siteasy build` |
-| SEO task tracking | (not included) |
+
+The plugin carries no SERP data feed and does not produce content. Search volumes, ranking positions, competitor traffic estimates and finished copy are outside what it can observe, so it states none of them: pull the figures from Search Console or a dedicated tool and bring them into the plan as inputs.
 
 ## Industry templates
 
 Load the matching plan template before drafting: [saas](plan-assets/saas.md) · [ecommerce](plan-assets/ecommerce.md) · [local-service](plan-assets/local-service.md) · [publisher](plan-assets/publisher.md) · [agency](plan-assets/agency.md) · [generic](plan-assets/generic.md).
-

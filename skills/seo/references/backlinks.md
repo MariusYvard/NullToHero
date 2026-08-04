@@ -6,23 +6,16 @@ description: >
   (Moz, Bing, Common Crawl). Use for: "backlinks", "link profile", "link building",
   "backlink audit", "toxic links", "competitor links", "anchor text", "domain authority",
   "referring domains".
-version: 1.39.0
+version: 1.39.1
 ---
 
 # Backlink Profile Analysis
 
 ## Data sources (no paid API required)
 
-| Source | Data type | How to access |
-|--------|-----------|---------------|
-| **Moz Link Explorer** | Domain Authority, top linking domains, anchor text | `moz.com/link-explorer`: 10 free queries/month |
-| **Bing Webmaster Tools** | Inbound links for verified domains | `bing.com/webmasters`: free, requires verification |
-| **Common Crawl** | Raw crawl data, large-scale link data | `commoncrawl.org`: free, technical |
-| **Google Search Console** | Links from Google's perspective (if verified) | `search.google.com/search-console`: free, verified only |
-| **Ahrefs Free Tools** | Limited backlink overview | `ahrefs.com/backlink-checker`: 1 free check/domain |
-| **Semrush Free** | Limited overview | `semrush.com`: 10 free queries/day |
-
-**Recommended approach:** Start with Moz Link Explorer for a quick overview. Use GSC if the user has access. Note all data limitations transparently.
+Verified 2026, and this is the fastest-rotting fact in the file: Moz Link Explorer (~10 free queries/month, DA and anchor text), Bing Webmaster Tools and Google Search Console (free, verified domains only), Ahrefs and Semrush free checkers (one domain check, ~10 queries/day), Common Crawl (raw link data, technical).
+Free quotas move without notice, so read the current limit off the vendor's own page before quoting a number to anyone; do not repeat the figures above as if they were stable.
+Start with Moz for the overview, use GSC whenever the user has access because it is the only view of what Google itself counts, and state the data limitation in the report.
 
 ---
 
@@ -30,36 +23,16 @@ version: 1.39.0
 
 ### 1. Profile Overview
 
-**Key metrics to report:**
+Report referring domains (more meaningful than raw backlink count), total backlinks and link velocity, where a sudden spike is a manipulation signal. Two readings need a caveat attached, because they are the ones that get scored against numbers nobody published:
 
 | Metric | What it means |
 |--------|---------------|
 | Domain Authority (Moz DA) or Domain Rating (Ahrefs DR) | Aggregate link authority score (0 to 100). Useful for comparison, not a Google metric. |
-| Referring domains | Number of unique domains linking to the site. More important than raw backlink count. |
-| Total backlinks | Total link count (including multiple links from same domain). |
 | Follow vs nofollow ratio | Share of links passing ranking credit. Google publishes no target ratio, so read the shape (a profile that is almost entirely one or the other is worth investigating), not a score. |
-| Link velocity | Rate at which new links are acquired. Sudden spikes = potential manipulation signal. |
-
-**Healthy profile indicators:**
-- Diverse referring domains (100+ for established sites)
-- DA/DR proportional to site age and content investment
-- Gradual, organic-looking link growth
-- Mix of dofollow and nofollow
-- Links from topically relevant sites
 
 ### 2. Link Quality Assessment
 
-**Evaluate the top 20 referring domains against these criteria:**
-
-| Quality signal | Positive | Negative |
-|---------------|----------|----------|
-| Domain relevance | Topically related to your site | Completely unrelated niche |
-| Domain authority | DA 40+ | DA < 10 |
-| Traffic | Domain has real organic traffic | Zero traffic (spam site) |
-| Link placement | In-content editorial link | Footer, sidebar, or link farm |
-| Anchor text | Natural, varied, topical | Exact-match keyword-stuffed |
-| Link age | Old, stable links | New links from old domains (hacked/expired) |
-| TLD | .com, .org, .edu, .gov, .uk, .de, etc. | Excessive .xyz, .club, .info, .top spam TLDs |
+Assess the top 20 referring domains on topical relevance, real organic traffic, link placement (an in-content editorial link is worth more than a footer, sidebar or link-farm placement), anchor naturalness and TLD. One signal in that list is the one to look for deliberately, because it reads as good news and is not: a recent link from an old domain is an indicator of a hacked site or of an expired domain bought for its history, not of an established site that suddenly found you interesting.
 
 ### 3. Anchor Text Distribution
 
@@ -78,42 +51,7 @@ Report the distribution together with how the links were acquired. A concentrati
 
 ### 4. Toxic Link Detection
 
-**High-risk link types:**
-
-- Links from known spam networks, link farms, PBNs
-- Links from hacked websites (legitimate site, hacked to point to yours)
-- Paid links with no `rel="sponsored"` (violates Google policy)
-- Links from low-quality article directories with duplicate content
-- Reciprocal link schemes (A links to B, B links to A, at scale)
-- Footer/sitewide links with exact-match anchor text
-
 **Action:** For clearly toxic links, recommend Google's Disavow Tool. Note: disavow should only be used for clear spam; disavowing quality links can harm rankings.
-
-### 5. Competitor Link Gap Analysis
-
-Compare the site's backlink profile against 2-3 competitors to find link opportunities.
-
-**Process:**
-1. List top 20 referring domains for Competitor A
-2. List top 20 referring domains for Competitor B
-3. Identify domains linking to competitors but NOT to the target site
-4. Assess which of those gaps are realistic link opportunities
-
-**Gap link types to prioritize:**
-- Industry publications and blogs (editorial, pitch required)
-- Resource pages ("best tools for X")
-- Roundups and listicles ("top X companies in Y")
-- Partner / integration pages (if product integrations exist)
-- Academic or research references (for data-driven content)
-
-### 6. Internal vs External Link Balance
-
-Backlinks matter, but internal links distribute authority within the site.
-
-**Check:**
-- Key pages have sufficient internal links pointing to them
-- High-authority pages (most linked-to) pass PageRank to key conversion pages
-- Orphan pages (no internal links) are a missed opportunity even with backlinks
 
 ---
 
@@ -153,7 +91,7 @@ Ranked by effort-to-reward ratio for sites without a dedicated link team:
 |--------|-------|------------|
 | Estimated DA | XX | [context] |
 | Referring domains | X | [healthy/low/good for site age] |
-| Dofollow ratio | XX% | [natural/over-nofollowed] |
+| Follow vs nofollow | X follow / Y nofollow | Shape, not a grade: flag only a profile that is almost entirely one or the other, and say so without a target ratio |
 | Toxic links estimated | X | [low risk/needs review] |
 
 ### Top Referring Domains (quality assessment)
@@ -162,7 +100,7 @@ Ranked by effort-to-reward ratio for sites without a dedicated link team:
 | ... | ... | ✅/⚠️/❌ | Editorial/footer | High/Med/Low |
 
 ### Anchor Text Distribution
-Chart of anchor types vs. healthy benchmarks
+Distribution of anchor types with the acquisition source beside each. Report the shape and name where it concentrates; there is no benchmark column, because Google publishes no target distribution.
 
 ### Competitor Gap Opportunities
 Top 10 domains linking to competitors but not to the site

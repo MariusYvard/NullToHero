@@ -6,7 +6,7 @@ description: >
   "GEO", "llms.txt", "AI crawler", "passage citability", "ChatGPT visibility",
   "Perplexity ranking", "brand mentions", "AI citation", "AI search visibility",
   "geo quick", "geo compare".
-version: 1.39.0
+version: 1.39.1
 ---
 
 # AI Search / GEO Optimization
@@ -397,6 +397,12 @@ so it carries no weight in the score.
   The `ai-crawler-http` check settles that by fetching the page once per bot user-agent
   and comparing the status to a browser baseline. Never conclude on access from
   robots.txt alone.
+
+**Base rate.** Among the top 10,000 domains where a robots.txt file was found, about
+14 percent carried allow or disallow directives aimed specifically at AI bots, and
+GPTBot was the most frequently disallowed ([Cloudflare, 2025](https://blog.cloudflare.com/from-googlebot-to-gptbot-whos-crawling-your-site-in-2025/)).
+A site with no AI-bot directive at all is therefore the common case: read a silent
+robots.txt as an untouched default, not as a deliberate decision to allow.
 
 **Scoring.** Reachability is weighted, not counted: tier 1 carries 50 percent, tier 2
 carries 25 percent, the absence of a blanket wildcard block carries 15 percent, and the
