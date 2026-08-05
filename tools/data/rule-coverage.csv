@@ -1,0 +1,73 @@
+id,class,executor,note
+1,static-check,contrast-ratio,Needs the cascade resolved; the check refuses to judge rather than guessing when a token's selector is unresolvable
+2,rules-engine,rules.mjs,
+3,rules-engine,rules.mjs,
+4,rules-engine,rules.mjs,
+5,judgment,,Whether colour is the only signal depends on what the colour means in this interface
+6,static-check,heading-order,
+7,rules-engine,rules.mjs,
+8,static-check,tap-target-size,Static half only; the rendered box is measured in the Playwright pass
+9,static-check,tap-target-spacing,Static half only; the rendered box is measured in the Playwright pass
+10,rules-engine,rules.mjs,
+11,rules-engine,rules.mjs,
+12,static-check,img-dimensions,
+13,rules-engine,rules.mjs,
+14,static-check,horizontal-overflow-375,Static half only; the real overflow is measured at 375px in the Playwright pass
+15,static-check,viewport-meta,
+16,static-check,body-font-size,
+17,static-check,line-measure,
+18,judgment,,A raw hex in a component is a convention breach in one codebase and the norm in another
+19,judgment,,Pure black on a small surface is fine; the rule is about large ones and that is a design call
+20,static-check,ui-motion-duration,
+21,rules-engine,rules.mjs,Scoped to keyframe animations; a transition fires because the reader acted
+22,rules-engine,rules.mjs,
+23,needs-render,,Whether the message lands next to its field is a layout fact
+24,rules-engine,rules.mjs,
+25,judgment,,
+26,rules-engine,rules.mjs,
+27,needs-render,,The thresholds are durations; a static read cannot time a load
+28,rules-engine,rules.mjs,
+29,rules-engine,rules.mjs,
+30,rules-engine,rules.mjs,Key shapes only; entropy heuristics flag every hash and get muted
+31,rules-engine,rules.mjs,
+32,rules-engine,rules.mjs,
+33,rules-engine,rules.mjs,Fires only when the file has no error path at all
+34,judgment,,
+35,judgment,,A type checker's job; every optional access would fire
+36,rules-engine,rules.mjs,
+37,rules-engine,rules.mjs,
+38,rules-engine,rules.mjs,
+39,rules-engine,rules.mjs,
+40,rules-engine,rules.mjs,
+41,rules-engine,rules.mjs,
+42,rules-engine,rules.mjs,Scoped to lifecycle hooks; a module-scope listener for the life of the page is fine
+43,rules-engine,rules.mjs,Fires only on a sheet of 25 blocks or more
+44,rules-engine,rules.mjs,Fires on a skip link parked off-screen with no focus rule; a missing skip link is the audit's landmark pass
+45,rules-engine,rules.mjs,Fires only once the sheet actually carries a dark scheme
+46,judgment,,
+47,static-check,motion-reduced-guard,
+48,rules-engine,rules.mjs,
+49,static-check,scrollbar-hidden,
+50,rules-engine,rules.mjs,
+51,needs-render,,The track's resolved height against the viewport is a layout fact
+52,needs-render,,Needs the ancestor chain as rendered rather than as written
+53,static-check,video-embed-hygiene,
+54,static-check,frame-sequence-preload,
+55,rules-engine,rules.mjs,
+56,judgment,,Whether a fallback is adequate is a product decision
+57,rules-engine,rules.mjs,
+58,static-check,frame-loop-alloc,
+59,rules-engine,rules.mjs,
+60,rules-engine,rules.mjs,
+61,rules-engine,rules.mjs,
+62,needs-render,,Which copies are clones is decided at runtime
+63,static-check,decorative-loop-budget,
+64,rules-engine,rules.mjs,
+65,rules-engine,rules.mjs,
+66,rules-engine,rules.mjs,
+67,rules-engine,rules.mjs,
+68,judgment,,An architecture choice rather than a defect
+69,rules-engine,rules.mjs,
+70,static-check,scrub-easing-linear,
+71,judgment,,
+72,static-check,viewport-unit-consistency,

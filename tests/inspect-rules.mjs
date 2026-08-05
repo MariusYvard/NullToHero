@@ -78,5 +78,52 @@ for (const r of RULES) {
 }
 if (!noise) ok("no clean fixture trips an unrelated rule");
 
+// ── coverage map ─────────────────────────────────────────────────────────────
+// Every registry rule names its executor, or names why it has none. This exists
+// because the v3.0.0 release note published "59 of the 72 remain non-executable"
+// and the real figure was 41: eighteen rules were already executing inside
+// checks.mjs under a check id, and nothing in the repository tied the two
+// together, so nobody could have caught the error by reading. A count that no
+// test can contradict is a count that drifts.
+console.log("\nCoverage map");
+const CLASSES = new Set(["rules-engine", "static-check", "needs-render", "judgment"]);
+const covRaw = readFileSync(join(ROOT, "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
+const cov = new Map();
+for (const line of covRaw) {
+  const [id, cls, executor] = line.split(",");
+  const n = Number(id);
+  if (!Number.isFinite(n)) { no(`rule-coverage.csv: unparseable id ${id}`); continue; }
+  if (cov.has(n)) no(`rule-coverage.csv: rule ${n} listed twice`);
+  if (!CLASSES.has(cls)) no(`rule-coverage.csv: rule ${n} has unknown class "${cls}"`);
+  cov.set(n, { cls, executor });
+}
+for (const id of known.keys()) if (!cov.has(id)) no(`rule ${id} is in the registry and absent from rule-coverage.csv`);
+for (const id of cov.keys()) if (!known.has(id)) no(`rule-coverage.csv names rule ${id}, which is not in the registry`);
+
+const engineIds = new Set(RULES.map(r => r.id));
+for (const [id, c] of cov) {
+  if (c.cls === "rules-engine" && !engineIds.has(id)) no(`rule ${id} is mapped to the rules engine and rules.mjs does not implement it`);
+  if (c.cls !== "rules-engine" && engineIds.has(id)) no(`rules.mjs implements rule ${id}, which rule-coverage.csv classes as ${c.cls}`);
+  if (c.cls === "static-check" && !c.executor) no(`rule ${id} is mapped to a static check and names none`);
+  if (c.cls !== "static-check" && c.cls !== "rules-engine" && c.executor) no(`rule ${id} is class ${c.cls} and still names an executor`);
+}
+
+// A named check must exist. A mapping to a check that was renamed or deleted is
+// the same failure as no mapping at all, only harder to see.
+const checksSrc = readFileSync(join(ROOT, "tools", "audit", "lib", "checks.mjs"), "utf8");
+for (const [id, c] of cov) {
+  if (c.cls !== "static-check") continue;
+  if (!new RegExp(`id:\\s*"${c.executor}"`).test(checksSrc)) no(`rule ${id} names static check "${c.executor}", which checks.mjs does not define`);
+}
+
+const tally = {};
+for (const c of cov.values()) tally[c.cls] = (tally[c.cls] || 0) + 1;
+const executable = (tally["rules-engine"] || 0) + (tally["static-check"] || 0);
+if (!failures) {
+  ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} in the rules engine, ${tally["static-check"]} in static checks, ` +
+     `${tally["needs-render"]} need a rendered page, ${tally["judgment"]} are judgment`);
+  ok(`${executable} of ${cov.size} executable`);
+}
+
 console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mAll detector checks passed.\x1b[0m\n");
 process.exit(failures ? 1 : 0);

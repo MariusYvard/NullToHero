@@ -56,6 +56,20 @@ for (const r of rows.slice(1)) {
   if (o.id) meta.set(Number(o.id), o);
 }
 
+// Which registry rule each static check executes. Eighteen of the checks in
+// tools/audit/lib/checks.mjs have been executing a registry rule since v3.0.0 and
+// reporting under a check id, so a reader counting executable rules undercounted
+// by eighteen — the v3.0.0 note says 59 remain when the true figure was 41.
+// tools/data/rule-coverage.csv is the single source of that mapping; the guard in
+// tests/inspect-rules.mjs fails the build when it drifts from either side.
+const coverage = parseCsv(readFileSync(join(ROOT, "tools/data/rule-coverage.csv"), "utf8").trim());
+const covHead = coverage[0];
+const checkToRule = new Map();
+for (const r of coverage.slice(1)) {
+  const o = Object.fromEntries(covHead.map((h, i) => [h, r[i]]));
+  if (o.class === "static-check" && o.executor) checkToRule.set(o.executor, Number(o.id));
+}
+
 // ── collect ──────────────────────────────────────────────────────────────────
 const SKIP = new Set(["node_modules", ".git", "dist", "build", "coverage", ".next", "vendor"]);
 const files = [];
@@ -115,11 +129,16 @@ for (const [dir, group] of byDir) {
     for (const c of runChecks({ rawHtml: html, css })) {
       if (c.method !== "static") continue;
       if (c.verdict !== "FAIL" && c.verdict !== "WARN") continue;
+      // The registry id is attached where one exists, and the check keeps its own
+      // label and its verdict-derived severity. Overwriting them with the
+      // registry's would promote a WARN to critical on the strength of a mapping,
+      // which is averaging two authorities instead of naming one.
+      const mapped = checkToRule.get(c.id);
       results.push({
-        id: null, check: c.id, file: where, evidence: c.detail,
+        id: mapped ?? null, check: c.id, file: where, evidence: c.detail,
         rule: c.label, category: c.dimension,
         severity: c.critical && c.verdict === "FAIL" ? "critical" : VERDICT_SEVERITY[c.verdict],
-        why: "", source: "tools/audit/lib/checks.mjs",
+        why: "", source: `tools/audit/lib/checks.mjs (${c.id})`,
       });
     }
   }
@@ -128,7 +147,7 @@ for (const [dir, group] of byDir) {
 // ── report ───────────────────────────────────────────────────────────────────
 const RANK = { critical: 0, important: 1, warning: 2, medium: 3, low: 4 };
 const enriched = results.map(f => {
-  if (f.id === null) return f;                       // already carries its own metadata
+  if (f.check) return f;                             // already carries its own metadata
   const m = meta.get(f.id) || {};
   return { ...f, rule: m.rule || `rule ${f.id}`, severity: m.severity || "medium",
            category: m.category || "", why: m.why || "", source: m.source || "" };

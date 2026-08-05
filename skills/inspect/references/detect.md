@@ -17,19 +17,29 @@ execution, so it costs nothing per run and is safe to point at a repository you 
 
 ## What it actually covers, and what it does not
 
-Two sources, both deterministic. Thirteen rules from `tools/data/inspect-rules.csv`, so every
+Two sources, both deterministic. Thirty-nine rules from `tools/data/inspect-rules.csv`, so every
 finding carries that registry's id, severity, rationale and standard. Plus twenty-six static
 checks from `tools/audit/lib/checks.mjs`, which existed to serve `/audit` on a URL and were
-never reachable from a local scan until now.
+never reachable from a local scan until v3.0.0. Eighteen of those checks execute a registry rule
+and now report its id alongside their own.
 
 The scope is source text, not layout. Whether a block overflows at 375px, whether a contrast
 ratio survives the resolved cascade, whether an animation janks: those need a rendered page and
 belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
 the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
 
-The registry holds 72 rules and 13 are executable. The rest still need a reader, which is what
-the sections further down this file are for. When a rule is implemented, its prose entry stays:
-the CSV is the single source of severity and rationale for both paths.
+The registry holds 72 rules and 57 are executable: 39 in the rules engine and 18 inside the
+static checks. `tools/data/rule-coverage.csv` names the executor of every rule, and the fifteen
+that have none say why in the same row: five need a rendered page, ten are judgment. Those
+fifteen still need a reader, which is what the sections further down this file are for. When a
+rule is implemented its prose entry stays: the CSV is the single source of severity and
+rationale for both paths.
+
+The figure was wrong until v3.1.0. The v3.0.0 note published "59 remain non-executable" while
+eighteen of those 59 were already running inside `checks.mjs` under a check id, with nothing in
+the repository tying the two together. A guard in `tests/inspect-rules.mjs` now fails the build
+when the coverage map drifts from either side, so the count cannot go stale again without a red
+test.
 
 ## Lineage
 

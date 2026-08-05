@@ -1,0 +1,2 @@
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+.dot { animation: pulse 2s ease-in-out infinite; }

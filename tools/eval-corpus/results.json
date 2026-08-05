@@ -1,58 +1,275 @@
 {
-  "$comment": "Recorded outcomes. One run per case, n=1, no repeated sampling. Verdicts are DIVERGENT (the file changed what the model reached for, clearly), DIVERGENT_NARROW (it did, but the control was close or richer in places) and EQUIVALENT (it did not, which licenses a cut). Recorded honestly: two narrow passes and two cases where the control taught the corpus something are in here, because a benchmark that only records its wins is a marketing page.",
-  "protocol": "open-question divergence, one reader given only the reference file, one reader given nothing, same question, 400 words each",
-  "recorded": "2026-08-04",
-  "judge": "the same session that made the cuts, which is the harness's main weakness and is stated in run.mjs",
+  "$comment": "Recorded outcomes, one entry per case with every draw inside it. Verdicts are DIVERGENT (the file changed what the model reached for, by two markers or more), DIVERGENT_NARROW (it did, by one), EQUIVALENT (it did not, which licenses a cut) and SPLIT (three draws, no majority, the harness declining to answer). Every verdict is recomputed from its own draws by run.mjs, so a summary cannot drift from its data. Three of the eight cases moved against the corpus relative to the self-judged run of 2026-08-04, which is the reason re-running it was worth the cost.",
+  "protocol": "open-question divergence, blind paired comparison. One reader is given only the reference file, one is given nothing and told to open no file. Same question, 350 words each. Draw i of one arm is paired with draw i of the other and shown to the judge as A and B, in an order fixed by FNV-1a over the case id and the draw number, and the judge is never told which is which.",
+  "recorded": "2026-08-05",
+  "n": 3,
+  "generator": "claude-opus-5, one agent per draw, no context shared between draws or between arms",
+  "judge": {
+    "independent": true,
+    "model": "claude-sonnet, a different model from the generator",
+    "blinding": "answers presented as A and B in an order fixed per case and draw by FNV-1a; the judge is told nothing about how either answer was produced and is instructed not to speculate",
+    "scope": "the judge returns two marker counts and a direction and never names a verdict; run.mjs derives the verdict from those three values"
+  },
+  "supersedes": "the run of 2026-08-04, n=1, judged by the session that made the cuts. It recorded 6 DIVERGENT and 2 DIVERGENT_NARROW across these same eight cases and no EQUIVALENT.",
   "runs": [
     {
       "case": "css-architecture-important",
       "verdict": "DIVERGENT",
-      "note": "With the file: cascade layers plus a migration path through @layer legacy. Without: an explanation of specificity, correct, that stops there. This is the run that set the doctrine in v2.6.0.",
-      "decided": "keep the prescriptions, cut the syntax; file went 458 to 134 lines"
+      "agreement": "2-1",
+      "note": "Two draws produced @layer with a legacy migration path against a control that explained specificity and stopped. In the third the control produced a specificity triple and the missing-semicolon trap and was judged to go further, which is why this is 2-1 and not unanimous.",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A fournit @layer, migration legacy via @import layer() et reset :where(); B reste sur la spécificité et le diagnostic DevTools sans jamais nommer les cascade layers."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 2,
+          "further": "corpus",
+          "judge_note": "B développe @layer avec six couches nommées, l'import d'une couche legacy et :where(); A ne cite @layer qu'en une ligne mais détaille les tuples de spécificité."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 2,
+          "further": "control",
+          "judge_note": "B chiffre la spécificité (1,0,1 contre 0,2,0) et le piège du point-virgule oublié; A détaille le code @layer et la migration que B évoque en une ligne."
+        }
+      ]
     },
     {
       "case": "local-city-pages",
-      "verdict": "DIVERGENT",
-      "note": "With the file: opens on the numbered refusal at 50 pages with the doorway motive, puts the business profile before the pages, knows a service-area business should hide its address, produces the maps.google.com/?cid= form of sameAs, names Apple Maps and Bing Places, judges reviews as a monthly rate. Without: none of it.",
-      "decided": "cut of 39 percent validated"
+      "verdict": "SPLIT",
+      "agreement": "1-1-1",
+      "note": "Three draws, three answers, no majority. The corpus reliably produces the service-area setting with a hidden address and the cid form of sameAs. The control reliably produces a numbered threshold on its own. Those two facts do not resolve into one verdict and the harness stops there.",
+      "control_taught_us": "warn against fabricating a local address or phone number per town, which the file does not say",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 3,
+          "further": "neither",
+          "judge_note": "A détaille le réglage GBP en zone de service avec adresse masquée; B est seul à avertir contre la fabrication de fausses adresses locales."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 2,
+          "further": "corpus",
+          "judge_note": "B pose les seuils 30 et 60 pages, la forme cid dans sameAs et le cas GBP zone de service; A nomme le piège des packs 100 villes et un délai de vérification."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 4,
+          "further": "corpus",
+          "judge_note": "A gradue le risque (visible à 30 pages, sérieux au-delà de 50), détaille le GBP zone de service et nomme Apple Plans et Bing Places."
+        }
+      ]
     },
     {
       "case": "ecommerce-facets",
-      "verdict": "DIVERGENT",
-      "note": "With the file: the per-facet matrix, colour and size consolidable, price and sort blocked, brand indexable if it has its own content, condition indexable if there is demand. Plus the trap where a robots.txt disallow means the canonical on that URL is never read. Without: three broad families, correct but undifferentiated.",
-      "decided": "cut of 39 percent validated"
+      "verdict": "DIVERGENT_NARROW",
+      "agreement": "2-1",
+      "note": "The brand facet is what the file adds and it appeared in all three corpus draws and no control draw. The margin never reached two markers, so narrow is the honest reading.",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "BA",
+          "markers_corpus": 5,
+          "markers_control": 4,
+          "further": "corpus",
+          "judge_note": "B traite la marque comme facette à part avec exemple, donne robots.txt et canonique prêts à l'emploi et chiffre 5 couleurs par 4 tailles; A ne traite jamais la marque."
+        },
+        {
+          "draw": 2,
+          "order": "AB",
+          "markers_corpus": 5,
+          "markers_control": 4,
+          "further": "control",
+          "judge_note": "B chiffre le seuil de 10 à 50 combinaisons et le délai d'un à trois mois; A est seule à traiter la facette marque et nomme les CMS concernés."
+        },
+        {
+          "draw": 3,
+          "order": "BA",
+          "markers_corpus": 5,
+          "markers_control": 4,
+          "further": "corpus",
+          "judge_note": "B couvre la marque et le piège du robots.txt auto-généré par Shopify, WooCommerce et Magento; A signale la suppression de l'outil Paramètres d'URL."
+        }
+      ]
     },
     {
       "case": "technical-react-invisible",
       "verdict": "DIVERGENT",
-      "note": "With the file: the four documented JavaScript pitfalls of December 2025, including that Google does not execute JavaScript on a non-200 response, plus Googlebot Smartphone since 5 July 2024 and the crawl budget threshold at 10k pages. Without: solid generic React SEO advice, none of the four, no dates.",
-      "decided": "cut of 41 percent validated"
+      "agreement": "unanimous",
+      "note": "The clearest result in the set, and the same shape three times: the dated pitfalls, the rule that Google does not render JavaScript on a non-200 response, and Googlebot Smartphone appear only with the file.",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "BA",
+          "markers_corpus": 3,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B nomme quatre pièges (noindex brut, canonical contradictoire, robots.txt, données structurées en JS) et chiffre LCP, INP et CLS; A ne fournit rien de cela."
+        },
+        {
+          "draw": 2,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A cite les seuils Core Web Vitals, les dates du 5 juillet 2024 et de décembre 2025, le non-200 et Googlebot Smartphone; B ne les mentionne jamais."
+        },
+        {
+          "draw": 3,
+          "order": "BA",
+          "markers_corpus": 3,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B ajoute les seuils chiffrés, la date de juillet 2024 et trois pièges JS nommés; A n'aborde aucun des quatre."
+        }
+      ]
     },
     {
       "case": "competitor-vs-page",
-      "verdict": "DIVERGENT_NARROW",
-      "note": "The control independently produced two pages rather than one, an honest section on when the competitor wins, the comparative-advertising caveat and the link from the pricing page. What only the file gave: FAQ sizing at 5 to 8 and 4 to 6, the dated removal of the FAQ rich result, and the prohibition on marking up third-party ratings.",
-      "control_taught_us": "read the SERP first, and if review directories hold the top three the work is the G2 profile and not this page. Added to the file.",
-      "decided": "cut of 44 percent validated, gap filled from the control"
+      "verdict": "DIVERGENT",
+      "agreement": "unanimous",
+      "note": "Recorded as a narrow pass at v3.0.0 and unanimous here. The AggregateRating prohibition and the dated removal of the FAQ rich result appeared in no control draw.",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "A nomme l'interdiction AggregateRating avec l'action manuelle, la disparition du résultat enrichi FAQ et les seuils 2 à 3 limites et 5 à 8 questions."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "B nomme le piège AggregateRating sur des avis tiers, le terme SERP et les seuils chiffrés; A n'aborde aucun des trois."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "A donne les seuils chiffrés, la date de disparition du résultat enrichi FAQ et l'interdiction AggregateRating; B n'aborde pas ces points."
+        }
+      ]
     },
     {
       "case": "harden-real-clients",
-      "verdict": "DIVERGENT_NARROW",
-      "note": "The narrowest in the set. The control was richer in places. What only the file gave: the 30 to 40 percent translation expansion budget and the test thresholds. The control also produced min-width: 0 on flex children, which the cut had removed as capacity, confirming that particular removal was right.",
-      "control_taught_us": "make the demo seed data hostile once instead of hardening per symptom, plus collator-based sorting and UTF-8 end to end. Added to the file.",
-      "decided": "cut of 48 percent validated, gaps filled from the control"
+      "verdict": "EQUIVALENT",
+      "agreement": "2-1",
+      "note": "Recorded as a narrow pass at v3.0.0; blind judging turns it over. One draw of three put the file ahead, by one marker. Intl.Collator is the file contribution that shows up reliably, and it is not enough on its own.",
+      "control_taught_us": "cost an absent index as 5 ms against 5 s, produce the German number and date formats, and name the N+1 query trap",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 3,
+          "further": "control",
+          "judge_note": "B chiffre l'index de 5 ms à 5 s et les formats allemands; A est seule à citer Intl.Collator pour le tri des noms accentués."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 3,
+          "further": "corpus",
+          "judge_note": "B nomme le collateur et des pièges concrets (RTL, null contre vide, double soumission); A détaille le piège de concaténation des traductions et un protocole de non-régression."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 3,
+          "further": "neither",
+          "judge_note": "A est seule à nommer Intl.Collator; B est seule à détailler les formats allemands et le piège des requêtes N+1."
+        }
+      ]
     },
     {
       "case": "clarify-confusing-copy",
-      "verdict": "DIVERGENT",
-      "note": "With the file: establish the reader's state before rewriting, then the ordered passes, and the rule that precision added in a later pass breaks the voice set in an earlier one, so you go back. Plus the help-text rule, that repeating the label in a tooltip teaches readers to ignore every tooltip. Without: inventory, prioritise, error formula, button formula, style guide. Good, and flat.",
-      "decided": "cut of 55 percent validated, the deepest in the corpus"
+      "verdict": "EQUIVALENT",
+      "agreement": "unanimous",
+      "note": "The largest correction to the v3.0.0 record, which called this the deepest validated cut in the corpus. Blind, the control goes further in all three draws. The file carries the concepts the markers ask for, the ordered passes and the voice rule, and the control out-specifies it every time on operational numbers. Either the cut went too far or the markers measure the wrong thing. The harness cannot tell which and does not pretend to.",
+      "control_taught_us": "size a button at 2 to 4 words, cap the style guide at one page, test with 5 readers, cap the glossary at 20 terms",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "BA",
+          "markers_corpus": 3,
+          "markers_control": 3,
+          "further": "control",
+          "judge_note": "A pose des seuils chiffrés (2 à 4 mots par bouton, une page de guide de style, 5 testeurs); B ne compense que par des pièges nommés sans chiffrer ses règles."
+        },
+        {
+          "draw": 2,
+          "order": "AB",
+          "markers_corpus": 3,
+          "markers_control": 1,
+          "further": "control",
+          "judge_note": "A développe la voix de marque et les passes successives; B va plus loin dans le chiffrage opérationnel (5 testeurs, seuil de 10 chiffres, inventaire en tableur)."
+        },
+        {
+          "draw": 3,
+          "order": "BA",
+          "markers_corpus": 1,
+          "markers_control": 2,
+          "further": "control",
+          "judge_note": "A chiffre presque chaque règle (8 caractères, glossaire de 20 mots, test à 5 personnes) et nomme le jargon à bannir; B reste qualitatif."
+        }
+      ]
     },
     {
       "case": "a11y-axe-is-green",
       "verdict": "DIVERGENT",
-      "note": "Both answers correctly say no. The difference is sourcing and specificity: the file carries the measured 57.38 percent from Deque with its date where the control invents 30 to 40 percent, and only the file produces the title-as-accessible-name trap, the combobox aria-activedescendant bug and the focus ring measured against adjacent colours rather than the page background.",
-      "decided": "cut of 40 percent validated"
+      "agreement": "unanimous",
+      "note": "Unanimous, and the mechanism is sourcing rather than coverage. Every control draw invented a figure around 30 to 40 percent. Every corpus draw carried the measured 57.38 percent from Deque with its date.",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 2,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A source son affirmation centrale (Deque, 2025, 57,38 %, 16 critères sur 50); B avance 30 à 40 % sans source ni norme."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 2,
+          "further": "corpus",
+          "judge_note": "B chiffre 57,38 % et 16 critères sur 50, donne le CSS du focus avec 3:1 sur couleurs adjacentes et nomme le piège du titre de modale."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 3,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A cite Deque 2025 avec 57,38 % et 16 critères sur 50; B se limite à une fourchette non sourcée de 30 à 40 %."
+        }
+      ]
     }
   ]
 }

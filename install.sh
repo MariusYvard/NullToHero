@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="3.0.0"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="3.1.0"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'

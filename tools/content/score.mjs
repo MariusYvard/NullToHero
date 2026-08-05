@@ -29,6 +29,7 @@
  */
 import { readFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const args = process.argv.slice(2);
 const has = (n) => args.includes(n);
@@ -690,5 +691,8 @@ function main() {
 
 // Only run the CLI when this file IS the command, so importing scoreDocument() from another
 // tool cannot exit the importing process.
+// fileURLToPath, not new URL(...).pathname: on Windows the latter returns /C:/... with a
+// leading slash, the comparison never matches, and the CLI silently does nothing. v3.0.0
+// fixed this in three tools and missed this one.
 const entry = process.argv[1] ? resolve(process.argv[1]) : "";
-if (decodeURIComponent(new URL(import.meta.url).pathname) === entry) main();
+if (fileURLToPath(import.meta.url) === entry) main();
