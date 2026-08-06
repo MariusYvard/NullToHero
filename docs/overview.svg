@@ -17,7 +17,7 @@
   <text x="40" y="56" font-family="Segoe UI, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" class="h" fill="#0f172a">NullToHero</text>
   <text x="40" y="84" font-family="Segoe UI, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="16" class="muted" fill="#64748b">From zero to a website you can publish, right inside Claude.</text>
   <rect class="pill" x="806" y="36" width="74" height="26" rx="13" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
-  <text x="843" y="53" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="700" class="acc-indigo" fill="#4f46e5">v3.4.1</text>
+  <text x="843" y="53" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="700" class="acc-indigo" fill="#4f46e5">v3.5.0</text>
 
   <!-- Card 1: siteasy -->
   <g>

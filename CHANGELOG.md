@@ -11,6 +11,55 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.5.0] - 2026-08-06
+
+The bench goes from 8 cases to 13, the marker lists are pre-registered, and the
+result worth reading is not that the corpus wins.
+
+### Added
+
+- **`tools/eval-corpus/preregistration.json`, and the guard that makes it bite.**
+  A marker list in `cases.json` that differs from the one declared there fails the
+  harness. v3.4.0 said the fix for a stale marker list was to declare a new one
+  before the next run; this is that sentence made checkable, and its commit lands
+  before the commit carrying the results.
+- **Every declaration carries a falsifiable prediction, and the harness scores
+  it.** A design that is never wrong predicted nothing. Of the six: 1 held, 4 held
+  partly, 1 was wrong.
+- **Five cases on ground the bench had never touched:** `geo`, `parallax`,
+  `slop-patterns`, `migration`, `hreflang`. The original eight were all files
+  v3.0.0 had cut, which is a useful bias and still a bias.
+- **A pre-registered case with no result reports AWAITING, not failure.**
+  Forbidding that state would force the declaration and the result into one
+  commit, which is what pre-registration exists to separate.
+
+### Changed
+
+- **The clarify marker list is retired for matching by accident.** A judge counted
+  the control's grammatical "voix active" against the marker "voice", which means
+  brand voice. Single words are replaced by named claims.
+- **13 cases: 5 DIVERGENT, 6 DIVERGENT_NARROW, 1 EQUIVALENT, 1 SPLIT.**
+
+### The finding
+
+Across the 18 draws of the second wave the corpus arm was judged to go further in
+**17**. It carried its own declared markers in far fewer: 4 of 4 on `hreflang`
+every time, 1 of 4 on `geo`, 0 of 4 on `clarify`. The case predicted weakest came
+out the strongest in the whole bench, and the three predicted strongest all came
+out narrow.
+
+The dividing line is not how good a file is. It is whether its distinctive content
+is a **fact** or a **structure**. An HTTP status, a region subtag, a canonical
+rule: those reach a 350-word answer intact. A scoring scheme, a refusal table, a
+compensation formula, an ordered set of editing passes: those get paraphrased
+away. So a low marker count means the answer was compressed, not necessarily that
+the file failed, and the direction is the more reliable of the two signals.
+
+That limit is now in `run.mjs` next to the others, stated rather than discovered
+by somebody else later.
+
+---
+
 ## [3.4.1] - 2026-08-06
 
 ### Fixed

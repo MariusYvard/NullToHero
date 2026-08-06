@@ -1,7 +1,7 @@
 {
-  "$comment": "Recorded outcomes, one entry per case with every draw inside it. Verdicts are DIVERGENT (the file changed what the model reached for, by two markers or more), DIVERGENT_NARROW (it did, by one), EQUIVALENT (it did not, which licenses a cut) and SPLIT (three draws, no majority, the harness declining to answer). Every verdict is recomputed from its own draws by run.mjs, so a summary cannot drift from its data. Three of the eight cases moved against the corpus relative to the self-judged run of 2026-08-04, which is the reason re-running it was worth the cost. One of those three, clarify-confusing-copy, was re-recorded on 2026-08-06 after the file was changed to carry what the control had been producing; its previous entry is kept inline under `previously` rather than deleted. Every other case still carries its 2026-08-05 measurement.",
+  "$comment": "Recorded outcomes, one entry per case with every draw inside it. Verdicts are DIVERGENT (the file changed what the model reached for, by two markers or more), DIVERGENT_NARROW (it did, by one or none), EQUIVALENT (it did not) and SPLIT (three draws, no majority). Every verdict is recomputed from its own draws by run.mjs. Thirteen cases: eight from the v3.0.0 cut set measured on 2026-08-05, and six measured on 2026-08-06 against markers declared beforehand in preregistration.json. The headline of the second wave is not that the corpus wins, it is WHICH markers survive: a marker that is a checkable fact reaches a 350-word answer, a marker that is a system or an argument does not.",
   "protocol": "open-question divergence, blind paired comparison. One reader is given only the reference file, one is given nothing and told to open no file. Same question, 350 words each. Draw i of one arm is paired with draw i of the other and shown to the judge as A and B, in an order fixed by FNV-1a over the case id and the draw number, and the judge is never told which is which.",
-  "recorded": "2026-08-05",
+  "recorded": "2026-08-06",
   "n": 3,
   "generator": "claude-opus-5, one agent per draw, no context shared between draws or between arms",
   "judge": {
@@ -209,42 +209,40 @@
     {
       "case": "clarify-confusing-copy",
       "verdict": "DIVERGENT_NARROW",
-      "agreement": "unanimous",
-      "note": "Turned over, and the way it turned over is the part to read. The file now goes further in all three draws, where on 2026-08-05 the control went further in all three. It also hits FEWER of its own markers than the control does, in all three draws. Both facts are the same fact: the 350 words that used to carry the ordered passes now carry the inventory, the triage and the stopping test, and the marker list was written against the passes. The mechanical rule gives DIVERGENT_NARROW because the direction is the corpus and the marker evidence does not corroborate it, which is the honest reading and not a disappointing one.",
-      "control_taught_us": "inventory every string in three columns before rewriting, triage by traffic and by error frequency from the logs, size a button at 2 to 4 words, cap the style guide at one page and the glossary at 20 terms, stop when 5 readers answer in 5 seconds. All of it is now in the file, credited there.",
+      "agreement": "2-1",
+      "note": "Zero markers on both arms, in all three draws. The file supplies the ordered passes, the return rule, the help-text rule and the audience precondition, and none of them reach a 350-word answer: the budget goes to the operational half instead. The corpus still goes further in two draws of three. Prediction was 3 or 4 for the corpus and it was 0.",
+      "prediction_held": false,
       "draws": [
         {
           "draw": 1,
           "order": "BA",
-          "markers_corpus": 1,
-          "markers_control": 3,
+          "markers_corpus": 0,
+          "markers_control": 0,
           "further": "corpus",
-          "judge_note": "B chiffre presque chaque règle (2 à 4 mots par bouton, un seul bouton principal, test des cinq secondes, vingt termes produit) là où A reste plus qualitatif; A est seul à donner l'exemple mot de passe et à recommander d'écouter les tickets."
+          "judge_note": "Ni A ni B ne reprennent les quatre marqueurs; B va plus loin dans le concret (20 termes, 2 à 4 mots, 5 secondes, 3 messages contre 50) et nomme plus de pièges."
         },
         {
           "draw": 2,
           "order": "AB",
-          "markers_corpus": 1,
-          "markers_control": 2,
-          "further": "corpus",
-          "judge_note": "A pose des seuils chiffrés précis (2 à 4 mots par bouton, 20 termes documentés, test chronométré à 5 secondes, écrans prioritaires nommés) que B n'égale pas; B nomme une liste de jargon interdit plus détaillée."
+          "markers_corpus": 0,
+          "markers_control": 0,
+          "further": "control",
+          "judge_note": "Ni A ni B ne reprend les marqueurs attendus; B va un peu plus loin avec un seuil chiffré dans un message, du jargon nommé et le piège Oui/Non."
         },
         {
           "draw": 3,
           "order": "BA",
           "markers_corpus": 0,
-          "markers_control": 4,
+          "markers_control": 0,
           "further": "corpus",
-          "judge_note": "B ajoute des seuils et pièges plus concrets (format de date, un seul bouton principal par écran, message d'erreur à côté du champ plutôt qu'en résumé); A couvre mieux les marqueurs."
+          "judge_note": "Aucune des deux n'implémente les passes nommées ni le retour ni la règle des infobulles; B va plus loin sur les actions destructives et le double seuil cinq personnes cinq secondes."
         }
       ],
-      "rerecorded": "2026-08-06, after clarify.md gained what the control had been producing",
-      "markers_stale": "The markers (pass, voice, back, help text) describe the file as it was before 2026-08-06 and no longer describe what it contributes. Revising them is the obvious next step and must be done by declaring the new list BEFORE the run that uses it. Changing markers after seeing a result is how a benchmark starts grading itself.",
       "previously": {
-        "recorded": "2026-08-05",
-        "verdict": "EQUIVALENT",
+        "recorded": "2026-08-06, after clarify.md gained what the control had been producing",
+        "verdict": "DIVERGENT_NARROW",
         "agreement": "unanimous",
-        "note": "The control went further in all three draws, every time on operational specifics. That is what prompted the change to the file rather than a change to the markers."
+        "note": "Judged against the marker list retired on 2026-08-06 for matching by accident."
       }
     },
     {
@@ -278,6 +276,172 @@
           "judge_note": "A cite Deque 2025 avec 57,38 % et 16 critères sur 50; B se limite à une fourchette non sourcée de 30 à 40 %."
         }
       ]
+    },
+    {
+      "case": "geo-worth-it",
+      "verdict": "DIVERGENT_NARROW",
+      "agreement": "unanimous",
+      "note": "Unanimous, and the mechanism is one marker doing all the work: the corpus arm carries the coverage spread with its sample every time, and the control names no figure it can source. The three attribution corrections never survive the word budget.",
+      "prediction_held": "partial",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A source précisément (Pew, 68 879 recherches, mars 2025, 18 %) et nomme le piège GPTBot contre les SearchBot; aucune des deux ne porte les marqueurs sur les +527 %, le 4.4x ou la corrélation."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B reprend la fourchette 9,5 à 60 % avec le contrepoint Pew et est nettement plus concret (92 %, tailles d'échantillon, piège GPTBot contre OAI-SearchBot, cas du 403)."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A reprend fidèlement la fourchette avec sa source et sa date et nomme ClaudeBot contre Claude-SearchBot; B ne valide aucun des quatre marqueurs."
+        }
+      ]
+    },
+    {
+      "case": "parallax-hero",
+      "verdict": "DIVERGENT_NARROW",
+      "agreement": "unanimous",
+      "note": "Unanimous in direction and thin in evidence. The go/no-go refusal appears in one draw of three; the scale compensation formula, the combined reduced-motion reset and smoothTouch never appear. What does reach the answer every time is the numeric furniture, the 768px breakpoint and the asset budgets.",
+      "prediction_held": "partial",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 0,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "Ni A ni B ne portent la formule translateZ sur perspective, le reset combiné ni smoothTouch false; A va plus loin avec 768px, 200 Ko, 50 à 80 Ko et les ratios."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B pose un vrai filtre go/no-go excluant les UI produit, absent de A, et va nettement plus loin dans le chiffré; ni l'une ni l'autre ne donne la formule ni le reset combiné."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "A traite le tableau de bord vu cinquante fois par jour comme un refus d'emblée et multiplie les seuils; B reste général et ne valide aucun marqueur."
+        }
+      ]
+    },
+    {
+      "case": "slop-detection",
+      "verdict": "DIVERGENT_NARROW",
+      "agreement": "2-1",
+      "note": "The scoring system reached the answer once out of three, and when it did the margin was two markers. The other two draws produced the file's examples without its system, which is the shape of a paraphrase.",
+      "prediction_held": "partial",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 0,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "Ni A ni B ne proposent de score depuis 100, de seuil de densité du tiret long, de regex par motif ni de réécriture systématique; A cite des formules exactes pour presque chaque motif."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 2,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B porte un vrai système de score (départ 100, seuils, cap de deux occurrences) et une réécriture avant après chiffrée; A reste sur des conseils génériques."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 0,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "Ni A ni B n'implémente le score, le seuil de densité, les regex ni un avant après systématique; A va plus loin avec deux réécritures chiffrées."
+        }
+      ]
+    },
+    {
+      "case": "domain-migration",
+      "verdict": "DIVERGENT_NARROW",
+      "agreement": "2-1",
+      "note": "The T+1 T+7 T+30 window is the marker that travels. The 1 percent and 10 referring domain dials never survive, and neither does the loss-per-migration-type table, even though the corpus arm is judged more concrete in all three draws.",
+      "prediction_held": "partial",
+      "draws": [
+        {
+          "draw": 1,
+          "order": "BA",
+          "markers_corpus": 2,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "B couvre le vrai 404 plutôt que la redirection vers l'accueil et les mesures J+1 J+7 J+30 sur baseline; A n'atteint aucun marqueur."
+        },
+        {
+          "draw": 2,
+          "order": "AB",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "Seul A reprend le schéma T+1 T+7 T+30 adossé à une capture avant migration et détaille chaînes, boucles et TTL; B reste sur une surveillance hebdomadaire générique."
+        },
+        {
+          "draw": 3,
+          "order": "BA",
+          "markers_corpus": 1,
+          "markers_control": 0,
+          "further": "corpus",
+          "judge_note": "Seul B porte le suivi J+1 J+7 J+30 avec baseline; B va bien plus loin (301 contre 302, saut unique, TTL, robots.txt de préprod, seuil de rollback)."
+        }
+      ]
+    },
+    {
+      "case": "hreflang-three-languages",
+      "verdict": "DIVERGENT",
+      "agreement": "unanimous",
+      "note": "The strongest result in the whole bench and the one predicted to be weakest. Four markers out of four in every draw against one for the control, unanimous. The self-canonical trap, the uppercase region subtag and the 200 rule appear every time.",
+      "prediction_held": true,
+      "draws": [
+        {
+          "draw": 1,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "A couvre les quatre pièges (réciprocité, canonique vers la langue par défaut, casse en-GB contre en-uk, code 200); B ne traite que la réciprocité."
+        },
+        {
+          "draw": 2,
+          "order": "BA",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "B couvre les quatre marqueurs avec les codes HTTP, la casse du sous-tag région et l'alternative sitemap; A ne couvre que la réciprocité."
+        },
+        {
+          "draw": 3,
+          "order": "AB",
+          "markers_corpus": 4,
+          "markers_control": 1,
+          "further": "corpus",
+          "judge_note": "A couvre les quatre marqueurs avec ISO 639-1, l'exemple en-uk contre en-GB et les codes HTTP; B omet la conséquence du canonique, la casse et les codes."
+        }
+      ]
     }
-  ]
+  ],
+  "finding": "Across the 18 draws of 2026-08-06 the corpus arm was judged to go further in 17. It carried the named markers in far fewer: 4 of 4 on hreflang every time, 1 of 4 on geo every time, and 0 of 4 on clarify every time. The cases predicted strongest came out narrow and the case predicted weakest came out unanimous. The dividing line is not how good the file is, it is whether its distinctive content is a fact or a structure. Facts survive compression into 350 words; a scoring system, a refusal table, a formula and an ordered set of passes do not. That limits what this bench can measure and is now stated rather than discovered later."
 }

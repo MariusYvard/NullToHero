@@ -85,8 +85,18 @@
  *     Blinding the judge removes the grader's bias, not the designer's.
  *   - n is 3. That is enough to see a split and not enough for a confidence
  *     interval. Three draws agreeing is weak evidence of stability, not proof.
- *   - Eight cases against a corpus of 123 files. The cases were chosen because
- *     they were the contested cuts, which is the useful bias and still a bias.
+ *   - Thirteen cases against a corpus of 123 files. The first eight were the
+ *     contested cuts of v3.0.0, which is the useful bias and still a bias. The
+ *     five added on 2026-08-06 deliberately went elsewhere.
+ *   - It measures fact transfer well and structure transfer badly, and the second
+ *     wave is what showed it. Across those 18 draws the corpus arm was judged to
+ *     go further in 17 and carried its own markers in far fewer: 4 of 4 on
+ *     hreflang every time, 1 of 4 on geo, 0 of 4 on clarify. A marker that is a
+ *     checkable fact (an HTTP status, a code, a canonical rule) reaches a
+ *     350-word answer. A marker that is a system (a scoring scheme, a refusal
+ *     table, a formula, an ordered set of passes) is paraphrased away. So a low
+ *     marker count here means the answer was compressed, not necessarily that
+ *     the file failed, and the direction is the more reliable of the two signals.
  *
  * The right reading of a green run is narrow: on these cases, this file changed
  * what the model reached for. Not: this plugin makes design better.
@@ -237,6 +247,22 @@ for (const r of results.runs || []) {
   if (r.agreement !== agreement) no(`${r.case}: agreement recorded as "${r.agreement}", draws give "${agreement}"`);
 }
 if (!failures) ok("every recorded verdict recomputes from its own draws, and every agreement matches");
+
+// The pre-registration is only worth its commit if the prediction is scored.
+// A design that is never wrong is a design that predicted nothing.
+if (preDecl) {
+  const scored = (results.runs || []).filter(r => "prediction_held" in r);
+  if (scored.length) {
+    const held = scored.filter(r => r.prediction_held === true);
+    const failed = scored.filter(r => r.prediction_held === false);
+    const partial = scored.filter(r => r.prediction_held === "partial");
+    console.log("\nPredictions, declared before the draws");
+    console.log(`  ${held.length} held, ${partial.length} partly, ${failed.length} wrong, out of ${scored.length}`);
+    for (const r of [...failed, ...partial]) {
+      console.log(`    ${r.case} (${r.prediction_held === false ? "wrong" : "partly"}): ${preDecl.cases[r.case].prediction}`);
+    }
+  }
+}
 
 console.log("\nOutcomes");
 const byVerdict = {};
