@@ -221,6 +221,19 @@ if (narrow.length) {
   console.log(`\n  Narrow passes:`);
   for (const r of narrow) console.log(`    ${r.case}: ${r.note}`);
 }
+// A case where the corpus goes further while hitting fewer markers than the
+// control is not a contradiction, it is a stale marker list: the file changed and
+// the markers still describe the old one. Surfaced as a note and not a failure,
+// because the fix is to declare a new list BEFORE the next run and not to edit the
+// list after reading the result.
+const stale = (results.runs || []).filter(r =>
+  (r.draws || []).length &&
+  r.draws.every(d => d.further === "corpus" && d.markers_corpus < d.markers_control));
+if (stale.length) {
+  console.log(`\n  Cases whose markers no longer describe the file:`);
+  for (const r of stale) console.log(`    ${r.case}: goes further in every draw and hits fewer of its own markers in every draw`);
+}
+
 const taught = (results.runs || []).filter(r => r.control_taught_us);
 if (taught.length) {
   console.log(`\n  Cases where the CONTROL produced something the corpus lacked:`);

@@ -80,7 +80,7 @@ probe in the browser rather than sitting in a reference file waiting for a reade
 | 51 Pins need a scroll track | The resolved track height against the viewport |
 | 52 Transforms create containing blocks | Which ancestor became the containing block |
 | 62 Hide marquee clones | Which copies exist, since a marquee clones its track at runtime |
-| 68 Guarantee decorative video playback | Whether the autoplay hero is actually paused right now |
+| 68 Guarantee decorative video playback | Whether the decorative hero is playing, blocked, or frozen on its last frame |
 
 ```bash
 node tools/inspect/rendered.mjs --source

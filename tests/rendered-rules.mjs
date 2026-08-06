@@ -51,6 +51,10 @@ const page = await browser.newPage({ viewport: VIEWPORT });
 const results = new Map();
 for (const file of files.sort()) {
   await page.goto(pathToFileURL(join(FX, file)).href, { waitUntil: "load" });
+  // Actually wait. Passing elapsedMs without spending it made the harness assert
+  // a timing condition it never met: rule 68 read every video before it had a
+  // chance to start, and rule 27 passed only because its fixture is static.
+  await page.waitForTimeout(WAIT);
   const { findings } = await page.evaluate(probe, { elapsedMs: WAIT });
   results.set(file, findings);
 }
@@ -58,15 +62,22 @@ await browser.close();
 
 console.log("Fixtures, both directions");
 for (const id of RENDERED_RULE_IDS) {
-  for (const kind of ["bad", "good"]) {
-    const file = `${id}-${kind}.html`;
-    const hits = results.get(file);
-    if (!hits) { no(`rule ${id}: no ${kind} fixture`); continue; }
-    const own = hits.filter(f => f.id === id);
-    if (kind === "bad" && !own.length) no(`rule ${id}: silent on its own bad fixture`);
-    else if (kind === "good" && own.length) no(`rule ${id}: fires on its clean fixture — ${own[0].evidence}`);
-    else ok(`rule ${id} ${kind === "bad" ? "fires on the defect" : "stays quiet on the clean case"}${kind === "bad" ? ` — ${own[0].evidence.slice(0, 72)}` : ""}`);
+  // A rule can carry more than one firing fixture (<id>-bad.html, <id>-bad2.html)
+  // when it reports genuinely different shapes. Every one of them must fire, so
+  // adding a branch without a fixture is a failure and not a quiet gap.
+  const bad = files.filter(f => new RegExp(`^${id}-bad\\d*\\.html$`).test(f)).sort();
+  if (!bad.length) no(`rule ${id}: no bad fixture`);
+  for (const file of bad) {
+    const own = (results.get(file) || []).filter(f => f.id === id);
+    if (!own.length) no(`rule ${id}: silent on ${file}`);
+    else ok(`rule ${id} fires on ${file} — ${own[0].evidence.slice(0, 76)}`);
   }
+  const clean = `${id}-good.html`;
+  const hits = results.get(clean);
+  if (!hits) { no(`rule ${id}: no clean fixture`); continue; }
+  const own = hits.filter(f => f.id === id);
+  if (own.length) no(`rule ${id}: fires on its clean fixture — ${own[0].evidence}`);
+  else ok(`rule ${id} stays quiet on the clean case`);
 }
 
 console.log("\nCross-contamination on clean fixtures");

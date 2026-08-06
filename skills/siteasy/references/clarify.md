@@ -1,7 +1,7 @@
 ---
 name: clarify
 description: "Identify and improve unclear, confusing, or poorly written interface text to make the product easier to understand and use."
-version: 1.6.1
+version: 1.7.0
 ---
 
 > **Additional context needed**: audience technical level and users' mental state in context.
@@ -10,6 +10,22 @@ Identify and improve unclear, confusing, or poorly written interface text to mak
 
 
 ---
+
+## Inventory before you rewrite
+
+You cannot improve what you have not listed, and the list is what turns "the copy is
+confusing" into a finite job. Walk the product and put every visible string in three
+columns: where it is, what it says now, and what the reader is trying to do there. The
+inconsistencies surface on their own, and they are usually the loudest problem: "Valider",
+"OK" and "Confirmer" for the same action, on three screens.
+
+Then do not rewrite all of it. Two lists decide the order, and both already exist:
+
+- The most visited screens. Sign-up, sign-in, the primary action, checkout.
+- The most frequent errors. Your logs have the ranking; you do not have to guess it.
+
+Three messages rewritten well beat fifty rewritten approximately, and the first three tell
+you whether the voice you picked survives contact with a real screen.
 
 ## Assess Current Copy
 
@@ -48,6 +64,14 @@ proof, which is exactly what the return pass is for.
 After each pass, return to the passes before it. The sequence matters: specificity added
 in pass 5 frequently breaks the voice set in pass 2.
 
+### Knowing when to stop
+
+The passes have no natural end, so give them one that is not your own judgement. Show a
+screen to five readers from outside the project for five seconds and ask what the main
+button does. Five is enough to surface most of the confusion and, more usefully, to settle
+the arguments of taste that otherwise run forever. Where they hesitate is the list of what
+to rewrite next; where they answer instantly, stop editing.
+
 Passes 3, 4 and 7 have their own references. The claim and evidence work belongs to
 [../../../agents/siteasy-agent-claims.md](../../../agents/siteasy-agent-claims.md), the
 objection inventory to [objections.md](objections.md), and the risk reversal to
@@ -70,9 +94,11 @@ Microcopy is interface. The same rules every time: clear, concise, consistent, u
 
 Structure every error as what happened, why, and how to fix it: "Payment declined. Your bank rejected the charge. Try another card or contact your bank." Not "Error 402". Name the problem in the reader's terms, never the system's.
 
+Two rules that decide whether the rewrite lands. Never blame the reader: "You entered an invalid value" becomes "The expected format is DD/MM/YYYY". And render the message beside the field it belongs to, not in a summary at the top of the form, which is registry rule 23 and is checked by the rendered probe.
+
 ### Calls to action
 
-Label the outcome, not the mechanism: "Start the trial", "Send the invite", "Delete account". Avoid "Submit", "OK" and "Click here". The label should make sense read alone.
+Label the outcome, not the mechanism: "Start the trial", "Send the invite", "Delete account". Avoid "Submit", "OK" and "Click here". Verb plus object, two to four words. The test is to cover the rest of the screen: if the button still reads unambiguously on its own, it is done. One primary button per screen.
 
 ### Empty states
 
@@ -91,6 +117,10 @@ every tooltip you write.
 ### Tone
 
 Write like a competent person, not a mascot and not a manual. Drop filler ("please note that", "in order to"). Match the moment: plain in errors, warmer in success, never jokey in a failure the reader did not cause.
+
+Write the rules down once, on one page, or you will relitigate them on every screen: the address form, the tense, and the twenty product terms with their single permitted wording. A term that only exists in your database has no business on screen.
+
+Where the additions above came from: the blind evaluation of 2026-08-05 recorded three draws in which the reader given nothing went further than the reader given this file, every time on operational specifics. The inventory, the triage by traffic and by error frequency, the stopping test at five readers, the button sizing and the one-page rule are what the control produced and this file lacked. Recorded in `tools/eval-corpus/results.json` under `clarify-confusing-copy`.
 
 ## Spotting machine-written copy
 

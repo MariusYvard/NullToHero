@@ -20,7 +20,7 @@ until v3.2.0 the plugin said so and left them to a human reader.
 | 51 Pins need a scroll track | The resolved height of the track against the viewport |
 | 52 Transforms create containing blocks | Which ancestor in the rendered chain became the containing block |
 | 62 Hide marquee clones | Which copies exist, since a marquee clones its track at runtime |
-| 68 Guarantee decorative video playback | Whether the autoplay hero is actually paused right now |
+| 68 Guarantee decorative video playback | Whether the decorative hero is playing, blocked, or frozen on its last frame |
 
 ## One probe, two runners
 
@@ -96,9 +96,16 @@ shorter than half the viewport is skipped on purpose.
 
 Rule 68 does not decide the architecture the registry entry prescribes. Whether a
 canvas decoder is the right answer is a build decision. What the probe answers is
-narrower and more useful: this autoplay hero is paused right now, and here is
-whether the attributes explain it. That covers the iOS Low Power Mode case the
-entry describes and could never test, and also the plain missing `muted`.
+narrower and more useful: this decorative hero is not playing right now, and here
+is which of the two reasons applies.
+
+The first is that it never started, which covers the iOS Low Power Mode case the
+entry describes and could never test, and the plain missing `muted` besides. The
+second is the one that survives review: a hero with no `loop` plays once while
+somebody is watching, then sits frozen on its last frame for every visitor after
+that. A decorative video loops or it is not decorative, so the absence of `loop`
+is reported as a defect and not as a preference. Videos with `controls` are out of
+scope here: the reader chose to watch those and they are allowed to end.
 
 Rule 5 does not decide whether colour is the only signal in the abstract, which
 needs to know what the colour means. It decides the half that is observable: this

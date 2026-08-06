@@ -163,16 +163,27 @@ export function probe(opts) {
   // autoplay policy, the missing muted attribute and the tab that never got a
   // gesture. One observation, no guessing.
   if (elapsedMs >= 2000) {
-    for (const v of Array.from(document.querySelectorAll("video[autoplay]")).slice(0, 3)) {
+    // Decorative only. A video with `controls` is one the reader chose to watch
+    // and is allowed to end; that one is rule 67's subject.
+    for (const v of Array.from(document.querySelectorAll("video[autoplay]:not([controls])")).slice(0, 3)) {
       if (!visible(v)) continue;
       if (!v.paused) continue;
+      // Two ways a decorative hero is not playing, and they need different fixes.
+      // Ended without `loop` is the one that looks fine in review: it plays once
+      // while somebody watches, then sits frozen on its last frame forever. A
+      // hero loops or it is not a hero.
+      if (v.ended && !v.hasAttribute("loop")) {
+        add(68, label(v), `an autoplay hero played once and is frozen on its last frame ${Math.round(elapsedMs)}ms after load, because it declares no loop`);
+        continue;
+      }
       const missing = [];
       if (!v.muted && !v.hasAttribute("muted")) missing.push("muted");
       if (!v.hasAttribute("playsinline")) missing.push("playsinline");
+      if (!v.hasAttribute("loop")) missing.push("loop");
       const why = missing.length
         ? `it is missing ${missing.join(" and ")}`
         : `the attributes are right, so the browser refused it anyway and nothing catches that`;
-      add(68, label(v), `an autoplay video is still paused ${Math.round(elapsedMs)}ms after load and ${why}${v.poster ? "" : ", with no poster to fall back to"}`);
+      add(68, label(v), `an autoplay hero is still paused ${Math.round(elapsedMs)}ms after load and ${why}${v.poster ? "" : ", with no poster to fall back to"}`);
     }
   }
 

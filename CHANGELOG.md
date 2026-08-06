@@ -11,6 +11,55 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.4.0] - 2026-08-06
+
+`clarify.md` gets what its own evaluation said it was missing, and the case is
+re-run blind. It turns over, and the way it turns over is worth reading.
+
+### Changed
+
+- **`clarify.md` carries the entry point it had lost.** The v3.0.0 cut kept the
+  doctrine, the ordered passes and the return rule, and dropped everything that
+  tells a reader where to start and how to know they are done. The blind run of
+  2026-08-05 recorded the control going further in all three draws, every time on
+  operational specifics. Added, credited to the control in the file and in
+  `results.json`: inventory every string in three columns, triage by traffic and
+  by error frequency from the logs, size a button at 2 to 4 words with one
+  primary per screen, cap the style guide at one page and the glossary at 20
+  terms, stop when 5 readers answer in 5 seconds.
+- **`clarify-confusing-copy` is re-recorded: EQUIVALENT unanimous to
+  DIVERGENT_NARROW unanimous.** The file now goes further in all three draws. It
+  also hits fewer of its own markers than the control does, in all three draws,
+  and those are the same fact: the 350 words that carried the passes now carry
+  the operational half, and the marker list was written against the passes. The
+  previous entry is kept inline under `previously` rather than deleted.
+- **The harness reports a stale marker list.** A case whose corpus arm goes
+  further in every draw while hitting fewer markers in every draw gets a named
+  note. It is a note and not a failure, because the fix is to declare a new
+  marker list BEFORE the next run. Editing markers after reading a result is how
+  a benchmark starts grading itself.
+
+### Fixed
+
+- **The rendered harness never waited.** It passed `elapsedMs: 2500` to the probe
+  and evaluated immediately after load, so it asserted a timing condition it had
+  not met. Rule 68 read every video before it could start; rule 27 passed only
+  because its fixture is static. It waits now.
+- **Rule 68 treats a decorative video that ended as a defect, which it is.** A
+  hero with no `loop` plays once while somebody is watching and then sits frozen
+  on its last frame for every visitor after that. `loop` joined the missing
+  attribute list, the frozen case has its own finding and its own fixture, and
+  videos with `controls` are out of scope because the reader chose to watch those
+  and they are allowed to end.
+
+### Added
+
+- **A rule may carry more than one firing fixture.** `<id>-bad.html`,
+  `<id>-bad2.html` and so on all must fire, so adding a branch without a fixture
+  is a failure and not a quiet gap.
+
+---
+
 ## [3.3.0] - 2026-08-06
 
 Three of the ten remaining rules had a decidable slice sharper than their own

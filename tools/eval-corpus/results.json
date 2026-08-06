@@ -1,5 +1,5 @@
 {
-  "$comment": "Recorded outcomes, one entry per case with every draw inside it. Verdicts are DIVERGENT (the file changed what the model reached for, by two markers or more), DIVERGENT_NARROW (it did, by one), EQUIVALENT (it did not, which licenses a cut) and SPLIT (three draws, no majority, the harness declining to answer). Every verdict is recomputed from its own draws by run.mjs, so a summary cannot drift from its data. Three of the eight cases moved against the corpus relative to the self-judged run of 2026-08-04, which is the reason re-running it was worth the cost.",
+  "$comment": "Recorded outcomes, one entry per case with every draw inside it. Verdicts are DIVERGENT (the file changed what the model reached for, by two markers or more), DIVERGENT_NARROW (it did, by one), EQUIVALENT (it did not, which licenses a cut) and SPLIT (three draws, no majority, the harness declining to answer). Every verdict is recomputed from its own draws by run.mjs, so a summary cannot drift from its data. Three of the eight cases moved against the corpus relative to the self-judged run of 2026-08-04, which is the reason re-running it was worth the cost. One of those three, clarify-confusing-copy, was re-recorded on 2026-08-06 after the file was changed to carry what the control had been producing; its previous entry is kept inline under `previously` rather than deleted. Every other case still carries its 2026-08-05 measurement.",
   "protocol": "open-question divergence, blind paired comparison. One reader is given only the reference file, one is given nothing and told to open no file. Same question, 350 words each. Draw i of one arm is paired with draw i of the other and shown to the judge as A and B, in an order fixed by FNV-1a over the case id and the draw number, and the judge is never told which is which.",
   "recorded": "2026-08-05",
   "n": 3,
@@ -208,36 +208,44 @@
     },
     {
       "case": "clarify-confusing-copy",
-      "verdict": "EQUIVALENT",
+      "verdict": "DIVERGENT_NARROW",
       "agreement": "unanimous",
-      "note": "The largest correction to the v3.0.0 record, which called this the deepest validated cut in the corpus. Blind, the control goes further in all three draws. The file carries the concepts the markers ask for, the ordered passes and the voice rule, and the control out-specifies it every time on operational numbers. Either the cut went too far or the markers measure the wrong thing. The harness cannot tell which and does not pretend to.",
-      "control_taught_us": "size a button at 2 to 4 words, cap the style guide at one page, test with 5 readers, cap the glossary at 20 terms",
+      "note": "Turned over, and the way it turned over is the part to read. The file now goes further in all three draws, where on 2026-08-05 the control went further in all three. It also hits FEWER of its own markers than the control does, in all three draws. Both facts are the same fact: the 350 words that used to carry the ordered passes now carry the inventory, the triage and the stopping test, and the marker list was written against the passes. The mechanical rule gives DIVERGENT_NARROW because the direction is the corpus and the marker evidence does not corroborate it, which is the honest reading and not a disappointing one.",
+      "control_taught_us": "inventory every string in three columns before rewriting, triage by traffic and by error frequency from the logs, size a button at 2 to 4 words, cap the style guide at one page and the glossary at 20 terms, stop when 5 readers answer in 5 seconds. All of it is now in the file, credited there.",
       "draws": [
         {
           "draw": 1,
           "order": "BA",
-          "markers_corpus": 3,
+          "markers_corpus": 1,
           "markers_control": 3,
-          "further": "control",
-          "judge_note": "A pose des seuils chiffrés (2 à 4 mots par bouton, une page de guide de style, 5 testeurs); B ne compense que par des pièges nommés sans chiffrer ses règles."
+          "further": "corpus",
+          "judge_note": "B chiffre presque chaque règle (2 à 4 mots par bouton, un seul bouton principal, test des cinq secondes, vingt termes produit) là où A reste plus qualitatif; A est seul à donner l'exemple mot de passe et à recommander d'écouter les tickets."
         },
         {
           "draw": 2,
           "order": "AB",
-          "markers_corpus": 3,
-          "markers_control": 1,
-          "further": "control",
-          "judge_note": "A développe la voix de marque et les passes successives; B va plus loin dans le chiffrage opérationnel (5 testeurs, seuil de 10 chiffres, inventaire en tableur)."
+          "markers_corpus": 1,
+          "markers_control": 2,
+          "further": "corpus",
+          "judge_note": "A pose des seuils chiffrés précis (2 à 4 mots par bouton, 20 termes documentés, test chronométré à 5 secondes, écrans prioritaires nommés) que B n'égale pas; B nomme une liste de jargon interdit plus détaillée."
         },
         {
           "draw": 3,
           "order": "BA",
-          "markers_corpus": 1,
-          "markers_control": 2,
-          "further": "control",
-          "judge_note": "A chiffre presque chaque règle (8 caractères, glossaire de 20 mots, test à 5 personnes) et nomme le jargon à bannir; B reste qualitatif."
+          "markers_corpus": 0,
+          "markers_control": 4,
+          "further": "corpus",
+          "judge_note": "B ajoute des seuils et pièges plus concrets (format de date, un seul bouton principal par écran, message d'erreur à côté du champ plutôt qu'en résumé); A couvre mieux les marqueurs."
         }
-      ]
+      ],
+      "rerecorded": "2026-08-06, after clarify.md gained what the control had been producing",
+      "markers_stale": "The markers (pass, voice, back, help text) describe the file as it was before 2026-08-06 and no longer describe what it contributes. Revising them is the obvious next step and must be done by declaring the new list BEFORE the run that uses it. Changing markers after seeing a result is how a benchmark starts grading itself.",
+      "previously": {
+        "recorded": "2026-08-05",
+        "verdict": "EQUIVALENT",
+        "agreement": "unanimous",
+        "note": "The control went further in all three draws, every time on operational specifics. That is what prompted the change to the file rather than a change to the markers."
+      }
     },
     {
       "case": "a11y-axe-is-green",
