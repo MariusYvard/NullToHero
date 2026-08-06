@@ -152,11 +152,43 @@ for (const c of cases.cases) {
 }
 if (!failures) ok(`${cases.cases.length} cases, all files present, all carry markers and a rationale`);
 
+// ── pre-registration ─────────────────────────────────────────────────────────
+// v3.4.0 recorded a case whose markers no longer described its file and said the
+// fix was to declare a new list before the next run. This turns that sentence
+// into a check: a marker list that differs from the declared one fails here, so
+// tuning a marker to suit a result cannot happen quietly. Its own commit lands
+// before the commit carrying the results, and git is the timestamp.
+const prePath = join(ROOT, "tools/eval-corpus/preregistration.json");
+if (existsSync(prePath)) {
+  console.log("\nPre-registered markers");
+  const pre = JSON.parse(readFileSync(prePath, "utf8"));
+  let drift = 0;
+  for (const c of cases.cases) {
+    const decl = pre.cases?.[c.id];
+    if (!decl) continue;
+    const a = JSON.stringify(decl.markers), b = JSON.stringify(c.markers);
+    if (a !== b) { drift++; no(`${c.id}: markers differ from the list declared on ${pre.declared}`); }
+    if (!decl.prediction) { drift++; no(`${c.id}: declared without a prediction, so nothing can be wrong`); }
+  }
+  const covered = cases.cases.filter(c => pre.cases?.[c.id]).length;
+  if (!drift) ok(`${covered} of ${cases.cases.length} cases carry markers declared on ${pre.declared}, each with a prediction`);
+}
+
 console.log("\nRecorded results");
 const recorded = new Map((results.runs || []).map(r => [r.case, r]));
+const preDecl = existsSync(join(ROOT, "tools/eval-corpus/preregistration.json"))
+  ? JSON.parse(readFileSync(join(ROOT, "tools/eval-corpus/preregistration.json"), "utf8")) : null;
 const missing = cases.cases.filter(c => !recorded.has(c.id));
-if (missing.length) missing.forEach(c => no(`${c.id}: declared but never run`));
-else ok(`every case has a recorded outcome`);
+// A case that is pre-registered and not yet drawn is the intended state between
+// declaring a marker list and spending the draws on it. It is reported and not
+// failed, because forbidding it would force the declaration and the result into
+// one commit, which is exactly what pre-registration exists to separate.
+const awaiting = missing.filter(c => preDecl?.cases?.[c.id]);
+const orphaned = missing.filter(c => !preDecl?.cases?.[c.id]);
+if (orphaned.length) orphaned.forEach(c => no(`${c.id}: has no result and was never pre-registered`));
+if (awaiting.length) console.log(`  \x1b[33mAWAITING\x1b[0m  ${awaiting.length} case(s) declared on ${preDecl.declared} and not yet drawn: ${awaiting.map(c => c.id).join(", ")}`);
+if (!missing.length) ok(`every case has a recorded outcome`);
+else if (!orphaned.length) ok(`every case that has been drawn has a recorded outcome`);
 
 const orphan = [...recorded.keys()].filter(id => !ids.has(id));
 if (orphan.length) orphan.forEach(id => no(`result recorded for unknown case: ${id}`));

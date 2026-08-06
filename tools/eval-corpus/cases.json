@@ -87,12 +87,12 @@
       "file": "skills/siteasy/references/clarify.md",
       "question": "Les textes de mon application sont confus, les gens ne comprennent pas les messages d'erreur et les boutons. Par où je commence ?",
       "markers": [
-        "pass",
-        "voice",
-        "back",
-        "help text"
+        "named editing passes in a fixed order, clarity then voice then so-what then prove-it then specificity then emotion then risk",
+        "return to the earlier passes after each one, because specificity added late breaks the voice set earlier",
+        "help text must add what the label cannot say, and restating the label in a tooltip trains readers to skip every tooltip",
+        "establish the audience and the reader's mental state before rewriting anything"
       ],
-      "rationale": "A bare model produces inventory, prioritise, error formula, button formula, style guide. It does not produce an ordered set of passes, nor the rule that precision added in a later pass breaks the voice set in an earlier one.",
+      "rationale": "A bare model produces inventory, triage, button formula, error formula and a style guide, all of which this file now also carries. What remains its own is the ordered set of editing passes, the rule that a later pass breaks an earlier one so you go back, the help-text rule and the audience precondition. Markers redeclared 2026-08-06 because the previous single words matched by accident.",
       "origin": "v3 stage 3 gate"
     },
     {
@@ -108,6 +108,71 @@
       ],
       "rationale": "Both answers say no. The difference is that the bare one invents a 30 to 40 percent figure while the file carries the measured 57.38 percent with its source, and only the file produces the title-as-accessible-name trap, the combobox aria-activedescendant bug and the focus ring measured against adjacent colours rather than the page background.",
       "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "geo-worth-it",
+      "file": "skills/seo/references/geo.md",
+      "question": "Tout le monde me dit d'optimiser mon site pour ChatGPT et les AI Overviews. Est-ce que ça vaut vraiment le coup, et par quoi je commence ?",
+      "markers": [
+        "the AI Overviews coverage figure is a spread from roughly 9.5 to 60 percent depending on the sample, so any single number is wrong",
+        "the +527 percent AI traffic growth is Previsible and not SparkToro, and it is off a base of about 17,000 sessions",
+        "4.4x as valuable is modelled value and not a 4.4x conversion rate",
+        "brand mentions against backlinks is a correlation whose own author warns against reading causally"
+      ],
+      "rationale": "A bare model gives confident single figures for AI Overview coverage and repeats the widely copied misattributions. The file refuses a single number, names the sample behind each one, and corrects the attribution and the causal reading.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "parallax-hero",
+      "file": "skills/siteasy/references/parallax.md",
+      "question": "Je veux un effet parallaxe sur la page d'accueil de mon site. Comment je fais ça bien ?",
+      "markers": [
+        "a numbered go/no-go check that refuses parallax outright when a row fails, including product UIs which never get it",
+        "the scale compensation formula for a translateZ layer, 1 plus the absolute translateZ over the perspective",
+        "the reduced-motion override must kill animation, transform and opacity together or the layer stays stuck on its first keyframe",
+        "smooth scrolling stays off on touch, smoothTouch false"
+      ],
+      "rationale": "A bare model produces transform-only animation, will-change hygiene and a reduced-motion media query. It does not refuse the effect on a numbered check, does not know the scale compensation formula, and does not know that killing only animation leaves the layer stuck on its first keyframe.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "slop-detection",
+      "file": "skills/siteasy/references/slop-patterns.md",
+      "question": "Comment je sais si un texte a été écrit par une IA, et comment je le corrige sans le dénaturer ?",
+      "markers": [
+        "a numeric score from 100 down with a fixed penalty per pattern and a cap per pattern",
+        "the long dash is judged by density against word count, around one per 200 words, and not by presence",
+        "each pattern ships a greppable regular expression rather than a description",
+        "a before and after rewrite for each pattern rather than a prohibition"
+      ],
+      "rationale": "A bare model lists tells and bans them. The file scores them, caps each pattern, judges the long dash by density rather than presence, and ships a rewrite instead of a prohibition.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "domain-migration",
+      "file": "skills/seo/references/migration.md",
+      "question": "Je change le nom de domaine de mon site. Comment je fais pour ne pas perdre mon référencement ?",
+      "markers": [
+        "numbered thresholds for a priority URL, 1 percent of organic traffic and 10 referring domains, stated as dials to set against the size of the site",
+        "an expected traffic loss and a recovery window per migration type, for instance 20 to 40 percent over 2 to 12 weeks for a URL structure change",
+        "where no equivalent page exists, a real 404 rather than a redirect to the homepage, which is a soft 404",
+        "measure at T+1, T+7 and T+30 against a baseline captured before the move"
+      ],
+      "rationale": "A bare model produces a 301 map, a sitemap update and Search Console monitoring. The file adds numbered thresholds for what is worth protecting, states them as dials against the size of the site, gives a recovery window per migration type, and refuses the homepage redirect that becomes a soft 404.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "hreflang-three-languages",
+      "file": "skills/seo/references/hreflang.md",
+      "question": "Mon site existe en français, en anglais et en espagnol. Comment je dis à Google quelle version montrer à qui ?",
+      "markers": [
+        "return tags: every page in the set links to all the others including itself, or the set is ignored",
+        "each page must be self-canonical, and canonicalising to the default language makes Google index only that one",
+        "the region subtag is uppercase, so en-uk is invalid and en-GB is correct",
+        "every URL referenced in an hreflang annotation must return 200 or it is ignored"
+      ],
+      "rationale": "The narrowest of the five, recorded as such before the draws. A bare model knows hreflang and x-default and may produce return tags unprompted. The self-canonical trap and the non-200 rule are what only the file gives.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
     }
   ]
 }

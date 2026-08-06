@@ -1,0 +1,62 @@
+{
+  "$comment": "Markers declared BEFORE the draws that use them. v3.4.0 recorded a case whose markers no longer described its file and stated that the fix was to declare a new list before the next run rather than after reading a result. This file is that promise made checkable: tests/../tools/eval-corpus/run.mjs fails when a case's markers in cases.json differ from the list declared here, so a marker cannot be edited to suit an outcome without the diff showing it. Its git commit is the timestamp, and it lands before the commit carrying the results.",
+  "declared": "2026-08-06",
+  "method": "Markers are written by reading the reference file and asking what a capable model would NOT reach for unprompted. That is the designer bias the harness already states and blinding does not remove it. Each entry carries a falsifiable prediction so the record shows whether the design held, not only whether the file won.",
+  "cases": {
+    "clarify-confusing-copy": {
+      "why_redeclared": "The previous list (pass, voice, back, help text) was single words that matched by accident: a judge counted the control's grammatical 'voix active' against the marker 'voice', which is brand voice. It also described the file as it stood before 2026-08-06. Both faults are fixed by naming each claim in full.",
+      "markers": [
+        "named editing passes in a fixed order, clarity then voice then so-what then prove-it then specificity then emotion then risk",
+        "return to the earlier passes after each one, because specificity added late breaks the voice set earlier",
+        "help text must add what the label cannot say, and restating the label in a tooltip trains readers to skip every tooltip",
+        "establish the audience and the reader's mental state before rewriting anything"
+      ],
+      "prediction": "The corpus hits 3 or 4 and the control hits 0 or 1. The operational half is now in both arms, so the file has to win on the doctrine or it wins on nothing."
+    },
+    "geo-worth-it": {
+      "markers": [
+        "the AI Overviews coverage figure is a spread from roughly 9.5 to 60 percent depending on the sample, so any single number is wrong",
+        "the +527 percent AI traffic growth is Previsible and not SparkToro, and it is off a base of about 17,000 sessions",
+        "4.4x as valuable is modelled value and not a 4.4x conversion rate",
+        "brand mentions against backlinks is a correlation whose own author warns against reading causally"
+      ],
+      "prediction": "The control produces confident single figures it cannot source. The corpus hits 2 or more; the control hits 0."
+    },
+    "parallax-hero": {
+      "markers": [
+        "a numbered go/no-go check that refuses parallax outright when a row fails, including product UIs which never get it",
+        "the scale compensation formula for a translateZ layer, 1 plus the absolute translateZ over the perspective",
+        "the reduced-motion override must kill animation, transform and opacity together or the layer stays stuck on its first keyframe",
+        "smooth scrolling stays off on touch, smoothTouch false"
+      ],
+      "prediction": "The control produces transform-only, will-change and prefers-reduced-motion. The corpus hits 2 or more; the control hits at most 1, and never the refusal table."
+    },
+    "slop-detection": {
+      "markers": [
+        "a numeric score from 100 down with a fixed penalty per pattern and a cap per pattern",
+        "the long dash is judged by density against word count, around one per 200 words, and not by presence",
+        "each pattern ships a greppable regular expression rather than a description",
+        "a before and after rewrite for each pattern rather than a prohibition"
+      ],
+      "prediction": "The control lists tells and bans them. The corpus hits 2 or more; the control hits 0 or 1 and produces no scoring system."
+    },
+    "domain-migration": {
+      "markers": [
+        "numbered thresholds for a priority URL, 1 percent of organic traffic and 10 referring domains, stated as dials to set against the size of the site",
+        "an expected traffic loss and a recovery window per migration type, for instance 20 to 40 percent over 2 to 12 weeks for a URL structure change",
+        "where no equivalent page exists, a real 404 rather than a redirect to the homepage, which is a soft 404",
+        "measure at T+1, T+7 and T+30 against a baseline captured before the move"
+      ],
+      "prediction": "The control produces 301 maps, sitemap updates and Search Console monitoring. The corpus hits 2 or more; the control hits at most 1."
+    },
+    "hreflang-three-languages": {
+      "markers": [
+        "return tags: every page in the set links to all the others including itself, or the set is ignored",
+        "each page must be self-canonical, and canonicalising to the default language makes Google index only that one",
+        "the region subtag is uppercase, so en-uk is invalid and en-GB is correct",
+        "every URL referenced in an hreflang annotation must return 200 or it is ignored"
+      ],
+      "prediction": "This is the narrowest of the five. The control knows hreflang and x-default and may well produce return tags on its own. The corpus hits 3 or more; the control hits 1 or 2, and the self-canonical trap is the one only the file gives."
+    }
+  }
+}
