@@ -517,6 +517,23 @@ export const RULES = [
     },
   },
   {
+    id: 46,
+    name: "Guard JS-only UI",
+    detect({ html, doc }) {
+      if (!/<head\b/i.test(html)) return [];
+      if (/<noscript\b/i.test(html)) return [];
+      // The shape is an empty mount point plus a script that fills it. A
+      // server-rendered page carries content inside its root and does not match,
+      // so this fires on the shell and not on every page that loads JavaScript.
+      const empty = queryAll(doc, "div")
+        .filter(d => /^(root|app|__next|__nuxt|main-app)$/i.test(attr(d, "id") || ""))
+        .find(d => !textContent(d).trim() && !queryAll(d, "img").length);
+      if (!empty) return [];
+      if (!/<script[^>]+\bsrc\s*=/i.test(html) && !/type\s*=\s*["']module["']/i.test(html)) return [];
+      return [finding(46, "html", `<div id="${attr(empty, "id")}"> is empty in the source and no <noscript> says what to do when the script never runs`)];
+    },
+  },
+  {
     id: 48,
     name: "One smoothing system",
     detect({ css, js, html }) {

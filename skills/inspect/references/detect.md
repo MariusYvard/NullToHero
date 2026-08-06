@@ -17,7 +17,7 @@ execution, so it costs nothing per run and is safe to point at a repository you 
 
 ## What it actually covers, and what it does not
 
-Two sources, both deterministic. Thirty-nine rules from `tools/data/inspect-rules.csv`, so every
+Two sources, both deterministic. Forty rules from `tools/data/inspect-rules.csv`, so every
 finding carries that registry's id, severity, rationale and standard. Plus twenty-six static
 checks from `tools/audit/lib/checks.mjs`, which existed to serve `/audit` on a URL and were
 never reachable from a local scan until v3.0.0. Eighteen of those checks execute a registry rule
@@ -28,11 +28,11 @@ ratio survives the resolved cascade, whether an animation janks: those need a re
 belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
 the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
 
-The registry holds 72 rules and 62 are executable: 39 in the rules engine, 18 inside the static
-checks and 5 in the rendered probe, which runs in a browser because a laid-out page is the only
+The registry holds 72 rules and 65 are executable: 40 in the rules engine, 18 inside the static
+checks and 7 in the rendered probe, which runs in a browser because a laid-out page is the only
 place their answer exists (see [rendered.md](rendered.md)). `tools/data/rule-coverage.csv` names
-the executor of every rule, and the ten that have none say why in the same row: they are
-judgment. Those ten still need a reader, which is what the sections further down this file are
+the executor of every rule, and the seven that have none say why in a typed class: two are
+convention, three judgment, one build-time and one tooling. Those seven still need a reader, which is what the sections further down this file are
 for. When a rule is implemented its prose entry stays: the CSV is the single source of severity
 and rationale for every path.
 

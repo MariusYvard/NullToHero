@@ -1,7 +1,7 @@
 ---
 name: seo
 description: "Use when the user wants to audit a website, analyze a page, plan an SEO strategy, fix technical SEO, add schema markup, improve content quality, optimize for AI search engines (GEO, llms.txt, AI crawler access), build local SEO, handle hreflang/i18n, generate sitemaps and robots.txt, optimize images, run programmatic SEO, build competitor comparison pages, cluster keywords, optimize Search Experience (SXO), monitor SEO drift, analyze backlinks, handle e-commerce SEO, or export a client report. Covers full-site audits with parallel sub-agents, single-page analysis, Core Web Vitals, JSON-LD and E-E-A-T. Use for any request containing: SEO, rank, Google, search engine, schema, sitemap, robots.txt, meta tags, keywords, AI search, local SEO, hreflang, backlinks, programmatic, ecommerce, or visibility. Not for how a page looks or reads as an interface: that belongs to /siteasy. Not for front-end defects such as focus rings or layout breakage: /inspect. For a whole-site pass across all three: /audit."
-version: 3.2.0
+version: 3.3.0
 user-invocable: true
 argument-hint: "[audit|page|plan|technical|schema|content|geo|sitemap|images|local|hreflang|programmatic|competitor-pages|cluster|drift|backlinks|ecommerce|indexnow|performance|migrate] [url | business-type | keyword | export.csv]"
 allowed-tools:

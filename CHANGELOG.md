@@ -11,6 +11,53 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.3.0] - 2026-08-06
+
+Three of the ten remaining rules had a decidable slice sharper than their own
+entry. The other seven stop pretending they are a backlog.
+
+### Added
+
+- **Rule 68 decides whether the hero is paused, not whether the architecture was
+  right.** The entry prescribes a canvas decoder, which no detector should be
+  ruling on. `video.paused === true` after settle is narrower and more useful: it
+  covers the iOS Low Power Mode case the entry describes and could never test,
+  and the plain missing `muted` besides.
+- **Rule 5 decides the observable half.** Not "is colour the only signal", which
+  needs to know what the colour means, but "this element carries a state and says
+  nothing else": no text, no icon, no accessible name.
+- **Rule 46 is a static rule after all.** An empty mount point plus a script that
+  fills it plus no `<noscript>`. A server-rendered page carries content in its
+  root and does not match.
+- Registry coverage 62 of 72 to **65**: 40 in the rules engine, 18 in the static
+  checks, 7 in the rendered probe.
+
+### Changed
+
+- **The classes that do not execute now say why, and the build fails when one
+  does not.** A single "not implemented" bucket reads as a backlog, and a backlog
+  invites someone to burn it down with rules that guess. Four classes instead:
+  `judgment` (25, 56, 71), `convention` (18, 19), `build-time` (34), `tooling`
+  (35).
+- **18 and 19 are conventions, not defects.** A raw hex in a component is a
+  breach in one codebase and the norm in another; pure black on a small surface
+  is fine. The project decides and `/siteasy` carries the guidance.
+- **34 is a build-time question.** Nothing observes a missing empty state on a
+  populated page, so no detector will ever find it. `/siteasy` asks while the
+  interface is being built.
+- **35 points at the tool that already does it.** TypeScript strict plus
+  `no-unnecessary-condition` beats any regex, and the row says so instead of
+  implying a detector is coming.
+
+### Fixed
+
+- **Rule 5 fired on rule 23's clean fixture on its first run.** `aria-invalid` is
+  itself announced, so it is a second signal and never belonged in the trigger
+  list, and a form control's state comes through its own semantics. Both
+  exclusions are in the probe and in the reference.
+
+---
+
 ## [3.2.0] - 2026-08-05
 
 The five rules that need a laid-out page stop being prose and start running, in

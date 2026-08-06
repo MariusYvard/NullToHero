@@ -155,6 +155,56 @@ export function probe(opts) {
       : `marked invalid with no message rendered beside it`);
   }
 
+  // ── 68. Guarantee decorative video playback ────────────────────────────────
+  // The registry rule prescribes a canvas decoder, which is an architecture
+  // choice a detector has no business deciding. What a rendered page answers is
+  // sharper and more useful: this hero is paused right now. That is the iOS Low
+  // Power Mode case the rule describes and could never test, and it is also the
+  // autoplay policy, the missing muted attribute and the tab that never got a
+  // gesture. One observation, no guessing.
+  if (elapsedMs >= 2000) {
+    for (const v of Array.from(document.querySelectorAll("video[autoplay]")).slice(0, 3)) {
+      if (!visible(v)) continue;
+      if (!v.paused) continue;
+      const missing = [];
+      if (!v.muted && !v.hasAttribute("muted")) missing.push("muted");
+      if (!v.hasAttribute("playsinline")) missing.push("playsinline");
+      const why = missing.length
+        ? `it is missing ${missing.join(" and ")}`
+        : `the attributes are right, so the browser refused it anyway and nothing catches that`;
+      add(68, label(v), `an autoplay video is still paused ${Math.round(elapsedMs)}ms after load and ${why}${v.poster ? "" : ", with no poster to fall back to"}`);
+    }
+  }
+
+  // ── 5. Color is not the only signal ────────────────────────────────────────
+  // Not "is colour the only signal" in the abstract, which needs to know what the
+  // colour means. The decidable half: this element carries a state and says
+  // nothing else. Scoped to elements that declare a state, so an ordinary
+  // coloured span is not a finding.
+  // aria-invalid is deliberately not in this list: it is itself announced, so it
+  // is a second signal and not a defect. A field marked invalid with its message
+  // in the wrong place is rule 23, which caught exactly this on its own clean
+  // fixture the first time this rule ran.
+  const STATEFUL = '[data-state], [data-status], [class*="status"], ' +
+    '[class*="badge"], [class*="error"], [class*="success"], [class*="warning"], [class*="danger"]';
+  const CONTROL = new Set(["INPUT", "SELECT", "TEXTAREA", "BUTTON", "A", "PROGRESS", "METER"]);
+  for (const el of Array.from(document.querySelectorAll(STATEFUL)).slice(0, 40)) {
+    if (!visible(el)) continue;
+    if (CONTROL.has(el.tagName)) continue;                          // its role is announced
+    if (el.hasAttribute("aria-invalid") || el.hasAttribute("aria-current")) continue;
+    if (el.querySelector("svg, img, video, canvas")) continue;      // an icon is a second signal
+    if (norm(el.textContent).length > 0) continue;                  // text is a second signal
+    const named = el.getAttribute("aria-label") || el.getAttribute("title") ||
+      (el.getAttribute("aria-labelledby") && norm((document.getElementById(el.getAttribute("aria-labelledby")) || {}).textContent));
+    if (named) continue;
+    const s = css(el);
+    // The element must actually be painted in a colour, or there is nothing to
+    // be the only signal.
+    const painted = s.backgroundColor !== "rgba(0, 0, 0, 0)" || s.borderTopWidth !== "0px";
+    if (!painted) continue;
+    add(5, label(el), `carries a state and renders as ${s.backgroundColor} with no text, no icon and no accessible name`);
+  }
+
   // ── 27. Loading state choreography ─────────────────────────────────────────
   // The half a single observation can decide. The 300ms boundary needs the load
   // instrumented and is not claimed here.
@@ -222,7 +272,7 @@ export function registryMeta() {
 }
 
 /** Rule ids this probe decides. Read by the coverage guard. */
-export const RENDERED_RULE_IDS = [23, 27, 51, 52, 62];
+export const RENDERED_RULE_IDS = [5, 23, 27, 51, 52, 62, 68];
 
 async function main() {
   const args = process.argv.slice(2);

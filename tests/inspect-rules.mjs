@@ -87,16 +87,27 @@ if (!noise) ok("no clean fixture trips an unrelated rule");
 // together, so nobody could have caught the error by reading. A count that no
 // test can contradict is a count that drifts.
 console.log("\nCoverage map");
-const CLASSES = new Set(["rules-engine", "static-check", "rendered-probe", "needs-render", "judgment"]);
+// The classes that do not execute say WHY, which is the point of having more than
+// one of them. "judgment" means a human decides case by case. "convention" means
+// the answer is a project policy and not a defect. "build-time" means nothing
+// observes it on a finished page. "tooling" means something else already does it
+// better. A single bucket called "not implemented" would read as a backlog, and
+// a backlog invites someone to burn it down with rules that guess.
+const CLASSES = new Set([
+  "rules-engine", "static-check", "rendered-probe",
+  "needs-render", "judgment", "convention", "build-time", "tooling",
+]);
+const EXECUTING = ["rules-engine", "static-check", "rendered-probe"];
 const covRaw = readFileSync(join(ROOT, "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
 const cov = new Map();
 for (const line of covRaw) {
-  const [id, cls, executor] = line.split(",");
+  const [id, cls, executor, ...rest] = line.split(",");
+  const note = rest.join(",").trim();
   const n = Number(id);
   if (!Number.isFinite(n)) { no(`rule-coverage.csv: unparseable id ${id}`); continue; }
   if (cov.has(n)) no(`rule-coverage.csv: rule ${n} listed twice`);
   if (!CLASSES.has(cls)) no(`rule-coverage.csv: rule ${n} has unknown class "${cls}"`);
-  cov.set(n, { cls, executor });
+  cov.set(n, { cls, executor, note });
 }
 for (const id of known.keys()) if (!cov.has(id)) no(`rule ${id} is in the registry and absent from rule-coverage.csv`);
 for (const id of cov.keys()) if (!known.has(id)) no(`rule-coverage.csv names rule ${id}, which is not in the registry`);
@@ -106,8 +117,10 @@ for (const [id, c] of cov) {
   if (c.cls === "rules-engine" && !engineIds.has(id)) no(`rule ${id} is mapped to the rules engine and rules.mjs does not implement it`);
   if (c.cls !== "rules-engine" && engineIds.has(id)) no(`rules.mjs implements rule ${id}, which rule-coverage.csv classes as ${c.cls}`);
   if (c.cls === "static-check" && !c.executor) no(`rule ${id} is mapped to a static check and names none`);
-  if (!["static-check", "rules-engine", "rendered-probe"].includes(c.cls) && c.executor)
+  if (!EXECUTING.includes(c.cls) && c.executor)
     no(`rule ${id} is class ${c.cls} and still names an executor`);
+  if (!EXECUTING.includes(c.cls) && !c.note)
+    no(`rule ${id} is class ${c.cls} and gives no reason, which is the whole point of the class`);
 }
 
 // The rendered probe declares which rules it decides. The map and the probe must
@@ -127,10 +140,11 @@ for (const [id, c] of cov) {
 
 const tally = {};
 for (const c of cov.values()) tally[c.cls] = (tally[c.cls] || 0) + 1;
-const executable = (tally["rules-engine"] || 0) + (tally["static-check"] || 0) + (tally["rendered-probe"] || 0);
+const executable = EXECUTING.reduce((n, c) => n + (tally[c] || 0), 0);
 if (!failures) {
-  ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} in the rules engine, ${tally["static-check"]} in static checks, ` +
-     `${tally["rendered-probe"] || 0} in the rendered probe, ${tally["needs-render"] || 0} still need a rendered page, ${tally["judgment"]} are judgment`);
+  ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} rules engine, ${tally["static-check"]} static checks, ${tally["rendered-probe"] || 0} rendered probe`);
+  ok(`the ${cov.size - executable} that do not execute say why: ` +
+     Object.entries(tally).filter(([c]) => !EXECUTING.includes(c)).map(([c, n]) => `${n} ${c}`).join(", "));
   ok(`${executable} of ${cov.size} executable`);
 }
 

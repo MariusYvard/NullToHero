@@ -67,18 +67,20 @@ than scripting.
 | Rendered text length much greater than raw HTML | Client-rendered (SSR gap) | seo-agent-technical |
 | Image painted larger than its file dimensions | CLS risk, oversized asset | inspect-agent-layout, seo-agent-performance |
 
-## Running the five rendered rules
+## Running the seven rendered rules
 
-Five registry rules have no answer in source text, and since v3.2.0 they run as a
+Seven registry rules have no answer in source text, and since v3.2.0 they run as a
 probe in the browser rather than sitting in a reference file waiting for a reader.
 
 | Rule | What only the rendered page answers |
 |---|---|
+| 5 Color is not the only signal | Whether the element carries a state and says nothing else |
 | 23 Inline errors | Where the message renders relative to the field it belongs to |
 | 27 Loading state choreography | What feedback is still on screen once the page settled |
 | 51 Pins need a scroll track | The resolved track height against the viewport |
 | 52 Transforms create containing blocks | Which ancestor became the containing block |
 | 62 Hide marquee clones | Which copies exist, since a marquee clones its track at runtime |
+| 68 Guarantee decorative video playback | Whether the autoplay hero is actually paused right now |
 
 ```bash
 node tools/inspect/rendered.mjs --source
