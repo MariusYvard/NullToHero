@@ -11,6 +11,23 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.4.1] - 2026-08-06
+
+### Fixed
+
+- **The probe measures its own elapsed time instead of taking it from the
+  caller.** v3.4.0 fixed the test harness, which claimed 2500ms while evaluating
+  on the load event, and left the same trap in the field: the Claude in Chrome
+  recipe says let the page settle and nothing made that true. Run the probe
+  immediately and rules 27 and 68 read every skeleton and every video as still
+  stuck, at critical severity, on a page that had simply not started. It now
+  reads `performance` and decides for itself.
+- **A run that was too early says so.** The return carries `settled`, false under
+  2s after the load event, and rules 27 and 68 are not judged at all in that
+  case. Their silence used to be indistinguishable from a pass.
+
+---
+
 ## [3.4.0] - 2026-08-06
 
 `clarify.md` gets what its own evaluation said it was missing, and the case is

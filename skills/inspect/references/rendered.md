@@ -1,7 +1,7 @@
 ---
 name: rendered
 description: "Run the seven registry rules that need a laid-out page, in Claude in Chrome or in Playwright, from one probe."
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Rules that need a rendered page
@@ -40,16 +40,19 @@ node tools/inspect/rendered.mjs --source
 
 Open the target in a tab, let it settle, then pass that string to the browser
 extension's JavaScript tool. It returns
-`{findings, scanned, truncated, elapsedMs}`. Each finding carries the registry
-id, so look up severity, rationale and standard in `inspect-rules.csv` exactly as
-`detect` does, and cite the remediation route from `remediation-map.csv`.
+`{findings, scanned, truncated, elapsedMs, settled}`. Each finding carries the
+registry id, so look up severity, rationale and standard in `inspect-rules.csv`
+exactly as `detect` does, and cite the remediation route from
+`remediation-map.csv`.
 
 Two things to get right before reading anything:
 
-1. **Let the page settle.** The probe judges rule 27 against elapsed time. Run it
-   at least 2.5s after load, and pass the real figure:
-   `(...)({elapsedMs: 2500})`. Under 2000 it declines to judge rule 27 rather
-   than guessing.
+1. **Check `settled` before you trust a quiet result.** The probe measures its own
+   elapsed time from the load event and does not take it from you. Under 2s it
+   returns `settled: false` and does not judge rules 27 and 68 at all, so their
+   absence means nothing. Wait and run it again. It used to accept the figure
+   from the caller, and the caller was wrong: the test harness claimed 2500ms
+   while evaluating on the load event, and every video read as paused.
 2. **Set the viewport deliberately.** Rule 51 compares a track against
    `window.innerHeight`. A pin that works at 800px tall can fail at 1200px.
    Report the viewport with the findings, and run mobile as a second pass.
@@ -76,7 +79,8 @@ this moment.** It does not mean the page is good, and it does not cover the othe
 change the answer.
 
 When the probe reports `truncated: true` the page has more elements than the scan
-cap and the read is partial. Say so rather than reporting a count.
+cap and the read is partial. When it reports `settled: false` two of the seven
+rules were not judged. Say either one rather than reporting a count.
 
 ## What it deliberately does not claim
 

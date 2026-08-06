@@ -32,19 +32,34 @@
 // The probe observes one moment. Rule 27 wants thresholds across a load (nothing
 // under 300ms, a skeleton to 2s, a spinner with a message beyond that) and a
 // single observation cannot see a sequence. So it decides the half it can: what
-// is still on screen once the page has settled, given the elapsed time the
-// runner passes in. It says which half in the finding.
+// is still on screen once the page has settled. It measures the elapsed time
+// itself rather than trusting the caller, and returns `settled: false` when it
+// was run too early, so a partial run cannot be read as a clean one.
 
 /**
  * Runs inside the page. No imports, no closure over module scope: everything it
  * needs is either a browser global or comes in through `opts`, because the
  * function is serialised to source before it runs.
  *
- * @param {{elapsedMs?: number, maxElements?: number}} opts
- * @returns {{findings: Array<{id:number, where:string, evidence:string}>, scanned:number, truncated:boolean, elapsedMs:number}}
+ * `settled` is false when the probe ran less than 2s after the load event. Rules
+ * 27 and 68 are not judged in that case and their absence means nothing.
+ *
+ * @param {{maxElements?: number}} opts
+ * @returns {{findings: Array<{id:number, where:string, evidence:string}>, scanned:number, truncated:boolean, elapsedMs:number, settled:boolean}}
  */
 export function probe(opts) {
-  const { elapsedMs = 0, maxElements = 4000 } = opts || {};
+  const { maxElements = 4000 } = opts || {};
+  // The probe measures its own elapsed time and does not take it from the caller.
+  // It used to, and the test harness promptly claimed 2500ms while evaluating on
+  // the load event, so rule 68 read every video before it could start. The same
+  // trap is worse in the field: the Claude in Chrome recipe says let it settle,
+  // and nothing made that true. A number a caller can be wrong about is a number
+  // the caller should not be supplying.
+  const nav = performance.getEntriesByType("navigation")[0];
+  const elapsedMs = Math.max(0, Math.round(
+    nav && nav.loadEventEnd ? performance.now() - nav.loadEventEnd : performance.now()));
+  const SETTLED = 2000;
+  const settled = elapsedMs >= SETTLED;
   const findings = [];
   const add = (id, where, evidence) => findings.push({ id, where, evidence });
   const css = (el) => getComputedStyle(el);
@@ -162,7 +177,7 @@ export function probe(opts) {
   // Power Mode case the rule describes and could never test, and it is also the
   // autoplay policy, the missing muted attribute and the tab that never got a
   // gesture. One observation, no guessing.
-  if (elapsedMs >= 2000) {
+  if (settled) {
     // Decorative only. A video with `controls` is one the reader chose to watch
     // and is allowed to end; that one is rule 67's subject.
     for (const v of Array.from(document.querySelectorAll("video[autoplay]:not([controls])")).slice(0, 3)) {
@@ -219,7 +234,7 @@ export function probe(opts) {
   // ── 27. Loading state choreography ─────────────────────────────────────────
   // The half a single observation can decide. The 300ms boundary needs the load
   // instrumented and is not claimed here.
-  if (elapsedMs >= 2000) {
+  if (settled) {
     const hit = (sel) => Array.from(document.querySelectorAll(sel)).filter(visible);
     const skeletons = hit('[class*="skeleton"], [class*="shimmer"], [class*="placeholder-glow"]');
     if (skeletons.length) {
@@ -239,7 +254,9 @@ export function probe(opts) {
     }
   }
 
-  return { findings, scanned: els.length, truncated, elapsedMs };
+  // settled says whether rules 27 and 68 were judged at all. A report that
+  // does not carry it reads a partial run as a clean one.
+  return { findings, scanned: els.length, truncated, elapsedMs, settled };
 }
 
 /** The exact string to hand to Claude in Chrome's javascript_tool. */
@@ -311,7 +328,7 @@ async function main() {
   const page = await browser.newPage({ viewport: { width: vp[0] || 1280, height: vp[1] || 800 } });
   await page.goto(target, { waitUntil: "load" });
   await page.waitForTimeout(wait);
-  const result = await page.evaluate(probe, { elapsedMs: wait });
+  const result = await page.evaluate(probe, {});
   await browser.close();
 
   const meta = registryMeta();
@@ -338,7 +355,7 @@ async function main() {
 }
 
 if (process.argv.includes("--source")) {
-  console.log(probeSource({ elapsedMs: 2500 }));
+  console.log(probeSource());
 } else if (fileURLToPath(import.meta.url) === (process.argv[1] ? (await import("node:path")).resolve(process.argv[1]) : "")) {
   await main();
 }

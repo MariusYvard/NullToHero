@@ -11,7 +11,7 @@
       "name": "null-to-hero",
       "source": "./",
       "description": "From zero knowledge to hero website. Ten doors on four skills and 62 commands: design and build (siteasy), SEO and GEO for AI search, defect inspection, and a whole-site /audit orchestrator running 15 parallel sub-agents with a deterministic pre-pass. Say the goal (express, build, improve, fix, ship, overhaul); the right specialist runs. Legacy names stay accepted via a versioned alias table.",
-      "version": "3.4.0",
+      "version": "3.4.1",
       "category": "design",
       "tags": [
         "design",

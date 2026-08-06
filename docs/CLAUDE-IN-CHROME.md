@@ -88,18 +88,20 @@ node tools/inspect/rendered.mjs --source
 
 Open the target, let it settle for at least 2.5 seconds, then run that string with
 the extension's JavaScript tool. It returns
-`{findings, scanned, truncated, elapsedMs}`, and every finding carries the
-registry id, so severity, rationale and standard come from
+`{findings, scanned, truncated, elapsedMs, settled}`, and every finding carries
+the registry id, so severity, rationale and standard come from
 `tools/data/inspect-rules.csv` exactly as they do for a local scan.
 
 The same function runs headless through Playwright
 (`node tools/inspect/rendered.mjs <url> --json`). One source, two runners, because
 two implementations of "is this sticky element broken" would drift.
 
-Two things decide the answer and both belong in the report: the **viewport**, since
-rule 51 compares a track against `window.innerHeight`, and the **elapsed time**,
-since rule 27 judges what outlived its window and declines to judge at all under
-2000ms. Full detail in `skills/inspect/references/rendered.md`.
+Two things decide the answer and both belong in the report. The **viewport**, since
+rule 51 compares a track against `window.innerHeight`. And **`settled`**, since
+rules 27 and 68 judge what outlived its window: the probe measures its own elapsed
+time from the load event and returns `settled: false` when it was run too early,
+in which case those two were not judged and their silence means nothing. Full
+detail in `skills/inspect/references/rendered.md`.
 
 ## A repeatable recipe
 
