@@ -11,6 +11,56 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.2.0] - 2026-08-05
+
+The five rules that need a laid-out page stop being prose and start running, in
+the browser.
+
+### Added
+
+- **A rendered-page probe, `tools/inspect/rendered.mjs`.** Rules 23, 27, 51, 52
+  and 62 execute for the first time. Registry coverage goes from 57 of 72 to 62,
+  and `needs-render` is now an empty class rather than five rules waiting for a
+  reader.
+- **One probe, two runners.** `probe` is an ordinary function serialised to
+  source, so Claude in Chrome (`--source`, then the extension's JavaScript tool)
+  and Playwright (`page.evaluate`) run the same code. Two implementations of
+  "is this sticky element broken" would drift, which is the failure
+  `rule-coverage.csv` was added to catch in v3.1.0.
+- **`tests/rendered-rules.mjs`,** the same two-fixture contract as the static
+  engine, run in Chromium: ten fixtures, both directions, plus the
+  cross-contamination pass. `NTH_CHROMIUM` points it at a Chromium already on the
+  machine so the suite never triggers a browser download.
+- **A guard tying the probe to the map.** `rendered.mjs` declares which rules it
+  decides and the build fails when `rule-coverage.csv` disagrees.
+- **`skills/inspect/references/rendered.md`** and a section in
+  `docs/CLAUDE-IN-CHROME.md`, both stating the two things that decide the answer:
+  the viewport, because rule 51 compares a track against `window.innerHeight`,
+  and the elapsed time, because rule 27 judges what outlived its window.
+
+### Changed
+
+- **A missing Playwright reports SKIPPED, not passed.** The harness names the
+  five rules it did not verify and prints the command that turns it on. A skipped
+  test that says "passed" is how a suite starts lying.
+- **Rule 27 claims half of what the registry describes, and says which half.** A
+  single observation cannot see a load sequence, so the probe decides what is
+  still on screen once the page settled and declines to judge at all under
+  2000ms rather than guessing at the 300ms boundary.
+- **Rule 51 judges stages, not sticky headers.** A sticky element shorter than
+  half the viewport is skipped: firing on every sticky table header would bury
+  the pinned stage that actually has nowhere to travel.
+- **Rule 23 judges only fields the application marked invalid.** Matching
+  `:invalid` would fire on every empty required field at first paint.
+
+### Fixed
+
+- **`/inspect` no longer claims to shell out to `impeccable`.** The Requirements
+  section and the `Bash(npx impeccable *)` permission had both survived v2.7.0,
+  which replaced that call with this plugin's own rules engine.
+
+---
+
 ## [3.1.0] - 2026-08-05
 
 Closes the three items v3.0.0 left open. Two of them were open because a number was

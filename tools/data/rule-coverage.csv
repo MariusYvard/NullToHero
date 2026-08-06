@@ -21,11 +21,11 @@ id,class,executor,note
 20,static-check,ui-motion-duration,
 21,rules-engine,rules.mjs,Scoped to keyframe animations; a transition fires because the reader acted
 22,rules-engine,rules.mjs,
-23,needs-render,,Whether the message lands next to its field is a layout fact
+23,rendered-probe,rendered.mjs,Message geometry against the field is a laid-out fact
 24,rules-engine,rules.mjs,
 25,judgment,,
 26,rules-engine,rules.mjs,
-27,needs-render,,The thresholds are durations; a static read cannot time a load
+27,rendered-probe,rendered.mjs,Judges what is still on screen once the page has settled; the 300ms boundary needs the load instrumented and is not claimed
 28,rules-engine,rules.mjs,
 29,rules-engine,rules.mjs,
 30,rules-engine,rules.mjs,Key shapes only; entropy heuristics flag every hash and get muted
@@ -49,8 +49,8 @@ id,class,executor,note
 48,rules-engine,rules.mjs,
 49,static-check,scrollbar-hidden,
 50,rules-engine,rules.mjs,
-51,needs-render,,The track's resolved height against the viewport is a layout fact
-52,needs-render,,Needs the ancestor chain as rendered rather than as written
+51,rendered-probe,rendered.mjs,The track height resolves against the viewport; scoped to stages and not to sticky headers
+52,rendered-probe,rendered.mjs,Walks the rendered ancestor chain for transform / filter / perspective / will-change / contain
 53,static-check,video-embed-hygiene,
 54,static-check,frame-sequence-preload,
 55,rules-engine,rules.mjs,
@@ -60,7 +60,7 @@ id,class,executor,note
 59,rules-engine,rules.mjs,
 60,rules-engine,rules.mjs,
 61,rules-engine,rules.mjs,
-62,needs-render,,Which copies are clones is decided at runtime
+62,rendered-probe,rendered.mjs,The clones are injected at runtime so source text could never see them
 63,static-check,decorative-loop-budget,
 64,rules-engine,rules.mjs,
 65,rules-engine,rules.mjs,

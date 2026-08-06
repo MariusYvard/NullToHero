@@ -107,6 +107,18 @@
   },
   {
     "skill": "inspect",
+    "path": "skills/inspect/references/rendered.md",
+    "title": "Rules that need a rendered page",
+    "keywords": [
+      "rendered",
+      "rules",
+      "that",
+      "need",
+      "page"
+    ]
+  },
+  {
+    "skill": "inspect",
     "path": "skills/inspect/references/review.md",
     "title": "Design Engineering Code Review",
     "keywords": [

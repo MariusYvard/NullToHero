@@ -28,12 +28,13 @@ ratio survives the resolved cascade, whether an animation janks: those need a re
 belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
 the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
 
-The registry holds 72 rules and 57 are executable: 39 in the rules engine and 18 inside the
-static checks. `tools/data/rule-coverage.csv` names the executor of every rule, and the fifteen
-that have none say why in the same row: five need a rendered page, ten are judgment. Those
-fifteen still need a reader, which is what the sections further down this file are for. When a
-rule is implemented its prose entry stays: the CSV is the single source of severity and
-rationale for both paths.
+The registry holds 72 rules and 62 are executable: 39 in the rules engine, 18 inside the static
+checks and 5 in the rendered probe, which runs in a browser because a laid-out page is the only
+place their answer exists (see [rendered.md](rendered.md)). `tools/data/rule-coverage.csv` names
+the executor of every rule, and the ten that have none say why in the same row: they are
+judgment. Those ten still need a reader, which is what the sections further down this file are
+for. When a rule is implemented its prose entry stays: the CSV is the single source of severity
+and rationale for every path.
 
 The figure was wrong until v3.1.0. The v3.0.0 note published "59 remain non-executable" while
 eighteen of those 59 were already running inside `checks.mjs` under a check id, with nothing in

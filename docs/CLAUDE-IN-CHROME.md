@@ -67,6 +67,38 @@ than scripting.
 | Rendered text length much greater than raw HTML | Client-rendered (SSR gap) | seo-agent-technical |
 | Image painted larger than its file dimensions | CLS risk, oversized asset | inspect-agent-layout, seo-agent-performance |
 
+## Running the five rendered rules
+
+Five registry rules have no answer in source text, and since v3.2.0 they run as a
+probe in the browser rather than sitting in a reference file waiting for a reader.
+
+| Rule | What only the rendered page answers |
+|---|---|
+| 23 Inline errors | Where the message renders relative to the field it belongs to |
+| 27 Loading state choreography | What feedback is still on screen once the page settled |
+| 51 Pins need a scroll track | The resolved track height against the viewport |
+| 52 Transforms create containing blocks | Which ancestor became the containing block |
+| 62 Hide marquee clones | Which copies exist, since a marquee clones its track at runtime |
+
+```bash
+node tools/inspect/rendered.mjs --source
+```
+
+Open the target, let it settle for at least 2.5 seconds, then run that string with
+the extension's JavaScript tool. It returns
+`{findings, scanned, truncated, elapsedMs}`, and every finding carries the
+registry id, so severity, rationale and standard come from
+`tools/data/inspect-rules.csv` exactly as they do for a local scan.
+
+The same function runs headless through Playwright
+(`node tools/inspect/rendered.mjs <url> --json`). One source, two runners, because
+two implementations of "is this sticky element broken" would drift.
+
+Two things decide the answer and both belong in the report: the **viewport**, since
+rule 51 compares a track against `window.innerHeight`, and the **elapsed time**,
+since rule 27 judges what outlived its window and declines to judge at all under
+2000ms. Full detail in `skills/inspect/references/rendered.md`.
+
 ## A repeatable recipe
 
 ```

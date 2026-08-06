@@ -1,11 +1,10 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'. Not for designing or building an interface: that belongs to /siteasy. Not for search visibility: /seo. For all three at once on a whole site: /audit."
-version: 3.1.0
+version: 3.2.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 allowed-tools:
-  - Bash(npx impeccable *)
   - Bash(npx playwright *)
   - Bash(node *)
   - Bash(python3 -m http.server *)
@@ -67,7 +66,7 @@ If `DIRECTION.md` or `PRODUCT.md` exist at the project root, read them before sc
 
 ## Detection rules from data
 
-Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (72 rules) — extend coverage without changing code. Each rule also maps to its remediation route (the command to run and the reference to load) in `tools/data/remediation-map.csv` (`rule-<id>` rows): cite it with every finding. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
+Beyond the deterministic scan, `detect` can read `tools/data/inspect-rules.csv` for editable Do/Don't rules with good and bad code examples (72 rules), so coverage extends without changing code. `tools/data/rule-coverage.csv` says which of the 72 already execute and where: 39 in the rules engine, 18 in the static checks, 5 in the rendered probe, and 10 that are judgment and name why. Each rule also maps to its remediation route (the command to run and the reference to load) in `tools/data/remediation-map.csv` (`rule-<id>` rows): cite it with every finding. To locate a relevant reference fast: `node tools/search-references.mjs "<topic>" --skill inspect`.
 
 ## Quick start
 
@@ -78,7 +77,9 @@ If no command is specified:
 
 ## Requirements
 
-The `detect` and `review` commands call the `impeccable` CLI through `npx`. It requires Node.js and is fetched on first run. Tested with impeccable 2.3.2. To pin the version and avoid drift from upstream flag changes, run `npx impeccable@2.3.2` instead of `npx impeccable`.
+`detect` and `review` need Node.js and nothing else. They ran `npx impeccable@2.3.2` until v2.7.0 and no longer do: the rules are this plugin's own and live in `tools/inspect/rules.mjs`, so there is no download on first run and no upstream flag to drift.
+
+Five rules need a laid-out page and run in a browser instead, through `tools/inspect/rendered.mjs`. Same probe either way: Claude in Chrome for a live or gated page, Playwright for a headless run. See [references/rendered.md](references/rendered.md).
 
 ## Recommended pre-ship sequence
 

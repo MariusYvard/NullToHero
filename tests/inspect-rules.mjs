@@ -15,6 +15,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { RULES, runRules } from "../tools/inspect/rules.mjs";
+import { RENDERED_RULE_IDS } from "../tools/inspect/rendered.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FX = join(ROOT, "tools", "inspect", "fixtures");
@@ -86,7 +87,7 @@ if (!noise) ok("no clean fixture trips an unrelated rule");
 // together, so nobody could have caught the error by reading. A count that no
 // test can contradict is a count that drifts.
 console.log("\nCoverage map");
-const CLASSES = new Set(["rules-engine", "static-check", "needs-render", "judgment"]);
+const CLASSES = new Set(["rules-engine", "static-check", "rendered-probe", "needs-render", "judgment"]);
 const covRaw = readFileSync(join(ROOT, "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
 const cov = new Map();
 for (const line of covRaw) {
@@ -105,8 +106,16 @@ for (const [id, c] of cov) {
   if (c.cls === "rules-engine" && !engineIds.has(id)) no(`rule ${id} is mapped to the rules engine and rules.mjs does not implement it`);
   if (c.cls !== "rules-engine" && engineIds.has(id)) no(`rules.mjs implements rule ${id}, which rule-coverage.csv classes as ${c.cls}`);
   if (c.cls === "static-check" && !c.executor) no(`rule ${id} is mapped to a static check and names none`);
-  if (c.cls !== "static-check" && c.cls !== "rules-engine" && c.executor) no(`rule ${id} is class ${c.cls} and still names an executor`);
+  if (!["static-check", "rules-engine", "rendered-probe"].includes(c.cls) && c.executor)
+    no(`rule ${id} is class ${c.cls} and still names an executor`);
 }
+
+// The rendered probe declares which rules it decides. The map and the probe must
+// name the same five, or one of them is describing a coverage that does not run.
+const mappedRendered = [...cov].filter(([, c]) => c.cls === "rendered-probe").map(([id]) => id).sort((a, b) => a - b);
+const declaredRendered = [...RENDERED_RULE_IDS].sort((a, b) => a - b);
+if (mappedRendered.join() !== declaredRendered.join())
+  no(`rule-coverage.csv maps ${mappedRendered.join(", ") || "nothing"} to the rendered probe, rendered.mjs declares ${declaredRendered.join(", ")}`);
 
 // A named check must exist. A mapping to a check that was renamed or deleted is
 // the same failure as no mapping at all, only harder to see.
@@ -118,10 +127,10 @@ for (const [id, c] of cov) {
 
 const tally = {};
 for (const c of cov.values()) tally[c.cls] = (tally[c.cls] || 0) + 1;
-const executable = (tally["rules-engine"] || 0) + (tally["static-check"] || 0);
+const executable = (tally["rules-engine"] || 0) + (tally["static-check"] || 0) + (tally["rendered-probe"] || 0);
 if (!failures) {
   ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} in the rules engine, ${tally["static-check"]} in static checks, ` +
-     `${tally["needs-render"]} need a rendered page, ${tally["judgment"]} are judgment`);
+     `${tally["rendered-probe"] || 0} in the rendered probe, ${tally["needs-render"] || 0} still need a rendered page, ${tally["judgment"]} are judgment`);
   ok(`${executable} of ${cov.size} executable`);
 }
 
