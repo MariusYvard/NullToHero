@@ -11,6 +11,27 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.5.2] - 2026-08-06
+
+### Added
+
+- **A clean run says what there was to judge.** The probe returns `candidates`,
+  the number of elements each rule had to look at, and the report separates
+  "judged and cleared" from "nothing on the page to judge, and that silence is not
+  a pass". The first clean target made the point: one rule cleared a pinned stage
+  it had actually measured, the other six had no candidate at all, and a single
+  "no defect found" flattened those into the same sentence.
+- **The CLI honours `NTH_CHROMIUM`,** the same variable the test harness uses, so
+  it points at a Chromium already on the machine instead of triggering a download.
+
+### Changed
+
+- The real-page table lists only pages the repository owner can act on. Two
+  unrelated public pages were stress targets and are described without being
+  named.
+
+---
+
 ## [3.5.1] - 2026-08-06
 
 First run of the rendered probe against real pages instead of its own fixtures.
@@ -38,11 +59,14 @@ Two defects in the probe and one in the file itself, all found by doing it.
 |---|---|---|
 | A CV site | 52 | Six `position: fixed` popups under an ancestor at `translateY(26px)`. All closed at read time, so the defect is latent and real: each resolves `top: 0` against the ancestor when it opens. |
 | A portfolio | 62 | A ticker of 10 children carrying 5 distinct strings, none `aria-hidden`, track running `24s linear infinite`. A screen reader reads the list twice. |
-| A large SaaS home page | 5 | A status dot with empty text, no `aria-label`, no title, no role, no icon, painted `rgb(102, 102, 102)`. Colour is the only signal it carries. |
 
-Two of the five pages returned nothing, which is the other half of the result: the
-rules are narrow enough not to fire on a clean page. One page hit the 4000-element
-scan cap and said so rather than reporting a count.
+Two unrelated public pages were used as stress targets, for motion and scale the
+two above do not have. One returned a rule 5 finding, also confirmed by hand, and
+is not listed here because it is nobody's to fix from this repository. The other
+hit the 4000-element scan cap and said so rather than reporting a count.
+
+One of the five returned nothing at all, which is the other half of the result:
+the rules are narrow enough not to fire on a clean page.
 
 ---
 

@@ -81,10 +81,32 @@ export function probe(opts) {
   };
   const infinite = (el) =>
     css(el).animationIterationCount.split(",").some(v => v.trim() === "infinite");
+  // aria-invalid is deliberately not in this list: it is itself announced, so it
+  // is a second signal and not a defect. Hoisted here because the candidate count
+  // and rule 5 must agree on what a stateful element is.
+  const STATEFUL = '[data-state], [data-status], [class*="status"], ' +
+    '[class*="badge"], [class*="error"], [class*="success"], [class*="warning"], [class*="danger"]';
 
   const all = Array.from(document.querySelectorAll("*"));
   const truncated = all.length > maxElements;
   const els = truncated ? all.slice(0, maxElements) : all;
+
+  // How many candidates each rule had to judge.
+  //
+  // "0 findings" and "0 findings out of 0 candidates" are different statements
+  // and the second one is not a pass. The first real target came back clean and
+  // the honest reading was mixed: one rule judged a pinned stage and cleared it,
+  // the other six had nothing on the page to look at. Without this a reader takes
+  // silence for a grade, which is the thing this whole engine is careful about.
+  const candidates = {
+    5: document.querySelectorAll(STATEFUL).length,
+    23: document.querySelectorAll('[aria-invalid="true"], [data-invalid], [data-error]').length,
+    27: document.querySelectorAll('[class*="skeleton"], [class*="shimmer"], [class*="spinner"], [class*="loader"], [role="progressbar"]').length,
+    51: els.filter(e => css(e).position === "sticky" && box(e).height >= vh * 0.5).length,
+    52: els.filter(e => ["fixed", "sticky"].includes(css(e).position)).length,
+    62: els.filter(e => e.children.length >= 2 && (infinite(e) || Array.from(e.children).some(infinite))).length,
+    68: document.querySelectorAll("video[autoplay]:not([controls])").length,
+  };
 
   // ── 52. Transforms create containing blocks ────────────────────────────────
   // Exact, not heuristic: a transformed, filtered or contained ancestor becomes
@@ -207,12 +229,8 @@ export function probe(opts) {
   // colour means. The decidable half: this element carries a state and says
   // nothing else. Scoped to elements that declare a state, so an ordinary
   // coloured span is not a finding.
-  // aria-invalid is deliberately not in this list: it is itself announced, so it
-  // is a second signal and not a defect. A field marked invalid with its message
-  // in the wrong place is rule 23, which caught exactly this on its own clean
-  // fixture the first time this rule ran.
-  const STATEFUL = '[data-state], [data-status], [class*="status"], ' +
-    '[class*="badge"], [class*="error"], [class*="success"], [class*="warning"], [class*="danger"]';
+  // A field marked invalid with its message in the wrong place is rule 23, which
+  // caught exactly this on its own clean fixture the first time this rule ran.
   const CONTROL = new Set(["INPUT", "SELECT", "TEXTAREA", "BUTTON", "A", "PROGRESS", "METER"]);
   for (const el of Array.from(document.querySelectorAll(STATEFUL)).slice(0, 40)) {
     if (!visible(el)) continue;
@@ -287,7 +305,7 @@ export function probe(opts) {
 
   // settled says whether rules 27 and 68 were judged at all. A report that
   // does not carry it reads a partial run as a clean one.
-  return { findings: out, scanned: els.length, truncated, elapsedMs, settled };
+  return { findings: out, scanned: els.length, truncated, elapsedMs, settled, candidates };
 }
 
 /** The exact string to hand to Claude in Chrome's javascript_tool. */
@@ -355,7 +373,10 @@ async function main() {
     process.exit(3);
   }
 
-  const browser = await chromium.launch();
+  // Same env var as tests/rendered-rules.mjs: point at a Chromium already on the
+  // machine rather than making the CLI trigger a browser download.
+  const executablePath = process.env.NTH_CHROMIUM || undefined;
+  const browser = await chromium.launch(executablePath ? { executablePath } : {});
   const page = await browser.newPage({ viewport: { width: vp[0] || 1280, height: vp[1] || 800 } });
   await page.goto(target, { waitUntil: "load" });
   await page.waitForTimeout(wait);
@@ -372,8 +393,12 @@ async function main() {
   console.log(`\nNullToHero rendered probe — ${target}, ${result.scanned} elements, ${vp[0]}x${vp[1]}, read ${wait}ms after load\n`);
   if (result.truncated) console.log(`  NOTE  the page has more elements than the scan cap, so this is a partial read\n`);
   if (!enriched.length) {
+    const judged = RENDERED_RULE_IDS.filter(id => (result.candidates || {})[id] > 0);
+    const idle = RENDERED_RULE_IDS.filter(id => !((result.candidates || {})[id] > 0));
     console.log("  No named defect found.");
-    console.log(`  This covers rules ${RENDERED_RULE_IDS.join(", ")} only, at this viewport and this moment.\n`);
+    if (judged.length) console.log(`  Judged and cleared: ${judged.map(id => `${id} (${result.candidates[id]} candidate${result.candidates[id] > 1 ? "s" : ""})`).join(", ")}`);
+    if (idle.length) console.log(`  Nothing on the page to judge for: ${idle.join(", ")}. Their silence is not a pass.`);
+    console.log(`  At this viewport and this moment only.\n`);
   } else {
     for (const f of enriched) {
       console.log(`  [${String(f.id).padStart(2)}] ${f.rule} — ${f.where}`);

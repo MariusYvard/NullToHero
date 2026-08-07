@@ -1,7 +1,7 @@
 ---
 name: rendered
 description: "Run the seven registry rules that need a laid-out page, in Claude in Chrome or in Playwright, from one probe."
-version: 1.3.0
+version: 1.4.0
 ---
 
 # Rules that need a rendered page
@@ -97,10 +97,11 @@ rules, all three confirmed by hand, and nothing that turned out to be noise.
 |---|---|---|
 | A CV site | 52 | Six `position: fixed` popups under an ancestor at `translateY(26px)`. All closed at read time, so the defect is latent and real: each will resolve `top: 0` against the ancestor when opened. |
 | A portfolio | 62 | A ticker of 10 children carrying 5 distinct strings, none `aria-hidden`, track running `24s linear infinite`. A screen reader reads the list twice. |
-| A large SaaS home page | 5 | A status dot with empty text, no `aria-label`, no title, no role, no icon, painted `rgb(102, 102, 102)`. Colour is the only signal it carries. |
 
-Two pages returned nothing, which is also a result: the rules are narrow enough
-not to fire on a clean page.
+Two further public pages were used as stress targets and are not listed: one
+returned a rule 5 finding on a colour-only status dot, the other hit the
+4000-element scan cap and said so. One page returned nothing at all, which is also
+a result: the rules are narrow enough not to fire on a clean page.
 
 ## What it deliberately does not claim
 
