@@ -6,7 +6,11 @@ import { resolveInRoot, looksGenerated } from "../skills/siteasy/scripts/live-co
 import { parseColor, ratioOf } from "../tools/audit/lib/contrast.mjs";
 import { runChecks } from "../tools/audit/lib/checks.mjs";
 import { dedupeSamples } from "../tools/audit/fetch.mjs";
-import { resolve } from "node:path";
+import { parseBuildLines, verdict, burned, changedAxes, AXES, VOCAB } from "../tools/siteasy/variety.mjs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 
 let failures = 0;
 function ok(name, cond) {
@@ -264,6 +268,115 @@ const realFail = stat(`<div class="s"><p>hello there</p></div>`, `.s{background:
 ok("a real static failure still fails", realFail.verdict === "FAIL" && realFail.value.failures === 1);
 ok("...and names the colours so a reader can check it",
   /#aaaaaa/.test(realFail.detail) && realFail.value.worstSamples?.[0]?.fg === "#aaaaaa");
+
+// ---------------------------------------------------------------------------
+// variety.mjs — the build rotation predicate.
+//
+// The point of these cases is the second clause of L-VARIETY-1. Counting changed
+// axes is the easy half and would pass a build that swapped a warm accent for a
+// cool one at the same coverage, on the same paper, under the same display face.
+// That is the exact non-change the old prose instruction permitted.
+
+console.log("\n── variety: parsing the build lines ──");
+const LOG = `# Journal
+
+## 2026-08-01 /siteasy build
+- build 2026-08-01 shape=stat-led paper=light display=grotesque accent=cool strategy=restrained
+
+Some prose that mentions a build but is not one.
+
+## 2026-08-04 /siteasy build
+* build 2026-08-04 shape=long-document paper=dark display=serif-display accent=warm strategy=committed
+`;
+const log = parseBuildLines(LOG);
+ok("both build lines parsed, prose ignored", log.length === 2);
+ok("newest first", log[0].date === "2026-08-04");
+ok("key=value pairs read", log[0].shape === "long-document" && log[0].strategy === "committed");
+ok("a bullet marker other than - still parses", log[0].display === "serif-display");
+ok("no log is an empty log, not a crash", parseBuildLines(null).length === 0);
+
+console.log("\n── variety: L-VARIETY-1, two axes and one of them visible ──");
+const prev = log[0]; // dark / serif-display / warm / committed
+const v = (c) => verdict(c, log);
+
+ok("four axes changed passes",
+  v({ shape: "catalogue", paper: "light", display: "mono", accent: "green", strategy: "drenched" }).ok);
+ok("one axis changed fails",
+  !v({ shape: "catalogue", paper: "light", display: "serif-display", accent: "warm", strategy: "committed" }).ok);
+const invisible = v({ shape: "catalogue", paper: "dark", display: "serif-display", accent: "cool", strategy: "restrained" });
+ok("two axes changed but neither is visible: fails", !invisible.ok);
+ok("...and says so rather than reporting a count",
+  invisible.reasons.some((r) => /not visible/.test(r)));
+ok("paper alone is not enough either",
+  !v({ shape: "catalogue", paper: "light", display: "serif-display", accent: "warm", strategy: "committed" }).ok);
+ok("paper plus strategy is enough",
+  v({ shape: "catalogue", paper: "light", display: "serif-display", accent: "warm", strategy: "drenched" }).ok);
+
+console.log("\n── variety: L-VARIETY-2 and the vocabularies ──");
+ok("a shape from the last three is refused",
+  !v({ shape: "stat-led", paper: "light", display: "mono", accent: "green", strategy: "drenched" }).ok);
+const typo = v({ shape: "catalogue", paper: "lite", display: "mono", accent: "green", strategy: "drenched" });
+ok("a value outside its vocabulary fails", !typo.ok);
+ok("...and is named, so a typo cannot silently buy variety",
+  typo.unreadable.includes("paper"));
+ok("an unreadable axis never counts as a difference",
+  !changedAxes({ paper: "lite" }, { paper: "dark" }).includes("paper"));
+
+console.log("\n── variety: the first build has nothing to differ from ──");
+const firstRun = verdict({ shape: "stat-led", paper: "dark", display: "mono", accent: "warm", strategy: "committed" }, []);
+ok("first build passes", firstRun.ok && firstRun.first === true);
+ok("burned() on an empty log reports nothing burned",
+  burned([]).shapes.length === 0 && burned([]).paper === null);
+ok("burned() reports the previous look and the recent shapes",
+  burned(log).paper === "dark" && burned(log).shapes.join() === "long-document,stat-led");
+ok("every axis has a closed vocabulary", AXES.every((a) => Array.isArray(VOCAB[a]) && VOCAB[a].length > 1));
+ok("prev is the entry the predicate compares against", prev.paper === "dark");
+
+// ---------------------------------------------------------------------------
+// load-context.mjs — the pre-flight scan.
+//
+// One end-to-end case against a real directory, because the thing that breaks is
+// never the regex in isolation, it is the walk, the caps, or a path separator on
+// Windows. The scan is a subprocess here for the same reason it is a subprocess
+// in the skill: that is how the gate actually calls it.
+
+console.log("\n── load-context: the pre-flight scan reads a project ──");
+{
+  const dir = mkdtempSync(join(tmpdir(), "nth-preflight-"));
+  mkdirSync(join(dir, "src"), { recursive: true });
+  writeFileSync(join(dir, "package.json"), JSON.stringify({
+    dependencies: { next: "16.2.10", react: "19.2.4", gsap: "^3.12.0" },
+  }, null, 2));
+  writeFileSync(join(dir, "src", "tokens.css"),
+    `:root {\n  --color-ink: oklch(22% 0.02 90);\n  --space-2: 8px;\n  --font-display: "Fraunces", serif;\n}\n`);
+  writeFileSync(join(dir, "index.html"), `<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700">`);
+
+  const raw = execFileSync(process.execPath,
+    [resolve("skills/siteasy/scripts/load-context.mjs"), dir], { encoding: "utf8" });
+  const pf = JSON.parse(raw).preflight;
+
+  ok("the meta-framework wins over react", pf.framework?.name === "Next.js");
+  ok("evidence carries a file and a line", /^package\.json:\d+$/.test(pf.framework.evidence));
+  ok("a motion library flips the stance", pf.motionStance === "motion-on" && pf.motion[0].package === "gsap");
+  ok("a linked Google font is found in markup",
+    pf.fonts.some((f) => f.kind === "google-link" && /Fraunces/.test(f.value)));
+  ok("a font token is found in CSS", pf.fonts.some((f) => f.kind === "token"));
+  ok("colour and spacing properties are counted apart",
+    pf.tokens.colorProps === 1 && pf.tokens.spaceProps === 1);
+  ok("paths in evidence are posix, whatever the host", pf.tokens.sample.every((s) => !s.evidence.includes("\\")));
+
+  // An empty directory is the case that most often crashes a scanner, and the one
+  // a first run on a scratch folder actually hits.
+  const empty = mkdtempSync(join(tmpdir(), "nth-preflight-empty-"));
+  const bare = JSON.parse(execFileSync(process.execPath,
+    [resolve("skills/siteasy/scripts/load-context.mjs"), empty], { encoding: "utf8" })).preflight;
+  ok("an empty project scans clean and says nothing to preserve",
+    bare.framework === null && bare.motionStance === "motion-cut" &&
+    bare.notes.some((n) => /nothing to preserve/.test(n)));
+
+  rmSync(dir, { recursive: true, force: true });
+  rmSync(empty, { recursive: true, force: true });
+}
 
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {

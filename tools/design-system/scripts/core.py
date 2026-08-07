@@ -30,10 +30,15 @@ CSV_CONFIG = {
         "search_cols": ["Data Type", "Keywords", "Best Chart Type", "When to Use", "When NOT to Use", "Accessibility Notes"],
         "output_cols": ["Data Type", "Keywords", "Best Chart Type", "Secondary Options", "When to Use", "When NOT to Use", "Data Volume Threshold", "Color Guidance", "Accessibility Grade", "Accessibility Notes", "A11y Fallback", "Library Recommendation", "Interactive Level"]
     },
+    # Key stays "landing" because six call sites in design_system.py read it and the
+    # key is internal. The file is page-shapes.csv because it stopped being only
+    # landing pages at v3.6.0: a console and a docs tree are page shapes too, and a
+    # catalogue named after one of its surfaces is how the next reader misses the
+    # other five.
     "landing": {
-        "file": "landing.csv",
-        "search_cols": ["Pattern Name", "Keywords", "Conversion Optimization", "Section Order"],
-        "output_cols": ["Pattern Name", "Keywords", "Section Order", "Primary CTA Placement", "Color Strategy", "Conversion Optimization"]
+        "file": "page-shapes.csv",
+        "search_cols": ["Pattern Name", "Surface", "Keywords", "Conversion Optimization", "Section Order"],
+        "output_cols": ["Pattern Name", "Surface", "Keywords", "Section Order", "Primary CTA Placement", "Color Strategy", "Conversion Optimization"]
     },
     "product": {
         "file": "products.csv",
@@ -227,7 +232,7 @@ def detect_domain(query):
     domain_keywords = {
         "color": ["color", "palette", "hex", "#", "rgb", "token", "semantic", "accent", "destructive", "muted", "foreground"],
         "chart": ["chart", "graph", "visualization", "trend", "bar", "pie", "scatter", "heatmap", "funnel"],
-        "landing": ["landing", "page", "cta", "conversion", "hero", "testimonial", "pricing", "section"],
+        "landing": ["landing", "page", "page shape", "cta", "conversion", "hero", "testimonial", "pricing", "section", "dashboard", "console", "workbench", "settings", "inbox", "docs", "documentation", "reference", "tutorial", "article", "editorial", "catalogue", "catalog", "specimen", "case study", "portfolio"],
         "product": ["saas", "ecommerce", "e-commerce", "fintech", "healthcare", "gaming", "portfolio", "crypto", "dashboard", "fitness", "restaurant", "hotel", "travel", "music", "education", "learning", "legal", "insurance", "medical", "beauty", "pharmacy", "dental", "pet", "dating", "wedding", "recipe", "delivery", "ride", "booking", "calendar", "timer", "tracker", "diary", "note", "chat", "messenger", "crm", "invoice", "parking", "transit", "vpn", "alarm", "weather", "sleep", "meditation", "fasting", "habit", "grocery", "meme", "wardrobe", "plant care", "reading", "flashcard", "puzzle", "trivia", "arcade", "photography", "streaming", "podcast", "newsletter", "marketplace", "freelancer", "coworking", "airline", "museum", "theater", "church", "non-profit", "charity", "kindergarten", "daycare", "senior care", "veterinary", "florist", "bakery", "brewery", "construction", "automotive", "real estate", "logistics", "agriculture", "coding bootcamp"],
         "style": ["style", "design", "ui", "minimalism", "glassmorphism", "neumorphism", "brutalism", "dark mode", "flat", "aurora", "prompt", "css", "implementation", "variable", "checklist", "tailwind"],
         "ux": ["ux", "usability", "accessibility", "wcag", "touch", "scroll", "animation", "keyboard", "navigation", "mobile"],

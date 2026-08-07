@@ -62,6 +62,85 @@ def fluid(n, ratio):
     span = (maxpx - minpx) / 9.2
     return f"clamp({minpx/16:.3f}rem, calc({minpx/16:.3f}rem + {span:.2f}vw), {maxpx/16:.3f}rem)"
 
+def emit_tailwind(t, a):
+    """Tailwind v4 @theme. v4 reads the theme from CSS, so this is the same token
+    set under the names Tailwind generates utilities from. Note --spacing-*, not
+    --space-*: Tailwind owns that prefix and a mismatch produces no utility and no
+    error."""
+    L = ["/* Tailwind v4. Import once, then use bg-bg, text-fg, border-border. */",
+         "@theme {",
+         f"  --font-sans: {a.font};",
+         f"  --font-head: {a.font_head or a.font};"]
+    for k in ("bg", "surface", "fg", "fg-muted", "border", "accent", "accent-ink", "ring"):
+        L.append(f"  --color-{k}: {t[k]};")
+    for k, v in t["neutral"].items(): L.append(f"  --color-neutral-{k}: {v};")
+    for k, v in t["accent-ramp"].items(): L.append(f"  --color-accent-{k}: {v};")
+    for i in [1, 2, 3, 4, 6, 8, 12, 16]:
+        L.append(f"  --spacing-{i}: {i*0.25:.2f}rem;")
+    for name, n in t["text"]: L.append(f"  --text-{name}: {n};")
+    L.append(f"  --radius-sm: {max(0, a.radius-4):g}px;")
+    L.append(f"  --radius: {a.radius:g}px;")
+    L.append(f"  --radius-lg: {a.radius+6:g}px;")
+    L.append("}")
+    return "\n".join(L) + "\n"
+
+
+def emit_dtcg(t, a):
+    """W3C Design Tokens Community Group JSON. The type scale is dropped rather
+    than exported: its values are clamp() expressions, which $type "dimension"
+    cannot carry, and a token that lies about its type is worse than an absent
+    one."""
+    import json
+    colors = {k: {"$value": t[k], "$type": "color"}
+              for k in ("bg", "surface", "fg", "fg-muted", "border", "accent", "accent-ink", "ring")}
+    colors["neutral"] = {k: {"$value": v, "$type": "color"} for k, v in t["neutral"].items()}
+    colors["accent-scale"] = {k: {"$value": v, "$type": "color"} for k, v in t["accent-ramp"].items()}
+    doc = {
+        "$schema": "https://tr.designtokens.org/format/",
+        "$description": "Generated starter. Colours are sRGB mixes; refine in OKLCH before shipping. The fluid type scale is not exported, see the note in theme_css.py.",
+        "color": colors,
+        "space": {str(i): {"$value": f"{i*0.25:.2f}rem", "$type": "dimension"} for i in [1, 2, 3, 4, 6, 8, 12, 16]},
+        "radius": {
+            "sm": {"$value": f"{max(0, a.radius-4):g}px", "$type": "dimension"},
+            "base": {"$value": f"{a.radius:g}px", "$type": "dimension"},
+            "lg": {"$value": f"{a.radius+6:g}px", "$type": "dimension"},
+        },
+        "font": {
+            "sans": {"$value": a.font, "$type": "fontFamily"},
+            "head": {"$value": a.font_head or a.font, "$type": "fontFamily"},
+        },
+    }
+    return json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
+
+
+def emit_shadcn(t, a):
+    """shadcn/ui variables. The one mapping worth stating: shadcn's --accent is the
+    subtle hover surface, not the brand colour. The brand goes to --primary. Wiring
+    the brand into --accent turns every hover row into a block of brand colour,
+    which is the mistake that makes a shadcn app look mis-themed rather than
+    themed."""
+    pairs = [
+        ("background", t["bg"]), ("foreground", t["fg"]),
+        ("card", t["surface"]), ("card-foreground", t["fg"]),
+        ("popover", t["surface"]), ("popover-foreground", t["fg"]),
+        ("primary", t["accent"]), ("primary-foreground", t["accent-ink"]),
+        ("secondary", t["surface"]), ("secondary-foreground", t["fg"]),
+        ("muted", t["surface"]), ("muted-foreground", t["fg-muted"]),
+        ("accent", t["surface"]), ("accent-foreground", t["fg"]),
+        ("border", t["border"]), ("input", t["border"]), ("ring", t["accent"]),
+    ]
+    L = ["/* shadcn/ui. Paste into globals.css. Values are hex, which shadcn accepts;",
+         "   convert to OKLCH when you refine the palette. */",
+         ":root {"]
+    L += [f"  --{k}: {v};" for k, v in pairs]
+    L.append(f"  --radius: {a.radius:g}px;")
+    L.append("  /* --destructive and --destructive-foreground are not derived from the")
+    L.append("     brand inputs. Choose them deliberately: a destructive colour that")
+    L.append("     falls out of a hue ramp is the one that reads as decoration. */")
+    L.append("}")
+    return "\n".join(L) + "\n"
+
+
 def main():
     ap = argparse.ArgumentParser(description="Emit a drop-in :root theme stylesheet.")
     ap.add_argument("--bg", default="#0B0B0C")
@@ -73,6 +152,8 @@ def main():
     ap.add_argument("--radius", type=float, default=10)
     ap.add_argument("--ratio", type=float, default=1.25)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--format", default="css", choices=["css", "tailwind", "dtcg", "shadcn"],
+                    help="css (default) | tailwind (v4 @theme) | dtcg (W3C tokens JSON) | shadcn (globals.css vars)")
     a = ap.parse_args()
     bg = parse_hex(a.bg); ink = parse_hex(a.ink); accent = parse_hex(a.accent); aink = parse_hex(a.accent_ink)
     surface = to_hex(mix(bg, ink, 0.05))
@@ -80,6 +161,26 @@ def main():
     border = to_hex(mix(bg, ink, 0.16))
     nr = ramp(mix((128, 128, 128), bg, 0.12))
     ar = ramp(accent)
+
+    # One computation, four spellings. The formats existed as columns in colors.csv
+    # and typography.csv and as prose in document.md, and nothing wrote them, so a
+    # project on Tailwind or shadcn re-typed the palette by hand.
+    tok = {
+        "bg": a.bg, "surface": surface, "fg": a.ink, "fg-muted": fg_muted,
+        "border": border, "accent": a.accent, "accent-ink": a.accent_ink, "ring": a.accent,
+        "neutral": nr, "accent-ramp": ar,
+        "text": [(name, fluid(n, a.ratio)) for name, n in
+                 [("xs", -1), ("sm", -0.4), ("base", 0), ("lg", 1), ("xl", 2), ("2xl", 3), ("3xl", 4), ("4xl", 5)]],
+    }
+    if a.format != "css":
+        out = {"tailwind": emit_tailwind, "dtcg": emit_dtcg, "shadcn": emit_shadcn}[a.format](tok, a)
+        if a.out:
+            open(a.out, "w", encoding="utf-8", newline="\n").write(out)
+            print(f"Wrote {a.out}")
+        else:
+            sys.stdout.write(out)
+        return
+
     L = []
     L.append("/* Generated theme. Tokens are a starter; refine the palette in OKLCH. */")
     L.append("/* WCAG: body text needs 4.5:1; large text and UI components need 3:1. */")

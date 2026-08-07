@@ -11,6 +11,76 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.6.0] - 2026-08-07
+
+### Added
+
+- **A build knows what the last build was.** `/siteasy` has said "vary across
+  projects, never converge on the same choices" since v1. Nothing recorded what
+  the last project chose, so the instruction was unenforceable and, in practice,
+  unenforced. A command that ships a page now appends one machine-readable line
+  to LOG.md (`- build <date> shape=... paper=... display=... accent=...
+  strategy=...`) and `tools/siteasy/variety.mjs` reads it back. No new file and
+  no new format: LOG.md already existed as append-only working memory.
+
+- **Variety as a decidable predicate, not an adjective.** Two new canonical laws.
+  L-VARIETY-1 requires two consecutive builds to differ on at least two of paper
+  band, display family, accent hue and colour strategy, and at least one of the
+  two must be paper or display. That second clause is the one that matters: a
+  warm accent swapped for a cool one at the same coverage, on the same paper,
+  under the same display face, is not a different site, and counting changed axes
+  alone would have passed it. L-VARIETY-2 refuses a page shape used in the last
+  three builds. The four look axes have closed vocabularies, because an open
+  vocabulary makes "did this change" undecidable, which is the failure the prose
+  instruction already had; a value outside its list is reported rather than
+  counted, so a typo cannot buy variety.
+
+- **The gate before handing back is a command, not a checklist.** `craft` Step 6
+  ends by running `tools/audit/gate.mjs` on the built file and refuses to present
+  on a critical failure. This is the same gate `/audit` publishes as a GitHub
+  Action, running the same 42 deterministic checks. The critique loop above it
+  stays, and stays judgment; the difference is that the last thing before Step 7
+  can now fail out loud. The result is reported as a number against a threshold,
+  and a skipped gate has to say it was skipped.
+
+- **The Conventions gate has machine output.** `load-context.mjs` scanned two
+  files. It now also reports framework, motion stance, the fonts already loaded,
+  the custom properties already defined and the Tailwind theme, each with a file
+  and a line, plus notes on the conflicts worth surfacing (Tailwind and raw
+  custom properties both present, fonts with no manifest). The walk is bounded
+  and skips build output, because a scan that wanders into `node_modules` reports
+  somebody else's conventions. Deliberately uncached: the scan is a few dozen
+  regex passes and finishes in milliseconds, so a cache would only add a
+  staleness bug.
+
+- **Page shapes past the landing page.** `landing.csv` became `page-shapes.csv`
+  and gained a `Surface` column and thirteen shapes the landing catalogue never
+  had: five app surfaces (workbench, metrics board, console, inbox and thread,
+  settings ladder), three docs, two editorial, two catalogue, one portfolio. 47
+  rows across six surfaces. `shape.md` picks from it and records the pick, which
+  is what L-VARIETY-2 reads. The search domain key stays `landing`, because six
+  call sites read it and the key is internal.
+
+- **The token generator emits the format the project already uses.**
+  `theme_css.py --format tailwind|dtcg|shadcn` alongside the default CSS. One
+  computation, four spellings. `colors.csv` has used shadcn's own role names on
+  161 palettes since v2 and nothing wrote them, so a project on shadcn re-typed
+  the palette by hand, which is where the second, slightly different palette
+  comes from. Three traps are handled rather than hit: Tailwind reads
+  `--spacing-*` and a `--space-*` block generates no utility and no error; the
+  fluid type scale is omitted from the DTCG output, because `clamp()` is not a
+  `dimension` and a mistyped token is worse than an absent one; and the brand
+  goes to shadcn's `--primary`, never its `--accent`, which is the subtle hover
+  surface. The CSS output is byte-identical to v3.5.2.
+
+### Fixed
+
+- Every em dash in this file. 107 of them, all in entries predating v3.1.0,
+  against a house style that bans them. The lint blocked on the file rather than
+  on the lines, so they had to go before the next entry could land.
+
+---
+
 ## [3.5.2] - 2026-08-06
 
 ### Added
@@ -673,11 +743,11 @@ Went to mine a vendor's SEO academy for material. Found nothing worth importing:
 ### Fixed
 
 - **`geo.md`'s statistics table cited "Industry data". Of its six load-bearing rows, zero were stated accurately.** On a skill whose pitch is verdicts you can recompute, a stats table sourced to a phrase that sounds like a consensus is the one lie that costs the argument. Every "Industry data" label turned out to be concealing a single traceable vendor study, so the label was hiding a source, not standing in for a missing one:
-  - **AI Overviews coverage "50%+ of all queries"** was a keyword-panel figure sold as a query figure. Real measurements span **9.5%–60%** and the spread is not a dispute, it is four different denominators: keyword databases over-weight the informational long-tail that triggers AIOs, real human query streams do not. Pew is the only non-vendor sample of actual searches (68,879 searches, 900 US adults, Mar 2025) and gives **18%**. Now a range with every sample named. Also noted: Semrush's own series is non-monotonic (24.6% Jul 2025 → 15.7% Nov), so any "growing to X" framing is unsupported by the only long time series that exists.
-  - **"+527%, SparkToro"** — the figure is real, the attribution was wrong. It is **Previsible**, 19 GA4 properties, off a base of 17,076 sessions.
-  - **"4.4x conversion"** — Semrush said 4.4x as *valuable*, modelled from conversion rate, in ~500 digital-marketing topics, which is Semrush's own vertical.
-  - **"Ahrefs Dec 2025"** — May 2025, seven months off. The table also dropped the caveat Ahrefs leads with: correlation only, all factors moderate-to-weak. Big brands get both mentions and citations; that confounder is the whole story.
-  - **"11% of domains cited by both ChatGPT and Google AIO"** — wrong engines. Profound measured ChatGPT ∩ **Perplexity**. ChatGPT ∩ AIO is not published by anyone.
+  - **AI Overviews coverage "50%+ of all queries"** was a keyword-panel figure sold as a query figure. Real measurements span **9.5%-60%** and the spread is not a dispute, it is four different denominators: keyword databases over-weight the informational long-tail that triggers AIOs, real human query streams do not. Pew is the only non-vendor sample of actual searches (68,879 searches, 900 US adults, Mar 2025) and gives **18%**. Now a range with every sample named. Also noted: Semrush's own series is non-monotonic (24.6% Jul 2025 → 15.7% Nov), so any "growing to X" framing is unsupported by the only long time series that exists.
+  - **"+527%, SparkToro"**, the figure is real, the attribution was wrong. It is **Previsible**, 19 GA4 properties, off a base of 17,076 sessions.
+  - **"4.4x conversion"**, Semrush said 4.4x as *valuable*, modelled from conversion rate, in ~500 digital-marketing topics, which is Semrush's own vertical.
+  - **"Ahrefs Dec 2025"**, May 2025, seven months off. The table also dropped the caveat Ahrefs leads with: correlation only, all factors moderate-to-weak. Big brands get both mentions and citations; that confounder is the whole story.
+  - **"11% of domains cited by both ChatGPT and Google AIO"**, wrong engines. Profound measured ChatGPT ∩ **Perplexity**. ChatGPT ∩ AIO is not published by anyone.
 - **The "40-60 word answer" rule had no primary source, and Google now contradicts its premise.** It is a descriptive artifact of vendor snippet-scrapes (that band is where Google *truncates*) reversed into a prescription. Google publishes no minimum length for featured snippets, and its generative-AI guide states there is **no ideal page length** and no requirement to chunk. Cut. A "120-180 words per block" optimum credited to unnamed "citation-extraction studies" went with it: a number nobody can trace is worse than no number, because it survives review by looking precise.
 
 ### Added
@@ -775,11 +845,11 @@ Went to mine a vendor's SEO academy for material. Found nothing worth importing:
 
 ### Fixed
 
-- `homepage` pointed at the author's CV. The plugin has a site now: https://nulltohero.netlify.app/ — built with the plugin, and the live proof of the OKLCH fix below. The author `url` stays the CV, which is what that field is for.
+- `homepage` pointed at the author's CV. The plugin has a site now: https://nulltohero.netlify.app/, built with the plugin, and the live proof of the OKLCH fix below. The author `url` stays the CV, which is what that field is for.
 
 ### Added
 
-- Mixing two faces in one lockup, in `typography.md`. Every instinct here is wrong and the errors all look like each other. `align-items: baseline` aligns the baselines the FONTS declare, so the typographically correct alignment is routinely the visually wrong one — and nudging the symptom buries a structural error under a second wrong number. Match cap height (measured, not font-size: a display face's caps ran 25% taller at the same size). Centre on painted ink **including shadows** (an extrusion hanging below the baseline is ink the reader sees; excluding it measures the wrong object). Fit letters on real side bearings (two faces butted together were 9.6px overlapped on one side and 9.3px apart on the other — a 19px swing, obvious as a symptom, invisible as a cause). Two things stay optical and only two: size when an effect adds mass no cap height accounts for, and kerning across a round-to-flat pair. Measurement settles geometry, not perception.
+- Mixing two faces in one lockup, in `typography.md`. Every instinct here is wrong and the errors all look like each other. `align-items: baseline` aligns the baselines the FONTS declare, so the typographically correct alignment is routinely the visually wrong one, and nudging the symptom buries a structural error under a second wrong number. Match cap height (measured, not font-size: a display face's caps ran 25% taller at the same size). Centre on painted ink **including shadows** (an extrusion hanging below the baseline is ink the reader sees; excluding it measures the wrong object). Fit letters on real side bearings (two faces butted together were 9.6px overlapped on one side and 9.3px apart on the other, a 19px swing, obvious as a symptom, invisible as a cause). Two things stay optical and only two: size when an effect adds mass no cap height accounts for, and kerning across a round-to-flat pair. Measurement settles geometry, not perception.
 
 ### Verified
 
@@ -793,17 +863,17 @@ Dogfooding release: everything here came from building a 7-act scrollytelling he
 
 ### Fixed
 
-- **The contrast engine could not read the colour spaces the plugin prescribes.** `parseColor` handled named/hex/rgb only, so `oklch()` returned null — including `oklch(0.15 0.01 270)`, which is inspect-rules.csv rule 19's own "good" example, and the format `design-tokens.md` recommends throughout. `pickColor` was the upstream half: its regex lacked the modern functions, so `background: oklch(...)` fell through to the bare-word branch and returned the string `"oklch"`, the background resolved as unknown, and every text sample on the page was dropped before it reached the parser. A site that followed our own advice was reported NOT_MEASURED: no false pass, but no measurement either. `contrast.mjs` now parses `oklch()`, `oklab()`, `lch()`, `lab()` (Ottosson OKLab and D50 CIE Lab, Bradford-adapted) and `hsl()`/`hsla()`, pure stdlib, no dependencies; unsupported spaces still return null rather than a guess. Verified: an all-OKLCH page now FAILS on a 1.49:1 grey it previously did not measure at all.
+- **The contrast engine could not read the colour spaces the plugin prescribes.** `parseColor` handled named/hex/rgb only, so `oklch()` returned null, including `oklch(0.15 0.01 270)`, which is inspect-rules.csv rule 19's own "good" example, and the format `design-tokens.md` recommends throughout. `pickColor` was the upstream half: its regex lacked the modern functions, so `background: oklch(...)` fell through to the bare-word branch and returned the string `"oklch"`, the background resolved as unknown, and every text sample on the page was dropped before it reached the parser. A site that followed our own advice was reported NOT_MEASURED: no false pass, but no measurement either. `contrast.mjs` now parses `oklch()`, `oklab()`, `lch()`, `lab()` (Ottosson OKLab and D50 CIE Lab, Bradford-adapted) and `hsl()`/`hsla()`, pure stdlib, no dependencies; unsupported spaces still return null rather than a guess. Verified: an all-OKLCH page now FAILS on a 1.49:1 grey it previously did not measure at all.
 - **Undecodable colours were dropped silently.** `checks.mjs` did `if (r) samples.push(...)`, so a ratio measured over 2 of 12 colours produced the same bare PASS as one measured over 12 of 12. Colours we cannot decode are now tracked and surfaced on every verdict, named, with an explicit "this verdict does not cover them". A deterministic detector must not let "could not read this" look identical to "this is fine".
 - 25 unit tests for the parser, anchored on values with known-exact answers (the sRGB primaries through every space; `oklch(62.8% 0.258 29.23)` is CSS Color 4's own red sample) rather than on whatever the implementation happens to emit.
 
 ### Added
 
-- Rules 69-71 (68 → 71). **69** Layout/critical: `opacity: 0` does not stop pointer events, so a faded full-bleed overlay silently swallows every click beneath it — nothing looks wrong, so it gets found by users rather than by review. **70** Motion/important: never reuse a time-based curve on a scrubbed tween; L-MOTION-3 already required linear, what was missing is the diagnostic — an expo-out tween is ~90% complete at the **midpoint** of its scroll window, so it snaps shut then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. **71** Motion/medium: a hand keeps its own clock; scrubbing handwriting ties the pen's speed to the wheel.
+- Rules 69-71 (68 → 71). **69** Layout/critical: `opacity: 0` does not stop pointer events, so a faded full-bleed overlay silently swallows every click beneath it, nothing looks wrong, so it gets found by users rather than by review. **70** Motion/important: never reuse a time-based curve on a scrubbed tween; L-MOTION-3 already required linear, what was missing is the diagnostic, an expo-out tween is ~90% complete at the **midpoint** of its scroll window, so it snaps shut then waits while the reader is still scrolling. Sample any scrub at 50% of its range and check the visual sits near 50%. **71** Motion/medium: a hand keeps its own clock; scrubbing handwriting ties the pen's speed to the wheel.
 - Scrollytelling doctrine in `parallax.md`, carried into the two artifacts that gate work (the Match-and-refuse list and the Audit Checklist) and into `siteasy-agent-motion`, not left as prose: beats are **covered, not crossfaded** (a fade is the default gesture, so the same fade on every boundary is the loudest signal that nobody chose any of them, and readers name it long before an audit does); beats get **weights, not equal segments** (a beat lasts as long as it takes to read, and a typing terminal does not take as long as a blank sheet).
 - Scroll-linked verification doctrine in `preview.md`: a screenshot is a claim about a moment, and on a scroll-driven page the default moment is the emptiest one. Everything scroll-linked sits at progress 0 until something scrolls; a hidden page runs no `requestAnimationFrame` at all, so scroll position moves while animation progress stays frozen and the DOM disagrees with the pixels; verify animated state from the DOM, never from the picture. `fetch.mjs` now asserts `visibilityState` before trusting computed measurements.
 - Font licensing in `typography.md`: read the licence in the zip, not the badge on the site. "Free for personal use" faces routinely require a licence for **promotional** use, which covers every marketing page we build, including free and open-source ones.
-- Display-face subsetting in `resource-recipes.md`: the advice existed without a command or a number. Both added — `pyftsubset --text="..." --flavor=woff2`, measured at 122 KB TTF → 2.6 KB woff2 (46x), cheaper than the DNS lookup a font CDN would have cost.
+- Display-face subsetting in `resource-recipes.md`: the advice existed without a command or a number. Both added, `pyftsubset --text="..." --flavor=woff2`, measured at 122 KB TTF → 2.6 KB woff2 (46x), cheaper than the DNS lookup a font CDN would have cost.
 - Stack gotchas: Tailwind `@theme inline` compiles utilities to the raw var name, so overriding `--color-*` does nothing, silently; re-theming needs an explicit colour class because inheritance carries the computed colour past the override; motion cannot animate SVG geometry attributes (use `clip-path`); `pathLength: 0` with a round cap paints a dot; a sticky header eats the top of a full-bleed hero and blurs the body instead of the hero.
 
 ---
@@ -818,7 +888,7 @@ Dogfooding release: everything here came from building a 7-act scrollytelling he
 - Direction-constrained generation: `design_system.py --direction` reads DIRECTION.md/PRODUCT.md, biases the search toward the declared register, prints the constraints and flags recommendations colliding with declared anti-references.
 - Learnings loop: audits capture false positives, uncovered patterns and threshold drift as structured `LEARNINGS.md` candidates (never applied mid-audit); the new `/audit learnings` command reviews them into rules, gates, laws or fixtures with the eval discipline.
 - Guaranteed-play video: `/siteasy video` with `video.md` (decorative vs interactive classification, canvas + WASM decoder doctrine, fallback chain, honest tradeoffs) and `scripts/video-guardplay.mjs` (audit mode; generate mode: ffmpeg MPEG1-TS for JSMpeg by default, VP9 option, poster + native fallback clip + drop-in component with IntersectionObserver pause, reduced-motion poster, zero CLS; fetches the MIT JSMpeg decoder into the target project once). Rules 65-68 (modern formats with fallback, lazy-load below the fold, VideoObject + video sitemap, guaranteed decorative playback), remediation routes to `/siteasy video`, and the `video-embed-hygiene` check now reports the decorative/interactive classification (new fixture, 68 total).
-- Component recipes: `component-recipes.md` — 22 curated registry recipes (install, canonical props from the demos, per-recipe guardrails: reduced-motion, factory gradients to tokens, localized tickers, self-hosted flags, setInterval-free gauges) linked from component-patterns and delight, with the kit warning.
+- Component recipes: `component-recipes.md`, 22 curated registry recipes (install, canonical props from the demos, per-recipe guardrails: reduced-motion, factory gradients to tokens, localized tickers, self-hosted flags, setInterval-free gauges) linked from component-patterns and delight, with the kit warning.
 
 ---
 
@@ -832,7 +902,7 @@ Connective-tissue release: the five recommendations against the "catalogue" effe
 - Remediation routing: `tools/data/remediation-map.csv` (32 checks + 64 rules, each mapped to the command that fixes it, the reference that command loads and an optional data query); every check in SITE-AUDIT.json now carries a `fixWith` route; the audit Action Plan and `/inspect detect` cite routes and group fixes by command.
 - Active data: a passive library probe (`target.libs`: GSAP, Lenis, motion, three.js, R3F, scrollama, React/Next, Vue, Svelte, Tailwind, jQuery, Alpine, WordPress) beside the scrolly probe; standardized "Resource hooks" blocks in 8 references citing exact `search.py`/`search-references.mjs` queries; two new moments (scrollytelling, WebGL) in resource-recommendations.
 - Reference graph: `tools/build-index.mjs` now emits `tools/reference-graph.json` (113 nodes, 258 edges) and validate check 36 fails on stale graphs, orphan references and design-system data files cited nowhere; the 11 existing orphans were wired in (plan templates linked from plan.md, technical deep dives, print styles from adapt, testing strategy from craft, ui-reasoning.csv documented in heuristics-scoring).
-- Journeys: three orchestrated pipelines as `/siteasy` commands — `ship` (polish, defect scan, deterministic audit, hardening, final audit), `overhaul` (baseline audit, triage by remediation route, execute per command, compare) and `express` (setup to launch in eight gated stages) — 3 new references chaining existing commands around the shared state.
+- Journeys: three orchestrated pipelines as `/siteasy` commands, `ship` (polish, defect scan, deterministic audit, hardening, final audit), `overhaul` (baseline audit, triage by remediation route, execute per command, compare) and `express` (setup to launch in eight gated stages), 3 new references chaining existing commands around the shared state.
 
 ### Fixed
 
@@ -987,7 +1057,7 @@ Memorable, not just correct. A site can pass every check and still be forgettabl
 
 - The build flow now opens from the direction, not a component library, and the memorability dimension checks whether that direction survived to the rendered page.
 
-## [1.22.0] — 2026-07-06
+## [1.22.0], 2026-07-06
 
 Harvested checks and references. The deterministic pre-pass gains thirteen checks: HTML nesting validity and ARIA attribute names, early charset and head metadata, subresource integrity, open-redirect parameters, a credentialed CORS wildcard, response compression, server fingerprint headers, cookie security flags, and three passive URL probes (HTTP to HTTPS redirect, www or non-www canonical host, security.txt). The security-headers check now grades HSTS and CSP quality and reports Permissions-Policy and cross-origin isolation. Nine inspect rules cover runtime security, JavaScript resilience and print and scheme robustness, and the rule set gains why and source columns. New references document head metadata, print styles, a testing strategy, privacy and consent, and performance; remediation tool lists and a generators data set back the build path.
 
@@ -1006,7 +1076,7 @@ Harvested checks and references. The deterministic pre-pass gains thirteen check
 
 ---
 
-## [1.21.0] — 2026-07-03
+## [1.21.0], 2026-07-03
 
 Audit reliability. The deterministic pre-pass now writes the raw and rendered HTML, the linked CSS and JS, the response headers and robots.txt to a known assets directory that every sub-agent reads with the Read tool, so agents no longer depend on a WebFetch that may be unavailable. Contrast is computed statically from design tokens and linked CSS without a headless browser, security headers and canonical or preview state are parsed deterministically, and a preview host with a production canonical is no longer a false failure.
 
@@ -1026,7 +1096,7 @@ Audit reliability. The deterministic pre-pass now writes the raw and rendered HT
 
 ---
 
-## [1.20.6] — 2026-06-27
+## [1.20.6], 2026-06-27
 
 README consistency. Every skill block now carries a "Common runs" line; the inspect example block is removed in favor of one.
 
@@ -1037,7 +1107,7 @@ README consistency. Every skill block now carries a "Common runs" line; the insp
 
 ---
 
-## [1.20.5] — 2026-06-27
+## [1.20.5], 2026-06-27
 
 README consistency. Each skill now ends the same way: a description and a single collapsible block, with nothing left visible after it.
 
@@ -1047,7 +1117,7 @@ README consistency. Each skill now ends the same way: a description and a single
 
 ---
 
-## [1.20.4] — 2026-06-27
+## [1.20.4], 2026-06-27
 
 README readability. Reverted the workflow to the plain-text flow, collapsed all four command tables and folded the output samples.
 
@@ -1059,7 +1129,7 @@ README readability. Reverted the workflow to the plain-text flow, collapsed all 
 
 ---
 
-## [1.20.3] — 2026-06-27
+## [1.20.3], 2026-06-27
 
 More README polish. A Mermaid workflow diagram, a four-skill card grid, syntax-highlighted output samples, GitHub callouts and a dark-mode demo via a picture element.
 
@@ -1076,7 +1146,7 @@ More README polish. A Mermaid workflow diagram, a four-skill card grid, syntax-h
 
 ---
 
-## [1.20.2] — 2026-06-27
+## [1.20.2], 2026-06-27
 
 README aesthetics. A centered header with a badge row, an animated demo of an audit, a navigation bar, collapsible secondary sections, color-coded skill badges and a footer.
 
@@ -1091,7 +1161,7 @@ README aesthetics. A centered header with a badge row, an animated demo of an au
 
 ---
 
-## [1.20.1] — 2026-06-27
+## [1.20.1], 2026-06-27
 
 The README comparison is now a capability table across NullToHero, design-intelligence skills, design-methodology skills and in-browser UI generators.
 
@@ -1101,7 +1171,7 @@ The README comparison is now a capability table across NullToHero, design-intell
 
 ---
 
-## [1.20.0] — 2026-06-27
+## [1.20.0], 2026-06-27
 
 Attribution cleanup and documentation. Third-party attribution is consolidated onto the genuinely vendored engine; the redundant THIRD-PARTY-NOTICES.md is removed. The overview diagram is refreshed and the README gains a comparison section.
 
@@ -1113,7 +1183,7 @@ Attribution cleanup and documentation. Third-party attribution is consolidated o
 
 ---
 
-## [1.19.0] — 2026-06-27
+## [1.19.0], 2026-06-27
 
 A 14th audit agent and editorial rigor. The audit gains a Claims and credibility specialist that red-teams the page's marketing claims with the Toulmin model. Plus a machine-written-copy check, a structurally-different variant mode, and a lightweight ADR practice. 59 commands, 95 references, 14 sub-agents.
 
@@ -1125,7 +1195,7 @@ A 14th audit agent and editorial rigor. The audit gains a Claims and credibility
 
 ---
 
-## [1.18.0] — 2026-06-27
+## [1.18.0], 2026-06-27
 
 New outputs. A developer handoff spec, a pre-launch ship checklist, a self-contained HTML rendering of an audit, plus UX copy patterns and a design-system audit. One new command (handoff); 59 commands, 95 references.
 
@@ -1138,7 +1208,7 @@ New outputs. A developer handoff spec, a pre-launch ship checklist, a self-conta
 
 ---
 
-## [1.17.0] — 2026-06-27
+## [1.17.0], 2026-06-27
 
 Theme generator. A pure-stdlib script turns a few brand inputs into a drop-in :root stylesheet: semantic tokens with WCAG contrast checks, neutral and accent tonal ramps, an elevation ramp, a fluid type scale, spacing and radius scales, focus-visible, a reduced-motion guard and a print sheet. The generative counterpart to the tokens audit. 58 commands, 92 references.
 
@@ -1152,7 +1222,7 @@ Theme generator. A pure-stdlib script turns a few brand inputs into a drop-in :r
 
 ---
 
-## [1.16.0] — 2026-06-27
+## [1.16.0], 2026-06-27
 
 Code quality lane. A new inspect reference reviews the robustness of emitted code (the security, performance, correctness and maintainability that interface review skips) and wires into the bundled per-stack rule base. Ten web code-quality rules added to the deterministic detector. 58 commands, 92 references.
 
@@ -1167,7 +1237,7 @@ Code quality lane. A new inspect reference reviews the robustness of emitted cod
 
 ---
 
-## [1.15.0] — 2026-06-27
+## [1.15.0], 2026-06-27
 
 Design reference depth. Five new siteasy references (data visualization accessibility, an elevation and shadow system, a semantic color system, named style systems, landing page patterns) plus a modular type scale, adapted from external MIT sources recorded in ATTRIBUTION.md. One new command (charts); 58 commands, 91 references.
 
@@ -1182,7 +1252,7 @@ Design reference depth. Five new siteasy references (data visualization accessib
 
 ---
 
-## [1.14.0] — 2026-06-09
+## [1.14.0], 2026-06-09
 
 Deterministic pre-pass. A pure-Node ground-truth layer turns the shared fetch into objective verdicts before any agent runs: an optional JavaScript render (Playwright) so a client-rendered SPA is audited as rendered rather than as an empty shell, a static analyzer that computes the objectively decidable checks (contrast, image dimensions, viewport, robots.txt, heading order, html lang, title, meta description, 375px overflow), a machine-readable `SITE-AUDIT.json`, a CI gate, a cost ledger and a reference evaluation set. One new command; 57 commands, 86 references.
 
@@ -1206,7 +1276,7 @@ Deterministic pre-pass. A pure-Node ground-truth layer turns the shared fetch in
 
 ---
 
-## [1.13.0] — 2026-06-09
+## [1.13.0], 2026-06-09
 
 Audit comparison. A new `/audit compare A B` mode diffs two targets check by check: which verdicts regressed, which improved and the resulting score deltas. It is trustworthy because 1.12.0 made the scores deterministic, so a delta is a real difference rather than jitter. One new command; 56 commands, 85 references.
 
@@ -1216,7 +1286,7 @@ Audit comparison. A new `/audit compare A B` mode diffs two targets check by che
 
 ---
 
-## [1.12.0] — 2026-06-09
+## [1.12.0], 2026-06-09
 
 Deterministic audit scoring. Replaces the free-form 0-100 score each agent picked by feel with a fixed rubric computed from the check verdicts, and makes the severity cap fire on a rule instead of a judgment. Cuts run-to-run score variance on the same site. No new commands; 55 commands, 84 references.
 
@@ -1231,7 +1301,7 @@ Deterministic audit scoring. Replaces the free-form 0-100 score each agent picke
 
 ---
 
-## [1.11.0] — 2026-06-08
+## [1.11.0], 2026-06-08
 
 Multi-agent architecture pass. Documents the orchestrator and the 13 sub-agents against production multi-agent practice, hardens the agent layer against untrusted-input injection, and adds a consensus re-check mode. One new command; 55 commands, 84 references.
 
@@ -1247,24 +1317,24 @@ Multi-agent architecture pass. Documents the orchestrator and the 13 sub-agents 
 
 ---
 
-## [1.10.0] — 2026-06-06
+## [1.10.0], 2026-06-06
 
 Mobile ergonomics knowledge drop: a dedicated phone playbook plus thumb-zone navigation, touch-target standards, mobile-first strategy, virtual-keyboard mapping and loading-state choreography folded into the existing references. One new command; 54 commands, 84 references.
 
 ### Added
-- `/siteasy mobile` and its reference `mobile-ergonomics.md`: the phone-specific playbook — thumb-zone placement map with corollaries (primary actions at the bottom, destructive actions out of the easy zone), condensed touch-target rules, one-handed navigation constraints, gesture escape hatches, keyboard-friction reduction through device capabilities (geolocation, camera, passkeys), cellular performance, and a five-step mobile audit protocol with a 12-point checklist.
-- `information-architecture.md`: "Mobile navigation" section — one-handed-use data (49/36/15), bottom tab bar vs hamburger vs full-screen vs gesture-only trade-offs, the Priority+ hybrid pattern with documented results, the 80-20 rule for drawers, the three-level depth ceiling, safe back behavior and the case against in-app browsers for core journeys.
-- `responsive-design.md`: "Mobile-first is a strategy, not a media-query order" — top-down responsive vs bottom-up mobile-first comparison, full content parity (no "view desktop site" link), the mobile comprehension penalty and the false-floor effect of banner-shaped decoration.
-- `wcag-2-2.md`: target-size context — how 24px (AA) sits against WCAG 2.5.5 AAA 44px, Apple 44pt, Android 48dp and Microsoft 7mm, plus per-control comfort sizes (CTA, fields, icon buttons, modal close) and the 8px adjacency gap.
+- `/siteasy mobile` and its reference `mobile-ergonomics.md`: the phone-specific playbook, thumb-zone placement map with corollaries (primary actions at the bottom, destructive actions out of the easy zone), condensed touch-target rules, one-handed navigation constraints, gesture escape hatches, keyboard-friction reduction through device capabilities (geolocation, camera, passkeys), cellular performance, and a five-step mobile audit protocol with a 12-point checklist.
+- `information-architecture.md`: "Mobile navigation" section, one-handed-use data (49/36/15), bottom tab bar vs hamburger vs full-screen vs gesture-only trade-offs, the Priority+ hybrid pattern with documented results, the 80-20 rule for drawers, the three-level depth ceiling, safe back behavior and the case against in-app browsers for core journeys.
+- `responsive-design.md`: "Mobile-first is a strategy, not a media-query order", top-down responsive vs bottom-up mobile-first comparison, full content parity (no "view desktop site" link), the mobile comprehension penalty and the false-floor effect of banner-shaped decoration.
+- `wcag-2-2.md`: target-size context, how 24px (AA) sits against WCAG 2.5.5 AAA 44px, Apple 44pt, Android 48dp and Microsoft 7mm, plus per-control comfort sizes (CTA, fields, icon buttons, modal close) and the 8px adjacency gap.
 - `form-patterns.md`: `<fieldset>`/`<legend>` grouping for screen readers and a keyboard-trigger map pairing `type`, `inputmode` and `autocomplete` per data type (codes, phone, email, decimal, URL).
-- `animation-engineering.md`: "Loading-State Choreography" — nothing under 300ms, skeleton with 1.5-2s shimmer loop from 300ms to 2s, spinner plus contextual message beyond 2s, 200ms cross-fade to content, degraded-network strategy. Explicitly scoped as ambient state outside the 300ms feedback ceiling.
+- `animation-engineering.md`: "Loading-State Choreography", nothing under 300ms, skeleton with 1.5-2s shimmer loop from 300ms to 2s, spinner plus contextual message beyond 2s, 200ms cross-fade to content, degraded-network strategy. Explicitly scoped as ambient state outside the 300ms feedback ceiling.
 - `adapt.md`: gesture affordance rule (visible hint plus button alternative for every swipe or pinch) and thumb-reach repositioning on rotation.
-- `tools/data/inspect-rules.csv`: two rules — mobile keyboard triggers (`inputmode` over `type="number"` for codes) and loading-state choreography. 27 rules total.
+- `tools/data/inspect-rules.csv`: two rules, mobile keyboard triggers (`inputmode` over `type="number"` for codes) and loading-state choreography. 27 rules total.
 - Agent checklists: `siteasy-agent-ux` gains thumb-reach navigation and the three-level depth check; `siteasy-agent-motion` scores skeleton timing against the 300ms/2s thresholds.
 
 ---
 
-## [1.9.2] — 2026-06-06
+## [1.9.2], 2026-06-06
 
 Implements every finding of the v1.9.1 full audit. No new features.
 
@@ -1291,7 +1361,7 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.9.1] — 2026-06-06
+## [1.9.1], 2026-06-06
 
 ### Changed
 - Sub-agents now run with least privilege: removed the unused `Bash` tool from all 13 agents. They only Read, Grep, Glob and WebFetch, so dropping Bash shrinks the prompt-injection-to-execution surface with no change in behavior.
@@ -1311,7 +1381,7 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.9.0] — 2026-06-05
+## [1.9.0], 2026-06-05
 
 ### Added
 - Eight specialist sub-agents: `inspect-agent-{a11y,interaction,layout,code}` for deterministic front-end defect detection, and `siteasy-agent-{ux,visual,motion,content}` for design-quality review. Each is scoped to one dimension with explicit non-overlap boundaries, mirroring the five SEO agents.
@@ -1337,7 +1407,7 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.8.2] — 2026-06-01
+## [1.8.2], 2026-06-01
 
 ### Fixed
 
@@ -1355,11 +1425,11 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.8.1] — 2026-06-01
+## [1.8.1], 2026-06-01
 
 ### Fixed
 
-- `skills/siteasy/references/tokens.md` — three internal links pointed to `references/design-tokens.md` and `references/dark-mode-engineering.md`. From inside the references folder these resolved to a non-existent `references/references/` path. They now link to the sibling files directly (`design-tokens.md`, `dark-mode-engineering.md`).
+- `skills/siteasy/references/tokens.md`, three internal links pointed to `references/design-tokens.md` and `references/dark-mode-engineering.md`. From inside the references folder these resolved to a non-existent `references/references/` path. They now link to the sibling files directly (`design-tokens.md`, `dark-mode-engineering.md`).
 
 ### Changed
 
@@ -1373,14 +1443,14 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.8.0] — 2026-06-01
+## [1.8.0], 2026-06-01
 
 ### Added
 
-- `NOTICE` — Apache 2.0 section 4(d) attribution for impeccable (Copyright 2025-2026 Paul Bakaus), carrying forward its upstream notices (Anthropic frontend-design skill, ehmo's typecraft-guide-skill).
-- `tests/unit.mjs` — runtime unit tests for the siteasy live helper: `resolveInRoot` path containment (rejects absolute paths, `../` escapes, empty and non-string input) and `looksGenerated` marker detection.
-- `tests/test_design_system.py` — unit tests for `safe_slug` (normalisation, traversal and unsafe-character stripping, fallback behaviour).
-- `tests/validate.js` — Check 18: the README headline counts (skills, commands, reference docs) must match the real file and command totals. Now 259 checks.
+- `NOTICE`, Apache 2.0 section 4(d) attribution for impeccable (Copyright 2025-2026 Paul Bakaus), carrying forward its upstream notices (Anthropic frontend-design skill, ehmo's typecraft-guide-skill).
+- `tests/unit.mjs`, runtime unit tests for the siteasy live helper: `resolveInRoot` path containment (rejects absolute paths, `../` escapes, empty and non-string input) and `looksGenerated` marker detection.
+- `tests/test_design_system.py`, unit tests for `safe_slug` (normalisation, traversal and unsafe-character stripping, fallback behaviour).
+- `tests/validate.js`, Check 18: the README headline counts (skills, commands, reference docs) must match the real file and command totals. Now 259 checks.
 - CI: both workflows run the Node and Python unit tests alongside the validator.
 
 ### Changed
@@ -1393,7 +1463,7 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.7.1] — 2026-06-01
+## [1.7.1], 2026-06-01
 
 ### Security
 
@@ -1403,7 +1473,7 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 - siteasy: `references/optimize.md` no longer presents FID as a live Core Web Vital. Replaced with INP (LCP, INP, CLS), consistent with the project's own `seo/references/technical.md` directive.
 - seo: removed four dead in-doc references (`schema-types.md`, `schema/templates.json` in two files, `eeat-framework.md`); the content they pointed to was already inline.
-- seo: `references/schema.md` — FAQ moved from RESTRICTED to DEPRECATED (rich results removed for all sites May 7, 2026); status date refreshed to June 2026.
+- seo: `references/schema.md`, FAQ moved from RESTRICTED to DEPRECATED (rich results removed for all sites May 7, 2026); status date refreshed to June 2026.
 - README: folded `geo quick`/`geo compare` into the `geo` row so the `/seo` table is 19 commands and the total reconciles to 47.
 - `.claude-plugin/marketplace.json`: corrected the `$schema` URL to the resolving `claude-code-marketplace.json`.
 - CHANGELOG: removed the unverifiable "64 reference documents" figure from the 1.0.0 entry; relabelled the format as Keep a Changelog.
@@ -1412,19 +1482,19 @@ Implements every finding of the v1.9.1 full audit. No new features.
 ### Changed
 
 - Touch-target guidance unified across inspect, seo and siteasy: 24×24px CSS minimum (WCAG 2.5.8 AA), 44×44px recommended for touch.
-- geo: broadened the citable-passage figure to ~120–180 words and date-stamped the industry-statistics table.
+- geo: broadened the citable-passage figure to ~120 to 180 words and date-stamped the industry-statistics table.
 - Installers pin the manual-clone fallback to the matching release tag, with a graceful fall-back to the default branch.
 - CI: added `concurrency` guards to both workflows; `release.yml` binds the tag name via `env:` instead of the implicit `GITHUB_REF_NAME`.
 - `.gitignore`: added `__pycache__/` and `*.pyc`; removed the two tracked `.pyc` files from the index.
 
 ### Added
 
-- `SECURITY.md` — disclosure policy and trust model.
-- `tests/validate.js` — Check 17: in-doc `references/*.md` and `schema/*.json` pointers must resolve (would have caught the dead references above). Now 256 checks.
+- `SECURITY.md`, disclosure policy and trust model.
+- `tests/validate.js`, Check 17: in-doc `references/*.md` and `schema/*.json` pointers must resolve (would have caught the dead references above). Now 256 checks.
 
 ---
 
-## [1.7.0] — 2026-06-01
+## [1.7.0], 2026-06-01
 
 ### Fixed
 
@@ -1452,116 +1522,116 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.6.0] — 2026-05-31
+## [1.6.0], 2026-05-31
 
 ### Added
 
-- `skills/siteasy/references/animation-engineering.md` — View Transitions API section (same-document and cross-document, element matching, reduced-motion gating)
-- `skills/siteasy/references/responsive-design.md` — container queries section (`container-type`, `@container`, `cqi` units)
-- `skills/siteasy/references/css-architecture.md` — `:has()` relational selection and `color-mix()` token derivation
+- `skills/siteasy/references/animation-engineering.md`, View Transitions API section (same-document and cross-document, element matching, reduced-motion gating)
+- `skills/siteasy/references/responsive-design.md`, container queries section (`container-type`, `@container`, `cqi` units)
+- `skills/siteasy/references/css-architecture.md`, `:has()` relational selection and `color-mix()` token derivation
 - Frontmatter (`name`, `description`, `version`) added to all 53 siteasy and 3 inspect reference files, clearing 56 validator warnings
-- `ATTRIBUTION.md` — credit for the `impeccable` CLI (Paul Bakaus)
+- `ATTRIBUTION.md`, credit for the `impeccable` CLI (Paul Bakaus)
 - Tested-version note for `impeccable` (2.3.2) in the inspect and siteasy SKILL.md
 
 ### Fixed
 
-- `package.json` — version was stuck at 1.5.0 while all other manifests were ahead; now tracked by the validator
-- `tests/validate.js` — version consistency check (Check 12) now includes `package.json`
-- `.github/workflows/release.yml` — changelog extraction returned only the heading line (empty release notes on every tag); rewritten with a flag-based awk range
+- `package.json`, version was stuck at 1.5.0 while all other manifests were ahead; now tracked by the validator
+- `tests/validate.js`, version consistency check (Check 12) now includes `package.json`
+- `.github/workflows/release.yml`, changelog extraction returned only the heading line (empty release notes on every tag); rewritten with a flag-based awk range
 
 ---
 
-## [1.5.2] — 2026-05-30
+## [1.5.2], 2026-05-30
 
 ### Fixed
 
-- `skills/siteasy/SKILL.md` — stripped the UTF-8 BOM so Cowork can parse the frontmatter `description`. Without this, the skill description failed to load.
+- `skills/siteasy/SKILL.md`, stripped the UTF-8 BOM so Cowork can parse the frontmatter `description`. Without this, the skill description failed to load.
 - Version bumped to 1.5.2 across `plugin.json`, `marketplace.json` and all three `SKILL.md`.
 
 ---
 
-## [1.5.1] — 2026-05-30
+## [1.5.1], 2026-05-30
 
 ### Fixed
 
-- `tests/validate.js` — `parseFrontmatter` now strips the UTF-8 BOM before matching, so BOM-prefixed reference files validate correctly.
-- `tests/validate.js` — lowered `FILE_INTEGRITY` minimum line thresholds to match actual file sizes, removing false truncation failures.
+- `tests/validate.js`, `parseFrontmatter` now strips the UTF-8 BOM before matching, so BOM-prefixed reference files validate correctly.
+- `tests/validate.js`, lowered `FILE_INTEGRITY` minimum line thresholds to match actual file sizes, removing false truncation failures.
 
 ---
 
-## [1.5.0] — 2026-05-30
+## [1.5.0], 2026-05-30
 
 ### Added
 
-- `tools/build-index.mjs` — generates `tools/reference-index.json`, a machine-readable manifest of all skills and references; called by both CI workflows before validation
-- `package.json` — `npm test` runs build + validate; `npm run build` generates the index
-- `LICENSE` — full Apache 2.0 text at repo root (GitHub license detection)
-- `ATTRIBUTION.md` — credits for standards, tools and data sources referenced in skill docs
-- `.gitignore` — covers OS artefacts, node_modules, editor dirs, Playwright output
-- `CONTRIBUTING.md` — removed stale reference to `tools/design-system/data/google-fonts.csv`
+- `tools/build-index.mjs`, generates `tools/reference-index.json`, a machine-readable manifest of all skills and references; called by both CI workflows before validation
+- `package.json`, `npm test` runs build + validate; `npm run build` generates the index
+- `LICENSE`, full Apache 2.0 text at repo root (GitHub license detection)
+- `ATTRIBUTION.md`, credits for standards, tools and data sources referenced in skill docs
+- `.gitignore`, covers OS artefacts, node_modules, editor dirs, Playwright output
+- `CONTRIBUTING.md`, removed stale reference to `tools/design-system/data/google-fonts.csv`
 
 ---
 
-## [1.4.0] — 2026-05-27
+## [1.4.0], 2026-05-27
 
-### Added — Group C: architecture, outputs, action plans
+### Added, Group C: architecture, outputs, action plans
 
-- `/seo report [url|file|generate]` — format any audit output as a client-ready Markdown report or PDF (via Cowork PDF skill); score gauges, color-coded tables, executive summary
-- `skills/seo/references/action-plan.md` — standardized ACTION-PLAN output template (Quick Wins / 1-Week / 1-Month / Backlog) now used by all commands
-- `skills/seo/agents/` — 5 parallel sub-agent files for `/seo audit`: `audit-technical`, `audit-content`, `audit-schema`, `audit-geo`, `audit-performance`. When the Task tool is available, `/seo audit` delegates each dimension in parallel; results are aggregated into a unified score and ACTION-PLAN
+- `/seo report [url|file|generate]`, format any audit output as a client-ready Markdown report or PDF (via Cowork PDF skill); score gauges, color-coded tables, executive summary
+- `skills/seo/references/action-plan.md`, standardized ACTION-PLAN output template (Quick Wins / 1-Week / 1-Month / Backlog) now used by all commands
+- `skills/seo/agents/`, 5 parallel sub-agent files for `/seo audit`: `audit-technical`, `audit-content`, `audit-schema`, `audit-geo`, `audit-performance`. When the Task tool is available, `/seo audit` delegates each dimension in parallel; results are aggregated into a unified score and ACTION-PLAN
 
 ### Changed
 
-- `skills/seo/SKILL.md` — version 1.4.0; parallel audit orchestration instructions added; `report` command added; cross-command workflow updated
-- `tests/validate.js` — 3 new checks: agent file presence and frontmatter (Check 5), per-file minimum line count integrity (Check 6), regex fix to detect hyphenated command names
+- `skills/seo/SKILL.md`, version 1.4.0; parallel audit orchestration instructions added; `report` command added; cross-command workflow updated
+- `tests/validate.js`, 3 new checks: agent file presence and frontmatter (Check 5), per-file minimum line count integrity (Check 6), regex fix to detect hyphenated command names
 
 ---
 
-## [1.3.0] — 2026-05-27
+## [1.3.0], 2026-05-27
 
-### Added — SEO skill: 11 new commands
+### Added, SEO skill: 11 new commands
 
-- `/seo sitemap` — XML sitemap validation and generation with industry templates
-- `/seo images` — Image SEO audit: alt text, formats (WebP/AVIF), lazy loading, CLS, LCP
-- `/seo local` — Local SEO: Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema
-- `/seo hreflang` — Hreflang / i18n SEO: validation and generation for multilingual sites
-- `/seo programmatic` — Programmatic SEO: URL patterns, quality gates, deduplication
-- `/seo competitor-pages` — "X vs Y" and "alternatives to X" pages with feature matrices and schema
-- `/seo cluster` — Semantic keyword clustering: intent-based grouping, content architecture, gap analysis
-- `/seo sxo` — Search Experience Optimization: intent alignment, page-type matching, persona analysis
-- `/seo drift` — SEO drift monitoring: baseline capture, change detection, history tracking
-- `/seo backlinks` — Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC)
-- `/seo ecommerce` — E-commerce SEO: product pages, category pages, faceted navigation, Product schema
+- `/seo sitemap`, XML sitemap validation and generation with industry templates
+- `/seo images`, Image SEO audit: alt text, formats (WebP/AVIF), lazy loading, CLS, LCP
+- `/seo local`, Local SEO: Google Business Profile, NAP consistency, citations, reviews, LocalBusiness schema
+- `/seo hreflang`, Hreflang / i18n SEO: validation and generation for multilingual sites
+- `/seo programmatic`, Programmatic SEO: URL patterns, quality gates, deduplication
+- `/seo competitor-pages`, "X vs Y" and "alternatives to X" pages with feature matrices and schema
+- `/seo cluster`, Semantic keyword clustering: intent-based grouping, content architecture, gap analysis
+- `/seo sxo`, Search Experience Optimization: intent alignment, page-type matching, persona analysis
+- `/seo drift`, SEO drift monitoring: baseline capture, change detection, history tracking
+- `/seo backlinks`, Backlink profile analysis via free data sources (Moz, Bing, Common Crawl, GSC)
+- `/seo ecommerce`, E-commerce SEO: product pages, category pages, faceted navigation, Product schema
 
-### Added — GEO: new commands and improved scoring
+### Added, GEO: new commands and improved scoring
 
-- `/geo quick [url]` — 60-second GEO visibility snapshot with top 3 quick wins
-- `/geo compare [url]` — Compare current GEO state against a stored baseline
+- `/geo quick [url]`, 60-second GEO visibility snapshot with top 3 quick wins
+- `/geo compare [url]`, Compare current GEO state against a stored baseline
 - Weighted GEO scoring methodology (6 dimensions with explicit weights)
 - Platform subscores: Google AI Overviews, ChatGPT, Perplexity, Bing Copilot (each 0-100)
 - Extended AI crawler list: 14 crawlers tracked
 
-### Added — Repo quality
+### Added, Repo quality
 
 - `CHANGELOG.md`, `CONTRIBUTING.md`, `install.sh`, `install.ps1`, `tests/validate.js`
 
 ---
 
-## [1.2.0] — 2026-05-15
+## [1.2.0], 2026-05-15
 
 ### Added
 
 - Design foundations layer in `siteasy` and `inspect`
 - Gestalt principles, UX research methodology, information architecture, journey mapping
-- WCAG 2.2 reference — all 9 new success criteria with code patterns
-- Image strategy — AVIF/WebP/SVG decision matrix, `<picture>` pattern, LCP optimization
-- Form patterns — single column layout, autocomplete vocabulary, validation timing
+- WCAG 2.2 reference, all 9 new success criteria with code patterns
+- Image strategy, AVIF/WebP/SVG decision matrix, `<picture>` pattern, LCP optimization
+- Form patterns, single column layout, autocomplete vocabulary, validation timing
 - Three new commands: `/siteasy research`, `/siteasy ia`, `/siteasy journey`
 - 25 new anti-pattern rules in `/inspect detect`
 
 ---
 
-## [1.1.0] — 2026-05-14
+## [1.1.0], 2026-05-14
 
 ### Added
 
@@ -1571,11 +1641,11 @@ Implements every finding of the v1.9.1 full audit. No new features.
 
 ---
 
-## [1.0.0] — 2026-04-01
+## [1.0.0], 2026-04-01
 
 ### Initial release
 
-- `/siteasy` — 24 commands for design, UX, motion, performance, and site architecture
-- `/seo` — 7 commands: audit, page, plan, technical, schema, content, geo
-- `/inspect` — 3 commands: detect, preview, review
+- `/siteasy`, 24 commands for design, UX, motion, performance, and site architecture
+- `/seo`, 7 commands: audit, page, plan, technical, schema, content, geo
+- `/inspect`, 3 commands: detect, preview, review
 - Core reference documents across siteasy, seo and inspect, Playwright-based browser preview, deterministic anti-pattern detector

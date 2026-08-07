@@ -1582,6 +1582,10 @@
     },
     {
       "from": "skills/siteasy/references/shape.md",
+      "to": "skills/siteasy/references/landing-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/shape.md",
       "to": "skills/siteasy/references/motion-design.md"
     },
     {

@@ -17,6 +17,7 @@ Craft cannot build until all of these are true:
 3. Implementation references from the brief are loaded.
 4. The shape visual probe decision is recorded: generated, skipped with reason, or already resolved.
 5. The north-star mock decision is recorded: generated, skipped with reason, or not applicable.
+6. The rotation is clear: the look chosen for this build passes `variety.mjs --check`, or the user has overridden it in writing.
 
 PRODUCT.md and `teach` answers do **not** satisfy the shape gate. They are project context only. A compact self-authored brief does not satisfy the shape gate either. `shape=pass` requires a separate user response approving the shape brief or an already-confirmed brief supplied by the user.
 
@@ -32,6 +33,7 @@ Craft is not a first pass. It is a loop with these required artifacts:
 4. Semantic, functional implementation using the project's real stack and conventions.
 5. Browser evidence across relevant viewports.
 6. At least one critique-and-fix pass after the first browser inspection, unless the first pass has no material defects.
+7. A recorded `gate.mjs` result, and a `build` line appended to LOG.md.
 
 Do not let generated mockups replace interface structure, copy, accessibility, responsive behavior, or state design. But do treat the approved mock as a concrete visual contract for composition, hierarchy, density, atmosphere, signature motifs, image needs, and distinctive visual moves. "North star" means "preserve the important visible ingredients in semantic code," not "use it as loose mood."
 
@@ -46,6 +48,31 @@ Wait for the design brief to be fully confirmed by the user before proceeding. T
 If this craft run resumed after `teach` created PRODUCT.md, run shape now. Do not treat the teach interview, PRODUCT.md, or a summary of project context as a substitute for shape. Shape is task-specific and must cover scope, content/states, visual direction, constraints, anti-goals, probes when applicable, and explicit brief confirmation.
 
 If the user has already run /siteasy shape and has a confirmed design brief, skip this step and use the existing brief.
+
+### Rotation: what this build may not be
+
+Before the brief is confirmed, read what the project already shipped:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/tools/siteasy/variety.mjs" .
+```
+
+It prints the last three `build` lines from LOG.md and states what is burned. Once the look is chosen, check it:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/tools/siteasy/variety.mjs" . \
+  --check "shape=catalogue,paper=light,display=mono,accent=green,strategy=drenched"
+```
+
+Exit 1 with a reason means the build has not moved far enough (L-VARIETY-1) or is reusing a shape from the last three (L-VARIETY-2). Move it, or get the override in writing and say in the presentation which law was waived and why.
+
+Two things this deliberately does not do. It does not judge whether the look is good, only whether it is the previous one again. And it writes nothing into the delivered page: the record lives in LOG.md, which belongs to the project, not in a comment inside a file that belongs to the client.
+
+State the reading out loud before the brief, in one line, so the user can override before the work happens rather than after:
+
+> Last build here was dark paper, serif display, warm accent, committed. This one goes light paper with a mono display. Shape long-document is burned; taking catalogue.
+
+The first build in a project has nothing to differ from and says so.
 
 ## Step 2: Load References
 
@@ -194,6 +221,20 @@ After the first browser pass, write a short critique for yourself and patch the 
 
 The exit bar is not "it works." It is: the rendered result looks intentional at all checked viewports, all expected states are handled, no placeholders remain unless explicitly accepted, and the implementation quality would be defensible in a high-end studio review.
 
+### The gate before you hand it back
+
+The checklist above is judgment, and judgment is what this skill is for. It is also the part that cannot fail loudly, because the same reader wrote the work and the verdict. So the last thing before Step 7 is not a checklist, it is a command:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/tools/audit/gate.mjs" <the built file> --min-score 90
+```
+
+Exit 0 hands back. Exit 1 does not: fix what it names and run it again. A critical failure blocks on its own regardless of the score, which is the point of `failOnCritical` being the default.
+
+This is the same gate `/audit` publishes as a GitHub Action, running the same 42 deterministic checks on the same code path. It is not a second opinion, it is the first one that can be wrong out loud.
+
+Report the result in Step 7 as a number and a threshold, never as an adjective. If the gate was skipped, say it was skipped and why, because a build presented without its gate result reads as a build that passed one.
+
 ## Step 7: Present
 
 Present the result to the user:
@@ -201,8 +242,15 @@ Present the result to the user:
 - Summarize the browser/viewports checked and the most important fixes made after inspection
 - Walk through the key states (empty, error, responsive)
 - Explain design decisions that connect back to the design brief and, when used, the chosen north-star mock. Include any accepted deviations from the mock; do not hide unimplemented mock ingredients.
+- Give the gate result as a number against its threshold, or say it was skipped and why
 - Note any remaining limitations or follow-up risks honestly
 - Ask: "What's working? What isn't?"
+
+Then append the build line to LOG.md, in the shape the SKILL.md context section fixes, so the next build in this project has something to differ from:
+
+```
+- build 2026-08-07 shape=catalogue paper=light display=mono accent=green strategy=drenched
+```
 
 Iterate based on feedback. Good design is rarely right on the first pass.
 

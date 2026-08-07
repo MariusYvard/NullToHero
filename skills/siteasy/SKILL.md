@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, audit, polish, clarify, simplify, amplify, animate, typeset, layout, adapt, harden, or improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Also handles UX review, Gestalt principles, UX research, personas, journey mapping, information architecture, card sorting, tree testing, cognitive load, WCAG 2.2 accessibility, image strategy (AVIF/WebP/srcset), form patterns, performance, responsive design, mobile ergonomics (thumb-zone, touch targets), theming, anti-patterns, typography, fonts, spacing, color, motion, micro-interactions, parallax, scrollytelling, scroll-driven animations, View Transitions API, container queries, modern CSS (:has(), color-mix()), UX copy, error states, edge cases, i18n, and design systems. For bland designs that need to be bolder, loud designs that should be quieter, or ambitious visual effects. Not for backend-only tasks."
-version: 3.5.2
+version: 3.6.0
 user-invocable: true
 argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · live] [target]"
 allowed-tools:
@@ -35,7 +35,7 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 | Gate | Required check | If fail |
 |---|---|---|
 | Context | PRODUCT.md and DESIGN.md are read from the workspace. | Use Read to look for PRODUCT.md; if missing, run `/siteasy setup` first. |
-| Conventions | On a project that already has code, its own conventions are read BEFORE any edit: a charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`), the CSS custom properties already defined, the class naming convention visible in the code, and the fonts already loaded. | Read them first. They bind every command below, including the ones that only mean to improve something. |
+| Conventions | On a project that already has code, its own conventions are read BEFORE any edit. Run `node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/load-context.mjs" .` and read the `preflight` block: framework, motion stance, fonts already loaded, custom properties already defined, Tailwind theme, each with a file and a line. Then read what the scan cannot: a charter or style guide at the root or in `docs/` (STYLEGUIDE, STYLE, CONVENTIONS, CONTRIBUTING, BRAND, DESIGN, `.editorconfig`) and the class naming convention visible in the code. | Read them first. They bind every command below, including the ones that only mean to improve something. Report what the scan found before proposing anything, and say explicitly what you will preserve and what you will introduce. |
 | Direction | If DIRECTION.md exists at the project root, it is read and honored (central idea, register, signature moment). | Commands that change the visual language re-read it. If the task contradicts the committed direction, surface the conflict; never silently override it. |
 | Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `/siteasy setup`, then resume. Never invent PRODUCT.md silently from the prompt alone: ask, and if no answer is obtainable, fall back to the rule below and mark what you assumed. |
 | Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
@@ -61,6 +61,14 @@ Three files in the workspace or project root form the shared project state every
 - **PRODUCT.md**: required. Users, brand, tone, anti-references, strategic principles. Written by `setup`.
 - **DESIGN.md**: optional, strongly recommended. Colors, typography, elevation, components. Written by `document` and `extract`.
 - **LOG.md**: optional, append-only working memory. Every command that decides or produces something appends one short entry (`## <date> /<skill> <command>` + Decisions / Artifacts / Open bullets) and reads the log first to avoid re-deciding or contradicting past entries. Journeys use it as their checkpoint state; audits append their score and report path.
+
+  A command that ships a page also appends one machine-readable line, so the next build can be made to differ from this one rather than being told to:
+
+  ```
+  - build 2026-08-07 shape=stat-led paper=dark display=serif-display accent=warm strategy=committed
+  ```
+
+  Five closed vocabularies, listed in `tools/siteasy/variety.mjs`. An open vocabulary makes "did this change" undecidable, which is the failure the old instruction already had. Read the log with `node "${CLAUDE_PLUGIN_ROOT}/tools/siteasy/variety.mjs" .` before choosing, and check a choice with `--check shape=...,paper=...`. Exit 1 means the build must move (L-VARIETY-1, L-VARIETY-2).
 - **DIRECTION.md**: optional until `/siteasy concept` runs; the committed art direction (central idea, anti-reference, signature moment). Written by `concept`, refined by `tokens` and brand decisions, read by every build and motion command, judged by `critique` and by the audit's memorability agent.
 
 Use the Read tool to check for these files. If already read in this session, don't re-read.
@@ -81,7 +89,9 @@ Load the matching reference: [references/brand.md](references/brand.md) or [refe
 
 ## Shared design laws
 
-Apply to every design, both registers. Match implementation complexity to the aesthetic vision. Interpret creatively. Vary across projects, never converge on the same choices.
+Apply to every design, both registers. Match implementation complexity to the aesthetic vision. Interpret creatively.
+
+Vary across projects. That used to be the whole instruction and it was unenforceable, because nothing recorded what the last project chose. It now has a state to read (the `build` line in LOG.md) and a threshold to meet (L-VARIETY-1, L-VARIETY-2). Two consecutive builds change at least two of paper band, display family, accent hue and colour strategy, and at least one of the two is paper or display: a warm accent swapped for a cool one at the same coverage, on the same paper, under the same display face, is not a different site.
 
 ### Color
 
@@ -115,7 +125,7 @@ Dark vs. light is never a default. Write one sentence of physical scene: who use
 
 ### Numeric laws (canonical)
 
-The numeric thresholds behind these laws live once, with stable identifiers, in `tools/data/laws.csv`, cite the identifier instead of restating the number: L-MOTION-1 (feedback 150-300ms), L-MOTION-2 (2 decorative loops per view), L-MOTION-3 (linear scrub), L-TOUCH-1 (44px targets), L-TOUCH-2 (8px spacing), L-MEDIA-1 (video 10/30MB), L-MEDIA-2 (models 5MB), L-MEDIA-3 (frame sequences 50/150), L-TYPE-1 (16px body), L-TYPE-2 (65-75ch), L-CONTRAST-1 (4.5:1), L-PERF-1 (LCP 2.5s), L-PERF-2 (CLS 0.1), L-PERF-3 (INP 200ms), L-WEBGL-1 (1000 draw calls), L-WEBGL-2 (DPR cap 2), L-CONTENT-1 (editorial quality 70), L-CONTENT-2 (sentence rhythm 8-15), L-CONTENT-3 (50-75 percent prose), L-VIEWPORT-1 (dvh on full-bleed), L-VIEWPORT-2 (one viewport unit per scroll system). The validator fails if a law stops being cited anywhere (check 37): when a threshold changes, change it in laws.csv and follow the citations.
+The numeric thresholds behind these laws live once, with stable identifiers, in `tools/data/laws.csv`, cite the identifier instead of restating the number: L-MOTION-1 (feedback 150-300ms), L-MOTION-2 (2 decorative loops per view), L-MOTION-3 (linear scrub), L-TOUCH-1 (44px targets), L-TOUCH-2 (8px spacing), L-MEDIA-1 (video 10/30MB), L-MEDIA-2 (models 5MB), L-MEDIA-3 (frame sequences 50/150), L-TYPE-1 (16px body), L-TYPE-2 (65-75ch), L-CONTRAST-1 (4.5:1), L-PERF-1 (LCP 2.5s), L-PERF-2 (CLS 0.1), L-PERF-3 (INP 200ms), L-WEBGL-1 (1000 draw calls), L-WEBGL-2 (DPR cap 2), L-CONTENT-1 (editorial quality 70), L-CONTENT-2 (sentence rhythm 8-15), L-CONTENT-3 (50-75 percent prose), L-VIEWPORT-1 (dvh on full-bleed), L-VIEWPORT-2 (one viewport unit per scroll system), L-VARIETY-1 (2 of 4 look axes, one visible), L-VARIETY-2 (no shape repeat inside 3 builds). The validator fails if a law stops being cited anywhere (check 37): when a threshold changes, change it in laws.csv and follow the citations.
 
 ### Absolute bans
 

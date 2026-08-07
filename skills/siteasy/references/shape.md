@@ -51,6 +51,28 @@ Force a visual decision on three fronts. Skip anything PRODUCT.md or DESIGN.md a
 - **Theme via scene sentence.** Write one sentence of physical context for this surface, who uses it, where, under what ambient light, in what mood. The sentence forces dark vs light. If it doesn't, add detail until it does.
 - **Two or three named anchor references.** Specific products, brands, objects, not adjectives like "modern" or "clean."
 
+### Page shape
+
+Name the spine before the sections. A shape is the order the page argues in, and picking one is a decision that gets made either way: unnamed, it defaults to hero, three features, call to action, footer, which is the shape every generated page has.
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/tools/design-system/scripts/search.py" "<the brief in a few words>" --domain landing
+```
+
+`tools/design-system/data/page-shapes.csv` carries 47 shapes across six surfaces, each with its section order, where the primary action sits, and the colour strategy the shape needs. Marketing pages are 34 of them and [landing-patterns.md](landing-patterns.md) covers those in depth, including reader awareness and market sophistication. The other thirteen are the surfaces a landing catalogue never had:
+
+| Surface | Shapes | What the spine is organised around |
+|---|---|---|
+| app | Workbench, Metrics board, Console, Inbox and thread, Settings ladder | the task, repeated daily, by someone who already decided |
+| docs | Docs three-column, Single-scroll reference, Tutorial ladder | the question the reader arrived with |
+| editorial | Long-form article, Index first | the argument, and the measure it is read at |
+| catalogue | Catalogue grid, Specimen sheet | comparison between items, or one item's own qualities |
+| portfolio | Case-study spread | the outcome, then how it was reached |
+
+Record the chosen shape in the brief and in the `build` line appended to LOG.md, since the rotation rule reads it (L-VARIETY-2 refuses a shape used in the last three builds). Run `node "${CLAUDE_PLUGIN_ROOT}/tools/siteasy/variety.mjs" .` before choosing rather than after.
+
+A brief may name a shape that is not in the file. The catalogue is a starting set, not a closed vocabulary, and the only thing that must be true is that the shape was chosen and can be named.
+
 ### Scope
 
 Always ask. Sketch quality and shipped quality are different outputs; don't guess between them.
