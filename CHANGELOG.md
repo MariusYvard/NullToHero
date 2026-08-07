@@ -11,6 +11,41 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.5.1] - 2026-08-06
+
+First run of the rendered probe against real pages instead of its own fixtures.
+Three findings on three different rules, all three confirmed by hand, no noise.
+Two defects in the probe and one in the file itself, all found by doing it.
+
+### Fixed
+
+- **Findings are collapsed and capped.** A real page returned six identical lines
+  for one defect: six popups sharing a class, each under the same transformed
+  ancestor. Six copies of one sentence is how a report teaches its reader to skim,
+  which costs the other findings too. Identical findings now become one line
+  carrying the count, and past three distinct findings a rule says how many it did
+  not list, so the cap is never silent. Five of the seven rules had no cap at all.
+- **The clean-run message named five rules.** It listed 23, 27, 51, 52 and 62 and
+  had not learned about 5 and 68. It reads `RENDERED_RULE_IDS` now, so it cannot
+  go stale again.
+- **Two null bytes in `rendered.mjs`.** A separator written as a literal `\0`
+  inside a template string. Harmless at runtime, which is why the suite stayed
+  green, and enough to make git and grep treat the source as binary.
+
+### What the shakedown found
+
+| Page | Rule | Verified by hand |
+|---|---|---|
+| A CV site | 52 | Six `position: fixed` popups under an ancestor at `translateY(26px)`. All closed at read time, so the defect is latent and real: each resolves `top: 0` against the ancestor when it opens. |
+| A portfolio | 62 | A ticker of 10 children carrying 5 distinct strings, none `aria-hidden`, track running `24s linear infinite`. A screen reader reads the list twice. |
+| A large SaaS home page | 5 | A status dot with empty text, no `aria-label`, no title, no role, no icon, painted `rgb(102, 102, 102)`. Colour is the only signal it carries. |
+
+Two of the five pages returned nothing, which is the other half of the result: the
+rules are narrow enough not to fire on a clean page. One page hit the 4000-element
+scan cap and said so rather than reporting a count.
+
+---
+
 ## [3.5.0] - 2026-08-06
 
 The bench goes from 8 cases to 13, the marker lists are pre-registered, and the

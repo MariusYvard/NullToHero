@@ -254,9 +254,40 @@ export function probe(opts) {
     }
   }
 
+  // Collapse and cap.
+  //
+  // The first run against a real page, outside the fixtures, produced six
+  // identical lines for one defect: six .finder-popup elements sharing a class,
+  // each under the same transformed ancestor. Six copies of one sentence is how a
+  // report teaches its reader to skim, which costs the other findings too. So
+  // identical findings become one line carrying the count, and a rule that still
+  // has more distinct findings than the cap says how many it did not list rather
+  // than dropping them quietly.
+  const PER_RULE_CAP = 3;
+  const seen = new Map();
+  for (const f of findings) {
+    const k = `${f.id} :: ${f.where} :: ${f.evidence}`;
+    if (seen.has(k)) seen.get(k).count++;
+    else seen.set(k, { ...f, count: 1 });
+  }
+  const perRule = new Map();
+  const out = [];
+  for (const f of seen.values()) {
+    const n = (perRule.get(f.id) || 0) + 1;
+    perRule.set(f.id, n);
+    if (n > PER_RULE_CAP) continue;
+    out.push(f.count > 1
+      ? { id: f.id, where: f.where, evidence: `${f.count} elements matching ${f.where}, each one: ${f.evidence}` }
+      : { id: f.id, where: f.where, evidence: f.evidence });
+  }
+  for (const [id, n] of perRule) {
+    if (n > PER_RULE_CAP) out.push({ id, where: "engine",
+      evidence: `${n - PER_RULE_CAP} further distinct finding(s) for this rule are not listed` });
+  }
+
   // settled says whether rules 27 and 68 were judged at all. A report that
   // does not carry it reads a partial run as a clean one.
-  return { findings, scanned: els.length, truncated, elapsedMs, settled };
+  return { findings: out, scanned: els.length, truncated, elapsedMs, settled };
 }
 
 /** The exact string to hand to Claude in Chrome's javascript_tool. */
@@ -342,7 +373,7 @@ async function main() {
   if (result.truncated) console.log(`  NOTE  the page has more elements than the scan cap, so this is a partial read\n`);
   if (!enriched.length) {
     console.log("  No named defect found.");
-    console.log("  This covers rules 23, 27, 51, 52 and 62 only, at this viewport and this moment.\n");
+    console.log(`  This covers rules ${RENDERED_RULE_IDS.join(", ")} only, at this viewport and this moment.\n`);
   } else {
     for (const f of enriched) {
       console.log(`  [${String(f.id).padStart(2)}] ${f.rule} — ${f.where}`);

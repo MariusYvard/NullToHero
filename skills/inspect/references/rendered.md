@@ -1,7 +1,7 @@
 ---
 name: rendered
 description: "Run the seven registry rules that need a laid-out page, in Claude in Chrome or in Playwright, from one probe."
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Rules that need a rendered page
@@ -81,6 +81,26 @@ change the answer.
 When the probe reports `truncated: true` the page has more elements than the scan
 cap and the read is partial. When it reports `settled: false` two of the seven
 rules were not judged. Say either one rather than reporting a count.
+
+Findings are collapsed and capped. Identical findings become one line carrying the
+count ("6 elements matching div.finder-popup"), because a real page produced six
+copies of one sentence on the first run outside the fixtures. Past three distinct
+findings for a rule the probe adds a line saying how many it did not list, so the
+cap is never silent.
+
+## What it found the first time it was pointed at real pages
+
+Five pages on 2026-08-06, at two viewports. Three findings, on three different
+rules, all three confirmed by hand, and nothing that turned out to be noise.
+
+| Page | Rule | Verified |
+|---|---|---|
+| A CV site | 52 | Six `position: fixed` popups under an ancestor at `translateY(26px)`. All closed at read time, so the defect is latent and real: each will resolve `top: 0` against the ancestor when opened. |
+| A portfolio | 62 | A ticker of 10 children carrying 5 distinct strings, none `aria-hidden`, track running `24s linear infinite`. A screen reader reads the list twice. |
+| A large SaaS home page | 5 | A status dot with empty text, no `aria-label`, no title, no role, no icon, painted `rgb(102, 102, 102)`. Colour is the only signal it carries. |
+
+Two pages returned nothing, which is also a result: the rules are narrow enough
+not to fire on a clean page.
 
 ## What it deliberately does not claim
 
