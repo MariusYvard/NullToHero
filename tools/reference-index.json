@@ -129,6 +129,16 @@
     ]
   },
   {
+    "skill": "inspect",
+    "path": "skills/inspect/references/three.md",
+    "title": "Measuring a three.js scene",
+    "keywords": [
+      "three",
+      "measuring",
+      "scene"
+    ]
+  },
+  {
     "skill": "seo",
     "path": "skills/seo/references/action-plan.md",
     "title": "ACTION-PLAN Output Standard",

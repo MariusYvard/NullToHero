@@ -11,6 +11,105 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.7.0] - 2026-08-11
+
+Fourteen rules, three of them measured in a browser rather than inferred from
+text, from a read of six public animation codebases. Nothing is transcribed:
+every rule below is a mechanism reimplemented in this repository's idiom, and
+every one was found as a live defect in shipped code rather than derived from a
+principle.
+
+### Added
+
+- **Six mechanical rules, all arithmetic rather than judgment.** Rule 73, an
+  entrance whose absolute travel exceeds L-MOTION-4 (375px, the narrowest
+  supported viewport): one public library splits perfectly on this line, with
+  percentage entrances that are safe at every width and pixel entrances that start
+  2000px out, which is 5.3 viewport widths at 375px and opens a horizontal scroll
+  region the exit variants never close. Rule 74, a stagger accumulator advanced by
+  the animation's own duration, which makes item N wait for item N-1 and turns an
+  eight-word headline into 8.8 seconds. Rule 75, text split into per-character
+  inline-block spans with no accessible name on the parent. Rule 76, a `@keyframes`
+  name defined twice in one sheet, where the later one silently wins. Rule 77, a
+  malformed easing function, which is not an error but a dropped declaration.
+  Rule 78, an infinite loop flashing above 3 Hz.
+
+- **Rules 79 to 81, a three.js scene measured from the page.** L-WEBGL-1 and
+  L-WEBGL-2 have been in the laws registry since they were written and have never
+  had an executor. `tools/inspect/three.mjs` gives them one. three.js sets
+  `data-engine` on its canvas, and its renderer constructor hands itself to
+  `window.__THREE_DEVTOOLS__` when that global exists, so a collector installed
+  before the page's own module evaluates receives every renderer unprompted.
+  Draw calls are read through `info.autoReset`, turned off for the sample and
+  restored, because the counter is cleared at the start of every `render()` and a
+  post-hoc read on a page with a post-processing chain reports the last pass only.
+
+- **Rules 82 and 83, the quality of a reduced-motion guard.** `animation: none`
+  under the preference query stops `animationend` from ever firing, so code
+  awaiting it deadlocks, and it deadlocks for exactly the readers the guard was
+  written to protect. Neutralise the duration instead. And killing the motion is
+  not the same as reaching the state it was communicating: a 1ms `fadeOut` with
+  `fill-mode: both` is a race, and a dismissed toast can end up visible.
+
+- **Rule 84, reduced motion measured instead of inferred.** Rule 21 passes any
+  stylesheet containing the query once, even when thirty of its thirty-one
+  animations sit outside the guard. `tools/inspect/motion.mjs` emulates the
+  preference, reads every entry in `document.getAnimations()`, waits, and reads
+  again. An animation whose `currentTime` advanced is a violation and there is
+  nothing to interpret in between. It checks the emulation took before judging: a
+  run that could not measure refuses, because an empty findings list there means
+  the opposite of what it looks like.
+
+- **Rules 85 and 86, the time axis.** The rendered probe observes one moment and
+  says so in its own header, which leaves every spatial rule blind to what is only
+  true mid-flight. The sweep pauses every animation, writes `currentTime` across a
+  grid and samples geometry at each step. The browser produces a matrix, Node
+  produces the verdict from a pure function that never sees a page, which is why
+  `evaluateSweep` is unit-tested on hand-written matrices with no Chromium. Rule 85
+  is a still run inside the declared duration, tail included, because the declared
+  duration is the author's statement of how long this should take. Rule 86 is a
+  collision between two text-bearing boxes that does not exist in the first sample.
+
+  The refusal is the point. If every sample returns the same signature the seek
+  never moved the page, and every quiet rule in that run is quiet for the wrong
+  reason. The sweep reports it and emits nothing.
+
+- **Two typed coverage classes, `three-probe` and `motion-probe`.** Both needed
+  something the rendered probe does not, an init script and a media emulation
+  respectively, so a rule mapped to the wrong one would look covered and never run.
+  The coverage guard now holds three separate declared-ids contracts.
+
+### Fixed
+
+- **The plugin taught the defect rule 82 catches, in three places.** The shipped
+  `assets/templates/react-modal/Modal.css` neutralised reduced motion with
+  `animation: none`, so a close handler bound to `animationend` would hang. So did
+  the example in `accessibility-engineering.md`, and so did rule 21's own clean
+  fixture, which is how it was found. All three now neutralise the duration and cap
+  the iteration count. The `::view-transition` pseudo-elements are a real exception
+  and rule 82 exempts them, because there is no author handler on those and
+  `startViewTransition`'s promise resolves either way.
+
+- **Rule 69 flagged every correct rule-83 guard.** An `opacity: 0` inside a
+  `prefers-reduced-motion` block is the state the motion would have reached, not a
+  layer parked over the page. `leafBlocks` now carries the at-rule context it
+  descended through, so the rule can tell the two apart.
+
+### Not done, and why
+
+A seventh mechanical rule was written and cut: an animation class that also sets
+`width`, `height` and a background, which one library ships fifteen times and which
+replaces the element it is added to. From one file `.spinner` and
+`.ca__fx-blobBouncePop` are the same text, and the rule fired on both. The symptom
+is measurable on a rendered page and that is where it belongs.
+
+The sweep samples `getBoundingClientRect`, which flattens a rotation into its
+bounding box. Four zero-size marker children per element would give the real
+projected quad; it mutates the page to measure it, and neither shipped rule needs
+that precision.
+
+---
+
 ## [3.6.0] - 2026-08-07
 
 ### Added

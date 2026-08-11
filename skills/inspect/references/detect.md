@@ -28,9 +28,12 @@ ratio survives the resolved cascade, whether an animation janks: those need a re
 belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
 the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
 
-The registry holds 72 rules and 65 are executable: 40 in the rules engine, 18 inside the static
-checks and 7 in the rendered probe, which runs in a browser because a laid-out page is the only
-place their answer exists (see [rendered.md](rendered.md)). `tools/data/rule-coverage.csv` names
+The registry holds 86 rules and 79 are executable: 48 in the rules engine, 18 inside the static
+checks, 7 in the rendered probe, which runs in a browser because a laid-out page is the only
+place their answer exists (see [rendered.md](rendered.md)), 3 in the three.js probe, which
+needs a live scene and a collector installed before the page's own three.js runs (see
+[three.md](three.md)), and 3 in the motion probe, which drives the page over time
+and refuses to report when it could not move it. `tools/data/rule-coverage.csv` names
 the executor of every rule, and the seven that have none say why in a typed class: two are
 convention, three judgment, one build-time and one tooling. Those seven still need a reader, which is what the sections further down this file are
 for. When a rule is implemented its prose entry stays: the CSV is the single source of severity

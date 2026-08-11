@@ -16,6 +16,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { RULES, runRules } from "../tools/inspect/rules.mjs";
 import { RENDERED_RULE_IDS } from "../tools/inspect/rendered.mjs";
+import { THREE_RULE_IDS } from "../tools/inspect/three.mjs";
+import { MOTION_RULE_IDS } from "../tools/inspect/motion.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FX = join(ROOT, "tools", "inspect", "fixtures");
@@ -94,10 +96,10 @@ console.log("\nCoverage map");
 // better. A single bucket called "not implemented" would read as a backlog, and
 // a backlog invites someone to burn it down with rules that guess.
 const CLASSES = new Set([
-  "rules-engine", "static-check", "rendered-probe",
+  "rules-engine", "static-check", "rendered-probe", "three-probe", "motion-probe",
   "needs-render", "judgment", "convention", "build-time", "tooling",
 ]);
-const EXECUTING = ["rules-engine", "static-check", "rendered-probe"];
+const EXECUTING = ["rules-engine", "static-check", "rendered-probe", "three-probe", "motion-probe"];
 const covRaw = readFileSync(join(ROOT, "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
 const cov = new Map();
 for (const line of covRaw) {
@@ -130,6 +132,22 @@ const declaredRendered = [...RENDERED_RULE_IDS].sort((a, b) => a - b);
 if (mappedRendered.join() !== declaredRendered.join())
   no(`rule-coverage.csv maps ${mappedRendered.join(", ") || "nothing"} to the rendered probe, rendered.mjs declares ${declaredRendered.join(", ")}`);
 
+// Same contract for the three.js probe. It is a separate class rather than more
+// rendered-probe rows because it needs something the rendered probe does not: an
+// init script installed before the page's own three.js evaluates. A rule mapped
+// to the wrong one of the two would look covered and never run.
+const mappedThree = [...cov].filter(([, c]) => c.cls === "three-probe").map(([id]) => id).sort((a, b) => a - b);
+const declaredThree = [...THREE_RULE_IDS].sort((a, b) => a - b);
+if (mappedThree.join() !== declaredThree.join())
+  no(`rule-coverage.csv maps ${mappedThree.join(", ") || "nothing"} to the three.js probe, three.mjs declares ${declaredThree.join(", ")}`);
+
+// And for the motion probe, which is a third class for a third reason: it needs
+// the runner to emulate a media feature, which neither of the other two do.
+const mappedMotion = [...cov].filter(([, c]) => c.cls === "motion-probe").map(([id]) => id).sort((a, b) => a - b);
+const declaredMotion = [...MOTION_RULE_IDS].sort((a, b) => a - b);
+if (mappedMotion.join() !== declaredMotion.join())
+  no(`rule-coverage.csv maps ${mappedMotion.join(", ") || "nothing"} to the motion probe, motion.mjs declares ${declaredMotion.join(", ")}`);
+
 // A named check must exist. A mapping to a check that was renamed or deleted is
 // the same failure as no mapping at all, only harder to see.
 const checksSrc = readFileSync(join(ROOT, "tools", "audit", "lib", "checks.mjs"), "utf8");
@@ -142,7 +160,7 @@ const tally = {};
 for (const c of cov.values()) tally[c.cls] = (tally[c.cls] || 0) + 1;
 const executable = EXECUTING.reduce((n, c) => n + (tally[c] || 0), 0);
 if (!failures) {
-  ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} rules engine, ${tally["static-check"]} static checks, ${tally["rendered-probe"] || 0} rendered probe`);
+  ok(`${cov.size} registry rules mapped: ${tally["rules-engine"]} rules engine, ${tally["static-check"]} static checks, ${tally["rendered-probe"] || 0} rendered probe, ${tally["three-probe"] || 0} three.js probe, ${tally["motion-probe"] || 0} motion probe`);
   ok(`the ${cov.size - executable} that do not execute say why: ` +
      Object.entries(tally).filter(([c]) => !EXECUTING.includes(c)).map(([c, n]) => `${n} ${c}`).join(", "));
   ok(`${executable} of ${cov.size} executable`);

@@ -68,6 +68,92 @@ Playwright is not a dependency of this repository. When it is absent the CLI say
 the run measured nothing and points at the browser path, instead of exiting clean
 and letting a reader assume the page was checked.
 
+## Two sibling probes, two other mechanisms
+
+This file's probe is one injected function on a settled page. Two other rule
+families need something it does not, and each is a separate file for that reason
+rather than more rows here.
+
+[three.md](three.md) covers `tools/inspect/three.mjs`, which measures a live
+three.js scene's draw calls and pixel ratio from `renderer.info`. It needs a
+collector installed **before** the page's own three.js evaluates, so in Claude in
+Chrome it is two steps and a reload.
+
+`tools/inspect/motion.mjs` decides rule 84, and it needs the runner to emulate a
+media feature:
+
+```bash
+node tools/inspect/motion.mjs https://example.com --json
+```
+
+Rule 21 passes any stylesheet that contains `prefers-reduced-motion` once, even
+when thirty of its thirty-one animations sit outside the guard. This probe stops
+inferring: it emulates the preference, reads every entry in
+`document.getAnimations()`, waits, and reads again. An animation whose
+`currentTime` advanced is a violation, and there is nothing to interpret in
+between.
+
+It refuses before it judges. The first thing it checks is whether the page is
+actually reporting the preference, because a run where the emulation did not take
+has every animation legitimately running, and an empty findings list would then
+mean the opposite of what it looks like. Same discipline as `settled` above, for
+the same reason.
+
+Two things it will not tell you. It cannot say a guard is complete, only that
+nothing moved during its sample, so a five-second delayed animation clears a
+one-second sample. And a page with nothing animating clears nothing: the result
+carries `sampled`, and a zero there is not a pass.
+
+## The time axis
+
+The probe at the top of this file observes one moment, and says so. Everything it
+checks is therefore blind to what is only true while an animation is in flight.
+Two elements that never overlap at rest can cross for two hundred milliseconds
+mid-transition, and a hero can sit motionless for three seconds inside a sequence
+that reads as continuous in the source.
+
+```bash
+node tools/inspect/motion.mjs https://example.com --sweep --json
+```
+
+The sweep pauses every entry in `document.getAnimations()`, writes `currentTime`
+across a grid, and samples the geometry at each step. The browser produces a
+matrix, one row per time. Node produces the verdict, from a pure function that
+never sees a page, which is why `evaluateSweep` is unit-tested on hand-written
+matrices with no Chromium at all.
+
+Two rules come out of it. Rule 85 is a still run inside the declared duration: an
+animation that declares four seconds and stops moving at six hundred milliseconds
+has 3.4 seconds of dead air. The tail is not exempt, because the declared duration
+is the author's statement of how long this should take. Rule 86 is a collision
+between two text-bearing boxes that does not exist in the first sample, which is
+what makes it a motion finding rather than a layout one.
+
+**The refusal is the important part.** If every sample comes back with the same
+signature, the seek never moved the page, and every quiet rule in that run is
+quiet for the wrong reason. `evaluateSweep` returns `refused: true` and emits
+nothing, because a clean report from a sweep that never advanced is worse than no
+report at all. The same trap is why the reduced-motion probe checks the emulation
+took before it judges.
+
+Three limits, stated rather than discovered later. `document.getAnimations()`
+reaches CSS animations, CSS transitions and WAAPI, and does not reach a GSAP
+scrub or a hand-rolled `requestAnimationFrame` tween; the result carries
+`undrivable` and says how many it could not move. The signature is built from
+`getBoundingClientRect`, which is an axis-aligned box, so a rotation is flattened
+into its bounding rectangle: four zero-size marker children per element would give
+the real projected quad, and that mutates the page to measure it, so it is the
+upgrade path and not what ships. And an infinite loop has no end time, so one
+iteration is taken as the window.
+
+In Claude in Chrome it is two pastes, because the sampler is installed as a page
+global once rather than serialised per sample:
+
+```bash
+node tools/inspect/motion.mjs --install        # paste first
+node tools/inspect/motion.mjs --sweep-source   # then this
+```
+
 ## Reporting
 
 Same discipline as `detect`, and the scope statement matters more here because a

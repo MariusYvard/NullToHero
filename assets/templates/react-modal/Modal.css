@@ -85,8 +85,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Duration neutralised, not animation removed: the close animation still runs
+     and still fires animationend, so a handler that unmounts on that event does
+     not hang for the reader who asked for less motion (rule 82). The iteration
+     cap is what actually stops an infinite one. */
   .modal-overlay,
   .modal-dialog {
-    animation: none;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

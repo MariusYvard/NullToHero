@@ -204,6 +204,10 @@ Animate from `inset(0 0 100% 0)` to `inset(0 0 0 0)` over 600ms on `--ease-out-u
 
 **`translateY` with percentages** is relative to the element's own height. Use `translateY(100%)` to hide a drawer below the fold, regardless of its actual size. Prefer percentages over hardcoded pixels.
 
+That preference has a threshold behind it (L-MOTION-4, 375px, the narrowest viewport the plugin supports) because the failure is arithmetic and not taste. One public library splits perfectly along the line: its percentage entrances move an element by its own size and are safe at every width, and its pixel entrances start at `translate3d(-2000px, 0, 0)`, which at 375px is 5.3 viewport widths. The leftward ones are clipped and look fine. The rightward twins open a 2000px horizontal scroll region, and the exit variants keep it open for good, because `animation-fill-mode: both` parks the element where the last frame left it. Rule 73 measures any absolute translate in a keyframe against that number; percentages and viewport units are not measured at all, because they are the correct construction.
+
+The same arithmetic governs the stagger. A stagger offsets each item by a fraction of the animation's duration, so the reveal overlaps; an accumulator that adds the full duration makes item N wait for item N-1 to finish, and the total reveal becomes the item count times the duration instead of times the delay. Eight words at a one-second default finish at 8.8 seconds. Rule 74 fires on the accumulator shape, not on the presence of a stagger, because the same file that gets word mode wrong usually gets letter mode right.
+
 **`scale()` affects children.** Unlike `width`/`height`, scale transforms children proportionally. A button press scales its icon and label. This is a feature, not something to correct for.
 
 ---

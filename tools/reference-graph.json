@@ -12,6 +12,7 @@
     "skills/inspect/references/preview.md",
     "skills/inspect/references/rendered.md",
     "skills/inspect/references/review.md",
+    "skills/inspect/references/three.md",
     "skills/seo/references/action-plan.md",
     "skills/seo/references/ai-overview-recovery.md",
     "skills/seo/references/audit.md",
@@ -245,12 +246,32 @@
       "to": "skills/inspect/references/review.md"
     },
     {
+      "from": "skills/inspect/SKILL.md",
+      "to": "skills/inspect/references/three.md"
+    },
+    {
       "from": "skills/inspect/references/detect.md",
       "to": "skills/inspect/references/rendered.md"
     },
     {
+      "from": "skills/inspect/references/detect.md",
+      "to": "skills/inspect/references/three.md"
+    },
+    {
+      "from": "skills/inspect/references/rendered.md",
+      "to": "skills/inspect/references/three.md"
+    },
+    {
       "from": "skills/inspect/references/review.md",
       "to": "skills/inspect/references/code-quality.md"
+    },
+    {
+      "from": "skills/inspect/references/three.md",
+      "to": "skills/inspect/references/rendered.md"
+    },
+    {
+      "from": "skills/inspect/references/three.md",
+      "to": "skills/siteasy/references/overdrive.md"
     },
     {
       "from": "skills/seo/SKILL.md",

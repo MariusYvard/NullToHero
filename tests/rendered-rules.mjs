@@ -16,22 +16,27 @@ import { readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { probe, RENDERED_RULE_IDS } from "../tools/inspect/rendered.mjs";
+import { probe as threeProbe, installSource, THREE_RULE_IDS } from "../tools/inspect/three.mjs";
+import { reducedMotionProbe, sweep, evaluateSweep, installSampler, MOTION_RULE_IDS } from "../tools/inspect/motion.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FX = join(ROOT, "tools", "inspect", "fixtures", "rendered");
+const FX3 = join(ROOT, "tools", "inspect", "fixtures", "three");
+const FXM = join(ROOT, "tools", "inspect", "fixtures", "motion");
 const WAIT = 2500;                       // past the 2s boundary rule 27 judges against
 const VIEWPORT = { width: 1280, height: 800 };
 
 let failures = 0;
 const ok = (m) => console.log(`  \x1b[32mPASS\x1b[0m  ${m}`);
 const no = (m) => { failures++; console.log(`  \x1b[31mFAIL\x1b[0m  ${m}`); };
+const ok3 = (cond, m) => (cond ? ok(m) : no(m));
 
 console.log("\nRendered-page probe\n");
 
 let chromium;
 try { ({ chromium } = await import("playwright")); }
 catch {
-  console.log(`  \x1b[33mSKIPPED\x1b[0m  Playwright is absent, so rules ${RENDERED_RULE_IDS.join(", ")} were NOT verified on this run.`);
+  console.log(`  \x1b[33mSKIPPED\x1b[0m  Playwright is absent, so rules ${[...RENDERED_RULE_IDS, ...THREE_RULE_IDS, ...MOTION_RULE_IDS].join(", ")} were NOT verified on this run.`);
   console.log(`            Turn it on with: npm i -D playwright && npx playwright install chromium`);
   console.log(`            The same probe also runs in Claude in Chrome: node tools/inspect/rendered.mjs --source\n`);
   process.exit(0);
@@ -90,5 +95,129 @@ for (const id of RENDERED_RULE_IDS) {
 }
 if (!noise) ok("no clean fixture trips an unrelated rule");
 
-console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mRendered probe verified in Chromium.\x1b[0m\n");
+// ── three.js probe ────────────────────────────────────────────────────────────
+// A separate section because the mechanism is different: the collector has to be
+// installed as an init script, before the page's own three.js constructs a
+// renderer. Installing it after the fact collects nothing, so the first thing
+// asserted here is that the harness itself is wired the way the field recipe is.
+console.log("\nthree.js probe");
+{
+  const browser3 = await chromium.launch(process.env.NTH_CHROMIUM ? { executablePath: process.env.NTH_CHROMIUM } : {});
+  const run = async (file, withInstall = true) => {
+    const page = await browser3.newPage({ viewport: VIEWPORT });
+    if (withInstall) await page.addInitScript({ content: installSource() });
+    await page.goto(pathToFileURL(join(FX3, file)).href, { waitUntil: "load" });
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(threeProbe, {});
+    await page.close();
+    return r;
+  };
+
+  const bad = await run("bad.html");
+  ok3(bad.detected && bad.revision === "186", `detects three.js r${bad.revision} from the canvas attribute alone`);
+  ok3(bad.installed && bad.renderers === 1, "the init-script collector received the renderer");
+  for (const id of THREE_RULE_IDS) {
+    const own = bad.findings.filter(f => f.id === id);
+    if (own.length) ok(`rule ${id} fires on bad.html — ${own[0].evidence.slice(0, 76)}`);
+    else no(`rule ${id}: silent on bad.html`);
+  }
+  // The measurement is the point, not the verdict: a naive read of info.render.calls
+  // against a site loop that resets every frame would report whatever the last
+  // frame happened to hold.
+  const calls = bad.scenes[0] && bad.scenes[0].drawCalls;
+  ok3(calls >= 1300 && calls <= 1500, `draw calls measured at ${calls} through autoReset, not read blind`);
+
+  const good = await run("good.html");
+  const noisy = good.findings.filter(f => THREE_RULE_IDS.includes(f.id));
+  if (noisy.length) no(`the clean fixture trips ${noisy.map(f => f.id).join(", ")}: ${noisy[0].evidence}`);
+  else ok("no rule fires on the clean fixture");
+
+  // Without the init script, cost cannot be measured and the probe has to say so
+  // rather than returning a short findings list that reads as a lighter scene.
+  // What survives is real and should survive: the colour-space findings come from
+  // the scene, not from the renderer, so they do not depend on the collector.
+  const late = await run("bad.html", false);
+  const costIds = late.findings.filter(f => /pixel ratio|draw calls/.test(f.evidence));
+  ok3(!late.installed && costIds.length === 0 &&
+      late.notes.some(n => /not installed before/.test(n)),
+      "with no init script it drops the cost findings and says cost was not measured");
+  ok3(late.findings.some(f => f.id === 81),
+      "...and keeps the scene findings, which never needed the collector");
+
+  await browser3.close();
+}
+
+// ── reduced-motion probe ──────────────────────────────────────────────────────
+// A third mechanism again: this one needs the RUNNER to emulate a media feature.
+// The probe cannot do it from inside the page, which is exactly why it checks
+// that the emulation took before it judges anything.
+console.log("\nReduced-motion probe");
+{
+  const runMotion = async (file, reducedMotion) => {
+    const b = await chromium.launch(process.env.NTH_CHROMIUM ? { executablePath: process.env.NTH_CHROMIUM } : {});
+    const page = await b.newPage({ viewport: VIEWPORT, reducedMotion });
+    await page.goto(pathToFileURL(join(FXM, file)).href, { waitUntil: "load" });
+    const r = await page.evaluate(reducedMotionProbe, { sampleMs: 600 });
+    await b.close();
+    return r;
+  };
+
+  const bad = await runMotion("84-bad.html", "reduce");
+  if (bad.findings.some(f => f.id === 84)) ok(`rule 84 fires on 84-bad.html — ${bad.findings[0].evidence.slice(0, 76)}`);
+  else no("rule 84: silent on 84-bad.html");
+
+  const good = await runMotion("84-good.html", "reduce");
+  if (good.findings.length) no(`rule 84: fires on its clean fixture — ${good.findings[0].evidence}`);
+  else ok("rule 84 stays quiet on the clean case");
+  ok3(good.sampled > 0, `the clean fixture had ${good.sampled} animations to clear, so its silence means something`);
+
+  // The self-invalidation guard. Without emulation every animation on the page is
+  // legitimately running, and a probe that returned an empty findings list here
+  // would report the worst page in the corpus as clean.
+  const unemulated = await runMotion("84-bad.html", "no-preference");
+  ok3(unemulated.emulated === false && unemulated.findings.length === 0 &&
+      unemulated.notes.some(n => /did not emulate/.test(n)),
+      "with no emulation it refuses to judge instead of reporting clean");
+}
+
+// ── the time-axis sweep ───────────────────────────────────────────────────────
+// The verdict half is unit-tested in tests/unit.mjs on hand-written matrices,
+// which is the point of it being pure. What Chromium has to prove here is the
+// other half: that driving document.getAnimations() actually moves the page and
+// fills the matrix correctly.
+console.log("\nMotion sweep, the time axis");
+{
+  const browserS = await chromium.launch(process.env.NTH_CHROMIUM ? { executablePath: process.env.NTH_CHROMIUM } : {});
+  const runSweep = async (file) => {
+    const page = await browserS.newPage({ viewport: VIEWPORT });
+    await page.addInitScript({ content: installSampler() });
+    await page.goto(pathToFileURL(join(FXM, file)).href, { waitUntil: "load" });
+    const raw = await page.evaluate(sweep, { samples: 24 });
+    await page.close();
+    return { raw, verdict: evaluateSweep(raw) };
+  };
+
+  for (const id of [85, 86]) {
+    const { raw, verdict } = await runSweep(`${id}-bad.html`);
+    ok3(raw.advanced === true, `rule ${id}: the sweep drove the page (${raw.driven} animations, ${raw.durationMs}ms)`);
+    const own = verdict.findings.filter(f => f.id === id);
+    if (own.length) ok(`rule ${id} fires on ${id}-bad.html — ${own[0].evidence.slice(0, 76)}`);
+    else no(`rule ${id}: silent on ${id}-bad.html`);
+
+    const clean = await runSweep(`${id}-good.html`);
+    if (clean.verdict.findings.some(f => f.id === id)) no(`rule ${id}: fires on its clean fixture`);
+    else ok(`rule ${id} stays quiet on the clean case`);
+  }
+
+  // The refusal, in the browser this time. A page with nothing to drive must not
+  // come back clean, because every quiet rule in that run is quiet for the wrong
+  // reason.
+  const dead = await runSweep("sweep-static.html");
+  ok3(dead.raw.advanced === false && dead.verdict.refused === true && dead.verdict.findings.length === 0,
+      "a page the sweep cannot drive is refused, not reported clean");
+
+  await browserS.close();
+}
+
+console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mRendered, three.js and reduced-motion probes verified in Chromium.\x1b[0m\n");
 process.exit(failures ? 1 : 0);

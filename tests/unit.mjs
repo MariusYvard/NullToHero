@@ -7,6 +7,7 @@ import { parseColor, ratioOf } from "../tools/audit/lib/contrast.mjs";
 import { runChecks } from "../tools/audit/lib/checks.mjs";
 import { dedupeSamples } from "../tools/audit/fetch.mjs";
 import { parseBuildLines, verdict, burned, changedAxes, AXES, VOCAB } from "../tools/siteasy/variety.mjs";
+import { evaluateSweep } from "../tools/inspect/motion.mjs";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -377,6 +378,80 @@ console.log("\n── load-context: the pre-flight scan reads a project ──")
   rmSync(dir, { recursive: true, force: true });
   rmSync(empty, { recursive: true, force: true });
 }
+
+// ---------------------------------------------------------------------------
+// evaluateSweep — the verdict half of the time axis.
+//
+// The whole reason the sweep is split in two is that this half never sees a
+// browser: the page produces a matrix, this function produces the findings. So
+// it gets tested here, on hand-written matrices, and the Chromium harness only
+// has to prove the browser half fills them correctly.
+
+console.log("\n── evaluateSweep: refuses a sweep that did not advance ──");
+const box = (i, x, y, text = true) => ({ i, label: `div.b${i}`, x, y, w: 100, h: 40, op: 1, text });
+const frame = (t, rects) => ({ t, sig: rects.map(r => `${r.x},${r.y}`).join("|"), rects });
+
+const still = evaluateSweep({ advanced: false, durationMs: 2000, frames: [], notes: ["nothing moved"] });
+ok("a sweep that did not advance yields no findings", still.findings.length === 0);
+ok("...and says it refused rather than passing", still.refused === true && /nothing moved/.test(still.reason));
+ok("a null result refuses too", evaluateSweep(null).refused === true);
+
+console.log("\n── evaluateSweep: rule 85, dead air ──");
+const stalled = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0)]), frame(500, [box(1, 300, 0)]),
+  frame(1000, [box(1, 300, 0)]), frame(2000, [box(1, 300, 0)]),
+  frame(3000, [box(1, 300, 0)]), frame(4000, [box(1, 300, 0)]),
+] };
+const s85 = evaluateSweep(stalled).findings.filter(f => f.id === 85);
+ok("a 3.5s still run inside a 4s sequence fires", s85.length === 1);
+ok("...and names the window, not just the fact", /500ms and 4000ms/.test(s85[0].evidence));
+
+const moving = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0)]), frame(1000, [box(1, 75, 0)]),
+  frame(2000, [box(1, 150, 0)]), frame(3000, [box(1, 225, 0)]), frame(4000, [box(1, 300, 0)]),
+] };
+ok("continuous motion does not fire", evaluateSweep(moving).findings.filter(f => f.id === 85).length === 0);
+
+// A leading stall is the same defect seen from the other end: an animation-delay
+// long enough that the page holds still before anything happens.
+const late = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0)]), frame(1000, [box(1, 0, 0)]), frame(2000, [box(1, 0, 0)]),
+  frame(3000, [box(1, 150, 0)]), frame(4000, [box(1, 300, 0)]),
+] };
+ok("a leading stall fires too", evaluateSweep(late).findings.filter(f => f.id === 85).length === 1);
+
+console.log("\n── evaluateSweep: rule 86, collision only while moving ──");
+const crossing = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0), box(2, 400, 0)]),
+  frame(2000, [box(1, 200, 0), box(2, 200, 0)]),
+  frame(4000, [box(1, 0, 0), box(2, 400, 0)]),
+] };
+const s86 = evaluateSweep(crossing).findings.filter(f => f.id === 86);
+ok("two labels that pass through each other fire", s86.length === 1);
+ok("...and the finding is anchored to the moment", /at 2000ms/.test(s86[0].evidence));
+
+const parallel = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0), box(2, 0, 200)]),
+  frame(2000, [box(1, 200, 0), box(2, 200, 200)]),
+  frame(4000, [box(1, 400, 0), box(2, 400, 200)]),
+] };
+ok("paths on different rows do not fire", evaluateSweep(parallel).findings.filter(f => f.id === 86).length === 0);
+
+// A pair already overlapping in the first sample is a layout defect, and the
+// static checks own it. Reporting it here would double-count it as a motion bug.
+const alreadyOver = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0), box(2, 20, 0)]),
+  frame(2000, [box(1, 100, 0), box(2, 120, 0)]),
+] };
+ok("a pair overlapping at rest is not a motion finding",
+  evaluateSweep(alreadyOver).findings.filter(f => f.id === 86).length === 0);
+
+const noText = { advanced: true, durationMs: 4000, frames: [
+  frame(0, [box(1, 0, 0, false), box(2, 400, 0, false)]),
+  frame(2000, [box(1, 200, 0, false), box(2, 200, 0, false)]),
+] };
+ok("two decorative boxes crossing are allowed to cross",
+  evaluateSweep(noText).findings.filter(f => f.id === 86).length === 0);
 
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {

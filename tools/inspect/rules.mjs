@@ -52,6 +52,11 @@ const NESTED_AT = /^@(?:media|supports|container|layer|scope|document)\b/i;
 function leafBlocks(css) {
   const c = decomment(css);
   const out = [];
+  // The at-rules we descended through to reach a leaf. Rule 69 needs it: an
+  // opacity: 0 inside a prefers-reduced-motion block is the substitute for a
+  // motion, not a layer parked over the page, and flagging it would make every
+  // correct rule-83 guard a critical finding.
+  const stack = [];
   let i = 0, prelude = "";
   const skipBlock = () => {              // i sits just past the opening brace
     let depth = 1;
@@ -61,20 +66,60 @@ function leafBlocks(css) {
       i++;
     }
   };
+  const depths = [];                     // brace depth at which each stack entry opened
+  let depth = 0;
   while (i < c.length) {
     const ch = c[i];
-    if (ch === "}") { prelude = ""; i++; continue; }
+    if (ch === "}") {
+      depth--;
+      while (depths.length && depths[depths.length - 1] > depth) { depths.pop(); stack.pop(); }
+      prelude = ""; i++; continue;
+    }
     if (ch !== "{") { prelude += ch; i++; continue; }
-    i++;
+    i++; depth++;
     const head = prelude.trim();
     prelude = "";
-    if (/^@keyframes\b/i.test(head)) { skipBlock(); continue; }  // a frame is not a layer
-    if (NESTED_AT.test(head)) continue;                          // descend, the leaves are inside
+    if (/^@keyframes\b/i.test(head)) { depth--; skipBlock(); continue; }  // a frame is not a layer
+    if (NESTED_AT.test(head)) { stack.push(head); depths.push(depth); continue; }  // descend
     const start = i;
     skipBlock();
-    out.push([head, c.slice(start, i - 1)]);
+    depth--;
+    out.push([head, c.slice(start, i - 1), stack.join(" ")]);
   }
   return out;
+}
+
+// Keyframe blocks, as [name, body] pairs. leafBlocks() deliberately skips
+// @keyframes because a frame is not a layer; three rules below need exactly the
+// part it throws away, so this is the mirror walker rather than a flag on that
+// one. Same brace counting, same reason: a regex cannot tell a nested block from
+// the end of the rule.
+function keyframeBlocks(css) {
+  const c = decomment(css);
+  const out = [];
+  const re = /@(?:-webkit-)?keyframes\s+([\w-]+)\s*\{/gi;
+  let m;
+  while ((m = re.exec(c)) !== null) {
+    let i = re.lastIndex, depth = 1;
+    while (i < c.length && depth) {
+      if (c[i] === "{") depth++;
+      else if (c[i] === "}") depth--;
+      i++;
+    }
+    out.push([m[1], c.slice(re.lastIndex, i - 1)]);
+    re.lastIndex = i;
+  }
+  return out;
+}
+
+// A CSS length in px, or null when the value is relative to something the
+// stylesheet does not fix. Percentages and viewport units return null on
+// purpose: they are the safe half of rule 73 and must never be measured.
+function pxLength(value) {
+  const m = /^(-?\d*\.?\d+)(px|rem|em)$/i.exec(value.trim());
+  if (!m) return null;
+  const n = parseFloat(m[1]);
+  return /rem|em/i.test(m[2]) ? n * 16 : n;
 }
 
 const finding = (id, where, evidence) => ({ id, where, evidence });
@@ -257,6 +302,10 @@ export const RULES = [
         // on load and ends somewhere else. A parked layer waits for a state change,
         // which is `transition`, and that case stays in scope.
         .filter(([, body]) => !/\banimation(?:-name)?\s*:/i.test(body))
+        // A leaf inside a reduced-motion query is the state the motion would have
+        // reached, which is rule 83's whole subject. Reporting it as a parked layer
+        // would make every correct guard a critical finding.
+        .filter(([, , at]) => !/prefers-reduced-motion/i.test(at || ""))
         .filter(([sel]) => !/^(?:from|to|\d+%)$/.test(sel))
         .slice(0, 3)
         .map(([sel]) => finding(69, "css", `${sel.slice(0, 40)} is opacity:0 and still takes clicks`));
@@ -651,6 +700,279 @@ export const RULES = [
       if (!watched.length) return [];
       if (/"@type"\s*:\s*"VideoObject"/.test(html)) return [];
       return [finding(67, "html", `${watched.length} video with controls and no VideoObject JSON-LD, so search cannot see it`)];
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Rules added in v3.7.0, from a read of six public animation codebases.
+  //
+  // Every one is arithmetic rather than judgment, and every one was found as a
+  // live defect in shipped code rather than derived from a principle. The
+  // provenance matters because it is what stops this section becoming a list of
+  // things that sound wrong: each rule below has a name and a file behind it.
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  {
+    id: 73,
+    name: "Entrance travel stays relative",
+    detect({ css }) {
+      // One library splits perfectly along this line: its percentage entrances
+      // move an element by its own size and are safe at any width, and its
+      // pixel entrances start 2000px out. At 375px that is 5.3 viewport widths.
+      // Negative offsets are clipped, but the positive-direction twins open a
+      // 2000px horizontal scroll region, and the exit variants keep it open for
+      // good because animation-fill-mode: both parks the element there.
+      //
+      // The threshold is L-MOTION-4, the narrowest viewport the plugin supports.
+      // Percentages and viewport units are not measured at all: they are the
+      // correct construction and pxLength returns null for them.
+      const NARROWEST = 375;
+      const out = [];
+      for (const [name, body] of keyframeBlocks(css)) {
+        let worst = 0, sample = "";
+        for (const t of body.matchAll(/translate(?:3d|X|Y|Z)?\s*\(([^)]*)\)/gi)) {
+          for (const arg of t[1].split(",")) {
+            const px = pxLength(arg);
+            if (px !== null && Math.abs(px) > Math.abs(worst)) { worst = px; sample = t[0]; }
+          }
+        }
+        if (Math.abs(worst) > NARROWEST) {
+          out.push(finding(73, "css",
+            `@keyframes ${name} travels ${Math.round(Math.abs(worst))}px, ${(Math.abs(worst) / NARROWEST).toFixed(1)} viewport widths at ${NARROWEST}px: ${sample.slice(0, 44)}`));
+        }
+      }
+      return out.slice(0, 3);
+    },
+  },
+  {
+    id: 74,
+    name: "Stagger overlaps, it does not queue",
+    detect({ js }) {
+      // The accumulator adds the animation's own duration instead of a fraction
+      // of it, so item N starts only once item N-1 has finished. Total reveal
+      // becomes O(n x duration) instead of O(n x delay): eight words at a
+      // one-second default finish at 8.8 seconds, and the headline is unreadable
+      // for most of the visit. The same file's letter mode does delay * index
+      // and is correct, which is why this fires on the accumulator shape and not
+      // on the presence of a stagger.
+      // Matching the delay variable to the accumulator by name does not work:
+      // in the case this rule was written from they are two different variables,
+      // one derived from the other. So this is a proximity rule, the same shape
+      // as rules 57 and 59: an accumulator advanced by a duration, sitting inside
+      // the same 400 characters as a write to animation-delay.
+      const WINDOW = 400;
+      const delays = [...js.matchAll(/animation-?[Dd]elay/g)].map(m => m.index);
+      if (!delays.length) return [];
+      const out = [];
+      for (const m of js.matchAll(/\b([A-Za-z_$][\w$]*)\s*(?:\+=|=[^;\n]*\+)[^;\n]*\b(\w*[Dd]uration)\b/g)) {
+        if (!delays.some(d => Math.abs(d - m.index) <= WINDOW)) continue;
+        out.push(finding(74, "js",
+          `${m[1]} is advanced by ${m[2]} beside a write to animation-delay, so item N waits for item N-1 to finish: ${m[0].trim().slice(0, 56)}`));
+      }
+      return out.slice(0, 2);
+    },
+  },
+  {
+    id: 75,
+    name: "Split text keeps its accessible name",
+    detect({ doc, html }) {
+      // A text splitter wraps every character in an inline-block span. Those are
+      // not inline text: several screen reader and browser pairings announce the
+      // heading one letter at a time, and the per-character break opportunities
+      // let a headline wrap mid-word at 375px.
+      //
+      // The detail that makes this critical rather than cosmetic: in the library
+      // this was found in, the display: inline-block rule sits outside the
+      // prefers-reduced-motion block. The animation stops and the shredding does
+      // not, so the reader who asked for less motion keeps the whole harm.
+      const named = (el) => has(el, "aria-label") || has(el, "aria-labelledby");
+      const out = [];
+
+      // Case 1: the split output is in the markup.
+      const hosts = ["h1", "h2", "h3", "p", "div", "span", "a", "button"]
+        .flatMap(tag => queryAll(doc, tag));
+      for (const el of hosts) {
+        const spans = (el.children || []).filter(c => c.tag === "span");
+        if (spans.length < 8) continue;
+        const chars = spans.filter(s => text(s).length === 1);
+        if (chars.length < 8) continue;
+        if (named(el)) continue;
+        if (spans.every(s => has(s, "aria-hidden"))) continue;
+        out.push(finding(75, "html",
+          `<${el.tag}> is split into ${chars.length} single-character spans with no accessible name on the parent`));
+      }
+
+      // Case 2: the splitter has not run yet, and says so in an attribute. Three
+      // real conventions, not a guess: Splitting.js, the GSAP SplitText data hook,
+      // and the attribute family from the library above.
+      for (const m of html.matchAll(/<([a-z0-9]+)\b([^>]*\b(?:data-splitting|split-by|data-split-text|ca__lt-[\w-]+)\b[^>]*)>/gi)) {
+        if (/aria-label/i.test(m[2])) continue;
+        out.push(finding(75, "html",
+          `<${m[1]}> is marked for text splitting and carries no aria-label, so the generated spans become the accessible name`));
+      }
+      return out.slice(0, 3);
+    },
+  },
+  {
+    id: 82,
+    name: "A reduced-motion guard neutralises duration, it does not remove the animation",
+    detect({ css }) {
+      // `animation: none` under the preference query kills animationend. Any code
+      // waiting on that event then deadlocks, and it deadlocks for exactly the
+      // readers the guard was written to protect, which is why it survives review:
+      // the author never sees it unless they toggle the OS setting.
+      //
+      // The two public libraries in this corpus disagree on precisely this. One
+      // sets `animation-duration: 1ms !important` so the animation still completes
+      // and still fires; the other sets `animation: none` and has the bug. The
+      // plugin's own parallax.md has said 0.01ms since it was written.
+      const c = decomment(css);
+      const out = [];
+      const re = /@media[^{]*prefers-reduced-motion\s*:\s*reduce[^{]*\{/gi;
+      let m;
+      while ((m = re.exec(c)) !== null) {
+        let i = re.lastIndex, depth = 1;
+        while (i < c.length && depth) {
+          if (c[i] === "{") depth++;
+          else if (c[i] === "}") depth--;
+          i++;
+        }
+        const body = c.slice(re.lastIndex, i - 1);
+        re.lastIndex = i;
+        const kill = /animation(?:-name)?\s*:\s*none\b/i.exec(body);
+        // One real exception, and it is narrow. On ::view-transition pseudo-elements
+        // `animation: none` is the documented way to opt out: there is no author
+        // handler on those pseudos, and startViewTransition's finished promise
+        // resolves either way. The plugin's own animation-engineering.md ships that
+        // exact snippet, and a rule that flags its own correct example is a rule
+        // people switch off.
+        if (kill && /::view-transition/i.test(body)) continue;
+        if (kill) {
+          out.push(finding(82, "css",
+            `the reduced-motion block writes ${kill[0].trim()}, which stops animationend firing; neutralise the duration instead so the animation completes instantly`));
+        }
+      }
+      return out.slice(0, 2);
+    },
+  },
+  {
+    id: 83,
+    name: "A reduced-motion guard still reaches the end state",
+    detect({ css }) {
+      // Killing the motion is not the same as reaching the state the motion was
+      // communicating. A 1ms fadeOut with fill-mode: both is a race, and the
+      // element can end up visible: a dismissed toast that does not dismiss.
+      //
+      // The library that gets this right does it in one line,
+      // `.animated[class*='Out'] { opacity: 0 }`, and it is the most considered
+      // line in either of the two. The rule only fires once the sheet has exit
+      // animations to protect, because a sheet with none has nothing to reach.
+      const c = decomment(css);
+      const guards = [...c.matchAll(/@media[^{]*prefers-reduced-motion\s*:\s*reduce[^{]*\{/gi)];
+      if (!guards.length) return [];
+      // An exit animation somewhere in the sheet: a keyframe or class named for
+      // leaving. Without one there is no end state to miss.
+      const EXITISH = /(?:out|exit|leave|dismiss|hide|close|collapse)\b/i;
+      const hasExit = keyframeBlocks(css).some(([n]) => EXITISH.test(n)) ||
+        leafBlocks(css).some(([sel, body]) => EXITISH.test(sel) && /\banimation(?:-name)?\s*:/i.test(body));
+      if (!hasExit) return [];
+      const out = [];
+      for (const g of guards) {
+        let i = g.index + g[0].length, depth = 1;
+        while (i < c.length && depth) {
+          if (c[i] === "{") depth++;
+          else if (c[i] === "}") depth--;
+          i++;
+        }
+        const body = c.slice(g.index + g[0].length, i - 1);
+        // A guard that does not touch timing at all is somebody's unrelated media
+        // query and not this rule's business.
+        if (!/animation|transition/i.test(body)) continue;
+        const terminal = EXITISH.test(body) &&
+          /(?:opacity\s*:\s*0|display\s*:\s*none|visibility\s*:\s*hidden)/i.test(body);
+        if (!terminal) {
+          out.push(finding(83, "css",
+            "the sheet has exit animations and its reduced-motion block neutralises timing without giving them a terminal state, so a dismissal can end visible"));
+        }
+      }
+      return out.slice(0, 1);
+    },
+  },
+  {
+    id: 76,
+    name: "One keyframes name, one animation",
+    detect({ css }) {
+      // The later definition wins, silently, so the earlier class animates
+      // somebody else's motion. Five live cases in one 192 KB bundle, and there
+      // is no way to see it by eye at that size.
+      const seen = new Map();
+      for (const [name] of keyframeBlocks(css)) seen.set(name, (seen.get(name) || 0) + 1);
+      return [...seen.entries()].filter(([, n]) => n > 1).slice(0, 3)
+        .map(([name, n]) => finding(76, "css",
+          `@keyframes ${name} is defined ${n} times; the last one wins and the earlier classes animate it instead of their own`));
+    },
+  },
+  {
+    id: 77,
+    name: "Easing functions parse",
+    detect({ css }) {
+      // steps(5 end) without the comma is not a valid <easing-function>. The
+      // declaration is dropped and the animation falls back to ease, so the
+      // author's stepped motion silently becomes a smooth one. Nothing warns.
+      const c = decomment(css);
+      const out = [];
+      for (const m of c.matchAll(/\bsteps\s*\(([^)]*)\)/gi)) {
+        const args = m[1].split(",").map(s => s.trim()).filter(Boolean);
+        const ok = args.length >= 1 && args.length <= 2 &&
+          /^\d+$/.test(args[0]) &&
+          (args.length === 1 || /^(jump-(start|end|none|both)|start|end)$/i.test(args[1]));
+        if (!ok) out.push(finding(77, "css", `${m[0].trim()} is not a valid easing function, so the declaration is dropped and the motion falls back to ease`));
+      }
+      for (const m of c.matchAll(/\bcubic-bezier\s*\(([^)]*)\)/gi)) {
+        const a = m[1].split(",").map(s => parseFloat(s));
+        const ok = a.length === 4 && a.every(Number.isFinite) &&
+          a[0] >= 0 && a[0] <= 1 && a[2] >= 0 && a[2] <= 1;
+        if (!ok) out.push(finding(77, "css", `${m[0].trim()} is not a valid cubic-bezier: four numbers, with both x coordinates between 0 and 1`));
+      }
+      return out.slice(0, 3);
+    },
+  },
+  {
+    id: 78,
+    name: "No flash above three per second",
+    detect({ css }) {
+      // WCAG 2.3.1. One shipped class is animation: glitchFlash 0.15s steps(2, end)
+      // infinite over a full opacity swing, which is 6.7 flashes per second, well
+      // inside the photosensitive-seizure band, and it ships with no guard.
+      //
+      // What this cannot know is the flashing area, and 2.3.1 has an area
+      // threshold. So the finding names the frequency and says the area was not
+      // measured, rather than asserting a violation.
+      const frames = new Map(keyframeBlocks(css));
+      const out = [];
+      for (const [sel, body] of leafBlocks(css)) {
+        const sh = /animation\s*:\s*([^;}]+)/i.exec(body);
+        if (!sh || !/\binfinite\b/i.test(sh[1])) continue;
+        const dur = /(-?\d*\.?\d+)(m?s)\b/i.exec(sh[1]);
+        if (!dur) continue;
+        const seconds = parseFloat(dur[1]) / (dur[2].toLowerCase() === "ms" ? 1000 : 1);
+        if (!(seconds > 0)) continue;
+        const name = sh[1].trim().split(/\s+/).find(t => frames.has(t));
+        if (!name) continue;
+        // Opacity values in document order. Adjacent pairs that differ are the
+        // flashes; one full 1 -> 0 -> 1 cycle is two of them.
+        const vals = [...frames.get(name).matchAll(/opacity\s*:\s*([\d.]+)/gi)].map(m => parseFloat(m[1]));
+        if (vals.length < 2) continue;
+        let transitions = 0;
+        for (let i = 1; i < vals.length; i++) if (Math.abs(vals[i] - vals[i - 1]) > 0.5) transitions++;
+        if (!transitions) continue;
+        const hz = transitions / seconds;
+        if (hz > 3) {
+          out.push(finding(78, "css",
+            `${sel.trim().slice(0, 32)} runs ${name} at ${hz.toFixed(1)} full-opacity flashes per second (WCAG 2.3.1 allows 3); the flashing area was not measured`));
+        }
+      }
+      return out.slice(0, 3);
     },
   },
 ];

@@ -1,0 +1,2 @@
+.type { animation-timing-function: steps(5 end); }
+.slide { transition-timing-function: cubic-bezier(0.3, 1.5, 0.5); }

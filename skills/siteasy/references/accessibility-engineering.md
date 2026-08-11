@@ -203,7 +203,8 @@ Reduced motion means fewer and gentler animations, not zero. Crossfades stay. Po
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  .card { animation: none; transform: none; transition: opacity 150ms ease; }
+  .card { animation-duration: 1ms !important; animation-iteration-count: 1 !important;
+          transform: none; transition: opacity 150ms ease; }
 }
 ```
 
