@@ -1673,6 +1673,10 @@ section("42. Deterministic tooling present");
     "tools/check-routing.mjs",
     "tools/audit/lib/ai-access.mjs",
     "tools/audit/lib/url-safety.mjs",
+    "tools/inspect/three.mjs",
+    "tools/inspect/motion.mjs",
+    "tools/inspect/capture.mjs",
+    "tools/siteasy/variety.mjs",
     "tests/behavior/run.mjs",
   ];
   let missingTools = 0;

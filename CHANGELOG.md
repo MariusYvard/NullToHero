@@ -11,6 +11,47 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.7.1] - 2026-08-11
+
+### Added
+
+- **`tools/inspect/capture.mjs`, a recording of what the page does.** `/inspect
+  preview` takes two stills, which is the right tool for composition and the wrong
+  one for every question with a duration in it. The usual substitute is describing
+  motion in prose to somebody who cannot see it. Playwright records video natively;
+  this is the wrapper that turns it into a deliverable. `--scroll` walks the page
+  down at eight steps a second rather than jumping, because jumping skips every
+  scroll-triggered reveal on the way, which is usually the thing being recorded.
+  `--reduced` records the same page under the preference, and the two files side by
+  side are the fastest way to show an owner what their guard actually does.
+
+  Deliberately not a render pipeline: no frame determinism, no alpha, no audio, no
+  golden-frame comparison. The verdicts still come from `motion.mjs --sweep`. This
+  produces the artefact a person watches, that produces the findings a machine can
+  check.
+
+### Fixed
+
+- **The generator and the auditor disagreed about three.js, and v3.7.0 is what made
+  it visible.** `tools/design-system/data/stacks/threejs.csv` pinned r128 and taught
+  `renderer.outputEncoding = THREE.sRGBEncoding` as correct, while the rules shipped
+  the day before reported that same line as a silent no-op on any current build.
+  Both cannot be right. The auditor is right about the library as it is now, so five
+  rows moved: the CDN pin (an import map on a current revision, not a global script
+  tag on a 2021 one), the recent-primitive trap (stated as the general check rather
+  than as a CapsuleGeometry-versus-r128 special case), addon loading (the
+  non-module `examples/js` directory was removed in r148), `THREE.Geometry` (gone
+  since r125, so a snippet using it is old enough that its other assumptions need
+  checking too), and colour management (since r152 the pipeline is linear in and
+  sRGB out with no configuration; what still needs a decision is tone mapping and
+  what still needs tagging is textures).
+
+  Found because somebody asked whether the plugin could generate 3D scenes. It can,
+  and until this commit it generated them against a renderer that stopped behaving
+  that way three years ago.
+
+---
+
 ## [3.7.0] - 2026-08-11
 
 Fourteen rules, three of them measured in a browser rather than inferred from

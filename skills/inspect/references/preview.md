@@ -74,6 +74,34 @@ const clip = await page.evaluate(() => getComputedStyle(document.querySelector("
 
 If a component's own progress is not observable from the DOM, that is worth a finding on its own: nothing about it can be asserted, only eyeballed.
 
+### 5b. Record the motion when a still cannot carry it
+
+Two screenshots answer questions about composition. They cannot answer a question
+with a duration in it, and the usual substitute is describing the motion in prose
+to somebody who cannot see it.
+
+```bash
+node tools/inspect/capture.mjs index.html --seconds 6
+node tools/inspect/capture.mjs https://example.com --scroll --seconds 10
+node tools/inspect/capture.mjs index.html --reduced --viewport 390x844
+```
+
+A webm lands in `./motion-capture`, named for the target and the viewport. `--scroll`
+walks the page from top to bottom at eight steps a second instead of jumping, because
+jumping skips every scroll-triggered reveal on the way, which is usually the thing
+being recorded. `--reduced` records the same page under
+`prefers-reduced-motion: reduce`, and the two files side by side are the fastest
+way to show an owner what their guard actually does.
+
+In Claude in Chrome the equivalent needs no install: the `gif_creator` tool records
+the user's own browser, which is also the only way to record a page behind a login.
+
+Two things to say when handing one over. **It is an artefact, not a verdict**: the
+findings over time come from `node tools/inspect/motion.mjs <url> --sweep`, which
+drives the page across a time grid and reports stalls and transient collisions. And
+a recording is one run at one viewport with one clock, so it shows what happened
+rather than what happens.
+
 ### 6. Fix issues
 1. Read the relevant file
 2. Apply targeted fix with Edit tool
