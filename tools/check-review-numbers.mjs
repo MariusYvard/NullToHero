@@ -24,7 +24,7 @@
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DOC = join(ROOT, "ARCHITECTURE-REVIEW.md");
@@ -152,7 +152,7 @@ facts.mappedChecks = cov.filter(r => r[1] === "static-check").length;
 // version antérieure soustrayait deux populations différentes (les fonctions
 // déclarées dans checks.mjs moins les exécuteurs déclarés dans la carte) et
 // perdait les huit contrôles que runChecks importe de ai-access.mjs.
-const { runChecks: _rc } = await import(join(ROOT, "tools/audit/lib/checks.mjs"));
+const { runChecks: _rc } = await import(pathToFileURL(join(ROOT, "tools/audit/lib/checks.mjs")).href);
 const emitted = [...new Set(_rc({ rawHtml: "<!doctype html><html lang=\"en\"><head><title>t</title></head><body><h1>h</h1></body></html>", css: "", js: "" }).map(c => c.id))];
 facts.checkFns = emitted.length;
 const mappedIds = new Set(cov.filter(r => r[1] === "static-check").map(r => r[2]));
@@ -314,7 +314,7 @@ try {
 /* ---------- 10. Les mesures, rejouées et non relues ---------- */
 
 console.log("\nMesures de la section 5 et du §6.4, rejouées");
-const { runChecks, scoreFromChecks } = await import(join(ROOT, "tools/audit/lib/checks.mjs"));
+const { runChecks, scoreFromChecks } = await import(pathToFileURL(join(ROOT, "tools/audit/lib/checks.mjs")).href);
 const passes = (r) => r.filter(c => c.verdict === "PASS").length;
 
 // 5.3 : 42 contrôles non mesurés
