@@ -453,6 +453,53 @@ const noText = { advanced: true, durationMs: 4000, frames: [
 ok("two decorative boxes crossing are allowed to cross",
   evaluateSweep(noText).findings.filter(f => f.id === 86).length === 0);
 
+// ── P3b: the invariant that makes the census self-carrying ──────────────────
+// P3 patches the paths this census found. This test protects the twenty-seventh:
+// for every check runChecks emits, an input whose provenance is "unfetchable" or
+// undeclared must never come back PASS. Adding a check that reads an empty string
+// as an absence now fails the build instead of waiting for a reader to notice.
+console.log("\n── P3b: no check passes on an input it did not measure ──");
+{
+  const { runChecks: rc2, UNFETCHABLE } = await import("../tools/audit/lib/checks.mjs");
+  // A page that references CSS and JS it never got: the provenance the fix exists for.
+  const referencing = '<!doctype html><html lang="en"><head><title>t</title>'
+    + '<meta charset="utf-8"><meta name="viewport" content="width=device-width">'
+    + '<link rel="stylesheet" href="https://cdn.example/app.css"></head>'
+    + '<body><h1>h</h1><script src="https://cdn.example/app.js"><\/script></body></html>';
+
+  for (const prov of [{ js: UNFETCHABLE, css: UNFETCHABLE }, null]) {
+    const label = prov ? "declared unfetchable" : "undeclared, page references both";
+    const out = rc2({ rawHtml: referencing, css: "", js: "", provenance: prov });
+    // Only the checks that actually read css or js are bound by this: the rest
+    // read the document, which was measured.
+    const INPUT_BOUND = new Set([
+      "motion-reduced-guard", "scrollbar-hidden", "frame-sequence-preload",
+      "three-duplicate-copies", "frame-loop-alloc",
+    ]);
+    const wrong = out.filter(c => INPUT_BOUND.has(c.id) && c.verdict === "PASS").map(c => c.id);
+    ok(`${label}: no input-bound check returns PASS${wrong.length ? " (" + wrong.join(", ") + ")" : ""}`, wrong.length === 0);
+    const measuredOnes = out.filter(c => INPUT_BOUND.has(c.id) && c.verdict === "NOT_MEASURED").length;
+    ok(`${label}: all five say so explicitly`, measuredOnes === INPUT_BOUND.size);
+  }
+
+  // The other direction, so the invariant cannot be satisfied by refusing always:
+  // a page that genuinely has no CSS and no JS gets its five verdicts.
+  const bare = '<!doctype html><html lang="en"><head><title>t</title><meta charset="utf-8">'
+    + '<meta name="viewport" content="width=device-width"></head><body><h1>h</h1></body></html>';
+  const bareOut = rc2({ rawHtml: bare, css: "", js: "" });
+  const silent = bareOut.filter(c => ["motion-reduced-guard", "scrollbar-hidden", "three-duplicate-copies", "frame-loop-alloc"].includes(c.id) && c.verdict === "NOT_MEASURED");
+  ok("a page that genuinely has no CSS and no JS is still judged", silent.length === 0);
+
+  // P4: a score deduced from nothing is not a score.
+  const { scoreFromChecks: sf2 } = await import("../tools/audit/lib/checks.mjs");
+  const allUnmeasured = sf2(Array.from({ length: 42 }, (_, i) => ({ id: "c" + i, verdict: "NOT_MEASURED" })));
+  ok("forty-two unmeasured checks score null, not 100", allUnmeasured.score === null);
+  ok("the coverage travels with the score", allUnmeasured.coverage === 0 && allUnmeasured.total === 42);
+  const someMeasured = sf2([{ id: "a", verdict: "PASS" }, { id: "b", verdict: "NOT_MEASURED" }]);
+  ok("a partially measured set is scored and carries its coverage",
+    someMeasured.score === 100 && someMeasured.coverage === 0.5 && someMeasured.measured === 1);
+}
+
 // ── The gate refuses to judge rather than pass (P1, P2, P5) ──────────────────
 // Each of these three exited 0 with RESULT: PASS before the fix. The gate had no
 // way to say "I could not judge", so anything it could not read read as a pass.

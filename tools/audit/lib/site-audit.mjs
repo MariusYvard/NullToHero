@@ -171,6 +171,11 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
     deterministic: {
       score: det.score, fails: det.fails, warns: det.warns,
       notMeasured: det.notMeasured, criticalFails: det.criticalFails,
+      // P4. Le dénominateur voyage avec le score, sans quoi la porte ne peut pas
+      // savoir sur quoi il a été calculé. provisionalScore est le chiffre d'avant
+      // la bascule, gardé pour que le déploiement de 6.4 puisse annoncer l'écart.
+      coverage: det.coverage, measured: det.measured, total: det.total,
+      provisionalScore: det.provisionalScore,
     },
     inputs: { hashes: inputHashes(fetchResult), dimensions: DIMENSION_INPUTS },
     checks: checks.map(c => ({ ...c, source: "analyzer", fixWith: remediationMap()[c.id] || null })),

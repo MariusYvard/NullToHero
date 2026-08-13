@@ -791,6 +791,31 @@ function checkCanonicalPreview(doc, url) {
 
 // ── DOM correctness, head hygiene and response hardening (harvested checks) ─────
 // Agent bindings for checks that land in the code and performance dimensions.
+// ── P3. La provenance d'une entrée ───────────────────────────────────────────
+// Une chaîne vide ne distingue pas "la page n'en a pas" de "on n'a pas pu la
+// récupérer". Cinq contrôles lisaient les deux comme une absence et rendaient
+// PASS, soit un verdict positif sur une mesure qui n'a pas eu lieu : une page
+// dont toute l'animation est sur un CDN obtenait "aucune bibliothèque
+// d'animation détectée", zéro FAIL et 72 sur 100.
+//
+// L'appelant dit maintenant ce que l'entrée est. Ce qu'il ne dit pas n'est pas
+// mesuré : inventer un succès est pire qu'inventer un échec, parce que personne
+// ne revérifie un vert. La doctrine est celle de css.mjs:216-217, portée à la
+// frontière où l'entrée arrive sous forme de chaîne.
+export const MEASURED = "measured";        // récupérée, c'est ce que la page sert
+export const ABSENT = "absent";            // la page n'en a réellement aucune
+export const UNFETCHABLE = "unfetchable";  // la page en a et on ne l'a pas eue
+
+// Un contrôle ne juge que sur "measured" ou "absent". Tout le reste, y compris
+// l'absence de déclaration, refuse de conclure.
+const judgeable = (prov) => prov === MEASURED || prov === ABSENT;
+const unmeasured = (id, label, dim, input, prov) => mk({
+  id, label, ...dim, verdict: "NOT_MEASURED", method: "not-measured", value: null,
+  detail: prov === UNFETCHABLE
+    ? `${input} was referenced by the page and could not be fetched, so this check did not run. Its silence is not a pass.`
+    : `${input} provenance was not declared by the caller, so this check did not run. Its silence is not a pass.`,
+});
+
 const CODE = { agent: "inspect-agent-code",       dimension: "Front-end Defects" };
 const PERF = { agent: "seo-agent-performance",    dimension: "Search Visibility" };
 
@@ -1185,7 +1210,8 @@ function checkVideoEmbeds(doc) {
     detail: `All ${auto.length} autoplay video(s) carry muted, playsinline and a poster.` });
 }
 
-function checkMotionReducedGuard(styleText, js) {
+function checkMotionReducedGuard(styleText, js, jsProv) {
+  if (!judgeable(jsProv)) return unmeasured("motion-reduced-guard", "Reduced-motion guard for JS animation", CODE, "page JavaScript", jsProv);
   if (!MOTION_LIB_RE.test(js || "")) {
     return mk({ id: "motion-reduced-guard", label: "Reduced-motion guard for JS animation", ...CODE, verdict: "PASS",
       method: "static", value: { library: false }, detail: "No JS animation or scroll library detected." });
@@ -1207,7 +1233,8 @@ function checkMotionReducedGuard(styleText, js) {
     detail: "A JS animation/scroll library is loaded with no prefers-reduced-motion guard anywhere (CSS or JS)." });
 }
 
-function checkScrollbarHidden(styleText) {
+function checkScrollbarHidden(styleText, cssProv) {
+  if (!judgeable(cssProv)) return unmeasured("scrollbar-hidden", "Document scrollbar suppressed", A11Y, "page CSS", cssProv);
   const t = styleText || "";
   const hits = [];
   const ruleRe = /([^{}]+)\{([^{}]*)\}/g;
@@ -1230,7 +1257,8 @@ function checkScrollbarHidden(styleText) {
     method: "static", value: null, detail: "Document scrollbar not suppressed." });
 }
 
-function checkFrameSequencePreload(js, rawHtml) {
+function checkFrameSequencePreload(js, rawHtml, jsProv) {
+  if (!judgeable(jsProv)) return unmeasured("frame-sequence-preload", "Image-sequence preload burst", PERF, "page JavaScript", jsProv);
   const t = (js || "") + "\n" + (rawHtml || "");
   const seq = new Map();
   const re = /["'(=\s]([\w./-]{0,120}?[\w-]*?)(\d{2,4})\.(webp|jpe?g|png|avif)\b/gi;
@@ -1301,7 +1329,8 @@ function checkMediaWeight(probes) {
     method: "probe", value, detail: `${videoMB.toFixed(1)} MB video and ${modelMB.toFixed(1)} MB 3D models referenced.` });
 }
 
-function checkThreeDuplicate(js) {
+function checkThreeDuplicate(js, jsProv) {
+  if (!judgeable(jsProv)) return unmeasured("three-duplicate-copies", "Duplicate three.js copies", PERF, "page JavaScript", jsProv);
   const t = js || "";
   const revs = [];
   const re = /\bREVISION\s*=\s*['"]?(\d{2,4})\b/g;
@@ -1326,7 +1355,8 @@ function checkThreeDuplicate(js) {
     method: "static", value: { copies: 1, revisions: distinct }, detail: `One three.js build (r${distinct[0]}).` });
 }
 
-function checkFrameLoopAlloc(js) {
+function checkFrameLoopAlloc(js, jsProv) {
+  if (!judgeable(jsProv)) return unmeasured("frame-loop-alloc", "Allocation inside a frame loop", CODE, "page JavaScript", jsProv);
   const t = js || "";
   const heads = /useFrame\s*\(|requestAnimationFrame\s*\(/g;
   const alloc = /new\s+(THREE\.)?(Vector[23]|Matrix[34]|Quaternion|Euler|Color)\s*\(|\.clone\s*\(\s*\)/;
@@ -1738,15 +1768,45 @@ function checkScrubEasingLinear(model) {
     detail: `${scrubbed} scroll-driven animation(s), all declared linear.` });
 }
 
+// La dérivation par défaut, quand l'appelant ne déclare rien. Elle lit le
+// document plutôt que la chaîne : c'est le seul endroit où absent et non
+// récupéré se distinguent sans information extérieure.
+export function derivedProvenance(rawHtml, styleText, js) {
+  const html = rawHtml || "";
+  // Un <style> en ligne est dans le document, donc mesuré : runChecks le fusionne
+  // dans styleText. Seule une feuille liée non fournie est non récupérée.
+  const linksSheet = /<link\b[^>]*\brel=["']?stylesheet["']?/i.test(html);
+  // Un <script> avec src n'est pas dans le document. Un <script> en ligne l'est,
+  // mais runChecks ne l'extrait pas : c'est l'appelant qui passe `js`, et s'il ne
+  // le passe pas le contenu n'a pas été mesuré, quoi qu'en dise le document.
+  const hasScript = /<script\b(?![^>]*\btype=["']?(?:application\/ld\+json|application\/json|importmap)["']?)[^>]*>/i.test(html);
+  const has = (v) => typeof v === "string" && v.trim().length > 0;
+  return {
+    js: has(js) ? MEASURED : (hasScript ? UNFETCHABLE : ABSENT),
+    css: has(styleText) ? MEASURED : (linksSheet ? UNFETCHABLE : ABSENT),
+  };
+}
+
 // ── engine ────────────────────────────────────────────────────────────────────
 
-export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", js = "", probes = null } = {}) {
+export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null, url = null, computed = null, headers = null, css = "", js = "", probes = null, provenance = null } = {}) {
+  // P3. Sans déclaration, la provenance est dérivée du document : la page ne
+  // référence aucun script, donc son JavaScript est réellement absent. Dès
+  // qu'elle en référence un, une chaîne vide veut dire "non récupéré" et non
+  // "aucun". Un appelant qui sait mieux passe `provenance` et prime.
+
   const rawDoc = parse(rawHtml || "");
   const activeDoc = renderedHtml ? parse(renderedHtml) : rawDoc;
   // Build a CSS model from inline <style> blocks plus any linked stylesheets so
   // the static contrast pass can resolve token colors without a browser.
   const styleText = (queryAll(activeDoc, "style").map(s => textContent(s)).join("\n") + "\n" + (css || "")).trim();
   const cssModel = styleText ? parseStylesheet(styleText) : null;
+  // P3. Sans déclaration, la provenance est dérivée du document et du texte de
+  // style réellement disponible : la page ne référence aucun script, donc son
+  // JavaScript est réellement absent. Dès qu'elle en référence un, une chaîne vide
+  // veut dire "non récupéré" et non "aucun". Un appelant qui sait mieux passe
+  // `provenance` et prime.
+  const prov = { ...derivedProvenance(rawHtml, styleText, js), ...(provenance || {}) };
   const checks = [
     checkViewport(activeDoc),
     checkImgDimensions(activeDoc),
@@ -1771,12 +1831,12 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
     checkServerFingerprint(headers),
     checkCookieFlags(headers),
     checkVideoEmbeds(activeDoc),
-    checkMotionReducedGuard(styleText, js),
-    checkScrollbarHidden(styleText),
-    checkFrameSequencePreload(js, rawHtml),
+    checkMotionReducedGuard(styleText, js, prov.js),
+    checkScrollbarHidden(styleText, prov.css),
+    checkFrameSequencePreload(js, rawHtml, prov.js),
     checkMixedScriptText(activeDoc),
-    checkThreeDuplicate(js),
-    checkFrameLoopAlloc(js),
+    checkThreeDuplicate(js, prov.js),
+    checkFrameLoopAlloc(js, prov.js),
     checkTapTargetSize(cssModel),
     checkTapTargetSpacing(cssModel),
     checkBodyFontSize(cssModel),
@@ -1807,9 +1867,28 @@ export function scoreFromChecks(checks) {
   const fails = measured.filter(c => c.verdict === "FAIL");
   const warns = measured.filter(c => c.verdict === "WARN");
   const criticalFails = fails.filter(c => c.critical).map(c => c.id);
+  // P4. Le score partait de 100 et ne connaissait pas son dénominateur : un
+  // contrôle qui n'a pas pu tourner déduisait zéro, arithmétiquement identique à
+  // un contrôle qui a réussi. Quarante-deux contrôles non mesurés donnaient 100.
+  // buildSiteAudit refusait déjà un score global quand un groupe n'avait pas
+  // tourné (site-audit.mjs:149-165) : le bon réflexe existait, à la mauvaise
+  // altitude. Il descend ici.
+  // La couverture répond à "le contrôle a-t-il tourné", pas à "a-t-il noté".
+  // ADVISORY a bien mesuré, il ne pénalise simplement pas, donc il compte ici.
+  // La couverture répond à "le contrôle a-t-il tourné", pas à "a-t-il noté".
+  // ADVISORY a bien mesuré, il ne pénalise simplement pas, donc il compte ici.
+  const total = checks.length;
+  const ran = checks.filter(c => c.verdict !== "NOT_MEASURED").length;
+  const coverage = total === 0 ? 0 : ran / total;
   let score = 100 - 15 * fails.length - 7 * warns.length;
   if (score < 0) score = 0;
   if (criticalFails.length) score = Math.min(score, 49);
+  // Le mécanisme : un score déduit de rien n'est pas un score. Quarante-deux
+  // contrôles non mesurés donnaient 100, arithmétiquement identique à
+  // quarante-deux réussites. Le plancher au-dessus de zéro est une politique, et
+  // il vit dans la porte, pas ici (P4, "ne corrige pas : le choix du plancher").
+  const scored = ran > 0;
+  if (!scored) score = null;
 
   const byAgent = {};
   for (const c of measured) {
@@ -1823,6 +1902,14 @@ export function scoreFromChecks(checks) {
   }
   return {
     score,
+    // Le score reste calculable même quand il est refusé : un appelant qui veut
+    // l'écart entre l'ancien et le nouveau chiffre (le drapeau de 6.4) en a
+    // besoin, et cacher le nombre empêcherait d'annoncer la bascule.
+    provisionalScore: scored ? score : Math.max(0, 100 - 15 * fails.length - 7 * warns.length),
+    coverage: Number(coverage.toFixed(3)),
+    measured: ran,
+    scoredOn: measured.length,
+    total,
     fails: fails.length,
     warns: warns.length,
     notMeasured: checks.filter(c => c.verdict === "NOT_MEASURED").length,

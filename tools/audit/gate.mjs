@@ -39,6 +39,12 @@ const policy = {
   minScore: numOpt("--min-score"),
   maxFails: numOpt("--max-fails"),
   maxWarns: numOpt("--max-warns"),
+  // P4, moitié politique. Le mécanisme est dans scoreFromChecks : un score déduit
+  // de rien vaut null. Le plancher au-dessus de zéro est un arbitrage, donc il est
+  // ici et il se règle. 0,45 laisse passer un fichier local complet (0,50 de
+  // couverture, les contrôles réseau n'ayant rien à mesurer) et refuse une page
+  // dont le CSS et le JS sont sur un CDN (0,40).
+  minCoverage: numOpt("--min-coverage") ?? 0.45,
   failOnCritical: !has("--no-fail-on-critical"),
   failOnClientRendered: has("--fail-on-client-rendered"),
 };
@@ -129,10 +135,12 @@ const fails = checks.filter(c => c.verdict === "FAIL");
 const warns = checks.filter(c => c.verdict === "WARN");
 const criticalFails = fails.filter(c => c.critical);
 const score = report.deterministic ? report.deterministic.score : null;
+const coverage = report.deterministic && report.deterministic.coverage != null ? report.deterministic.coverage : null;
 const clientRenderedUnverified = report.target && report.target.clientRendered === true && report.target.render === "none";
 
 const violations = [];
 if (policy.failOnCritical && criticalFails.length) violations.push(`${criticalFails.length} critical check FAIL: ${criticalFails.map(c => c.id).join(", ")}`);
+if (policy.minCoverage != null && coverage != null && coverage < policy.minCoverage) violations.push(`only ${(coverage * 100).toFixed(0)}% of checks were measured, below the ${(policy.minCoverage * 100).toFixed(0)}% floor: the score would rate the page on the half that ran`);
 if (policy.minScore != null && score == null) violations.push(`--min-score ${policy.minScore} requested but the report carries no deterministic score`);
 if (policy.minScore != null && score != null && score < policy.minScore) violations.push(`deterministic score ${score} < min ${policy.minScore}`);
 if (policy.maxFails != null && fails.length > policy.maxFails) violations.push(`${fails.length} FAIL > max ${policy.maxFails}`);
@@ -145,6 +153,7 @@ console.log(`NullToHero audit gate — ${tgt}`);
 console.log(`  deterministic score: ${score == null ? "n/a" : score}/100   FAIL: ${fails.length}   WARN: ${warns.length}   critical FAIL: ${criticalFails.length}`);
 if (reportPath) console.log(`  report: ${report.pluginVersion} generated ${report.generatedAt}`);
 if (httpStatus != null) console.log(`  target answered HTTP ${httpStatus}`);
+if (coverage != null) console.log(`  coverage: ${(coverage * 100).toFixed(0)}% of ${report.deterministic.total} checks measured (floor ${(policy.minCoverage * 100).toFixed(0)}%)`);
 if (clientRenderedUnverified) console.log(`  note: target looks client-rendered and was fetched without --render`);
 for (const c of criticalFails) console.log(`  ✗ critical ${c.id}: ${c.detail}`);
 if (passed) console.log(`  RESULT: PASS`);

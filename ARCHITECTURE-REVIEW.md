@@ -31,9 +31,10 @@ test, et les deux nombres à garder en tête.
 | P5 | `gate.mjs` refuse un statut HTTP au-dessus de 399 | une fixture 404 fait refuser au lieu de noter 86 |
 | P1 | la porte exige `pluginVersion`, `generatedAt`, `checks` non vide | `--report package.json` fait sortir 2 |
 
-Les deux nombres : la deuxième livraison bascule **279 verdicts** et ne bouge le
-score d'**aucun point** (6.4). C'est ce qui rend indispensable de livrer P3 et P4
-ensemble, et de l'annoncer.
+Le nombre à garder en tête : la livraison de P3 et P4 a fait basculer
+**9 verdicts** sur le corpus d'évaluation, contre 279 annoncés avant de la faire.
+Le §6.4 dit pourquoi la prévision était fausse, et ce qui bouge vraiment est la
+couverture, désormais rapportée et opposable.
 
 Portée : le dépôt à la version 3.7.1, le 11 août 2026. Quatre questions, traitées
 dans l'ordre des sections 2 à 5 : entretien, évolution, compréhension, fiabilité.
@@ -70,7 +71,7 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 211 emplacements cités par le document, et de ceux de
+- l'existence de chacun des 213 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
   dans le document (100 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
@@ -1307,6 +1308,9 @@ avec la commande qui le montrait, et c'est la trace qu'il faut garder.
 | P2 | 3.8.0 | un rapport plus vieux que `--max-age-hours` fait sortir 2 (5.2) |
 | P5 | 3.8.0 | une cible qui a répondu au-dessus de 399 fait sortir 2 (5.5) |
 | P1 | 3.8.0 | un fichier qui n'est pas un rapport fait sortir 2 (5.1) |
+| P3 | 3.8.0 | les cinq contrôles rendent NOT_MEASURED sur une entrée non récupérée (5.4, 5.6) |
+| P4 | 3.8.0 | un score déduit de rien vaut `null`, la couverture voyage avec (5.3) |
+| P3b | 3.8.0 | `tests/unit.mjs` échoue si un contrôle rend PASS sur une entrée non mesurée |
 
 ### 6.4 Ce que ce plan va casser, mesuré
 
@@ -1330,6 +1334,33 @@ de 25 contrôles mesurés sur 50 à 20 sur 50, soit de 50 % à 40 %. Sous n'impo
 quel plancher de couverture raisonnable, l'audit d'un site à ressources externes
 cesse de rendre 93 et rend "pas de score". Ce n'est pas une régression, c'est la
 première mesure honnête, et elle ressemblera à une régression.
+
+**Mesuré après livraison, et la prévision était fausse.** P3 et P4 sont livrés en
+3.8.0. Sur le même corpus, dans les mêmes conditions, **9 verdicts** ont
+réellement basculé, pas 279, et le score provisoire moyen n'a pas bougé : 83,6
+avant, 83,6 après.
+
+L'écart tient à une hypothèse que la prévision ne s'était pas énoncée. Elle
+comptait comme bascule tout PASS rendu par les cinq contrôles sur une entrée vide,
+c'est-à-dire qu'elle supposait un correctif traitant toute chaîne vide comme non
+récupérée. Le correctif livré est plus fin : il lit le document pour distinguer
+l'absence de la non-récupération, et 270 des 279 PASS portaient sur des pages qui
+ne référencent aucun script externe et dont le style est en ligne, donc mesuré.
+Leur PASS était honnête et l'est resté.
+
+Deux conséquences. La première est bonne : la livraison est trente fois moins
+bruyante qu'annoncé, et il n'y a rien à amortir derrière un drapeau. La seconde ne
+l'est pas : ce document a produit un chiffre exact, vérifiable et rejoué à chaque
+exécution du garde, dont la définition ne correspondait pas au correctif qu'il
+servait à chiffrer. Un nombre tenu par un mécanisme reste faux si le mécanisme
+mesure autre chose que ce que la phrase dit. C'est la limite de la thèse de ce
+document, trouvée en la livrant.
+
+Ce qui bouge visiblement, en revanche, est la couverture : elle est désormais
+rapportée par le score et opposable par la porte. `clean-pass.html` mesure 25
+contrôles sur 50, et une page dont le CSS et le JS sont sur un CDN en mesure 20,
+soit 40 %, sous le plancher de 45 % que `gate.mjs --min-coverage` applique par
+défaut. C'est là que se joue le "pas de score" annoncé, et non dans les verdicts.
 
 Trois précautions, chiffrées à deux jours en plus du total de 6.1. Livrer P3 et P4
 derrière un drapeau pendant une version, en rapportant l'écart entre l'ancien et
