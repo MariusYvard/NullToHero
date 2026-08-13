@@ -159,6 +159,8 @@ ok("contrôles émis par runChecks", facts.checkFns, n(/contrôles émis : (\d+)
 ok("contrôles mappés à une règle", facts.mappedChecks, n(/mappés à une règle du registre : (\d+)/));
 ok("contrôles non mappés", facts.unmappedChecks, n(/non mappés : (\d+)/));
 ok("références siteasy", facts.siteasyRefs, n(/contient (\d+) fichiers/));
+for (const [skill, re] of [["seo", /(\d+) pour `seo`/], ["audit", /(\d+) pour\s*\n?`audit`/], ["inspect", /(\d+) pour `inspect`/]])
+  ok(`références ${skill}`, readdirSync(join(ROOT, `skills/${skill}/references`)).filter(f => f.endsWith(".md")).length, n(re));
 ok("scripts siteasy", facts.siteasyScripts, word(n(/`skills\/siteasy\/scripts\/` contient ([\w-]+) fichiers/)));
 ok("fixtures HTML du corpus d'évaluation", facts.fixtures, n(/fixtures analysées : (\d+)/));
 
@@ -174,7 +176,11 @@ try {
 
 /* ---------- 4. Le recensement de 5.0 ---------- */
 
-const modBlock = /Les (\w+) modules qui émettent un verdict[\s\S]*?\n\n/.exec(doc);
+const modBlock = /Les ([\w-]+) modules qui émettent un verdict[\s\S]*?\n\n/.exec(doc);
+// Ce bloc n'a jamais tourné jusqu'ici : `\w` ne franchit pas le tiret de
+// "dix-sept", donc modBlock valait null et le if était muet. Un bloc de garde
+// silencieusement sauté est le défaut que ce document instruit.
+if (!modBlock) { failures++; console.log("  \x1b[31mNON \x1b[0m le recensement de 5.0 n'a pas été lu"); }
 if (modBlock) {
   const listed = (modBlock[0].match(/`[^`]+\.mjs`|\{[^}]+\}\.mjs/g) || []).join(" ");
   const braces = [...listed.matchAll(/\{([^}]+)\}/g)].reduce((a, m) => a + m[1].split(",").length, 0);
@@ -226,7 +232,7 @@ for (const [id, v] of byPoint) {
 if (!badConv) console.log(`  \x1b[32mOK  \x1b[0m ${("max(annexe) = plan, " + byPoint.size + " points couverts").padEnd(52)} document: conforme`);
 // Les points sans entrée d'annexe doivent être exactement ceux que 6.1 déclare.
 const noEntry = [...plan.keys()].filter(id => !byPoint.has(id)).sort();
-const declared = (/qu'aucune entrée ne nomme \(([^)]+)\)/.exec(doc) || [, ""])[1]
+const declared = (/les quatre du plan \(([^)]+)\)/.exec(doc) || [, ""])[1]
   .split(/,\s*/).map(s => s.trim()).filter(s => plan.has(s)).sort();
 ok("points sans entrée d'annexe", noEntry.join(" "), declared.join(" "));
 
@@ -621,7 +627,8 @@ all("règles navigateur non vérifiées", /([\w-]+) règles ne sont donc pas vé
 all("chemins reproduits par exécution", /([\w-]+) sont reproduits par\s*\n?\s*exécution/g, facts.verified);
 all("lois portant un guard", /([\w-]+) lois sur 33|([\w-]+) lignes sur 33 en portent une/g, guardedLaws());
 all("points de la première livraison", /La première livraison, ([\w-]+) points|Les ([\w-]+) points de la première livraison/g, FIRST.length);
-all("bascules de verdict", /(\d+) verdicts\*\*|deviendraient NOT_MEASURED : (\d+)|sur les (\d+) cas/g, flips);
+all("chemins recensés", /(?:^|[.\s])([\w-]+(?: et [\w-]+)?) chemins (?:rendent|retenus)|Les ([\w-]+(?: et [\w-]+)?) chemins de vert faux|Sur ([\w-]+(?: et [\w-]+)?) chemins|des ([\w-]+(?: et [\w-]+)?) chemins n'ont pas de point|de ces ([\w-]+(?: et [\w-]+)?) chemins sont dans le code|des ([\w-]+(?: et [\w-]+)?) chemins défectueux|à ([\w-]+(?: et [\w-]+)?) chemins/g, facts.annexRows);
+all("bascules de verdict", /(\d+) verdicts\*?\*?|deviendraient NOT_MEASURED : (\d+)|sur les (\d+) cas/g, flips);
 
 /* ---------- 14b. Les chiffres du conflit d'intérêts ---------- */
 
@@ -661,7 +668,7 @@ try {
   const rows = comp.split("\n").filter(l => /^\|\s*\d+\s*\|/.test(l)).map(l => l.split("|").map(c => c.trim()));
   const high = rows.filter(r => r[r.length - 3] === "haute").length;
   const unlisted = rows.filter(r => /^hors/.test(r[r.length - 2])).length;
-  ok("constats du compagnon", rows.length, word(n(/Vingt constats,\s*\n?dont/)) === "?" ? 20 : 20);
+  ok("constats du compagnon", rows.length, word(n(/([\w-]+) constats,\s*\n?dont [\w-]+ de gravité haute/)));
   ok("constats de gravité haute", high, word((/dont ([\w-]+) de gravité haute/.exec(comp) || [, "?"])[1]));
   ok("constats non recensés", unlisted, word((/que les ([\w-]+) constats non recensés/.exec(comp) || [, "?"])[1]));
   ok("gravité haute, cohérente avec le document", high, word(n(/dont quatre de gravité haute/) === "?" ? word(n(/dont ([\w-]+) de gravité haute/)) : 4));

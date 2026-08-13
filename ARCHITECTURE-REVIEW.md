@@ -70,7 +70,7 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 209 emplacements cités par le document, et de ceux de
+- l'existence de chacun des 207 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
   dans le document (100 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
@@ -82,7 +82,8 @@ cette liste en déclarait la moitié :
 - les chiffres du conflit d'intérêts, dérivés des entrées de l'annexe ;
 - son propre câblage.
 
-Ce qu'il ne couvre pas : les jugements, la prose non chiffrée, la colonne "Le dit ?" de l'annexe, la colonne
+Ce qu'il ne couvre pas : les jugements, la prose non chiffrée, la colonne "Le
+dit ?" de l'annexe, la colonne
 "Dépend de" du tableau du plan, et les nombres qui ne sont dans aucun tableau.
 
 Le script existe parce qu'une première version de ce document énonçait ses propres
@@ -158,7 +159,8 @@ répartition par moteur apparaît dans deux fichiers, sous la forme "48 dans le
 moteur de règles, 18 dans les contrôles statiques, 7 dans la sonde rendue, 3 dans
 la sonde three.js, 3 dans la sonde motion". Ces cinq nombres font 79, le total
 annoncé est 86, et l'écart de 7 est le nombre de règles qui ne s'exécutent pas.
-Les deux fichiers énoncent bien le résultat (`skills/inspect/SKILL.md:69` écrit "7 that do not
+Les deux fichiers énoncent bien le résultat (`skills/inspect/SKILL.md:69` écrit
+"7 that do not
 execute", `detect.md:31` écrit "79 are executable"), donc le lecteur n'a rien à
 reconstituer. Ce sont sept nombres à tenir cohérents à la main, dont deux sont la
 somme et la différence des cinq autres.
@@ -211,7 +213,8 @@ Deux précisions qui limitent la portée du constat. Aucun mécanisme du dépôt
 signale la ligne `outputEncoding` elle-même : `grep -rn outputEncoding tools/ skills/
 agents/` ne retourne que deux choses, le corpus de génération et la prose citée
 juste après. Ce qui se contredit est la révision épinglée, pas l'appel d'API. Et la
-divergence est déjà racontée dans `skills/siteasy/references/overdrive.md:129`, écrite au moment de la
+divergence est déjà racontée dans `skills/siteasy/references/overdrive.md:129`,
+écrite au moment de la
 correction : elle était connue d'un lecteur, elle n'était tenue par rien.
 
 C'est le constat dont la conséquence est la plus directement visible pour un
@@ -257,7 +260,8 @@ motion-reduced-guard -> id: 47,    source: "tools/audit/lib/checks.mjs (motion-r
 l'identifiant de registre seulement quand la carte en donne un. Les 32 autres ne
 sont donc pas ingouvernés, ils portent une sévérité dérivée de leur verdict et une
 source qui pointe leur propre fichier ; ce qu'ils n'ont pas est la ligne de registre
-qui donne aux 18 autres leur rationnel, leur exemple et leur route de correction. C'est le même motif que le premier cas, une marche plus bas : la
+qui donne aux 18 autres leur rationnel, leur exemple et leur route de
+correction. C'est le même motif que le premier cas, une marche plus bas : la
 promesse centrale du plugin est vraie des 86 règles du registre et de 18 des 50
 contrôles.
 
@@ -273,7 +277,8 @@ prose dans leur propre fichier. Le §5.0 les exclut du recensement de fiabilité
 parce que leurs verdicts viennent d'un modèle et non de code, ce qui est une raison
 valable pour ce recensement-là et une raison faible ici : c'est précisément la
 promesse "identifiant, sévérité, source" que des verdicts produits par un modèle
-tiendront le moins bien. Je n'ai pas tranché dans ce document, et c'est le plus gros angle mort de mon
+tiendront le moins bien. Je n'ai pas tranché dans ce document, et c'est le plus
+gros angle mort de mon
 propre travail. Ce n'est pas une raison pour n'en donner qu'un aveu. La sonde qui
 manque tient en une journée : charger les 15 fichiers d'`agents/`, extraire le
 format de sortie que chacun décrit, et vérifier qu'il porte un identifiant, une
@@ -281,7 +286,13 @@ sévérité et une source. Elle ne prouverait pas que les verdicts sont justes, 
 qu'aucun mécanisme statique ne peut faire sur une sortie de modèle ; elle
 établirait si la promesse est seulement formulable là, ce qui est la question posée
 et pas une autre. Un jour, dégât 2, probabilité 4 : elle entrerait au plan à
-priorité 8, et je ne l'y porte pas parce que je ne l'ai pas écrite. Elle est le
+priorité 8, donc devant neuf de ses vingt lignes. Je ne l'y porte pas, et le motif
+n'est pas qu'elle reste à écrire, ce qui vaut de tous les autres points. C'est que
+sa cotation, seule du tableau, ne repose sur aucune mesure : les vingt autres
+dérivent leur dégât et leur probabilité d'une entrée d'annexe reproduite ou lue,
+celle-ci d'une intuition sur un corpus que je n'ai pas ouvert. La porter au plan
+mettrait un jugement non tenu au milieu de vingt jugements tenus, ce que ce
+document reproche par ailleurs. Elle est le
 premier des deux travaux que le §8 laisse à un successeur.
 
 ### 2.4 La taille du corpus : ce que j'ai mesuré et ce que je n'établis pas
@@ -406,10 +417,11 @@ contredire, ce que ce document reproche par ailleurs.
 `tools/inspect/{rules,detect,rendered,three,motion,capture}.mjs`,
 `tools/audit/{analyze,fetch,gate,eval,compare,reaudit}.mjs`,
 `tools/audit/lib/{checks,aggregate,site-audit,ai-access}.mjs`,
-`tools/content/score.mjs`, plus les cinq harnais de `tests/`. `compare.mjs` et
-`reaudit.mjs` ont été ajoutés après une relecture qui les a trouvés hors liste : ils
-sortent 2 et sont appelés par `skills/audit/references/`, donc la phrase qui autorise
-le nombre trente et un les omettait.
+`tools/content/score.mjs`, plus les cinq harnais de `tests/`.
+
+Deux d'entre eux ont été ajoutés après une relecture qui les a trouvés hors liste :
+ils sortent 2 et sont appelés par `skills/audit/references/`, donc la phrase qui
+autorise le nombre du recensement les omettait.
 
 `skills/siteasy/scripts/` contient douze fichiers et n'entre pas en bloc. Six
 rendent un verdict ou un objet de résultat positif : `parallax-audit.mjs`,
@@ -431,7 +443,8 @@ le module rend un résultat positif alors que la mesure n'a pas eu lieu. Un chem
 qui dit qu'il n'a pas mesuré n'est pas retenu, et l'entrée 21 de l'annexe est la
 seule exception : elle le dit très bien et son code de sortie le contredit.
 
-**Règle d'arrêt.** L'énumération est exhaustive sur les contrôles de `runChecks` (50 sur 50) et
+**Règle d'arrêt.** L'énumération est exhaustive sur les contrôles de `runChecks`
+(50 sur 50) et
 sur les six modules de `tools/inspect/`. Elle est exhaustive par motif et non par
 ligne sur `fetch.mjs` (952 lignes) et sur les scripts de `skills/`. Le
 vingt-sixième chemin viendra donc probablement de là, et c'est la raison d'être de
@@ -509,7 +522,8 @@ $ node tools/audit/gate.mjs --report /tmp/old.json --min-score 90; echo $?
 ```
 
 **vérifié.** Le rapport est daté d'une semaine avant la portée de ce document, la
-porte le passe, et rien dans sa sortie n'indique son âge. Une étape d'analyse qui échoue sans faire échouer le
+porte le passe, et rien dans sa sortie n'indique son âge. Une étape d'analyse
+qui échoue sans faire échouer le
 job laisse le rapport de la veille sur le disque et la porte reste verte sur les
 verdicts de la veille. L'annexe classe ce chemin en probabilité élevée, avec dix
 autres, et derrière six chemins certains.
@@ -583,7 +597,8 @@ avec `"No robots.txt found. Every AI crawler is allowed by default."` quand
 `robotsTxt` vaut `null`. Or `robotsTxt` vaut `null` sur cinq états, dont
 quatre sont dans `fetch.mjs:104-112` (cible locale à `:105`, réponse non OK à
 `:109`, erreur réseau et délai dépassé partageant le `return` de `:111`). Le
-cinquième, "non demandé", est décidé à `:819`, la sonde étant derrière `--robots`. Et `checkRobots` rend `NOT_MEASURED` pour ce même `null`. Deux
+cinquième, "non demandé", est décidé à `:819`, la sonde étant derrière
+`--robots`. Et `checkRobots` rend `NOT_MEASURED` pour ce même `null`. Deux
 contrôles, une entrée, deux réponses opposées.
 
 ### 5.5 La page d'erreur du serveur est auditée comme la page cible
@@ -762,7 +777,8 @@ porte **L** : la relecture croisée annonce l'avoir reproduit de son côté et j
 pas son transcript, ce qui ne suffit pas pour un **V** sous la convention de ce
 document.
 
-**Les trois autres retenus, dont ce quatrième constat haut.** Le balayage tronque à 20 s sans note, donc une
+**Les trois autres retenus, dont ce quatrième constat haut.** Le balayage
+tronque à 20 s sans note, donc une
 animation déclarée à 40 s reçoit "rien ne bouge entre 2609 ms et 20000 ms d'une
 séquence de 20000 ms" alors que la seconde moitié n'a pas été parcourue
 (`motion.mjs:233`, `:255`). Le drapeau `truncated`, levé au-delà de 1500 éléments,
@@ -925,8 +941,10 @@ jours-personne pour quelqu'un qui connaît le dépôt, borne basse au dénominat
 
 **Conversion depuis l'annexe.** Un point de plan qui couvre des entrées prend le
 maximum de leurs dégâts et le maximum de leurs probabilités. Les cinq points
-qu'aucune entrée ne nomme (P3b, P6, P7, P8, P12) portent une valeur de jugement, non
-dérivée, dont l'argument tient en une ligne de leur paragraphe. Le mot "très élevée" apparaissait dans une version antérieure de
+qu'aucune entrée ne nomme portent une valeur de jugement, non dérivée, dont
+l'argument tient en une ligne de leur paragraphe : les quatre du plan (P3b, P6, P7,
+P8), plus P12 qui est hors classement. Le mot "très élevée" apparaissait dans
+une version antérieure de
 l'annexe pour les entrées 4 et 7 et n'existait sur aucune échelle : ces deux chemins
 sont empruntés à chaque exécution par défaut, comme les entrées 2, 9, 21 et 26, donc
 "certaine". Le critère de la colonne est corrigé en conséquence dans l'annexe.
@@ -960,8 +978,18 @@ Trois dérogations au classement, chacune motivée :
   P3 en tête parce que les deux autres en dépendent (6.4).
 - **P13 est remonté** de la dernière place, devant P15, P6, P18, P7 et P14. Sa
   probabilité est faible, mais l'un de ses deux chemins présente l'artefact d'une
-  exécution précédente comme la preuve de celle-ci. Pour un outil dont le produit est la preuve, c'est une erreur de
+  exécution précédente comme la preuve de celle-ci. Pour un outil dont le produit
+est la preuve, c'est une erreur de
   catégorie et pas une erreur de degré.
+
+**Trois lignes attendent un arbitre qui n'est pas nommé ici**, et il vaut mieux le
+dire une fois que trois. P4 laisse ouvert le plancher de couverture sous lequel un
+score global est refusé, P4b la couverture minimale pour noter une dimension, P8 la
+valeur retenue quand six fichiers en donnent six. Chacune est un arbitrage produit
+ou éditorial et non un mécanisme, chacune est déclarée dans le *Ne corrige pas* de
+son point, et aucune n'est bloquante pour commencer : les trois travaux peuvent être
+livrés derrière la valeur actuelle et la décision prise après. Mais elles sont dans
+la moitié haute du plan, donc quelqu'un devra trancher avant la deuxième livraison.
 
 Le tableau est dans l'ordre de livraison, pas dans l'ordre de priorité. Quatre des
 cinq blocs séparés par les dérogations ci-dessus sont à priorité décroissante ; le
@@ -1325,7 +1353,8 @@ question, à laquelle `tools/eval-corpus/` répond pour treize cas.
 Le recensement de la section 5 est exhaustif sur `checks.mjs` et sur
 `tools/inspect/`, et exhaustif par motif seulement sur `fetch.mjs` et sur les
 scripts de `skills/` (5.0). Sur trente et un chemins, neuf sont reproduits par
-exécution, vingt et un établis par lecture et un des deux. Les colonnes dégât et probabilité sont des jugements
+exécution, vingt et un établis par lecture et un des deux. Les colonnes dégât et
+probabilité sont des jugements
 argumentés ligne par ligne en annexe, pas des mesures : personne n'a instrumenté
 d'exécutions réelles pour les chiffrer.
 

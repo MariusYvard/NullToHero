@@ -126,7 +126,9 @@ for (const [id, c] of cov) {
 }
 
 // The rendered probe declares which rules it decides. The map and the probe must
-// name the same five, or one of them is describing a coverage that does not run.
+// name the same set, or one of them is describing a coverage that does not run.
+// The count is not written here: it said five, the probe grew to seven, and the
+// comment did not. A number in a comment has nothing holding it.
 const mappedRendered = [...cov].filter(([, c]) => c.cls === "rendered-probe").map(([id]) => id).sort((a, b) => a - b);
 const declaredRendered = [...RENDERED_RULE_IDS].sort((a, b) => a - b);
 if (mappedRendered.join() !== declaredRendered.join())
