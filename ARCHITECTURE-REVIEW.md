@@ -71,7 +71,7 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 213 emplacements cités par le document, et de ceux de
+- l'existence de chacun des 217 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
   dans le document (99 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
@@ -1319,6 +1319,12 @@ avec la commande qui le montrait, et c'est la trace qu'il faut garder.
 | P11 | 3.8.0 | le balayage parallax imprime ce qu'il n'a pas mesuré et sort 2 s'il n'a rien jugé |
 | P16 | 3.8.0 | les sondes refusent sur un échantillon vide, la troncature et le plafond remontent |
 | P4b | 3.8.0 | une dimension non notable rend `null` et sort du composite, qui se renormalise |
+| P13 | 3.8.0 | `capture.mjs` écrit dans un dossier par exécution et n'invente plus de fichier, le `catch` de `three.mjs` note ce qu'il avale |
+| P15 | 3.8.0 | `live-inject` passe par `resolveInRoot` et `ok: true` cesse d'être inconditionnel |
+| P6 | 3.8.0 | `tools/data/three-obsolete.csv` confronte les deux corpus, un `Code Good` qui réintroduit un motif fait échouer le build |
+| P18 | 3.8.0 | le diviseur WebGPU vient de `info.render.frame`, la règle 81 dédoublonne et se tait avant r152 |
+| P7 | 3.8.0 | `tools/sync-counts.mjs` écrit les comptages depuis les CSV, `--check` en CI |
+| P14 | 3.8.0 | un fichier attendu et absent fait échouer le contrôle 6 lui-même |
 
 ### 6.4 Ce que ce plan va casser, mesuré
 

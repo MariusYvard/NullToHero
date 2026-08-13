@@ -116,7 +116,8 @@ export async function probe(opts) {
 
   // A revision predating r152 means the colour pipeline is the old one, and the
   // legacy setters people still copy are no-ops on anything newer.
-  if (revision && Number(revision) < 152) {
+  const preR152 = !!(revision && Number(revision) < 152);
+  if (preR152) {
     add(81, "js", `three.js r${revision} predates the r152 colour-management change, so outputColorSpace and texture colour space do not apply`);
   }
 
@@ -137,7 +138,13 @@ export async function probe(opts) {
       if (typeof dpr === "number" && dpr > pixelRatioCap) {
         add(79, "js", `renderer pixel ratio is ${dpr}, above the cap of ${pixelRatioCap}; fragment cost scales with its square, so this is ${(dpr * dpr / (pixelRatioCap * pixelRatioCap)).toFixed(2)}x the work of a capped renderer`);
       }
-    } catch { /* a renderer mid-teardown is not a finding */ }
+    } catch (e) {
+      // P13. Ce catch était vide : la loi L-WEBGL-2 n'était pas contrôlée, rien
+      // ne le disait dans le JSON, et seul le CLI imprimait "pixel ratio ?". Le
+      // bloc suivant faisait déjà le bon geste vingt-six lignes plus bas.
+      entry.pixelRatio = null;
+      notes.push("renderer.getPixelRatio was unreadable (" + e.message + "), so L-WEBGL-2 was not checked on this renderer");
+    }
 
     // 3. Draw calls (L-WEBGL-1), measured rather than inferred.
     try {
@@ -211,7 +218,12 @@ export async function probe(opts) {
     let meshes = 0;
     const colourSlots = ["map", "emissiveMap", "specularMap"];
     const dataSlots = ["normalMap", "roughnessMap", "metalnessMap", "aoMap", "displacementMap"];
-    const untagged = [], mistagged = [];
+    // P18. `untagged` et `mistagged` étaient poussés une fois par visite de
+    // maillage, et le garde `< 6` était dans la condition de poussée : le compte
+    // saturait à six et un matériau partagé par 400 maillages était compté six
+    // fois, avec le même nom répété trois fois dans la preuve. On dédoublonne par
+    // texture, qui est l'objet dont on parle.
+    const untaggedSet = new Map(), mistaggedSet = new Map();
     for (const root of roots) {
       root.traverse((o) => {
         if (o.isMesh) {
@@ -222,15 +234,22 @@ export async function probe(opts) {
         const mats = [].concat(o.material || []);
         for (const mat of mats) {
           if (!mat) continue;
+          // Avant r152 la propriété `colorSpace` n'existe pas (c'était `encoding`),
+          // donc la chercher sur une scène ancienne produit un constat sur une
+          // propriété que la bibliothèque n'a pas. La révision gate le contrôle.
+          if (preR152) continue;
           for (const s of colourSlots) {
-            if (mat[s] && mat[s].colorSpace !== "srgb" && untagged.length < 6) untagged.push(mat.name || mat.type || "material");
+            const t = mat[s];
+            if (t && t.colorSpace !== "srgb") untaggedSet.set(t.uuid || `${mat.uuid}.${s}`, mat.name || mat.type || "material");
           }
           for (const s of dataSlots) {
-            if (mat[s] && mat[s].colorSpace === "srgb" && mistagged.length < 6) mistagged.push(`${mat.name || mat.type || "material"}.${s}`);
+            const t = mat[s];
+            if (t && t.colorSpace === "srgb") mistaggedSet.set(t.uuid || `${mat.uuid}.${s}`, `${mat.name || mat.type || "material"}.${s}`);
           }
         }
       });
     }
+    const untagged = [...untaggedSet.values()], mistagged = [...mistaggedSet.values()];
     const worst = [...pairs.values()].sort((a, b) => b - a)[0] || 0;
     if (worst >= 50) {
       add(80, "js", `${meshes} meshes, of which ${worst} share one geometry and one material; that group is one InstancedMesh or BatchedMesh away from a single draw call`);

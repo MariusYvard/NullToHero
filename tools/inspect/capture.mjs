@@ -56,13 +56,19 @@ async function main() {
     process.exit(3);
   }
 
-  const outDir = resolve(arg("--out", "motion-capture"));
+  // P13. Un dossier par exécution. Deux runs partageant un dossier ne sont pas
+  // sûrs : le second ne peut plus distinguer sa capture de celle du premier, et
+  // c'est ce que le repli supprimé plus bas confondait. L'horodatage est dans le
+  // chemin, donc la question ne se pose plus.
+  const outBase = resolve(arg("--out", "motion-capture"));
+  const runStamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  const outDir = process.argv.includes("--flat") ? outBase : join(outBase, runStamp);
   const seconds = Math.max(1, Math.min(60, Number(arg("--seconds", 6))));
   const [w, h] = arg("--viewport", "1280x800").split("x").map(Number);
   const viewport = { width: w || 1280, height: h || 800 };
   const doScroll = process.argv.includes("--scroll");
   const reduced = process.argv.includes("--reduced");
-  const url = /^https?:\/\//i.test(target) ? target : "file://" + resolve(target);
+  const url = /^(https?|file):\/\//i.test(target) ? target : "file://" + resolve(target);
   const name = arg("--name",
     (url.replace(/^https?:\/\//, "").replace(/[^\w.-]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "capture")
     + (reduced ? "-reduced" : "") + `-${viewport.width}x${viewport.height}.webm`);
@@ -111,14 +117,27 @@ async function main() {
       renameSync(raw, dest);
       written = dest;
     }
-  } catch { /* fall through to the scan below */ }
-  if (!written) {
-    const webm = readdirSync(outDir).filter(f => f.endsWith(".webm"));
-    written = webm.length ? join(outDir, webm[webm.length - 1]) : null;
+  } catch (e) {
+    // P13. Le repli parcourait le dossier et retenait un .webm arbitraire, dans
+    // l'ordre de readdirSync et non par date : sur un deuxième run dans le même
+    // dossier, l'outil annonçait le fichier du run précédent comme la capture de
+    // celui-ci, avec sa durée et son viewport. C'est un artefact périmé présenté
+    // comme une preuve fraîche, et pour un outil dont le produit est la preuve
+    // c'est une erreur de catégorie.
+    //
+    // Le correctif n'est pas une meilleure sélection de fichier. Deux exécutions
+    // partageant un dossier ne sont pas sûres, donc chaque run écrit dans son
+    // propre sous-dossier horodaté et l'échec est un échec.
+    console.error(`The recording could not be located: ${e.message}`);
+    console.error("Nothing is reported rather than reporting a file this run did not write.");
+    process.exit(1);
   }
 
   if (!written) {
     console.error("The context closed without writing a video. Nothing was recorded.");
+    console.error(`Looked in ${outDir}. No fallback scan is done: a .webm left by an earlier`);
+    console.error("run is not this run's capture, and presenting it as one is the defect this");
+    console.error("path used to have.");
     process.exit(1);
   }
   console.log(`\n  ${written}`);

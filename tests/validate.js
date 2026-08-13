@@ -325,7 +325,12 @@ section("6. File integrity (minimum line counts — all skills)");
 Object.entries(FILE_INTEGRITY).forEach(([relPath, { minLines }]) => {
   const absPath = path.join(ROOT, relPath);
   if (!fs.existsSync(absPath)) {
-    warn(`${relPath}: not found — skipping integrity check`);
+    // P14. Ce contrôle dégradait un fichier absent en avertissement, et un lot
+    // d'avertissements sort 0. Le contrôle 6 se taisait donc là où il devait
+    // parler. Quatre autres contrôles rattrapent la suppression et font sortir 1,
+    // ce qui a fait ramener le dégât de ce point de 3 à 1, mais un fichier
+    // attendu et absent est un échec du contrôle d'intégrité lui-même.
+    fail(`${relPath}: expected by FILE_INTEGRITY and not found. A file that is gone is not a file that passed its integrity check.`);
     return;
   }
   const lines = lineCount(readFile(absPath));

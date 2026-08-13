@@ -9,7 +9,7 @@ import { dedupeSamples } from "../tools/audit/fetch.mjs";
 import { parseBuildLines, verdict, burned, changedAxes, AXES, VOCAB } from "../tools/siteasy/variety.mjs";
 import { evaluateSweep } from "../tools/inspect/motion.mjs";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -452,6 +452,36 @@ const noText = { advanced: true, durationMs: 4000, frames: [
 ] };
 ok("two decorative boxes crossing are allowed to cross",
   evaluateSweep(noText).findings.filter(f => f.id === 86).length === 0);
+
+// ── P15: live-inject goes through resolveInRoot ─────────────────────────────
+// live-accept.mjs used it, live-core exported it, tests covered it both ways, and
+// live-inject built its write path with join(). A configured entry of "../.." left
+// the project root. Its sibling did the right thing; it did not.
+console.log("\n── P15: live-inject refuses a path outside the root ──");
+{
+  const ltmp = mkdtempSync(join(tmpdir(), "nth-live-"));
+  const proj = join(ltmp, "proj");
+  mkdirSync(join(proj, ".siteasy-live"), { recursive: true });
+  writeFileSync(join(proj, "index.html"), "<html><body></body></html>");
+  writeFileSync(join(ltmp, "outside.html"), "<html><body></body></html>");
+  const INJECT = resolve("skills/siteasy/scripts/live-inject.mjs");
+  const runInject = (files) => {
+    writeFileSync(join(proj, ".siteasy-live", "config.json"), JSON.stringify({ files, port: 4321, token: "t" }));
+    try { return { json: JSON.parse(execFileSync("node", [INJECT, "--port", "4321", "--token", "t"], { cwd: proj, stdio: ["ignore", "pipe", "pipe"] }).toString()), code: 0 }; }
+    catch (e) { return { json: JSON.parse((e.stdout || "{}").toString() || "{}"), code: e.status ?? -1 }; }
+  };
+  const escape = runInject(["../outside.html"]);
+  ok("a configured path outside the root is refused", (escape.json.refused || []).length === 1);
+  ok("nothing outside the root was touched", (escape.json.touched || []).length === 0);
+  ok("a refusal is not ok: true", escape.json.ok === false);
+  ok("a refusal exits non-zero", escape.code !== 0);
+  const outsideStill = readFileSync(join(ltmp, "outside.html"), "utf8");
+  ok("the file outside the root is untouched on disk", !outsideStill.includes("siteasy-live"));
+
+  const inside = runInject(["index.html"]);
+  ok("a path inside the root is still injected", (inside.json.touched || []).length === 1 && inside.json.ok === true);
+  rmSync(ltmp, { recursive: true, force: true });
+}
 
 // ── P4b: the second scorer stops imputing 70 ────────────────────────────────
 // Three dimensions returned 70 when they could not score, and 70 was then

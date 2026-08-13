@@ -216,5 +216,65 @@ console.log("\n── P9: callers pass the inputs their checks read ──");
   else console.log("  \x1b[32mPASS\x1b[0m  every call site passes rawHtml, css and js");
 }
 
+// ── P6. The generation corpus and the audit corpus are confronted ───────────
+// tools/design-system/data/stacks/threejs.csv serves generation, the registry and
+// three.mjs serve the audit, both describe three.js, and nothing compared their
+// claims. Until ad23b72 the first pinned r128 and taught outputEncoding while the
+// probe flagged any revision below r152 as the old pipeline: the generator was
+// producing pages its own auditor reports. The divergence was found by a question
+// asked out loud, not by a method. This is the method.
+console.log("\n── P6: the three.js corpora agree on what is obsolete ──");
+{
+  const parseCsv = (text) => {
+    const out = []; const lines = text.trim().split(/\r?\n/);
+    const head = lines[0].split(",");
+    for (const line of lines.slice(1)) {
+      const cells = []; let cur = "", q = false;
+      for (const ch of line) {
+        if (ch === '"') q = !q;
+        else if (ch === "," && !q) { cells.push(cur); cur = ""; }
+        else cur += ch;
+      }
+      cells.push(cur);
+      out.push(Object.fromEntries(head.map((h, i) => [h, cells[i] ?? ""])));
+    }
+    return out;
+  };
+  const obsolete = parseCsv(readFileSync(join(ROOT, "tools/data/three-obsolete.csv"), "utf8"));
+  ok(`${obsolete.length} obsolete three.js patterns declared`);
+
+  // Every declared pattern must name a rule the registry actually carries.
+  const ruleIds = new Set([...known.keys()].map(Number));
+  const orphan = obsolete.filter(o => !ruleIds.has(Number(o.rule)));
+  if (orphan.length) no(`three-obsolete.csv names rules the registry does not have: ${orphan.map(o => o.rule).join(", ")}`);
+  else ok("every obsolete pattern maps to a rule in the registry");
+
+  // The generation corpus must not teach any of them as good code.
+  const stack = parseCsv(readFileSync(join(ROOT, "tools/design-system/data/stacks/threejs.csv"), "utf8"));
+  const taught = [];
+  for (const row of stack) {
+    // Les champs prescriptifs seulement. Une Description qui nomme un motif pour
+    // dire qu'il est obsolète est exactement ce qu'on veut lire.
+    for (const field of ["Code Good", "Do"]) {
+      const text = row[field] || "";
+      for (const o of obsolete) {
+        if (text.includes(o.pattern)) taught.push(`${row.Guideline?.slice(0, 40)} [${field}] teaches ${o.pattern}, removed at ${o.since} (rule ${o.rule}); use ${o.replacement}`);
+      }
+    }
+  }
+  if (taught.length) no(`generation corpus teaches what the audit flags: ${taught.join(" | ")}`);
+  else ok("no Code Good in the stack corpus teaches a pattern the audit flags");
+
+  // And the probe must still know about them, so the two cannot drift apart by
+  // the audit side going quiet.
+  const probeSrc = readFileSync(join(ROOT, "tools/inspect/three.mjs"), "utf8");
+  const claimed = obsolete.filter(o => o.detected === "yes");
+  const unknown = claimed.filter(o => !probeSrc.includes(o.since.replace("r", "")) && !probeSrc.includes(o.pattern));
+  if (unknown.length) no(`declared detected but the probe knows nothing about: ${unknown.map(o => o.pattern).join(", ")}`);
+  else ok(`the probe carries each of the ${claimed.length} obsolescences declared detected`);
+  const undetected = obsolete.filter(o => o.detected !== "yes");
+  if (undetected.length) ok(`${undetected.length} declared and not detected, said so in the CSV: ${undetected.map(o => o.pattern).join(", ")}`);
+}
+
 console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mAll detector checks passed.\x1b[0m\n");
 process.exit(failures ? 1 : 0);

@@ -25,6 +25,10 @@ jobs:
       - name: Build reference index
         run: node tools/build-index.mjs
 
+      - name: Prose counts match the CSVs
+        if: always()
+        run: node tools/sync-counts.mjs --check
+
       - name: Run reference validator
         if: always()
         run: node tests/validate.js
