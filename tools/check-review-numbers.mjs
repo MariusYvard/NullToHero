@@ -117,7 +117,10 @@ ok("coût bas des points de structure", fr(sLow), st ? st[1] : "?");
 ok("coût haut des points de structure", fr(sHigh), st ? st[2] : "?");
 
 // La première livraison, telle que §1 l'annonce.
-const FIRST = ["P17", "P2", "P5", "P1", "P14"];
+// Dérivé de la dérogation de tête, plus retapé : une copie périmée (P14 pour P10)
+// contredisait la dérivation que ce même script fait trois cents lignes plus bas.
+const FIRST = ((/\*\*(P\d+b?(?:, P\d+b?)*(?: et P\d+b?)?) sont livrés en premier\*\*/.exec(doc) || [, ""])[1])
+  .replace(/ et /, ", ").split(/,\s*/).filter(Boolean);
 let fLow = 0, fHigh = 0;
 for (const r of costRows) {
   if (!FIRST.includes(r[1])) continue;
@@ -330,11 +333,10 @@ ok("score de la page 404 (5.5)", scoreFromChecks(r404).score, m55 && m55[1]);
 ok("PASS de la page 404 (5.5)", passes(r404), word(m55 && m55[2]));
 
 // 6.4 : le balayage des fixtures
-const FLIP5 = /motion-reduced-guard|three-duplicate-copies|frame-loop-alloc|frame-sequence-preload|scrollbar-hidden/;
 const FLIP = /motion-reduced-guard|three-duplicate-copies|frame-loop-alloc|frame-sequence-preload|scrollbar-hidden/;
 const fxDir = join(ROOT, "tests/eval/fixtures");
 const fx = readdirSync(fxDir).filter(f => f.endsWith(".html"));
-let flips = 0, sum = 0, cleanMeasured = 0, cleanTotal = 0, cleanScore = 0;
+let flips = 0, sum = 0, cleanMeasured = 0, cleanTotal = 0, cleanScore = 0, cleanFlips = 0;
 for (const f of fx) {
   const r = runChecks({ rawHtml: readFileSync(join(fxDir, f), "utf8"), css: "", js: "" });
   sum += scoreFromChecks(r).score;
@@ -343,6 +345,7 @@ for (const f of fx) {
     cleanTotal = r.length;
     cleanMeasured = r.filter(c => c.verdict !== "NOT_MEASURED").length;
     cleanScore = scoreFromChecks(r).score;
+    cleanFlips = r.filter(c => c.verdict === "PASS" && FLIP.test(c.id)).length;
   }
 }
 ok("verdicts PASS qui basculeraient (6.4)", flips, n(/deviendraient NOT_MEASURED : (\d+)/));
@@ -408,15 +411,20 @@ ok("fichiers cités qui n'existent pas", missingFiles.size ? [...missingFiles].j
 // graves, ce jeton doit se trouver près de la ligne citée.
 const WINDOW = 12;
 const wrongLine = [];
-for (const m of doc.matchAll(/`([\w./-]+\.(?:mjs|js|csv|md|json|yml))`?:(\d+)(?:-(\d+))?`?[^\n]{0,220}/g)) {
-  const [whole, file, a, b] = m;
+// Fenêtre en lookahead : consommée, elle avalait toute référence tombant dans les
+// 240 caractères de la précédente, et `fetch.mjs:387` n'était jamais examinée.
+for (const m of doc.matchAll(/`([\w./-]+\.(?:mjs|js|csv|md|json|yml))`?:(\d+)(?:-(\d+))?`?(?=([\s\S]{0,240}))/g)) {
+  const [, file, a, b, after] = m;
+  const whole = ":" + a + after;
   const real = resolve_(file);
   if (!real) continue;
   // Seulement les citations directes : "faisant `X`", "est `X`", "avec `X`",
   // "`fichier:ligne` = `X`". Une paraphrase entre accents graves n'est pas un jeton
   // et ne doit pas être cherchée dans le fichier.
-  const tail = whole.slice(whole.indexOf(":" + a));
-  const tok = /(?:faisant|est|fixe[^`]{0,24}|refuse[^`]{0,24}|écrit[^`]{0,24}|construit[^`]{0,24}|appelle|porte|contient)\s*:?\s*\n?\s*`([^`]{6,120})`/.exec(tail.replace(/\n/g, " "));
+  // Borné à la phrase qui porte la référence : au-delà, le jeton appartient à une
+  // autre affirmation ("gate.mjs:46-47 lit le fichier. buildSiteAudit écrit `x`").
+  const tail = whole.slice(whole.indexOf(":" + a)).split(/\.\s/)[0];
+  const tok = /(?:faisant|est|fixe[^`]{0,70}|refuse[^`]{0,70}|écrit[^`]{0,70}|construit[^`]{0,70}|appelle|porte|contient)\s*:?\s*\n?\s*`([^`]{6,120})`/.exec(tail.replace(/\n/g, " "));
   const needle = tok && tok[1];
   if (!needle || /^[\w./-]+\.(mjs|js|csv|md|json|yml)/.test(needle)) continue;
   // Une affirmation négative ("ne passe pas par `X`") ne dit pas que X est là.
@@ -542,7 +550,7 @@ ok("5.5, ligne de score du transcript",
   `score ${scoreFromChecks(r404).score} FAIL ${scoreFromChecks(r404).fails} PASS ${passes(r404)}`,
   (/^(score \d+ FAIL \d+ PASS \d+)$/m.exec(s55) || [, "?"])[1]);
 // Les cinq PASS du transcript de 5.4 dans l'ordre où runChecks les rend.
-const realOrder = rc.filter(c => c.verdict === "PASS" && FLIP5.test(c.id)).map(c => c.id).join(" ");
+const realOrder = rc.filter(c => c.verdict === "PASS" && FLIP.test(c.id)).map(c => c.id).join(" ");
 const docOrder = [...s54.matchAll(/^PASS\s+([\w-]+)/gm)].map(m => m[1]).join(" ");
 ok("5.4, ordre des cinq PASS du transcript", realOrder, docOrder);
 
@@ -608,6 +616,11 @@ all("dérogations au classement", /(\S+) dérogations (?:au classement|réordonn
 all("lignes au plancher", /(\S+) des dix-neuf lignes\s*\n?valent|Sur ces (\S+) lignes/g,
   costRows.filter(r => /^1 à 1,5 j$/.test(r[5])).length);
 all("chemins planifiés", /(\S+) chemins sont planifiés|dont ([\w-]+) sont planifiés ici/g, facts.planned);
+all("règles navigateur non vérifiées", /([\w-]+) règles ne sont donc pas vérifiées|([\w-]+) règles de sonde non vérifiées|les ([\w-]+) règles ne sont pas vérifiées/g,
+  cov.filter(r => ["rendered-probe", "three-probe", "motion-probe"].includes(r[1])).length);
+all("chemins reproduits par exécution", /([\w-]+) sont reproduits par\s*\n?\s*exécution/g, facts.verified);
+all("lois portant un guard", /([\w-]+) lois sur 33|([\w-]+) lignes sur 33 en portent une/g, guardedLaws());
+all("points de la première livraison", /La première livraison, ([\w-]+) points|Les ([\w-]+) points de la première livraison/g, FIRST.length);
 all("bascules de verdict", /(\d+) verdicts\*\*|deviendraient NOT_MEASURED : (\d+)|sur les (\d+) cas/g, flips);
 
 /* ---------- 14b. Les chiffres du conflit d'intérêts ---------- */
@@ -622,7 +635,12 @@ ok("chemins dans le code de l'auteur", owns.length, word(n(/([\w-]+) de ces tren
 ok("dont partagés avec du code antérieur", shared.length, /plus\s*\n?un huitième partagé/.test(doc) ? 1 : "?");
 ok("chemins propres à l'auteur", owns.length - shared.length, word(n(/soit deux des sept mécanismes[\s\S]{0,120}?et ([\w-]+) des trente et un/)));
 // 5.11 : quatre lois sur 33 portent un guard
-const csvCells = (line) => {
+function guardedLaws() {
+  const lines = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/);
+  const gi = csvCells(lines[0]).indexOf("guard");
+  return lines.slice(1).filter(l => (csvCells(l)[gi] || "").trim().length > 0).length;
+}
+function csvCells(line) {
   const out = []; let cur = "", q = false;
   for (const ch of line) {
     if (ch === '"') q = !q;
@@ -630,11 +648,8 @@ const csvCells = (line) => {
     else cur += ch;
   }
   out.push(cur); return out;
-};
+}
 const lawLines = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/);
-const gi = csvCells(lawLines[0]).indexOf("guard");
-const guarded = lawLines.slice(1).filter(l => (csvCells(l)[gi] || "").trim().length > 0).length;
-ok("lois portant un guard", guarded, word(n(/([\w-]+) lignes sur 33 en portent une/)));
 ok("lois au total", lawLines.length - 1, n(/lignes sur (\d+) en portent une/));
 
 /* ---------- 14c. L'artefact compagnon ---------- */
@@ -660,14 +675,13 @@ console.log("\nPage de tête");
 const head5 = doc.slice(0, doc.indexOf("## 1. La thèse"));
 ok("bascules citées en tête", flips, (/\*\*(\d+) verdicts\*\*/.exec(head5) || [, "?"])[1]);
 ok("total cité en tête, borne basse", fr(low), (/entre ([\d,]+) et [\d,]+ jours-personne/.exec(head5) || [, "?"])[1]);
-ok("total cité en tête, borne haute", fr(high2()), (/entre [\d,]+ et ([\d,]+) jours-personne/.exec(head5) || [, "?"])[1]);
-function high2() { return high; }
+ok("total cité en tête, borne haute", fr(high), (/entre [\d,]+ et ([\d,]+) jours-personne/.exec(head5) || [, "?"])[1]);
 ok("points de structure cités en tête", STRUCT.join(" "),
   ((/\(P3b, ([^)]+)\)/.exec(head5) || [, ""])[0] || "").replace(/[()]/g, "").split(/,\s*|\s+et\s+/).map(x => x.trim()).filter(Boolean).join(" "));
 ok("priorité de P1 citée en tête", plan.get("P1").prio, (/quand P1 est à (\d+)/.exec(head5) || [, "?"])[1]);
 
 // Le second chiffre du §6.4, celui qui porte l'argument "c'est avec P4"
-ok("6.4, couverture après P3", cleanMeasured - Math.round(flips / fx.length), cp && cp[3]);
+ok("6.4, couverture après P3", cleanMeasured - cleanFlips, cp && cp[3]);
 
 // Un ordre qui contredit le texte d'une dérogation
 const p13After = (/P13 est remonté\*\* de la dernière place, devant ([^.]+)\./.exec(derogBlock) || [, ""])[1]

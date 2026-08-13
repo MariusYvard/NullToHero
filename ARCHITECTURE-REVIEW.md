@@ -70,12 +70,15 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 206 emplacements cités par le document et son artefact
-  compagnon, dont 124 portent un numéro de ligne (100 couples distincts), la borne
-  haute de chaque ligne citée, et, quand le document affirme qu'un fragment de code
-  se trouve à un endroit, sa présence dans la fenêtre citée ; ce contrôle attrape le
-  fichier inventé et la ligne au-delà de la fin, pas la ligne existante mais fausse
-  sur laquelle rien n'est cité ;
+- l'existence de chacun des 209 emplacements cités par le document, et de ceux de
+  son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
+  dans le document (100 couples distincts), la borne
+  haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
+  fragment de code entre accents graves, sa présence dans les douze lignes autour
+  (cinq fragments aujourd'hui, et le garde échoue si ce nombre tombe à zéro) ; ce
+  contrôle attrape le fichier inventé, la ligne au-delà de la fin et le fragment
+  déplacé ou paraphrasé, pas la ligne existante mais fausse sur laquelle rien
+  n'est cité ;
 - les chiffres du conflit d'intérêts, dérivés des entrées de l'annexe ;
 - son propre câblage.
 
@@ -399,10 +402,14 @@ visiblement différents de ceux d'aujourd'hui.
 Sans méthode, "vingt-cinq chemins" est un nombre qu'on cite et qu'on ne peut pas
 contredire, ce que ce document reproche par ailleurs.
 
-**Population.** Les quinze modules qui émettent un verdict ou un code de sortie :
+**Population.** Les dix-sept modules qui émettent un verdict ou un code de sortie :
 `tools/inspect/{rules,detect,rendered,three,motion,capture}.mjs`,
-`tools/audit/{analyze,fetch,gate,eval}.mjs`, `tools/audit/lib/{checks,aggregate,site-audit,ai-access}.mjs`,
-`tools/content/score.mjs`, plus les cinq harnais de `tests/`.
+`tools/audit/{analyze,fetch,gate,eval,compare,reaudit}.mjs`,
+`tools/audit/lib/{checks,aggregate,site-audit,ai-access}.mjs`,
+`tools/content/score.mjs`, plus les cinq harnais de `tests/`. `compare.mjs` et
+`reaudit.mjs` ont été ajoutés après une relecture qui les a trouvés hors liste : ils
+sortent 2 et sont appelés par `skills/audit/references/`, donc la phrase qui autorise
+le nombre trente et un les omettait.
 
 `skills/siteasy/scripts/` contient douze fichiers et n'entre pas en bloc. Six
 rendent un verdict ou un objet de résultat positif : `parallax-audit.mjs`,
@@ -534,7 +541,7 @@ plancher qu'il expose en dessous a le défaut que sa propre note décrit.
 `tools/audit/fetch.mjs:40` fixe les plafonds :
 `{ maxFiles: 30, maxBytesPerFile: 512 * 1024, maxTotalBytes: 3 * 1024 * 1024 }`.
 `fetch.mjs:387` refuse toute ressource d'une autre origine avec
-`skipped.push({ href, reason: "cross-origin" })`. Un bundle GSAP, ScrollTrigger ou
+`skipped.push({ href: abs.href, reason: "cross-origin" })`. Un bundle GSAP, ScrollTrigger ou
 Lenis servi par un CDN déclenche les deux.
 
 Sept contrôles reçoivent alors une chaîne nue. **Cinq la lisent comme une
@@ -575,7 +582,7 @@ Cas identique et plus fréquent, `tools/audit/lib/ai-access.mjs:121-132` rend PA
 avec `"No robots.txt found. Every AI crawler is allowed by default."` quand
 `robotsTxt` vaut `null`. Or `robotsTxt` vaut `null` sur cinq états, dont
 quatre sont dans `fetch.mjs:104-112` (cible locale à `:105`, réponse non OK à
-`:110`, erreur réseau et délai dépassé partageant le `return` de `:112`). Le
+`:109`, erreur réseau et délai dépassé partageant le `return` de `:111`). Le
 cinquième, "non demandé", est décidé à `:819`, la sonde étant derrière `--robots`. Et `checkRobots` rend `NOT_MEASURED` pour ce même `null`. Deux
 contrôles, une entrée, deux réponses opposées.
 
@@ -1205,9 +1212,10 @@ valeur passe.
 il devrait parler.
 Ce point a été dégradé après vérification. Une version antérieure de ce document
 concluait qu'un fichier supprimé passe. C'est faux, et je l'ai reproduit : supprimer
-`skills/seo/references/geo.md` fait bien sortir `validate.js` avec 1, par quatre
-autres contrôles (la référence exigée par une commande, le comptage du README, la
-péremption de `reference-index.json`, la détection d'orphelins). Le défaut est réel
+`skills/seo/references/geo.md` fait bien sortir `validate.js` avec 1, par cinq
+autres contrôles : la référence exigée par une commande, le comptage du README, la
+péremption de `reference-index.json`, celle de `reference-graph.json`, et le
+contrôle 40 de cohérence du registre des robots d'IA. Le défaut est réel
 et local, la conséquence annoncée ne l'était pas : dégât ramené de 3 à 1, le point
 sort du lot de tête et tombe en dernière ligne du plan.
 Le détail vaut d'être noté, parce qu'il coupe dans l'autre sens que 2.1 : ce qui
@@ -1368,7 +1376,7 @@ quand l'exécution n'établit qu'une moitié du constat. Statut : le point de pl
 | 12 | `eval.mjs:31, 52-55` | référentiel absent ou fixture renommée donnent "aucune dérive", `--strict` sort 0 | non | 2 | moyenne | L | décliné |
 | 13 | `score.mjs:144, 349, 406` | dimensions non notables imputées à 70, pliées dans le composite et le code de sortie | JSON | 2 | élevée | L | P4b |
 | 14 | `ai-access.mjs:160-168` | le texte du PASS affirme les crawlers de rang 2 joignables alors qu'ils sont bloqués | non | 2 | élevée | L | P3 |
-| 15 | `validate.js:326-330` et `:1702` | le contrôle 6 dégrade un fichier absent en avertissement, quatre autres contrôles rattrapent la sortie | avertissement | 1 | moyenne | V | P14 |
+| 15 | `validate.js:326-330` et `:1702` | le contrôle 6 dégrade un fichier absent en avertissement, cinq autres contrôles rattrapent la sortie | avertissement | 1 | moyenne | V | P14 |
 | 16 | `gate.mjs:46-47` | un rapport `site-audit` périmé garde la porte verte | non | 3 | élevée | V | P2 |
 | 17 | `checks.mjs:1123-1126` | délai DNS sur l'hôte alternatif donne "ne sert pas le site", PASS | non | 2 | moyenne | L | P3 |
 | 18 | `capture.mjs:105-118` | le repli rend le webm d'un run précédent | non | 3 | faible | L | P13 |
