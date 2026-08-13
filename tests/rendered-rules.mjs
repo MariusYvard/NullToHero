@@ -34,10 +34,21 @@ const ok3 = (cond, m) => (cond ? ok(m) : no(m));
 
 console.log("\nRendered-page probe\n");
 
+// P10. --require-browser turns the silent skip into a loud failure. CI passes it,
+// so a missing browser fails the job instead of reporting a pass over thirteen
+// rules nobody verified. A developer without Playwright still gets the skip.
+const requireBrowser = process.argv.includes("--require-browser");
+
 let chromium;
 try { ({ chromium } = await import("playwright")); }
 catch {
-  console.log(`  \x1b[33mSKIPPED\x1b[0m  Playwright is absent, so rules ${[...RENDERED_RULE_IDS, ...THREE_RULE_IDS, ...MOTION_RULE_IDS].join(", ")} were NOT verified on this run.`);
+  const ids = [...RENDERED_RULE_IDS, ...THREE_RULE_IDS, ...MOTION_RULE_IDS].join(", ");
+  if (requireBrowser) {
+    console.error(`  \x1b[31mFAIL\x1b[0m  --require-browser was passed and Playwright is absent.`);
+    console.error(`          Rules ${ids} were NOT verified, and this run refuses to report a pass.`);
+    process.exit(1);
+  }
+  console.log(`  \x1b[33mSKIPPED\x1b[0m  Playwright is absent, so rules ${ids} were NOT verified on this run.`);
   console.log(`            Turn it on with: npm i -D playwright && npx playwright install chromium`);
   console.log(`            The same probe also runs in Claude in Chrome: node tools/inspect/rendered.mjs --source\n`);
   process.exit(0);
@@ -218,6 +229,32 @@ console.log("\nMotion sweep, the time axis");
       "a page the sweep cannot drive is refused, not reported clean");
 
   await browserS.close();
+}
+
+// ── P17: --json carries the exit code the text path carries ─────────────────
+// The refusal code 2, written so a caller cannot mistake a refusal for a
+// success, was dropped by the transport the references recommend. Both probes
+// printed their report and exited 0 regardless of its contents.
+console.log("\n── P17: --json and text agree on the exit code ──");
+{
+  const { execFileSync } = await import("node:child_process");
+  const { resolve } = await import("node:path");
+  const run = (script, target, extra) => {
+    try { execFileSync("node", [resolve(ROOT, script), target, ...extra], { stdio: ["ignore", "pipe", "pipe"] }); return 0; }
+    catch (e) { return e.status ?? -1; }
+  };
+  const cases = [
+    ["tools/inspect/three.mjs", "tools/inspect/fixtures/three/bad.html", [], "three.js probe, bad fixture"],
+    ["tools/inspect/three.mjs", "tools/inspect/fixtures/three/good.html", [], "three.js probe, clean fixture"],
+    ["tools/inspect/motion.mjs", "tools/inspect/fixtures/motion/sweep-static.html", ["--sweep"], "motion sweep that refuses"],
+    ["tools/inspect/motion.mjs", "tools/inspect/fixtures/motion/85-bad.html", ["--sweep"], "motion sweep with findings"],
+  ];
+  for (const [script, fx, extra, label] of cases) {
+    const url = "file://" + resolve(ROOT, fx);
+    const text = run(script, url, extra);
+    const json = run(script, url, [...extra, "--json"]);
+    ok3(text === json, `${label}: text exits ${text}, --json exits ${json}`);
+  }
 }
 
 console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mRendered, three.js and reduced-motion probes verified in Chromium.\x1b[0m\n");

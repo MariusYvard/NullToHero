@@ -453,6 +453,45 @@ const noText = { advanced: true, durationMs: 4000, frames: [
 ok("two decorative boxes crossing are allowed to cross",
   evaluateSweep(noText).findings.filter(f => f.id === 86).length === 0);
 
+// ── The gate refuses to judge rather than pass (P1, P2, P5) ──────────────────
+// Each of these three exited 0 with RESULT: PASS before the fix. The gate had no
+// way to say "I could not judge", so anything it could not read read as a pass.
+console.log("\n── audit gate: refusing to judge is exit 2 ──");
+const GATE = resolve("tools/audit/gate.mjs");
+const gate = (args) => {
+  try { execFileSync("node", [GATE, ...args], { stdio: ["ignore", "pipe", "pipe"] }); return 0; }
+  catch (e) { return e.status ?? -1; }
+};
+const gtmp = mkdtempSync(join(tmpdir(), "nth-gate-"));
+const wj = (name, obj) => { const f = join(gtmp, name); writeFileSync(f, JSON.stringify(obj)); return f; };
+const nowIso = () => new Date(Date.now() - 60000).toISOString();
+const wellFormed = (over = {}) => ({
+  pluginVersion: "3.7.1", generatedAt: nowIso(),
+  checks: [{ id: "x", verdict: "PASS", critical: false }],
+  deterministic: { score: 95 }, target: { file: null, url: "https://example.test/" },
+  ...over,
+});
+
+ok("a file that is not an audit report exits 2", gate(["--report", resolve("package.json"), "--min-score", "95"]) === 2);
+ok("a report missing pluginVersion exits 2",
+  gate(["--report", wj("no-version.json", { ...wellFormed(), pluginVersion: undefined })]) === 2);
+ok("a report with an empty checks array exits 2",
+  gate(["--report", wj("empty.json", { ...wellFormed(), checks: [] })]) === 2);
+ok("a well-formed fresh report is judged, not refused",
+  gate(["--report", wj("fresh.json", wellFormed()), "--min-score", "50"]) === 0);
+ok("a report older than the bound exits 2",
+  gate(["--report", wj("stale.json", wellFormed({ generatedAt: "2020-01-01T00:00:00.000Z" })), "--min-score", "50"]) === 2);
+ok("a raised bound accepts the same stale report",
+  gate(["--report", wj("stale2.json", wellFormed({ generatedAt: "2020-01-01T00:00:00.000Z" })),
+        "--min-score", "50", "--max-age-hours", "999999"]) === 0);
+ok("a target that answered 404 exits 2",
+  gate(["--report", wj("s404.json", wellFormed({ target: { url: "https://example.test/x", status: 404 } })), "--min-score", "50"]) === 2);
+ok("a target that answered 200 is judged",
+  gate(["--report", wj("s200.json", wellFormed({ target: { url: "https://example.test/x", status: 200 } })), "--min-score", "50"]) === 0);
+ok("--min-score on a report with no score is a violation, not a silence",
+  gate(["--report", wj("noscore.json", wellFormed({ deterministic: null })), "--min-score", "50"]) === 1);
+rmSync(gtmp, { recursive: true, force: true });
+
 console.log("\n" + "═".repeat(50));
 if (failures > 0) {
   console.error(`❌  unit tests FAILED: ${failures} failure(s).`);

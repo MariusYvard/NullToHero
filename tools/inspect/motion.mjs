@@ -376,7 +376,12 @@ async function main() {
     const raw = await page.evaluate(sweep, {});
     await browser.close();
     const verdict = evaluateSweep(raw);
-    if (asJson) { console.log(JSON.stringify({ ...raw, frames: raw.frames.length, ...verdict }, null, 2)); return; }
+    if (asJson) {
+      console.log(JSON.stringify({ ...raw, frames: raw.frames.length, ...verdict }, null, 2));
+      // P17 : le code 2 du refus, écrit exprès pour qu'un appelant ne prenne pas un
+      // refus pour un succès, disparaissait sur la voie que les références recommandent.
+      process.exit(verdict.refused ? 2 : (verdict.findings.length ? 1 : 0));
+    }
     console.log(`\nNullToHero motion sweep — ${target}\n`);
     console.log(`  ${raw.frames.length} samples across ${raw.durationMs}ms, ${raw.driven} animations driven`);
     for (const n of raw.notes) console.log(`  NOTE  ${n}`);
@@ -397,7 +402,10 @@ async function main() {
   const result = await page.evaluate(reducedMotionProbe, {});
   await browser.close();
 
-  if (asJson) { console.log(JSON.stringify(result, null, 2)); return; }
+  if (asJson) {
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(!result.emulated ? 2 : (result.findings.length ? 1 : 0));
+  }
   console.log(`\nNullToHero reduced-motion probe — ${target}\n`);
   if (!result.emulated) {
     console.log(`  REFUSED  ${result.notes[0]}\n`);

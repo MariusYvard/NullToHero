@@ -11,7 +11,7 @@ import { scoreFromChecks } from "./checks.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-const sha = (s) => (s == null ? null : createHash("sha256").update(typeof s === "string" ? s : JSON.stringify(s)).digest("hex").slice(0, 16));
+export const sha = (s) => (s == null ? null : createHash("sha256").update(typeof s === "string" ? s : JSON.stringify(s)).digest("hex").slice(0, 16));
 
 // Which fetched artifacts feed each dimension. reaudit.mjs uses this to re-run
 // only the dimensions whose inputs changed since the last SITE-AUDIT.json.
@@ -127,6 +127,11 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
     target: {
       url: fetchResult.url || null,
       file: fetchResult.file || null,
+      // P5 : le statut etait capture par fetch.mjs et lu par personne. Une page
+      // 404 bien construite obtenait 86 sur 100 sans qu'une ligne de sortie dise
+      // que le serveur n'avait pas servi la page demandee. Le chemin par page le
+      // controlait deja ; c'est la page d'entree qui ne l'avait pas.
+      status: fetchResult.status == null ? null : fetchResult.status,
       // The real number, not a hardcoded 1. It sat at 1 while the schema advertised
       // the field, which is a claim the tool was not entitled to make. Counts the
       // entry plus every page actually fetched, which is what the static checks ran on.

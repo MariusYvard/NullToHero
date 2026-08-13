@@ -389,7 +389,10 @@ async function main() {
     return { ...f, rule: m.rule || `rule ${f.id}`, severity: m.severity || "medium", category: m.category || "", why: m.why || "", source: m.source || "" };
   });
 
-  if (asJson) { console.log(JSON.stringify({ ...result, findings: enriched }, null, 2)); return; }
+  if (asJson) {
+    console.log(JSON.stringify({ ...result, findings: enriched }, null, 2));
+    process.exit(enriched.length ? 1 : 0);
+  }
   console.log(`\nNullToHero rendered probe — ${target}, ${result.scanned} elements, ${vp[0]}x${vp[1]}, read ${wait}ms after load\n`);
   if (result.truncated) console.log(`  NOTE  the page has more elements than the scan cap, so this is a partial read\n`);
   if (!enriched.length) {

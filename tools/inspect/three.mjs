@@ -292,7 +292,12 @@ async function main() {
     return { ...f, rule: m.rule || `rule ${f.id}`, severity: m.severity || "medium", why: m.why || "" };
   });
 
-  if (asJson) { console.log(JSON.stringify({ ...result, findings: enriched }, null, 2)); return; }
+  // P17 : la voie --json rendait 0 quel que soit le contenu, y compris sur des
+  // constats que la voie texte fait sortir en 1. Les deux voies sortent le même code.
+  if (asJson) {
+    console.log(JSON.stringify({ ...result, findings: enriched }, null, 2));
+    process.exit(result.detected && enriched.length ? 1 : 0);
+  }
 
   if (!result.detected) {
     console.log(`\nNo three.js on ${target}. Nothing measured, and nothing to measure.\n`);

@@ -452,7 +452,15 @@ console.log(`  \x1b[32mOK  \x1b[0m ${("emplacements vérifiés : " + facts.refsC
 
 // Une relecture a réécrit "RESULT: PASS" en "RESULT: FAIL" dans le §5.1 sans que
 // le script bronche. Le constat le plus cité du document n'était tenu par rien.
-console.log("\nTranscripts de la section 5, rejoués");
+// Le journal de 6.5 : pour un point livré, on vérifie le comportement neuf plutôt
+// que l'ancien transcript. Sans cela, corriger un défaut ferait rougir le document
+// qui le décrit, et le garde deviendrait une raison de ne pas livrer.
+const delivered = new Set(
+  doc.slice(doc.indexOf("### 6.5"), doc.indexOf("### 6.4"))
+    .split("\n").filter(l => /^\|\s*P\d+b?\s*\|/.test(l))
+    .map(l => l.split("|")[1].trim()));
+const done = (id) => delivered.has(id);
+console.log(`\nTranscripts de la section 5, rejoués (livrés : ${[...delivered].join(", ") || "aucun"})`);
 const { execFileSync } = await import("node:child_process");
 const run = (args, opts = {}) => {
   try { return { out: execFileSync("node", args, { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"], ...opts }).toString(), code: 0 }; }
@@ -463,8 +471,13 @@ const sec = (a, b) => doc.slice(doc.indexOf(a), doc.indexOf(b));
 // 5.1 : la porte sur un fichier qui n'est pas un rapport
 const g = run(["tools/audit/gate.mjs", "--report", "package.json", "--min-score", "95", "--max-fails", "0"]);
 const s51 = sec("### 5.1", "### 5.2");
-ok("5.1, verdict de la porte", /RESULT:\s*(\w+)/.exec(g.out)?.[1], /RESULT:\s*(\w+)/.exec(s51)?.[1]);
-ok("5.1, code de sortie", g.code, (/RESULT: \w+\n\$ echo \$\?\n(\d+)/.exec(s51) || [, "?"])[1]);
+if (done("P1")) {
+  ok("5.1, P1 livré : la porte refuse de juger", g.code, 2);
+  ok("5.1, P1 livré : plus de verdict rendu", /RESULT:/.test(g.out) ? "un verdict" : "aucun", "aucun");
+} else {
+  ok("5.1, verdict de la porte", /RESULT:\s*(\w+)/.exec(g.out)?.[1], /RESULT:\s*(\w+)/.exec(s51)?.[1]);
+  ok("5.1, code de sortie", g.code, (/RESULT: \w+\n\$ echo \$\?\n(\d+)/.exec(s51) || [, "?"])[1]);
+}
 
 // 5.2 : la porte sur un rapport daté d'hier
 const s52 = sec("### 5.2", "### 5.3");
@@ -475,9 +488,34 @@ try {
   j.generatedAt = "2026-08-04T09:00:00.000Z";        // une semaine avant la portée du document
   (await import("node:fs")).writeFileSync(tmp, JSON.stringify(j));
   const g2 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "90"]);
-  ok("5.2, code de sortie sur un rapport d'une semaine", g2.code, (/--min-score 90; echo \$\?\n(\d+)/.exec(s52) || [, "?"])[1]);
+  ok("5.2, code de sortie sur un rapport d'une semaine", g2.code,
+    done("P2") ? 2 : (/--min-score 90; echo \$\?\n(\d+)/.exec(s52) || [, "?"])[1]);
+  if (done("P2")) {
+    const g3 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "90", "--max-age-hours", "999999"]);
+    ok("5.2, P2 livré : une borne relevée accepte le même rapport", g3.code, 0);
+  }
   (await import("node:fs")).unlinkSync(tmp);
 } catch { console.log("  \x1b[33m--  \x1b[0m 5.2 non rejoué, analyze.mjs n'a pas rendu de JSON"); failures++; }
+
+// 5.5 : P5 livré, une cible en 4xx fait refuser la porte
+if (done("P5")) {
+  const fs2 = await import("node:fs");
+  const rep404 = join(ROOT, "node_modules", ".review-404.json");
+  fs2.writeFileSync(rep404, JSON.stringify({
+    pluginVersion: "x", generatedAt: new Date().toISOString(),
+    checks: [{ id: "x", verdict: "PASS", critical: false }],
+    deterministic: { score: 86 }, target: { url: "https://example.test/x", status: 404 },
+  }));
+  const g404 = run(["tools/audit/gate.mjs", "--report", rep404, "--min-score", "50"]);
+  ok("5.5, P5 livré : une cible en 404 fait sortir 2", g404.code, 2);
+  fs2.writeFileSync(rep404, JSON.stringify({
+    pluginVersion: "x", generatedAt: new Date().toISOString(),
+    checks: [{ id: "x", verdict: "PASS", critical: false }],
+    deterministic: { score: 86 }, target: { url: "https://example.test/x", status: 200 },
+  }));
+  ok("5.5, P5 livré : une cible en 200 est jugée", run(["tools/audit/gate.mjs", "--report", rep404, "--min-score", "50"]).code, 0);
+  fs2.unlinkSync(rep404);
+}
 
 // 5.6 : la règle 47 déclarée exécutable et muette faute d'entrée
 const s56 = sec("### 5.6", "### 5.7");
@@ -493,7 +531,14 @@ ok("5.6, detect.mjs:129 appelle toujours runChecks sans js",
 const s57 = sec("### 5.7", "### 5.8");
 const wf = readFileSync(join(ROOT, ".github/workflows/validate.yml"), "utf8");
 const pkgTest = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).scripts.test;
-ok("5.7, rendered-rules.mjs dans le workflow", /rendered-rules\.mjs/.test(wf) ? "présent" : "absent", "absent");
+ok("5.7, rendered-rules.mjs dans le workflow", /rendered-rules\.mjs/.test(wf) ? "présent" : "absent",
+  done("P10") ? "présent" : "absent");
+if (done("P10")) {
+  ok("5.7, P10 livré : le workflow installe Chromium", /playwright install/.test(wf) ? "oui" : "non", "oui");
+  ok("5.7, P10 livré : le job passe --require-browser", /--require-browser/.test(wf) ? "oui" : "non", "oui");
+  const rrSrc = readFileSync(join(ROOT, "tests/rendered-rules.mjs"), "utf8");
+  ok("5.7, P10 livré : le drapeau fait échouer un saut", /requireBrowser[\s\S]{0,400}process\.exit\(1\)/.test(rrSrc) ? "oui" : "non", "oui");
+}
 ok("5.7, rendered-rules.mjs dans npm test", /rendered-rules\.mjs/.test(pkgTest) ? "présent" : "absent", "présent");
 const rr = readFileSync(join(ROOT, "tests/rendered-rules.mjs"), "utf8");
 ok("5.7, la branche SKIPPED sort bien 0",
@@ -514,9 +559,14 @@ if (browser) {
   const m2 = run(["tools/inspect/motion.mjs", fxm, "--sweep", "--json"]);
   const codes = [...s58.matchAll(/\$ echo \$\?\n(\d+)/g)].map(x => x[1]);
   ok("5.8, three.mjs texte", t1.code, codes[0]);
-  ok("5.8, three.mjs --json", t2.code, codes[1]);
   ok("5.8, motion.mjs --sweep texte", m1.code, codes[2]);
-  ok("5.8, motion.mjs --sweep --json", m2.code, codes[3]);
+  if (done("P17")) {
+    ok("5.8, P17 livré : three.mjs --json rend le code du texte", t2.code, t1.code);
+    ok("5.8, P17 livré : motion.mjs --json rend le code du texte", m2.code, m1.code);
+  } else {
+    ok("5.8, three.mjs --json", t2.code, codes[1]);
+    ok("5.8, motion.mjs --sweep --json", m2.code, codes[3]);
+  }
 } else {
   console.log("  \x1b[31mNON \x1b[0m 5.8 non rejoué : playwright absent. Le refus est bruyant, pas silencieux.");
   failures++;
@@ -545,8 +595,10 @@ console.log("\nTrous fermés après mutation dirigée");
 
 // (a) chaque jeton numérique des blocs de transcript, et non la seule prose voisine
 const inBlock = (sec, re) => (re.exec(sec) || [, "?"])[1];
-ok("5.1, FAIL du transcript", (/FAIL:\s*(\d+)/.exec(g.out) || [, "?"])[1], inBlock(s51, /FAIL:\s*(\d+)/));
-ok("5.1, WARN du transcript", (/WARN:\s*(\d+)/.exec(g.out) || [, "?"])[1], inBlock(s51, /WARN:\s*(\d+)/));
+if (!done("P1")) {
+  ok("5.1, FAIL du transcript", (/FAIL:\s*(\d+)/.exec(g.out) || [, "?"])[1], inBlock(s51, /FAIL:\s*(\d+)/));
+  ok("5.1, WARN du transcript", (/WARN:\s*(\d+)/.exec(g.out) || [, "?"])[1], inBlock(s51, /WARN:\s*(\d+)/));
+}
 const s53 = sec("### 5.3", "### 5.4");
 ok("5.3, score du transcript", scoreFromChecks(Array.from({ length: 42 }, (_, i) => ({ id: "c" + i, verdict: "NOT_MEASURED" }))).score,
   inBlock(s53, /\{"score":(\d+)/));
@@ -705,6 +757,30 @@ const withLine = [...doc.matchAll(/`[\w./-]+\.(?:mjs|js|csv|md|json|css|html|yml
 ok("emplacements portant un numéro de ligne", withLine.length, n(/dont (\d+)\s*\n?\s*portent un numéro de ligne/));
 ok("couples distincts", new Set(withLine).size, n(/\((\d+) couples distincts\)/));
 
+/* ---------- 14e. Le chantier entretien ---------- */
+
+// Un second document chiffré n'échapperait pas à la règle du premier.
+console.log("\nChantier entretien, dérivé de son propre tableau");
+try {
+  const ent = readFileSync(join(ROOT, "ARCHITECTURE-REVIEW-entretien.md"), "utf8");
+  const eRows = ent.split("\n").filter(l => /^\|\s*E\d+\s*\|/.test(l)).map(l => l.split("|").map(c => c.trim()));
+  let eLow = 0, eHigh = 0, badE = 0;
+  for (const r of eRows) {
+    const m = /([\d,]+)(?:\s*à\s*([\d,]+))?\s*j/.exec(r[5] || "");
+    const a = num(m[1]), b = m[2] ? num(m[2]) : a;
+    eLow += a; eHigh += b;
+    if (Math.abs(num(r[3]) * num(r[4]) / a - num(r[6])) > 0.001) badE++;
+  }
+  ok("priorités du chantier entretien", badE ? `${badE} ligne(s) fausse(s)` : "conformes", "conformes");
+  const eTot = /Total : ([\d,]+) à ([\d,]+) jours-personne/.exec(ent);
+  ok("total du chantier entretien, borne basse", fr(eLow), eTot ? eTot[1] : "?");
+  ok("total du chantier entretien, borne haute", fr(eHigh), eTot ? eTot[2] : "?");
+  const gl = guardedLaws(), lawTotal = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/).length - 1;
+  ok("lois sans garde", lawTotal - gl, (/(\d+) lois sans garde|aux (\d+) lois sans garde/.exec(ent) || [, "?"]).slice(1).find(Boolean));
+  ok("lois gardées, citées par le chantier", gl, (/([\w-]+) lignes sur 33 en portent une/.exec(ent) || [, "?"])[1] === "?" ? gl : word((/([\w-]+) lignes sur 33 en portent une/.exec(ent))[1]));
+  ok("le plan principal renvoie au chantier", /ARCHITECTURE-REVIEW-entretien\.md/.test(doc) ? "oui" : "non", "oui");
+} catch (e) { failures++; console.log("  \x1b[31mNON \x1b[0m chantier entretien illisible : " + e.message); }
+
 /* ---------- 15. Le garde est câblé ---------- */
 
 console.log("\nLe garde lui-même");
@@ -712,7 +788,7 @@ const self = "check-review-numbers";
 ok("appelé par npm test", new RegExp(self).test(pkgTest) ? "oui" : "non", "oui");
 const wired = new RegExp(self).test(wf);
 ok("appelé par le workflow", wired ? "oui" : "non",
-  /ce garde tourne dans `npm test` et pas dans le workflow/.test(doc) ? "non" : "oui");
+  done("P10") ? "oui" : (/ce garde tourne dans `npm test` et pas dans le workflow/.test(doc) ? "non" : "oui"));
 
 if (process.argv.includes("--json")) console.log("\n" + JSON.stringify(facts, null, 2));
 

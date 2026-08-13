@@ -12,13 +12,14 @@
  *   node tools/audit/gate.mjs --report SITE-AUDIT.json [--min-score N] [--max-fails N] [--max-warns N] [--no-fail-on-critical] [--fail-on-client-rendered]
  *   node tools/audit/gate.mjs <url|file> [--render] [--robots] [--min-score N] ...
  *
- * Exit 0 = gate passed, 1 = gate failed, 2 = usage error.
+ * Exit 0 = gate passed, 1 = gate failed, 2 = the gate could not judge
+ *   (usage error, unreadable report, report missing its shape, report stale).
  */
 
 import { readFileSync, appendFileSync } from "node:fs";
 import { fetchTarget } from "./fetch.mjs";
 import { runChecks } from "./lib/checks.mjs";
-import { buildSiteAudit } from "./lib/site-audit.mjs";
+import { buildSiteAudit, sha } from "./lib/site-audit.mjs";
 
 const args = process.argv.slice(2);
 const has = (n) => args.includes(n);
@@ -42,13 +43,85 @@ const policy = {
   failOnClientRendered: has("--fail-on-client-rendered"),
 };
 
+// P1 et P2 : la porte refusait de juger sans le dire. `--report package.json`
+// rendait PASS et sortait 0, parce que `score != null` desactivait le seuil au
+// lieu de le faire echouer, et parce qu'aucune propriete du rapport n'etait
+// exigee. Un rapport illisible ou perimé est maintenant un refus de juger (2),
+// distinct d'un verdict negatif (1).
+const REFUSE = (title, lines) => {
+  console.error(`NullToHero audit gate — ${title}`);
+  for (const l of lines) console.error(`  ${l}`);
+  console.error("  the gate refuses to judge rather than pass.");
+  process.exit(2);
+};
+
 let report;
 if (reportPath) {
-  report = JSON.parse(readFileSync(reportPath, "utf8"));
+  let raw;
+  try { raw = readFileSync(reportPath, "utf8"); }
+  catch (e) { REFUSE(reportPath, [`unreadable: ${e.message}`]); }
+  try { report = JSON.parse(raw); }
+  catch (e) { REFUSE(reportPath, [`not JSON: ${e.message}`]); }
+
+  // P1 : la forme minimale d'un rapport d'audit.
+  const missing = [];
+  if (!report || typeof report !== "object") missing.push("a JSON object");
+  else {
+    if (!report.pluginVersion) missing.push("pluginVersion");
+    if (!report.generatedAt) missing.push("generatedAt");
+    if (!Array.isArray(report.checks) || report.checks.length === 0) missing.push("a non-empty checks array");
+  }
+  if (missing.length) {
+    REFUSE(reportPath, [
+      `not an audit report: missing ${missing.join(", ")}`,
+      "produce one with: node tools/audit/analyze.mjs <target> --json > SITE-AUDIT.json",
+    ]);
+  }
+
+  // P2 : un rapport perimé garde la porte verte sur les verdicts de la veille.
+  // Une etape d'analyse qui echoue sans faire echouer le job laisse le rapport
+  // d'hier sur le disque, et rien dans la sortie n'indiquait son age.
+  const maxAgeHours = numOpt("--max-age-hours") ?? 24;
+  const stamped = Date.parse(report.generatedAt);
+  if (Number.isNaN(stamped)) REFUSE(reportPath, [`generatedAt is not a date: ${report.generatedAt}`]);
+  const ageHours = (Date.now() - stamped) / 3600000;
+  if (ageHours > maxAgeHours) {
+    REFUSE(reportPath, [
+      `report is ${ageHours.toFixed(1)}h old, above the ${maxAgeHours}h bound`,
+      "re-run the audit, or raise the bound with --max-age-hours N",
+    ]);
+  }
+  if (ageHours < -0.25) REFUSE(reportPath, [`generatedAt is ${Math.abs(ageHours).toFixed(1)}h in the future`]);
+
+  // P2, seconde moitie : quand la cible est un fichier local, le rapport doit
+  // decrire l'arbre courant et pas un etat anterieur.
+  const file = report.target && report.target.file;
+  const claimed = report.inputs && report.inputs.hashes && report.inputs.hashes.rawHtml;
+  if (file && claimed) {
+    let current = null;
+    try { current = sha(readFileSync(file, "utf8")); } catch { /* la cible a disparu, traite plus bas */ }
+    if (current === null) {
+      REFUSE(reportPath, [`report targets ${file}, which no longer exists`]);
+    } else if (current !== claimed) {
+      REFUSE(reportPath, [
+        `report describes ${file} at ${claimed}, the file on disk is ${current}`,
+        "the target changed since the audit ran. Re-run it.",
+      ]);
+    }
+  }
 } else {
   const fetchResult = await fetchTarget({ target, render: has("--render"), robots: has("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
   const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "" });
   report = buildSiteAudit({ fetchResult, checks, mode: "checks" });
+}
+
+// P5 : auditer la page d'erreur d'un serveur n'est pas auditer la cible.
+const httpStatus = report.target ? report.target.status : null;
+if (httpStatus != null && httpStatus > 399) {
+  REFUSE(reportPath || target, [
+    `the target answered HTTP ${httpStatus}`,
+    "what was audited is the server's error page, not the page asked for.",
+  ]);
 }
 
 const checks = (report.checks || []).filter(c => c.verdict !== "NOT_MEASURED");
@@ -60,6 +133,7 @@ const clientRenderedUnverified = report.target && report.target.clientRendered =
 
 const violations = [];
 if (policy.failOnCritical && criticalFails.length) violations.push(`${criticalFails.length} critical check FAIL: ${criticalFails.map(c => c.id).join(", ")}`);
+if (policy.minScore != null && score == null) violations.push(`--min-score ${policy.minScore} requested but the report carries no deterministic score`);
 if (policy.minScore != null && score != null && score < policy.minScore) violations.push(`deterministic score ${score} < min ${policy.minScore}`);
 if (policy.maxFails != null && fails.length > policy.maxFails) violations.push(`${fails.length} FAIL > max ${policy.maxFails}`);
 if (policy.maxWarns != null && warns.length > policy.maxWarns) violations.push(`${warns.length} WARN > max ${policy.maxWarns}`);
@@ -69,6 +143,8 @@ const passed = violations.length === 0;
 const tgt = report.target ? (report.target.url || report.target.file || "?") : "?";
 console.log(`NullToHero audit gate — ${tgt}`);
 console.log(`  deterministic score: ${score == null ? "n/a" : score}/100   FAIL: ${fails.length}   WARN: ${warns.length}   critical FAIL: ${criticalFails.length}`);
+if (reportPath) console.log(`  report: ${report.pluginVersion} generated ${report.generatedAt}`);
+if (httpStatus != null) console.log(`  target answered HTTP ${httpStatus}`);
 if (clientRenderedUnverified) console.log(`  note: target looks client-rendered and was fetched without --render`);
 for (const c of criticalFails) console.log(`  ✗ critical ${c.id}: ${c.detail}`);
 if (passed) console.log(`  RESULT: PASS`);

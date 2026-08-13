@@ -70,7 +70,7 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 207 emplacements cités par le document, et de ceux de
+- l'existence de chacun des 211 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
   dans le document (100 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
@@ -1027,6 +1027,14 @@ travaux, la livraison n'en fait qu'une : le §6.4 montre que P3 seul est un
 incrément strictement négatif, trois jours et demi pour 279 verdicts basculés et
 aucun signal visible.
 
+**L'axe entretien est chiffré à part.** Quinze des dix-neuf points de ce plan ne
+servent que la fiabilité, et deux seulement le coût d'entretien (P7 et P8). Les
+quatre écarts que ce document nomme puis décline, faute de pouvoir démontrer qu'ils
+causent un verdict faux, sont chiffrés dans `ARCHITECTURE-REVIEW-entretien.md` : la
+vue qui montre une règle en entier (4), la portée réelle du contrôle 37 (5.11), P12
+ci-dessous, et le datage de `laws.csv`. Quatre à six jours, sur un axe où le critère
+de retenue de ce plan ne s'applique pas.
+
 **P12, l'enregistrement générique des sondes, sort du plan.** Son dégât utilisateur
 est nul (3.2) et le classer avec des chemins de vert faux affaiblirait l'idée que
 cette liste est ordonnée par impact. Il reste une dette de structure, notée ici
@@ -1279,6 +1287,26 @@ affirmations, et un trou dans ce garde prime sur n'importe quel confort de
 structure : elle est devenue P14. L'entrée 20 est adjacente à une question de
 frontière de confiance (5.9) et sa correction est un appel de fonction déjà écrite
 et testée : elle est devenue P15.
+
+### 6.5 Journal de livraison
+
+Ce document évalue le dépôt à la version 3.7.1. À mesure que le plan se livre, les
+reproductions de la section 5 cessent de reproduire, ce qui est le résultat
+recherché et non une dérive : `check-review-numbers.mjs` lit ce tableau et, pour
+chaque point livré, vérifie le comportement neuf au lieu de l'ancien transcript. Le
+garde devient ainsi le test d'acceptation du plan, et un point marqué livré dont le
+correctif régresse fait rougir ce document.
+
+Les sections 5.1 à 5.12 ne sont pas réécrites. Elles décrivent ce qui a été trouvé,
+avec la commande qui le montrait, et c'est la trace qu'il faut garder.
+
+| Point | Livré | Ce que la section 5 devient |
+|---|---|---|
+| P17 | 3.8.0 | `--json` sort le code de la voie texte, refus compris (5.8) |
+| P10 | 3.8.0 | `validate.yml` installe Chromium et lance `rendered-rules.mjs --require-browser` (5.7) |
+| P2 | 3.8.0 | un rapport plus vieux que `--max-age-hours` fait sortir 2 (5.2) |
+| P5 | 3.8.0 | une cible qui a répondu au-dessus de 399 fait sortir 2 (5.5) |
+| P1 | 3.8.0 | un fichier qui n'est pas un rapport fait sortir 2 (5.1) |
 
 ### 6.4 Ce que ce plan va casser, mesuré
 

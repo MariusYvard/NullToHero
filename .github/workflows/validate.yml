@@ -39,6 +39,30 @@ jobs:
       - name: Corpus divergence harness (registry and recorded results)
         run: node tools/eval-corpus/run.mjs
 
+      # P10. The thirteen browser rules are what the product sells and nothing in
+      # CI verified them: rendered-rules.mjs exits 0 when Playwright is absent, and
+      # the workflow did not run the file at all. Not a failure, a construction.
+      # The recipe was already written in action.yml:61-64 and never ported here.
+      #
+      # Delivery condition, from the plan: a flaky gate gets bypassed, and a
+      # bypassed gate stops protecting against real reds. This job stays
+      # non-blocking (continue-on-error) until it has run twenty consecutive times
+      # green on the same revision. Flip continue-on-error to false then, and not
+      # before. Remove this comment in the same commit.
+      - name: Install Playwright Chromium
+        if: always()
+        run: npx --yes playwright install --with-deps chromium
+
+      - name: Browser-verified rules (rendered, three.js, motion probes)
+        if: always()
+        continue-on-error: true
+        run: node tests/rendered-rules.mjs --require-browser
+
+      - name: Architecture review numbers hold
+        if: always()
+        continue-on-error: true
+        run: node tools/check-review-numbers.mjs
+
       - name: Run Python unit tests
         if: always()
         run: python3 tests/test_design_system.py
