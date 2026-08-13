@@ -8,7 +8,8 @@
 //
 // Playwright is not a dependency of this repository and this test does not make
 // it one. When it is missing the harness says so at the top of its output, names
-// the five rules it did not verify, and exits 0. A skipped test that reports
+// the rules it did not verify, and exits 0. The count is not written here: it
+// used to say five, the probes grew to thirteen, and the comment did not. A skipped test that reports
 // "passed" is how a suite starts lying, so it reports SKIPPED and prints the
 // command that turns it on.
 
