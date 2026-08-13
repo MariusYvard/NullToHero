@@ -25,6 +25,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { tmpdir } from "node:os";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DOC = join(ROOT, "ARCHITECTURE-REVIEW.md");
@@ -505,7 +506,7 @@ if (done("P1")) {
 
 // 5.2 : la porte sur un rapport daté d'hier
 const s52 = sec("### 5.2", "### 5.3");
-const tmp = join(ROOT, "node_modules", ".review-old.json");
+const tmp = join(tmpdir(), "nth-review-old.json");
 const rep = run(["tools/audit/analyze.mjs", "tests/eval/fixtures/clean-pass.html", "--json"]);
 try {
   const j = JSON.parse(rep.out);
@@ -524,7 +525,7 @@ try {
 // 5.5 : P5 livré, une cible en 4xx fait refuser la porte
 if (done("P5")) {
   const fs2 = await import("node:fs");
-  const rep404 = join(ROOT, "node_modules", ".review-404.json");
+  const rep404 = join(tmpdir(), "nth-review-404.json");
   fs2.writeFileSync(rep404, JSON.stringify({
     pluginVersion: "x", generatedAt: new Date().toISOString(),
     checks: [{ id: "x", verdict: "PASS", critical: false }],
