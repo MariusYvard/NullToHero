@@ -85,7 +85,7 @@ Canvas and WebGL do not re-render on a theme change by themselves. Wire the list
 
 ## Checklist
 
-- [ ] Text contrast meets AA in both modes (4.5:1 body, 3:1 large)
+- [ ] Text contrast meets AA in both modes (contrast per L-CONTRAST-1)
 - [ ] Focus rings visible against dark surfaces
 - [ ] `color-scheme` set, so native controls and scrollbars follow
 - [ ] Shadows replaced by surface elevation

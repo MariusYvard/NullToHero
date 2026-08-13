@@ -1,7 +1,7 @@
 ---
 name: inspect
 description: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'. Not for designing or building an interface: that belongs to /siteasy. Not for search visibility: /seo. For all three at once on a whole site: /audit."
-version: 3.7.1
+version: 3.8.0
 user-invocable: true
 argument-hint: "[detect|preview|review] [path/to/file | https://url | paste code]"
 allowed-tools:
@@ -54,7 +54,7 @@ If `DIRECTION.md` or `PRODUCT.md` exist at the project root, read them before sc
 | # | Category | Severity |
 |---|----------|----------|
 | 1 | Accessibility (contrast, focus rings, alt text, keyboard, aria-labels) | CRITICAL |
-| 2 | Touch and interaction (target size: 24x24px CSS minimum per WCAG 2.5.8 AA, 44x44px recommended for touch; spacing, feedback) | CRITICAL |
+| 2 | Touch and interaction (target size per L-TOUCH-1, spacing per L-TOUCH-2, feedback) | CRITICAL |
 | 3 | Performance and Core Web Vitals (WebP/AVIF, lazy-load, CLS, LCP) | HIGH |
 | 4 | Structure and semantics (heading order, landmarks, valid HTML) | HIGH |
 | 5 | Layout and responsive (breakpoints, viewport, no horizontal scroll) | HIGH |

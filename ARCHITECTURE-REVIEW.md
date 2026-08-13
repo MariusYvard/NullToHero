@@ -71,9 +71,9 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 217 emplacements cités par le document, et de ceux de
-  son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
-  dans le document (99 couples distincts), la borne
+- l'existence de chacun des 216 emplacements cités par le document, et de ceux de
+  son artefact compagnon par la même passe, dont 123 portent un numéro de ligne
+  dans le document (98 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
   fragment de code entre accents graves, sa présence dans les douze lignes autour
   (cinq fragments aujourd'hui, et le garde échoue si ce nombre tombe à zéro) ; ce
@@ -901,7 +901,7 @@ l'échantillon est vide.
 
 Le contrôle 37 garantit qu'une loi est citée. Il garantit aussi qu'aucun fichier ne
 réénonce son seuil sans citer son identifiant, mais seulement là où la ligne porte
-une expression régulière dans sa colonne `guard`, `tests/validate.js:1412` faisant
+une expression régulière dans sa colonne `guard`, le contrôle faisant
 `if (!law.guard) continue;`. Quatre lignes sur 33 en portaient une au moment de
 l'évaluation (`L-PROG-1`, `L-PROG-2`, `L-WORD-1`, `L-INDEXNOW-1`), et pour les 29
 autres la réénonciation n'était pas détectée : la promesse du tableau de la

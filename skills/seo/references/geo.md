@@ -272,7 +272,7 @@ Googlebot is tier 1, and it produces the wrong diagnosis on a Google-only visibi
 - RSL 1.0 licensing implementation
 - HTTPS. Worth having on every count, but not an AI Overviews gate: Google states there is no additional
   requirement beyond being indexed and snippet-eligible (see the quotation above).
-- Core Web Vitals (especially LCP < 2.5s)
+- Core Web Vitals (especially LCP within L-PERF-1)
 
 ### Dimension 6: Platform Optimization (10%)
 

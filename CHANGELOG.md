@@ -11,6 +11,93 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.8.0] - 2026-08-13
+
+The reliability plan of ARCHITECTURE-REVIEW.md, delivered whole, plus the
+maintenance chantier costed separately in ARCHITECTURE-REVIEW-entretien.md.
+Nineteen plan points and four maintenance points.
+
+### The headline
+
+An audit that could not measure something used to say PASS. It now says it did not
+measure. Five checks read an empty string as an absence and returned a positive
+verdict on a page whose CSS and JS were on a CDN; the caller now declares where
+each input came from, and anything undeclared refuses to conclude. The score used
+to start at 100 and never learn its denominator, so forty-two unmeasured checks
+scored 100; a score deduced from nothing is now null, and the coverage travels with
+it to the gate.
+
+### Added
+
+- `tools/rule.mjs`, one rule shown whole across its four data files, its
+  implementation and its fixtures. `--audit` runs it over all 86 and fails on a
+  rule described in some sources and not others. It found three rules with no
+  remediation route on its first run.
+- `tools/sync-counts.mjs`, prose counts written from the CSVs. `--check` compares
+  without writing, and runs in CI.
+- `tools/data/three-obsolete.csv`, what the audit corpus holds obsolete, with the
+  revision, the rule and the replacement. A `Code Good` in the generation corpus
+  that reintroduces one of these patterns now fails the build.
+- `--require-browser` on `tests/rendered-rules.mjs`: a missing browser is an error
+  instead of a pass over thirteen unverified rules.
+- `--max-age-hours` and `--min-coverage` on `tools/audit/gate.mjs`.
+- `source` and `asserted` columns on every law, and a check that refuses a law
+  without them. Eleven laws come from an external standard, twenty-four are
+  NullToHero arbitrations and now say so.
+
+### Changed
+
+- The audit gate exits 2 when it cannot judge, distinct from 1 when it judges and
+  fails. An unreadable report, a report missing its shape, a report older than the
+  bound, a target that answered above 399: all four used to exit 0 with PASS.
+- The three probes exit with the same code on `--json` as on the text path, refusal
+  included. The refusal code existed and the transport the references recommend
+  dropped it.
+- The reduced-motion probe refuses when nothing was animating at the sample, rather
+  than printing the note and the clearance in the same output.
+- The three.js probe samples `info.render.frame` around its window: no render means
+  not measured, and the delta is the true divisor, which also fixes the WebGPU
+  chain that turned a ceiling breach into a target miss.
+- The parallax sweep prints what it did not measure and exits 2 when it judged
+  nothing. Zero vitals, zero layers and zero weighed images used to read as three
+  passes.
+- `tools/content/score.mjs` no longer imputes 70 to a dimension it cannot score.
+  The composite renormalises on the weight that was scored, and exits 2 when there
+  is not enough to judge.
+- `capture.mjs` writes to a timestamped directory per run and reports nothing
+  rather than reporting a `.webm` an earlier run left behind.
+- `live-inject.mjs` resolves through `resolveInRoot`, as its sibling already did.
+- The probe coverage guard is a registry rather than three copied blocks, and it
+  refuses a probe class the map uses without a registered probe.
+- Sixteen laws gained a guard (22 of 35 now), which immediately found eleven
+  restatements. `L-MOTION-5` and `L-MOTION-6` settle the stagger delay and the
+  exit ratio that six references contradicted each other on.
+- CI runs the browser probes with Chromium, the prose-count check, the rule
+  completeness audit, and the review guard.
+
+### Fixed
+
+- `detect.mjs` passes the inline JS it had already extracted, so rules 47 and 58
+  are reachable on a local scan. A guard now fails the build if any caller of
+  `runChecks` drops an input; it found two more callers in the same state.
+- `fetch.mjs` captured the HTTP status and nobody read it. A well-formed 404 used
+  to score 86 out of 100.
+- A file expected by `FILE_INTEGRITY` and missing fails check 6 itself instead of
+  degrading to a warning.
+- Rule 81 deduplicates by texture instead of saturating at six, and stays quiet
+  before r152 where `colorSpace` did not exist.
+- The three probes accept a `file://` URL and a bare path alike.
+
+### Notes
+
+The §6.4 prediction was measured after delivery and was wrong: 9 verdicts changed,
+not 279, and the average score did not move. The prediction counted every PASS on
+an empty input, which assumed a coarser fix than the one written. The number was
+exact and replayed on every run; its definition did not match the correction it was
+costing. That is in the document.
+
+---
+
 ## [3.7.1] - 2026-08-11
 
 ### Added

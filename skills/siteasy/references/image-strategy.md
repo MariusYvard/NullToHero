@@ -128,7 +128,7 @@ Pair with a server-side hint if possible:
 Link: </images/hero-1200.avif>; rel=preload; as=image; type="image/avif"; fetchpriority=high
 ```
 
-Target: LCP under 2.5 seconds at 75th percentile, measured in real user data, not synthetic.
+Target: LCP within L-PERF-1econds at 75th percentile, measured in real user data, not synthetic.
 
 ## Lazy Loading and Below-the-Fold
 

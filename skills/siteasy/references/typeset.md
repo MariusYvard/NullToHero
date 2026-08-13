@@ -23,7 +23,7 @@ Analyze what's weak or generic about the current type:
 1. **Font choices**: invisible defaults (Inter, Roboto, Arial, Open Sans, system stacks)? Does the face match the brand personality, or is a playful brand wearing a corporate typeface? More than 2-3 families is almost always a mess.
 2. **Hierarchy**: heading, body and caption distinguishable at a glance? Sizes too close together (14px, 15px, 16px) make muddy hierarchy, and Medium against Regular is a weight contrast nobody sees.
 3. **Sizing and scale**: a committed scale or arbitrary sizes? Body text at 16px or more? Fixed `rem` scales for app UIs, fluid `clamp()` for marketing and content headings.
-4. **Readability**: line length in the 45-75 character band, line-height suited to the face and the context, enough contrast against the background.
+4. **Readability**: line length per L-TYPE-2, line-height suited to the face and the context, enough contrast against the background.
 5. **Consistency**: same role styled the same way throughout, each weight doing one job (not bold in one section and semibold in another for the same role), letter-spacing intentional rather than default everywhere.
 
 **CRITICAL**: The goal isn't to make text "fancier" — it's to make it clearer, more readable, and more intentional. Good typography is invisible; bad typography is distracting.
@@ -58,7 +58,7 @@ Build a clear type scale:
 - Set `max-width` on text containers using `ch` units (`max-width: 65ch`)
 - Adjust line-height per context: tighter for headings (1.1-1.2), looser for body (1.5-1.7)
 - Increase line-height slightly for light-on-dark text
-- Ensure body text is at least 16px / 1rem
+- Ensure body text meets L-TYPE-1
 
 ### Refine Details
 

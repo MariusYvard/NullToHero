@@ -1386,6 +1386,7 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
     const col = (name) => header.indexOf(name);
     const laws = rows.slice(1).map(r => ({
       id: r[col("id")], anchor: r[col("anchor")], guard: (r[col("guard")] || "").trim(),
+      source: (r[col("source")] || "").trim(), asserted: (r[col("asserted")] || "").trim(),
     })).filter(l => l.id);
 
     const ids = laws.map(l => l.id);
@@ -1411,6 +1412,17 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
     const uncited = ids.filter(id => !corpus.includes(id));
     if (uncited.length) uncited.forEach(id => fail(`law never cited in any skill: ${id}`));
     else pass("every law id is cited at least once in the skills");
+
+    // E4. Une loi sans source ni date est un nombre que rien ne rattache au monde.
+    // Le contrôle 37 garantissait qu'un seuil vive une fois ; il ne garantissait
+    // pas qu'on sache d'où il vient ni quand il a été affirmé. L-PERF-1 valait
+    // 2,5 s parce que Google le disait à l'écriture de la ligne, et rien ne datait
+    // cette affirmation. Dater ne résout pas la péremption, cela la rend posable.
+    const unsourced = laws.filter(l => !l.source || !l.asserted);
+    if (unsourced.length) unsourced.forEach(l => fail(`${l.id}: no source or no assertion date. A threshold with nothing behind it is a number, not a law.`));
+    else pass(`every law carries a source and the date it was asserted`);
+    const badDate = laws.filter(l => l.asserted && !/^\d{4}-\d{2}-\d{2}$/.test(l.asserted));
+    if (badDate.length) badDate.forEach(l => fail(`${l.id}: asserted is not an ISO date: ${l.asserted}`));
 
     let guarded = 0, breaches = 0;
     for (const law of laws) {

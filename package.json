@@ -1,10 +1,10 @@
 {
   "name": "null-to-hero",
-  "version": "3.7.1",
+  "version": "3.8.0",
   "description": "From zero knowledge to hero website. Design + SEO skills for Claude Cowork.",
   "scripts": {
     "build": "node tools/build-index.mjs",
-    "test": "node tools/build-index.mjs && node tests/validate.js && node tests/unit.mjs && node tests/inspect-rules.mjs && node tests/rendered-rules.mjs && node tools/sync-counts.mjs --check && node tools/check-review-numbers.mjs && node tools/eval-corpus/run.mjs && python3 tests/test_design_system.py && node tools/audit/eval.mjs",
+    "test": "node tools/build-index.mjs && node tests/validate.js && node tests/unit.mjs && node tests/inspect-rules.mjs && node tests/rendered-rules.mjs && node tools/rule.mjs --audit && node tools/sync-counts.mjs --check && node tools/check-review-numbers.mjs && node tools/eval-corpus/run.mjs && python3 tests/test_design_system.py && node tools/audit/eval.mjs",
     "eval": "node tools/audit/eval.mjs",
     "audit": "node tools/audit/analyze.mjs",
     "audit:gate": "node tools/audit/gate.mjs",

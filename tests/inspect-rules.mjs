@@ -125,30 +125,40 @@ for (const [id, c] of cov) {
     no(`rule ${id} is class ${c.cls} and gives no reason, which is the whole point of the class`);
 }
 
-// The rendered probe declares which rules it decides. The map and the probe must
-// name the same set, or one of them is describing a coverage that does not run.
-// The count is not written here: it said five, the probe grew to seven, and the
-// comment did not. A number in a comment has nothing holding it.
-const mappedRendered = [...cov].filter(([, c]) => c.cls === "rendered-probe").map(([id]) => id).sort((a, b) => a - b);
-const declaredRendered = [...RENDERED_RULE_IDS].sort((a, b) => a - b);
-if (mappedRendered.join() !== declaredRendered.join())
-  no(`rule-coverage.csv maps ${mappedRendered.join(", ") || "nothing"} to the rendered probe, rendered.mjs declares ${declaredRendered.join(", ")}`);
+// E3. Une sonde déclare les règles qu'elle décide, la carte dit la même chose, et
+// l'une des deux se trompe si elles divergent. Trois blocs quasi identiques
+// faisaient ce contrôle, un par famille : ajouter une quatrième famille en
+// ajoutait un quatrième, ce qui était le seul endroit du dépôt où l'ajout était en
+// O(n) plutôt qu'en O(1). Le garde connaissait les sondes par énumération alors
+// qu'il devait les connaître par contrat.
+//
+// Le contrat est celui-ci : une sonde exporte sa classe de couverture et la liste
+// des identifiants qu'elle décide. Une famille de plus est une ligne de plus dans
+// PROBES, et le jour où une sonde exporte son propre nom de classe, même cette
+// ligne disparaît.
+const PROBES = [
+  { cls: "rendered-probe", name: "the rendered probe", file: "rendered.mjs", ids: RENDERED_RULE_IDS },
+  { cls: "three-probe",    name: "the three.js probe", file: "three.mjs",    ids: THREE_RULE_IDS },
+  { cls: "motion-probe",   name: "the motion probe",   file: "motion.mjs",  ids: MOTION_RULE_IDS },
+];
 
-// Same contract for the three.js probe. It is a separate class rather than more
-// rendered-probe rows because it needs something the rendered probe does not: an
-// init script installed before the page's own three.js evaluates. A rule mapped
-// to the wrong one of the two would look covered and never run.
-const mappedThree = [...cov].filter(([, c]) => c.cls === "three-probe").map(([id]) => id).sort((a, b) => a - b);
-const declaredThree = [...THREE_RULE_IDS].sort((a, b) => a - b);
-if (mappedThree.join() !== declaredThree.join())
-  no(`rule-coverage.csv maps ${mappedThree.join(", ") || "nothing"} to the three.js probe, three.mjs declares ${declaredThree.join(", ")}`);
+// Toute classe de couverture en "-probe" doit avoir son entrée : sans cela, une
+// quatrième famille pourrait être déclarée dans la carte et n'être vérifiée par
+// personne, ce qui est exactement la défaillance que ce bloc existe pour empêcher.
+const probeClasses = new Set([...cov].map(([, c]) => c.cls).filter(c => /-probe$/.test(c)));
+const unregistered = [...probeClasses].filter(c => !PROBES.some(p => p.cls === c));
+if (unregistered.length) no(`rule-coverage.csv uses probe classes no registered probe declares: ${unregistered.join(", ")}`);
+else ok(`${PROBES.length} probe families registered, and the map uses no other`);
 
-// And for the motion probe, which is a third class for a third reason: it needs
-// the runner to emulate a media feature, which neither of the other two do.
-const mappedMotion = [...cov].filter(([, c]) => c.cls === "motion-probe").map(([id]) => id).sort((a, b) => a - b);
-const declaredMotion = [...MOTION_RULE_IDS].sort((a, b) => a - b);
-if (mappedMotion.join() !== declaredMotion.join())
-  no(`rule-coverage.csv maps ${mappedMotion.join(", ") || "nothing"} to the motion probe, motion.mjs declares ${declaredMotion.join(", ")}`);
+for (const probe of PROBES) {
+  const mapped = [...cov].filter(([, c]) => c.cls === probe.cls).map(([id]) => id).sort((a, b) => a - b);
+  const declared = [...probe.ids].sort((a, b) => a - b);
+  if (mapped.join() !== declared.join()) {
+    no(`rule-coverage.csv maps ${mapped.join(", ") || "nothing"} to ${probe.name}, ${probe.file} declares ${declared.join(", ")}`);
+  } else {
+    ok(`${probe.name}: map and probe name the same ${declared.length} rules`);
+  }
+}
 
 // A named check must exist. A mapping to a check that was renamed or deleted is
 // the same failure as no mapping at all, only harder to see.

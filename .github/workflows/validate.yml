@@ -25,6 +25,10 @@ jobs:
       - name: Build reference index
         run: node tools/build-index.mjs
 
+      - name: Every rule is complete across its four sources
+        if: always()
+        run: node tools/rule.mjs --audit
+
       - name: Prose counts match the CSVs
         if: always()
         run: node tools/sync-counts.mjs --check

@@ -808,7 +808,9 @@ try {
   ok("total du chantier entretien, borne basse", fr(eLow), eTot ? eTot[1] : "?");
   ok("total du chantier entretien, borne haute", fr(eHigh), eTot ? eTot[2] : "?");
   const gl = guardedLaws(), lawTotal = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/).length - 1;
-  ok("lois sans garde", lawTotal - gl, (/(\d+) lois sans garde|aux (\d+) lois sans garde/.exec(ent) || [, "?"]).slice(1).find(Boolean));
+  ok("lois gardées après E2", gl, (/le compte à (\d+) lois gardées/.exec(ent) || [, "?"])[1]);
+  ok("lois au total", lawTotal, (/lois gardées\s*\n?sur (\d+)/.exec(ent) || [, "?"])[1]);
+  ok("lois sans garde, dites qualitatives", lawTotal - gl, word((/Les ([\w-]+) lois\s*\n?restantes ne portent pas de garde/.exec(ent) || [, "?"])[1]));
   ok("le plan principal renvoie au chantier", /ARCHITECTURE-REVIEW-entretien\.md/.test(doc) ? "oui" : "non", "oui");
 } catch (e) { failures++; console.log("  \x1b[31mNON \x1b[0m chantier entretien illisible : " + e.message); }
 

@@ -93,7 +93,7 @@ Icon buttons need invisible padding:
 
 ```css
 .icon-btn {
-  padding: 6px; /* extends hit area to 24x24 even when icon is 12x12 */
+  padding: 6px; /* extends the hit area to the L-TOUCH-1 floor even when the icon is 12x12 */
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -24,7 +24,7 @@ version: 1.9.1
 
 ### 3. Mobile Optimization
 - Responsive design: viewport meta tag, responsive CSS
-- Touch targets: 24x24px CSS minimum (WCAG 2.5.8 AA), 44x44px recommended for comfortable touch, with adequate spacing
+- Touch targets: see L-TOUCH-1 for the floor and the recommended size, L-TOUCH-2 for spacing
 - Font size: minimum 16px base
 - No horizontal scroll
 - Mobile-first indexing: **after July 5, 2024, Google crawls and indexes sites for Search with Googlebot Smartphone** ([Google Search Central, 2024](https://developers.google.com/search/blog/2024/06/mobile-indexing-vlast-final-final.doc)). A site whose content is not accessible on a mobile device is no longer indexable. Googlebot Desktop can still appear in server logs for a few other features (product listings, Google for Jobs), so treat "mobile only" as a statement about Search indexing, not about every Google fetch.
@@ -33,7 +33,7 @@ version: 1.9.1
 
 Ownership: this section holds the targets; image-specific LCP/CLS tactics live in [images.md](images.md) and the remediation deep-dive in [performance.md](performance.md).
 
-- Targets, measured at the 75th percentile of real user data: LCP <2.5s, INP <200ms, CLS <0.1
+- Targets, measured at the 75th percentile of real user data: LCP within L-PERF-1, INP within L-PERF-3, CLS <0.1
 - INP became a Core Web Vital and replaced FID on March 12, 2024 ([web.dev, 2024](https://web.dev/blog/inp-cwv-march-12)). September 9, 2024 was the announced deadline for moving off FID ([web.dev, 2024](https://web.dev/blog/inp-cwv-launch)), and Chrome ended FID support in its tools (PageSpeed Insights and its API, CrUX API and History API, CrUX Dashboard, web-vitals.js) in September 2024 ([web.dev, 2024](https://web.dev/blog/fid)). Do NOT reference FID anywhere.
 - Use PageSpeed Insights API or CrUX data if MCP available
 

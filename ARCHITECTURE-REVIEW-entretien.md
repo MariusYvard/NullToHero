@@ -15,12 +15,15 @@ tout point demandant un test non trivial coûte au moins un jour, un demi pour l
 changement et un demi pour le test, plus un demi-jour de revue dans la borne haute.
 Le dégât se lit ici comme coût récurrent et non comme dommage utilisateur.
 
-| # | Point | Dégât | Prob. | Coût | Prio. |
-|---|---|---|---|---|---|
-| E1 | La vue qui montre une règle en entier | 2 | 4 | 1 à 1,5 j | 8 |
-| E2 | Étendre la portée du contrôle 37 aux 29 lois sans garde | 2 | 4 | 1 à 1,5 j | 8 |
-| E3 | L'enregistrement générique des sondes (P12) | 1 | 2 | 1 à 1,5 j | 2 |
-| E4 | Dater et sourcer `laws.csv` | 1 | 2 | 1 à 1,5 j | 2 |
+Les quatre points sont livrés en 3.8.0, et chaque section porte ce que la
+livraison a trouvé.
+
+| # | Point | Dégât | Prob. | Coût | Prio. | Livré |
+|---|---|---|---|---|---|---|
+| E1 | La vue qui montre une règle en entier | 2 | 4 | 1 à 1,5 j | 8 | 3.8.0 |
+| E2 | Étendre la portée du contrôle 37 aux 29 lois sans garde | 2 | 4 | 1 à 1,5 j | 8 | 3.8.0 |
+| E3 | L'enregistrement générique des sondes (P12) | 1 | 2 | 1 à 1,5 j | 2 | 3.8.0 |
+| E4 | Dater et sourcer `laws.csv` | 1 | 2 | 1 à 1,5 j | 2 | 3.8.0 |
 
 Total : 4 à 6 jours-personne. Le plan principal en achète déjà deux de plus sur le
 même axe, P7 (générer les comptages) et P8 (promouvoir trois seuils en lois), pour
@@ -56,6 +59,11 @@ l'exécuteur, la route de remédiation, la loi citée s'il y en a une, et le che
 deux fixtures. Modèle disponible dans le dépôt : `tools/search-references.mjs`, 66
 lignes, bibliothèque standard seule, aucune dépendance.
 
+**Livré.** `node tools/rule.mjs 47` imprime la règle en entier, `--audit` la passe
+sur les 86. La première exécution a trouvé trois règles (69, 70, 71) sans route de
+remédiation, dans un dépôt où toutes les autres en ont une : la vue a payé son
+écriture avant d'avoir servi à lire. Les trois routes sont ajoutées et l'audit est
+câblé dans `npm test` et dans le workflow.
 *Test :* une règle dont la ligne manque dans l'un des quatre CSV fait sortir 1 avec
 le nom du fichier incomplet, ce qui rend la vue utile comme contrôle d'intégrité en
 plus de la lecture.
@@ -66,11 +74,18 @@ l'éditabilité.
 
 **Ce qui coûte aujourd'hui.** Le contrôle 37 garantit qu'aucun fichier ne réénonce
 le seuil d'une loi sans citer son identifiant, mais seulement là où la ligne porte
-une expression régulière dans sa colonne `guard` : `tests/validate.js:1412` fait
-`if (!law.guard) continue;`. Quatre lignes sur 33 en portent une. Pour les 29
-autres, la réénonciation n'est pas détectée, et §2.2 de l'évaluation montre le
-résultat sur un cas non promu : six valeurs pour le délai de stagger dans cinq
-fichiers.
+une expression régulière dans sa colonne `guard`. Quatre lignes sur 33 en
+portaient une, et pour les 29 autres la réénonciation n'était pas détectée : §2.2
+de l'évaluation montre le résultat sur un cas non promu, six valeurs pour le délai
+de stagger dans cinq fichiers.
+
+**Livré.** Seize gardes ont été ajoutés, ce qui porte le compte à 22 lois gardées
+sur 35. Le contrôle a immédiatement trouvé onze réénonciations réelles, chacune
+corrigée en citant la loi plutôt qu'en répétant le nombre. Les treize lois
+restantes ne portent pas de garde parce que leur seuil est qualitatif (`linear`,
+`dvh`, `all reachable`, `2 per view`) : une expression régulière y attraperait
+chaque mention du mot et rien de la règle. Le refus est écrit dans la colonne
+plutôt que deviné.
 
 **Le geste.** Une passe sur les 29 lignes sans `guard`, ajoutant l'expression quand
 le seuil s'exprime en motif (une durée, un ratio, une distance en pixels) et
@@ -93,6 +108,11 @@ plutôt qu'en O(1).
 **Le geste.** Une boucle sur un registre de sondes, chacune exportant son nom de
 classe et sa liste d'identifiants, remplace les trois blocs.
 
+**Livré**, avec un contrôle que les trois blocs n'avaient pas : toute classe de
+couverture en `-probe` que la carte utilise doit avoir son entrée au registre. Sans
+lui, une quatrième famille pouvait être déclarée dans la carte et n'être vérifiée
+par personne, ce qui est la défaillance même que ces blocs existent pour empêcher.
+
 *Test :* les trois contrats existants continuent d'échouer aux mêmes conditions.
 *Ne corrige pas :* rien d'observable pour un utilisateur, ce qui est la raison pour
 laquelle ce point est sorti du plan principal.
@@ -105,8 +125,14 @@ et pas de colonne `source`, quand `inspect-rules.csv` en a une. `L-PERF-1` vaut
 affirmation ni ne la rattache à sa source. Le mécanisme qui tient tous les seuils
 honnêtes n'a lui-même rien qui le tienne, au-delà de sa cohérence interne.
 
-**Le geste.** Deux colonnes, `source` et `asserted`, remplies sur 33 lignes, plus
-un contrôle qui échoue quand une ligne n'a ni l'une ni l'autre.
+**Le geste.** Deux colonnes, `source` et `asserted`, remplies sur les 35 lignes,
+plus un contrôle qui échoue quand une ligne n'a ni l'une ni l'autre.
+
+**Livré.** La distinction que le remplissage a rendue visible vaut d'être dite :
+onze lois viennent d'une norme externe datable (WCAG 2.2, Core Web Vitals,
+three.js), les vingt-quatre autres sont des arbitrages NullToHero et le disent.
+Confondre les deux était le vrai coût, plus que l'absence de date : un seuil de
+norme se re-vérifie contre sa norme, un arbitrage maison se rediscute.
 
 *Test :* ajouter une loi sans source fait échouer le build.
 *Ne corrige pas :* la péremption. Une valeur datée de 2024 reste fausse si le
