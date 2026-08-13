@@ -70,15 +70,17 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 203 emplacements cités par le document, dont 122
-  portent un numéro de ligne (98 couples distincts), et la borne haute de chaque
-  ligne citée ; ce contrôle attrape le fichier inventé et la ligne au-delà de la
-  fin, pas la ligne existante mais fausse ;
+- l'existence de chacun des 206 emplacements cités par le document et son artefact
+  compagnon, dont 124 portent un numéro de ligne (100 couples distincts), la borne
+  haute de chaque ligne citée, et, quand le document affirme qu'un fragment de code
+  se trouve à un endroit, sa présence dans la fenêtre citée ; ce contrôle attrape le
+  fichier inventé et la ligne au-delà de la fin, pas la ligne existante mais fausse
+  sur laquelle rien n'est cité ;
 - les chiffres du conflit d'intérêts, dérivés des entrées de l'annexe ;
 - son propre câblage.
 
-Ce qu'il ne couvre pas : les jugements, la prose non chiffrée, les colonnes "Le
-dit ?" et "Dépend de" de l'annexe, et les nombres qui ne sont dans aucun tableau.
+Ce qu'il ne couvre pas : les jugements, la prose non chiffrée, la colonne "Le dit ?" de l'annexe, la colonne
+"Dépend de" du tableau du plan, et les nombres qui ne sont dans aucun tableau.
 
 Le script existe parce qu'une première version de ce document énonçait ses propres
 nombres à la main et en a fait dériver cinq. Trois relectures en aveugle ont ensuite
@@ -94,7 +96,7 @@ Mais ce garde tourne dans `npm test` et pas dans le workflow, pour la raison mê
 qui vaut à `rendered-rules.mjs` d'en être absent : son bloc 12 rejoue les sondes de
 5.8 et demande un navigateur. C'est le défaut du §5.7 appliqué à ce document, et
 c'est P10 qui le ferme, la ligne étant ajoutée à son périmètre. Second point, ce
-garde fait 666 lignes, 514 hors commentaires, attachées à un document vivant : c'est une dette, et
+garde est un programme attaché à un document vivant : c'est une dette, et
 son entretien est chiffré à un demi-jour par révision majeure du document, ligne
 absente du total de 6.1 parce qu'elle ne porte pas sur le produit.
 
@@ -293,7 +295,7 @@ cinquième du corpus n'a donc qu'un seul point d'entrée.
 Ce que je n'établis pas : que ce soit un défaut. Un corpus large et bien indexé
 est une force, `tools/search-references.mjs` existe et le graphe interdit les
 orphelins. La seule conséquence que je peux démontrer est celle de 2.2, six
-fichiers qui donnent six valeurs pour la même chose, ce qui est ce qu'un corpus de
+valeurs pour la même chose réparties sur cinq fichiers, ce qui est ce qu'un corpus de
 cette taille produit sans arbitre. Le correctif est donc P8, pas une réduction du
 corpus. Je signale la taille, je ne la condamne pas.
 
@@ -835,8 +837,15 @@ planifié en P15.
 ### 5.10 La doctrine existe, et elle est rigoureuse là où elle est appliquée
 
 Il serait faux de présenter ce dépôt comme naïf sur la question. Il a un
-vocabulaire explicite pour "je n'ai pas pu mesurer", appliqué sans faute partout
-où l'entrée est un navigateur.
+vocabulaire explicite pour "je n'ai pas pu mesurer", et chaque module dont l'entrée
+est un navigateur en porte au moins un usage.
+
+Il faut lire cette liste avec 5.8 en tête, sinon elle dit plus qu'elle ne vaut.
+Avoir le vocabulaire n'est pas l'appliquer sur tous les chemins : les entrées 24,
+27, 28, 29 et 30 de l'annexe sont des verts faux dans ces mêmes sondes, dont
+l'entrée est bien un navigateur. La frontière n'est donc pas seulement "chaîne
+contre navigateur", elle est aussi "échantillon vide contre échantillon peuplé", et
+c'est ce second bord que le vocabulaire ne franchit pas.
 
 - `tools/inspect/rendered.mjs:101-109` compte les candidats par règle, et `:400`
   imprime `"Nothing on the page to judge for: N. Their silence is not a pass."`
@@ -848,8 +857,9 @@ où l'entrée est un navigateur.
 - `tools/inspect/three.mjs:111-113` annonce que le collecteur n'était pas installé
   et que seuls les constats de détection sont réels.
 - `tools/audit/lib/css.mjs:58-78` enregistre l'ambiguïté au lieu de choisir un
-  camp, avec la doctrine écrite : inventer un succès est pire qu'inventer un
-  échec, parce que personne ne revérifie un verdict vert.
+  camp, dans un sens comme dans l'autre, et `css.mjs:216-217` écrit la doctrine :
+  inventer un succès est pire qu'inventer un échec, parce que personne ne
+  revérifie un verdict vert.
 - `tools/audit/lib/aggregate.mjs:36` interdit à un `NOT_MEASURED` de primer sur un
   verdict réel.
 - `tests/behavior/run.mjs:522` : "un corpus valide n'est pas un test de
@@ -859,7 +869,8 @@ Deux de ces sept ont été écrits pendant l'évaluation, celui de `motion.mjs` 
 de `three.mjs`, dans les modules nés en 3.7.0. Cinq préexistaient, y compris le
 comptage de candidats de `rendered.mjs:101-109`, arrivé en 3.5.2
 (`git log -S "Their silence is not a pass"`). Le vocabulaire préexiste, il a été
-étendu, il n'a jamais traversé la frontière où l'entrée est une chaîne.
+étendu, et il n'a traversé ni la frontière où l'entrée est une chaîne, ni celle où
+l'échantillon est vide.
 
 ### 5.11 Ce qui tient laws.csv
 
@@ -886,9 +897,14 @@ c'est la racine de confiance du dépôt et elle est plus fine qu'elle n'en a l'a
 ### 5.12 Conclusion de la section
 
 La conclusion n'est donc pas que le dépôt ignore le problème. C'est qu'il l'a
-résolu dans les sondes navigateur et le chemin de contraste, et pas là où l'entrée
-arrive sous forme de chaîne ou de `null`. Le score, enfin, convertit chaque cas
-non résolu en points gratuits.
+nommé, doté d'un vocabulaire, et résolu chemin par chemin plutôt que par classe.
+Là où l'entrée arrive sous forme de chaîne ou de `null`, il ne l'a pas résolu du
+tout. Là où l'entrée est un navigateur, il l'a résolu sur les chemins où quelque
+chose a été mesuré et pas sur ceux où l'échantillon est vide, ce que 5.8 établit
+dans les modules les plus récents. Le score, enfin, convertit chaque cas non résolu
+en points gratuits. C'est pour cette raison que P3b, l'invariant, compte plus que
+la somme des correctifs unitaires : ce dépôt sait faire le geste, il ne sait pas
+encore l'exiger.
 
 ---
 
@@ -920,11 +936,11 @@ jugements, et le document ne prétend plus les dériver.
 
 Conséquence qu'il faut dire plutôt que laisser voir : quinze des dix-neuf lignes
 valent exactement le plancher, donc le dénominateur est constant sur les quatre
-cinquièmes du tableau et la division n'y ordonne rien. Sur ces quatorze lignes, le
-classement se réduit à `dégât × probabilité`, et quatre dérogations réordonnent
+cinquièmes du tableau et la division n'y ordonne rien. Sur ces quinze lignes, le
+classement se réduit à `dégât × probabilité`, et trois dérogations réordonnent
 ensuite le résultat. La formule sert à rendre le raisonnement contestable ligne à
 ligne, pas à trancher : ce qui décide vraiment de l'ordre de livraison, ce sont les
-dégâts, les probabilités et les quatre dérogations écrites au-dessus.
+dégâts, les probabilités et les trois dérogations écrites ci-dessous.
 
 Trois dérogations au classement, chacune motivée :
 
@@ -994,6 +1010,31 @@ transport que les références recommandent.
 rendent le même code de sortie sur la même fixture.
 *Ne corrige pas :* la forme du JSON, que des appelants lisent déjà.
 
+**P10. Les règles navigateur remontent à l'intégration continue.** Un job
+`validate.yml` qui installe Chromium avec cache et exécute
+`tests/rendered-rules.mjs`. Le drapeau `--require-browser`, à un demi-jour,
+transforme le saut silencieux en échec bruyant sans jamais vérifier les treize
+règles : pour un outil dont la valeur est le verdict observé en navigateur, ce
+n'est pas suffisant. Prendre le job Chromium.
+Chiffrage corrigé après vérification. Une version antérieure comptait deux à trois
+jours en supposant la recette à écrire. Elle est écrite : `action.yml:61-64` porte
+déjà `npx --yes playwright install --with-deps chromium`, dans l'Action publiée du
+dépôt. Le travail est de la porter dans `validate.yml` avec un cache, un demi-jour à
+un jour, plus le budget de stabilisation ci-dessous. La priorité passe de 6 à 12 et
+P10 remonte dans le lot de tête, ce qui est le bon rang pour le constat que 5.7
+appelle le plus inquiétant.
+Le même job porte `node tools/check-review-numbers.mjs`, dont le bloc 12 rejoue les
+sondes de 5.8 et demande donc le même navigateur.
+*Test :* le workflow échoue si les treize règles ne sont pas vérifiées, et le garde
+du présent document tourne dans le même job.
+*Ne corrige pas :* la durée d'exécution, qui augmente d'environ deux minutes.
+*Condition de livraison, à ne pas sauter :* une porte instable est contournée, et
+une porte contournée cesse de protéger contre les vrais rouges, ce que ce document
+soutient par ailleurs en 6.4. Avant de rendre ce job bloquant, le faire tourner
+vingt fois de suite sur la même révision. Zéro échec, il devient bloquant. Un seul
+échec, il reste informatif et le premier travail est de le stabiliser, pas de
+l'imposer. Ce budget est inclus dans la borne haute.
+
 **P2. La porte refuse un rapport périmé.** Dans `gate.mjs:46-47`, comparer
 `generatedAt` à maintenant
 avec une borne configurable, et comparer `inputs.hashes` à l'arbre courant quand
@@ -1013,26 +1054,6 @@ lieu de noter 86.
 leur absence.
 *Test :* la commande de 5.1 sort 2 et non 0.
 *Ne corrige pas :* un rapport frais et sincèrement vide, que P4 couvre.
-
-**P14. Le contrôle d'intégrité cesse de se taire sur un fichier absent.**
-`tests/validate.js:326-330` transforme un fichier absent en avertissement, et
-`:1702` fait sortir 0 sur un lot d'avertissements. Le contrôle 6 est donc muet là où
-il devrait parler.
-Ce point a été dégradé après vérification. Une version antérieure de ce document
-concluait qu'un fichier supprimé passe. C'est faux, et je l'ai reproduit : supprimer
-`skills/seo/references/geo.md` fait bien sortir `validate.js` avec 1, par quatre
-autres contrôles (la référence exigée par une commande, le comptage du README, la
-péremption de `reference-index.json`, la détection d'orphelins). Le défaut est réel
-et local, la conséquence annoncée ne l'était pas : dégât ramené de 3 à 1, le point
-sort du lot de tête et tombe en dernière ligne du plan.
-Le détail vaut d'être noté, parce qu'il coupe dans l'autre sens que 2.1 : ce qui
-rattrape la suppression, c'est d'abord le comptage écrit à la main dans le README,
-celui-là même que 2.1 condamne. Un comptage retapé n'est pas seulement une dette, il
-attrape ici ce qu'un garde typé laissait passer.
-*Test :* supprimer un fichier de `FILE_INTEGRITY` fait échouer le contrôle 6
-lui-même, et non seulement les quatre autres.
-*Ne corrige pas :* les autres avertissements de `validate.js`, dont certains sont
-légitimement non bloquants.
 
 **P3. "Non mesuré" devient indéracinable.** Sept contrôles reçoivent une chaîne
 nue : `checkRobots`, `checkViewportUnits`, `checkMotionReducedGuard`,
@@ -1089,31 +1110,6 @@ passé à `runRules` à la ligne suivante, puis oublié à `:129`. Les deux chan
 vont dans le même commit.
 *Test :* retirer `js` d'un appelant fait échouer le garde.
 *Ne corrige pas :* les entrées présentes mais vides, qui sont P3.
-
-**P10. Les règles navigateur remontent à l'intégration continue.** Un job
-`validate.yml` qui installe Chromium avec cache et exécute
-`tests/rendered-rules.mjs`. Le drapeau `--require-browser`, à un demi-jour,
-transforme le saut silencieux en échec bruyant sans jamais vérifier les treize
-règles : pour un outil dont la valeur est le verdict observé en navigateur, ce
-n'est pas suffisant. Prendre le job Chromium.
-Chiffrage corrigé après vérification. Une version antérieure comptait deux à trois
-jours en supposant la recette à écrire. Elle est écrite : `action.yml:61-64` porte
-déjà `npx --yes playwright install --with-deps chromium`, dans l'Action publiée du
-dépôt. Le travail est de la porter dans `validate.yml` avec un cache, un demi-jour à
-un jour, plus le budget de stabilisation ci-dessous. La priorité passe de 6 à 12 et
-P10 remonte dans le lot de tête, ce qui est le bon rang pour le constat que 5.7
-appelle le plus inquiétant.
-Le même job porte `node tools/check-review-numbers.mjs`, dont le bloc 12 rejoue les
-sondes de 5.8 et demande donc le même navigateur.
-*Test :* le workflow échoue si les treize règles ne sont pas vérifiées, et le garde
-du présent document tourne dans le même job.
-*Ne corrige pas :* la durée d'exécution, qui augmente d'environ deux minutes.
-*Condition de livraison, à ne pas sauter :* une porte instable est contournée, et
-une porte contournée cesse de protéger contre les vrais rouges, ce que ce document
-soutient par ailleurs en 6.4. Avant de rendre ce job bloquant, le faire tourner
-vingt fois de suite sur la même révision. Zéro échec, il devient bloquant. Un seul
-échec, il reste informatif et le premier travail est de le stabiliser, pas de
-l'imposer. Ce budget est inclus dans la borne haute.
 
 **P11. Le balayage parallax cesse de rendre PASS à vide.**
 `skills/siteasy/scripts/parallax-audit.mjs` contribue trois entrées de l'annexe.
@@ -1203,6 +1199,26 @@ source qui le produit, faute de quoi un script qui écrit deux fois la mauvaise
 valeur passe.
 *Ne corrige pas :* les nombres qui ne sont dans aucun CSV, qui sont P8.
 
+**P14. Le contrôle d'intégrité cesse de se taire sur un fichier absent.**
+`tests/validate.js:326-330` transforme un fichier absent en avertissement, et
+`:1702` fait sortir 0 sur un lot d'avertissements. Le contrôle 6 est donc muet là où
+il devrait parler.
+Ce point a été dégradé après vérification. Une version antérieure de ce document
+concluait qu'un fichier supprimé passe. C'est faux, et je l'ai reproduit : supprimer
+`skills/seo/references/geo.md` fait bien sortir `validate.js` avec 1, par quatre
+autres contrôles (la référence exigée par une commande, le comptage du README, la
+péremption de `reference-index.json`, la détection d'orphelins). Le défaut est réel
+et local, la conséquence annoncée ne l'était pas : dégât ramené de 3 à 1, le point
+sort du lot de tête et tombe en dernière ligne du plan.
+Le détail vaut d'être noté, parce qu'il coupe dans l'autre sens que 2.1 : ce qui
+rattrape la suppression, c'est d'abord le comptage écrit à la main dans le README,
+celui-là même que 2.1 condamne. Un comptage retapé n'est pas seulement une dette, il
+attrape ici ce qu'un garde typé laissait passer.
+*Test :* supprimer un fichier de `FILE_INTEGRITY` fait échouer le contrôle 6
+lui-même, et non seulement les quatre autres.
+*Ne corrige pas :* les autres avertissements de `validate.js`, dont certains sont
+légitimement non bloquants.
+
 **P12. Enregistrement générique des sondes.** Hors du classement (6.1). Une boucle
 sur les modules de sonde remplace les trois blocs de `tests/inspect-rules.mjs`.
 *Test :* les trois contrats existants continuent d'échouer aux mêmes conditions.
@@ -1216,7 +1232,7 @@ en moyenne et trois en faible, et aucun ne touche le score ni la porte.
 
 Chiffrage du refus, puisque ce document exige un coût partout ailleurs. Sous le
 plancher de 6.1, chacune demande un test non trivial et coûte donc au moins un
-jour : cinq jours, davantage que le bloc P3 tout entier, pour un dixième de la
+jour : cinq jours, soit le plancher du bloc P3 tout entier, pour un dixième de la
 probabilité cumulée. C'est le motif du refus, et il est révisable : si P3 et P4
 livrent en avance, les cinq sont le meilleur usage suivant d'une journée.
 

@@ -44,6 +44,16 @@ const WORDS = { un: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, h
   "vingt-six": 26, "trente et un": 31, "vingt-deux": 22, "vingt-trois": 23, "vingt-quatre": 24, "vingt-cinq": 25 };
 const word = (w) => (w == null ? "?" : (WORDS[String(w).toLowerCase().trim()] ?? w));
 const n = (re) => { const m = re.exec(doc); return m ? m[1] : "?"; };
+// Une quantité dérivée citée deux fois n'était gardée qu'une fois : c'est par là
+// que "quinze/quatorze" et "trois/quatre dérogations" étaient passés. `all` exige
+// que chaque occurrence de la formulation concorde, et qu'il y en ait au moins une.
+const all = (name, re, want, hay = doc) => {
+  const hits = [...hay.matchAll(re)].map(m => word(m.slice(1).find(Boolean)));
+  if (!hits.length) { failures++; console.log(`  \x1b[31mNON \x1b[0m ${(name + " : aucune occurrence").padEnd(52)}`); return; }
+  const bad = hits.filter(h => String(h) !== String(want));
+  if (bad.length) failures++;
+  console.log(`  ${bad.length ? "\x1b[31mNON \x1b[0m" : "\x1b[32mOK  \x1b[0m"} ${(name + ` (${hits.length} occurrence${hits.length > 1 ? "s" : ""})`).padEnd(52)} document: ${hits.join("/").padEnd(14)} source: ${want}`);
+};
 const num = (s) => parseFloat(String(s).replace(",", "."));
 const fr = (x) => String(x).replace(".", ",");
 
@@ -237,6 +247,9 @@ ok("dérogations annoncées", (derogBlock.match(/^- \*\*/gm) || []).length, word
 const paras = [...doc.matchAll(/^\*\*(P\d+b?)\. ([\s\S]*?)(?=\n\n\*\*P|\n### )/gm)];
 const paraIds = paras.map(m => m[1]);
 ok("points du tableau sans paragraphe", order.filter(id => !paraIds.includes(id)).join(" ") || 0, 0);
+// §6.2 annonce l'ordre de livraison : deux paragraphes s'étaient déplacés sans que
+// l'appartenance, seule vérifiée jusque-là, ne bouge.
+ok("ordre des paragraphes de 6.2", paraIds.filter(id => plan.has(id)).join(" "), order.join(" "));
 const extras = paras.filter(m => !plan.has(m[1]));
 ok("paragraphes hors tableau non déclarés",
   extras.filter(m => !/[Hh]ors du classement/.test(m[2])).map(m => m[1]).join(" ") || 0, 0);
@@ -379,7 +392,9 @@ const lengthOf = (f) => {
   return lineCache.get(f);
 };
 const missingFiles = new Set(), outOfRange = new Set();
-for (const m of doc.matchAll(REF)) {
+let tested = 0;
+const compDoc = (() => { try { return readFileSync(join(ROOT, "ARCHITECTURE-REVIEW-sondes.md"), "utf8"); } catch { return ""; } })();
+for (const m of (doc + "\n" + compDoc).matchAll(REF)) {
   const [, file, a, b, extra] = m;
   const len = lengthOf(file);
   if (len === null) { missingFiles.add(file); continue; }
@@ -401,15 +416,21 @@ for (const m of doc.matchAll(/`([\w./-]+\.(?:mjs|js|csv|md|json|yml))`?:(\d+)(?:
   // "`fichier:ligne` = `X`". Une paraphrase entre accents graves n'est pas un jeton
   // et ne doit pas être cherchée dans le fichier.
   const tail = whole.slice(whole.indexOf(":" + a));
-  const tok = /(?:faisant|est)\s+`([^`]{6,120})`/.exec(tail);
+  const tok = /(?:faisant|est|fixe[^`]{0,24}|refuse[^`]{0,24}|écrit[^`]{0,24}|construit[^`]{0,24}|appelle|porte|contient)\s*:?\s*\n?\s*`([^`]{6,120})`/.exec(tail.replace(/\n/g, " "));
   const needle = tok && tok[1];
   if (!needle || /^[\w./-]+\.(mjs|js|csv|md|json|yml)/.test(needle)) continue;
+  // Une affirmation négative ("ne passe pas par `X`") ne dit pas que X est là.
+  if (/\bne\s|\bn'\w|\bsans\b|\bjamais\b|\baucun/.test(tail.slice(0, tail.indexOf(needle)))) continue;
   const lines = readFileSync(join(ROOT, real), "utf8").split("\n");
   const lo = Math.max(0, Number(a) - 1 - WINDOW), hi = Math.min(lines.length, Number(b || a) + WINDOW);
   const hay = lines.slice(lo, hi).join("\n").replace(/\s+/g, " ");
+  tested++;
   if (!hay.includes(needle.replace(/\s+/g, " "))) wrongLine.push(`${file}:${a} ne contient pas ${needle}`);
 }
 ok("jetons cités absents de la fenêtre citée", wrongLine.join(" | ") || 0, 0);
+// Un contrôle qui n'éprouve rien rend un vert sur une mesure qui n'a pas eu lieu,
+// ce qui est le sujet du document. Il échoue donc quand il ne teste aucun jeton.
+ok("jetons réellement éprouvés", tested > 0 ? tested : "aucun", tested > 0 ? tested : "au moins un");
 ok("lignes citées au-delà de la fin du fichier", outOfRange.size ? [...outOfRange].join(" ") : 0, 0);
 console.log(`  \x1b[32mOK  \x1b[0m ${("emplacements vérifiés : " + facts.refsChecked).padEnd(52)}`);
 
@@ -581,6 +602,14 @@ for (const [id, v] of byPoint) {
 }
 console.log(`  \x1b[32mOK  \x1b[0m ${"chaque point cite les fichiers de ses entrées d'annexe".padEnd(52)} document: conforme`);
 
+console.log("\nQuantités citées plusieurs fois, chaque occurrence");
+all("dérogations au classement", /(\S+) dérogations (?:au classement|réordonnent|écrites)/g,
+  (derogBlock.match(/^- \*\*/gm) || []).length);
+all("lignes au plancher", /(\S+) des dix-neuf lignes\s*\n?valent|Sur ces (\S+) lignes/g,
+  costRows.filter(r => /^1 à 1,5 j$/.test(r[5])).length);
+all("chemins planifiés", /(\S+) chemins sont planifiés|dont ([\w-]+) sont planifiés ici/g, facts.planned);
+all("bascules de verdict", /(\d+) verdicts\*\*|deviendraient NOT_MEASURED : (\d+)|sur les (\d+) cas/g, flips);
+
 /* ---------- 14b. Les chiffres du conflit d'intérêts ---------- */
 
 // Le nombre le plus engageant du document pour son auteur était le seul à n'être
@@ -645,6 +674,15 @@ const p13After = (/P13 est remonté\*\* de la dernière place, devant ([^.]+)\./
   .split(/,\s*|\s+et\s+/).map(x => x.trim()).filter(Boolean);
 const i13 = order.indexOf("P13");
 ok("points que P13 doit précéder", p13After.filter(x => order.indexOf(x) < i13).join(" ") || 0, 0);
+
+console.log("\nComptages du garde, dérivés du garde");
+// Le nombre de lignes du garde n'est pas gardé : il change à chaque édition du
+// garde, donc un contrôle dessus casserait à chaque passe sans rien protéger. Le
+// document ne le cite plus.
+ok("emplacements cités", facts.refsChecked, n(/chacun des (\d+) emplacements/));
+const withLine = [...doc.matchAll(/`[\w./-]+\.(?:mjs|js|csv|md|json|css|html|yml|tex):\d+/g)].map(m => m[0]);
+ok("emplacements portant un numéro de ligne", withLine.length, n(/dont (\d+)\s*\n?\s*portent un numéro de ligne/));
+ok("couples distincts", new Set(withLine).size, n(/\((\d+) couples distincts\)/));
 
 /* ---------- 15. Le garde est câblé ---------- */
 
