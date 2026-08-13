@@ -20,6 +20,7 @@ import { readFileSync, appendFileSync } from "node:fs";
 import { fetchTarget } from "./fetch.mjs";
 import { runChecks } from "./lib/checks.mjs";
 import { buildSiteAudit, sha } from "./lib/site-audit.mjs";
+import { provenanceOf } from "./lib/checks.mjs";
 
 const args = process.argv.slice(2);
 const has = (n) => args.includes(n);
@@ -117,7 +118,7 @@ if (reportPath) {
   }
 } else {
   const fetchResult = await fetchTarget({ target, render: has("--render"), robots: has("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
-  const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "" });
+  const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "", js: fetchResult.linkedJs || "", provenance: provenanceOf(fetchResult) });
   report = buildSiteAudit({ fetchResult, checks, mode: "checks" });
 }
 

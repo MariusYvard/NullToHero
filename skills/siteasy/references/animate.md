@@ -56,7 +56,7 @@ Work the layers in order. Feedback and transitions earn their place first; entra
 
 | Layer | Where it lands | Calibration |
 |---|---|---|
-| Entrance | Page load, hero, scroll reveals, modal and drawer entry | Stagger element reveals at 100-150ms delays; fade plus slide, not slide alone |
+| Entrance | Page load, hero, scroll reveals, modal and drawer entry | Stagger element reveals per L-MOTION-5; fade plus slide, not slide alone |
 | Micro-interaction | Buttons, inputs, toggles, checkboxes, favorites | Hover scale 1.02-1.05; press scale per animation-engineering.md; toggles 200-300ms |
 | State transition | Show/hide, expand/collapse, loading, success/error, enable/disable | Expand/collapse transitions the height container, never the content height |
 | Navigation | Route changes, tabs, carousels, scroll effects | Shared-element transitions over crossfades where a spatial link exists |
@@ -83,7 +83,7 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv). Entrance choreography on page l
 /* elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6); */
 ```
 
-**Exit animations are faster than entrances.** Use ~75% of enter duration.
+**Exit animations are faster than entrances.** Use ~75% of enter duration (L-MOTION-6).
 
 ### Performance
 - **Motion materials**: Use transform/opacity for reliable movement, but use blur, filters, masks, shadows, and color shifts when they materially improve the effect
@@ -110,7 +110,7 @@ Ship a `prefers-reduced-motion: reduce` block that collapses durations to near-z
 Rules distilled from the animated-component ecosystem (registries, hero effects):
 
 - Two duration regimes coexist. Feedback and entrances live at 300-400ms ease-out; ambient loops (shimmer ~3s, border beams ~6s, marquees ~40s) live at 3-40s linear. Judge a decorative loop on its reduced-motion guard and its per-view budget, not on the 300ms feedback ceiling.
-- Scroll entrances: IntersectionObserver with `once: true` and a margin around -50px, near-zero base delay (~40ms), staggers around 50ms that compress with segment count (total duration divided by elements) so long lists do not make the reader wait.
+- Scroll entrances: IntersectionObserver with `once: true` and a margin around -50px, near-zero base delay (~40ms), staggers per L-MOTION-5, around 50ms that compress with segment count (total duration divided by elements) so long lists do not make the reader wait.
 - Split-text accessibly: per-character spans are noise for a screen reader. Hide the animated copy (`aria-hidden`) and expose the intact text (`aria-label` or a visually-hidden duplicate).
 - Animated counters: `tabular-nums` so digits keep a stable width (no reflow), write `textContent` directly outside the render cycle, and format with the page locale, never a hardcoded one.
 - Several beams or orbiters on one element: phase them with negative delays instead of duplicating keyframes.

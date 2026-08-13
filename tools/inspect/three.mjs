@@ -146,12 +146,40 @@ export async function probe(opts) {
         const wasAuto = info.autoReset;
         info.autoReset = false;
         if (info.reset) info.reset();
+        // P16 and P18. Two defects in one read. Nothing checked that a render
+        // happened at all during the window: a scene that renders on demand kept
+        // the counter at zero, rule 80 stayed silent, and the CLI printed "0 draw
+        // calls" — the sentinel and the best possible value at once. And the
+        // divisor was info.render.frameCalls, which counts the render calls of the
+        // current frame, not the frames sampled: a three-pass WebGPU chain divided
+        // by three too many and turned a ceiling breach into a target miss.
+        //
+        // info.render.frame increments on every render() and is not cleared by
+        // reset(), so its delta is both the true divisor and a free NOT_MEASURED
+        // when it is zero. motion.mjs:68 already reads that field.
+        const frameBefore = typeof info.render.frame === "number" ? info.render.frame : null;
         await new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res)));
+        const frameAfter = typeof info.render.frame === "number" ? info.render.frame : null;
+        const rendered = frameBefore !== null && frameAfter !== null ? frameAfter - frameBefore : null;
+        info.autoReset = wasAuto;
+
+        if (rendered === 0) {
+          entry.drawCalls = null;
+          entry.renderedFrames = 0;
+          notes.push("the renderer drew no frame during the sample window, so draw calls were not measured. A render-on-demand scene is not a scene with zero draw calls.");
+          entry.geometries = info.memory ? info.memory.geometries : null;
+          entry.textures = info.memory ? info.memory.textures : null;
+          entry.programs = info.programs ? info.programs.length : null;
+          scenes.push(entry);
+          continue;
+        }
+
         // The WebGPU trap: .calls is cumulative there, .drawCalls is per frame.
         const perFrame = typeof info.render.drawCalls === "number" ? info.render.drawCalls : info.render.calls;
-        const frames = typeof info.render.frameCalls === "number" ? Math.max(1, info.render.frameCalls) : 2;
+        const frames = rendered !== null && rendered > 0 ? rendered
+          : (typeof info.render.frameCalls === "number" ? Math.max(1, info.render.frameCalls) : 2);
         const calls = Math.round(perFrame / frames);
-        info.autoReset = wasAuto;
+        entry.renderedFrames = rendered;
         entry.drawCalls = calls;
         entry.geometries = info.memory ? info.memory.geometries : null;
         entry.textures = info.memory ? info.memory.textures : null;

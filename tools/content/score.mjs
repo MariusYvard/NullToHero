@@ -138,10 +138,12 @@ function rhythm(prose) {
     .filter(s => s.length >= 5);          // fragments shorter than this are list debris
 
   if (sentences.length < 10) {
-    // Below ten sentences the standard deviation is noise, so refuse to score rather than
-    // report a number the sample cannot support. 70 is neutral and does not move the
-    // composite in either direction.
-    return { score: 70, label: "insufficient-data", sentences: sentences.length,
+    // P4b. L'intention était bonne et écrite : refuser de noter plutôt que de rendre
+    // un nombre que l'échantillon ne porte pas. L'effet ne l'était pas : 70 n'est
+    // neutre que par rapport à lui-même, il était pondéré dans le composite, dans
+    // le drapeau `passed` et dans le code de sortie, donc une dimension non notée
+    // votait comme une dimension moyenne. Elle ne vote plus.
+    return { score: null, label: "insufficient-data", sentences: sentences.length,
       mean: null, stdev: null, monotoneWindows: 0,
       note: "Fewer than 10 prose sentences; rhythm not scored." };
   }
@@ -346,7 +348,7 @@ function structureBalance(body) {
   const denom = total - headings;
 
   if (denom <= 0) {
-    return { score: 70, proseRatio: null, findings,
+    return { score: null, proseRatio: null, findings,
       detail: { total, headings, lists, tables, note: "nothing but headings; not scored" } };
   }
   const proseRatio = (total - lists - tables - headings) / denom;
@@ -403,7 +405,7 @@ function readability(prose) {
   const sentences = prose.split(/[.!?]+(?:\s|$)/).map(s => s.trim()).filter(s => s.length >= 5);
   const w = words(prose);
   if (sentences.length < 3 || w.length < 30) {
-    return { score: 70, findings, detail: { note: "too short to score", flesch: null, grade: null } };
+    return { score: null, findings, detail: { note: "too short to score", flesch: null, grade: null } };
   }
   const wps = w.length / sentences.length;
   const spw = w.reduce((a, x) => a + syllables(x), 0) / w.length;
@@ -579,9 +581,19 @@ export function scoreDocument(raw, opts = {}) {
     readability: readability(prose),
   };
 
+  // P4b. Une dimension qui n'a pas pu être notée rend null et sort du composite,
+  // qui se renormalise sur le poids réellement noté. Sous la moitié du poids, il
+  // n'y a pas de composite : un nombre calculé sur moins de la moitié du barème
+  // note le document sur la partie qui a tenu et se tait sur celle qui n'a pas.
   const scores = {};
-  for (const [k, v] of Object.entries(dims)) scores[k] = Math.round(v.score);
-  const composite = Math.round(Object.entries(WEIGHTS).reduce((a, [k, w]) => a + w * scores[k], 0));
+  for (const [k, v] of Object.entries(dims)) scores[k] = v.score == null ? null : Math.round(v.score);
+  const scoredKeys = Object.keys(scores).filter(k => scores[k] != null);
+  const scoredWeight = scoredKeys.reduce((a, k) => a + WEIGHTS[k], 0);
+  const COMPOSITE_FLOOR = 0.5;
+  const composite = scoredWeight >= COMPOSITE_FLOOR
+    ? Math.round(scoredKeys.reduce((a, k) => a + WEIGHTS[k] * scores[k], 0) / scoredWeight)
+    : null;
+  const unscored = Object.keys(scores).filter(k => scores[k] == null);
 
   /* Impact ranks a fix by what fixing it is worth: the dimension's weight times the points
      it is currently leaving on the table. A perfect dimension contributes zero however many
@@ -596,14 +608,21 @@ export function scoreDocument(raw, opts = {}) {
   const priorityFixes = Object.entries(dims)
     .flatMap(([dimension, v]) => v.findings.map(f => ({
       location: f.location, dimension, issue: f.issue, fix: f.fix, severity: f.severity,
-      impact: r1(WEIGHTS[dimension] * (100 - scores[dimension])),
+      impact: scores[dimension] == null ? 0 : r1(WEIGHTS[dimension] * (100 - scores[dimension])),
     })))
     .sort((a, b) => b.impact - a.impact || (RANK[a.severity] ?? 3) - (RANK[b.severity] ?? 3))
     .slice(0, 5);
 
   const passMark = opts.min ?? 70;
   return {
-    scores, composite, passed: composite >= passMark, passMark,
+    scores, composite,
+    // `passed` vaut null quand il n'y a pas de composite : ni un succès ni un
+    // échec, un refus de trancher, et le code de sortie le distingue.
+    passed: composite == null ? null : composite >= passMark,
+    passMark,
+    unscored,
+    scoredWeight: r1(scoredWeight * 100) / 100,
+    compositeFloor: COMPOSITE_FLOOR,
     proseRatio: dims.structureBalance.proseRatio ?? null,
     rhythm: rhythmResult,
     priorityFixes,
@@ -620,7 +639,11 @@ function markdownReport(name, res) {
   const out = [];
   out.push(`# Editorial quality: ${name}`);
   out.push("");
-  out.push(`**${res.composite}/100** against a pass mark of ${res.passMark}: ${res.passed ? "PASS" : "BELOW THRESHOLD"}. ${res.words} words.`);
+  if (res.composite == null) {
+    out.push(`**No composite.** Only ${Math.round(res.scoredWeight * 100)}% of the weight could be scored (floor ${Math.round(res.compositeFloor * 100)}%); ${res.unscored.join(", ")} had too little to judge. ${res.words} words.`);
+  } else {
+    out.push(`**${res.composite}/100** against a pass mark of ${res.passMark}: ${res.passed ? "PASS" : "BELOW THRESHOLD"}. ${res.words} words.${res.unscored.length ? ` Not scored: ${res.unscored.join(", ")}.` : ""}`);
+  }
   out.push("");
   out.push("| Dimension | Weight | Score | |");
   out.push("|---|---|---|---|");
@@ -686,7 +709,10 @@ function main() {
 
   if (has("--markdown")) console.log(markdownReport(basename(file), res));
   else console.log(JSON.stringify(res, null, 2));
-  process.exit(res.passed ? 0 : 1);
+  // P4b. Trois codes, pas deux : 0 réussi, 1 échoué, 2 pas assez de matière pour
+  // trancher. Confondre le troisième avec l'un des deux autres est ce que ce
+  // fichier faisait en imputant 70.
+  process.exit(res.passed === null ? 2 : (res.passed ? 0 : 1));
 }
 
 // Only run the CLI when this file IS the command, so importing scoreDocument() from another

@@ -61,8 +61,8 @@ Commit to one aesthetic per surface. Mixing two reads as indecision.
 These hold regardless of the chosen aesthetic.
 
 - Easing vocabulary: enter with an ease-out curve (expo or quint) so motion decelerates into place; exit with ease-in; never `ease-in` on an entering element and never `ease-out` on a leaving one.
-- Exit is faster than enter: an exit runs at roughly 60 to 70% of the enter duration, because a leaving element should not hold attention.
-- Stagger a list or grid by 30 to 50ms per item. Less reads as simultaneous; more makes the user wait.
+- Exit is faster than enter: an exit runs at 75% of the enter duration (L-MOTION-6), because a leaving element should not hold attention.
+- Stagger a list or grid by 40 to 80ms per item (L-MOTION-5). Less reads as simultaneous; more makes the user wait.
 - Numbers that change in place (counters, prices, timers) use tabular figures (`font-variant-numeric: tabular-nums`) so the layout does not jitter as digits change.
 - Full-bleed and fixed surfaces respect the device safe area with `env(safe-area-inset-*)` so content clears notches and home indicators.
 - All of the above sit under the 300ms UI ceiling and freeze under `prefers-reduced-motion`.

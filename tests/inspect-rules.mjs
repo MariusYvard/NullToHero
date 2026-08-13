@@ -168,5 +168,53 @@ if (!failures) {
   ok(`${executable} of ${cov.size} executable`);
 }
 
+// ── P9. The guard checks reachability, not just existence ───────────────────
+// rule-coverage.csv declared rules 47 and 58 static-check, and tests counted them
+// in "N of M executable", while detect.mjs called runChecks without `js` and made
+// them structurally unable to fire. Existence was guarded; reachability was not.
+// A caller that drops an input a declared-executable check reads is now a build
+// failure, not something a reader has to notice.
+console.log("\n── P9: callers pass the inputs their checks read ──");
+{
+  const { readFileSync: rf, readdirSync: rd, statSync } = await import("node:fs");
+  const { join: j, relative } = await import("node:path");
+  // The inputs runChecks fans out to the static checks. A call site that omits
+  // one of these silences every check that reads it.
+  const REQUIRED = ["rawHtml", "css", "js"];
+  const walk = (dir, out = []) => {
+    for (const e of rd(dir, { withFileTypes: true })) {
+      const p = j(dir, e.name);
+      if (e.name === "node_modules" || e.name.startsWith(".")) continue;
+      if (e.isDirectory()) walk(p, out);
+      else if (/\.(mjs|js)$/.test(e.name)) out.push(p);
+    }
+    return out;
+  };
+  const files = [...walk(j(ROOT, "tools")), ...walk(j(ROOT, "skills"))]
+    .filter(f => !f.endsWith("checks.mjs") && !f.endsWith("check-review-numbers.mjs"));
+  let sites = 0, bad = [];
+  for (const f of files) {
+    const src = rf(f, "utf8");
+    // Each runChecks({...}) call, brace-matched so nested objects do not truncate it.
+    let i = 0;
+    while ((i = src.indexOf("runChecks({", i)) !== -1 ? src.indexOf("runChecks({", i) : -1, i !== -1) {
+      let depth = 0, k = i + "runChecks(".length, end = k;
+      for (; k < src.length; k++) {
+        if (src[k] === "{") depth++;
+        else if (src[k] === "}") { depth--; if (depth === 0) { end = k; break; } }
+      }
+      const call = src.slice(i, end + 1);
+      sites++;
+      const missing = REQUIRED.filter(key => !new RegExp(`\\b${key}\\s*[:,}]`).test(call));
+      if (missing.length) bad.push(`${relative(ROOT, f)}:${src.slice(0, i).split("\n").length} omits ${missing.join(", ")}`);
+      i = end + 1;
+    }
+  }
+  if (sites === 0) no("no runChecks call site found: the guard is looking in the wrong place");
+  else console.log(`  \x1b[32mPASS\x1b[0m  ${sites} runChecks call sites inspected`);
+  if (bad.length) no(`call sites dropping an input: ${bad.join(" | ")}`);
+  else console.log("  \x1b[32mPASS\x1b[0m  every call site passes rawHtml, css and js");
+}
+
 console.log(failures ? `\n\x1b[31m${failures} failing\x1b[0m\n` : "\n\x1b[32mAll detector checks passed.\x1b[0m\n");
 process.exit(failures ? 1 : 0);

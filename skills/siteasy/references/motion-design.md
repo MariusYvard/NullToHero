@@ -1,6 +1,6 @@
 ---
 name: motion-design
-description: "Exit animations are faster than entrances - use ~75% of enter duration."
+description: "Exit animations are faster than entrances - use ~75% of enter duration (L-MOTION-6)."
 version: 1.9.1
 ---
 

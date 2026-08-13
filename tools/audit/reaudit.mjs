@@ -19,6 +19,7 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { fetchTarget, warnClientRendered } from "./fetch.mjs";
+import { provenanceOf } from "./lib/checks.mjs";
 import { runChecks } from "./lib/checks.mjs";
 import { buildSiteAudit, inputHashes, DIMENSION_INPUTS } from "./lib/site-audit.mjs";
 
@@ -72,7 +73,8 @@ const savingPct = Math.round(100 * (1 - reRunAgents.length / allAgents.length));
 const checks = runChecks({
   rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null,
   robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null,
-  computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "",
+  computed: fetchResult.computed || null, headers: fetchResult.headers || null,
+  css: fetchResult.linkedCss || "", js: fetchResult.linkedJs || "", provenance: provenanceOf(fetchResult),
 });
 const fresh = buildSiteAudit({ fetchResult, checks, mode: "checks" });
 

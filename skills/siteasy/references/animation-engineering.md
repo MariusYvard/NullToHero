@@ -72,7 +72,7 @@ Canonical law: L-MOTION-1 (tools/data/laws.csv). Cite the identifier when quotin
 | Tooltips, small popovers | 125-200ms |
 | Dropdowns, selects | 150-250ms |
 | Modals, drawers | 200-500ms |
-| Exit animations | ~75% of enter duration |
+| Exit animations | ~75% of enter duration (L-MOTION-6) |
 
 **UI feedback animations (buttons, dropdowns, toggles, small reveals) must stay under 300ms; only large-surface choreography such as modals and drawers may use the 300-500ms end of the table.** A 180ms dropdown feels more responsive than a 400ms one. Faster-spinning spinners make loading *feel* faster even when load time is identical.
 
@@ -283,7 +283,7 @@ When reviewing motion in any UI:
 | Keyframes on rapidly-triggered element | Use CSS transitions instead |
 | Framer `x`/`y` props under load | Use `transform: "translateX()"` for GPU acceleration |
 | Same enter/exit speed | Exit at ~75% of enter duration |
-| All elements appear at once | Add stagger (30-80ms between items) |
+| All elements appear at once | Add stagger, see L-MOTION-5 |
 
 ## View Transitions API
 

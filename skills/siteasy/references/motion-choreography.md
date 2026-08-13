@@ -38,7 +38,7 @@ Raw values scattered through the code are how a signature erodes.
 ## Stagger rules
 
 Lists and grids animate with a stagger, each item offset slightly from the last, so the group resolves as a wave rather than a block.
-Keep the per-item delay small, on the order of 40 to 80ms, and cap the total: a long list must not take two seconds to finish appearing.
+Keep the per-item delay small, 40 to 80ms (L-MOTION-5), and cap the total: a long list must not take two seconds to finish appearing.
 Beyond roughly the first eight to ten items, stop staggering and reveal the remainder together, because a visitor is not watching item forty arrive.
 
 Stagger direction should match reading order, top to bottom and leading edge first, so the motion reinforces how the eye already moves rather than fighting it.

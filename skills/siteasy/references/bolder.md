@@ -89,7 +89,7 @@ Systematically increase impact across these dimensions:
 ### Motion & Animation
 
 Motion accents only: the motion doctrine itself (durations, easing, restraint, L-MOTION-1 and L-MOTION-2) belongs to [animate.md](animate.md) and [delight.md](delight.md); load them for anything beyond these amplification accents.
-- **Entrance choreography**: Staggered, dramatic page load animations with 50-100ms delays
+- **Entrance choreography**: staggered, dramatic page load animations, per-item delay from L-MOTION-5
 - **Scroll effects**: Parallax, reveal animations, scroll-triggered sequences
 - **Micro-interactions**: Satisfying hover effects, click feedback, state changes
 - **Transitions**: Smooth, noticeable transitions using ease-out-quart/quint/expo (not bounce or elastic, they cheapen the effect)

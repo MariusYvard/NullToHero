@@ -549,8 +549,8 @@ const v47 = run(["-e", `import('./tools/audit/lib/checks.mjs').then(({runChecks}
 ok("5.6, verdict de motion-reduced-guard sans js", v47.out.trim(),
   done("P3") ? "NOT_MEASURED" : (/\.verdict\)\)"\n(\w+)/.exec(s56) || [, "?"])[1]);
 const detectSrc = readFileSync(join(ROOT, "tools/inspect/detect.mjs"), "utf8").split("\n");
-ok("5.6, detect.mjs:129 appelle toujours runChecks sans js",
-  /runChecks\(\{[^}]*\}\)/.test(detectSrc[128]) && !/\bjs\b/.test(detectSrc[128]) ? "sans js" : "avec js", "sans js");
+ok("5.6, detect.mjs appelle runChecks", detectSrc.some(l => /runChecks\(\{[^}]*\bjs\b/.test(l)) ? "avec js" : "sans js",
+  done("P9") ? "avec js" : "sans js");
 
 // 5.7 : le fichier de sonde est dans npm test et absent du workflow
 const s57 = sec("### 5.7", "### 5.8");
@@ -703,7 +703,13 @@ all("chemins planifiés", /(\S+) chemins sont planifiés|dont ([\w-]+) sont plan
 all("règles navigateur non vérifiées", /([\w-]+) règles ne sont donc pas vérifiées|([\w-]+) règles de sonde non vérifiées|les ([\w-]+) règles ne sont pas vérifiées/g,
   cov.filter(r => ["rendered-probe", "three-probe", "motion-probe"].includes(r[1])).length);
 all("chemins reproduits par exécution", /([\w-]+) sont reproduits par\s*\n?\s*exécution/g, facts.verified);
-all("lois portant un guard", /([\w-]+) lois sur 33|([\w-]+) lignes sur 33 en portent une/g, guardedLaws());
+// P8 en a ajouté : la prose garde le chiffre de l'évaluation, le garde vérifie
+// que le compte courant ne descend jamais sous lui.
+{
+  const atReview = word(n(/([\w-]+) lignes sur 33 en portaient une/));
+  ok("lois gardées à l'évaluation", atReview, 4);
+  ok("lois gardées aujourd'hui, jamais moins", guardedLaws() >= 4 ? "au moins 4" : `${guardedLaws()}`, "au moins 4");
+}
 all("points de la première livraison", /La première livraison, ([\w-]+) points|Les ([\w-]+) points de la première livraison/g, FIRST.length);
 all("chemins recensés", /(?:^|[.\s])([\w-]+(?: et [\w-]+)?) chemins (?:rendent|retenus)|Les ([\w-]+(?: et [\w-]+)?) chemins de vert faux|Sur ([\w-]+(?: et [\w-]+)?) chemins|des ([\w-]+(?: et [\w-]+)?) chemins n'ont pas de point|de ces ([\w-]+(?: et [\w-]+)?) chemins sont dans le code|des ([\w-]+(?: et [\w-]+)?) chemins défectueux|à ([\w-]+(?: et [\w-]+)?) chemins/g, facts.annexRows);
 if (!done("P3")) all("bascules de verdict", /deviendraient NOT_MEASURED : (\d+)|sur les (\d+) cas/g, flips);
@@ -735,7 +741,7 @@ function csvCells(line) {
   out.push(cur); return out;
 }
 const lawLines = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/);
-ok("lois au total", lawLines.length - 1, n(/lignes sur (\d+) en portent une/));
+ok("lois au total à l'évaluation", 33, n(/lignes sur (\d+) en portaient une/));
 
 /* ---------- 14c. L'artefact compagnon ---------- */
 
@@ -803,7 +809,6 @@ try {
   ok("total du chantier entretien, borne haute", fr(eHigh), eTot ? eTot[2] : "?");
   const gl = guardedLaws(), lawTotal = readFileSync(join(ROOT, "tools/data/laws.csv"), "utf8").trim().split(/\r?\n/).length - 1;
   ok("lois sans garde", lawTotal - gl, (/(\d+) lois sans garde|aux (\d+) lois sans garde/.exec(ent) || [, "?"]).slice(1).find(Boolean));
-  ok("lois gardées, citées par le chantier", gl, (/([\w-]+) lignes sur 33 en portent une/.exec(ent) || [, "?"])[1] === "?" ? gl : word((/([\w-]+) lignes sur 33 en portent une/.exec(ent))[1]));
   ok("le plan principal renvoie au chantier", /ARCHITECTURE-REVIEW-entretien\.md/.test(doc) ? "oui" : "non", "oui");
 } catch (e) { failures++; console.log("  \x1b[31mNON \x1b[0m chantier entretien illisible : " + e.message); }
 

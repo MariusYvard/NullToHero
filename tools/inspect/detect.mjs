@@ -126,7 +126,12 @@ for (const [dir, group] of byDir) {
     const inlineJs = [...html.matchAll(/<script(?![^>]+\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]).join("\n");
     for (const f of runRules({ html, css, js: inlineJs })) results.push({ ...f, file: where });
     if (!h) continue;
-    for (const c of runChecks({ rawHtml: html, css })) {
+    // P9. `inlineJs` est calculé trois lignes plus haut et passé à runRules ; il
+    // était oublié ici, ce qui rendait les règles 47 et 58 structurellement
+    // incapables de se déclencher sur un scan local tout en restant déclarées
+    // exécutables. Le garde d'atteignabilité de tests/inspect-rules.mjs interdit
+    // maintenant qu'un appelant reparte sans ses entrées.
+    for (const c of runChecks({ rawHtml: html, css, js: inlineJs })) {
       if (c.method !== "static") continue;
       if (c.verdict !== "FAIL" && c.verdict !== "WARN") continue;
       // The registry id is attached where one exists, and the check keeps its own

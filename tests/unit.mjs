@@ -453,6 +453,43 @@ const noText = { advanced: true, durationMs: 4000, frames: [
 ok("two decorative boxes crossing are allowed to cross",
   evaluateSweep(noText).findings.filter(f => f.id === 86).length === 0);
 
+// ── P4b: the second scorer stops imputing 70 ────────────────────────────────
+// Three dimensions returned 70 when they could not score, and 70 was then
+// weighted into the composite, the passed flag and the exit code. The intent was
+// written down and right; the effect was a made-up vote from a dimension that
+// had nothing to say.
+console.log("\n── P4b: an unscorable dimension does not vote ──");
+{
+  const stmp = mkdtempSync(join(tmpdir(), "nth-score-"));
+  const SCORE = resolve("tools/content/score.mjs");
+  const runScore = (text) => {
+    const f = join(stmp, "d.md");
+    writeFileSync(f, text);
+    try { return { json: JSON.parse(execFileSync("node", [SCORE, f], { stdio: ["ignore", "pipe", "pipe"] }).toString()), code: 0 }; }
+    catch (e) { return { json: JSON.parse((e.stdout || "{}").toString() || "{}"), code: e.status ?? -1 }; }
+  };
+  const heads = runScore("# A\n\n## B\n\n### C\n");
+  ok("a headings-only document leaves dimensions unscored", heads.json.unscored?.length >= 2);
+  ok("an unscored dimension is null, not 70",
+    heads.json.unscored.every(k => heads.json.scores[k] === null));
+  ok("the composite renormalises on the weight that was scored",
+    heads.json.scoredWeight != null && heads.json.scoredWeight < 1);
+  // Le plancher de composite n'est pas atteignable aujourd'hui : seules deux des
+  // cinq dimensions savent refuser de noter, soit 30 % du poids, et le plancher
+  // est à 50 %. La branche existe et n'a pas de cas. C'est noté au plan (P4b) et
+  // ce test vérifie l'invariant plutôt que la branche : un composite, quand il
+  // existe, ne doit jamais être une moyenne où une dimension muette a voté.
+  const heads2 = runScore("# A\n\n## B\n");
+  const manual = Object.entries(heads2.json.weights)
+    .filter(([k]) => heads2.json.scores[k] != null)
+    .reduce((a2, [k, w]) => a2 + w * heads2.json.scores[k], 0) / heads2.json.scoredWeight;
+  ok("the composite is exactly the renormalised mean of what was scored",
+    Math.abs(Math.round(manual) - heads2.json.composite) <= 1);
+  ok("an unscored dimension carries zero impact in the fix ranking",
+    heads2.json.priorityFixes.every(f => heads2.json.scores[f.dimension] != null || f.impact === 0));
+  rmSync(stmp, { recursive: true, force: true });
+}
+
 // ── P3b: the invariant that makes the census self-carrying ──────────────────
 // P3 patches the paths this census found. This test protects the twenty-seventh:
 // for every check runChecks emits, an input whose provenance is "unfetchable" or

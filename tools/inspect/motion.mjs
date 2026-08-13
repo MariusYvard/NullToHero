@@ -230,7 +230,12 @@ export async function sweep(opts) {
     return { advanced: false, driven: 0, undrivable, durationMs: 0, frames: [],
       truncated: false, notes: [...notes, "no drivable animation on the page, so the sweep measured nothing"] };
   }
+  // P16. Le plafond était silencieux : une animation déclarée à 40 s recevait
+  // "rien ne bouge entre 2609 ms et 20000 ms d'une séquence de 20000 ms" alors
+  // que la seconde moitié n'avait pas été parcourue.
+  const declaredMs = durationMs;
   durationMs = Math.min(durationMs, 20000);   // a 40s marquee is not worth 24 samples
+  const clamped = declaredMs > durationMs;
 
   const paused = [];
   for (const { a } of drivable) { try { a.pause(); paused.push(a); } catch { /* already gone */ } }
@@ -252,8 +257,11 @@ export async function sweep(opts) {
   if (!advanced) {
     notes.push("every sample came back identical, so the seek never moved the page and no verdict from this sweep is reliable");
   }
+  if (clamped) {
+    notes.push(`the longest animation declares ${Math.round(declaredMs)}ms and the sweep samples the first ${Math.round(durationMs)}ms, so anything past that window was not looked at`);
+  }
   return { advanced, driven: drivable.length, undrivable, durationMs: Math.round(durationMs),
-    frames, truncated, notes };
+    declaredMs: Math.round(declaredMs), clamped, frames, truncated, notes };
 }
 
 /** The sweep as source, for Claude in Chrome. Install the sampler first. */
@@ -269,10 +277,16 @@ export function sweepSource(opts = {}) {
  * @param {{stallMs?: number, minOverlapArea?: number}} opts
  */
 export function evaluateSweep(result, opts = {}) {
+  // P16. `truncated` était levé au-delà de 1500 éléments et lu par personne, et
+  // le plafond de 20 s n'apparaissait nulle part : un verdict propre sortait sur
+  // un sous-ensemble non annoncé. Les deux remontent maintenant dans le verdict.
+  const caveats = [];
+  if (result && result.truncated) caveats.push("the page has more animated elements than the sampler cap, so this verdict covers the first 1500 in document order only");
+  if (result && result.clamped) caveats.push(`the sweep sampled the first ${result.durationMs}ms of a ${result.declaredMs}ms sequence`);
   const { stallMs = 900, minOverlapArea = 400 } = opts;
   if (!result || !result.advanced) {
     return { findings: [], refused: true,
-      reason: (result && result.notes && result.notes[0]) || "the sweep did not advance the page" };
+      reason: (result && result.notes && result.notes[0]) || "the sweep did not advance the page", caveats };
   }
   const frames = result.frames || [];
   const findings = [];
@@ -332,7 +346,7 @@ export function evaluateSweep(result, opts = {}) {
     }
   }
 
-  return { findings: findings.slice(0, 6), refused: false, reason: null };
+  return { findings: findings.slice(0, 6), refused: false, reason: null, caveats };
 }
 
 /** Rule ids this probe decides. Read by the coverage guard. */
@@ -390,6 +404,8 @@ async function main() {
       console.log(`  REFUSED  ${verdict.reason}\n`);
       process.exit(2);
     }
+    for (const c of verdict.caveats || []) console.log(`  CAVEAT  ${c}`);
+    if (verdict.caveats && verdict.caveats.length) console.log("");
     if (!verdict.findings.length) console.log(`  No stall and no transient collision across the sampled window.\n`);
     else { for (const f of verdict.findings) console.log(`  [${f.id}] ${f.evidence}`); console.log(""); }
     process.exit(verdict.findings.length ? 1 : 0);
@@ -403,8 +419,9 @@ async function main() {
   await browser.close();
 
   if (asJson) {
-    console.log(JSON.stringify(result, null, 2));
-    process.exit(!result.emulated ? 2 : (result.findings.length ? 1 : 0));
+    console.log(JSON.stringify({ ...result, refused: !result.emulated || (result.sampled === 0 && result.threeFrames === null) }, null, 2));
+    const refused = !result.emulated || (result.sampled === 0 && result.threeFrames === null);
+    process.exit(refused ? 2 : (result.findings.length ? 1 : 0));
   }
   console.log(`\nNullToHero reduced-motion probe — ${target}\n`);
   if (!result.emulated) {
@@ -415,6 +432,15 @@ async function main() {
   if (result.threeFrames !== null) console.log(`  three.js advanced ${result.threeFrames} frames during the sample`);
   for (const n of result.notes) console.log(`  NOTE  ${n}`);
   console.log("");
+  // P16. Zéro animation échantillonnée était noté correctement puis suivi de "la
+  // page respecte la préférence". La note et le verdict se contredisaient dans la
+  // même sortie et c'est le verdict qui était lu. rendered.md:105 écrit la règle
+  // que cette ligne violait : une page où rien n'anime ne dédouane rien.
+  if (result.sampled === 0 && result.threeFrames === null) {
+    console.log(`  REFUSED  nothing was animating when the sample started, so this run cleared nothing.`);
+    console.log(`           Scroll-triggered reveals and delayed entrances are the common case, not the edge one.\n`);
+    process.exit(2);
+  }
   if (!result.findings.length) {
     console.log(`  The page honours the preference: nothing advanced.\n`);
   } else {

@@ -49,6 +49,13 @@ const fails = [];
 const warns = [];
 const passes = [];
 const recordPass = (m) => passes.push(m);
+// P11. Zéro était à la fois la valeur sentinelle et le meilleur score possible :
+// des vitals en échec donnaient LCP, CLS et INP à zéro et trois PASS, zéro calque
+// trouvé donnait "calques neutralisés", zéro image pesée donnait "toutes les
+// images sous 200 Ko". Le motif du correctif est celui de rendered.mjs:101-109 et
+// :400 : compter les candidats et refuser de conclure sur un ensemble vide.
+const unmeasured = [];
+const recordUnmeasured = (m) => unmeasured.push(m);
 const recordWarn = (m) => warns.push(m);
 const recordFail = (m) => fails.push(m);
 
@@ -113,7 +120,8 @@ async function runProfile({ deviceName, reducedMotion }) {
 
   // 2. Performance vitals
   const vitals = await page.evaluate(() => new Promise((resolve) => {
-    const out = { lcp: 0, cls: 0, inp: 0 };
+    // clsObserved distingue "aucun décalage" de "l'observateur n'a rien vu".
+    const out = { lcp: 0, cls: 0, inp: 0, clsObserved: false };
     try {
       new PerformanceObserver((list) => {
         const entries = list.getEntries();
@@ -126,6 +134,7 @@ async function runProfile({ deviceName, reducedMotion }) {
           if (!e.hadRecentInput) cls += e.value;
         }
         out.cls = cls;
+        out.clsObserved = true;
       }).observe({ type: 'layout-shift', buffered: true });
 
       new PerformanceObserver((list) => {
@@ -181,18 +190,38 @@ const desktop = await runProfile({ reducedMotion: false });
 // Pass 2: mobile, reduced motion
 const mobile = await runProfile({ deviceName: 'Pixel 5', reducedMotion: true });
 
-// Evaluate desktop
-if (desktop.vitals.lcp > THRESHOLDS.lcpMs) recordFail(`LCP ${desktop.vitals.lcp.toFixed(0)}ms exceeds ${THRESHOLDS.lcpMs}ms`);
-else recordPass(`LCP ${desktop.vitals.lcp.toFixed(0)}ms`);
+// Evaluate desktop. A vital the browser never reported stays at its sentinel of
+// zero, which reads as the best possible value. Zero is not a measurement.
+const vital = (name, value, judge) => {
+  if (value == null || !Number.isFinite(value) || value === 0) {
+    recordUnmeasured(`${name} was not reported by the browser during the run, so it was not judged. Its silence is not a pass.`);
+    return;
+  }
+  judge(value);
+};
+vital('LCP', desktop.vitals.lcp, (v) => v > THRESHOLDS.lcpMs
+  ? recordFail(`LCP ${v.toFixed(0)}ms exceeds ${THRESHOLDS.lcpMs}ms`)
+  : recordPass(`LCP ${v.toFixed(0)}ms`));
+// CLS is the one vital whose zero is a real, good measurement: a page that never
+// shifted genuinely scores 0. It is judged on whether the observer ran at all.
+if (desktop.vitals.clsObserved) {
+  desktop.vitals.cls > THRESHOLDS.cls
+    ? recordFail(`CLS ${desktop.vitals.cls.toFixed(3)} exceeds ${THRESHOLDS.cls}`)
+    : recordPass(`CLS ${desktop.vitals.cls.toFixed(3)}`);
+} else {
+  recordUnmeasured('CLS: the layout-shift observer never fired, so nothing was measured. Its silence is not a pass.');
+}
+vital('INP', desktop.vitals.inp, (v) => v > THRESHOLDS.inpMs
+  ? recordWarn(`INP ${v.toFixed(0)}ms exceeds ${THRESHOLDS.inpMs}ms (warning, requires real interaction)`)
+  : recordPass(`INP ${v.toFixed(0)}ms`));
 
-if (desktop.vitals.cls > THRESHOLDS.cls) recordFail(`CLS ${desktop.vitals.cls.toFixed(3)} exceeds ${THRESHOLDS.cls}`);
-else recordPass(`CLS ${desktop.vitals.cls.toFixed(3)}`);
-
-if (desktop.vitals.inp > THRESHOLDS.inpMs) recordWarn(`INP ${desktop.vitals.inp.toFixed(0)}ms exceeds ${THRESHOLDS.inpMs}ms (warning, requires real interaction)`);
-else recordPass(`INP ${desktop.vitals.inp.toFixed(0)}ms`);
-
-if (desktop.fps.min < THRESHOLDS.fpsMin) recordFail(`Scroll FPS dropped to ${desktop.fps.min.toFixed(0)} (min threshold ${THRESHOLDS.fpsMin})`);
-else recordPass(`Scroll FPS min ${desktop.fps.min.toFixed(0)} avg ${desktop.fps.avg.toFixed(0)}`);
+if (!Number.isFinite(desktop.fps.min)) {
+  recordUnmeasured('Scroll FPS: no frame samples were collected, so the scroll was not judged.');
+} else if (desktop.fps.min < THRESHOLDS.fpsMin) {
+  recordFail(`Scroll FPS dropped to ${desktop.fps.min.toFixed(0)} (min threshold ${THRESHOLDS.fpsMin})`);
+} else {
+  recordPass(`Scroll FPS min ${desktop.fps.min.toFixed(0)} avg ${desktop.fps.avg.toFixed(0)}`);
+}
 
 desktop.staticReport.violations.forEach(recordFail);
 
@@ -206,18 +235,25 @@ if (desktop.staticReport.scrollDriven) recordPass('Native scroll-driven animatio
 
 // Image weights
 let heavyImages = 0;
+const imageSizesSeen = desktop.imageSizes.size;
 desktop.imageSizes.forEach((info, url) => {
   if (info.bytes > THRESHOLDS.bytesPerImage) {
     heavyImages++;
     recordWarn(`Heavy image: ${url} = ${(info.bytes / 1024).toFixed(0)} KB`);
   }
 });
-if (heavyImages === 0) recordPass('All images under 200 KB');
+if (imageSizesSeen === 0) recordUnmeasured('No image was weighed: none was found, or none could be fetched. "All images under 200 KB" would be a verdict on an empty set.');
+else if (heavyImages === 0) recordPass(`All ${imageSizesSeen} images weighed are under 200 KB`);
 
 // Mobile + reduced motion: layers should be stationary
-const mobileTransformsActive = mobile.staticReport.layers.some((l) => l.willChange === 'transform');
-if (mobileTransformsActive) recordWarn('Parallax layers retain will-change: transform under reduced-motion on mobile');
-else recordPass('Layers neutralized under reduced-motion on mobile');
+const mobileLayers = mobile.staticReport.layers || [];
+if (mobileLayers.length === 0) {
+  recordUnmeasured('No parallax layer was found on the page, so "layers neutralized under reduced-motion" would be a verdict on an empty set. The detector matches a naming convention; a page that parallaxes by other means reads as a page with none.');
+} else {
+  const mobileTransformsActive = mobileLayers.some((l) => l.willChange === 'transform');
+  if (mobileTransformsActive) recordWarn('Parallax layers retain will-change: transform under reduced-motion on mobile');
+  else recordPass(`${mobileLayers.length} parallax layers neutralized under reduced-motion on mobile`);
+}
 
 // Report
 const line = (s, prefix) => `  ${prefix} ${s}`;
@@ -231,7 +267,16 @@ console.log(`\nWARN (${warns.length})`);
 warns.forEach((w) => console.log(line(w, '!  ')));
 console.log(`\nFAIL (${fails.length})`);
 fails.forEach((f) => console.log(line(f, 'X  ')));
+// P11. Ce que le balayage n'a pas mesuré est imprimé, compté, et porté dans le
+// code de sortie. Un rapport qui ne montre que ses PASS laisse croire qu'il a tout
+// regardé, ce qui est la défaillance que ce script produisait.
+console.log(`\nNOT MEASURED (${unmeasured.length})`);
+unmeasured.forEach((u) => console.log(line(u, '?  ')));
 
 console.log('\n────────────────────────────────────────');
-console.log(`Score: ${passes.length} pass · ${warns.length} warn · ${fails.length} fail`);
+console.log(`Score: ${passes.length} pass · ${warns.length} warn · ${fails.length} fail · ${unmeasured.length} not measured`);
+if (passes.length === 0 && unmeasured.length > 0) {
+  console.log('Nothing on this page was successfully judged. Exit 2: the run measured nothing.');
+  process.exit(2);
+}
 process.exit(fails.length === 0 ? 0 : 1);

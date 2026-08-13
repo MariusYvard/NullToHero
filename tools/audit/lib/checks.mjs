@@ -1768,6 +1768,23 @@ function checkScrubEasingLinear(model) {
     detail: `${scrubbed} scroll-driven animation(s), all declared linear.` });
 }
 
+// P3, cote appelant. fetch.mjs sait ce qu'il a demandé et ce qu'il a obtenu :
+// `assets.skipped` porte chaque ressource refusée avec son motif (cross-origin,
+// plafond de taille, plafond de nombre). Une ressource sautée veut dire que la
+// page en a et qu'on ne l'a pas, ce qu'aucune chaîne vide ne peut dire.
+export function provenanceOf(fetchResult) {
+  if (!fetchResult) return {};
+  const skipped = (fetchResult.assets && fetchResult.assets.skipped) || [];
+  const skippedOf = (kind) => skipped.some(x => (x.kind || "") === kind || new RegExp(`\\.${kind === "js" ? "m?js" : "css"}(\\?|$)`, "i").test(x.href || ""));
+  const has = (v) => typeof v === "string" && v.trim().length > 0;
+  const out = {};
+  if (skippedOf("js")) out.js = UNFETCHABLE;
+  else if (has(fetchResult.linkedJs)) out.js = MEASURED;
+  if (skippedOf("css")) out.css = UNFETCHABLE;
+  else if (has(fetchResult.linkedCss)) out.css = MEASURED;
+  return out;   // ce qui n'est pas décidé ici retombe sur la dérivation du document
+}
+
 // La dérivation par défaut, quand l'appelant ne déclare rien. Elle lit le
 // document plutôt que la chaîne : c'est le seul endroit où absent et non
 // récupéré se distinguent sans information extérieure.

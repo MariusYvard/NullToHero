@@ -73,7 +73,7 @@ cette liste en déclarait la moitié :
   les mesures du §6.4 ;
 - l'existence de chacun des 213 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 124 portent un numéro de ligne
-  dans le document (100 couples distincts), la borne
+  dans le document (99 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
   fragment de code entre accents graves, sa présence dans les douze lignes autour
   (cinq fragments aujourd'hui, et le garde échoue si ce nombre tombe à zéro) ; ce
@@ -116,13 +116,13 @@ qui échoue quand l'affirmation devient fausse.
 Elle est appliquée à trois endroits, et à ces trois endroits le résultat est
 solide, à trois réserves établies plus loin : le garde de la première ligne vérifie
 l'existence et non l'atteignabilité (5.6), la seconde moitié de la deuxième ligne ne
-vaut que pour 4 lois sur 33 (5.11), et le contrat de la troisième ne tourne jamais
+vaut que pour 4 lois sur 33 au moment de l'évaluation (5.11), et le contrat de la troisième ne tourne jamais
 en intégration continue (5.7).
 
 | Affirmation | Ce qui la tient | Ce qui casse si elle devient fausse |
 |---|---|---|
 | "cette règle s'exécute ici" | `rule-coverage.csv` plus le garde de `tests/inspect-rules.mjs` | le build, avec le nom de la règle et l'écart |
-| "ce seuil vaut N" | `laws.csv` plus le contrôle 37 de `validate.js` | le build, si la loi cesse d'être citée ; et si un fichier réénonce le nombre, mais pour 4 lois sur 33 seulement |
+| "ce seuil vaut N" | `laws.csv` plus le contrôle 37 de `validate.js` | le build, si la loi cesse d'être citée ; et si un fichier réénonce le nombre, mais pour 4 lois sur 33 seulement à l'évaluation, 6 sur 35 après P8 |
 | "cette règle détecte ce défaut" | deux fixtures par règle, dans les deux sens, plus le contrôle de contamination croisée | le build, si la règle devient muette ou bruyante |
 
 Partout ailleurs la même affirmation existe sans rien pour la tenir. Ce document
@@ -631,8 +631,9 @@ Le chemin par page, sept cent cinquante lignes plus bas, fait le contrôle
 
 ### 5.6 La couverture déclarée n'est pas la couverture atteinte
 
-`tools/inspect/detect.mjs:129` appelle `runChecks({ rawHtml: html, css })` sans
-passer `js`, qui vaut alors `""` par défaut (`checks.mjs:1743`). Le JS en ligne
+`tools/inspect/detect.mjs:129` appelait `runChecks` sans lui passer `js`, qui
+valait alors la chaîne vide par défaut. La ligne est corrigée depuis P9 ; ce qui
+suit décrit l'état à l'évaluation. Le JS en ligne
 existe pourtant : il est extrait à `:126` sous le nom `inlineJs` et passé à
 `runRules` à la ligne suivante. Il est disponible, il n'est pas transmis.
 
@@ -901,9 +902,11 @@ l'échantillon est vide.
 Le contrôle 37 garantit qu'une loi est citée. Il garantit aussi qu'aucun fichier ne
 réénonce son seuil sans citer son identifiant, mais seulement là où la ligne porte
 une expression régulière dans sa colonne `guard`, `tests/validate.js:1412` faisant
-`if (!law.guard) continue;`. Quatre lignes sur 33 en portent une (`L-PROG-1`,
-`L-PROG-2`, `L-WORD-1`, `L-INDEXNOW-1`). Pour les 29 autres, la réénonciation n'est
-pas détectée : la promesse du tableau de la section 1 vaut au huitième. C'est le
+`if (!law.guard) continue;`. Quatre lignes sur 33 en portaient une au moment de
+l'évaluation (`L-PROG-1`, `L-PROG-2`, `L-WORD-1`, `L-INDEXNOW-1`), et pour les 29
+autres la réénonciation n'était pas détectée : la promesse du tableau de la
+section 1 valait au huitième. P8 en a ajouté deux (L-MOTION-5, L-MOTION-6) et
+E2 est le point qui traite les restantes. C'est le
 meilleur exemple existant du défaut décrit en 2.2, et il est dans le mécanisme censé
 le corriger.
 
@@ -1311,6 +1314,11 @@ avec la commande qui le montrait, et c'est la trace qu'il faut garder.
 | P3 | 3.8.0 | les cinq contrôles rendent NOT_MEASURED sur une entrée non récupérée (5.4, 5.6) |
 | P4 | 3.8.0 | un score déduit de rien vaut `null`, la couverture voyage avec (5.3) |
 | P3b | 3.8.0 | `tests/unit.mjs` échoue si un contrôle rend PASS sur une entrée non mesurée |
+| P8 | 3.8.0 | stagger et ratio de sortie promus en lois gardées (L-MOTION-5, L-MOTION-6) |
+| P9 | 3.8.0 | `detect.mjs:129` passe `js`, et un appelant qui laisse tomber une entrée fait échouer le build |
+| P11 | 3.8.0 | le balayage parallax imprime ce qu'il n'a pas mesuré et sort 2 s'il n'a rien jugé |
+| P16 | 3.8.0 | les sondes refusent sur un échantillon vide, la troncature et le plafond remontent |
+| P4b | 3.8.0 | une dimension non notable rend `null` et sort du composite, qui se renormalise |
 
 ### 6.4 Ce que ce plan va casser, mesuré
 
