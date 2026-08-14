@@ -9,7 +9,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const version = JSON.parse(
   readFileSync(join(root, ".claude-plugin", "plugin.json"), "utf8")
 ).version;
-const svgPath = join(root, "docs", "overview.svg");
+// docs/ stays at the repository root, one level above the plugin.
+const svgPath = join(root, "..", "docs", "overview.svg");
 const svg = readFileSync(svgPath, "utf8");
 const next = svg.replace(/>v\d+\.\d+\.\d+</, `>v${version}<`);
 

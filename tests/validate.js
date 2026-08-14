@@ -51,9 +51,15 @@ const path   = require("path");
 const crypto = require("crypto");
 
 const ROOT       = path.resolve(__dirname, "..");
-const SEO_SKILL  = path.join(ROOT, "skills", "seo", "SKILL.md");
-const SEO_REFS   = path.join(ROOT, "skills", "seo", "references");
-const SEO_AGENTS = path.join(ROOT, "agents");
+// The repository is the marketplace; the plugin lives in one subfolder so that
+// Claude Code sees a versioned plugin source it can update. Paths written
+// plugin-relative (skills/..., agents/..., assets/...) resolve under PLUG;
+// tooling, docs and the marketplace manifest stay at ROOT.
+const PLUG       = path.join(ROOT, "null-to-hero");
+const anyPath    = (rel) => fs.existsSync(path.join(PLUG, rel)) ? path.join(PLUG, rel) : path.join(ROOT, rel);
+const SEO_SKILL  = path.join(PLUG, "skills", "seo", "SKILL.md");
+const SEO_REFS   = path.join(PLUG, "skills", "seo", "references");
+const SEO_AGENTS = path.join(PLUG, "agents");
 
 let errors   = 0;
 let warnings = 0;
@@ -323,7 +329,7 @@ if (!fs.existsSync(SEO_AGENTS)) {
 section("6. File integrity (minimum line counts — all skills)");
 
 Object.entries(FILE_INTEGRITY).forEach(([relPath, { minLines }]) => {
-  const absPath = path.join(ROOT, relPath);
+  const absPath = path.join(PLUG, relPath);
   if (!fs.existsSync(absPath)) {
     // P14. Ce contrôle dégradait un fichier absent en avertissement, et un lot
     // d'avertissements sort 0. Le contrôle 6 se taisait donc là où il devait
@@ -410,8 +416,8 @@ section("8b. LICENSE canonical Apache-2.0 body");
 
 section("9. siteasy SKILL.md and references");
 
-const SITEASY_SKILL = path.join(ROOT, "skills", "siteasy", "SKILL.md");
-const SITEASY_REFS  = path.join(ROOT, "skills", "siteasy", "references");
+const SITEASY_SKILL = path.join(PLUG, "skills", "siteasy", "SKILL.md");
+const SITEASY_REFS  = path.join(PLUG, "skills", "siteasy", "references");
 
 const siteasySKILL = readFile(SITEASY_SKILL);
 if (!siteasySKILL) {
@@ -475,8 +481,8 @@ if (siteasyCmdCount >= siteasyCmdMinimum) {
 
 section("11. inspect SKILL.md and references");
 
-const INSPECT_SKILL = path.join(ROOT, "skills", "inspect", "SKILL.md");
-const INSPECT_REFS  = path.join(ROOT, "skills", "inspect", "references");
+const INSPECT_SKILL = path.join(PLUG, "skills", "inspect", "SKILL.md");
+const INSPECT_REFS  = path.join(PLUG, "skills", "inspect", "references");
 
 const inspectSKILL = readFile(INSPECT_SKILL);
 if (!inspectSKILL) {
@@ -507,8 +513,8 @@ if (!fs.existsSync(INSPECT_REFS)) {
 
 section("11b. audit SKILL.md and references");
 
-const AUDIT_SKILL = path.join(ROOT, "skills", "audit", "SKILL.md");
-const AUDIT_REFS  = path.join(ROOT, "skills", "audit", "references");
+const AUDIT_SKILL = path.join(PLUG, "skills", "audit", "SKILL.md");
+const AUDIT_REFS  = path.join(PLUG, "skills", "audit", "references");
 
 const auditSKILL = readFile(AUDIT_SKILL);
 if (!auditSKILL) {
@@ -547,7 +553,7 @@ section("12. Version consistency (plugin.json / marketplace.json / SKILL.md)");
 
 const versionSources = {};
 
-const pluginJsonContent = readFile(path.join(ROOT, ".claude-plugin", "plugin.json"));
+const pluginJsonContent = readFile(path.join(PLUG, ".claude-plugin", "plugin.json"));
 if (pluginJsonContent) {
   try {
     const pj = JSON.parse(pluginJsonContent);
@@ -569,14 +575,20 @@ const marketplaceJsonContent = readFile(path.join(ROOT, ".claude-plugin", "marke
 if (marketplaceJsonContent) {
   try {
     const mj = JSON.parse(marketplaceJsonContent);
-    const v = mj.plugins?.[0]?.version || null;
-    versionSources[".claude-plugin/marketplace.json"] = v;
-    if (!v) fail("marketplace.json: missing plugins[0].version");
+    const entry = (mj.plugins && mj.plugins[0]) || {};
+    // The version lives in plugin.json and nowhere else. A second copy here
+    // drifted silently between clones; Claude Code reads the manifest anyway.
+    if (entry.version) fail("marketplace.json: plugins[0].version must not exist — plugin.json is the only version source");
+    else pass("marketplace.json declares no version (plugin.json is the single source)");
+    if (entry.name !== "null-to-hero") fail(`marketplace.json: plugins[0].name is "${entry.name}", expected "null-to-hero"`);
+    else pass('marketplace.json: plugins[0].name is "null-to-hero"');
+    if (entry.source !== "./null-to-hero") fail(`marketplace.json: plugins[0].source is "${entry.source}", expected "./null-to-hero"`);
+    else pass("marketplace.json: plugins[0].source points at the plugin subfolder");
   } catch { fail("marketplace.json: invalid JSON"); }
 } else { fail(".claude-plugin/marketplace.json: not found"); }
 
 ["seo", "siteasy", "inspect", "audit"].forEach(skill => {
-  const content = readFile(path.join(ROOT, "skills", skill, "SKILL.md"));
+  const content = readFile(path.join(PLUG, "skills", skill, "SKILL.md"));
   if (content) {
     const fm = parseFrontmatter(content);
     versionSources[`skills/${skill}/SKILL.md`] = fm?.version || null;
@@ -677,7 +689,7 @@ function scanDir(dir, root) {
   }
 }
 
-scanDir(path.join(ROOT, "tools"), ROOT);
+scanDir(path.join(PLUG, "tools"), PLUG);
 pass("Large-file scan complete");
 
 // ─── Check 14: no stale /impeccable command references ────────────────────────
@@ -694,14 +706,14 @@ function walkMd(dir, acc) {
   return acc;
 }
 
-const SKILLS_DIR = path.join(ROOT, "skills");
+const SKILLS_DIR = path.join(PLUG, "skills");
 const allSkillMd = walkMd(SKILLS_DIR, []);
 let impeccableHits = 0;
 allSkillMd.forEach(f => {
   const content = readFile(f) || "";
   content.split("\n").forEach((line, i) => {
     if (/\/impeccable\b/.test(line)) {
-      const rel = f.slice(ROOT.length + 1).split("\\").join("/");
+      const rel = f.slice(PLUG.length + 1).split("\\").join("/");
       fail(`${rel}:${i + 1}: stale /impeccable command reference — use /siteasy`);
       impeccableHits++;
     }
@@ -725,14 +737,14 @@ allSkillMd.forEach(f => {
     // resolve plugin-root-relative paths only (skip bare names / node_modules tools)
     if (!rel.includes("/")) continue;
     if (rel.startsWith(".claude/")) {
-      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+      const relFile = f.slice(PLUG.length + 1).split("\\").join("/");
       fail(`${relFile}: script path "${rel}" assumes external .claude/ layout — use \${CLAUDE_PLUGIN_ROOT}`);
       missingScripts++;
       continue;
     }
     scriptRefs++;
-    if (!fs.existsSync(path.join(ROOT, rel))) {
-      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+    if (!fs.existsSync(anyPath(rel))) {
+      const relFile = f.slice(PLUG.length + 1).split("\\").join("/");
       fail(`${relFile}: referenced script not found: ${rel}`);
       missingScripts++;
     }
@@ -783,12 +795,13 @@ allSkillMd.forEach(f => {
     const candidates = [
       path.join(dir, ref),                 // relative to the doc itself
       path.join(dir, path.basename(ref)),  // same dir, by basename
-      path.join(ROOT, "skills", ref),      // skill-qualified, e.g. siteasy/references/x.md
-      path.join(ROOT, "skills", "seo", ref),
+      path.join(PLUG, "skills", ref),      // skill-qualified, e.g. siteasy/references/x.md
+      path.join(PLUG, "skills", "seo", ref),
+      path.join(PLUG, ref),                // plugin-root relative
       path.join(ROOT, ref),                // repo-root relative
     ];
     if (!candidates.some(c => fs.existsSync(c))) {
-      const relFile = f.slice(ROOT.length + 1).split("\\").join("/");
+      const relFile = f.slice(PLUG.length + 1).split("\\").join("/");
       fail(`${relFile}: in-doc reference not found: ${ref}`);
       deadDocRefs++;
     }
@@ -812,7 +825,7 @@ function countRefDocs(dir) {
   }
   return n;
 }
-const SKILLS_ROOT = path.join(ROOT, "skills");
+const SKILLS_ROOT = path.join(PLUG, "skills");
 const actualRefDocs = countRefDocs(SKILLS_ROOT);
 const actualSkills = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true })
   .filter(d => d.isDirectory() && fs.existsSync(path.join(SKILLS_ROOT, d.name, "SKILL.md")))
@@ -887,8 +900,8 @@ section("19. reference-index.json matches references on disk");
     return out;
   };
   const entries = [];
-  for (const file of walk(path.join(ROOT, "skills"))) {
-    const rel = file.slice(ROOT.length + 1).split("\\").join("/");
+  for (const file of walk(path.join(PLUG, "skills"))) {
+    const rel = file.slice(PLUG.length + 1).split("\\").join("/");
     const skill = rel.split("/")[1];
     const text = fs.readFileSync(file, "utf8");
     const title = firstHeading(text);
@@ -896,7 +909,7 @@ section("19. reference-index.json matches references on disk");
   }
   entries.sort((a, b) => a.path.localeCompare(b.path));
   const expected = JSON.stringify(entries, null, 2) + "\n";
-  const indexPath = path.join(ROOT, "tools", "reference-index.json");
+  const indexPath = path.join(PLUG, "tools", "reference-index.json");
   const committed = fs.existsSync(indexPath) ? fs.readFileSync(indexPath, "utf8") : null;
   if (committed === null) fail("tools/reference-index.json missing — run `node tools/build-index.mjs`");
   else if (committed === expected) pass(`reference-index.json is current (${entries.length} entries)`);
@@ -926,7 +939,7 @@ section("20. No stale FAQ 'restricted to gov/health' claims in SEO references");
       if (!/FAQ/i.test(line)) return;
       faqLinesScanned++;
       if (RESTRICT_RE.test(line) && !/previously/i.test(line) && !/removed/i.test(line)) {
-        const rel = f.slice(ROOT.length + 1).split("\\").join("/");
+        const rel = f.slice(PLUG.length + 1).split("\\").join("/");
         fail(`${rel}:${i + 1}: stale present-tense FAQ gov/health restriction — FAQ rich results were removed for all sites May 7, 2026 (see schema.md)`);
         staleFaq++;
       }
@@ -962,8 +975,8 @@ section("21. CSV column integrity (header vs rows)");
     return acc;
   }
   let badCsv = 0, csvScanned = 0;
-  walkCsv(path.join(ROOT, "tools"), []).forEach(f => {
-    const rel = f.slice(ROOT.length + 1).split(path.sep).join("/");
+  walkCsv(path.join(PLUG, "tools"), []).forEach(f => {
+    const rel = f.slice(PLUG.length + 1).split(path.sep).join("/");
     if (CSV_EXEMPT.has(rel)) return;
     const lines = (readFile(f) || "").split("\n").filter(l => l.length > 0);
     if (lines.length < 2) return;
@@ -1028,8 +1041,8 @@ section("23. Sub-agents carry the Trust boundary block");
 
 section("24. /audit verify consensus mode is wired");
 {
-  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
-  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
+  const auditSkill = readFile(path.join(PLUG, "skills", "audit", "SKILL.md")) || "";
+  const full = readFile(path.join(PLUG, "skills", "audit", "references", "full.md")) || "";
   const cmds = extractCommandRefs(auditSkill);
   if (cmds.verify) pass("audit/SKILL.md declares the 'verify' command");
   else fail("audit/SKILL.md: 'verify' command row missing from the Commands table");
@@ -1091,7 +1104,7 @@ section("26. Agent scoring rubric is deterministic");
 
 section("27. Orchestrator severity cap is rule-based");
 {
-  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
+  const full = readFile(path.join(PLUG, "skills", "audit", "references", "full.md")) || "";
   if (/Severity cap \(deterministic\)/.test(full)) pass("full.md severity cap is rule-based (deterministic)");
   else fail("full.md: severity cap is not marked deterministic");
   if (/subtract 15 per FAIL/i.test(full)) pass("full.md scoring intro references the rubric formula");
@@ -1102,8 +1115,8 @@ section("27. Orchestrator severity cap is rule-based");
 
 section("28. /audit compare mode is wired");
 {
-  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
-  const cmp = readFile(path.join(ROOT, "skills", "audit", "references", "compare.md"));
+  const auditSkill = readFile(path.join(PLUG, "skills", "audit", "SKILL.md")) || "";
+  const cmp = readFile(path.join(PLUG, "skills", "audit", "references", "compare.md"));
   const cmds = extractCommandRefs(auditSkill);
   if (cmds.compare) pass("audit/SKILL.md declares the 'compare' command");
   else fail("audit/SKILL.md: 'compare' command row missing from the Commands table");
@@ -1121,11 +1134,11 @@ section("28. /audit compare mode is wired");
 
 section("29. /audit checks deterministic pre-pass is wired");
 {
-  const auditSkill = readFile(path.join(ROOT, "skills", "audit", "SKILL.md")) || "";
+  const auditSkill = readFile(path.join(PLUG, "skills", "audit", "SKILL.md")) || "";
   const cmds = extractCommandRefs(auditSkill);
   if (cmds.checks) pass("audit/SKILL.md declares the 'checks' command");
   else fail("audit/SKILL.md: 'checks' command row missing from the Commands table");
-  const checksRef = readFile(path.join(ROOT, "skills", "audit", "references", "checks.md"));
+  const checksRef = readFile(path.join(PLUG, "skills", "audit", "references", "checks.md"));
   if (checksRef === null) {
     fail("skills/audit/references/checks.md not found");
   } else {
@@ -1149,9 +1162,9 @@ section("30. Deterministic audit tooling present");
     "tools/audit/README.md",
   ];
   let miss = 0;
-  for (const rel of need) if (!fs.existsSync(path.join(ROOT, rel))) { fail(`missing ${rel}`); miss++; }
+  for (const rel of need) if (!fs.existsSync(anyPath(rel))) { fail(`missing ${rel}`); miss++; }
   if (miss === 0) pass(`all ${need.length} deterministic audit tooling files present`);
-  const schemaTxt = readFile(path.join(ROOT, "tools", "audit", "schema", "site-audit.schema.json"));
+  const schemaTxt = readFile(path.join(PLUG, "tools", "audit", "schema", "site-audit.schema.json"));
   try {
     const sc = JSON.parse(schemaTxt);
     if (sc.$schema && sc.properties && sc.properties.checks) pass("site-audit schema is valid JSON with a checks array");
@@ -1163,9 +1176,9 @@ section("30. Deterministic audit tooling present");
 
 section("31. SITE-AUDIT.json and cost ledger wired into the orchestration");
 {
-  const full = readFile(path.join(ROOT, "skills", "audit", "references", "full.md")) || "";
-  const report = readFile(path.join(ROOT, "skills", "audit", "references", "report.md")) || "";
-  const compare = readFile(path.join(ROOT, "skills", "audit", "references", "compare.md")) || "";
+  const full = readFile(path.join(PLUG, "skills", "audit", "references", "full.md")) || "";
+  const report = readFile(path.join(PLUG, "skills", "audit", "references", "report.md")) || "";
+  const compare = readFile(path.join(PLUG, "skills", "audit", "references", "compare.md")) || "";
   const items = [
     ["full.md references SITE-AUDIT.json", full.includes("SITE-AUDIT.json")],
     ["full.md documents the ground-truth pre-pass", /Ground truth from computed checks/.test(full)],
@@ -1234,7 +1247,7 @@ section("35. Stated agent and rule counts match the repository");
 {
   const agentCount = fs.existsSync(SEO_AGENTS)
     ? fs.readdirSync(SEO_AGENTS).filter(f => f.endsWith(".md")).length : 0;
-  const rulesCsv = readFile(path.join(ROOT, "tools", "data", "inspect-rules.csv"));
+  const rulesCsv = readFile(path.join(PLUG, "tools", "data", "inspect-rules.csv"));
   const ruleCount = rulesCsv ? rulesCsv.trim().split(/\r?\n/).length - 1 : 0;
 
   const claims = [
@@ -1247,7 +1260,7 @@ section("35. Stated agent and rule counts match the repository");
 
   let bad = 0;
   claims.forEach(([rel, re, expected, label]) => {
-    const body = readFile(path.join(ROOT, rel));
+    const body = readFile(anyPath(rel));
     if (body == null) { fail(`${label}: ${rel} not found`); bad++; return; }
     const m = body.match(re);
     if (!m) { fail(`${label}: no count matching ${re} in ${rel}`); bad++; }
@@ -1276,8 +1289,8 @@ section("36. Reference graph: no orphan references, all data domains cited");
     return out;
   };
   const walkRefs = (dir) => walkAll(dir).filter(p => path.basename(p) !== "SKILL.md");
-  const skillsRoot = path.join(ROOT, "skills");
-  const nodeSet = new Set(walkRefs(skillsRoot).map(p => p.slice(ROOT.length + 1).split("\\").join("/")));
+  const skillsRoot = path.join(PLUG, "skills");
+  const nodeSet = new Set(walkRefs(skillsRoot).map(p => p.slice(PLUG.length + 1).split("\\").join("/")));
   const norm = (p) => {
     const parts = [];
     for (const seg of p.split("/")) {
@@ -1289,7 +1302,7 @@ section("36. Reference graph: no orphan references, all data domains cited");
   };
   const edges = new Set();
   for (const file of walkAll(skillsRoot)) {
-    const relSource = file.slice(ROOT.length + 1).split("\\").join("/");
+    const relSource = file.slice(PLUG.length + 1).split("\\").join("/");
     const text = fs.readFileSync(file, "utf8");
     const dir = relSource.split("/").slice(0, -1).join("/");
     for (const m of text.matchAll(/[A-Za-z0-9_./-]+\.md\b/g)) {
@@ -1308,7 +1321,7 @@ section("36. Reference graph: no orphan references, all data domains cited");
     orphans,
   };
   const expected = JSON.stringify(graph, null, 2) + "\n";
-  const graphPath = path.join(ROOT, "tools", "reference-graph.json");
+  const graphPath = path.join(PLUG, "tools", "reference-graph.json");
   if (!fs.existsSync(graphPath)) fail("tools/reference-graph.json missing — run `node tools/build-index.mjs`");
   else if (fs.readFileSync(graphPath, "utf8") !== expected) fail("tools/reference-graph.json is stale — run `node tools/build-index.mjs` and commit the result");
   else pass(`reference-graph.json is current (${graph.nodes.length} nodes, ${graph.edges.length} edges)`);
@@ -1318,10 +1331,10 @@ section("36. Reference graph: no orphan references, all data domains cited");
   let corpus = "";
   for (const f of walkAll(skillsRoot)) corpus += fs.readFileSync(f, "utf8");
   for (const extra of ["tools/design-system/README.md", "tools/README.md", "tools/design-system/scripts/core.py"]) {
-    const fp = path.join(ROOT, extra);
+    const fp = anyPath(extra);
     if (fs.existsSync(fp)) corpus += fs.readFileSync(fp, "utf8");
   }
-  const dataDir = path.join(ROOT, "tools", "design-system", "data");
+  const dataDir = path.join(PLUG, "tools", "design-system", "data");
   const csvs = [];
   const walkCsv = (dir) => {
     for (const name of fs.readdirSync(dir)) {
@@ -1336,7 +1349,7 @@ section("36. Reference graph: no orphan references, all data domains cited");
     const stem = base.replace(/\.csv$/, "");
     return !corpus.includes(base) && !corpus.includes(`--stack ${stem}`) && !corpus.includes(`--domain ${stem}`);
   });
-  if (uncited.length) uncited.forEach(u => fail(`data file never cited by any skill, README or engine config: ${u.slice(ROOT.length + 1)}`));
+  if (uncited.length) uncited.forEach(u => fail(`data file never cited by any skill, README or engine config: ${u.slice(PLUG.length + 1)}`));
   else pass(`all ${csvs.length} design-system data files are cited by a skill, a README or the engine config`);
 }
 
@@ -1360,7 +1373,7 @@ section("36. Reference graph: no orphan references, all data domains cited");
 // because a guard that cries wolf gets deleted and then guards nothing.
 section("37. Canonical laws: registry well-formed, every law cited, no restated threshold");
 {
-  const lawsPath = path.join(ROOT, "tools", "data", "laws.csv");
+  const lawsPath = path.join(PLUG, "tools", "data", "laws.csv");
   if (!fs.existsSync(lawsPath)) fail("tools/data/laws.csv missing");
   else {
     // RFC4180-ish: the statement column has embedded commas, so a naive split
@@ -1403,7 +1416,7 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
         else if (name.endsWith(".md")) files.push(p);
       }
     };
-    walkMd(path.join(ROOT, "skills"));
+    walkMd(path.join(PLUG, "skills"));
     const readmePath = path.join(ROOT, "README.md");
     if (fs.existsSync(readmePath)) files.push(readmePath);
 
@@ -1431,7 +1444,7 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
       let re;
       try { re = new RegExp(law.guard, "g"); }
       catch { fail(`${law.id}: guard is not a valid regex: ${law.guard}`); breaches++; continue; }
-      const anchorAbs = path.join(ROOT, law.anchor);
+      const anchorAbs = anyPath(law.anchor);
       for (const [p, text] of texts) {
         if (p === anchorAbs) continue;
         const hits = text.match(re);
@@ -1453,8 +1466,8 @@ section("37. Canonical laws: registry well-formed, every law cited, no restated 
 // somebody renumbers the CSV without touching the engine.
 section("43. Detector rules resolve in the inspect registry");
 {
-  const rulesPath = path.join(ROOT, "tools", "inspect", "rules.mjs");
-  const csvPath = path.join(ROOT, "tools", "data", "inspect-rules.csv");
+  const rulesPath = path.join(PLUG, "tools", "inspect", "rules.mjs");
+  const csvPath = path.join(PLUG, "tools", "data", "inspect-rules.csv");
   if (!fs.existsSync(rulesPath) || !fs.existsSync(csvPath)) {
     fail("detector engine or inspect-rules.csv missing");
   } else {
@@ -1485,14 +1498,14 @@ section("38. Intent routes, aliases, doors and marketplace counts");
   const liveCmds = {};
   for (const s of SKILL_NAMES) {
     liveCmds[s] = new Set(Object.keys(
-      extractCommandRefs(readFile(path.join(ROOT, "skills", s, "SKILL.md")) || "")
+      extractCommandRefs(readFile(path.join(PLUG, "skills", s, "SKILL.md")) || "")
     ));
   }
   const isLive = (skill, cmd) =>
     (liveCmds[skill] && liveCmds[skill].has(cmd)) ||
     (skill === "audit" && AUDIT_SCOPES.has(cmd));
 
-  const intentsPath = path.join(ROOT, "tools", "data", "intents.csv");
+  const intentsPath = path.join(PLUG, "tools", "data", "intents.csv");
   if (!fs.existsSync(intentsPath)) {
     fail("tools/data/intents.csv missing");
   } else {
@@ -1533,11 +1546,11 @@ section("38. Intent routes, aliases, doors and marketplace counts");
         else if (name.endsWith(".md")) staleTargets.push(p2);
       }
     };
-    collect(path.join(ROOT, "skills"));
+    collect(path.join(PLUG, "skills"));
     if (fs.existsSync(path.join(ROOT, "docs"))) collect(path.join(ROOT, "docs"));
-    if (fs.existsSync(path.join(ROOT, "agents"))) collect(path.join(ROOT, "agents"));
+    if (fs.existsSync(path.join(PLUG, "agents"))) collect(path.join(PLUG, "agents"));
     staleTargets.push(path.join(ROOT, "README.md"));
-    staleTargets.push(path.join(ROOT, "tools", "data", "remediation-map.csv"));
+    staleTargets.push(path.join(PLUG, "tools", "data", "remediation-map.csv"));
     let stale = 0;
     for (const f of staleTargets) {
       const txt = fs.readFileSync(f, "utf8");
@@ -1571,7 +1584,7 @@ section("38. Intent routes, aliases, doors and marketplace counts");
   const mkt = JSON.parse(readFile(path.join(ROOT, ".claude-plugin", "marketplace.json")) || "{}");
   const desc = (mkt.plugins && mkt.plugins[0] && mkt.plugins[0].description) || "";
   const totalCmds = SKILL_NAMES.reduce((n, s) => n + liveCmds[s].size, 0);
-  const agentCount = fs.readdirSync(path.join(ROOT, "agents")).filter(f => f.endsWith(".md")).length;
+  const agentCount = fs.readdirSync(path.join(PLUG, "agents")).filter(f => f.endsWith(".md")).length;
   const mc = desc.match(/(\d+)\s+commands/);
   const ma = desc.match(/(\d+)\s+(?:parallel\s+)?sub-agents/);
   if (!mc) fail("marketplace description: no command count found");
@@ -1589,7 +1602,7 @@ section("39. Argument-hint coverage, remediation routes live, doc agent counts")
   const SKILLS39 = ["siteasy", "seo", "inspect", "audit"];
   const live39 = {};
   for (const s of SKILLS39) {
-    const txt = readFile(path.join(ROOT, "skills", s, "SKILL.md")) || "";
+    const txt = readFile(path.join(PLUG, "skills", s, "SKILL.md")) || "";
     live39[s] = new Set(Object.keys(extractCommandRefs(txt)));
     const hint = (txt.match(/argument-hint:\s*"([^"]+)"/) || [])[1] || "";
     const missing = [...live39[s]].filter(c => !hint.includes(c));
@@ -1597,7 +1610,7 @@ section("39. Argument-hint coverage, remediation routes live, doc agent counts")
     else pass(`${s}: argument-hint covers all ${live39[s].size} commands`);
   }
   const AUDIT_SCOPES39 = new Set(["seo", "defects", "design", "quick"]);
-  const remLines = (readFile(path.join(ROOT, "tools", "data", "remediation-map.csv")) || "").trim().split(/\r?\n/).slice(1);
+  const remLines = (readFile(path.join(PLUG, "tools", "data", "remediation-map.csv")) || "").trim().split(/\r?\n/).slice(1);
   let deadRoutes = 0;
   for (const line of remLines) {
     const cmd = line.split(",")[2] || "";
@@ -1607,7 +1620,7 @@ section("39. Argument-hint coverage, remediation routes live, doc agent counts")
     }
   }
   if (!deadRoutes) pass(`remediation-map: all ${remLines.length} routes point at live commands`);
-  const agentCount39 = fs.readdirSync(path.join(ROOT, "agents")).filter(f => f.endsWith(".md")).length;
+  const agentCount39 = fs.readdirSync(path.join(PLUG, "agents")).filter(f => f.endsWith(".md")).length;
   const arch = readFile(path.join(ROOT, "docs", "ARCHITECTURE.md")) || "";
   const claims39 = [...arch.matchAll(/(?:its|all|earns) (\d+) (?:specialist )?(?:sub-)?agents/g)].map(m => Number(m[1]));
   const wrong39 = claims39.filter(n => n !== agentCount39);
@@ -1624,9 +1637,9 @@ section("39. Argument-hint coverage, remediation routes live, doc agent counts")
 // bots that decide assistant citations.
 section("40. AI crawler registry consistency (csv, analyzer, geo.md)");
 {
-  const csvPath = path.join(ROOT, "tools/data/ai-crawlers.csv");
-  const modPath = path.join(ROOT, "tools/audit/lib/ai-access.mjs");
-  const geoPath = path.join(ROOT, "skills/seo/references/geo.md");
+  const csvPath = path.join(PLUG, "tools/data/ai-crawlers.csv");
+  const modPath = path.join(PLUG, "tools/audit/lib/ai-access.mjs");
+  const geoPath = path.join(PLUG, "skills/seo/references/geo.md");
   const csvTxt = readFile(csvPath), modTxt = readFile(modPath), geoTxt = readFile(geoPath);
   if (!csvTxt || !modTxt || !geoTxt) {
     fail("AI crawler registry: one of csv / ai-access.mjs / geo.md is missing");
@@ -1665,8 +1678,8 @@ section("40. AI crawler registry consistency (csv, analyzer, geo.md)");
 // draft spec starts costing sites points. Both directions are guarded here.
 section("41. ADVISORY verdict wired end to end");
 {
-  const schema = readFile(path.join(ROOT, "tools/audit/schema/site-audit.schema.json")) || "";
-  const checksMjs = readFile(path.join(ROOT, "tools/audit/lib/checks.mjs")) || "";
+  const schema = readFile(path.join(PLUG, "tools/audit/schema/site-audit.schema.json")) || "";
+  const checksMjs = readFile(path.join(PLUG, "tools/audit/lib/checks.mjs")) || "";
   let ok = true;
   try {
     const enumVals = JSON.parse(schema).properties.checks.items.properties.verdict.enum;
@@ -1698,7 +1711,7 @@ section("42. Deterministic tooling present");
   ];
   let missingTools = 0;
   TOOLS.forEach(rel => {
-    if (!fs.existsSync(path.join(ROOT, rel))) { fail(`missing tool: ${rel}`); missingTools++; }
+    if (!fs.existsSync(anyPath(rel))) { fail(`missing tool: ${rel}`); missingTools++; }
   });
   if (!missingTools) pass(`all ${TOOLS.length} deterministic tools present`);
 }

@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-3.8.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-3.8.1-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v3.8.0** · 4 skills · 62 commands · 131 reference docs · 15 audit sub-agents
+**v3.8.1** · 4 skills · 62 commands · 131 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -65,7 +65,7 @@ written down in the code rather than left for a reviewer to guess.
 You can check the claim rather than take it:
 
 ```bash
-node tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-score 90
+node null-to-hero/tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-score 90
 #   deterministic score: 100/100   FAIL: 0   WARN: 0   critical FAIL: 0
 #   RESULT: PASS
 ```
@@ -107,7 +107,7 @@ the point of doing them first.
 
 ## Install
 
-NullToHero is a Claude Code plugin and a marketplace in one repository.
+NullToHero is a Claude Code plugin and a marketplace in one repository. The marketplace manifest sits at the repository root; the plugin itself lives in the `null-to-hero/` folder.
 
 **A. From the marketplace (recommended, auto-updates)**
 
@@ -116,7 +116,16 @@ NullToHero is a Claude Code plugin and a marketplace in one repository.
 /plugin install null-to-hero@null-to-hero-marketplace
 ```
 
-Later, pull new releases with `/plugin marketplace update null-to-hero-marketplace`.
+### Updating
+
+Updating never requires uninstalling. Refresh the marketplace, then update the plugin:
+
+```
+/plugin marketplace update null-to-hero-marketplace
+/plugin update null-to-hero@null-to-hero-marketplace
+```
+
+Run `/reload-plugins`, or start a new session, for the new version to load.
 
 <details>
 <summary><b>Manual install (macOS, Linux, Windows)</b></summary>
@@ -296,7 +305,7 @@ Runs every specialist at once across search, defects and design, then merges eve
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (50 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight, AI crawler access, plus the declared-value laws for tap target size and spacing, base body size, line measure, feedback duration, decorative loop budget and scrub easing), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v3.8.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [tools/audit/README.md](tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (50 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight, AI crawler access, plus the declared-value laws for tap target size and spacing, base body size, line measure, feedback duration, decorative loop budget and scrub easing), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v3.8.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [null-to-hero/tools/audit/README.md](null-to-hero/tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -473,7 +482,7 @@ Two more appear as you work: `DIRECTION.md` (the committed creative direction, w
 
 ## Ready-made assets
 
-The `assets/` folder ships an original, license-clean starter library: 139 icons, 20 background patterns, 18 spot illustrations, 34 animations and 6 templates. Icons and patterns take the surrounding color and the animations honor `prefers-reduced-motion`. Everything is CC0 for the media and MIT for the templates, so it is safe to copy into any project. Open `assets/gallery.html` to browse the whole set, and `assets/README.md` for how to wire each kind in. During a build, `/siteasy build` recommends curated external sites first and uses this library as a fallback for quick, offline or placeholder assets.
+The `null-to-hero/assets/` folder ships an original, license-clean starter library: 139 icons, 20 background patterns, 18 spot illustrations, 34 animations and 6 templates. Icons and patterns take the surrounding color and the animations honor `prefers-reduced-motion`. Everything is CC0 for the media and MIT for the templates, so it is safe to copy into any project. Open `null-to-hero/assets/gallery.html` to browse the whole set, and `null-to-hero/assets/README.md` for how to wire each kind in. During a build, `/siteasy build` recommends curated external sites first and uses this library as a fallback for quick, offline or placeholder assets.
 
 ## What is inside
 
@@ -492,9 +501,9 @@ NullToHero ships **131 reference docs** that Claude loads only when it needs the
 
 **audit, whole-site (6):** checks, compare, full, html-report, learnings, report
 
-**shared state and routing:** `DIRECTION.md` and `LOG.md` project files read by every command, `tools/data/laws.csv` (16 canonical numeric laws, CI-checked citations), `tools/data/remediation-map.csv` routing every check and rule to the command that fixes it (`fixWith` in SITE-AUDIT.json), and `tools/reference-graph.json` (the reference graph, zero orphans enforced by CI).
+**shared state and routing:** `DIRECTION.md` and `LOG.md` project files read by every command, `null-to-hero/tools/data/laws.csv` (16 canonical numeric laws, CI-checked citations), `null-to-hero/tools/data/remediation-map.csv` routing every check and rule to the command that fixes it (`fixWith` in SITE-AUDIT.json), and `null-to-hero/tools/reference-graph.json` (the reference graph, zero orphans enforced by CI).
 
-A stack-aware design-system generator also lives under `tools/design-system/`, covering 16 technology stacks (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, HTML and Tailwind, shadcn/ui, SwiftUI, React Native, Flutter, Jetpack Compose, Three.js, Nuxt UI).
+A stack-aware design-system generator also lives under `null-to-hero/tools/design-system/`, covering 16 technology stacks (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, HTML and Tailwind, shadcn/ui, SwiftUI, React Native, Flutter, Jetpack Compose, Three.js, Nuxt UI).
 
 </details>
 

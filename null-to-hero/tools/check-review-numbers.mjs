@@ -28,7 +28,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { tmpdir } from "node:os";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const DOC = join(ROOT, "ARCHITECTURE-REVIEW.md");
+// The plugin is one folder of the marketplace repository. ROOT is the plugin;
+// the review documents, the tests and docs/ live one level up.
+const REPO = join(ROOT, "..");
+const DOC = join(REPO, "ARCHITECTURE-REVIEW.md");
 const doc = readFileSync(DOC, "utf8");
 
 let failures = 0;
@@ -160,7 +163,7 @@ const mappedIds = new Set(cov.filter(r => r[1] === "static-check").map(r => r[2]
 facts.unmappedChecks = emitted.filter(i => !mappedIds.has(i)).length;
 facts.siteasyRefs = readdirSync(join(ROOT, "skills/siteasy/references")).filter(f => f.endsWith(".md")).length;
 facts.siteasyScripts = readdirSync(join(ROOT, "skills/siteasy/scripts")).filter(f => /\.(mjs|js)$/.test(f)).length;
-facts.fixtures = readdirSync(join(ROOT, "tests/eval/fixtures")).filter(f => f.endsWith(".html")).length;
+facts.fixtures = readdirSync(join(REPO, "tests/eval/fixtures")).filter(f => f.endsWith(".html")).length;
 
 console.log("\nDépôt, dérivé des fichiers");
 ok("règles au registre", facts.rules, n(/registre de (\d+) règles/));
@@ -363,7 +366,7 @@ ok("PASS de la page 404 (5.5)", passes(r404), word(m55 && m55[2]));
 
 // 6.4 : le balayage des fixtures
 const FLIP = /motion-reduced-guard|three-duplicate-copies|frame-loop-alloc|frame-sequence-preload|scrollbar-hidden/;
-const fxDir = join(ROOT, "tests/eval/fixtures");
+const fxDir = join(REPO, "tests/eval/fixtures");
 const fx = readdirSync(fxDir).filter(f => f.endsWith(".html"));
 let flips = 0, realFlips = 0, sum = 0, cleanMeasured = 0, cleanTotal = 0, cleanScore = 0, cleanFlips = 0;
 for (const f of fx) {
@@ -417,25 +420,30 @@ const lineCache = new Map();
 // Le document cite souvent un fichier par son nom nu (`checks.mjs:1806`). L'index
 // résout ces noms ; un nom ambigu est signalé comme introuvable plutôt que deviné.
 const { execFileSync: _ex } = await import("node:child_process");
-const tracked = _ex("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: ROOT })
+const tracked = _ex("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: REPO })
   .toString().trim().split("\n");
 const byBase = new Map();
 for (const f of tracked) {
   const b = f.split("/").pop();
   byBase.set(b, byBase.has(b) ? null : f);          // null = ambigu
 }
-const resolve_ = (f) => (tracked.includes(f) ? f : (f.includes("/") ? null : byBase.get(f) || null));
+// Le document est écrit relativement au plugin (`tools/...`, `skills/...`), et le
+// plugin est un sous-dossier du dépôt. Un chemin est cherché tel quel, puis
+// préfixé, puis par nom nu.
+const resolve_ = (f) => (tracked.includes(f) ? f
+  : tracked.includes(`null-to-hero/${f}`) ? `null-to-hero/${f}`
+  : (f.includes("/") ? null : byBase.get(f) || null));
 const lengthOf = (f) => {
   if (!lineCache.has(f)) {
     const real = resolve_(f);
-    try { lineCache.set(f, real ? readFileSync(join(ROOT, real), "utf8").split("\n").length : null); }
+    try { lineCache.set(f, real ? readFileSync(join(REPO, real), "utf8").split("\n").length : null); }
     catch { lineCache.set(f, null); }
   }
   return lineCache.get(f);
 };
 const missingFiles = new Set(), outOfRange = new Set();
 let tested = 0;
-const compDoc = (() => { try { return readFileSync(join(ROOT, "ARCHITECTURE-REVIEW-sondes.md"), "utf8"); } catch { return ""; } })();
+const compDoc = (() => { try { return readFileSync(join(REPO, "ARCHITECTURE-REVIEW-sondes.md"), "utf8"); } catch { return ""; } })();
 for (const m of (doc + "\n" + compDoc).matchAll(REF)) {
   const [, file, a, b, extra] = m;
   const len = lengthOf(file);
@@ -468,7 +476,7 @@ for (const m of doc.matchAll(/`([\w./-]+\.(?:mjs|js|csv|md|json|yml))`?:(\d+)(?:
   if (!needle || /^[\w./-]+\.(mjs|js|csv|md|json|yml)/.test(needle)) continue;
   // Une affirmation négative ("ne passe pas par `X`") ne dit pas que X est là.
   if (/\bne\s|\bn'\w|\bsans\b|\bjamais\b|\baucun/.test(tail.slice(0, tail.indexOf(needle)))) continue;
-  const lines = readFileSync(join(ROOT, real), "utf8").split("\n");
+  const lines = readFileSync(join(REPO, real), "utf8").split("\n");
   const lo = Math.max(0, Number(a) - 1 - WINDOW), hi = Math.min(lines.length, Number(b || a) + WINDOW);
   const hay = lines.slice(lo, hi).join("\n").replace(/\s+/g, " ");
   tested++;
@@ -494,7 +502,7 @@ const run = (args, opts = {}) => {
 const sec = (a, b) => doc.slice(doc.indexOf(a), doc.indexOf(b));
 
 // 5.1 : la porte sur un fichier qui n'est pas un rapport
-const g = run(["tools/audit/gate.mjs", "--report", "package.json", "--min-score", "95", "--max-fails", "0"]);
+const g = run(["tools/audit/gate.mjs", "--report", join(REPO, "package.json"), "--min-score", "95", "--max-fails", "0"]);
 const s51 = sec("### 5.1", "### 5.2");
 if (done("P1")) {
   ok("5.1, P1 livré : la porte refuse de juger", g.code, 2);
@@ -507,7 +515,7 @@ if (done("P1")) {
 // 5.2 : la porte sur un rapport daté d'hier
 const s52 = sec("### 5.2", "### 5.3");
 const tmp = join(tmpdir(), "nth-review-old.json");
-const rep = run(["tools/audit/analyze.mjs", "tests/eval/fixtures/clean-pass.html", "--json"]);
+const rep = run(["tools/audit/analyze.mjs", join(REPO, "tests/eval/fixtures/clean-pass.html"), "--json"]);
 try {
   const j = JSON.parse(rep.out);
   j.generatedAt = "2026-08-04T09:00:00.000Z";        // une semaine avant la portée du document
@@ -555,18 +563,18 @@ ok("5.6, detect.mjs appelle runChecks", detectSrc.some(l => /runChecks\(\{[^}]*\
 
 // 5.7 : le fichier de sonde est dans npm test et absent du workflow
 const s57 = sec("### 5.7", "### 5.8");
-const wf = readFileSync(join(ROOT, ".github/workflows/validate.yml"), "utf8");
-const pkgTest = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).scripts.test;
+const wf = readFileSync(join(REPO, ".github/workflows/validate.yml"), "utf8");
+const pkgTest = JSON.parse(readFileSync(join(REPO, "package.json"), "utf8")).scripts.test;
 ok("5.7, rendered-rules.mjs dans le workflow", /rendered-rules\.mjs/.test(wf) ? "présent" : "absent",
   done("P10") ? "présent" : "absent");
 if (done("P10")) {
   ok("5.7, P10 livré : le workflow installe Chromium", /playwright install/.test(wf) ? "oui" : "non", "oui");
   ok("5.7, P10 livré : le job passe --require-browser", /--require-browser/.test(wf) ? "oui" : "non", "oui");
-  const rrSrc = readFileSync(join(ROOT, "tests/rendered-rules.mjs"), "utf8");
+  const rrSrc = readFileSync(join(REPO, "tests/rendered-rules.mjs"), "utf8");
   ok("5.7, P10 livré : le drapeau fait échouer un saut", /requireBrowser[\s\S]{0,400}process\.exit\(1\)/.test(rrSrc) ? "oui" : "non", "oui");
 }
 ok("5.7, rendered-rules.mjs dans npm test", /rendered-rules\.mjs/.test(pkgTest) ? "présent" : "absent", "présent");
-const rr = readFileSync(join(ROOT, "tests/rendered-rules.mjs"), "utf8");
+const rr = readFileSync(join(REPO, "tests/rendered-rules.mjs"), "utf8");
 ok("5.7, la branche SKIPPED sort bien 0",
   /SKIPPED[\s\S]{0,600}?process\.exit\((\d)\)/.exec(rr)?.[1], (/sort ensuite (\d)/.exec(s57) || [, "?"])[1]);
 ok("5.7, règles non vérifiées", cov.filter(r => ["rendered-probe", "three-probe", "motion-probe"].includes(r[1])).length,
@@ -749,7 +757,7 @@ ok("lois au total à l'évaluation", 33, n(/lignes sur (\d+) en portaient une/))
 // La pièce à conviction du §5.8 était le seul fichier que le garde n'ouvrait pas.
 console.log("\nArtefact compagnon des sondes");
 try {
-  const comp = readFileSync(join(ROOT, "ARCHITECTURE-REVIEW-sondes.md"), "utf8");
+  const comp = readFileSync(join(REPO, "ARCHITECTURE-REVIEW-sondes.md"), "utf8");
   const rows = comp.split("\n").filter(l => /^\|\s*\d+\s*\|/.test(l)).map(l => l.split("|").map(c => c.trim()));
   const high = rows.filter(r => r[r.length - 3] === "haute").length;
   const unlisted = rows.filter(r => /^hors/.test(r[r.length - 2])).length;
@@ -795,7 +803,7 @@ ok("couples distincts", new Set(withLine).size, n(/\((\d+) couples distincts\)/)
 // Un second document chiffré n'échapperait pas à la règle du premier.
 console.log("\nChantier entretien, dérivé de son propre tableau");
 try {
-  const ent = readFileSync(join(ROOT, "ARCHITECTURE-REVIEW-entretien.md"), "utf8");
+  const ent = readFileSync(join(REPO, "ARCHITECTURE-REVIEW-entretien.md"), "utf8");
   const eRows = ent.split("\n").filter(l => /^\|\s*E\d+\s*\|/.test(l)).map(l => l.split("|").map(c => c.trim()));
   let eLow = 0, eHigh = 0, badE = 0;
   for (const r of eRows) {

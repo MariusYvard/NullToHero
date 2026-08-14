@@ -9,7 +9,9 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const readme = readFileSync(join(root, "README.md"), "utf8");
+// docs/ and README.md stay at the repository root, one level above the plugin.
+const repo = join(root, "..");
+const readme = readFileSync(join(repo, "README.md"), "utf8");
 
 const lines = readme.split("\n").filter(l => l.startsWith("|"));
 const headerLine = lines.find(l => l.startsWith("| Capability |"));
@@ -110,6 +112,6 @@ return svg;
 }
 
 for (const [name, T] of Object.entries(THEMES)) {
-  writeFileSync(join(root, "docs", `compare-${name}.svg`), render(T));
+  writeFileSync(join(repo, "docs", `compare-${name}.svg`), render(T));
   console.log(`docs/compare-${name}.svg: ${cols.length} columns, ${rows.length} rows, ${W}x${H}`);
 }

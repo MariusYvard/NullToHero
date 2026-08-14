@@ -21,7 +21,7 @@ A reference file teaches Claude a specific domain. Good reference files are:
 A new command should:
 - Address a distinct, non-overlapping need from existing commands
 - Have a clear input (`[url]`, `[keyword]`, `generate`) and a defined output format
-- Reference a corresponding file in `skills/seo/references/` or `skills/siteasy/references/`
+- Reference a corresponding file in `null-to-hero/skills/seo/references/` or `null-to-hero/skills/siteasy/references/`
 
 ### Bug fix or improvement
 
@@ -86,7 +86,7 @@ version: 1.0.0
 
 ### 4. Update SKILL.md
 
-Add your command to the commands table in `skills/seo/SKILL.md` (or `skills/siteasy/SKILL.md` for design commands).
+Add your command to the commands table in `null-to-hero/skills/seo/SKILL.md` (or `null-to-hero/skills/siteasy/SKILL.md` for design commands).
 
 ### 5. Update CHANGELOG.md
 
@@ -168,12 +168,12 @@ By contributing, you agree that your contribution will be licensed under Apache 
 
 ## Large files
 
-NullToHero imposes a **500 KB** per-file soft limit tracked by `tests/validate.js` (Check 13). A warning fires for any file in `tools/` that exceeds this threshold.
+NullToHero imposes a **500 KB** per-file soft limit tracked by `tests/validate.js` (Check 13). A warning fires for any file in `null-to-hero/tools/` that exceeds this threshold.
 
 If you need to add a large dataset:
 
 1. Open an issue explaining the use case and size.
-2. Consider a `tools/download-*.mjs` script that fetches the file from a GitHub release asset on demand instead of committing it.
+2. Consider a `null-to-hero/tools/download-*.mjs` script that fetches the file from a GitHub release asset on demand instead of committing it.
 3. Do not commit files over 5 MB — GitHub will reject them and the PR will be stuck.
 
 `node tests/validate.js` warns on files above 500 KB but does not fail CI. Treat the warning as a prompt to discuss before merging.
@@ -182,7 +182,7 @@ If you need to add a large dataset:
 
 Releases are tag-driven. To cut version X.Y.Z:
 
-1. Bump the version in every source the validator checks (Check 12): `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `package.json`, the four `skills/*/SKILL.md` frontmatters, `install.sh` and `install.ps1`. All must match.
+1. Bump the version in every source the validator checks (Check 12): `null-to-hero/.claude-plugin/plugin.json`, `package.json`, the four `null-to-hero/skills/*/SKILL.md` frontmatters, `install.sh` and `install.ps1`. All must match.
 2. Add a dated `## [X.Y.Z]` section to `CHANGELOG.md`.
 3. Run `npm test` (build-index, `validate.js`, `unit.mjs`, the Python suite) and confirm zero errors.
 4. Commit, then `git tag vX.Y.Z && git push --tags`. The `release.yml` workflow re-runs the suite, extracts the matching `CHANGELOG` section, and publishes the GitHub Release.

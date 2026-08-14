@@ -11,6 +11,49 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [3.8.1] - 2026-08-14
+
+### The headline
+
+The repository was both the marketplace and the plugin, with `"source": "./"` in
+`.claude-plugin/marketplace.json`. That shape does not deliver updates: a witness
+installation stayed pinned across four published releases while the marketplace
+kept reporting itself current. Marketplaces that update declare each plugin in a
+subfolder. The plugin now lives in `null-to-hero/`, and `source` points at it.
+
+### Changed
+
+- `.claude-plugin/marketplace.json` stays alone at the repository root and
+  declares `"source": "./null-to-hero"`.
+- `skills/`, `agents/`, `assets/`, `tools/` and `.claude-plugin/plugin.json` moved
+  under `null-to-hero/`. `tools/` had to move with them: eighteen command recipes
+  call `${CLAUDE_PLUGIN_ROOT}/tools/...`, so leaving the engines at the repository
+  root would have shipped a plugin whose deterministic checks, detector and audit
+  gate resolve to nothing. `${CLAUDE_PLUGIN_ROOT}` still means the plugin
+  directory, so no path inside a skill changed.
+- `tests/`, `docs/`, `package.json`, `action.yml`, both installers and the
+  repository documentation stay at the root. The four tools that reach back out
+  (`check-review-numbers.mjs`, `sync-overview.mjs`, `sync-compare.mjs`,
+  `audit/eval.mjs`) resolve the repository through a `REPO` constant.
+- `tests/validate.js` resolves plugin content through a `PLUG` constant and keeps
+  emitting plugin-relative paths, so `reference-index.json`,
+  `reference-graph.json` and the eval corpus are unchanged by the move.
+- The manual-install fallback in `install.sh` and `install.ps1` copies the clone
+  to `~/.claude/plugins/null-to-hero-marketplace`. What is cloned is the
+  marketplace, not the plugin, and it must not take the directory name Claude
+  Code uses for the installed plugin.
+- `release.yml` reads the version from `null-to-hero/.claude-plugin/plugin.json`;
+  the scrubber self-test in `validate.yml` runs from the plugin subfolder.
+
+### Removed
+
+- The `version` field on the marketplace plugin entry. The version lives in
+  `plugin.json` alone: two local clones had already drifted to different numbers,
+  and nothing was checking. Check 12 now asserts the field is absent, and that
+  the entry is named `null-to-hero` with `source` `./null-to-hero`.
+
+---
+
 ## [3.8.0] - 2026-08-13
 
 The reliability plan of ARCHITECTURE-REVIEW.md, delivered whole, plus the

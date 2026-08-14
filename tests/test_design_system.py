@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools" / "design-system" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "null-to-hero" / "tools" / "design-system" / "scripts"))
 from design_system import safe_slug  # noqa: E402
 
 failures = 0
@@ -37,7 +37,7 @@ print("\n-- theme_css: the four export formats agree on one palette --")
 import json  # noqa: E402
 import subprocess  # noqa: E402
 
-SCRIPT = str(Path(__file__).resolve().parent.parent / "tools" / "design-system" / "scripts" / "theme_css.py")
+SCRIPT = str(Path(__file__).resolve().parent.parent / "null-to-hero" / "tools" / "design-system" / "scripts" / "theme_css.py")
 ARGS = ["--bg", "#0B0B0C", "--ink", "#F5F5F4", "--accent", "#6E56CF"]
 
 

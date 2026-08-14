@@ -16,14 +16,14 @@
 import { readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { probe, RENDERED_RULE_IDS } from "../tools/inspect/rendered.mjs";
-import { probe as threeProbe, installSource, THREE_RULE_IDS } from "../tools/inspect/three.mjs";
-import { reducedMotionProbe, sweep, evaluateSweep, installSampler, MOTION_RULE_IDS } from "../tools/inspect/motion.mjs";
+import { probe, RENDERED_RULE_IDS } from "../null-to-hero/tools/inspect/rendered.mjs";
+import { probe as threeProbe, installSource, THREE_RULE_IDS } from "../null-to-hero/tools/inspect/three.mjs";
+import { reducedMotionProbe, sweep, evaluateSweep, installSampler, MOTION_RULE_IDS } from "../null-to-hero/tools/inspect/motion.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const FX = join(ROOT, "tools", "inspect", "fixtures", "rendered");
-const FX3 = join(ROOT, "tools", "inspect", "fixtures", "three");
-const FXM = join(ROOT, "tools", "inspect", "fixtures", "motion");
+const FX = join(ROOT, "null-to-hero", "tools", "inspect", "fixtures", "rendered");
+const FX3 = join(ROOT, "null-to-hero", "tools", "inspect", "fixtures", "three");
+const FXM = join(ROOT, "null-to-hero", "tools", "inspect", "fixtures", "motion");
 const WAIT = 2500;                       // past the 2s boundary rule 27 judges against
 const VIEWPORT = { width: 1280, height: 800 };
 
@@ -244,10 +244,10 @@ console.log("\n── P17: --json and text agree on the exit code ──");
     catch (e) { return e.status ?? -1; }
   };
   const cases = [
-    ["tools/inspect/three.mjs", "tools/inspect/fixtures/three/bad.html", [], "three.js probe, bad fixture"],
-    ["tools/inspect/three.mjs", "tools/inspect/fixtures/three/good.html", [], "three.js probe, clean fixture"],
-    ["tools/inspect/motion.mjs", "tools/inspect/fixtures/motion/sweep-static.html", ["--sweep"], "motion sweep that refuses"],
-    ["tools/inspect/motion.mjs", "tools/inspect/fixtures/motion/85-bad.html", ["--sweep"], "motion sweep with findings"],
+    ["null-to-hero/tools/inspect/three.mjs", "null-to-hero/tools/inspect/fixtures/three/bad.html", [], "three.js probe, bad fixture"],
+    ["null-to-hero/tools/inspect/three.mjs", "null-to-hero/tools/inspect/fixtures/three/good.html", [], "three.js probe, clean fixture"],
+    ["null-to-hero/tools/inspect/motion.mjs", "null-to-hero/tools/inspect/fixtures/motion/sweep-static.html", ["--sweep"], "motion sweep that refuses"],
+    ["null-to-hero/tools/inspect/motion.mjs", "null-to-hero/tools/inspect/fixtures/motion/85-bad.html", ["--sweep"], "motion sweep with findings"],
   ];
   for (const [script, fx, extra, label] of cases) {
     const url = "file://" + resolve(ROOT, fx);

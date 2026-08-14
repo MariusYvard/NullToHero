@@ -14,19 +14,21 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { RULES, runRules } from "../tools/inspect/rules.mjs";
-import { RENDERED_RULE_IDS } from "../tools/inspect/rendered.mjs";
-import { THREE_RULE_IDS } from "../tools/inspect/three.mjs";
-import { MOTION_RULE_IDS } from "../tools/inspect/motion.mjs";
+import { RULES, runRules } from "../null-to-hero/tools/inspect/rules.mjs";
+import { RENDERED_RULE_IDS } from "../null-to-hero/tools/inspect/rendered.mjs";
+import { THREE_RULE_IDS } from "../null-to-hero/tools/inspect/three.mjs";
+import { MOTION_RULE_IDS } from "../null-to-hero/tools/inspect/motion.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const FX = join(ROOT, "tools", "inspect", "fixtures");
+// Plugin runtime lives under null-to-hero/; the tooling stays at the repo root.
+const PLUG = join(ROOT, "null-to-hero");
+const FX = join(ROOT, "null-to-hero", "tools", "inspect", "fixtures");
 let failures = 0;
 const ok = (m) => console.log(`  \x1b[32mPASS\x1b[0m  ${m}`);
 const no = (m) => { failures++; console.log(`  \x1b[31mFAIL\x1b[0m  ${m}`); };
 
 // ── registry coupling ────────────────────────────────────────────────────────
-const csv = readFileSync(join(ROOT, "tools", "data", "inspect-rules.csv"), "utf8").trim().split("\n");
+const csv = readFileSync(join(ROOT, "null-to-hero", "tools", "data", "inspect-rules.csv"), "utf8").trim().split("\n");
 const known = new Map();
 for (const line of csv.slice(1)) {
   const id = Number(line.split(",")[0]);
@@ -100,7 +102,7 @@ const CLASSES = new Set([
   "needs-render", "judgment", "convention", "build-time", "tooling",
 ]);
 const EXECUTING = ["rules-engine", "static-check", "rendered-probe", "three-probe", "motion-probe"];
-const covRaw = readFileSync(join(ROOT, "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
+const covRaw = readFileSync(join(ROOT, "null-to-hero", "tools", "data", "rule-coverage.csv"), "utf8").trim().split("\n").slice(1);
 const cov = new Map();
 for (const line of covRaw) {
   const [id, cls, executor, ...rest] = line.split(",");
@@ -162,7 +164,7 @@ for (const probe of PROBES) {
 
 // A named check must exist. A mapping to a check that was renamed or deleted is
 // the same failure as no mapping at all, only harder to see.
-const checksSrc = readFileSync(join(ROOT, "tools", "audit", "lib", "checks.mjs"), "utf8");
+const checksSrc = readFileSync(join(ROOT, "null-to-hero", "tools", "audit", "lib", "checks.mjs"), "utf8");
 for (const [id, c] of cov) {
   if (c.cls !== "static-check") continue;
   if (!new RegExp(`id:\\s*"${c.executor}"`).test(checksSrc)) no(`rule ${id} names static check "${c.executor}", which checks.mjs does not define`);
@@ -200,7 +202,7 @@ console.log("\n── P9: callers pass the inputs their checks read ──");
     }
     return out;
   };
-  const files = [...walk(j(ROOT, "tools")), ...walk(j(ROOT, "skills"))]
+  const files = [...walk(j(ROOT, "null-to-hero", "tools")), ...walk(j(PLUG, "skills"))]
     .filter(f => !f.endsWith("checks.mjs") && !f.endsWith("check-review-numbers.mjs"));
   let sites = 0, bad = [];
   for (const f of files) {
@@ -250,7 +252,7 @@ console.log("\n── P6: the three.js corpora agree on what is obsolete ──"
     }
     return out;
   };
-  const obsolete = parseCsv(readFileSync(join(ROOT, "tools/data/three-obsolete.csv"), "utf8"));
+  const obsolete = parseCsv(readFileSync(join(ROOT, "null-to-hero/tools/data/three-obsolete.csv"), "utf8"));
   ok(`${obsolete.length} obsolete three.js patterns declared`);
 
   // Every declared pattern must name a rule the registry actually carries.
@@ -260,7 +262,7 @@ console.log("\n── P6: the three.js corpora agree on what is obsolete ──"
   else ok("every obsolete pattern maps to a rule in the registry");
 
   // The generation corpus must not teach any of them as good code.
-  const stack = parseCsv(readFileSync(join(ROOT, "tools/design-system/data/stacks/threejs.csv"), "utf8"));
+  const stack = parseCsv(readFileSync(join(ROOT, "null-to-hero/tools/design-system/data/stacks/threejs.csv"), "utf8"));
   const taught = [];
   for (const row of stack) {
     // Les champs prescriptifs seulement. Une Description qui nomme un motif pour
@@ -277,7 +279,7 @@ console.log("\n── P6: the three.js corpora agree on what is obsolete ──"
 
   // And the probe must still know about them, so the two cannot drift apart by
   // the audit side going quiet.
-  const probeSrc = readFileSync(join(ROOT, "tools/inspect/three.mjs"), "utf8");
+  const probeSrc = readFileSync(join(ROOT, "null-to-hero/tools/inspect/three.mjs"), "utf8");
   const claimed = obsolete.filter(o => o.detected === "yes");
   const unknown = claimed.filter(o => !probeSrc.includes(o.since.replace("r", "")) && !probeSrc.includes(o.pattern));
   if (unknown.length) no(`declared detected but the probe knows nothing about: ${unknown.map(o => o.pattern).join(", ")}`);

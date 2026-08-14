@@ -41,7 +41,8 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..");
 const CASES_DIR = join(HERE, "cases");
-const SKILLS_DIR = join(ROOT, "skills");
+// Plugin runtime lives under null-to-hero/; the corpus stays at the repo root.
+const SKILLS_DIR = join(ROOT, "null-to-hero", "skills");
 const PROFILES_FILE = join(HERE, "profiles.json");
 
 const SCALAR_FIELDS = ["id", "type", "status", "target_skill", "scenario", "input_summary"];

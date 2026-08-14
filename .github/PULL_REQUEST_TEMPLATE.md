@@ -20,7 +20,7 @@
 
 ## Reference files added or changed
 
-<!-- List the paths, e.g. skills/seo/references/new-command.md -->
+<!-- List the paths, e.g. null-to-hero/skills/seo/references/new-command.md -->
 
 ## Testing
 

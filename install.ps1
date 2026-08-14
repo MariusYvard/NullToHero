@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 $REPO      = "MariusYvard/NullToHero"
 $PLUGIN_DIR = Join-Path $env:USERPROFILE ".claude\plugins"
 $INSTALL_NAME = "null-to-hero"
-$PLUGIN_VERSION = "3.8.0"   # pinned release tag for the manual-clone fallback
+$PLUGIN_VERSION = "3.8.1"   # pinned release tag for the manual-clone fallback
 
 function Log   { param($msg) Write-Host "[NullToHero] $msg" -ForegroundColor Cyan }
 function Ok    { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
@@ -70,14 +70,17 @@ try {
         New-Item -ItemType Directory -Path $PLUGIN_DIR -Force | Out-Null
     }
 
-    $dest = Join-Path $PLUGIN_DIR $INSTALL_NAME
+    # What is cloned is the marketplace: its manifest sits at the repository root
+    # and the plugin itself is in null-to-hero\. It must not occupy the directory
+    # name Claude Code uses for the installed plugin.
+    $dest = Join-Path $PLUGIN_DIR "$INSTALL_NAME-marketplace"
     if (Test-Path $dest) {
         Warn "Existing installation found at $dest. Removing before reinstall."
         Remove-Item $dest -Recurse -Force
     }
 
     Copy-Item "$tempDir\NullToHero" $dest -Recurse -Force
-    Ok "Files copied to $dest"
+    Ok "Marketplace copied to $dest (plugin in $dest\$INSTALL_NAME)"
 
     # Register the local copy as a marketplace, then install from it
     try {

@@ -1,6 +1,6 @@
 # Behavior evaluation harness
 
-The repository already tests its tools well. `tools/audit/eval.mjs` grades the static
+The repository already tests its tools well. `null-to-hero/tools/audit/eval.mjs` grades the static
 analyzer against labeled HTML fixtures in `tests/eval/`, measures per-check accuracy and
 fails CI on a correctness regression or, under `--strict`, on any drift from
 `tests/eval/baseline.json`. That harness answers one question precisely: does the
@@ -10,7 +10,7 @@ It answers nothing about the instructions. Nothing in the repository checks that
 agent refuses to guarantee a ranking, returns a missing input state instead of a number
 when a blocking input is absent, declines to reconstruct a threshold the project removed
 on purpose, or routes a request to the command that owns it. Those behaviors are
-specified across `skills/*/SKILL.md`, the reference files and the sub-agent definitions,
+specified across `null-to-hero/skills/*/SKILL.md`, the reference files and the sub-agent definitions,
 and until now they were specified nowhere in a form anything could check.
 
 This directory holds that missing corpus and a structural verifier for it.
@@ -47,7 +47,7 @@ failure_modes:
 | `id` | Lowercase kebab-case, unique across the whole corpus. |
 | `type` | One of `risk`, `routing`, `edge`, `contract`. |
 | `status` | `simulated` by default. `real` only under the evidence rule below. |
-| `target_skill` | A directory that exists under `skills/`. |
+| `target_skill` | A directory that exists under `null-to-hero/skills/`. |
 | `scenario` | The situation, one sentence, from the outside. |
 | `input_summary` | What the user says, in the user's register rather than the plugin's. |
 | `expected_behavior` | Non-empty list. Each entry is something an observer could confirm from a transcript. |
@@ -133,7 +133,7 @@ command getting renamed while the cases keep citing the old name.
 |---|---|---|
 | 1 | Every case parses, carries the seven mandatory fields, and `type` and `status` hold allowed values | error |
 | 2 | Case ids are unique across the whole corpus | error |
-| 3 | `target_skill` names a directory present in `skills/` | error |
+| 3 | `target_skill` names a directory present in `null-to-hero/skills/` | error |
 | 4 | The evidence rule: a `real` case carries both evidence fields, the file exists inside the repository and the hash matches | error |
 | 5 | `expected_behavior` and `failure_modes` are non-empty | error |
 | 5b | A failure mode that is an expected behavior with a negation prefix | warning |
@@ -172,4 +172,4 @@ change the exit code.
 Content is in English, matching the rest of the repository. The tone is factual: a case
 describes a situation and a behavior, it does not sell the plugin. Em dashes and en
 dashes are banned throughout this directory, including inside cases, in line with the
-copy rule in `skills/siteasy/SKILL.md`. No serial comma.
+copy rule in `null-to-hero/skills/siteasy/SKILL.md`. No serial comma.

@@ -21,7 +21,8 @@ import { fileURLToPath } from "node:url";
 import { runChecks } from "./lib/checks.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const EVAL = join(HERE, "..", "..", "tests", "eval");
+// tests/ stays at the repository root; HERE is <repo>/null-to-hero/tools/audit.
+const EVAL = join(HERE, "..", "..", "..", "tests", "eval");
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");
 const update = args.includes("--update");

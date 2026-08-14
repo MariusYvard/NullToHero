@@ -2,12 +2,12 @@
 // Runtime unit tests for siteasy live-mode path containment, design-system
 // slug sanitisation, and the contrast parser's colour spaces.
 // Pure Node standard library. Run: node tests/unit.mjs
-import { resolveInRoot, looksGenerated } from "../skills/siteasy/scripts/live-core.mjs";
-import { parseColor, ratioOf } from "../tools/audit/lib/contrast.mjs";
-import { runChecks } from "../tools/audit/lib/checks.mjs";
-import { dedupeSamples } from "../tools/audit/fetch.mjs";
-import { parseBuildLines, verdict, burned, changedAxes, AXES, VOCAB } from "../tools/siteasy/variety.mjs";
-import { evaluateSweep } from "../tools/inspect/motion.mjs";
+import { resolveInRoot, looksGenerated } from "../null-to-hero/skills/siteasy/scripts/live-core.mjs";
+import { parseColor, ratioOf } from "../null-to-hero/tools/audit/lib/contrast.mjs";
+import { runChecks } from "../null-to-hero/tools/audit/lib/checks.mjs";
+import { dedupeSamples } from "../null-to-hero/tools/audit/fetch.mjs";
+import { parseBuildLines, verdict, burned, changedAxes, AXES, VOCAB } from "../null-to-hero/tools/siteasy/variety.mjs";
+import { evaluateSweep } from "../null-to-hero/tools/inspect/motion.mjs";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -353,7 +353,7 @@ console.log("\n── load-context: the pre-flight scan reads a project ──")
   writeFileSync(join(dir, "index.html"), `<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700">`);
 
   const raw = execFileSync(process.execPath,
-    [resolve("skills/siteasy/scripts/load-context.mjs"), dir], { encoding: "utf8" });
+    [resolve("null-to-hero/skills/siteasy/scripts/load-context.mjs"), dir], { encoding: "utf8" });
   const pf = JSON.parse(raw).preflight;
 
   ok("the meta-framework wins over react", pf.framework?.name === "Next.js");
@@ -370,7 +370,7 @@ console.log("\n── load-context: the pre-flight scan reads a project ──")
   // a first run on a scratch folder actually hits.
   const empty = mkdtempSync(join(tmpdir(), "nth-preflight-empty-"));
   const bare = JSON.parse(execFileSync(process.execPath,
-    [resolve("skills/siteasy/scripts/load-context.mjs"), empty], { encoding: "utf8" })).preflight;
+    [resolve("null-to-hero/skills/siteasy/scripts/load-context.mjs"), empty], { encoding: "utf8" })).preflight;
   ok("an empty project scans clean and says nothing to preserve",
     bare.framework === null && bare.motionStance === "motion-cut" &&
     bare.notes.some((n) => /nothing to preserve/.test(n)));
@@ -464,7 +464,7 @@ console.log("\n── P15: live-inject refuses a path outside the root ──");
   mkdirSync(join(proj, ".siteasy-live"), { recursive: true });
   writeFileSync(join(proj, "index.html"), "<html><body></body></html>");
   writeFileSync(join(ltmp, "outside.html"), "<html><body></body></html>");
-  const INJECT = resolve("skills/siteasy/scripts/live-inject.mjs");
+  const INJECT = resolve("null-to-hero/skills/siteasy/scripts/live-inject.mjs");
   const runInject = (files) => {
     writeFileSync(join(proj, ".siteasy-live", "config.json"), JSON.stringify({ files, port: 4321, token: "t" }));
     try { return { json: JSON.parse(execFileSync("node", [INJECT, "--port", "4321", "--token", "t"], { cwd: proj, stdio: ["ignore", "pipe", "pipe"] }).toString()), code: 0 }; }
@@ -491,7 +491,7 @@ console.log("\n── P15: live-inject refuses a path outside the root ──");
 console.log("\n── P4b: an unscorable dimension does not vote ──");
 {
   const stmp = mkdtempSync(join(tmpdir(), "nth-score-"));
-  const SCORE = resolve("tools/content/score.mjs");
+  const SCORE = resolve("null-to-hero/tools/content/score.mjs");
   const runScore = (text) => {
     const f = join(stmp, "d.md");
     writeFileSync(f, text);
@@ -527,7 +527,7 @@ console.log("\n── P4b: an unscorable dimension does not vote ──");
 // as an absence now fails the build instead of waiting for a reader to notice.
 console.log("\n── P3b: no check passes on an input it did not measure ──");
 {
-  const { runChecks: rc2, UNFETCHABLE } = await import("../tools/audit/lib/checks.mjs");
+  const { runChecks: rc2, UNFETCHABLE } = await import("../null-to-hero/tools/audit/lib/checks.mjs");
   // A page that references CSS and JS it never got: the provenance the fix exists for.
   const referencing = '<!doctype html><html lang="en"><head><title>t</title>'
     + '<meta charset="utf-8"><meta name="viewport" content="width=device-width">'
@@ -558,7 +558,7 @@ console.log("\n── P3b: no check passes on an input it did not measure ──
   ok("a page that genuinely has no CSS and no JS is still judged", silent.length === 0);
 
   // P4: a score deduced from nothing is not a score.
-  const { scoreFromChecks: sf2 } = await import("../tools/audit/lib/checks.mjs");
+  const { scoreFromChecks: sf2 } = await import("../null-to-hero/tools/audit/lib/checks.mjs");
   const allUnmeasured = sf2(Array.from({ length: 42 }, (_, i) => ({ id: "c" + i, verdict: "NOT_MEASURED" })));
   ok("forty-two unmeasured checks score null, not 100", allUnmeasured.score === null);
   ok("the coverage travels with the score", allUnmeasured.coverage === 0 && allUnmeasured.total === 42);
@@ -571,7 +571,7 @@ console.log("\n── P3b: no check passes on an input it did not measure ──
 // Each of these three exited 0 with RESULT: PASS before the fix. The gate had no
 // way to say "I could not judge", so anything it could not read read as a pass.
 console.log("\n── audit gate: refusing to judge is exit 2 ──");
-const GATE = resolve("tools/audit/gate.mjs");
+const GATE = resolve("null-to-hero/tools/audit/gate.mjs");
 const gate = (args) => {
   try { execFileSync("node", [GATE, ...args], { stdio: ["ignore", "pipe", "pipe"] }); return 0; }
   catch (e) { return e.status ?? -1; }

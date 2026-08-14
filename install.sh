@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="3.8.0"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="3.8.1"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -68,7 +68,10 @@ fi
 
 log "Installing plugin manually..."
 mkdir -p "${PLUGIN_DIR}"
-DEST="${PLUGIN_DIR}/${INSTALL_NAME}"
+# What is cloned is the marketplace: its manifest sits at the repository root and
+# the plugin itself is in null-to-hero/. It must not occupy the directory name
+# Claude Code uses for the installed plugin.
+DEST="${PLUGIN_DIR}/${INSTALL_NAME}-marketplace"
 
 if [ -d "${DEST}" ]; then
   warn "Existing installation found at ${DEST}. Removing before reinstall."
@@ -76,7 +79,7 @@ if [ -d "${DEST}" ]; then
 fi
 
 cp -r "${TEMP_DIR}/NullToHero" "${DEST}"
-ok "Files copied to ${DEST}"
+ok "Marketplace copied to ${DEST} (plugin in ${DEST}/${INSTALL_NAME})"
 
 # Register the local copy as a marketplace, then install from it
 if claude plugin marketplace add "${DEST}" 2>/dev/null && \

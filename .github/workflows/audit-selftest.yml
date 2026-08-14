@@ -27,14 +27,14 @@ jobs:
           node-version: "20"
 
       - name: Analyzer eval (correctness + drift)
-        run: node tools/audit/eval.mjs --strict
+        run: node null-to-hero/tools/audit/eval.mjs --strict
 
       - name: Gate passes a clean fixture
-        run: node tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 90
+        run: node null-to-hero/tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 90
 
       - name: Gate fails a defective fixture (below score threshold)
         run: |
-          if node tools/audit/gate.mjs tests/eval/fixtures/contrast-fail-grey.html --min-score 90; then
+          if node null-to-hero/tools/audit/gate.mjs tests/eval/fixtures/contrast-fail-grey.html --min-score 90; then
             echo "::error::gate should have failed the low-scoring defective fixture"
             exit 1
           fi
@@ -42,7 +42,7 @@ jobs:
 
       - name: Gate blocks a critical defect (robots)
         run: |
-          if node tools/audit/gate.mjs --report tests/eval/fixtures/critical-report.json; then
+          if node null-to-hero/tools/audit/gate.mjs --report tests/eval/fixtures/critical-report.json; then
             echo "::error::gate should have failed on a critical check FAIL"
             exit 1
           fi
@@ -50,5 +50,5 @@ jobs:
 
       - name: Gate JSON report round-trips
         run: |
-          node tools/audit/analyze.mjs tests/eval/fixtures/clean-pass.html --out /tmp/sa.json
-          node tools/audit/gate.mjs --report /tmp/sa.json --min-score 90
+          node null-to-hero/tools/audit/analyze.mjs tests/eval/fixtures/clean-pass.html --out /tmp/sa.json
+          node null-to-hero/tools/audit/gate.mjs --report /tmp/sa.json --min-score 90

@@ -49,8 +49,8 @@ than scripting.
    the deterministic analyzer on it, so the computed checks score the real page:
    ```bash
    # paste/save the rendered DOM to rendered.html, then:
-   node tools/audit/analyze.mjs rendered.html --out SITE-AUDIT.json
-   node tools/audit/gate.mjs --report SITE-AUDIT.json --min-score 60
+   node null-to-hero/tools/audit/analyze.mjs rendered.html --out SITE-AUDIT.json
+   node null-to-hero/tools/audit/gate.mjs --report SITE-AUDIT.json --min-score 60
    ```
    Or run a full `/audit` and pass the rendered HTML as the shared fetch so all 13
    sub-agents read the real content.
@@ -83,17 +83,17 @@ probe in the browser rather than sitting in a reference file waiting for a reade
 | 68 Guarantee decorative video playback | Whether the decorative hero is playing, blocked, or frozen on its last frame |
 
 ```bash
-node tools/inspect/rendered.mjs --source
+node null-to-hero/tools/inspect/rendered.mjs --source
 ```
 
 Open the target, let it settle for at least 2.5 seconds, then run that string with
 the extension's JavaScript tool. It returns
 `{findings, scanned, truncated, elapsedMs, settled}`, and every finding carries
 the registry id, so severity, rationale and standard come from
-`tools/data/inspect-rules.csv` exactly as they do for a local scan.
+`null-to-hero/tools/data/inspect-rules.csv` exactly as they do for a local scan.
 
 The same function runs headless through Playwright
-(`node tools/inspect/rendered.mjs <url> --json`). One source, two runners, because
+(`node null-to-hero/tools/inspect/rendered.mjs <url> --json`). One source, two runners, because
 two implementations of "is this sticky element broken" would drift.
 
 Two things decide the answer and both belong in the report. The **viewport**, since
@@ -101,7 +101,7 @@ rule 51 compares a track against `window.innerHeight`. And **`settled`**, since
 rules 27 and 68 judge what outlived its window: the probe measures its own elapsed
 time from the load event and returns `settled: false` when it was run too early,
 in which case those two were not judged and their silence means nothing. Full
-detail in `skills/inspect/references/rendered.md`.
+detail in `null-to-hero/skills/inspect/references/rendered.md`.
 
 ## A repeatable recipe
 
@@ -127,7 +127,7 @@ fetch.
 
 ## See also
 
-- [tools/audit/README.md](../tools/audit/README.md) — the deterministic pre-pass the browser feeds.
-- `skills/inspect/references/preview.md` — Playwright screenshots for visual review.
-- `skills/audit/references/checks.md` — the `/audit checks` deterministic run.
+- [null-to-hero/tools/audit/README.md](../null-to-hero/tools/audit/README.md) — the deterministic pre-pass the browser feeds.
+- `null-to-hero/skills/inspect/references/preview.md` — Playwright screenshots for visual review.
+- `null-to-hero/skills/audit/references/checks.md` — the `/audit checks` deterministic run.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — why the fetch and the computed checks are shared.

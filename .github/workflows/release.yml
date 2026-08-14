@@ -27,7 +27,7 @@ jobs:
           TAG_NAME: ${{ github.ref_name }}
         run: |
           version="${TAG_NAME#v}"
-          manifest="$(node -p "require('./.claude-plugin/plugin.json').version")"
+          manifest="$(node -p "require('./null-to-hero/.claude-plugin/plugin.json').version")"
           if [ "$version" != "$manifest" ]; then
             echo "::error::Tag ${TAG_NAME} (${version}) does not match plugin.json (${manifest})"
             exit 1
@@ -45,7 +45,7 @@ jobs:
         run: node tests/unit.mjs && python3 tests/test_design_system.py
 
       - name: Build reference index
-        run: node tools/build-index.mjs
+        run: node null-to-hero/tools/build-index.mjs
 
       - name: Extract changelog entry
         env:

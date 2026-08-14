@@ -23,15 +23,15 @@ jobs:
           node-version: "20"
 
       - name: Build reference index
-        run: node tools/build-index.mjs
+        run: node null-to-hero/tools/build-index.mjs
 
       - name: Every rule is complete across its four sources
         if: always()
-        run: node tools/rule.mjs --audit
+        run: node null-to-hero/tools/rule.mjs --audit
 
       - name: Prose counts match the CSVs
         if: always()
-        run: node tools/sync-counts.mjs --check
+        run: node null-to-hero/tools/sync-counts.mjs --check
 
       - name: Run reference validator
         if: always()
@@ -45,7 +45,7 @@ jobs:
         run: node tests/inspect-rules.mjs
 
       - name: Corpus divergence harness (registry and recorded results)
-        run: node tools/eval-corpus/run.mjs
+        run: node null-to-hero/tools/eval-corpus/run.mjs
 
       # P10. The thirteen browser rules are what the product sells and nothing in
       # CI verified them: rendered-rules.mjs exits 0 when Playwright is absent, and
@@ -69,7 +69,7 @@ jobs:
       - name: Architecture review numbers hold
         if: always()
         continue-on-error: true
-        run: node tools/check-review-numbers.mjs
+        run: node null-to-hero/tools/check-review-numbers.mjs
 
       - name: Run Python unit tests
         if: always()
@@ -77,11 +77,11 @@ jobs:
 
       - name: Context budget guard
         if: always()
-        run: node tools/check-context-budget.mjs
+        run: node null-to-hero/tools/check-context-budget.mjs
 
       - name: Routing guard
         if: always()
-        run: node tools/check-routing.mjs
+        run: node null-to-hero/tools/check-routing.mjs
 
       - name: Behavior corpus is well formed
         if: always()
@@ -89,4 +89,4 @@ jobs:
 
       - name: Content scrubber self-test
         if: always()
-        run: node skills/seo/scripts/scrub.mjs --selftest
+        run: node null-to-hero/skills/seo/scripts/scrub.mjs --selftest

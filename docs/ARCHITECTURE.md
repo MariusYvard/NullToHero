@@ -5,7 +5,7 @@ designed, and which production multi-agent principles apply to a Claude Code
 plugin made of Markdown and a few local scripts. This document is the rationale
 record for the agent layer. The operational security policy lives in
 [SECURITY.md](../SECURITY.md); the runnable orchestration playbook lives in
-[skills/audit/references/full.md](../skills/audit/references/full.md).
+[null-to-hero/skills/audit/references/full.md](../null-to-hero/skills/audit/references/full.md).
 
 ## Topology
 
@@ -170,7 +170,7 @@ The combine step is code-shaped, not model-shaped, so it is reproducible:
   tools and trust boundary since 1.11.0, the scoring rubric since 1.12.0). It treats
   generated structure as a proposal that must pass a checker, not as trusted output.
   Since 1.14.0 the same discipline extends from plugin structure to page facts:
-  `tools/audit/analyze.mjs` computes the objective checks and `tools/audit/eval.mjs`
+  `null-to-hero/tools/audit/analyze.mjs` computes the objective checks and `null-to-hero/tools/audit/eval.mjs`
   grades them against labeled fixtures, so the computed verdicts are checked too.
 
 Run-to-run variance is therefore confined to verdict flips on the genuinely subjective

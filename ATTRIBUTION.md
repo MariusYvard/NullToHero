@@ -17,7 +17,7 @@ NullToHero is built on the following open standards, tools and sources of knowle
 - **Lenis**: Darkroom Engineering (formerly Studio Freight), MIT. https://github.com/darkroomengineering/lenis
 - **GSAP**: GreenSock, standard license. https://gsap.com/
 - **ui-ux-pro-max-skill**: design-system knowledge base (stack guidelines and design data) by Next Level Builder, licensed under the MIT License. https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-  The `tools/design-system` generator adapts its stack knowledge base and design data. The MIT license text is retained in `tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt` and credited in [NOTICE](NOTICE).
+  The `null-to-hero/tools/design-system` generator adapts its stack knowledge base and design data. The MIT license text is retained in `null-to-hero/tools/design-system/UI-UX-PRO-MAX-LICENSE-MIT.txt` and credited in [NOTICE](NOTICE).
 
 ## Data sources referenced in SEO references
 
@@ -39,7 +39,7 @@ The 1.22.0 release adds deterministic checks, inspect rules and references adapt
 
 ## Assets fetched at build time
 
-`tools/design-system/scripts/fetch-asset.mjs` can retrieve icons, brand marks, fonts and public-domain images from third-party services (Iconify, Simple Icons, Google Fonts, Openverse with its partner museums, DiceBear and Colormind) when a project needs them. Nothing from these services is stored in this repository, so each asset keeps its upstream license, honored in the generated site as described in `skills/siteasy/references/fetch-asset.md`.
+`null-to-hero/tools/design-system/scripts/fetch-asset.mjs` can retrieve icons, brand marks, fonts and public-domain images from third-party services (Iconify, Simple Icons, Google Fonts, Openverse with its partner museums, DiceBear and Colormind) when a project needs them. Nothing from these services is stored in this repository, so each asset keeps its upstream license, honored in the generated site as described in `null-to-hero/skills/siteasy/references/fetch-asset.md`.
 
 ## License
 

@@ -92,4 +92,4 @@ runs:
         [ -n "$IN_MIN_SCORE" ] && ARGS+=( --min-score "$IN_MIN_SCORE" )
         [ -n "$IN_MAX_WARNS" ] && ARGS+=( --max-warns "$IN_MAX_WARNS" )
         [ "$IN_FAIL_CRIT" = "false" ] && ARGS+=( --no-fail-on-critical )
-        node "$GITHUB_ACTION_PATH/tools/audit/gate.mjs" "${ARGS[@]}"
+        node "$GITHUB_ACTION_PATH/null-to-hero/tools/audit/gate.mjs" "${ARGS[@]}"
