@@ -1,0 +1,10 @@
+Token,Kimi Code,Codex,Why
+Claude in Chrome,a connected browser,a connected browser,"Neither host ships the Chrome extension; the property that matters is a real browser with the user's session."
+Claude Code,Kimi Code,Codex,"The host names itself."
+AskUserQuestion,AskUserQuestion,clarifying-question,"Kimi Code exposes the same tool name. Codex documents no equivalent, so the phrase names the act."
+subagent_type,subagent_type,agent_type,"Kimi Code's Agent tool takes subagent_type. Codex's spawn_agent takes agent_type."
+WebFetch,FetchURL,fetch,"Kimi Code renamed it. Codex documents no tool name for skills."
+Task tool,Agent tool,spawn_agent tool,"The delegation tool of each host."
+`Task`,`Agent`,`spawn_agent`,"Same, in its backticked form."
+Read tool,Read tool,file reader,"Kimi Code exposes Read. Codex documents no tool name for skills."
+Edit tool,Edit tool,file editor,"Kimi Code exposes Edit."

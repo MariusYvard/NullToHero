@@ -47,6 +47,14 @@ jobs:
       - name: Corpus divergence harness (registry and recorded results)
         run: node null-to-hero/tools/eval-corpus/run.mjs
 
+      - name: Parsers for the generated packages
+        if: always()
+        run: python3 -m pip install --quiet pyyaml
+
+      - name: Portable packages are in sync and valid (Codex, Kimi Code)
+        if: always()
+        run: node tests/portability.mjs
+
       # P10. The thirteen browser rules are what the product sells and nothing in
       # CI verified them: rendered-rules.mjs exits 0 when Playwright is absent, and
       # the workflow did not run the file at all. Not a failure, a construction.

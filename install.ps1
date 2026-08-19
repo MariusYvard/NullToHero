@@ -1,18 +1,89 @@
 # NullToHero — Manual installer for Windows (PowerShell)
-# Usage: powershell -ExecutionPolicy Bypass -File install.ps1
+# Usage: powershell -ExecutionPolicy Bypass -File install.ps1 [-Target claude|codex|kimi|all]
 # Requires: Claude Code CLI, Git
+
+param([ValidateSet("claude","codex","kimi","all")][string]$Target = "claude")
 
 $ErrorActionPreference = "Stop"
 
 $REPO      = "MariusYvard/NullToHero"
 $PLUGIN_DIR = Join-Path $env:USERPROFILE ".claude\plugins"
 $INSTALL_NAME = "null-to-hero"
-$PLUGIN_VERSION = "3.8.1"   # pinned release tag for the manual-clone fallback
+$PLUGIN_VERSION = "4.0.0"   # pinned release tag for the manual-clone fallback
 
 function Log   { param($msg) Write-Host "[NullToHero] $msg" -ForegroundColor Cyan }
 function Ok    { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
 function Warn  { param($msg) Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 function Err   { param($msg) Write-Host "[ERROR] $msg" -ForegroundColor Red; exit 1 }
+
+# ─── Portable targets: Codex and Kimi ─────────────────────────────────────────
+#
+#   -Target codex   copies dist\codex into %USERPROFILE%\.agents\skills
+#   -Target kimi    copies dist\kimi  into %USERPROFILE%\.kimi\skills
+#   -Target all     both
+#
+# The two directories are kept apart because Codex needs the short descriptions
+# and Kimi carries the long ones; one shared copy would have to lose one.
+
+$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
+$NTH_ROOT_ABS = Join-Path $SCRIPT_DIR "null-to-hero"
+
+function Install-Portable {
+    param([string]$HostName)
+
+    $src = Join-Path $SCRIPT_DIR "dist\$HostName"
+    if (-not (Test-Path $src)) {
+        Err "dist\$HostName not found. Run: node null-to-hero\tools\build-dist.mjs"
+    }
+    if (-not (Test-Path (Join-Path $NTH_ROOT_ABS ".claude-plugin\plugin.json"))) {
+        Err "This script must run from a NullToHero checkout; $NTH_ROOT_ABS is missing."
+    }
+
+    $skillsDir = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi\skills" }
+                 else { Join-Path $env:USERPROFILE ".agents\skills" }
+    New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
+
+    foreach ($skill in Get-ChildItem (Join-Path $src "skills") -Directory) {
+        $dest = Join-Path $skillsDir $skill.Name
+        if ((Test-Path $dest) -and -not (Test-Path (Join-Path $dest ".nth-installed"))) {
+            Warn "Skipping $dest : it exists and was not installed by NullToHero."
+            continue
+        }
+        if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
+        Copy-Item $skill.FullName $dest -Recurse
+
+        # Resolve the root token to this checkout. Tools and assets are read from
+        # the checkout, they are not copied.
+        $utf8 = New-Object System.Text.UTF8Encoding($false)
+        Get-ChildItem $dest -Recurse -File -Include *.md,*.mjs,*.py | ForEach-Object {
+            $text = [System.IO.File]::ReadAllText($_.FullName)
+            if ($text.Contains('${NTH_ROOT}')) {
+                [System.IO.File]::WriteAllText($_.FullName, $text.Replace('${NTH_ROOT}', $NTH_ROOT_ABS), $utf8)
+            }
+        }
+        Set-Content -Path (Join-Path $dest ".nth-installed") -Value (Get-Date -Format o) -Encoding utf8
+        Ok "$($skill.Name) -> $dest"
+    }
+
+    $agentsDest = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi\agents" }
+                  else { Join-Path $env:USERPROFILE ".codex\agents" }
+    New-Item -ItemType Directory -Path $agentsDest -Force | Out-Null
+    Copy-Item (Join-Path $src "agents\*") $agentsDest -Recurse -Force
+    Ok "sub-agents -> $agentsDest"
+
+    if ($HostName -eq "kimi") {
+        Warn "Kimi loads sub-agents from an agent file, not from a directory scan."
+        Warn "Start it with: kimi --agent-file $agentsDest\null-to-hero.yaml"
+    }
+    Log "Read dist\VERIFY.md: three claims about these hosts come from their"
+    Log "documentation and have never been observed running."
+}
+
+switch ($Target) {
+    "codex" { Install-Portable "codex"; exit 0 }
+    "kimi"  { Install-Portable "kimi";  exit 0 }
+    "all"   { Install-Portable "codex"; Install-Portable "kimi"; exit 0 }
+}
 
 # ─── Check dependencies ───────────────────────────────────────────────────────
 

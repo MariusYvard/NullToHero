@@ -11,6 +11,75 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ---
 
+## [4.0.0] - 2026-08-19
+
+### The headline
+
+The plugin ran on one host. It now runs on three. Claude Code is unaffected:
+`git diff` on `null-to-hero/skills` and `null-to-hero/agents` shows four lines,
+all of them the version number. Codex and Kimi Code get generated packages under
+`dist/`, built from the same source.
+
+The tempting shape was to neutralise the source, write "fetch the page" instead
+of `WebFetch`, and let every host read the same neutral text. That degrades the
+one host with existing users, because Claude reads the prose too. So the source
+keeps naming Claude's tools and the build substitutes them per host, from a
+table with a source citation on every row.
+
+### Added
+
+- `null-to-hero/tools/build-dist.mjs`. Generates `dist/codex/` and `dist/kimi/`:
+  the `nth-` prefix, the root token substitution, the command rewrite, the tool
+  name substitution, the host note, and the fifteen sub-agents transposed to each
+  host's own format. `--check` rebuilds into a temporary directory and fails if
+  `dist/` drifted.
+- `null-to-hero/tools/nth-root.mjs`. Resolves the checkout from `NTH_ROOT`, then
+  `CLAUDE_PLUGIN_ROOT`, then by walking up to `.claude-plugin/plugin.json`.
+- `null-to-hero/tools/data/prose-tokens.csv`. Nine tool names, their replacement
+  on each host, and why. Kimi Code's names are almost Claude's: only `WebFetch`
+  and `Task` differ. Codex publishes no tool name to a skill, so its column
+  carries capability phrases.
+- `null-to-hero/tools/data/host-tools.csv` and `skill-short-descriptions.csv`.
+  Four descriptions of at most 400 characters, because Codex bounds its startup
+  skill list and Kimi Code truncates a description at 250 characters in the
+  listing it shows the model. The long description moves to `whenToUse`, which
+  Kimi Code leaves whole.
+- `tests/portability.mjs`, 42 checks, and `tests/parse-dist.py`, 40 checks. The
+  first holds the non-regression contract; the second parses every generated file
+  with tomllib and PyYAML rather than a regular expression, and enforces the
+  field rules each host's own parser enforces.
+- `tests/verify-hosts.sh`. Installs Codex and Kimi Code from npm, installs the
+  generated packages into throwaway homes, and points both at a local server that
+  stands in for the model API. The evidence is the request payload each host
+  would have sent, not a log line about it. Eight checks, outside the normal
+  suite because it needs the network.
+- `dist/VERIFY.md`. What that run showed, and what stays out of scope.
+- `install.sh --target codex|kimi|all` and `install.ps1 -Target`.
+
+### Changed
+
+- Nothing that Claude Code reads, beyond the version. The prose, the frontmatter,
+  the sub-agent declarations and the 32 `${CLAUDE_PLUGIN_ROOT}` tokens are
+  byte-identical to 3.8.1.
+
+### Known limits
+
+Kimi Work is not covered. No official source establishes that it reads `SKILL.md`
+from disk, and its installation directory holds no configuration.
+
+The Python `kimi-cli` is not covered. Its own README says it is being wound down
+in favour of Kimi Code, and its agent format is unrelated.
+
+Kimi Code's read-only allowlist is intersected with what the session offers:
+`ReadMediaFile` and `WebSearch` are declared in the frontmatter and did not reach
+the request. The read-only contract holds either way, but the declaration is not
+the last word.
+
+What no local run can settle is whether a model then uses the skills well. That
+is what the evaluation corpus is for, and it needs an account.
+
+---
+
 ## [3.8.1] - 2026-08-14
 
 ### The headline

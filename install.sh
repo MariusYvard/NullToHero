@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="MariusYvard/NullToHero"
 PLUGIN_DIR="${HOME}/.claude/plugins"
 INSTALL_NAME="null-to-hero"
-PLUGIN_VERSION="3.8.1"   # pinned release tag for the manual-clone fallback
+PLUGIN_VERSION="4.0.0"   # pinned release tag for the manual-clone fallback
 
 # Colors
 RED='\033[0;31m'
@@ -21,6 +21,87 @@ log()    { echo -e "${BLUE}[NullToHero]${NC} $1"; }
 ok()     { echo -e "${GREEN}[OK]${NC} $1"; }
 warn()   { echo -e "${YELLOW}[WARN]${NC} $1"; }
 err()    { echo -e "${RED}[ERROR]${NC} $1" >&2; }
+
+# ─── Portable targets: Codex and Kimi ─────────────────────────────────────────
+#
+#   bash install.sh                  Claude Code, the default, unchanged below
+#   bash install.sh --target codex   copies dist/codex into ~/.agents/skills
+#   bash install.sh --target kimi    copies dist/kimi into ~/.agents/skills
+#   bash install.sh --target all     both
+#
+# Codex and Kimi both read ~/.agents/skills, so one copy serves the two. Only
+# the sub-agent files differ, and they go to each host's own directory.
+
+TARGET="claude"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --target) TARGET="${2:-}"; shift 2 ;;
+    --target=*) TARGET="${1#*=}"; shift ;;
+    *) shift ;;
+  esac
+done
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+NTH_ROOT_ABS="${SCRIPT_DIR}/null-to-hero"
+# Codex reads ~/.agents/skills. Kimi Code reads $KIMI_CODE_HOME/skills, default
+# ~/.kimi-code/skills. They are kept apart so the two packages, which carry
+# different frontmatter and different tool names, cannot overwrite one another.
+KIMI_CODE_HOME="${KIMI_CODE_HOME:-${HOME}/.kimi-code}"
+skills_dir_for() { [ "$1" = "kimi" ] && echo "${KIMI_CODE_HOME}/skills" || echo "${HOME}/.agents/skills"; }
+
+install_portable() {
+  local host="$1"
+  local src="${SCRIPT_DIR}/dist/${host}"
+
+  if [ ! -d "${src}" ]; then
+    err "dist/${host} not found. Run: node null-to-hero/tools/build-dist.mjs"
+    exit 1
+  fi
+  if [ ! -f "${NTH_ROOT_ABS}/.claude-plugin/plugin.json" ]; then
+    err "This script must run from a NullToHero checkout; ${NTH_ROOT_ABS} is missing."
+    exit 1
+  fi
+
+  local target_skills; target_skills="$(skills_dir_for "${host}")"
+  mkdir -p "${target_skills}"
+  local skill dest
+  for skill in "${src}"/skills/*/; do
+    dest="${target_skills}/$(basename "${skill}")"
+    if [ -d "${dest}" ] && [ ! -f "${dest}/.nth-installed" ]; then
+      warn "Skipping ${dest}: it exists and was not installed by NullToHero."
+      continue
+    fi
+    rm -rf "${dest}"
+    cp -r "${skill}" "${dest}"
+    # Resolve the root token to this checkout. The tools and the asset library
+    # stay where they are; only the skill text is copied.
+    find "${dest}" -type f \( -name '*.md' -o -name '*.mjs' -o -name '*.py' \) \
+      -exec sed -i.bak "s|\${NTH_ROOT}|${NTH_ROOT_ABS}|g" {} \; 2>/dev/null || \
+    find "${dest}" -type f \( -name '*.md' -o -name '*.mjs' -o -name '*.py' \) \
+      -exec sed -i '' "s|\${NTH_ROOT}|${NTH_ROOT_ABS}|g" {} \;
+    find "${dest}" -name '*.bak' -delete
+    date -u +%Y-%m-%dT%H:%M:%SZ > "${dest}/.nth-installed"
+    ok "$(basename "${skill}") -> ${dest}"
+  done
+
+  local agents_dest
+  if [ "${host}" = "codex" ]; then agents_dest="${HOME}/.codex/agents"; else agents_dest="${KIMI_CODE_HOME}/agents"; fi
+  mkdir -p "${agents_dest}"
+  cp -r "${src}"/agents/. "${agents_dest}/"
+  ok "sub-agents -> ${agents_dest}"
+
+  echo ""
+  log "Read dist/VERIFY.md: three claims about these hosts come from their"
+  log "documentation and have never been observed running."
+}
+
+case "${TARGET}" in
+  codex) install_portable codex; exit 0 ;;
+  kimi)  install_portable kimi;  exit 0 ;;
+  all)   install_portable codex; install_portable kimi; exit 0 ;;
+  claude) : ;;
+  *) err "Unknown target: ${TARGET}. Use claude, codex, kimi or all."; exit 1 ;;
+esac
 
 # ─── Check dependencies ───────────────────────────────────────────────────────
 

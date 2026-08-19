@@ -6,12 +6,12 @@
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-3.8.1-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-4.0.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v3.8.1** · 4 skills · 62 commands · 131 reference docs · 15 audit sub-agents
+**v4.0.0** · 4 skills · 62 commands · 131 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -115,6 +115,38 @@ NullToHero is a Claude Code plugin and a marketplace in one repository. The mark
 /plugin marketplace add MariusYvard/NullToHero
 /plugin install null-to-hero@null-to-hero-marketplace
 ```
+
+### Other agents: Codex and Kimi Code
+
+The four skills also run on OpenAI Codex and on Kimi Code. Both read the
+[Agent Skills](https://agentskills.io/specification) format, so the same source
+serves all three hosts; `null-to-hero/tools/build-dist.mjs` generates each
+package into `dist/`.
+
+```
+git clone https://github.com/MariusYvard/NullToHero.git
+cd NullToHero
+bash install.sh --target codex     # or --target kimi, or --target all
+```
+
+On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`.
+
+Codex gets `~/.agents/skills` and `~/.codex/agents`. Kimi Code gets
+`~/.kimi-code/skills` and `~/.kimi-code/agents`, and finds its fifteen
+sub-agents without any launch flag. The skills install as `nth-seo`,
+`nth-siteasy`, `nth-inspect` and `nth-audit`, because a skills directory is
+shared with every other pack on the machine and `audit` is a name someone else
+will claim. The deterministic tools and the asset library are read from the
+clone, so keep it where it is.
+
+Claude Code is unaffected by any of this. It keeps loading `null-to-hero/`
+directly, the prose keeps naming Claude's tools, and the build substitutes them
+only in the generated packages. `tests/portability.mjs` fails if that stops
+being true.
+
+Both hosts were installed and run against these packages on 2026-08-19, Codex
+`0.148.0` and Kimi Code `0.37.2`. `dist/VERIFY.md` records what that run showed;
+`bash tests/verify-hosts.sh` reproduces it in about three minutes.
 
 ### Updating
 
