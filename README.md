@@ -15,7 +15,7 @@
 
 </div>
 
-NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, and check them for problems before you publish. Claude does the expert work, you stay in control.
+NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, judge the whole site before you publish, and hand the finished thing to the person who owns it. Claude does the expert work, you stay in control.
 
 <div align="center">
   <picture>
@@ -34,7 +34,7 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 
 ## What is NullToHero
 
-Claude already writes code. NullToHero gives it the taste and the checklists of a senior web team: a designer, an SEO specialist, a quality inspector, and a reviewer who looks at the whole site at once.
+Claude already writes code. NullToHero gives it the taste and the checklists of a senior web team: a designer, an SEO specialist, a reviewer who judges the whole site at once, and the person who hands the keys to its owner.
 
 You do not learn commands by heart. You say what you want ("make this landing page look more premium", "why am I not on Google", "is this ready to ship"), and Claude picks the right tool. The sections below show what each tool produces so you know what to expect.
 
@@ -102,6 +102,7 @@ the point of doing them first.
 | Be found on Google and in AI answers | `/seo yoursite.com` | A scored report and a prioritized action plan |
 | Get a client-ready report | `/audit report` | Deliverable Markdown, self-contained HTML page, or PDF |
 | See it the way a real browser does | `/siteasy preview index.html` | Desktop and mobile screenshots, bugs fixed in a loop |
+| Hand the site to its owner | `/cms entrust` | Their words become editable fields, the code stays out of reach |
 
 ---
 
@@ -210,16 +211,16 @@ The doors above are the way in. The skills below are the full reference behind t
 <tr>
 <td valign="top" width="50%">
 
-![cms](https://img.shields.io/badge/cms-16a34a)<br>
-**Check before you publish.** Anti-pattern scan, browser preview, code review.<br>
-`/inspect detect` · `/inspect preview` · `/inspect review`
+![audit](https://img.shields.io/badge/audit-7c3aed)<br>
+**Whole site in one pass.** Every specialist at once, one score, one action plan.<br>
+`/audit` · `/audit verify` · `/audit compare`
 
 </td>
 <td valign="top" width="50%">
 
-![audit](https://img.shields.io/badge/audit-7c3aed)<br>
-**Whole site in one pass.** Every specialist at once, one score, one action plan.<br>
-`/audit` · `/audit verify` · `/audit compare`
+![cms](https://img.shields.io/badge/cms-16a34a)<br>
+**Hand it over.** Turn the prose into fields, ship an editor, keep the code out of reach.<br>
+`/cms entrust` · `/cms accounts` · `/cms check`
 
 </td>
 </tr>
@@ -314,13 +315,14 @@ Runs every specialist at once across search, defects and design, then merges eve
 | Command | What it does |
 |---------|-------------|
 | `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) |
-| `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents |
+| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas |
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures |
 | `report [file]` | Format an existing audit into a client-ready report, a self-contained HTML page, or PDF |
+| `review [target]` | Design engineering code review of a file or a paste: motion crimes, accessibility violations, forbidden patterns, a Before/After table with a score |
 
-The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (50 checks: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight, AI crawler access, plus the declared-value laws for tap target size and spacing, base body size, line measure, feedback duration, decorative loop budget and scrub easing), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v3.8.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [null-to-hero/tools/audit/README.md](null-to-hero/tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
+The deterministic pre-pass behind `checks` fetches the page once (optionally rendering a client-rendered SPA with Playwright), computes the objectively decidable verdicts (50 checks and the 48 rules of the rules engine: contrast, image dimensions, viewport, robots.txt, headings, titles, security headers, video hygiene, motion guards, media weight, AI crawler access, plus the declared-value laws for tap target size and spacing, base body size, line measure, feedback duration, decorative loop budget and scrub easing, plus the source-level rules for focus outlines, transition targets, z-index discipline and the rest), attaches to each one the `fixWith` route toward the command that fixes it, and writes a machine-readable `SITE-AUDIT.json`. That JSON powers a structural `compare`, score-over-time, and a CI gate you can drop into any repo as a GitHub Action (`uses: MariusYvard/NullToHero@v3.8.0`). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [null-to-hero/tools/audit/README.md](null-to-hero/tools/audit/README.md). To analyze a live site in the browser with Claude, see [docs/CLAUDE-IN-CHROME.md](docs/CLAUDE-IN-CHROME.md).
 
 Common runs: a full pass (`audit`), a consensus re-check (`audit verify`) or a before and after diff (`audit compare`).
 
@@ -435,7 +437,7 @@ NullToHero is the one that spans build, defects, SEO and a scored whole-site aud
 
 ## How a project flows
 
-The doors are the flow. A project usually walks through five of them:
+The doors are the flow. A project usually walks through six of them, in this order:
 
 ```
 /siteasy express        nothing yet: brief to a first shippable page
@@ -449,6 +451,8 @@ The doors are the flow. A project usually walks through five of them:
 /siteasy fix            execute the findings, batch by batch
      |
 /siteasy ship           polish, scans, hardening, gates: out the door
+     |
+/cms entrust            the owner can change the words, not the code
 ```
 
 Reworking an existing site instead: `/siteasy overhaul` chains the baseline audit, the fixes and the before/after proof. Growing traffic after launch: `/seo plan` sets the strategy and names the specialist passes to run; `/seo drift` watches for regressions.
@@ -477,10 +481,10 @@ Reworking an existing site instead: `/siteasy overhaul` chains the baseline audi
 /siteasy delight        add micro-interactions
 /siteasy clarify        sharpen the copy
      |
-/inspect detect         catch anti-patterns
-/inspect preview        see it in a real browser
+/audit checks           catch anti-patterns, no model involved
+/siteasy preview        see it in a real browser
 /siteasy critique       heuristic UX review
-/inspect review         final code-quality gate
+/audit review           final code-quality gate
 /siteasy polish         last quality pass
      |
 /seo audit              full SEO check
@@ -493,6 +497,8 @@ Reworking an existing site instead: `/siteasy overhaul` chains the baseline audi
 /siteasy harden         harden for production
 /audit report           client-ready report
 /seo drift              watch for regressions
+     |
+/cms entrust            hand the keys to the owner
 ```
 
 </details>
@@ -527,15 +533,15 @@ NullToHero ships **135 reference docs** that Claude loads only when it needs the
 <details>
 <summary>See the full knowledge base</summary>
 
-**siteasy, design (80):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, brand-identity, clarify, cognitive-load, color-and-contrast, color-systems, colorize, component-patterns, component-recipes, concept, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, data-viz, delight, design-tokens, distill, document, elevation, extract, fetch-asset, fix, form-patterns, gestalt, handoff, harden, heuristics-scoring, image-strategy, improve, information-architecture, inspiration, interaction-design, journey-express, journey-mapping, journey-overhaul, journey-ship, landing-patterns, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, onboard, optimize, overdrive, parallax, personas, polish, print-styles, product, quieter, resource-recipes, resource-recommendations, responsive-design, shape, ship-checklist, signature-moments, sourcing-external-code, spatial-design, stock-media, style-systems, teach, testing-strategy, tokens, typeset, typography, ux-research, ux-writing, video, wcag-2-2
+**siteasy, design (86):** accessibility-engineering, adapt, animate, animation-engineering, assets-library, audit, bolder, brand, brand-identity, clarify, cognitive-load, color-and-contrast, color-systems, colorize, component-patterns, component-recipes, concept, conversion-experiments, conversion-quality, craft, creative-patterns, critique, css-architecture, dark-mode-engineering, data-viz, delight, design-tokens, distill, document, elevation, extract, fetch-asset, fix, form-patterns, gestalt, handoff, harden, heuristics-scoring, image-strategy, improve, information-architecture, inspiration, interaction-design, journey-express, journey-mapping, journey-overhaul, journey-ship, landing-patterns, layout, live, memorability, mobile-ergonomics, motion-choreography, motion-design, objections, offer-diagnostic, onboard, optimize, overdrive, parallax, personas, polish, preview, print-styles, product, quieter, resource-recipes, resource-recommendations, responsive-design, shape, ship-checklist, signature-moments, slop-patterns, sourcing-external-code, spatial-design, stock-media, style-systems, teach, testing-strategy, tokens, typeset, typography, ux-research, ux-writing, video, wcag-2-2
 
-**seo, search (23):** action-plan, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, head-meta, hreflang, images, indexnow, local, page, performance, plan, privacy-consent, programmatic, schema, sitemap, sxo, technical
+**seo, search (27):** action-plan, ai-overview-recovery, audit, backlinks, cluster, competitor-pages, content, drift, ecommerce, geo, head-meta, hreflang, images, indexnow, local, measurement, migration, page, performance, plan, privacy-consent, programmatic, schema, search-console, sitemap, sxo, technical
 
 **seo, plan assets (6):** agency, ecommerce, generic, local-service, publisher, saas
 
-**inspect, defects (4):** code-quality, detect, preview, review
+**audit, judging (12):** checks, code-quality, compare, full, html-report, learnings, refine, rendered, report, review, rules-engine, three
 
-**audit, whole-site (6):** checks, compare, full, html-report, learnings, report
+**cms, handing over (4):** architecture, carve, entrust, operate
 
 **shared state and routing:** `DIRECTION.md` and `LOG.md` project files read by every command, `null-to-hero/tools/data/laws.csv` (16 canonical numeric laws, CI-checked citations), `null-to-hero/tools/data/remediation-map.csv` routing every check and rule to the command that fixes it (`fixWith` in SITE-AUDIT.json), and `null-to-hero/tools/reference-graph.json` (the reference graph, zero orphans enforced by CI).
 
@@ -548,8 +554,8 @@ A stack-aware design-system generator also lives under `null-to-hero/tools/desig
 <details>
 <summary><b>Requirements</b></summary>
 
-- **Node.js**, for `/inspect preview`, `/inspect detect` and the validator (`tests/validate.js`).
-- **Playwright**, installed on first `/inspect preview` run.
+- **Node.js**, for `/audit checks`, `/siteasy preview`, the whole `/cms` chain and the validator (`tests/validate.js`).
+- **Playwright**, installed on first `/siteasy preview` run, and required by `/cms carve`, which reads the page in a real browser and refuses rather than guessing when it is missing.
 - **Python 3**, for the design-system generator (`/siteasy setup`) and the Python tests.
 
 </details>
