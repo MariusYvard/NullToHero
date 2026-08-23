@@ -36,8 +36,11 @@ const BAD = /[\\\0#?%]|[\x00-\x1f\x7f]|(^|\/)\.\.(\/|$)|\/\//;
 export function allowed(path, rules) {
   if (typeof path !== "string" || !path || path.length > 512) return false;
   if (path.startsWith("/") || BAD.test(path)) return false;
-  const rule = rules.find(r =>
-    r.prefix.endsWith("/") ? path.startsWith(r.prefix) : path === r.prefix);
+  // Même ordre de préférence que `checkPath` : la règle exacte d'abord, la
+  // règle de dossier ensuite. Les deux copies existent exprès, et
+  // `tests/cms-publish.mjs` échoue si elles se mettent à répondre différemment.
+  const rule = rules.find(r => !r.prefix.endsWith("/") && path === r.prefix)
+    || rules.find(r => r.prefix.endsWith("/") && path.startsWith(r.prefix));
   if (!rule) return false;
   const dot = path.lastIndexOf(".");
   const ext = dot > path.lastIndexOf("/") ? path.slice(dot).toLowerCase() : "";

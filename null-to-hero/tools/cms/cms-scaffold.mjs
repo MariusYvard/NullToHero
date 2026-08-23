@@ -136,10 +136,17 @@ export function policyFrom(declared) {
   }));
   // A file collection declares one `file:` or a `files:` list; both name exact
   // paths, and an exact path is the tightest rule the bridge can be given.
+  //
+  // Un fichier deja couvert par une regle de dossier n'a pas besoin de sa propre
+  // regle, SAUF s'il reserve son ecriture a un role : sans regle exacte, c'est
+  // la regle du dossier qui repond, et elle ne nomme aucun role. Le fichier
+  // etait alors ouvert a tout compte connecte, en silence, pendant que
+  // l'editeur affichait la restriction.
   for (const single of singlesOf(declared.collections)) {
-    if (rules.some(r => single.file.startsWith(r.prefix))) continue;
+    const roles = single.roles || [];
     if (rules.some(r => r.prefix === single.file)) continue;
-    rules.push({ prefix: single.file, extensions: [], roles: single.roles || [] });
+    if (!roles.length && rules.some(r => single.file.startsWith(r.prefix))) continue;
+    rules.push({ prefix: single.file, extensions: [], roles });
   }
   rules.push({ prefix: `${declared.media.folder.replace(/\/+$/, "")}/`, extensions: IMAGE_EXTENSIONS, roles: [] });
   return {

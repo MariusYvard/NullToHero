@@ -96,8 +96,11 @@ const BAD = /[\\\0#?%]|[\x00-\x1f\x7f]|(^|\/)\.\.(\/|$)|\/\//;
 export function checkPath(path, policy, roles = []) {
   if (typeof path !== "string" || !path || path.length > 512) return "shape";
   if (path.startsWith("/") || BAD.test(path)) return "traversal";
-  const rule = policy.rules.find(r =>
-    r.prefix.endsWith("/") ? path.startsWith(r.prefix) : path === r.prefix);
+  // La règle exacte gagne sur la règle de dossier qui la contient. Avec un
+  // simple `find`, c'est l'ordre du fichier de politique qui décidait, et un
+  // fichier réservé à un rôle posé sous un dossier ouvert était ouvert à tous.
+  const rule = policy.rules.find(r => !r.prefix.endsWith("/") && path === r.prefix)
+    || policy.rules.find(r => r.prefix.endsWith("/") && path.startsWith(r.prefix));
   if (!rule) return "outside the allow-list";
   const dot = path.lastIndexOf(".");
   const ext = dot > path.lastIndexOf("/") ? path.slice(dot).toLowerCase() : "";

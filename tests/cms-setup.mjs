@@ -3,8 +3,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { handoverFor } from "../null-to-hero/tools/cms/cms-scaffold.mjs";
+import { handoverFor, policyFrom } from "../null-to-hero/tools/cms/cms-scaffold.mjs";
 import { CHECKS } from "../null-to-hero/tools/cms/cms-lint.mjs";
+import { checkPath } from "../null-to-hero/tools/cms/bridge.mjs";
 
 const SITE = {
   locale: "fr", branch: "cms-content", production_branch: "cms",
@@ -68,6 +69,49 @@ test("la fiche donne l'ordre de remplacement du jeton, révocation en dernier", 
 test("sans dépôt déclaré, la fiche le dit au lieu d'inventer", () => {
   const fiche = handoverFor({ ...SITE, repo: undefined });
   assert.ok(fiche.includes("<propriétaire/dépôt>"));
+});
+
+/* ── la liste blanche compilée ────────────────────────────────────────────── */
+
+// LE TROU QUE CE TEST FERME
+// -------------------------
+// Le générateur sautait la règle exacte d'un fichier déjà couvert par la règle
+// de son dossier. Le rôle déclaré sur ce fichier disparaissait avec elle, la
+// règle du dossier ne nomme aucun rôle, et n'importe quel compte connecté
+// pouvait l'écrire pendant que l'éditeur affichait la restriction.
+const declared = (roles) => ({
+  branch: "cms-content", roles: ["editor", "manager"], quota: [{ hours: 1, max: 5 }],
+  media: { folder: "static/uploads" },
+  collections: [
+    { folder: "content", name: "pages" },
+    { file: "content/prix.json", name: "prix", roles },
+  ],
+});
+
+test("un fichier réservé à un rôle garde sa règle, même sous un dossier ouvert", () => {
+  const policy = policyFrom(declared(["manager"]));
+  assert.ok(policy.rules.some(r => r.prefix === "content/prix.json"),
+    "la règle exacte a été avalée par la règle du dossier");
+  assert.equal(checkPath("content/prix.json", policy, ["editor"]), "role");
+  assert.equal(checkPath("content/prix.json", policy, ["manager"]), null);
+  assert.equal(checkPath("content/autre.json", policy, ["editor"]), null);
+});
+
+test("un fichier sans rôle n'ajoute pas de règle pour rien", () => {
+  const policy = policyFrom(declared([]));
+  assert.ok(!policy.rules.some(r => r.prefix === "content/prix.json"));
+  assert.equal(checkPath("content/prix.json", policy, ["editor"]), null);
+});
+
+// L'ordre du fichier de politique ne doit plus décider de rien.
+test("la règle exacte gagne quelle que soit sa place dans la liste", () => {
+  const rules = [
+    { prefix: "content/prix.json", extensions: [], roles: ["manager"] },
+    { prefix: "content/", extensions: [".json"], roles: [] },
+  ];
+  for (const order of [rules, [...rules].reverse()]) {
+    assert.equal(checkPath("content/prix.json", { rules: order }, ["editor"]), "role");
+  }
 });
 
 function run(state) {
