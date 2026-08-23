@@ -16,7 +16,7 @@ library are read from the checkout, not copied, so keep it where it is.
 
 ## What is here
 
-Four skills (`nth-seo`, `nth-siteasy`, `nth-inspect`, `nth-audit`) and 15 read-only sub-agents.
+5 skills (`nth-seo`, `nth-siteasy`, `nth-inspect`, `nth-audit`, `nth-cms`) and 15 read-only sub-agents.
 
 The `nth-` prefix exists because a skills directory is shared with every other
 skill pack on the machine, and `audit` and `inspect` are names a third party

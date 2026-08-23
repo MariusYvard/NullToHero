@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 
-const { fitDevice } = createRequire(import.meta.url)("../null-to-hero/tools/siteasy/cms/nth-backend.js");
+const { fitDevice } = createRequire(import.meta.url)("../null-to-hero/tools/cms/nth-backend.js");
 
 function device(stageH, stageW) {
   const node = {
@@ -35,7 +35,7 @@ test("un volet de hauteur nulle ne produit pas d'échelle absurde", () => {
 
 // Le volet lui-même : sa hauteur descend jusqu'au bas de la fenêtre où il est
 // posé, qui n'est pas celle du script quand Decap rend l'aperçu dans une iframe.
-const { fitPane } = createRequire(import.meta.url)("../null-to-hero/tools/siteasy/cms/nth-backend.js");
+const { fitPane } = createRequire(import.meta.url)("../null-to-hero/tools/cms/nth-backend.js");
 
 function pane(top, viewHeight, scriptHeight) {
   const before = globalThis.window;
@@ -68,7 +68,7 @@ test("un bloc déjà hors champ garde une hauteur utilisable", () => {
 
 // L'aperçu ordinateur : l'écran garde 1280 px de large quelle que soit la
 // largeur du volet, sinon le site répond avec sa mise en page étroite.
-const { fitDesktop } = createRequire(import.meta.url)("../null-to-hero/tools/siteasy/cms/nth-backend.js");
+const { fitDesktop } = createRequire(import.meta.url)("../null-to-hero/tools/cms/nth-backend.js");
 
 function desk(stageW, stageH) {
   const node = { style: {}, parentNode: { clientWidth: stageW, clientHeight: stageH } };

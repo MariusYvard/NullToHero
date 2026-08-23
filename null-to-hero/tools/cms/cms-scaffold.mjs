@@ -26,7 +26,7 @@ import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse, stringify } from "./yaml-lite.mjs";
-import { contentMap } from "../content-map.mjs";
+import { contentMap } from "./content-map.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BUNDLE_VERSION = "3.15.1";

@@ -37,7 +37,7 @@ import { nthRoot } from "./nth-root.mjs";
 
 const ROOT = nthRoot();
 const REPO = path.dirname(ROOT);
-const SKILLS = ["seo", "siteasy", "inspect", "audit"];
+const SKILLS = ["seo", "siteasy", "inspect", "audit", "cms"];
 const PREFIX = "nth-";
 const CHECK = process.argv.includes("--check");
 
@@ -331,7 +331,7 @@ library are read from the checkout, not copied, so keep it where it is.
 
 ## What is here
 
-Four skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`) and ${agentCount} read-only sub-agents.
+${SKILLS.length} skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`) and ${agentCount} read-only sub-agents.
 
 The \`nth-\` prefix exists because a skills directory is shared with every other
 skill pack on the machine, and \`audit\` and \`inspect\` are names a third party

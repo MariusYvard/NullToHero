@@ -392,7 +392,7 @@ const collectionFields = c => [...fieldsOf(c), ...list(c.files).flatMap(f => fie
 /* ── running them ─────────────────────────────────────────────────────────── */
 
 export const META = () => {
-  const csv = readFileSync(join(HERE, "../../data/cms-checks.csv"), "utf8").trim().split(/\r?\n/);
+  const csv = readFileSync(join(HERE, "../data/cms-checks.csv"), "utf8").trim().split(/\r?\n/);
   const head = csv[0].split(",");
   return new Map(csv.slice(1).map(line => {
     const cells = line.split(",");

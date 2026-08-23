@@ -75,6 +75,52 @@
     ]
   },
   {
+    "skill": "cms",
+    "path": "skills/cms/references/architecture.md",
+    "title": "How an entrusted site is put together",
+    "keywords": [
+      "architecture",
+      "how",
+      "entrusted",
+      "site",
+      "put",
+      "together"
+    ]
+  },
+  {
+    "skill": "cms",
+    "path": "skills/cms/references/carve.md",
+    "title": "Carving a site into fields",
+    "keywords": [
+      "carve",
+      "carving",
+      "site",
+      "into",
+      "fields"
+    ]
+  },
+  {
+    "skill": "cms",
+    "path": "skills/cms/references/entrust.md",
+    "title": "Entrusting a site",
+    "keywords": [
+      "entrust",
+      "entrusting",
+      "site"
+    ]
+  },
+  {
+    "skill": "cms",
+    "path": "skills/cms/references/operate.md",
+    "title": "Operating an entrusted site",
+    "keywords": [
+      "operate",
+      "operating",
+      "entrusted",
+      "site"
+    ]
+  },
+  {
     "skill": "inspect",
     "path": "skills/inspect/references/code-quality.md",
     "title": "Code Quality",

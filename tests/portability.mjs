@@ -32,7 +32,7 @@ const KIMI_LISTING_TRUNCATION = 250;
 const SHORT_DESC_MAX = 400;
 // The count Claude Code has always substituted. A change here means the loaded
 // tree moved, which is exactly what must not happen silently.
-const CLAUDE_ROOT_TOKENS = 32;
+const CLAUDE_ROOT_TOKENS = 43;
 
 let passed = 0, failed = 0;
 const pass = m => { passed++; console.log(`  ok    ${m}`); };

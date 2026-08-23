@@ -2,7 +2,7 @@
 
 # NullToHero
 
-<img src="docs/overview.svg" alt="NullToHero overview: four skills (siteasy, seo, inspect, audit) inside Claude" width="860">
+<img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, inspect, audit and cms inside Claude" width="860">
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v4.0.0** · 4 skills · 62 commands · 131 reference docs · 15 audit sub-agents
+**v4.0.0** · 5 skills · 68 commands · 135 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -26,7 +26,7 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 
 <div align="center">
 
-[What it is](#what-is-nulltohero) · [See it built](#see-what-it-builds) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-four-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows) · [Assets](#ready-made-assets)
+[What it is](#what-is-nulltohero) · [See it built](#see-what-it-builds) · [Pick your goal](#pick-your-goal) · [Install](#install) · [Skills](#the-skills) · [Compare](#how-nulltohero-compares) · [Workflow](#how-a-project-flows) · [Assets](#ready-made-assets)
 
 </div>
 
@@ -118,7 +118,7 @@ NullToHero is a Claude Code plugin and a marketplace in one repository. The mark
 
 ### Other agents: Codex and Kimi Code
 
-The four skills also run on OpenAI Codex and on Kimi Code. Both read the
+The five skills also run on OpenAI Codex and on Kimi Code. Both read the
 [Agent Skills](https://agentskills.io/specification) format, so the same source
 serves all three hosts; `null-to-hero/tools/build-dist.mjs` generates each
 package into `dist/`.
@@ -134,7 +134,7 @@ On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`
 Codex gets `~/.agents/skills` and `~/.codex/agents`. Kimi Code gets
 `~/.kimi-code/skills` and `~/.kimi-code/agents`, and finds its fifteen
 sub-agents without any launch flag. The skills install as `nth-seo`,
-`nth-siteasy`, `nth-inspect` and `nth-audit`, because a skills directory is
+`nth-siteasy`, `nth-inspect`, `nth-audit` and `nth-cms`, because a skills directory is
 shared with every other pack on the machine and `audit` is a name someone else
 will claim. The deterministic tools and the asset library are read from the
 clone, so keep it where it is.
@@ -186,9 +186,9 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 
 ---
 
-## The four skills
+## The skills
 
-The doors above are the way in. The four skills below are the full reference behind them: every command stays callable on its own.
+The doors above are the way in. The skills below are the full reference behind them: every command stays callable on its own.
 
 <table>
 <tr>
@@ -518,7 +518,7 @@ The `null-to-hero/assets/` folder ships an original, license-clean starter libra
 
 ## What is inside
 
-NullToHero ships **131 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **135 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>

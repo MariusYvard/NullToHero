@@ -7,6 +7,10 @@
     "skills/audit/references/learnings.md",
     "skills/audit/references/refine.md",
     "skills/audit/references/report.md",
+    "skills/cms/references/architecture.md",
+    "skills/cms/references/carve.md",
+    "skills/cms/references/entrust.md",
+    "skills/cms/references/operate.md",
     "skills/inspect/references/code-quality.md",
     "skills/inspect/references/detect.md",
     "skills/inspect/references/preview.md",
@@ -224,6 +228,26 @@
     {
       "from": "skills/audit/references/report.md",
       "to": "skills/audit/references/html-report.md"
+    },
+    {
+      "from": "skills/cms/SKILL.md",
+      "to": "skills/cms/references/architecture.md"
+    },
+    {
+      "from": "skills/cms/SKILL.md",
+      "to": "skills/cms/references/carve.md"
+    },
+    {
+      "from": "skills/cms/SKILL.md",
+      "to": "skills/cms/references/entrust.md"
+    },
+    {
+      "from": "skills/cms/SKILL.md",
+      "to": "skills/cms/references/operate.md"
+    },
+    {
+      "from": "skills/cms/references/entrust.md",
+      "to": "skills/cms/references/carve.md"
     },
     {
       "from": "skills/inspect/SKILL.md",

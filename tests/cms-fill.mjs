@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 
 import {
   namespaceOf, pageNamespace, markFixed, previewOf, fillTokens, valueAt, run,
-} from "../null-to-hero/tools/siteasy/cms/content-fill.mjs";
+} from "../null-to-hero/tools/cms/content-fill.mjs";
 
 const BAG = {
   accueil: { hero: { titre: "Osez", texte: "Verres & montures" } },

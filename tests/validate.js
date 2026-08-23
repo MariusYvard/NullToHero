@@ -836,7 +836,10 @@ const inspectCmdCount = Object.keys(
 const auditCmdCount = Object.keys(
   extractCommandRefs(readFile(path.join(SKILLS_ROOT, "audit", "SKILL.md")))
 ).length;
-const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount + auditCmdCount;
+const cmsCmdCount = Object.keys(
+  extractCommandRefs(readFile(path.join(SKILLS_ROOT, "cms", "SKILL.md")))
+).length;
+const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount + auditCmdCount + cmsCmdCount;
 
 function readmeNum(re) { const m = readmeTxt.match(re); return m ? Number(m[1]) : null; }
 const claims = [
@@ -1493,7 +1496,7 @@ section("43. Detector rules resolve in the inspect registry");
 // description's counts match reality (they have drifted before).
 section("38. Intent routes, aliases, doors and marketplace counts");
 {
-  const SKILL_NAMES = ["siteasy", "seo", "inspect", "audit"];
+  const SKILL_NAMES = ["siteasy", "seo", "inspect", "audit", "cms"];
   const AUDIT_SCOPES = new Set(["seo", "defects", "design", "quick"]);
   const liveCmds = {};
   for (const s of SKILL_NAMES) {

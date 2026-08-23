@@ -3,8 +3,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { handoverFor } from "../null-to-hero/tools/siteasy/cms/cms-scaffold.mjs";
-import { CHECKS } from "../null-to-hero/tools/siteasy/cms/cms-lint.mjs";
+import { handoverFor } from "../null-to-hero/tools/cms/cms-scaffold.mjs";
+import { CHECKS } from "../null-to-hero/tools/cms/cms-lint.mjs";
 
 const SITE = {
   locale: "fr", branch: "cms-content", production_branch: "cms",

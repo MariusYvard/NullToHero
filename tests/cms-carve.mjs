@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { namespaceFor, body, tokenise, nest, refill, carveInPage } from "../null-to-hero/tools/siteasy/cms/content-carve.mjs";
+import { namespaceFor, body, tokenise, nest, refill, carveInPage } from "../null-to-hero/tools/cms/content-carve.mjs";
 
 test("le chemin d'une page donne l'espace de noms de son entrée", () => {
   assert.equal(namespaceFor("index.html"), "accueil");
