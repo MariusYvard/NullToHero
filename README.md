@@ -1,8 +1,11 @@
 <div align="center">
 
-# NullToHero
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.svg">
+  <img src="docs/banner.svg" alt="NullToHero: design, SEO, quality audit and handover skills for Claude" width="860">
+</picture>
 
-<img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, audit and cms inside Claude" width="860">
+# NullToHero
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
@@ -35,6 +38,10 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 ## What is NullToHero
 
 Claude already writes code. NullToHero gives it the taste and the checklists of a senior web team: a designer, an SEO specialist, a reviewer who judges the whole site at once, and the person who hands the keys to its owner.
+
+<p align="center">
+  <img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, audit and cms inside Claude" width="860">
+</p>
 
 You do not learn commands by heart. You say what you want ("make this landing page look more premium", "why am I not on Google", "is this ready to ship"), and Claude picks the right tool. The sections below show what each tool produces so you know what to expect.
 
@@ -392,6 +399,13 @@ An action plan from `/audit`, ordered by severity:
 
 The last step of a project, and the one nobody ships. The site is finished, the client wants to change their opening hours, and the only person who can is you. `/cms entrust` turns the page's hardcoded prose into fields, vendors an editor at a pinned version, and puts a server-side allow-list between the browser and the repository. The owner edits words and pictures. The templates, the scripts and the stylesheets stay out of reach.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/editor-dark.svg">
+    <img src="docs/editor-light.svg" width="920" alt="The editor an entrusted site's owner opens at their own domain: a list holding only the content collections, a field panel with a character counter advising a length, the real page previewed in a phone frame at 390 pixels, and a badge showing the write quota left for the hour.">
+  </picture>
+</p>
+
 <details>
 <summary><b>All 6 commands</b></summary>
 
@@ -401,7 +415,7 @@ The last step of a project, and the one nobody ships. The site is finished, the 
 | `carve [site]` | The extraction alone: propose the fields, read them back, write nothing until asked |
 | `scaffold [site]` | Compile CONTENT.md into the editor, the bridge, the allow-list and the publish workflow |
 | `accounts [site]` | Mint, remove and list the accounts the bridge will accept |
-| `check [site]` | `cms-lint` and `cms-scaffold --check` in one pass, plus what neither can see |
+| `check [site]` | `cms-lint` and `cms-scaffold --check` in one pass, then the deployed bridge's own diagnosis |
 | `handover [site]` | Regenerate CMS.md and read it with the person who will do the manual steps |
 
 Common runs: a first handover (`entrust`), a re-read before writing (`carve` without `--write`), a new editor for the client's colleague (`accounts`), a check after someone edited a compiled file by hand (`check`).
@@ -410,9 +424,11 @@ Common runs: a first handover (`entrust`), a re-read before writing (`carve` wit
 
 What makes it safe to point at a client's repository is not the interface, which is a convenience, but four things underneath it. The bridge writes to a content branch and a workflow copies the allow-listed paths onto the production branch, so a compromised editor cannot reach a build script. The token is a fine-grained one **without** the `Workflows` permission, which puts `.github/workflows/` beyond its reach by GitHub's rule rather than by ours being right. The editor is vendored at an exact version, so the admin page needs no external origin and nothing moves under a client's feet. And a write quota, counted from the branch's own commit history, means a loop in somebody's browser costs them a message rather than ten thousand commits.
 
-One file is written by hand, `CONTENT.md`: what the owner may edit, the branch, the roles, the theme, the language. Everything else is compiled from it, and `cms-lint` runs 29 checks that fail when a compiled file and its source disagree. What no check can establish from a repository, the rights a token actually carries, whether the host deploys the branch you think, is listed at the end of the generated `CMS.md` instead of being left for someone to discover in production.
+One file is written by hand, `CONTENT.md`: what the owner may edit, the branch, the roles, the theme, the language. Everything else is compiled from it, and `cms-lint` runs 29 checks that fail when a compiled file and its source disagree. What no check can establish from a repository, the rights a token actually carries, whether the host deploys the branch you think, is listed at the end of the generated `CMS.md` instead of being left for someone to discover in production. Once the bridge is deployed it answers most of that itself: `cms-diagnose.mjs` signs in and reports, in booleans and never in values, which variables are set on the context being served, whether the token can write, whether both branches exist, and when the token expires. Three weeks before that date the bridge starts saying so in the host's log, because a token that expires stops writing on a Tuesday without warning anybody.
 
-Measured on a real 33-page site: 704 fields extracted, and 32 of the 33 pages come back byte for byte identical after the extraction is filled back in. The one that does not holds a doubled space, and the tool names the page rather than staying quiet.
+This chain assumes **Netlify**. `cms-scaffold` writes the bridge to `netlify/functions/cms.mjs`, the headers to `_headers`, and reads the build command from `netlify.toml`; the quota exists because Netlify bills build minutes. Nothing in the bridge itself is Netlify-specific, it is one request handler over the standard `Request` and `Response`, so another host that runs functions from a repository would need the three files renamed and its own way of setting environment variables. That port has not been done, and this README will not claim it has.
+
+Measured on a real 33-page site: 712 fields extracted, and 32 of the 33 pages come back byte for byte identical after the extraction is filled back in. The one that does not holds a doubled space, and the tool names the page rather than staying quiet.
 
 ## How NullToHero compares
 

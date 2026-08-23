@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// build-figures.mjs — draws the README's comparison matrix, in both themes,
-// from tools/data/compare-matrix.csv.
+// build-figures.mjs — draws the README's figures, in both themes: the
+// comparison matrix from tools/data/compare-matrix.csv, the banner from the
+// skills present on disk, and the editor schematic.
 //
 // WHY A GENERATOR AND NOT TWO HAND-BUILT FILES
 // --------------------------------------------
@@ -24,24 +25,43 @@
 // Usage:
 //   node tools/build-figures.mjs [--check]
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const CSV = join(ROOT, "null-to-hero", "tools", "data", "compare-matrix.csv");
+const SKILLS_DIR = join(ROOT, "null-to-hero", "skills");
 const OUT = (name) => join(ROOT, "docs", name);
 
 const FONT = "Segoe UI, system-ui, -apple-system, Helvetica, Arial, sans-serif";
+const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
 const THEMES = {
-  light: { file: "compare-light.svg", ground: "#f8fafc", card: "#ffffff", hairline: "#e6e8ec",
+  light: { key: "light", compare: "compare-light.svg", banner: "banner.svg", editor: "editor-light.svg",
+           ground: "#f8fafc", card: "#ffffff", hairline: "#e6e8ec",
            ink: "#0f172a", muted: "#64748b", faint: "#9da7b3", accent: "#4f46e5", partial: "#b45309",
-           band: "rgba(79,70,229,0.06)", stripe: "rgba(15,23,42,0.025)" },
-  dark:  { file: "compare-dark.svg",  ground: "#0d1117", card: "#161b22", hairline: "#30363d",
+           band: "rgba(79,70,229,0.06)", stripe: "rgba(15,23,42,0.025)",
+           inset: "#f1f5f9", shade: "rgba(15,23,42,0.06)" },
+  dark:  { key: "dark", compare: "compare-dark.svg", banner: "banner-dark.svg", editor: "editor-dark.svg",
+           ground: "#0d1117", card: "#161b22", hairline: "#30363d",
            ink: "#e6edf3", muted: "#8b949e", faint: "#6b7684", accent: "#818cf8", partial: "#fbbf24",
-           band: "rgba(129,140,248,0.10)", stripe: "rgba(230,237,243,0.03)" },
+           band: "rgba(129,140,248,0.10)", stripe: "rgba(230,237,243,0.03)",
+           inset: "#0d1117", shade: "rgba(230,237,243,0.07)" },
 };
+
+// LES COULEURS DES QUATRE COMPÉTENCES
+// -----------------------------------
+// Les mêmes que les pastilles du readme et que `docs/overview.svg`. En sombre,
+// chaque teinte est éclaircie plutôt que remplacée : une compétence garde son
+// identité d'un thème à l'autre.
+const SKILL_COLOURS = {
+  siteasy: { light: "#4f46e5", dark: "#818cf8" },
+  seo:     { light: "#0ea5e9", dark: "#38bdf8" },
+  audit:   { light: "#7c3aed", dark: "#a78bfa" },
+  cms:     { light: "#16a34a", dark: "#4ade80" },
+};
+const SKILL_ORDER = ["siteasy", "seo", "audit", "cms"];
 
 // The columns the matrix compares, and the products each one stands for.
 const COLUMNS = [
@@ -152,23 +172,177 @@ export function draw(matrix, t) {
   return out.join("\n") + "\n";
 }
 
+/* ── the banner ───────────────────────────────────────────────────────────── */
+
+// POURQUOI LA BANNIÈRE LIT LE DOSSIER DES COMPÉTENCES
+// ---------------------------------------------------
+// La bannière écrite à la main annonçait encore `inspect`, une compétence
+// supprimée par la refonte v6, et ne connaissait pas `cms`. Une image ne se
+// relit pas comme du texte : personne ne l'avait vue. Elle lit maintenant
+// `skills/`, donc elle ne peut plus nommer une compétence qui n'existe pas, ni
+// en oublier une qui existe.
+export function skillNames(dir = SKILLS_DIR) {
+  const found = readdirSync(dir, { withFileTypes: true })
+    .filter((e) => e.isDirectory()).map((e) => e.name);
+  const known = SKILL_ORDER.filter((name) => found.includes(name));
+  const strangers = found.filter((name) => !SKILL_ORDER.includes(name));
+  if (strangers.length) {
+    throw new Error(`skills/ holds ${strangers.join(", ")}, which build-figures.mjs has no colour for`);
+  }
+  if (known.length !== found.length) throw new Error("a skill disappeared between two readings");
+  return known;
+}
+
+export function drawBanner(skills, t) {
+  const W = 1200, H = 300, colour = (name) => SKILL_COLOURS[name][t.key];
+  const chipW = 168, chipH = 46, gap = 22;
+  const out = [];
+  out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="NullToHero: the skills ${skills.join(", ")} for Claude">`);
+  out.push(`<rect width="${W}" height="${H}" fill="${t.ground}"/>`);
+  // Le filet du haut porte les quatre teintes dans l'ordre du parcours, ce qui
+  // dit la progression sans une flèche ni un mot.
+  skills.forEach((name, i) => {
+    const w = W / skills.length;
+    out.push(`<rect x="${i * w}" y="0" width="${w}" height="3" fill="${colour(name)}"/>`);
+  });
+  out.push(text(72, 116, "NullToHero", { size: 62, weight: 700, fill: t.ink }));
+  out.push(text(76, 152, "Design, SEO, quality audit and handover skills for Claude.", { size: 19, fill: t.muted }));
+
+  skills.forEach((name, i) => {
+    const x = 72 + i * (chipW + gap);
+    const c = colour(name);
+    out.push(`<rect x="${x}" y="196" width="${chipW}" height="${chipH}" rx="${chipH / 2}" fill="${t.card}" stroke="${c}" stroke-opacity="0.55" stroke-width="1.4"/>`);
+    out.push(`<circle cx="${x + 26}" cy="${196 + chipH / 2}" r="5" fill="${c}"/>`);
+    out.push(text(x + 42, 196 + chipH / 2 + 5, `/${name}`, { size: 16, weight: 600, fill: t.ink }));
+  });
+
+  // Trois pages empilées, de la feuille blanche au site fini, dans le même
+  // langage de traits que le reste des figures.
+  [0, 1, 2].forEach((i) => {
+    const x = 902 + i * 34, y = 74 + i * 8, w = 176, h = 152;
+    const filled = i === 2;
+    out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${t.card}" stroke="${t.hairline}" stroke-width="1.4"/>`);
+    if (!filled) return;
+    out.push(`<rect x="${x + 18}" y="${y + 20}" width="72" height="6" rx="3" fill="${colour(skills[0] || "siteasy")}"/>`);
+    [0, 1, 2, 3].forEach((k) =>
+      out.push(`<rect x="${x + 18}" y="${y + 40 + k * 16}" width="${k === 3 ? 92 : 140}" height="4" rx="2" fill="${t.shade}"/>`));
+    out.push(`<rect x="${x + 18}" y="${y + 116}" width="66" height="18" rx="9" fill="${colour(skills[skills.length - 1] || "cms")}" fill-opacity="0.18"/>`);
+  });
+  out.push("</svg>");
+  return out.join("\n") + "\n";
+}
+
+/* ── the editor ───────────────────────────────────────────────────────────── */
+
+// CE QUE LE README NE POUVAIT PAS MONTRER
+// ---------------------------------------
+// La section `/cms` décrivait un éditeur que rien n'illustrait. Une capture
+// serait datée le jour où l'interface bouge et porterait le contenu d'un vrai
+// client ; un schéma dit ce qui compte, à savoir où passe la frontière entre ce
+// que le propriétaire atteint et ce qu'il n'atteint pas.
+export function drawEditor(t) {
+  const W = 1044, H = 470, PAD = 26;
+  const out = [];
+  const rect = (x, y, w, h, r, fill, stroke) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}"`
+    + (stroke ? ` stroke="${stroke}" stroke-width="1"` : "") + "/>";
+  const bar = (x, y, w, h = 5) => rect(x, y, w, h, h / 2, t.shade);
+
+  out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="The editor an entrusted site's owner sees: a collection list, a field panel with a character counter, a live preview of the real page in a phone frame, and the remaining write quota">`);
+  out.push(rect(0.5, 0.5, W - 1, H - 1, 14, t.ground, t.hairline));
+  out.push(text(PAD, 46, "What the owner gets", { size: 18, weight: 700, fill: t.ink }));
+  out.push(text(W - PAD, 46, "vendored editor · server-side allow-list · write quota", { size: 11, fill: t.muted, anchor: "end" }));
+
+  // La fenêtre du navigateur, avec l'adresse : /admin/ est sur le site du
+  // client, pas sur un service tiers.
+  const winX = PAD, winY = 66, winW = W - PAD * 2, winH = 336;
+  out.push(rect(winX, winY, winW, winH, 10, t.card, t.hairline));
+  out.push(rect(winX, winY, winW, 34, 10, t.inset, t.hairline));
+  [0, 1, 2].forEach((i) => out.push(`<circle cx="${winX + 20 + i * 16}" cy="${winY + 17}" r="4.5" fill="${t.faint}" fill-opacity="0.6"/>`));
+  out.push(rect(winX + 78, winY + 8, 250, 18, 9, t.card, t.hairline));
+  out.push(`<text x="${winX + 90}" y="${winY + 21}" font-family="${MONO}" font-size="10.5" fill="${t.muted}">example.com/admin/</text>`);
+
+  // Colonne des collections.
+  const sideX = winX + 1, sideY = winY + 34, sideW = 196, sideH = winH - 35;
+  out.push(rect(sideX, sideY, sideW, sideH, 0, t.inset));
+  out.push(text(sideX + 18, sideY + 30, "Content", { size: 12, weight: 700, fill: t.ink }));
+  ["Home", "Opening hours", "Services", "Photos"].forEach((name, i) => {
+    const y = sideY + 54 + i * 34;
+    if (i === 1) out.push(rect(sideX + 10, y - 16, sideW - 20, 28, 6, t.band));
+    out.push(text(sideX + 22, y + 3, name, { size: 12, fill: i === 1 ? t.accent : t.muted }));
+  });
+  out.push(text(sideX + 22, sideY + sideH - 100, "Templates, scripts", { size: 10.5, fill: t.faint }));
+  out.push(text(sideX + 22, sideY + sideH - 86, "and styles are absent", { size: 10.5, fill: t.faint }));
+  out.push(text(sideX + 22, sideY + sideH - 72, "from this list.", { size: 10.5, fill: t.faint }));
+
+  // L'aperçu occupe le bord droit de la fenêtre, et le panneau des champs
+  // prend tout ce qui reste : une figure qui laisse un quart de sa surface vide
+  // se lit comme une figure inachevée.
+  const pw = 150, ph = 250;
+  const px = winX + winW - pw - 48, py = sideY + 22;
+  const fx = sideX + sideW + 26, fy = sideY + 22, fw = px - fx - 46;
+  out.push(text(fx, fy + 8, "Opening hours", { size: 14, weight: 700, fill: t.ink }));
+  [["Title", "Our hours", false], ["Weekdays", "9am to 7pm", false], ["Sunday", "Closed", true]]
+    .forEach(([label, value, last], i) => {
+      const y = fy + 36 + i * 62;
+      out.push(text(fx, y, label, { size: 10.5, weight: 600, fill: t.muted }));
+      out.push(rect(fx, y + 8, fw, 32, 6, t.card, last ? t.accent : t.hairline));
+      out.push(text(fx + 12, y + 29, value, { size: 12, fill: t.ink }));
+      if (last) out.push(text(fx + fw, y + 54, "7 characters (advised 20 to 60)", { size: 10, fill: t.partial, anchor: "end" }));
+    });
+  out.push(rect(fx, fy + 232, 92, 30, 6, t.accent, null));
+  out.push(text(fx + 46, fy + 251, "Save", { size: 12, weight: 600, fill: t.card, anchor: "middle" }));
+  out.push(rect(fx + 104, fy + 232, 118, 30, 6, t.card, t.hairline));
+  out.push(text(fx + 163, fy + 251, "Previous version", { size: 11, fill: t.muted, anchor: "middle" }));
+
+  // L'aperçu : la vraie page, dans un appareil, à l'échelle.
+  out.push(rect(px, py, pw, ph, 20, t.ink, null));
+  out.push(rect(px + 5, py + 5, pw - 10, ph - 10, 16, t.card, null));
+  out.push(rect(px + 5, py + 5, pw - 10, 26, 16, t.inset, null));
+  out.push(bar(px + 20, py + 44, 74, 7));
+  out.push(rect(px + 20, py + 62, pw - 50, 44, 4, t.band, null));
+  out.push(text(px + 26, py + 80, "Our hours", { size: 9.5, weight: 700, fill: t.accent }));
+  out.push(text(px + 26, py + 96, "9am to 7pm", { size: 9, fill: t.muted }));
+  [0, 1, 2, 3, 4].forEach((k) => out.push(bar(px + 20, py + 124 + k * 16, k === 4 ? 62 : 106, 4)));
+  out.push(rect(px + 20, py + 206, 66, 20, 10, t.shade, null));
+  out.push(text(px + pw / 2, py + ph + 24, "the real page, at 390px", { size: 10, fill: t.faint, anchor: "middle" }));
+
+  // Le compteur du quota, en bas à gauche de la fenêtre comme dans l'éditeur.
+  out.push(rect(sideX + 14, winY + winH - 50, 168, 28, 14, t.card, t.hairline));
+  out.push(`<circle cx="${sideX + 32}" cy="${winY + winH - 36}" r="4" fill="${t.partial}"/>`);
+  out.push(text(sideX + 44, winY + winH - 32, "3 changes left this hour", { size: 10.5, fill: t.muted }));
+
+  const legendY = H - 30;
+  out.push(text(PAD, legendY, "The bridge refuses any path outside the compiled allow-list, whatever the interface offers.", { size: 11, fill: t.muted }));
+  out.push(text(W - PAD, legendY, "No token in the browser.", { size: 11, fill: t.faint, anchor: "end" }));
+  out.push("</svg>");
+  return out.join("\n") + "\n";
+}
+
 /* ── the run ──────────────────────────────────────────────────────────────── */
 
 if (/build-figures\.mjs$/.test(process.argv[1] || "")) {
   const matrix = readMatrix(readFileSync(CSV, "utf8"));
+  const skills = skillNames();
   const check = process.argv.includes("--check");
   let drift = 0;
   for (const t of Object.values(THEMES)) {
-    const svg = draw(matrix, t);
-    const path = OUT(t.file);
-    let current = null;
-    try { current = readFileSync(path, "utf8"); } catch { /* absent */ }
-    if (check) {
-      if (current !== svg) { console.error(`docs/${t.file} is out of date. Run: node tools/build-figures.mjs`); drift++; }
-      else console.log(`docs/${t.file} matches compare-matrix.csv`);
-    } else {
-      writeFileSync(path, svg);
-      console.log(`wrote docs/${t.file} (${matrix.length} capabilities)`);
+    const figures = [
+      [t.compare, draw(matrix, t), `${matrix.length} capabilities`],
+      [t.banner, drawBanner(skills, t), `${skills.length} skills`],
+      [t.editor, drawEditor(t), "schematic"],
+    ];
+    for (const [file, svg, note] of figures) {
+      const path = OUT(file);
+      let current = null;
+      try { current = readFileSync(path, "utf8"); } catch { /* absent */ }
+      if (check) {
+        if (current !== svg) { console.error(`docs/${file} is out of date. Run: node tools/build-figures.mjs`); drift++; }
+        else console.log(`docs/${file} matches its source`);
+      } else {
+        writeFileSync(path, svg);
+        console.log(`wrote docs/${file} (${note})`);
+      }
     }
   }
   if (drift) process.exitCode = 1;

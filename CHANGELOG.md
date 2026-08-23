@@ -7,7 +7,104 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ## [Unreleased]
 
-<!-- Add your changes here before the next release -->
+### The headline
+
+Two things. `/inspect` is gone and its three commands went home: the deterministic
+scan into `/audit checks`, the Chromium capture into `/siteasy`, the code review
+into `/audit`. And the CMS, which existed as a pile of tools in a client's
+repository, is a skill of the plugin with a door of its own.
+
+`/audit checks` reached 18 of the 79 executable rules. The other 61 ran only if
+somebody thought to launch `/inspect` separately, so a clean audit report could
+sit on a page violating thirty rules the plugin knows how to detect, without
+lying: nobody had executed them. It now reaches 66 on a local target and 79 with
+`--render`.
+
+The rules are carried beside the score rather than folded into it. The claim in
+the plan, that folding them in would put most sites at zero, was wrong, and
+`tools/audit/score-lab.mjs` on 33 real pages is what corrected it: the median
+goes from 93 to 42 and no page reaches zero. The conclusion held for a different
+reason, that every dividing formula compresses the whole corpus into 93 to 96 and
+loses the bite the floor has.
+
+### Added
+
+- `skills/cms/` and its four references: `entrust`, `carve`, `operate`,
+  `architecture`. Six commands, from `entrust` to `handover`.
+- `tools/cms/`, moved out of `tools/siteasy/cms/`: the bridge, the browser half,
+  the extraction, the fill, the scaffold, the linter, the accounts, the publisher.
+  A tool filed under a skill that never calls it is a false trail for whoever
+  reads the repository.
+- `content-carve.mjs`. Reads the rendered DOM in Chromium and performs text
+  surgery on the source rather than re-serialising it, so a page that carries no
+  content token comes back byte for byte. Measured on 33 real pages: 712 fields,
+  32 of the 33 identical, and the one that differs is named rather than passed
+  over in silence. `--shared` carves a fragment used by every page into one
+  entry, `<br>`-separated lines become one field each.
+- `diagnose`, an authenticated bridge action, and `cms-diagnose.mjs`, the client
+  that calls it. `CMS.md` ended with four things no check could establish from a
+  repository; three of them are answerable from inside the deployed function,
+  which is the only place the token lives. The answer is booleans and dates,
+  never the value of a variable, because a diagnostic that returned values would
+  be a way to read the environment through the editor.
+- The token's expiry date, read from the header GitHub attaches to every REST
+  response made with it, so it costs no call. Under 21 days the bridge writes it
+  into the host's log on every action, in success and in failure. The replacement
+  manoeuvre is in `operate.md` and in the handover sheet, in both languages, and
+  its order is the opposite of the intuitive one: revoke last.
+- `tools/audit/lib/rules-bridge.mjs`. Translates the 48 rules-engine rules into
+  audit checks carrying `source: "rules"`, mapped to an agent by category and to
+  a verdict by severity.
+- `tools/audit/score-lab.mjs`. A calibration bench that writes nothing and exists
+  to settle scoring arguments with numbers.
+- `tools/build-figures.mjs` and `tools/data/compare-matrix.csv`. The comparison
+  matrix, the banner and the editor schematic, each in both themes, derived
+  rather than drawn twice. `--check` fails the build when a committed SVG no
+  longer matches its source.
+- Ten test suites for the CMS: `cms-frames`, `cms-fill`, `cms-carve`,
+  `cms-setup`, `cms-bridge`, `cms-bridge-core`, `cms-publish`, `cms-lint`,
+  `cms-map`, `cms-editor`. 195 cases. Four are skipped where the environment
+  cannot run them, each naming its reason.
+
+### Fixed
+
+- A file reserved to a role was restricted in the editor and open in the bridge.
+  `policyFrom` dropped the exact rule of a file already covered by its folder's
+  rule, and the declared role went with it; `checkPath` and `allowed` took the
+  first matching rule, so even a present exact rule would have depended on the
+  order of the policy file. Both sides now prefer the exact rule, and the
+  generator emits it whenever it carries a role.
+- `cms-scaffold` did not run at all. The path to the theme script climbed two
+  levels, which was right while the CMS lived under `tools/siteasy/cms/`; the
+  move left it pointing beside the file. No test ran the generator, so nothing
+  saw it.
+- `admin/theme.css` looked hand-edited at every `cms-scaffold --check` on
+  Windows, forever, because python writes platform line endings and the drift
+  comparison reads in LF. A check that always complains is a check people learn
+  to ignore.
+- The preview pane rendered inside an iframe while the preview component's code
+  ran in the parent page, so the device frame measured the whole editor instead
+  of the pane and the phone was cut off. `node.ownerDocument.defaultView` is what
+  spells the difference.
+- `content-carve` placed a field token inside a `mailto:` attribute rather than
+  in the link text, because the attribute comes first in the source. The owner
+  would have got a field that edits the link and leaves the visible text frozen.
+- `tests/portability.mjs` had drifted from 43 to 45 substituted tokens while
+  nothing called it. It is called by `npm test` now: a guard nobody runs is a
+  comment.
+
+### Changed
+
+- `/inspect` is removed rather than kept as an alias. A permanent alias preserves
+  exactly the problem the refactor fixes, two descriptions claiming the same
+  trigger phrases, and `/inspect detect` and `/audit checks` were the most
+  confusable pair in the plugin.
+- The README is reworked around four skills: the CMS section grew from a stub to
+  a full account of why a client's repository can be pointed at safely, and it
+  now states plainly that the chain assumes Netlify.
+- `docs/banner.svg` and its dark twin are generated from the skills present on
+  disk. The hand-written pair still announced `inspect` and had never heard of
+  `cms`: an image is not re-read like prose, so nobody had noticed.
 
 ---
 
