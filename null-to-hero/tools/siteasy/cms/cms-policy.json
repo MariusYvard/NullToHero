@@ -1,0 +1,24 @@
+{
+  "branch": "content",
+  "requiredRoles": ["editor", "manager"],
+  "sessionHours": 8,
+  "maxSessionHours": 24,
+  "writeQuota": [
+    { "hours": 1, "max": 10 },
+    { "hours": 720, "max": 100 }
+  ],
+  "maxFileBytes": 3145728,
+  "maxRequestBytes": 5242880,
+  "rules": [
+    {
+      "prefix": "content/",
+      "extensions": [".md", ".markdown", ".json", ".yml", ".yaml"],
+      "roles": []
+    },
+    {
+      "prefix": "static/uploads/",
+      "extensions": [".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"],
+      "roles": []
+    }
+  ]
+}

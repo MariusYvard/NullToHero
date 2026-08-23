@@ -424,6 +424,10 @@ const tracked = _ex("git", ["ls-files", "--cached", "--others", "--exclude-stand
   .toString().trim().split("\n");
 const byBase = new Map();
 for (const f of tracked) {
+  // `dist/` porte une copie de chaque compétence pour Codex et pour Kimi. Un nom
+  // nu y apparaît donc trois fois et deviendrait ambigu, alors qu'une citation
+  // ne désigne jamais la copie générée.
+  if (f.startsWith("dist/")) continue;
   const b = f.split("/").pop();
   byBase.set(b, byBase.has(b) ? null : f);          // null = ambigu
 }
