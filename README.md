@@ -358,6 +358,17 @@ Structured data from `/seo schema`, valid Schema.org JSON-LD ready to paste:
 }
 ```
 
+What `/cms entrust` does to a page, and the file the owner edits:
+
+```html
+<h1>{{accueil.hero.titre}}</h1>
+<p>{{accueil.hero.texte}}</p>
+```
+
+```json
+{ "hero": { "titre": "Osez un nouveau regard.", "texte": "Opticien lunetier..." } }
+```
+
 An action plan from `/audit`, ordered by severity:
 
 ```md
@@ -379,24 +390,29 @@ An action plan from `/audit`, ordered by severity:
 
 ### ![cms](https://img.shields.io/badge/cms-16a34a) Hand it over
 
-The site is finished and it is not yours to keep. `/cms entrust` turns its
-hardcoded prose into fields, vendors an editor with its own accounts, puts a
-server-side allow-list between the browser and the repository, and writes the
-sheet of manual steps with your site's real values.
+The last step of a project, and the one nobody ships. The site is finished, the client wants to change their opening hours, and the only person who can is you. `/cms entrust` turns the page's hardcoded prose into fields, vendors an editor at a pinned version, and puts a server-side allow-list between the browser and the repository. The owner edits words and pictures. The templates, the scripts and the stylesheets stay out of reach.
 
 <details>
 <summary><b>All 6 commands</b></summary>
 
 | Command | What it does |
-|---|---|
-| `/cms entrust` | The whole chain, from a finished site to a repository ready to hand over |
-| `/cms carve` | The extraction alone: propose the fields, read them back, write nothing until asked |
-| `/cms scaffold` | Compile CONTENT.md into the editor, the bridge, the allow-list and the workflow |
-| `/cms accounts` | Mint, remove and list the accounts the bridge will accept |
-| `/cms check` | `cms-lint` and `cms-scaffold --check` in one pass, plus what neither can see |
-| `/cms handover` | Regenerate CMS.md and read it with the person who will do the manual steps |
+|---------|-------------|
+| `entrust [site]` | The whole chain, from a finished site to a repository ready to hand over |
+| `carve [site]` | The extraction alone: propose the fields, read them back, write nothing until asked |
+| `scaffold [site]` | Compile CONTENT.md into the editor, the bridge, the allow-list and the publish workflow |
+| `accounts [site]` | Mint, remove and list the accounts the bridge will accept |
+| `check [site]` | `cms-lint` and `cms-scaffold --check` in one pass, plus what neither can see |
+| `handover [site]` | Regenerate CMS.md and read it with the person who will do the manual steps |
+
+Common runs: a first handover (`entrust`), a re-read before writing (`carve` without `--write`), a new editor for the client's colleague (`accounts`), a check after someone edited a compiled file by hand (`check`).
 
 </details>
+
+What makes it safe to point at a client's repository is not the interface, which is a convenience, but four things underneath it. The bridge writes to a content branch and a workflow copies the allow-listed paths onto the production branch, so a compromised editor cannot reach a build script. The token is a fine-grained one **without** the `Workflows` permission, which puts `.github/workflows/` beyond its reach by GitHub's rule rather than by ours being right. The editor is vendored at an exact version, so the admin page needs no external origin and nothing moves under a client's feet. And a write quota, counted from the branch's own commit history, means a loop in somebody's browser costs them a message rather than ten thousand commits.
+
+One file is written by hand, `CONTENT.md`: what the owner may edit, the branch, the roles, the theme, the language. Everything else is compiled from it, and `cms-lint` runs 29 checks that fail when a compiled file and its source disagree. What no check can establish from a repository, the rights a token actually carries, whether the host deploys the branch you think, is listed at the end of the generated `CMS.md` instead of being left for someone to discover in production.
+
+Measured on a real 33-page site: 704 fields extracted, and 32 of the 33 pages come back byte for byte identical after the extraction is filled back in. The one that does not holds a doubled space, and the tool names the page rather than staying quiet.
 
 ## How NullToHero compares
 
