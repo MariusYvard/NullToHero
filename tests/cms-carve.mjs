@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { namespaceFor, body, tokenise, nest, carveInPage } from "../null-to-hero/tools/siteasy/cms/content-carve.mjs";
+import { namespaceFor, body, tokenise, nest, refill, carveInPage } from "../null-to-hero/tools/siteasy/cms/content-carve.mjs";
 
 test("le chemin d'une page donne l'espace de noms de son entrée", () => {
   assert.equal(namespaceFor("index.html"), "accueil");
@@ -106,4 +106,30 @@ test("l'extraction nomme, groupe et refuse", { skip: chromium ? false : "playwri
     assert.ok(!seen.some((s) => s.includes("Repère")), "un repère dans main a été extrait");
     assert.ok(!seen.some((s) => s.includes("Wagram")), "le pied de page a été extrait");
   } finally { await browser.close(); }
+});
+
+test("un commentaire ne reçoit pas le jeton du titre qui le suit", () => {
+  const src = `<!-- Créateurs & univers -->\n<h2>Créateurs &amp; univers</h2>`;
+  const out = tokenise(src, [{ box: "h", name: "titre", kind: "text", value: "Créateurs & univers" }], "p");
+  assert.ok(out.html.startsWith("<!-- Créateurs & univers -->"), "le commentaire a été touché");
+  assert.ok(out.html.includes("<h2>{{p.h.titre}}</h2>"));
+});
+
+test("un script ne reçoit pas non plus le jeton d'une prose qui lui ressemble", () => {
+  const src = `<script>var t = "Nos verres";</script><p>Nos verres</p>`;
+  const out = tokenise(src, [{ box: "b", name: "texte", kind: "text", value: "Nos verres" }], "p");
+  assert.ok(out.html.includes('var t = "Nos verres"'));
+  assert.ok(out.html.includes("<p>{{p.b.texte}}</p>"));
+});
+
+test("remettre les valeurs rend le fichier quand rien n'a été normalisé", () => {
+  const src = `<h1>Osez</h1><p>Verres &amp; montures</p>`;
+  const out = tokenise(src, FIELDS.slice(0, 2), "accueil");
+  assert.equal(refill(out.html, out.fields), src);
+});
+
+test("une espace doublée se voit dans le retour, elle ne se tait pas", () => {
+  const src = `<p>10h  à 19h30</p>`;
+  const out = tokenise(src, [{ box: "h", name: "texte", kind: "text", value: "10h à 19h30" }], "p");
+  assert.notEqual(refill(out.html, out.fields), src);
 });

@@ -175,13 +175,20 @@ export function carveInPage() {
 export function tokenise(source, fields, ns) {
   let at = 0, out = "";
   const done = [];
+  // A comment often repeats the heading that follows it, and a script holds
+  // strings that look like prose. The cursor would stop at the first of them and
+  // put the token in the wrong place, so those regions are blanked out of the
+  // copy the search reads. The nul character matches nothing the patterns look
+  // for, and blanking keeps every offset where it was.
+  const searchable = source.replace(/<!--[\s\S]*?-->|<(script|style)\b[\s\S]*?<\/\1>/gi,
+    (m) => "\u0000".repeat(m.length));
   for (const field of fields) {
     const token = `{{${ns}.${field.box}.${field.name}}}`;
     const re = field.kind === "attribute"
       ? new RegExp(`${escapeRe(field.attribute)}\\s*=\\s*"${body(field.value)}"`, "g")
       : new RegExp(body(field.value), "g");
     re.lastIndex = at;
-    const m = re.exec(source);
+    const m = re.exec(searchable);
     if (!m) { done.push({ ...field, token, placed: false }); continue; }
     out += source.slice(at, m.index)
       + (field.kind === "attribute" ? `${field.attribute}="${token}"` : token);
@@ -189,6 +196,20 @@ export function tokenise(source, fields, ns) {
     done.push({ ...field, token, placed: true });
   }
   return { html: out + source.slice(at), fields: done };
+}
+
+// The one check worth running on every page: put the values back where the
+// tokens are and see whether the file comes back. This is the same substitution
+// the site's build performs, so a page that does not come back identical is a
+// page the extraction changed, and the run says which one rather than leaving it
+// to be noticed on the deployed site.
+const ESCAPE = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
+export function refill(html, fields) {
+  const value = new Map(fields.filter((f) => f.placed).map((f) => [f.token, f.value]));
+  return html.replace(/\{\{[a-z0-9_.]+\}\}/gi, (token) => {
+    const found = value.get(token);
+    return found === undefined ? token : String(found).replace(/[&<>"]/g, (c) => ESCAPE[c]);
+  });
 }
 
 // The browser hands back text as a reader sees it: entities decoded, runs of
@@ -252,7 +273,10 @@ export async function carve(root, { write = false, pages, log = console.log, err
       const ns = namespaceFor(rel);
       const placed = tokenise(source, fields, ns);
       const unplaced = placed.fields.filter((f) => !f.placed);
-      report.push({ page: rel, ns, fields: placed.fields.length, unplaced: unplaced.length, skipped: skipped.length });
+      const back = refill(placed.html, placed.fields) === source;
+      report.push({ page: rel, ns, fields: placed.fields.length,
+        unplaced: unplaced.length, skipped: skipped.length, identical: back });
+      if (!back) err(`${rel}: putting the values back does not give the file back. The page is written, the difference is a normalisation (a doubled space, an entity) and is worth a look.`);
       if (unplaced.length) {
         err(`${rel}: ${unplaced.length} value(s) not found in the source, left alone`);
         for (const f of unplaced.slice(0, 5)) err(`  ${f.box}.${f.name}: ${String(f.value).slice(0, 60)}`);
@@ -268,8 +292,9 @@ export async function carve(root, { write = false, pages, log = console.log, err
   }
   const total = report.reduce((n, r) => n + r.fields, 0);
   const lost = report.reduce((n, r) => n + r.unplaced, 0);
-  log(`content-carve: ${report.length} page(s), ${total} field(s), ${lost} not placed`);
-  return { report, total, lost };
+  const moved = report.filter((r) => !r.identical).length;
+  log(`content-carve: ${report.length} page(s), ${total} field(s), ${lost} not placed, ${moved} page(s) that do not come back identical`);
+  return { report, total, lost, moved };
 }
 
 if (/content-carve\.mjs$/.test(process.argv[1] || "")) {
