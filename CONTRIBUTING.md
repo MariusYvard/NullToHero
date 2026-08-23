@@ -47,8 +47,18 @@ This prevents duplicate work and gets early feedback.
 ```bash
 git clone https://github.com/MariusYvard/NullToHero.git
 cd NullToHero
+npm install --include=dev
+npx playwright install chromium
 git checkout -b feature/your-contribution-name
 ```
+
+`--include=dev` is not decoration. A machine that carries `NODE_ENV=production`
+makes npm derive `omit=dev`, so a plain `npm install` skips every
+devDependency without printing anything. The visible consequence is thirteen
+rules reported as skipped by `tests/rendered-rules.mjs` and a red
+`check-review-numbers.mjs`, on a repository that declares playwright correctly.
+Chromium is what the three probes open a laid-out page in; `npm test` refuses to
+report a pass over rules it did not verify.
 
 ### 3. Write the reference file
 

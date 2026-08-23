@@ -6,12 +6,22 @@
 // rule. The difference is that these rules need a laid-out page, so the fixtures
 // are opened in Chromium instead of read as text.
 //
-// Playwright is not a dependency of this repository and this test does not make
-// it one. When it is missing the harness says so at the top of its output, names
-// the rules it did not verify, and exits 0. The count is not written here: it
-// used to say five, the probes grew to thirteen, and the comment did not. A skipped test that reports
-// "passed" is how a suite starts lying, so it reports SKIPPED and prints the
-// command that turns it on.
+// Playwright is a devDependency, not a runtime one: the plugin never launches a
+// browser on a user's machine, only this suite and the three probes do. When it
+// is missing the harness says so at the top of its output, names the rules it
+// did not verify, and exits 0. The count is not written here: it used to say
+// five, the probes grew to thirteen, and the comment did not. A skipped test
+// that reports "passed" is how a suite starts lying, so it reports SKIPPED and
+// prints the command that turns it on.
+//
+// LE PIÈGE OÙ CE FICHIER A FAIT PERDRE UNE JOURNÉE
+// ------------------------------------------------
+// Une machine qui porte `NODE_ENV=production` fait dériver `omit=dev` à npm, si
+// bien que `npm install` saute les devDependencies sans un mot et que ce
+// harnais se déclare sauté pour toujours sur un dépôt qui déclare pourtant
+// playwright. Le symptôme est un `npm test` rouge sur `check-review-numbers` et
+// un SKIPPED ici. La sortie de secours est `npm install --include=dev`, qui
+// n'exige pas de toucher à la variable d'environnement de la machine.
 
 import { readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -49,7 +59,8 @@ catch {
     process.exit(1);
   }
   console.log(`  \x1b[33mSKIPPED\x1b[0m  Playwright is absent, so rules ${ids} were NOT verified on this run.`);
-  console.log(`            Turn it on with: npm i -D playwright && npx playwright install chromium`);
+  console.log(`            Turn it on with: npm install --include=dev && npx playwright install chromium`);
+  console.log(`            --include=dev matters: NODE_ENV=production makes npm skip devDependencies in silence.`);
   console.log(`            The same probe also runs in Claude in Chrome: node tools/inspect/rendered.mjs --source\n`);
   process.exit(0);
 }
