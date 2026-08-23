@@ -119,3 +119,12 @@ test("deux fichiers pour un même espace de noms sont refusés", () => {
   const out = run(root, quiet);
   assert.equal(out.errors.length, 1);
 });
+
+test("un fragment partagé est rempli mais n'a pas d'aperçu", () => {
+  const root = site();
+  mkdirSync(join(root, "components"), { recursive: true });
+  writeFileSync(join(root, "components", "footer.html"), "<footer>{{boutique.telephone}}</footer>");
+  const out = run(root, quiet);
+  assert.deepEqual(out.previews, ["accueil"], "le fragment a reçu un aperçu");
+  assert.equal(readFileSync(join(root, "components/footer.html"), "utf8"), "<footer>01 40 54 03 90</footer>");
+});

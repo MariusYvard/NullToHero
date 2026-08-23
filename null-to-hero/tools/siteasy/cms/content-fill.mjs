@@ -42,7 +42,7 @@ import { join, resolve as resolvePath } from "node:path";
 // The first segment names the file, the rest walk into it.
 export const TOKEN = /\{\{\s*([a-z0-9_]+(?:\.[a-z0-9_]+)+)\s*\}\}/gi;
 
-const SKIP = /^(node_modules|\.git|dist|build|out|_site|\.next|\.nuxt|\.output|\.svelte-kit|\.astro|coverage|admin|components|css|js|fonts|img|images|photos|static|public|assets|netlify)(\/|$)/;
+const SKIP = /^(node_modules|\.git|dist|build|out|_site|\.next|\.nuxt|\.output|\.svelte-kit|\.astro|coverage|admin|css|js|fonts|img|images|photos|static|public|assets|netlify)(\/|$)/;
 
 // content/a-propos.json gives the namespace a_propos, content/createurs/blanc.json
 // gives createurs_blanc. The file keeps the page's name and its hyphens; the
@@ -156,6 +156,12 @@ export function previewOf(bag, html, ns) {
   }));
 }
 
+// A shared fragment (a navigation, a footer) holds tokens like any page but is
+// not one: it has no document around it, and the editor has no entry to preview
+// it with. Its tokens are still resolved, because a page that pulls the fragment
+// in at runtime would otherwise show the braces to a visitor.
+export const isDocument = (html) => /<html[\s>]|<!doctype/i.test(html);
+
 export function pagesUnder(root) {
   const out = [];
   (function walk(dir, prefix) {
@@ -180,7 +186,7 @@ export function run(root, { check = false, log = console.log, err = console.erro
   for (const page of pagesUnder(root)) {
     const file = join(root, page);
     const html = readFileSync(file, "utf8");
-    const ns = pageNamespace(html);
+    const ns = isDocument(html) ? pageNamespace(html) : null;
     if (ns) {
       const kept = previewOf(bag, html, ns);
       fixed += kept.count;
