@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { namespaceFor, body, tokenise, nest, refill, carveInPage } from "../null-to-hero/tools/cms/content-carve.mjs";
+import { namespaceFor, body, tokenise, nest, refill, carveInPage, isDocument, boxForFragment } from "../null-to-hero/tools/cms/content-carve.mjs";
 
 test("le chemin d'une page donne l'espace de noms de son entrée", () => {
   assert.equal(namespaceFor("index.html"), "accueil");
@@ -132,4 +132,54 @@ test("une espace doublée se voit dans le retour, elle ne se tait pas", () => {
   const src = `<p>10h  à 19h30</p>`;
   const out = tokenise(src, [{ box: "h", name: "texte", kind: "text", value: "10h à 19h30" }], "p");
   assert.notEqual(refill(out.html, out.fields), src);
+});
+
+/* ── le contenu partagé, et le découpage sur les sauts de ligne ───────────── */
+
+test("un fragment se reconnaît à l'absence de document autour de lui", () => {
+  assert.equal(isDocument("<!doctype html><html><body>x</body></html>"), true);
+  assert.equal(isDocument("<footer>x</footer>"), false);
+});
+
+test("la boîte d'un fragment porte le nom de son fichier", () => {
+  assert.equal(boxForFragment("components/footer.html"), "footer");
+  assert.equal(boxForFragment("partials/site-nav.html"), "site_nav");
+});
+
+test("un jeton ne se pose pas dans un attribut quand la valeur y est aussi", () => {
+  const src = `<a href="mailto:jean@exemple.fr">jean@exemple.fr</a>`;
+  const out = tokenise(src, [{ box: "pied", name: "email", kind: "text", value: "jean@exemple.fr" }], "boutique");
+  assert.equal(out.html, `<a href="mailto:jean@exemple.fr">{{boutique.pied.email}}</a>`);
+});
+
+const PIED = `<footer>
+<address>
+  78 avenue de Wagram<br>
+  75017 Paris<br>
+  <a href="tel:+33140540390">01 40 54 03 90</a>
+</address>
+<p>Une phrase avec <strong>du gras</strong> dedans.</p>
+<p>Deux <time>10h</time> et <time>19h</time> sur la même ligne.</p>
+<p>Mardi <time>10h</time> et <time>19h</time><br>Dimanche fermé</p>
+</footer>`;
+
+test("une adresse coupée par des sauts de ligne donne un champ par ligne", { skip: chromium ? false : "playwright absent" }, async () => {
+  const browser = await chromium.launch(
+    process.env.NTH_CHROMIUM ? { executablePath: process.env.NTH_CHROMIUM } : {});
+  try {
+    const page = await browser.newPage();
+    await page.setContent(PIED);
+    const { fields, skipped } = await page.evaluate(carveInPage);
+    const values = fields.map((f) => f.value);
+
+    assert.ok(values.includes("78 avenue de Wagram"));
+    assert.ok(values.includes("75017 Paris"));
+    assert.ok(values.includes("01 40 54 03 90"), "le numéro dans un lien n'est pas devenu un champ");
+
+    assert.ok(!values.some((v) => v.includes("du gras")), "une phrase porteuse de balisage a été coupée");
+    assert.ok(!values.some((v) => v.includes("sur la même ligne")), "une ligne à deux balises a été coupée");
+    assert.ok(!values.includes("Dimanche fermé"),
+      "un bloc dont une ligne porte deux balises a quand même été coupé sur ses sauts");
+    assert.equal(skipped.length, 3, "les passages figés ne sont pas tous signalés");
+  } finally { await browser.close(); }
 });

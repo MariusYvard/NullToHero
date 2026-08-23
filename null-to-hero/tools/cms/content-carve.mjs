@@ -32,15 +32,21 @@
 // the preview so the owner learns why they cannot be touched.
 //
 // Usage:
-//   node content-carve.mjs [projectRoot] [--write] [--pages a.html,b.html]
+//   node content-carve.mjs [projectRoot] [--write] [--pages a.html,b.html] [--shared boutique]
 //
 // Without --write nothing is saved and the proposal is printed as JSON.
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, resolve as resolvePath } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const SKIP_DIR = /^(node_modules|\.git|dist|build|out|_site|\.next|\.nuxt|\.output|coverage|admin|components|css|js|fonts|img|images|photos|static|public|assets|netlify|content)(\/|$)/;
+const SKIP_DIR = /^(node_modules|\.git|dist|build|out|_site|\.next|\.nuxt|\.output|coverage|admin|css|js|fonts|img|images|photos|static|public|assets|netlify|content)(\/|$)/;
+
+// Un document a une page autour de lui. Un fragment (une navigation, un pied de
+// page) porte du contenu comme une page mais n'en est pas une : aucune entrée de
+// l'éditeur ne le prévisualise, et son contenu appartient à toutes les pages à la
+// fois. Il n'est donc extrait que si on nomme l'entrée partagée qui l'accueille.
+export const isDocument = (html) => /<html[\s>]|<!doctype/i.test(html);
 
 export function pagesUnder(root) {
   const out = [];
@@ -119,6 +125,34 @@ export function carveInPage() {
     return key;
   };
 
+  // Returns one string per line when every line is either plain text or a single
+  // element carrying nothing but text (a telephone number inside a link). Returns
+  // null when any line holds more than that, because a line the file does not
+  // hold contiguously cannot be put back where it came from.
+  const splitOnBreaks = (el) => {
+    const kids = [...el.childNodes];
+    if (!kids.some((n) => n.nodeName === "BR")) return null;
+    const lines = [];
+    let current = [];
+    for (const node of kids.concat([{ nodeName: "BR" }])) {
+      if (node.nodeName === "BR") { lines.push(current); current = []; continue; }
+      current.push(node);
+    }
+    const out = [];
+    for (const line of lines) {
+      const solid = line.filter((n) => (n.textContent || "").trim());
+      if (!solid.length) continue;
+      const elements = solid.filter((n) => n.nodeType === 1);
+      if (elements.length > 1) return null;
+      if (elements.length === 1) {
+        if (solid.length > 1) return null;                 // du texte autour d'une balise
+        if (!isLeaf(elements[0])) return null;             // une balise dans la balise
+      }
+      out.push(solid.map((n) => n.textContent).join(" ").replace(/\s+/g, " ").trim());
+    }
+    return out.length ? out : null;
+  };
+
   const fields = [], skipped = [];
   const used = new Map();          // box → set of field names already given out
   const unique = (box, name) => {
@@ -150,12 +184,28 @@ export function carveInPage() {
       if (!own) { walk(child); continue; }
 
       if (FIELD_TAG.test(child.tagName)) {
-        // A passage that carries markup is fixed as a whole. Descending into it
-        // would turn one bold word into a field and leave the sentence around it
-        // untouchable, which reads as a defect rather than as a rule.
-        if (!isLeaf(child)) { skipped.push({ tag: child.tagName, text: own.slice(0, 60) }); continue; }
-        const box = keyOfBox(boxOf(child));
-        fields.push({ box, name: unique(box, nameFor(child)), kind: "text", value: own });
+        if (isLeaf(child)) {
+          const box = keyOfBox(boxOf(child));
+          fields.push({ box, name: unique(box, nameFor(child)), kind: "text", value: own });
+          continue;
+        }
+        // An address and a set of opening hours are the two things a shop owner
+        // most wants to change, and both are written as lines separated by
+        // `<br>`. Freezing the whole block over its separators would hand back a
+        // site whose telephone number is the one thing nobody can edit. So the
+        // block is cut on its breaks, and each line becomes a field when it is
+        // simple enough to be put back where it came from.
+        const lines = splitOnBreaks(child);
+        if (lines) {
+          const box = keyOfBox(boxOf(child));
+          const name = nameFor(child);
+          for (const line of lines) fields.push({ box, name: unique(box, name), kind: "text", value: line });
+          continue;
+        }
+        // Anything else carries markup inside its own sentence. Turning one bold
+        // word into a field would leave the sentence around it untouchable, which
+        // reads as a defect rather than as a rule.
+        skipped.push({ tag: child.tagName, text: own.slice(0, 60) });
         continue;
       }
       if (isLeaf(child)) { skipped.push({ tag: child.tagName, text: own.slice(0, 60) }); continue; }
@@ -188,7 +238,12 @@ export function tokenise(source, fields, ns) {
       ? new RegExp(`${escapeRe(field.attribute)}\\s*=\\s*"${body(field.value)}"`, "g")
       : new RegExp(body(field.value), "g");
     re.lastIndex = at;
-    const m = re.exec(searchable);
+    let m = re.exec(searchable);
+    // A value can also appear inside an attribute: the email of a `mailto:` link
+    // is the text of that link too, and the attribute comes first. Putting the
+    // token there would leave the visible text frozen and hand the owner a field
+    // that edits the href alone, which is worse than not offering the field.
+    while (m && field.kind === "text" && insideTag(searchable, m.index)) m = re.exec(searchable);
     if (!m) { done.push({ ...field, token, placed: false }); continue; }
     out += source.slice(at, m.index)
       + (field.kind === "attribute" ? `${field.attribute}="${token}"` : token);
@@ -211,6 +266,8 @@ export function refill(html, fields) {
     return found === undefined ? token : String(found).replace(/[&<>"]/g, (c) => ESCAPE[c]);
   });
 }
+
+const insideTag = (source, at) => source.lastIndexOf("<", at) > source.lastIndexOf(">", at);
 
 // The browser hands back text as a reader sees it: entities decoded, runs of
 // whitespace collapsed, line breaks gone. The file holds the other version. A
@@ -250,7 +307,13 @@ export function nest(fields) {
 
 /* ── the run ──────────────────────────────────────────────────────────────── */
 
-export async function carve(root, { write = false, pages, log = console.log, err = console.error } = {}) {
+// components/footer.html donne la boite `footer` dans l'entree partagee, parce
+// qu'un lecteur cherchant le telephone du magasin le cherche sous "footer" et non
+// sous "bloc_2".
+export const boxForFragment = (page) =>
+  page.replace(/\.html?$/i, "").split("/").pop().replace(/[^a-z0-9]+/gi, "_").toLowerCase();
+
+export async function carve(root, { write = false, pages, shared = null, log = console.log, err = console.error } = {}) {
   let chromium;
   try { ({ chromium } = await import("playwright")); }
   catch {
@@ -268,9 +331,17 @@ export async function carve(root, { write = false, pages, log = console.log, err
     for (const rel of list) {
       const file = join(root, rel);
       const source = readFileSync(file, "utf8");
+      const fragment = !isDocument(source);
+      if (fragment && !shared) continue;
       await page.goto(pathToFileURL(file).href, { waitUntil: "domcontentloaded" });
       const { fields, skipped } = await page.evaluate(carveInPage);
-      const ns = namespaceFor(rel);
+      // Un fragment appartient a toutes les pages : son contenu va dans l'entree
+      // partagee, sous une boite qui porte le nom du fichier.
+      if (fragment) {
+        const box = boxForFragment(rel);
+        for (const f of fields) f.box = box;
+      }
+      const ns = fragment ? shared : namespaceFor(rel);
       const placed = tokenise(source, fields, ns);
       const unplaced = placed.fields.filter((f) => !f.placed);
       const back = refill(placed.html, placed.fields) === source;
@@ -285,7 +356,14 @@ export async function carve(root, { write = false, pages, log = console.log, err
       writeFileSync(file, placed.html);
       const out = join(root, "content", `${ns.replace(/_/g, "-")}.json`);
       mkdirSync(dirname(out), { recursive: true });
-      writeFileSync(out, `${JSON.stringify(nest(placed.fields), null, 2)}\n`);
+      // Plusieurs fragments partagent une entree, donc le fichier se complete au
+      // lieu d'etre reecrit : le pied de page ne doit pas effacer la navigation.
+      let bag = nest(placed.fields);
+      if (fragment && existsSync(out)) {
+        try { bag = { ...JSON.parse(readFileSync(out, "utf8")), ...bag }; }
+        catch { /* un fichier illisible sera signale par le remplissage */ }
+      }
+      writeFileSync(out, `${JSON.stringify(bag, null, 2)}\n`);
     }
   } finally {
     await browser.close();
@@ -301,9 +379,11 @@ if (/content-carve\.mjs$/.test(process.argv[1] || "")) {
   const args = process.argv.slice(2);
   const at = args.indexOf("--pages");
   const root = resolvePath(args.find((a) => !a.startsWith("--")) || ".");
+  const sharedAt = args.indexOf("--shared");
   const out = await carve(root, {
     write: args.includes("--write"),
     pages: at >= 0 ? (args[at + 1] || "").split(",").filter(Boolean) : null,
+    shared: sharedAt >= 0 ? (args[sharedAt + 1] || "").trim() || null : null,
   });
   if (!out || out.lost) process.exitCode = 1;
 }

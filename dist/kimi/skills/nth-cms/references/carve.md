@@ -37,6 +37,49 @@ The blunt rule (no element children at all, rather than no children carrying
 text) is deliberate. The subtler rule accepts elements whose text the file does
 not hold contiguously, and those cannot be put back where they came from.
 
+## Lines, and why a `<br>` is not markup
+
+An address and a set of opening hours are the two things a shop owner most wants
+to change, and both are written as lines separated by `<br>`. Freezing the whole
+block over its separators would hand back a site whose telephone number is the
+one thing nobody can edit, which is the opposite of the point.
+
+So a block carrying breaks is cut on them, and each line becomes a field when it
+is simple enough to be put back where it came from: plain text, or a single
+element carrying nothing but text, which is what a telephone number inside a
+`tel:` link looks like. A line holding two elements, or text wrapped around one,
+freezes the whole block again. That rule is what keeps every field contiguous in
+the file, and contiguity is what lets the token go back exactly where the value
+was.
+
+One consequence worth stating. When a value appears twice, once in an attribute
+and once as the text, an email address inside a `mailto:` link being the usual
+case, the token goes on the text. Putting it in the attribute would hand the
+owner a field that edits the link and leaves the visible address frozen, and the
+divergence would only show the day someone changed it.
+
+## Shared content
+
+Nothing outside `<main>` is extracted from a page, so the footer's telephone
+number, opening hours and address stay hardcoded. They do not belong to a page:
+they belong to all of them.
+
+    node "${NTH_ROOT}/tools/cms/content-carve.mjs" . --shared boutique --write
+
+With `--shared`, the fragments (any HTML file with no document around it, which
+is what a shared component is) are carved into one entry of that name, each under
+a box named after its file: `components/footer.html` gives
+`{{boutique.footer.adresse}}`. Several fragments share the entry, so the content
+file is completed rather than rewritten, and the footer does not erase the
+navigation.
+
+Without `--shared`, fragments are left alone. A namespace for shared content is a
+decision about the site, not something an extractor should invent.
+
+A navigation is still skipped, breaks or not. Its links are landmarks, and a menu
+label that a client can change while the URL stays put is a trap rather than a
+feature.
+
 ## How it names
 
 The box is the nearest `section`, `article`, or element with an id, because that

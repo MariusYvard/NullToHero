@@ -55,6 +55,14 @@ Two declarations worth thinking about rather than accepting:
     node "${CLAUDE_PLUGIN_ROOT}/tools/cms/content-carve.mjs" . --write
     node "${CLAUDE_PLUGIN_ROOT}/tools/cms/cms-scaffold.mjs" .
 
+A site whose footer or navigation carries content of its own needs one more
+pass, because nothing outside `<main>` is extracted from a page:
+
+    node "${CLAUDE_PLUGIN_ROOT}/tools/cms/content-carve.mjs" . --shared boutique --write
+
+That puts the shared fragments into one entry, named by you rather than guessed.
+See [carve.md](carve.md).
+
 The first rewrites the pages, replacing each extracted value with its token, and
 writes `content/*.json`. It checks itself: every page is refilled from its own
 values and compared with the original, and any page that does not come back
