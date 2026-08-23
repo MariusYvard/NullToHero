@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { handle, signSession, envState } from "../null-to-hero/tools/cms/bridge.mjs";
+import { handle, signSession, envState, tokenExpiry } from "../null-to-hero/tools/cms/bridge.mjs";
 import { cookiesFrom, verdict } from "../null-to-hero/tools/cms/cms-diagnose.mjs";
 
 const SECRET = "x".repeat(48);
@@ -25,15 +25,16 @@ const claims = { sub: "a@b.fr", email: "a@b.fr", roles: ["editor"], csrf: "c", i
 // Un faux GitHub : chaque route rend ce que la table dit, et une route absente
 // rend 404, ce qui est exactement le cas que `diagnose` doit traverser sans
 // tomber. Une valeur numérique dans la table est un statut de refus.
-const forge = routes => async url => {
+const forge = (routes, expiry) => async url => {
+  const headers = new Headers(expiry ? { "github-authentication-token-expiration": expiry } : {});
   const path = String(url).replace("https://api.github.com/repos/moi/mon-site", "");
   const hit = Object.entries(routes).find(([k]) => path === k || path.startsWith(`${k}?`));
-  if (!hit) return { ok: false, status: 404, json: async () => ({}) };
-  if (typeof hit[1] === "number") return { ok: false, status: hit[1], json: async () => ({}) };
-  return { ok: true, status: 200, json: async () => hit[1] };
+  if (!hit) return { ok: false, status: 404, headers, json: async () => ({}) };
+  if (typeof hit[1] === "number") return { ok: false, status: hit[1], headers, json: async () => ({}) };
+  return { ok: true, status: 200, headers, json: async () => hit[1] };
 };
 
-const call = async (routes, env = ENV, policy = POLICY) => {
+const call = async (routes, env = ENV, policy = POLICY, expiry = null) => {
   const req = new Request("https://site.fr/api/cms", {
     method: "POST",
     headers: {
@@ -43,7 +44,7 @@ const call = async (routes, env = ENV, policy = POLICY) => {
     },
     body: JSON.stringify({ action: "diagnose" }),
   });
-  const res = await handle(req, env, { fetch: forge(routes), now: NOW, policy });
+  const res = await handle(req, env, { fetch: forge(routes, expiry), now: NOW, policy });
   return { status: res.status, body: await res.json() };
 };
 
@@ -62,7 +63,8 @@ test("un pont complet répond oui à tout ce qu'il peut constater", async () => 
   assert.deepEqual(body.env, {
     session_secret: true, accounts: 1, github_token: true, repo: true,
   });
-  assert.deepEqual(body.token, { reads: true, writes: true });
+  assert.deepEqual(body.token,
+    { reads: true, writes: true, expires_at: null, expires_in_days: null });
   assert.deepEqual(body.branches, { content: true, production: true });
   assert.equal(body.publish.workflow_readable, true);
   assert.equal(body.publish.last_run_ok, true);
@@ -166,6 +168,43 @@ test("l'épreuve d'écriture ne touche ni branche ni commit", async () => {
   const writes = seen.filter(([, method]) => method !== "GET");
   assert.deepEqual(writes.map(([url]) => url.split("/repos/moi/mon-site")[1]), ["/git/blobs"]);
   assert.ok(!seen.some(([url]) => /\/git\/(refs|commits|trees)/.test(url)));
+});
+
+/* ── l'expiration du jeton ────────────────────────────────────────────────── */
+
+test("la date d'expiration se lit au format que GitHub envoie", () => {
+  const at = tokenExpiry("2026-09-30 15:00:00 UTC", NOW);
+  assert.equal(at.at, "2026-09-30T15:00:00.000Z");
+  assert.equal(at.days, 42);
+  assert.equal(tokenExpiry("", NOW), null, "un jeton sans date n'en invente pas");
+  assert.equal(tokenExpiry("jamais", NOW), null, "une date illisible reste null");
+});
+
+test("un jeton qui expire bientôt est daté et signalé sans être une panne", async () => {
+  const { body } = await call(FULL, ENV, POLICY, "2026-08-26 12:00:00 UTC");
+  assert.equal(body.token.expires_in_days, 7);
+  const line = verdict(body).find(l => /expire dans/.test(l.label));
+  assert.ok(line && !line.ok && !line.fatal, "sept jours doit alerter sans faire échouer");
+});
+
+test("un jeton déjà expiré est une panne, et le diagnostic le dit ainsi", async () => {
+  const { body } = await call(FULL, ENV, POLICY, "2026-08-17 12:00:00 UTC");
+  assert.ok(body.token.expires_in_days < 0);
+  assert.ok(verdict(body).some(l => l.fatal && !l.ok && /a expiré/.test(l.label)));
+});
+
+test("un jeton confortable ne déclenche rien", async () => {
+  const { body } = await call(FULL, ENV, POLICY, "2027-08-19 12:00:00 UTC");
+  assert.ok(verdict(body).every(l => l.ok || !/expir/.test(l.label)));
+});
+
+// L'en-tête arrive aussi sur un refus, et un refus est justement ce que rend un
+// jeton mort : le lire seulement sur les réponses valides le rendrait muet
+// exactement quand il sert.
+test("la date se lit même quand GitHub refuse tout", async () => {
+  const { body } = await call({}, ENV, POLICY, "2026-08-17 12:00:00 UTC");
+  assert.equal(body.token.reads, false);
+  assert.equal(body.token.expires_at, "2026-08-17T12:00:00.000Z");
 });
 
 test("le diagnostic exige une session, comme toute autre action", async () => {

@@ -63,6 +63,36 @@ by what name it was reached. Whether the host serves the production branch stays
 a matter of looking, though a workflow that ran and a production branch that
 exists narrow it to the host's own setting.
 
+## Replacing the token
+
+A fine-grained token expires, and it does not announce it: it stops writing on a
+Tuesday and the client calls to say the editor is broken. GitHub returns the
+expiry date on every REST response made with the token, so the bridge already
+knows it. Under three weeks it writes `{"cms":"token-expiry","days":n}` into the
+host's function log on every action, and `cms-diagnose.mjs` prints it as a date.
+
+The order matters, and it is the opposite of the intuitive one:
+
+1. Mint the new token in GitHub, same repository, `Contents` in write, nothing
+   else, and above all not `Workflows`.
+2. Set `NTH_CMS_GITHUB_TOKEN` to the new value on the host, on the deploy context
+   that is actually served.
+3. Redeploy. A Netlify function reads its variables at cold start, so a variable
+   changed without a deploy reaches only the instances that start afterwards, and
+   the editor keeps working through the old token until the last warm instance
+   dies.
+4. Run `cms-diagnose.mjs` and read the new expiry date. Until it moves, the
+   change has not landed.
+5. Revoke the old token in GitHub, once, and not before step 4.
+
+Revoking first turns a five-minute operation into an outage: between the
+revocation and the redeploy, every save fails. The bridge holds no state and no
+cache of its own, so nothing else has to be flushed.
+
+A token without a declared expiry is not the good news it looks like. It never
+warns because there is nothing to warn about, and it outlives the client
+relationship it was minted for.
+
 ## The write quota
 
 Declared in `CONTENT.md`, counted from the branch's commit history, and returned
@@ -83,6 +113,7 @@ history on the content branch, so a restore is a commit rather than a deletion.
 | Anything at all, before guessing | `cms-diagnose.mjs`, which answers from inside the deployment rather than from the repository |
 | The sign-in refuses a password that used to work | `NTH_CMS_ACCOUNTS` on the host, and whether the deploy context is the one being served |
 | Saving reports a refusal | The allow-list: the path is outside `cms-policy.json`, whatever the interface offered |
+| Saving reported nothing for months and now refuses everything | The token's expiry date, which the log has been naming for three weeks |
 | Saving works, the site does not change | The workflow, and whether the host deploys the production branch |
 | The preview shows braces | The build does not call `nth-content.mjs` |
 | The preview is empty | `admin/preview/` is written at build time and gitignored; a deploy that did not run the build has none |

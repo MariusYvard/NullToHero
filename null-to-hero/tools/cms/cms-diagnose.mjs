@@ -59,6 +59,17 @@ export function verdict(d) {
   say(d.token.writes === true, d.token.writes === null
     ? "le jeton n'a pas pu être testé en écriture, GitHub a répondu autre chose qu'un refus"
     : "le jeton écrit le contenu (Contents: write)");
+  // Un jeton expire en silence : il cesse d'écrire, un mardi. Trois semaines
+  // laissent le temps de le remplacer sans travailler un dimanche, et un jeton
+  // sans date déclarée n'est pas une bonne nouvelle non plus.
+  if (d.token.expires_in_days === null) {
+    say(true, "le jeton ne déclare pas de date d'expiration, à vérifier dans GitHub", false);
+  } else if (d.token.expires_in_days < 0) {
+    say(false, `le jeton a expiré il y a ${-d.token.expires_in_days} jour(s), le ${d.token.expires_at.slice(0, 10)}`);
+  } else {
+    say(d.token.expires_in_days > 21,
+      `le jeton expire dans ${d.token.expires_in_days} jour(s), le ${d.token.expires_at.slice(0, 10)}`, false);
+  }
   say(d.branches.content, "la branche de contenu existe");
   if (d.branches.production !== null) say(d.branches.production, "la branche de production existe");
   if (d.publish.mode === "manual") {

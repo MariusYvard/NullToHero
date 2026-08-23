@@ -217,7 +217,28 @@ const setCookie = (name, value, maxAge, httpOnly = true) =>
 
 const encodePath = path => path.split("/").map(encodeURIComponent).join("/");
 
+// QUAND LE JETON MEURT
+// --------------------
+// GitHub joint la date d'expiration du jeton à chaque réponse REST faite avec
+// lui, dans un en-tête, au format `2026-12-31 15:00:00 UTC`. Elle ne coûte donc
+// aucun appel : elle est déjà là, sur les appels que le pont fait de toute
+// façon. Un jeton à durée illimitée n'a pas d'en-tête, ce qui se lit `null`
+// plutôt que "jamais" : le pont ne sait pas la différence entre pas d'en-tête et
+// pas de date.
+export function tokenExpiry(raw, now = Date.now()) {
+  if (!raw) return null;
+  const at = Date.parse(String(raw).replace(" UTC", "Z").replace(" ", "T"));
+  if (!Number.isFinite(at)) return null;
+  return { at: new Date(at).toISOString(), days: Math.floor((at - now) / 86_400_000) };
+}
+
+// En dessous, le pont le dit dans le journal de l'hébergeur à chaque action.
+// Trois semaines laissent le temps de frapper un jeton, de poser la variable et
+// de redéployer sans travailler un dimanche.
+export const EXPIRY_WARN_DAYS = 21;
+
 function github(env, fetchImpl, quota) {
+  let expiry = null;
   const call = async (path, init = {}) => {
     const res = await fetchImpl(`${GITHUB}/repos/${env.NTH_CMS_REPO}${path}`, {
       ...init,
@@ -228,6 +249,10 @@ function github(env, fetchImpl, quota) {
         ...(init.body ? { "content-type": "application/json" } : {}),
       },
     });
+    // L'en-tête arrive aussi sur un refus, et un refus est justement ce que rend
+    // un jeton expiré : la lire ici plutôt qu'après le `if` est ce qui permet de
+    // dire "il a expiré" au lieu de "GitHub a refusé".
+    expiry = (res.headers && res.headers.get("github-authentication-token-expiration")) || expiry;
     if (!res.ok) {
       console.error(JSON.stringify({ cms: "github", status: res.status, path }));
       const err = res.status === 404
@@ -242,6 +267,7 @@ function github(env, fetchImpl, quota) {
   };
   return {
     call,
+    get expiryHeader() { return expiry; },
     // Contents returns an empty string past one megabyte and hands over a blob sha.
     async read(path, branch) {
       const meta = await call(`/contents/${encodePath(path)}?ref=${encodeURIComponent(branch)}`);
@@ -617,6 +643,11 @@ async function act(body, ctx) {
         probe(`/actions/workflows/${encodeURIComponent(file)}/runs?per_page=1`),
       ]);
       const run = runs && Array.isArray(runs.workflow_runs) ? runs.workflow_runs[0] : null;
+      const writes = await gh.call("/git/blobs", {
+        method: "POST",
+        body: JSON.stringify({ content: "nth-diagnose", encoding: "utf-8" }),
+      }).then(() => true).catch(e => (e.upstream === 403 ? false : null));
+      const expires = tokenExpiry(gh.expiryHeader, ctx.now);
       return {
         env: ctx.config,
         token: {
@@ -633,10 +664,9 @@ async function act(body, ctx) {
           // Un blob créé sans arbre ni commit ne référence rien, n'apparaît sur
           // aucune branche, ne déclenche aucun build et ne compte pas dans le
           // quota, qui compte des commits. GitHub le ramasse tout seul.
-          writes: await gh.call("/git/blobs", {
-            method: "POST",
-            body: JSON.stringify({ content: "nth-diagnose", encoding: "utf-8" }),
-          }).then(() => true).catch(e => (e.upstream === 403 ? false : null)),
+          writes,
+          expires_at: expires ? expires.at : null,
+          expires_in_days: expires ? expires.days : null,
         },
         branches: {
           content: Boolean(content),
@@ -713,8 +743,22 @@ export async function handle(req, env, deps = {}) {
     policy, roles: claims.roles || [], branch, repo: env.NTH_CMS_REPO, now,
     config: envState(env, secret),
   };
+  // UN JETON QUI EXPIRE NE PRÉVIENT PAS
+  // -----------------------------------
+  // Il cesse simplement d'écrire, un mardi, et le client appelle en disant que
+  // l'éditeur est cassé. La date est dans les réponses de GitHub, donc elle ne
+  // coûte rien : la dire dans le journal de l'hébergeur pendant les trois
+  // semaines qui précèdent transforme une panne en rendez-vous.
+  const warnExpiry = () => {
+    const left = tokenExpiry(ctx.gh.expiryHeader, now);
+    if (left && left.days <= EXPIRY_WARN_DAYS) {
+      console.warn(JSON.stringify({ cms: "token-expiry", days: left.days, at: left.at }));
+    }
+  };
+
   try {
     const out = await act(body, ctx);
+    warnExpiry();
     // Le diagnostic n'écrit rien mais il lit la configuration : qui l'a demandé
     // et quand appartient au journal de l'hébergeur au même titre qu'une écriture.
     if (WRITES.has(body.action) || body.action === "diagnose") {
@@ -725,6 +769,9 @@ export async function handle(req, env, deps = {}) {
     }
     return json(out, 200, refresh(claims, secret, now, policy));
   } catch (e) {
+    // Surtout ici : un jeton expiré se manifeste par un refus de GitHub, et
+    // "expiré depuis deux jours" est une réponse là où "502" n'en est pas une.
+    warnExpiry();
     if (e instanceof HttpError) {
       console.log(JSON.stringify({ cms: body.action, who: claims.email, refused: e.message }));
       if (e.status === 429) console.warn(JSON.stringify({ cms: "quota", repo: env.NTH_CMS_REPO, at: new Date(now).toISOString() }));

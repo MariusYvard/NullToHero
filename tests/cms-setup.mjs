@@ -51,6 +51,20 @@ test("la fiche envoie vers le diagnostic du pont, dans les deux langues", () => 
   }
 });
 
+// Révoquer avant d'avoir redéployé met le site hors service entre les deux.
+// L'ordre est le seul contenu utile de ce paragraphe, donc il est gardé.
+test("la fiche donne l'ordre de remplacement du jeton, révocation en dernier", () => {
+  for (const locale of ["fr", "en"]) {
+    const fiche = handoverFor({ ...SITE, locale });
+    // La fiche est du texte enroulé : une coupure de ligne tombe n'importe où.
+    const loose = words => new RegExp(words.join("[\\s\\S]{0,80}"));
+    const rotation = locale === "fr"
+      ? loose(["poser la", "variable", "redéployer", "vérifier", "révoquer l'ancien seulement ensuite"])
+      : loose(["set the variable", "redeploy", "confirm", "only then revoke the old one"]);
+    assert.ok(rotation.test(fiche), `l'ordre de rotation manque à la fiche ${locale}`);
+  }
+});
+
 test("sans dépôt déclaré, la fiche le dit au lieu d'inventer", () => {
   const fiche = handoverFor({ ...SITE, repo: undefined });
   assert.ok(fiche.includes("<propriétaire/dépôt>"));

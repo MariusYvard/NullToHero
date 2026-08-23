@@ -271,6 +271,14 @@ portée du pont. La garantie vient de GitHub, pas de notre liste blanche, et
 c'est pour cela qu'elle vaut quelque chose. Un jeton ne se colle ni dans une
 conversation ni dans le dépôt.
 
+Notez la date d'expiration choisie. Un jeton expiré ne prévient pas : il cesse
+d'écrire et l'éditeur refuse d'enregistrer. Le pont l'annonce dans le journal de
+l'hébergeur pendant les trois semaines qui précèdent, et \`cms-diagnose.mjs\` la
+donne à la demande. Pour le remplacer : frapper le nouveau jeton, poser la
+variable, redéployer, vérifier la nouvelle date avec \`cms-diagnose.mjs\`, et
+révoquer l'ancien seulement ensuite. Révoquer d'abord met le site hors service
+entre la révocation et le redéploiement.
+
 ## 4. Les variables d'environnement
 
 Chez l'hébergeur, sur ${site}, quatre variables, marquées secrètes :
@@ -352,6 +360,13 @@ Withholding Workflows is what puts \`.github/workflows/\` beyond the bridge's
 reach. The guarantee comes from GitHub rather than from our own allow-list being
 right, which is why it is worth having. A token belongs in neither a
 conversation nor the repository.
+
+Note the expiry date you pick. An expired token gives no warning: it stops
+writing and the editor refuses to save. The bridge announces it in the host's
+function log for the three weeks before, and \`cms-diagnose.mjs\` reports it on
+demand. To replace one: mint the new token, set the variable, redeploy, confirm
+the new date with \`cms-diagnose.mjs\`, and only then revoke the old one.
+Revoking first takes the site down between the revocation and the redeploy.
 
 ## 4. The environment variables
 
