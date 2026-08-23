@@ -1,3 +1,10 @@
+// NullToHero :: deterministic rule engine
+//
+// The directory is named after a skill that no longer exists. Since v6 these
+// engines are called by `/audit checks` (rules, rendered, motion, three) and by
+// `/siteasy preview` (capture). The name is kept because renaming it would move
+// a hundred cited locations in the architecture review for no gain; what was
+// missing was this sentence, not another path.
 // NullToHero :: deterministic anti-pattern rules
 //
 // WHY THIS EXISTS
