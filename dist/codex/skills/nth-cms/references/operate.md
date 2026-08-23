@@ -37,8 +37,31 @@ repository path, a declared locale the editor does not ship, a workflow that
 watches the wrong branch, a build that never calls `nth-content.mjs`. The second
 reports any compiled file that has been edited by hand.
 
-Neither can see the four things listed at the end of `CMS.md`. Those are
-established by opening the editor and changing a word.
+Neither can see the four things listed at the end of `CMS.md`, because neither
+leaves the repository. Three of the four are visible from inside the deployed
+bridge, and only from there:
+
+    node "${NTH_ROOT}/tools/cms/cms-diagnose.mjs" https://the-site.example owner@example.com
+
+It signs in as an existing account, asks the bridge for its own state, and prints
+booleans: which of the four variables are set on the context being served, how
+many accounts the bridge can read, whether the token reads the repository,
+whether it may write contents, whether it is wider than it should be, whether the
+two branches exist, whether the publish workflow is readable and when it last
+ran. It exits 1 when something that must hold does not.
+
+The answer is booleans and dates, never values. A diagnostic that returned the
+value of a variable would be a way to read the variables through the editor, and
+every account that can sign in could use it.
+
+The password is read from the keyboard without echo, or from standard input when
+it is piped. It is never a command-line argument, because an argument is in the
+shell history and in the process table.
+
+The fourth thing, the domain's DNS, stays out of reach: the bridge does not know
+by what name it was reached. Whether the host serves the production branch stays
+a matter of looking, though a workflow that ran and a production branch that
+exists narrow it to the host's own setting.
 
 ## The write quota
 
@@ -57,6 +80,7 @@ history on the content branch, so a restore is a commit rather than a deletion.
 
 | Symptom | First thing to look at |
 |---|---|
+| Anything at all, before guessing | `cms-diagnose.mjs`, which answers from inside the deployment rather than from the repository |
 | The sign-in refuses a password that used to work | `NTH_CMS_ACCOUNTS` on the host, and whether the deploy context is the one being served |
 | Saving reports a refusal | The allow-list: the path is outside `cms-policy.json`, whatever the interface offered |
 | Saving works, the site does not change | The workflow, and whether the host deploys the production branch |
@@ -68,6 +92,8 @@ history on the content branch, so a restore is a commit rather than a deletion.
 
 `CMS.md` is compiled, so regenerating it is `cms-scaffold` and editing it by hand
 is pointless. It carries this site's real values and it ends by naming what no
-check can establish: the rights the token actually holds, whether the variables
-are set on the right context, which branch the host deploys, the domain's DNS.
-Read it with the person who will do those steps.
+check can establish from the repository: the rights the token actually holds,
+whether the variables are set on the right context, which branch the host
+deploys, the domain's DNS. Read it with the person who will do those steps, then
+run `cms-diagnose.mjs` once the steps are done: the first three stop being a
+matter of trust the moment the bridge is up.

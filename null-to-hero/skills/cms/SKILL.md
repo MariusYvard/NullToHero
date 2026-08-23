@@ -39,7 +39,7 @@ An edit therefore changes a JSON value and nothing else.
 | `carve [site]` | The extraction alone: propose the fields, read them back, write nothing until asked | [references/carve.md](references/carve.md) |
 | `scaffold [site]` | Compile CONTENT.md into the editor, the bridge, the allow-list and the workflow | [references/entrust.md](references/entrust.md) + [references/architecture.md](references/architecture.md) |
 | `accounts [site]` | Mint, remove and list the accounts the bridge will accept | [references/operate.md](references/operate.md) |
-| `check [site]` | `cms-lint` and `cms-scaffold --check` in one pass, plus what neither can see | [references/operate.md](references/operate.md) |
+| `check [site]` | `cms-lint` and `cms-scaffold --check` in one pass, then the deployed bridge's own diagnosis | [references/operate.md](references/operate.md) |
 | `handover [site]` | Regenerate CMS.md and read it with the person who will do the manual steps | [references/operate.md](references/operate.md) |
 
 ## Start here
@@ -67,7 +67,8 @@ It does not create the token, set the environment variables, push the content
 branch or point the host at the right branch. Those live in a console nobody here
 controls. `scaffold` writes `CMS.md`, which names each of them with this site's
 real values, and ends with the list of things no check can establish from the
-repository.
+repository. Once the bridge is deployed, `cms-diagnose.mjs` asks it three of
+those four from the inside, where the token lives.
 
 It never puts a secret in the repository. A password is never a command-line
 argument, and a token pasted into a conversation is a token in a transcript.

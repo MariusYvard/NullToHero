@@ -37,7 +37,18 @@ test("la fiche nomme les quatre variables et refuse Workflows au jeton", () => {
 test("la fiche dit ce qu'aucun contrôle ne pourra constater", () => {
   const fiche = handoverFor(SITE);
   assert.ok(/DNS/.test(fiche));
-  assert.ok(/ne les expose pas/.test(fiche), "le jeton non vérifiable n'est pas signalé");
+  assert.ok(/Workflows/.test(fiche), "la permission invérifiable n'est pas signalée");
+});
+
+// Ce que la fiche déclarait invérifiable il y a une version l'est depuis
+// l'intérieur du pont. Une fiche qui ne nomme pas le diagnostic renvoie le
+// propriétaire à un "on verra bien" qui n'a plus lieu d'être.
+test("la fiche envoie vers le diagnostic du pont, dans les deux langues", () => {
+  for (const locale of ["fr", "en"]) {
+    const fiche = handoverFor({ ...SITE, locale });
+    assert.ok(fiche.includes("cms-diagnose.mjs"), `diagnostic absent de la fiche ${locale}`);
+    assert.ok(fiche.includes(SITE.site), `l'adresse du site manque à la commande ${locale}`);
+  }
 });
 
 test("sans dépôt déclaré, la fiche le dit au lieu d'inventer", () => {

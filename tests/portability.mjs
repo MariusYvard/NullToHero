@@ -31,8 +31,10 @@ const CODEX_LIST_BUDGET = 8000;
 const KIMI_LISTING_TRUNCATION = 250;
 const SHORT_DESC_MAX = 400;
 // The count Claude Code has always substituted. A change here means the loaded
-// tree moved, which is exactly what must not happen silently.
-const CLAUDE_ROOT_TOKENS = 43;
+// tree moved, which is exactly what must not happen silently. It did drift
+// silently, from 43 to 45, while this file was not called by `npm test`: a guard
+// nobody runs is a comment. It is called now.
+const CLAUDE_ROOT_TOKENS = 46;
 
 let passed = 0, failed = 0;
 const pass = m => { passed++; console.log(`  ok    ${m}`); };

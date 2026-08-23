@@ -139,6 +139,24 @@ export function loadAccounts(raw) {
   })).filter(a => a.email && a.password);
 }
 
+// CE QUE LE PONT SAIT DE SA PROPRE CONFIGURATION
+// ----------------------------------------------
+// En booléens et en nombres, jamais en valeurs. `diagnose` répond avec ceci, et
+// un diagnostic qui rendrait la valeur d'une variable serait une fuite de
+// variable. Le nombre de comptes suffit à distinguer les trois états qui se
+// ressemblent depuis l'extérieur : variable absente, variable posée sur le
+// mauvais contexte de déploiement, variable posée mais vide.
+export function envState(env, secret = env.NTH_CMS_SESSION_SECRET) {
+  let accounts = null;
+  try { accounts = loadAccounts(env.NTH_CMS_ACCOUNTS).length; } catch { accounts = null; }
+  return {
+    session_secret: Boolean(secret) && String(secret).length >= 32,
+    accounts,                       // null : la variable est absente ou illisible
+    github_token: Boolean(env.NTH_CMS_GITHUB_TOKEN),
+    repo: /^[^/\s]+\/[^/\s]+$/.test(String(env.NTH_CMS_REPO || "")),
+  };
+}
+
 // An unknown email still pays for one derivation, so the answer takes the same
 // time whether or not the account exists. Otherwise the login route is an oracle
 // that tells anyone which addresses are worth attacking.
@@ -212,8 +230,13 @@ function github(env, fetchImpl, quota) {
     });
     if (!res.ok) {
       console.error(JSON.stringify({ cms: "github", status: res.status, path }));
-      if (res.status === 404) throw new HttpError(404, "not found");
-      throw new HttpError(502, "upstream refused the write");
+      const err = res.status === 404
+        ? new HttpError(404, "not found")
+        : new HttpError(502, "upstream refused the write");
+      // Le statut d'origine ne sort jamais vers le navigateur ; `diagnose` en a
+      // besoin en interne pour séparer "interdit" de "cassé".
+      err.upstream = res.status;
+      throw err;
     }
     return res.status === 204 ? null : res.json();
   };
@@ -392,7 +415,7 @@ const mediaFile = (path, buffer, sha) => ({
   name: path.slice(path.lastIndexOf("/") + 1),
 });
 
-/* ── the ten actions ──────────────────────────────────────────────────────── */
+/* ── the actions ──────────────────────────────────────────────────────────── */
 
 async function act(body, ctx) {
   const { gh, policy, roles, branch } = ctx;
@@ -571,6 +594,66 @@ async function act(body, ctx) {
     case "getDeployPreview":
       return null;
 
+    // TROIS DES QUATRE QUESTIONS QUE CMS.md LAISSE OUVERTES
+    // -----------------------------------------------------
+    // La fiche de mise en service finit par ce qu'aucun contrôle ne peut établir
+    // depuis le dépôt : les droits réels du jeton, les variables posées sur le
+    // bon contexte, la branche que l'hébergeur déploie, le DNS. Les trois
+    // premières se répondent d'ici et de nulle part ailleurs, parce que le pont
+    // tourne dans le contexte servi et qu'il tient le jeton. La quatrième reste
+    // dehors : le pont ne sait pas par quel nom on l'a joint.
+    //
+    // Aucun appel n'est fatal. Un pont à moitié configuré est exactement le cas
+    // où l'on demande le diagnostic, et un diagnostic qui refuse de répondre
+    // parce qu'une brique manque ne diagnostique rien.
+    case "diagnose": {
+      const probe = path => gh.call(path).catch(() => null);
+      const file = policy.publishWorkflow || "publish-content.yml";
+      const separate = Boolean(policy.productionBranch) && policy.productionBranch !== branch;
+      const [repo, content, production, runs] = await Promise.all([
+        probe(""),
+        probe(`/branches/${encodeURIComponent(branch)}`),
+        separate ? probe(`/branches/${encodeURIComponent(policy.productionBranch)}`) : null,
+        probe(`/actions/workflows/${encodeURIComponent(file)}/runs?per_page=1`),
+      ]);
+      const run = runs && Array.isArray(runs.workflow_runs) ? runs.workflow_runs[0] : null;
+      return {
+        env: ctx.config,
+        token: {
+          reads: Boolean(repo),
+          // POURQUOI UNE ÉCRITURE PLUTÔT QU'UNE LECTURE DE DROITS
+          // ----------------------------------------------------
+          // Le champ `permissions` des métadonnées du dépôt décrit le rôle du
+          // compte propriétaire du jeton, pas ce que ce jeton-là s'est vu
+          // accorder. Sur le dépôt de son propre auteur il rend `push: true`
+          // quel que soit le jeton, donc il répondrait oui à un jeton en
+          // lecture seule. La seule question sans ambiguïté est celle qu'on
+          // pose à l'écriture elle-même.
+          //
+          // Un blob créé sans arbre ni commit ne référence rien, n'apparaît sur
+          // aucune branche, ne déclenche aucun build et ne compte pas dans le
+          // quota, qui compte des commits. GitHub le ramasse tout seul.
+          writes: await gh.call("/git/blobs", {
+            method: "POST",
+            body: JSON.stringify({ content: "nth-diagnose", encoding: "utf-8" }),
+          }).then(() => true).catch(e => (e.upstream === 403 ? false : null)),
+        },
+        branches: {
+          content: Boolean(content),
+          production: separate ? Boolean(production) : null,
+        },
+        // Un flux illisible veut dire un jeton sans Actions. C'est l'état normal
+        // en publication automatique, et une panne en publication manuelle :
+        // `publishSite` ne pourra pas déclencher la mise en ligne.
+        publish: {
+          mode: policy.publish,
+          workflow_readable: Boolean(runs),
+          last_run_at: run?.updated_at || null,
+          last_run_ok: run ? run.conclusion === "success" : null,
+        },
+      };
+    }
+
     default:
       throw new HttpError(422, `Unknown action ${body.action}`);
   }
@@ -628,10 +711,13 @@ export async function handle(req, env, deps = {}) {
   const ctx = {
     gh: github(env, fetchImpl, (call, b) => quotaUsage(call, policy, b, now)),
     policy, roles: claims.roles || [], branch, repo: env.NTH_CMS_REPO, now,
+    config: envState(env, secret),
   };
   try {
     const out = await act(body, ctx);
-    if (WRITES.has(body.action)) {
+    // Le diagnostic n'écrit rien mais il lit la configuration : qui l'a demandé
+    // et quand appartient au journal de l'hébergeur au même titre qu'une écriture.
+    if (WRITES.has(body.action) || body.action === "diagnose") {
       console.log(JSON.stringify({
         cms: body.action, who: claims.email, at: new Date(now).toISOString(),
         paths: pathsOf(body), bytes: Buffer.byteLength(raw),

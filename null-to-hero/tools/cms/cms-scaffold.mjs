@@ -291,16 +291,27 @@ les copies que l'aperçu affiche. Sans cet appel, le site publie ses accolades.
     node cms-lint.mjs .
     node cms-scaffold.mjs --check .
 
-## Ce qu'aucun contrôle d'ici ne peut constater
+Ces deux commandes lisent le dépôt, donc elles ne voient que ce qui y est écrit.
+Une fois le pont déployé, il répond sur le reste, depuis l'intérieur du contexte
+que l'hébergeur sert et avec le jeton en main :
 
-- Les droits réellement accordés au jeton. L'API GitHub ne les expose pas à son
-  porteur, donc un jeton trop large passe tous les contrôles.
-- Que les quatre variables sont posées sur le bon site et le bon contexte de
-  déploiement.
+    node cms-diagnose.mjs ${site} <votre adresse>
+
+Il dit lesquelles des quatre variables sont posées ici, combien de comptes il
+lit, si le jeton lit le dépôt et s'il peut y écrire, si les deux branches
+existent, si le flux de publication est lisible et quand il a tourné. Il répond
+en oui et en non, jamais avec la valeur d'une variable, et le mot de passe se
+tape au clavier plutôt que sur la ligne de commande.
+
+## Ce qui reste hors de portée
+
+- Que le jeton n'a pas la permission \`Workflows\`. La constater demanderait
+  d'écrire sous \`.github/workflows/\`, ce qui est exactement ce que cette
+  permission absente doit rendre impossible.
 - Que \`${production}\` est bien la branche que l'hébergeur déploie.
 - Le DNS et le certificat du domaine.
 
-Ces quatre points se constatent en essayant : ouvrir /admin/, se connecter,
+Ces trois points se constatent en essayant : ouvrir /admin/, se connecter,
 changer un mot, publier, et regarder le site.
 `;
 
@@ -362,15 +373,27 @@ preview displays. Without the call, the site publishes its braces.
     node cms-lint.mjs .
     node cms-scaffold.mjs --check .
 
-## What no check here can establish
+Both read the repository, so they see what is written there and nothing else.
+Once the bridge is deployed it answers for the rest, from inside the context the
+host serves and with the token in hand:
 
-- The rights the token actually carries. The GitHub API does not expose them to
-  the bearer, so an over-broad token passes every check.
-- That the four variables are set on the right site and the right deploy context.
+    node cms-diagnose.mjs ${site} <your address>
+
+It reports which of the four variables are set here, how many accounts it can
+read, whether the token reads the repository and whether it may write to it,
+whether both branches exist, whether the publish workflow is readable and when it
+last ran. The answer is yes and no, never the value of a variable, and the
+password is typed at the keyboard rather than on the command line.
+
+## What stays out of reach
+
+- That the token does not carry the \`Workflows\` permission. Establishing it
+  would mean writing under \`.github/workflows/\`, which is exactly what that
+  missing permission is there to prevent.
 - That \`${production}\` is the branch the host actually deploys.
 - The domain's DNS and certificate.
 
-Those four are established by trying: open /admin/, sign in, change a word,
+Those three are established by trying: open /admin/, sign in, change a word,
 publish, and look at the site.
 `;
 
