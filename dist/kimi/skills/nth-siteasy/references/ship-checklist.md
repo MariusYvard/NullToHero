@@ -14,8 +14,8 @@ This complements `harden` (production robustness) and `optimize` (performance). 
 
 Quality gates, all of which must pass:
 
-- [ ] `/nth-audit checks` and `/nth-inspect review` are clean of CRITICAL and HIGH findings, or each remaining one is a conscious, recorded decision.
-- [ ] `/nth-inspect preview` has been viewed at mobile and desktop widths; nothing is clipped or overflowing at 375px.
+- [ ] `/nth-audit checks` and `/inspect review` are clean of CRITICAL and HIGH findings, or each remaining one is a conscious, recorded decision.
+- [ ] `/inspect preview` has been viewed at mobile and desktop widths; nothing is clipped or overflowing at 375px.
 - [ ] Every internal link resolves; no link points to a staging or localhost URL.
 - [ ] A real 404 page exists and is styled, and the host is configured to serve it.
 - [ ] Redirects for any moved or renamed URL are in place, so old links do not break.
@@ -60,7 +60,7 @@ Decide the trigger before you need it.
 
 ## What this does not replace
 
-This checklist confirms readiness, not quality. Run `/nth-audit` for the scored health check and `/nth-inspect` for defects before you reach this gate. A site can pass every box here and still be slow or hard to use. Ship readiness and ship quality are different questions.
+This checklist confirms readiness, not quality. Run `/nth-audit` for the scored health check and `/inspect` for defects before you reach this gate. A site can pass every box here and still be slow or hard to use. Ship readiness and ship quality are different questions.
 
 ## One-line summary
 

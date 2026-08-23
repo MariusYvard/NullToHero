@@ -21,7 +21,7 @@
 
         "seo-score-without-url",
         "seo-backlinks-without-source",
-        "inspect-scan-without-target",
+        "audit-scan-without-target",
 
         "seo-citation-passage-word-count",
         "seo-featured-snippet-length-rule",

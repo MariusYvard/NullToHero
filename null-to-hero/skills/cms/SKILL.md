@@ -1,7 +1,7 @@
 ---
 name: cms
 description: "Use when the user wants to hand a finished site over to the person who owns it, so they can change the words and the pictures without touching the code. Covers: turning hardcoded HTML prose into editable fields, a vendored Decap CMS editor with its own accounts, a Netlify function bridge with a server-side allow-list, a write quota, an in-page preview of the real site, and a publish workflow that copies rather than merges. Use when the user says: 'give my client the keys', 'let the owner edit the text', 'add a CMS to this site', 'make this site editable', 'hand this site over', 'set up the admin panel', 'the client wants to change their opening hours themselves'. Not for designing or building the interface, use /siteasy. Not for judging a site's quality, use /audit. Not for search visibility, use /seo."
-version: 1.0.0
+version: 4.0.0
 user-invocable: true
 argument-hint: "[entrust|carve|scaffold|accounts|check|handover] [path/to/site]"
 allowed-tools:

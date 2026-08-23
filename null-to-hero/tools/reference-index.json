@@ -12,6 +12,15 @@
   },
   {
     "skill": "audit",
+    "path": "skills/audit/references/code-quality.md",
+    "title": "Code Quality",
+    "keywords": [
+      "code",
+      "quality"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/compare.md",
     "title": "Audit Compare",
     "keywords": [
@@ -64,6 +73,18 @@
   },
   {
     "skill": "audit",
+    "path": "skills/audit/references/rendered.md",
+    "title": "Rules that need a rendered page",
+    "keywords": [
+      "rendered",
+      "rules",
+      "that",
+      "need",
+      "page"
+    ]
+  },
+  {
+    "skill": "audit",
     "path": "skills/audit/references/report.md",
     "title": "Report: any audit into a deliverable",
     "keywords": [
@@ -72,6 +93,36 @@
       "audit",
       "into",
       "deliverable"
+    ]
+  },
+  {
+    "skill": "audit",
+    "path": "skills/audit/references/review.md",
+    "title": "Design Engineering Code Review",
+    "keywords": [
+      "review",
+      "design",
+      "engineering",
+      "code"
+    ]
+  },
+  {
+    "skill": "audit",
+    "path": "skills/audit/references/rules-engine.md",
+    "title": "The rules engine",
+    "keywords": [
+      "rules",
+      "engine"
+    ]
+  },
+  {
+    "skill": "audit",
+    "path": "skills/audit/references/three.md",
+    "title": "Measuring a three.js scene",
+    "keywords": [
+      "three",
+      "measuring",
+      "scene"
     ]
   },
   {
@@ -118,70 +169,6 @@
       "operating",
       "entrusted",
       "site"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/code-quality.md",
-    "title": "Code Quality",
-    "keywords": [
-      "code",
-      "quality"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/detect.md",
-    "title": "Anti-Pattern Detector",
-    "keywords": [
-      "detect",
-      "anti",
-      "pattern",
-      "detector"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/preview.md",
-    "title": "Browser Visual Testing",
-    "keywords": [
-      "preview",
-      "browser",
-      "visual",
-      "testing"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/rendered.md",
-    "title": "Rules that need a rendered page",
-    "keywords": [
-      "rendered",
-      "rules",
-      "that",
-      "need",
-      "page"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/review.md",
-    "title": "Design Engineering Code Review",
-    "keywords": [
-      "review",
-      "design",
-      "engineering",
-      "code"
-    ]
-  },
-  {
-    "skill": "inspect",
-    "path": "skills/inspect/references/three.md",
-    "title": "Measuring a three.js scene",
-    "keywords": [
-      "three",
-      "measuring",
-      "scene"
     ]
   },
   {
@@ -1094,6 +1081,17 @@
     "title": "polish",
     "keywords": [
       "polish"
+    ]
+  },
+  {
+    "skill": "siteasy",
+    "path": "skills/siteasy/references/preview.md",
+    "title": "Browser Visual Testing",
+    "keywords": [
+      "preview",
+      "browser",
+      "visual",
+      "testing"
     ]
   },
   {

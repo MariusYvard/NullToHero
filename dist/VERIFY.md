@@ -43,4 +43,4 @@ Kimi Code, and its agent format is unrelated to what is generated here.
 Whether a real model then uses the skills well. That is what the evaluation
 corpus is for, and it needs an account.
 
-Generated codex (5 skills, 15 sub-agents), kimi (5 skills, 15 sub-agents).
+Generated codex (4 skills, 15 sub-agents), kimi (4 skills, 15 sub-agents).

@@ -1,22 +1,21 @@
 {
   "nodes": [
     "skills/audit/references/checks.md",
+    "skills/audit/references/code-quality.md",
     "skills/audit/references/compare.md",
     "skills/audit/references/full.md",
     "skills/audit/references/html-report.md",
     "skills/audit/references/learnings.md",
     "skills/audit/references/refine.md",
+    "skills/audit/references/rendered.md",
     "skills/audit/references/report.md",
+    "skills/audit/references/review.md",
+    "skills/audit/references/rules-engine.md",
+    "skills/audit/references/three.md",
     "skills/cms/references/architecture.md",
     "skills/cms/references/carve.md",
     "skills/cms/references/entrust.md",
     "skills/cms/references/operate.md",
-    "skills/inspect/references/code-quality.md",
-    "skills/inspect/references/detect.md",
-    "skills/inspect/references/preview.md",
-    "skills/inspect/references/rendered.md",
-    "skills/inspect/references/review.md",
-    "skills/inspect/references/three.md",
     "skills/seo/references/action-plan.md",
     "skills/seo/references/ai-overview-recovery.md",
     "skills/seo/references/audit.md",
@@ -112,6 +111,7 @@
     "skills/siteasy/references/parallax.md",
     "skills/siteasy/references/personas.md",
     "skills/siteasy/references/polish.md",
+    "skills/siteasy/references/preview.md",
     "skills/siteasy/references/print-styles.md",
     "skills/siteasy/references/product.md",
     "skills/siteasy/references/quieter.md",
@@ -143,6 +143,10 @@
     },
     {
       "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/code-quality.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
       "to": "skills/audit/references/compare.md"
     },
     {
@@ -164,6 +168,14 @@
     {
       "from": "skills/audit/SKILL.md",
       "to": "skills/audit/references/report.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/review.md"
+    },
+    {
+      "from": "skills/audit/SKILL.md",
+      "to": "skills/audit/references/rules-engine.md"
     },
     {
       "from": "skills/audit/references/checks.md",
@@ -218,12 +230,36 @@
       "to": "skills/audit/references/full.md"
     },
     {
+      "from": "skills/audit/references/rendered.md",
+      "to": "skills/audit/references/three.md"
+    },
+    {
       "from": "skills/audit/references/report.md",
       "to": "skills/audit/references/full.md"
     },
     {
       "from": "skills/audit/references/report.md",
       "to": "skills/audit/references/html-report.md"
+    },
+    {
+      "from": "skills/audit/references/review.md",
+      "to": "skills/audit/references/code-quality.md"
+    },
+    {
+      "from": "skills/audit/references/rules-engine.md",
+      "to": "skills/audit/references/rendered.md"
+    },
+    {
+      "from": "skills/audit/references/rules-engine.md",
+      "to": "skills/audit/references/three.md"
+    },
+    {
+      "from": "skills/audit/references/three.md",
+      "to": "skills/audit/references/rendered.md"
+    },
+    {
+      "from": "skills/audit/references/three.md",
+      "to": "skills/siteasy/references/overdrive.md"
     },
     {
       "from": "skills/cms/SKILL.md",
@@ -244,54 +280,6 @@
     {
       "from": "skills/cms/references/entrust.md",
       "to": "skills/cms/references/carve.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/code-quality.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/detect.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/preview.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/rendered.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/review.md"
-    },
-    {
-      "from": "skills/inspect/SKILL.md",
-      "to": "skills/inspect/references/three.md"
-    },
-    {
-      "from": "skills/inspect/references/detect.md",
-      "to": "skills/inspect/references/rendered.md"
-    },
-    {
-      "from": "skills/inspect/references/detect.md",
-      "to": "skills/inspect/references/three.md"
-    },
-    {
-      "from": "skills/inspect/references/rendered.md",
-      "to": "skills/inspect/references/three.md"
-    },
-    {
-      "from": "skills/inspect/references/review.md",
-      "to": "skills/inspect/references/code-quality.md"
-    },
-    {
-      "from": "skills/inspect/references/three.md",
-      "to": "skills/inspect/references/rendered.md"
-    },
-    {
-      "from": "skills/inspect/references/three.md",
-      "to": "skills/siteasy/references/overdrive.md"
     },
     {
       "from": "skills/seo/SKILL.md",
@@ -784,6 +772,10 @@
     {
       "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/polish.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/preview.md"
     },
     {
       "from": "skills/siteasy/SKILL.md",

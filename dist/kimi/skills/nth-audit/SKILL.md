@@ -1,7 +1,7 @@
 ---
 name: nth-audit
 description: "Run one whole-site audit that merges search visibility, front-end defects and design quality into a single scored report with a prioritized action plan. Dispatches fifteen specialist sub-agents over a shared fetch, on top of a deterministic pre-pass. Use for 'audit my whole site' or 'review my site end to end'."
-whenToUse: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, or the deterministic scan alone. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code'. For a search-only audit use /nth-seo audit; for a screenshot or a pasted-code review use /nth-inspect; for design-only use /nth-siteasy audit."
+whenToUse: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, the deterministic scan alone, or a design engineering review of code they paste. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code', 'review before I ship', 'critique my code'. For a search-only audit use /nth-seo audit; to see the page in a browser use /nth-siteasy preview; for design-only use /nth-siteasy audit."
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
@@ -9,7 +9,7 @@ metadata:
   host: kimi
   source-skill: audit
   short-description: "Run one whole-site audit that merges search visibility, front-end defects and design quality into a single scored report with a prioritized action plan. Dispatches fifteen specialist sub-agents over a shared fetch, on top of a deterministic pre-pass. Use for 'audit my whole site' or 'review my site end to end'."
-  argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
+  argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | review [target] | [report|learnings] [file] | compare [A] [B]"
 ---
 <!-- Generated for Kimi Code from null-to-hero/skills/audit/.
      Do not edit here. Edit the source and run tools/build-dist.mjs. -->
@@ -22,14 +22,15 @@ Invoke this skill with `/skill:nth-audit`. Its commands are written `/nth-audit 
 
 Tools named below are this host's: read a file (`Read`), read a media file (`ReadMediaFile`), write a file (`Write`), edit a file (`Edit`), match paths by pattern (`Glob`), search file contents (`Grep`), fetch a URL (`FetchURL`), search the web (`WebSearch`), run a shell command (`Bash`), ask the user a clarifying question (`AskUserQuestion`), delegate to a sub-agent (`Agent`).
 
-Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/nth-seo, /nth-inspect, /nth-siteasy), dispatches all 15 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
+Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/nth-seo, /inspect, /nth-siteasy), dispatches all 15 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
 
 ## Commands
 
 | Command | What it does | Reference |
 |---------|-------------|-----------|
 | `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) + [references/refine.md](references/refine.md) |
-| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
+| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) + [references/rules-engine.md](references/rules-engine.md) |
+| `review [target]` | Design engineering code review of a file or a paste: motion crimes, accessibility violations, forbidden patterns, a Before/After table with a score, plus code robustness across security, performance and correctness | [references/review.md](references/review.md) + [references/code-quality.md](references/code-quality.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures | [references/learnings.md](references/learnings.md) |
@@ -54,7 +55,7 @@ The three audit groups map one-to-one onto the plugin's three other skills and r
 | Group | Backing skill | Sub-agents reused |
 |-------|---------------|-------------------|
 | Search visibility | /nth-seo (see /nth-seo audit) | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo |
-| Front-end defects | /nth-inspect (detect, review) | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
+| Front-end defects | /inspect (detect, review) | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
 | Design quality | /nth-siteasy (see /nth-siteasy audit) | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims, siteasy-agent-memorability |
 
 Because the agents are shared, a fix surfaced here can be re-run or deepened with the owning skill (for example /nth-seo technical for a flagged crawl issue, or /nth-siteasy clarify for flagged copy) without re-auditing the whole site.
@@ -75,7 +76,7 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 |-----------|-------------|
 | You only need search visibility | /nth-seo audit |
 | You only need the deterministic scan, no sub-agents | /nth-audit checks |
-| You want a screenshot, or a review of pasted code | /nth-inspect |
+| You want to see the page in a browser | /nth-siteasy preview |
 | You only need subjective design and UX review | /nth-siteasy audit |
 | You want to build, fix, or redesign the interface | /nth-siteasy build |
 

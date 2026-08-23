@@ -15,7 +15,6 @@
  *  8.  siteasy SKILL.md and all reference files exist with valid frontmatter
  *  9.  siteasy command→reference mapping (every declared command has a backing file)
  * 10.  siteasy command count meets minimum (≥25)
- * 11.  inspect SKILL.md and all reference files exist with valid frontmatter
  * 11b. audit (meta-orchestrator) SKILL.md, command->reference mapping, reference frontmatter
  * 12.  Version consistency — plugin.json, marketplace.json, package.json, all SKILL.md, install.sh, install.ps1
  * 12b. SECURITY.md supported line (major.minor) and README **vX.Y.Z** token match plugin.json
@@ -211,11 +210,10 @@ const FILE_INTEGRITY = {
   "skills/siteasy/references/handoff.md": { minLines: 75 },
   "skills/siteasy/references/ship-checklist.md": { minLines: 55 },
   // ── inspect ──────────────────────────────────────────────────────────────
-  "skills/inspect/SKILL.md":                    { minLines:  65 },
-  "skills/inspect/references/detect.md":        { minLines: 115 },  // actual: 125
-  "skills/inspect/references/review.md":        { minLines: 100 },
-  "skills/inspect/references/code-quality.md": { minLines: 70 },
-  "skills/inspect/references/preview.md":       { minLines:  35 },
+  "skills/audit/references/rules-engine.md":   { minLines: 115 },
+  "skills/audit/references/review.md":         { minLines: 100 },
+  "skills/audit/references/code-quality.md":   { minLines:  70 },
+  "skills/siteasy/references/preview.md":      { minLines:  35 },
   // -- audit (meta-orchestrator) ------------------------------------------
   "skills/audit/SKILL.md":                      { minLines:  60 },
   "skills/audit/references/full.md":            { minLines: 150 },
@@ -477,38 +475,6 @@ if (siteasyCmdCount >= siteasyCmdMinimum) {
   warn(`siteasy: only ${siteasyCmdCount} commands found in SKILL.md (expected >= ${siteasyCmdMinimum})`);
 }
 
-// ─── Check 11: inspect SKILL.md and references ────────────────────────────────
-
-section("11. inspect SKILL.md and references");
-
-const INSPECT_SKILL = path.join(PLUG, "skills", "inspect", "SKILL.md");
-const INSPECT_REFS  = path.join(PLUG, "skills", "inspect", "references");
-
-const inspectSKILL = readFile(INSPECT_SKILL);
-if (!inspectSKILL) {
-  fail("skills/inspect/SKILL.md not found");
-} else {
-  const fm = parseFrontmatter(inspectSKILL);
-  if (!fm) fail("skills/inspect/SKILL.md: missing frontmatter");
-  else if (!fm.version) fail("skills/inspect/SKILL.md: missing 'version' field");
-  else pass(`skills/inspect/SKILL.md found (v${fm.version})`);
-}
-
-if (!fs.existsSync(INSPECT_REFS)) {
-  fail("skills/inspect/references/ not found");
-} else {
-  const refs = fs.readdirSync(INSPECT_REFS).filter(f => f.endsWith(".md"));
-  pass(`${refs.length} reference files in inspect/references/`);
-  refs.forEach(file => {
-    const content = readFile(path.join(INSPECT_REFS, file));
-    if (!content) { fail(`inspect/references/${file}: cannot read`); return; }
-    const fm = parseFrontmatter(content);
-    if (!fm) warn(`inspect/references/${file}: missing frontmatter`);
-    else if (!fm.name || !fm.version) warn(`inspect/references/${file}: incomplete frontmatter`);
-    else pass(`inspect/references/${file}: ok (v${fm.version})`);
-  });
-}
-
 // --- Check 11b: audit (meta-orchestrator) SKILL.md and references ------------
 
 section("11b. audit SKILL.md and references");
@@ -587,7 +553,7 @@ if (marketplaceJsonContent) {
   } catch { fail("marketplace.json: invalid JSON"); }
 } else { fail(".claude-plugin/marketplace.json: not found"); }
 
-["seo", "siteasy", "inspect", "audit"].forEach(skill => {
+["seo", "siteasy", "audit", "cms"].forEach(skill => {
   const content = readFile(path.join(PLUG, "skills", skill, "SKILL.md"));
   if (content) {
     const fm = parseFrontmatter(content);
@@ -830,16 +796,13 @@ const actualRefDocs = countRefDocs(SKILLS_ROOT);
 const actualSkills = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true })
   .filter(d => d.isDirectory() && fs.existsSync(path.join(SKILLS_ROOT, d.name, "SKILL.md")))
   .length;
-const inspectCmdCount = Object.keys(
-  extractCommandRefs(readFile(path.join(SKILLS_ROOT, "inspect", "SKILL.md")))
-).length;
 const auditCmdCount = Object.keys(
   extractCommandRefs(readFile(path.join(SKILLS_ROOT, "audit", "SKILL.md")))
 ).length;
 const cmsCmdCount = Object.keys(
   extractCommandRefs(readFile(path.join(SKILLS_ROOT, "cms", "SKILL.md")))
 ).length;
-const actualCommands = seoActual + siteasyCmdCount + inspectCmdCount + auditCmdCount + cmsCmdCount;
+const actualCommands = seoActual + siteasyCmdCount + auditCmdCount + cmsCmdCount;
 
 function readmeNum(re) { const m = readmeTxt.match(re); return m ? Number(m[1]) : null; }
 const claims = [
@@ -867,7 +830,7 @@ claims.forEach(([label, claimed, actual]) => {
   const perSkill = [...readmeTxt.matchAll(/All (\d+) commands/g)].map(m => Number(m[1]));
   const actualPerSkill = [
     ["siteasy", siteasyCmdCount], ["seo", seoActual],
-    ["inspect", inspectCmdCount], ["audit", auditCmdCount],
+    ["audit", auditCmdCount], ["cms", cmsCmdCount],
   ];
   if (perSkill.length !== actualPerSkill.length) {
     fail(`README: expected ${actualPerSkill.length} "All N commands" blocks, found ${perSkill.length}`);
@@ -1258,7 +1221,7 @@ section("35. Stated agent and rule counts match the repository");
     ["README.md",               /All\s+(\d+)\s+sub-agents/, agentCount, "README full-command sub-agents"],
     ["skills/audit/SKILL.md",   /All\s+(\d+)\s+sub-agents/, agentCount, "audit SKILL sub-agents"],
     ["tools/README.md",         /\((\d+)\s+rules\)/,       ruleCount,  "tools README inspect rules"],
-    ["skills/inspect/SKILL.md", /\((\d+)\s+rules\)/,       ruleCount,  "inspect SKILL rules"],
+    ["skills/audit/references/rules-engine.md", /registry holds (\d+) rules/, ruleCount, "rules-engine reference"],
   ];
 
   let bad = 0;
@@ -1496,7 +1459,7 @@ section("43. Detector rules resolve in the inspect registry");
 // description's counts match reality (they have drifted before).
 section("38. Intent routes, aliases, doors and marketplace counts");
 {
-  const SKILL_NAMES = ["siteasy", "seo", "inspect", "audit", "cms"];
+  const SKILL_NAMES = ["siteasy", "seo", "audit", "cms"];
   const AUDIT_SCOPES = new Set(["seo", "defects", "design", "quick"]);
   const liveCmds = {};
   for (const s of SKILL_NAMES) {
@@ -1602,7 +1565,7 @@ section("38. Intent routes, aliases, doors and marketplace counts");
 // ─── Check 39: hints cover the tables, remediation routes are live, docs agent counts match ─
 section("39. Argument-hint coverage, remediation routes live, doc agent counts");
 {
-  const SKILLS39 = ["siteasy", "seo", "inspect", "audit"];
+  const SKILLS39 = ["siteasy", "seo", "audit", "cms"];
   const live39 = {};
   for (const s of SKILLS39) {
     const txt = readFile(path.join(PLUG, "skills", s, "SKILL.md")) || "";

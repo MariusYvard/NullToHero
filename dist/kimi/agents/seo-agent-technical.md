@@ -148,4 +148,4 @@ Quick wins:
 |------|-------|
 | Full technical audit | `/nth-seo technical [url]` |
 | Sitemap generation | `/nth-seo sitemap [url]` |
-| Core Web Vitals deep dive | `/nth-inspect preview` |
+| Core Web Vitals deep dive | `/inspect preview` |

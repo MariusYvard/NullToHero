@@ -1,13 +1,13 @@
 ---
 name: nth-cms
-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and generate the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, that is siteasy."
+description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and write the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, use siteasy."
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "1.0.0"
+  version: "4.0.0"
   host: codex
   source-skill: cms
-  short-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and generate the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, that is siteasy."
+  short-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and write the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, use siteasy."
   argument-hint: "[entrust|carve|scaffold|accounts|check|handover] [path/to/site]"
 ---
 <!-- Generated for OpenAI Codex from null-to-hero/skills/cms/.

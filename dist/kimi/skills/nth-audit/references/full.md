@@ -15,7 +15,7 @@ This is the orchestration playbook for every run mode of /nth-audit (`full`, `se
 `defects`, `design`, `quick`). It schedules the plugin's existing specialist
 sub-agents, shares one fetch across them, and consolidates their output. It adds
 no new detection logic. Each dimension is owned by one backing skill (/nth-seo,
-/nth-inspect, /nth-siteasy) and is the single source of truth for that dimension.
+/inspect, /nth-siteasy) and is the single source of truth for that dimension.
 
 ## Process
 
@@ -419,6 +419,6 @@ a PDF, defer to [report.md](report.md). Do not re-implement formatting here.
 |------|-------|
 | Deep search-visibility audit | /nth-seo audit |
 | Deterministic front-end defect scan | /nth-audit checks |
-| Design engineering code review | /nth-inspect review |
+| Design engineering code review | /inspect review |
 | Subjective design and UX review | /nth-siteasy audit |
 | Format this audit into a report or PDF | /nth-audit report (see [report.md](report.md)) |

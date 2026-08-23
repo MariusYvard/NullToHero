@@ -1,15 +1,19 @@
 ---
-name: detect
-description: "Run NullToHero's own deterministic detector on local code and present findings clearly."
-version: 2.0.0
+name: audit-rules-engine
+description: >
+  The 48 rules the audit's deterministic pre-pass runs over the source, beside
+  the computed checks: what each one reads, what it refuses to judge, and how to
+  read a finding. Backs the rules half of /audit checks, and the standalone
+  directory scan that needs no fetch.
+version: 3.0.0
 ---
 
+# The rules engine
 
-> **Moved.** Since v6 the rules engine runs inside the audit's deterministic
-> pre-pass: `/nth-audit checks` executes these 48 rules on the same fetch as the
-> computed checks, and reports them under `deterministic.rules`. This command
-> still works and stays for one version, for a scan of a directory on disk
-> without fetching anything. New work should call `/nth-audit checks`.
+These rules run inside `/audit checks`, on the same fetch as the computed checks,
+and come back in the same `checks` array under `source: "rules"`. The command
+below scans a directory on disk instead, which is what a hook or a pre-commit
+wants: no network, no page executed, no model.
 
 # Anti-Pattern Detector
 
@@ -26,13 +30,13 @@ execution, so it costs nothing per run and is safe to point at a repository you 
 
 Two sources, both deterministic. Forty rules from `tools/data/inspect-rules.csv`, so every
 finding carries that registry's id, severity, rationale and standard. Plus twenty-six static
-checks from `tools/audit/lib/checks.mjs`, which existed to serve `/nth-audit` on a URL and were
+checks from `tools/audit/lib/checks.mjs`, which existed to serve `/audit` on a URL and were
 never reachable from a local scan until v3.0.0. Eighteen of those checks execute a registry rule
 and now report its id alongside their own.
 
 The scope is source text, not layout. Whether a block overflows at 375px, whether a contrast
 ratio survives the resolved cascade, whether an animation janks: those need a rendered page and
-belong to `/nth-inspect preview`. **A clean report here means the named defects are absent, not that
+belong to `/inspect preview`. **A clean report here means the named defects are absent, not that
 the page is good.** Say that when reporting a clean run, or the number gets read as a grade.
 
 The registry holds 86 rules and 79 are executable: 48 in the rules engine, 18 inside the static
@@ -96,7 +100,7 @@ Found [N] issues: [C] critical · [I] important · [M] medium · [L] low
 ```
 
 If 0 issues: "No named defect found. This covers the executable rules only, not layout or
-resolved contrast, which need `/nth-inspect preview`."
+resolved contrast, which need `/inspect preview`."
 
 ## Common Anti-Patterns
 
@@ -115,7 +119,7 @@ resolved contrast, which need `/nth-inspect preview`."
 
 > The detector needs Node.js. Install it from https://nodejs.org, then run
 > `node tools/inspect/detect.mjs [target]`. In the meantime I can review by hand: share the file
-> and I will run `/nth-siteasy audit` instead.
+> and I will run `/siteasy audit` instead.
 
 ## Parallax Anti-Patterns
 

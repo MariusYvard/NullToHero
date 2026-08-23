@@ -8,7 +8,7 @@ metadata:
   host: codex
   source-skill: audit
   short-description: "Run one whole-site audit that merges search visibility, front-end defects and design quality into a single scored report with a prioritized action plan. Dispatches fifteen specialist sub-agents over a shared fetch, on top of a deterministic pre-pass. Use for 'audit my whole site' or 'review my site end to end'."
-  argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
+  argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | review [target] | [report|learnings] [file] | compare [A] [B]"
 ---
 <!-- Generated for OpenAI Codex from null-to-hero/skills/audit/.
      Do not edit here. Edit the source and run tools/build-dist.mjs. -->
@@ -21,14 +21,15 @@ Invoke this skill with `$nth-audit`, or pick it from `/skills`. Its commands are
 
 This host does not publish tool names to a skill. Where the text names a tool, read it as the capability: read a file, read a media file, write a file, edit a file, match paths by pattern, search file contents, fetch a URL, search the web, run a shell command, ask the user a clarifying question, delegate to a sub-agent.
 
-Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/nth-seo, /nth-inspect, /nth-siteasy), dispatches all 15 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
+Complete-audit toolkit for websites. One pass that orchestrates the plugin's three other skills (/nth-seo, /inspect, /nth-siteasy), dispatches all 15 specialist sub-agents across search visibility, front-end defects, and design quality, then merges their scored sections into a single Site Health Score with a prioritized action plan. The audit skill owns no detection logic of its own. It schedules the existing sub-agents, shares one fetch across them, and consolidates the results.
 
 ## Commands
 
 | Command | What it does | Reference |
 |---------|-------------|-----------|
 | `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) + [references/refine.md](references/refine.md) |
-| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
+| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) + [references/rules-engine.md](references/rules-engine.md) |
+| `review [target]` | Design engineering code review of a file or a paste: motion crimes, accessibility violations, forbidden patterns, a Before/After table with a score, plus code robustness across security, performance and correctness | [references/review.md](references/review.md) + [references/code-quality.md](references/code-quality.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures | [references/learnings.md](references/learnings.md) |
@@ -53,7 +54,7 @@ The three audit groups map one-to-one onto the plugin's three other skills and r
 | Group | Backing skill | Sub-agents reused |
 |-------|---------------|-------------------|
 | Search visibility | /nth-seo (see /nth-seo audit) | seo-agent-technical, seo-agent-content, seo-agent-schema, seo-agent-performance, seo-agent-geo |
-| Front-end defects | /nth-inspect (detect, review) | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
+| Front-end defects | /inspect (detect, review) | inspect-agent-a11y, inspect-agent-interaction, inspect-agent-layout, inspect-agent-code |
 | Design quality | /nth-siteasy (see /nth-siteasy audit) | siteasy-agent-ux, siteasy-agent-visual, siteasy-agent-motion, siteasy-agent-content, siteasy-agent-claims, siteasy-agent-memorability |
 
 Because the agents are shared, a fix surfaced here can be re-run or deepened with the owning skill (for example /nth-seo technical for a flagged crawl issue, or /nth-siteasy clarify for flagged copy) without re-auditing the whole site.
@@ -74,7 +75,7 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 |-----------|-------------|
 | You only need search visibility | /nth-seo audit |
 | You only need the deterministic scan, no sub-agents | /nth-audit checks |
-| You want a screenshot, or a review of pasted code | /nth-inspect |
+| You want to see the page in a browser | /nth-siteasy preview |
 | You only need subjective design and UX review | /nth-siteasy audit |
 | You want to build, fix, or redesign the interface | /nth-siteasy build |
 

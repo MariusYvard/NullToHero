@@ -37,7 +37,7 @@ import { nthRoot } from "./nth-root.mjs";
 
 const ROOT = nthRoot();
 const REPO = path.dirname(ROOT);
-const SKILLS = ["seo", "siteasy", "inspect", "audit", "cms"];
+const SKILLS = ["seo", "siteasy", "audit", "cms"];
 const PREFIX = "nth-";
 const CHECK = process.argv.includes("--check");
 

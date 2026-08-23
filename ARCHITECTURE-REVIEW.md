@@ -71,9 +71,9 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 216 emplacements cités par le document, et de ceux de
-  son artefact compagnon par la même passe, dont 123 portent un numéro de ligne
-  dans le document (98 couples distincts), la borne
+- l'existence de chacun des 215 emplacements cités par le document, et de ceux de
+  son artefact compagnon par la même passe, dont 122 portent un numéro de ligne
+  dans le document (97 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
   fragment de code entre accents graves, sa présence dans les douze lignes autour
   (cinq fragments aujourd'hui, et le garde échoue si ce nombre tombe à zéro) ; ce
@@ -153,16 +153,15 @@ Trois versions ont été livrées pendant l'évaluation, 3.6.0, 3.7.0 et 3.7.1.
 Chacune a passé du temps sur la même tâche : mettre à jour des comptages énoncés à
 la main dans la prose.
 
-Le nombre de règles apparaît dans `skills/inspect/SKILL.md:69` (deux fois),
-`skills/inspect/references/detect.md:31` et `tools/README.md:18`. Le nombre de
+Le nombre de règles apparaît dans `skills/audit/references/rules-engine.md:42` et `tools/README.md:18`. Le nombre de
 documents de référence apparaît dans `README.md:14` et `README.md:480`. La
 répartition par moteur apparaît dans deux fichiers, sous la forme "48 dans le
 moteur de règles, 18 dans les contrôles statiques, 7 dans la sonde rendue, 3 dans
 la sonde three.js, 3 dans la sonde motion". Ces cinq nombres font 79, le total
 annoncé est 86, et l'écart de 7 est le nombre de règles qui ne s'exécutent pas.
-Les deux fichiers énoncent bien le résultat (`skills/inspect/SKILL.md:69` écrit
+Les deux fichiers énoncent bien le résultat (`skills/audit/references/rules-engine.md:42` écrit
 "7 that do not
-execute", `detect.md:31` écrit "79 are executable"), donc le lecteur n'a rien à
+execute", `rules-engine.md:42` écrit "79 are executable"), donc le lecteur n'a rien à
 reconstituer. Ce sont sept nombres à tenir cohérents à la main, dont deux sont la
 somme et la différence des cinq autres.
 
@@ -298,13 +297,14 @@ premier des deux travaux que le §8 laisse à un successeur.
 
 ### 2.4 La taille du corpus : ce que j'ai mesuré et ce que je n'établis pas
 
-`skills/siteasy/references/` contient 85 fichiers, contre 27 pour `seo`, 7 pour
-`audit` et 6 pour `inspect`. Le garde `tools/check-context-budget.mjs` borne la
+`skills/siteasy/references/` contient 86 fichiers, contre 27 pour `seo`, 12 pour
+`audit` et 4 pour `cms`. Ces comptes sont ceux de la refonte v6, qui a reparti
+les references d'`inspect` entre `siteasy` et `audit` et supprime la competence. Le garde `tools/check-context-budget.mjs` borne la
 taille de chaque fichier, rien ne borne leur nombre.
 
 Mesure, depuis `tools/reference-graph.json` : la médiane des citations entrantes
-d'une référence siteasy est de 3, le 90e centile de 6, le maximum de 14, et 16 des
-85 sont citées exactement une fois, le graphe interdisant les orphelins. Près d'un
+d'une référence siteasy est de 3, le 90e centile de 6, le maximum de 14, et 17 des
+86 sont citées exactement une fois, le graphe interdisant les orphelins. Près d'un
 cinquième du corpus n'a donc qu'un seul point d'entrée.
 
 Ce que je n'établis pas : que ce soit un défaut. Un corpus large et bien indexé
@@ -760,7 +760,7 @@ $ echo $?
 ```
 
 **vérifié.** La note et le verdict se contredisent dans la même sortie, et c'est le
-verdict qui est lu. `skills/inspect/references/rendered.md:105` écrit la règle que
+verdict qui est lu. `skills/audit/references/rendered.md:105` écrit la règle que
 cette ligne viole : une page où rien n'anime ne dédouane rien, et un zéro n'est pas
 un succès. Les révélations au défilement et les entrées différées sont le cas
 courant, pas le cas limite.

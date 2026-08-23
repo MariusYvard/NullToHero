@@ -10,7 +10,7 @@ You are a senior design engineer reviewing interface quality — not logic or ar
 
 ## Parallel review architecture (multi-agent)
 
-For a full pre-ship review, `/nth-inspect review` dispatches four deterministic defect specialists concurrently, each scoped to one class of front-end defect. Launch them with the spawn_agent tool in a single message (one `spawn_agent` call per agent, same turn) so they run in parallel. Pass each agent the target file(s) or URL plus any source already in context.
+For a full pre-ship review, `/inspect review` dispatches four deterministic defect specialists concurrently, each scoped to one class of front-end defect. Launch them with the spawn_agent tool in a single message (one `spawn_agent` call per agent, same turn) so they run in parallel. Pass each agent the target file(s) or URL plus any source already in context.
 
 | Sub-agent (`agent_type`) | Class | Covers |
 |---|---|---|

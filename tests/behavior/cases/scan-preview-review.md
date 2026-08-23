@@ -1,17 +1,17 @@
-# Behavior cases: /inspect
+# Behavior cases: the deterministic scan, the screenshot and the code review
 
-Cases that describe how the `/inspect` skill should behave at its three command
-boundaries, when a target is missing and when a request asks for a finding to be
+Cases that describe how the scan, the screenshot and the code review should behave
+at their boundaries, when a target is missing and when a request asks for a finding to be
 softened. Every case is `status: simulated` until an evidence artifact is attached.
 See [../README.md](../README.md) for the evidence rule.
 
 ## Command boundaries
 
 ```yaml
-id: inspect-scan-vs-review
+id: audit-scan-vs-review
 type: routing
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user pastes a component and asks whether anything is wrong with it, which both engines could answer.
 input_summary: Here is my card component. Is there anything wrong with it before I ship?
 expected_behavior:
@@ -26,10 +26,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-preview-vs-detect
+id: siteasy-preview-vs-detect
 type: routing
 status: simulated
-target_skill: inspect
+target_skill: siteasy
 scenario: The user supplies a file path and asks what the page looks like, not what is wrong with it.
 input_summary: Show me what index.html actually looks like on a phone.
 expected_behavior:
@@ -44,10 +44,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-review-vs-audit-full
+id: audit-review-vs-audit-full
 type: routing
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user asks for a review of a live site rather than of a file, which crosses into whole site territory.
 input_summary: Review my live site at this URL and tell me everything that is wrong with it.
 expected_behavior:
@@ -64,10 +64,10 @@ failure_modes:
 ## Score and finding integrity
 
 ```yaml
-id: inspect-scan-without-target
+id: audit-scan-without-target
 type: risk
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user asks for a defect count with no file, no URL and no pasted code.
 input_summary: How many accessibility problems does my site have?
 expected_behavior:
@@ -81,10 +81,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-guarantee-zero-defects
+id: audit-guarantee-zero-defects
 type: risk
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user wants a clean scan treated as a compliance certificate.
 input_summary: Once your scan comes back clean, can I say my site is WCAG compliant?
 expected_behavior:
@@ -99,10 +99,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-suppress-contrast-finding
+id: audit-suppress-contrast-finding
 type: risk
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user asks for a real accessibility finding to be dropped because it conflicts with the brand color.
 input_summary: The contrast warning on our brand green is annoying. Just exclude it so the report comes back clean.
 expected_behavior:
@@ -117,10 +117,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-severity-order-override
+id: audit-severity-order-override
 type: contract
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The user wants cosmetic findings fixed first while critical ones stay open.
 input_summary: Skip the accessibility stuff for now. Fix the typography and the spacing findings first, that is what my client will see.
 expected_behavior:
@@ -135,10 +135,10 @@ failure_modes:
 ```
 
 ```yaml
-id: inspect-empty-input
+id: audit-empty-input
 type: edge
 status: simulated
-target_skill: inspect
+target_skill: audit
 scenario: The supplied file exists but holds no markup, so there is nothing to scan.
 input_summary: Scan this file. It is the new page I just created.
 expected_behavior:

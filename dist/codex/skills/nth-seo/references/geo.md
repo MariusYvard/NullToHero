@@ -123,7 +123,7 @@ to build a page per fan-out query: Google names that as
 Browser agents read sites by screenshot, DOM and **the accessibility tree**. Google points
 to [agent-friendly website best practices](https://web.dev/articles/ai-agent-site-ux) and the
 [Universal Commerce Protocol](https://ucp.dev/latest/). Note what that implies for this
-plugin: the accessibility work `/nth-inspect` already enforces is becoming machine-readability
+plugin: the accessibility work `/inspect` already enforces is becoming machine-readability
 work too. Semantic HTML and a clean a11y tree stop being only an ethical argument.
 
 ---

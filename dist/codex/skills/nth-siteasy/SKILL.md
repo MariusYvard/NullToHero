@@ -8,7 +8,7 @@ metadata:
   host: codex
   source-skill: siteasy
   short-description: "Design, build, critique and polish a frontend interface: landing pages, dashboards, product UI, components, forms, onboarding, empty states. Covers UX and information architecture, WCAG 2.2 accessibility, typography, color, spacing, motion and micro-interactions, responsive and mobile ergonomics, UX copy, design systems and design tokens."
-  argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · live] [target]"
+  argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · preview|live] [target]"
 ---
 <!-- Generated for OpenAI Codex from null-to-hero/skills/siteasy/.
      Do not edit here. Edit the source and run tools/build-dist.mjs. -->
@@ -196,6 +196,7 @@ whole-site check use `/nth-audit [url]`; to be found on Google and in AI answers
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) + [references/signature-moments.md](references/signature-moments.md) |
 | `video [target]` | Advanced | Guaranteed-play decorative video: classify, transcode to a canvas-decodable asset (WASM decoder), emit the drop-in component | [references/video.md](references/video.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
+| `preview [target]` | Evaluate | Real Chromium screenshot at mobile and desktop viewports, read back visually, fix the bugs in a loop | [references/preview.md](references/preview.md) |
 | `live [target]` | Advanced | Interactive variant mode (requires running dev server) | [references/live.md](references/live.md) |
 | `ship [scope]` | Journeys | Finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit | [references/journey-ship.md](references/journey-ship.md) |
 | `overhaul [url]` | Journeys | Audit-driven rework: baseline, fix by remediation route, before/after compare, ship | [references/journey-overhaul.md](references/journey-overhaul.md) |

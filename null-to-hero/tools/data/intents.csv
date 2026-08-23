@@ -8,7 +8,7 @@ rework,redesign; revamp; overhaul this site; start over from what exists,/siteas
 ship,ready to ship; publish; go live; final gates,/siteasy ship,current
 be-found,not on google; seo; show up in AI answers; get more traffic,/seo audit,current
 client-report,client report; deliverable; export as PDF; format for a client,/audit report,current
-see-it,screenshot; how does it look; view it like a browser,/inspect preview,current
+see-it,screenshot; how does it look; view it like a browser,/siteasy preview,current
 /siteasy launch,production hardening; performance pass; core web vitals,/siteasy harden,alias
 /seo report,seo report; format seo audit,/audit report,alias
 /siteasy plan,shape the ux before code; design brief,/siteasy shape,alias

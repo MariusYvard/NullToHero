@@ -171,7 +171,7 @@ ok("contrôles émis par runChecks", facts.checkFns, n(/contrôles émis : (\d+)
 ok("contrôles mappés à une règle", facts.mappedChecks, n(/mappés à une règle du registre : (\d+)/));
 ok("contrôles non mappés", facts.unmappedChecks, n(/non mappés : (\d+)/));
 ok("références siteasy", facts.siteasyRefs, n(/contient (\d+) fichiers/));
-for (const [skill, re] of [["seo", /(\d+) pour `seo`/], ["audit", /(\d+) pour\s*\n?`audit`/], ["inspect", /(\d+) pour `inspect`/]])
+for (const [skill, re] of [["seo", /(\d+) pour `seo`/], ["audit", /(\d+) pour\s*\n?`audit`/], ["cms", /(\d+) pour `cms`/]])
   ok(`références ${skill}`, readdirSync(join(ROOT, `skills/${skill}/references`)).filter(f => f.endsWith(".md")).length, n(re));
 ok("scripts siteasy", facts.siteasyScripts, word(n(/`skills\/siteasy\/scripts\/` contient ([\w-]+) fichiers/)));
 ok("fixtures HTML du corpus d'évaluation", facts.fixtures, n(/fixtures analysées : (\d+)/));
@@ -311,7 +311,7 @@ try {
     ok("médiane des citations entrantes", med, n(/médiane des citations entrantes\s*\n?d'une référence siteasy est de (\d+)/));
     ok("90e centile", p90, n(/le 90e centile de (\d+)/));
     ok("maximum", counts[counts.length - 1], n(/le maximum de (\d+)/));
-    ok("références citées une seule fois", counts.filter(c => c === 1).length, n(/et (\d+) des\s*\n?85 sont citées exactement une fois/));
+    ok("références citées une seule fois", counts.filter(c => c === 1).length, n(/et (\d+) des\s*\n?\d+ sont citées exactement une fois/));
   }
 } catch { console.log("  \x1b[33m--  \x1b[0m reference-graph.json illisible, contrôle de 2.4 sauté"); }
 

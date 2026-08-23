@@ -16,7 +16,7 @@ const REPO = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const SRC = path.join(REPO, "null-to-hero");
 const DIST = path.join(REPO, "dist");
 const HOSTS = ["codex", "kimi"];
-const SKILLS = ["seo", "siteasy", "inspect", "audit"];
+const SKILLS = ["seo", "siteasy", "audit", "cms"];
 
 // agentskills.io/specification
 const NAME_RE = /^(?!-)(?!.*--)[a-z0-9-]{1,64}(?<!-)$/;
@@ -154,7 +154,7 @@ section("4. no Claude-only token survives in dist/");
   if (offenders.length) fail(`\${CLAUDE_PLUGIN_ROOT} still present in ${offenders.length} file(s), first: ${path.relative(REPO, offenders[0])}`);
   else pass("no ${CLAUDE_PLUGIN_ROOT} anywhere in dist/");
 
-  const commandRe = /(?<![\w/.-])\/(seo|siteasy|inspect|audit)\b(?!\/)/;
+  const commandRe = /(?<![\w/.-])\/(seo|siteasy|audit|cms)\b(?!\/)/;
   const unprefixed = walk(DIST).filter(f =>
     /\.(md|toml|yaml)$/.test(f) && commandRe.test(fs.readFileSync(f, "utf8")));
   if (unprefixed.length) fail(`unprefixed command reference in ${unprefixed.length} file(s), first: ${path.relative(REPO, unprefixed[0])}`);

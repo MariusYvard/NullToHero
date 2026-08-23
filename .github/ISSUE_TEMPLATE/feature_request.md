@@ -19,6 +19,6 @@ Link to specs, docs, or existing implementations that would inform the content.
 **Skill it belongs to**
 - [ ] `/siteasy` — design and frontend
 - [ ] `/seo` — search engine optimization
-- [ ] `/inspect` — quality checks
+- [ ] `/cms` — handing a site to its owner
 - [ ] `/audit` — whole-site orchestrator
 - [ ] New skill (describe scope)

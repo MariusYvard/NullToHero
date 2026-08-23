@@ -1,9 +1,9 @@
 ---
 name: audit
-description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, or the deterministic scan alone. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code'. For a search-only audit use /seo audit; for a screenshot or a pasted-code review use /inspect; for design-only use /siteasy audit."
+description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, the deterministic scan alone, or a design engineering review of code they paste. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code', 'review before I ship', 'critique my code'. For a search-only audit use /seo audit; to see the page in a browser use /siteasy preview; for design-only use /siteasy audit."
 version: 4.0.0
 user-invocable: true
-argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
+argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | review [target] | [report|learnings] [file] | compare [A] [B]"
 allowed-tools:
   - Read
   - Write
@@ -22,7 +22,8 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | Command | What it does | Reference |
 |---------|-------------|-----------|
 | `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) + [references/refine.md](references/refine.md) |
-| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
+| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) + [references/rules-engine.md](references/rules-engine.md) |
+| `review [target]` | Design engineering code review of a file or a paste: motion crimes, accessibility violations, forbidden patterns, a Before/After table with a score, plus code robustness across security, performance and correctness | [references/review.md](references/review.md) + [references/code-quality.md](references/code-quality.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures | [references/learnings.md](references/learnings.md) |
@@ -68,7 +69,7 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 |-----------|-------------|
 | You only need search visibility | /seo audit |
 | You only need the deterministic scan, no sub-agents | /audit checks |
-| You want a screenshot, or a review of pasted code | /inspect |
+| You want to see the page in a browser | /siteasy preview |
 | You only need subjective design and UX review | /siteasy audit |
 | You want to build, fix, or redesign the interface | /siteasy build |
 

@@ -133,4 +133,4 @@ Quick wins:
 |------|-------|
 | Image SEO deep dive | `/nth-seo images [url]` |
 | Full technical audit | `/nth-seo technical [url]` |
-| Browser preview with CWV | `/nth-inspect preview [url]` |
+| Browser preview with CWV | `/inspect preview [url]` |

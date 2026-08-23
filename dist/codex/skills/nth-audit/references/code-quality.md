@@ -6,7 +6,7 @@ version: 1.16.0
 
 # Code Quality
 
-`/nth-inspect review` judges interface quality: motion, accessibility, layout, tokens. This reference covers the other half, the robustness of the code that ships. A page can be visually perfect and still leak a key, block the main thread, or crash on an empty array. Run this pass on any HTML, CSS or JavaScript a build emits, before it ships.
+`/inspect review` judges interface quality: motion, accessibility, layout, tokens. This reference covers the other half, the robustness of the code that ships. A page can be visually perfect and still leak a key, block the main thread, or crash on an empty array. Run this pass on any HTML, CSS or JavaScript a build emits, before it ships.
 
 Scope: the static front-end artifact. Server logic and architecture are out of scope. The four dimensions below are ordered by how much damage a miss does.
 

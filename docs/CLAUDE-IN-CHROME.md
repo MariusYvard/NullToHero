@@ -101,7 +101,7 @@ rule 51 compares a track against `window.innerHeight`. And **`settled`**, since
 rules 27 and 68 judge what outlived its window: the probe measures its own elapsed
 time from the load event and returns `settled: false` when it was run too early,
 in which case those two were not judged and their silence means nothing. Full
-detail in `null-to-hero/skills/inspect/references/rendered.md`.
+detail in `null-to-hero/skills/audit/references/rendered.md`.
 
 ## A repeatable recipe
 
@@ -128,6 +128,6 @@ fetch.
 ## See also
 
 - [null-to-hero/tools/audit/README.md](../null-to-hero/tools/audit/README.md) — the deterministic pre-pass the browser feeds.
-- `null-to-hero/skills/inspect/references/preview.md` — Playwright screenshots for visual review.
+- `null-to-hero/skills/siteasy/references/preview.md` — Playwright screenshots for visual review.
 - `null-to-hero/skills/audit/references/checks.md` — the `/audit checks` deterministic run.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — why the fetch and the computed checks are shared.

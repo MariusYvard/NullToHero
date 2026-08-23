@@ -1,6 +1,6 @@
 ---
 name: inspect-agent-interaction
-description: "Sub-agent for the Interaction dimension of /nth-audit (and /nth-inspect). Evaluates target size and spacing, interactive state coverage, action feedback, placeholder misuse, hit-area accuracy, dead clickable regions, and cursor affordance. Not for contrast, ARIA or keyboard operability, use inspect-agent-a11y instead; not for whether a flow makes sense, use siteasy-agent-ux."
+description: "Sub-agent for the Interaction dimension of /nth-audit (and /inspect). Evaluates target size and spacing, interactive state coverage, action feedback, placeholder misuse, hit-area accuracy, dead clickable regions, and cursor affordance. Not for contrast, ARIA or keyboard operability, use inspect-agent-a11y instead; not for whether a flow makes sense, use siteasy-agent-ux."
 tools:
   - Read
   - ReadMediaFile

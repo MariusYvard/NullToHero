@@ -2,7 +2,7 @@
 
 # NullToHero
 
-<img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, inspect, audit and cms inside Claude" width="860">
+<img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, audit and cms inside Claude" width="860">
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
@@ -11,7 +11,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v4.0.0** · 5 skills · 68 commands · 135 reference docs · 15 audit sub-agents
+**v4.0.0** · 4 skills · 67 commands · 135 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -79,7 +79,7 @@ node null-to-hero/tools/audit/gate.mjs https://nulltohero.netlify.app/ --min-sco
 | 3. Shape before code | `/siteasy shape` | The section order and the seven acts, validated as a brief before a line was written |
 | 4. Build the acts | `/siteasy build`, `/siteasy parallax` | The pinned scroll track, the act transitions, the reduced-motion fallback |
 | 5. Set the type and colour | `/siteasy typeset`, `/siteasy layout` | The type scale, the spacing rhythm, the one-accent discipline held across every act |
-| 6. Look at it | `/inspect preview` | Desktop and phone screenshots at real viewports, read back and fixed in a loop |
+| 6. Look at it | `/siteasy preview` | Desktop and phone screenshots at real viewports, read back and fixed in a loop |
 | 7. Gate it | `/audit full`, `/siteasy fix` | Findings routed to the command that fixes each one, then re-run until the gate came back clean |
 
 The brief that started it was one sentence: show what the plugin does best, Awwwards-grade,
@@ -101,7 +101,7 @@ the point of doing them first.
 | Finish and ship | `/siteasy ship` | Polish, defect scan, deterministic audit and hardening, in order |
 | Be found on Google and in AI answers | `/seo yoursite.com` | A scored report and a prioritized action plan |
 | Get a client-ready report | `/audit report` | Deliverable Markdown, self-contained HTML page, or PDF |
-| See it the way a real browser does | `/inspect preview index.html` | Desktop and mobile screenshots, bugs fixed in a loop |
+| See it the way a real browser does | `/siteasy preview index.html` | Desktop and mobile screenshots, bugs fixed in a loop |
 
 ---
 
@@ -118,7 +118,7 @@ NullToHero is a Claude Code plugin and a marketplace in one repository. The mark
 
 ### Other agents: Codex and Kimi Code
 
-The five skills also run on OpenAI Codex and on Kimi Code. Both read the
+The four skills also run on OpenAI Codex and on Kimi Code. Both read the
 [Agent Skills](https://agentskills.io/specification) format, so the same source
 serves all three hosts; `null-to-hero/tools/build-dist.mjs` generates each
 package into `dist/`.
@@ -134,7 +134,7 @@ On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`
 Codex gets `~/.agents/skills` and `~/.codex/agents`. Kimi Code gets
 `~/.kimi-code/skills` and `~/.kimi-code/agents`, and finds its fifteen
 sub-agents without any launch flag. The skills install as `nth-seo`,
-`nth-siteasy`, `nth-inspect`, `nth-audit` and `nth-cms`, because a skills directory is
+`nth-siteasy`, `nth-audit` and `nth-cms`, because a skills directory is
 shared with every other pack on the machine and `audit` is a name someone else
 will claim. The deterministic tools and the asset library are read from the
 clone, so keep it where it is.
@@ -182,7 +182,7 @@ powershell -ExecutionPolicy Bypass -File NullToHero/install.ps1
 </details>
 
 > [!TIP]
-> The short forms `/siteasy`, `/seo`, `/inspect` and `/audit` work as long as no other plugin claims the same name. If you run several plugins, use the namespaced form `/null-to-hero:siteasy`.
+> The short forms `/siteasy`, `/seo`, `/audit` and `/cms` work as long as no other plugin claims the same name. If you run several plugins, use the namespaced form `/null-to-hero:siteasy`.
 
 ---
 
@@ -210,7 +210,7 @@ The doors above are the way in. The skills below are the full reference behind t
 <tr>
 <td valign="top" width="50%">
 
-![inspect](https://img.shields.io/badge/inspect-f59e0b)<br>
+![cms](https://img.shields.io/badge/cms-16a34a)<br>
 **Check before you publish.** Anti-pattern scan, browser preview, code review.<br>
 `/inspect detect` · `/inspect preview` · `/inspect review`
 
@@ -230,7 +230,7 @@ The doors above are the way in. The skills below are the full reference behind t
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
 <details>
-<summary><b>All 33 commands</b></summary>
+<summary><b>All 34 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -304,29 +304,12 @@ Common runs: new site (`plan` → build → `technical` → `schema` → `sitema
 
 </details>
 
-### ![inspect](https://img.shields.io/badge/inspect-f59e0b) Check before you publish
-
-Your quality gate. Three quick checks to run before you ship.
-
-<details>
-<summary><b>All 3 commands</b></summary>
-
-| Command | What it does |
-|---------|-------------|
-| `detect [target]` | Deterministic anti-pattern scan, finds missing focus rings, clipped dropdowns, pure black/white, tiny touch targets, missing reduced-motion, and more |
-| `preview [target]` | Real Chromium screenshot, desktop + mobile viewports, reads back visually, fixes bugs in a loop |
-| `review [file]` | Design engineering code review, motion crimes, a11y violations, forbidden patterns, Before/After table with score; plus code robustness (security, performance, correctness) |
-
-Common runs: before every ship (`detect` → `preview` → `review`).
-
-</details>
-
 ### ![audit](https://img.shields.io/badge/audit-7c3aed) The whole site in one pass
 
 Runs every specialist at once across search, defects and design, then merges everything into one score and one action plan ordered by priority. The orchestration is documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 <details>
-<summary><b>All 6 commands</b></summary>
+<summary><b>All 7 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -391,6 +374,27 @@ An action plan from `/audit`, ordered by severity:
 </details>
 
 ---
+
+### ![cms](https://img.shields.io/badge/cms-16a34a) Hand it over
+
+The site is finished and it is not yours to keep. `/cms entrust` turns its
+hardcoded prose into fields, vendors an editor with its own accounts, puts a
+server-side allow-list between the browser and the repository, and writes the
+sheet of manual steps with your site's real values.
+
+<details>
+<summary><b>All 6 commands</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/cms entrust` | The whole chain, from a finished site to a repository ready to hand over |
+| `/cms carve` | The extraction alone: propose the fields, read them back, write nothing until asked |
+| `/cms scaffold` | Compile CONTENT.md into the editor, the bridge, the allow-list and the workflow |
+| `/cms accounts` | Mint, remove and list the accounts the bridge will accept |
+| `/cms check` | `cms-lint` and `cms-scaffold --check` in one pass, plus what neither can see |
+| `/cms handover` | Regenerate CMS.md and read it with the person who will do the manual steps |
+
+</details>
 
 ## How NullToHero compares
 

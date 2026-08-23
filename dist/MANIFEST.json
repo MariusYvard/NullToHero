@@ -4,13 +4,13 @@
   "hosts": [
     {
       "host": "codex",
-      "skills": 5,
+      "skills": 4,
       "agents": 15,
       "skillsDir": "~/.agents/skills"
     },
     {
       "host": "kimi",
-      "skills": 5,
+      "skills": 4,
       "agents": 15,
       "skillsDir": "~/.kimi-code/skills"
     }

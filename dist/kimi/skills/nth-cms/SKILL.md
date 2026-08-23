@@ -1,14 +1,14 @@
 ---
 name: nth-cms
-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and generate the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, that is siteasy."
+description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and write the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, use siteasy."
 whenToUse: "Use when the user wants to hand a finished site over to the person who owns it, so they can change the words and the pictures without touching the code. Covers: turning hardcoded HTML prose into editable fields, a vendored Decap CMS editor with its own accounts, a Netlify function bridge with a server-side allow-list, a write quota, an in-page preview of the real site, and a publish workflow that copies rather than merges. Use when the user says: 'give my client the keys', 'let the owner edit the text', 'add a CMS to this site', 'make this site editable', 'hand this site over', 'set up the admin panel', 'the client wants to change their opening hours themselves'. Not for designing or building the interface, use /nth-siteasy. Not for judging a site's quality, use /nth-audit. Not for search visibility, use /nth-seo."
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "1.0.0"
+  version: "4.0.0"
   host: kimi
   source-skill: cms
-  short-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and generate the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, that is siteasy."
+  short-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and write the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, use siteasy."
   argument-hint: "[entrust|carve|scaffold|accounts|check|handover] [path/to/site]"
 ---
 <!-- Generated for Kimi Code from null-to-hero/skills/cms/.

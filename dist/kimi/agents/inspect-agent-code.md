@@ -1,6 +1,6 @@
 ---
 name: inspect-agent-code
-description: "Sub-agent for the Front-end Code dimension of /nth-audit (and /nth-inspect). Evaluates semantic HTML and landmarks, valid markup, design-token discipline, forbidden CSS patterns, deterministic motion crimes, and inline-style sprawl. Not for whether the rendered result looks right, use siteasy-agent-visual instead; not for runtime layout breakage, use inspect-agent-layout."
+description: "Sub-agent for the Front-end Code dimension of /nth-audit (and /inspect). Evaluates semantic HTML and landmarks, valid markup, design-token discipline, forbidden CSS patterns, deterministic motion crimes, and inline-style sprawl. Not for whether the rendered result looks right, use siteasy-agent-visual instead; not for runtime layout breakage, use inspect-agent-layout."
 tools:
   - Read
   - ReadMediaFile
@@ -129,6 +129,6 @@ Quick wins:
 ## CROSS-SKILL REFERENCES
 | Need | Skill |
 |------|-------|
-| Code review | `/nth-inspect review` |
+| Code review | `/inspect review` |
 | Token system | `/nth-siteasy tokens` |
 | Animation engineering | `/nth-siteasy animate` |

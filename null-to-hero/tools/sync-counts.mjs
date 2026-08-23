@@ -51,7 +51,7 @@ function derive() {
     inert: total - executable,
     engines,
     laws: rows("tools/data/laws.csv").length,
-    references: ["siteasy", "seo", "audit", "inspect"].reduce((a, s) => a + refs(s), 0),
+    references: ["siteasy", "seo", "audit", "cms"].reduce((a, s) => a + refs(s), 0),
   };
 }
 
@@ -64,11 +64,8 @@ const facts = derive();
 const spread = Object.entries(facts.engines).map(([k, v]) => `${v} in the ${k}`).join(", ");
 
 const SITES = [
-  { file: "skills/inspect/SKILL.md", re: /\((\d+) rules\)/g, value: facts.rules },
-  { file: "skills/inspect/SKILL.md", re: /which of the (\d+) already execute/g, value: facts.rules },
-  { file: "skills/inspect/SKILL.md", re: /and (\d+) that do not execute/g, value: facts.inert },
-  { file: "skills/inspect/references/detect.md", re: /registry holds (\d+) rules/g, value: facts.rules },
-  { file: "skills/inspect/references/detect.md", re: /and (\d+) are executable/g, value: facts.executable },
+  { file: "skills/audit/references/rules-engine.md", re: /registry holds (\d+) rules/g, value: facts.rules },
+  { file: "skills/audit/references/rules-engine.md", re: /and (\d+) are executable/g, value: facts.executable },
   { file: "tools/README.md", re: /\((\d+) rules\)/g, value: facts.rules },
 ];
 
