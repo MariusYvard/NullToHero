@@ -30,7 +30,12 @@ import { contentMap } from "./content-map.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BUNDLE_VERSION = "3.15.1";
-const THEME_SCRIPT = join(HERE, "../../design-system/scripts/theme_css.py");
+// `tools/cms/` vers `tools/design-system/`. Ce chemin remontait de deux crans
+// quand le CMS vivait sous `tools/siteasy/cms/` ; le déménagement de la v6 l'a
+// laissé pointer à côté, et `cms-scaffold` échouait sur toute exécution réelle
+// sans qu'aucun test ne le voie. `tests/cms-lint.mjs` compile un projet entier
+// maintenant, donc ce chemin est repassé à chaque `npm test`.
+const THEME_SCRIPT = join(HERE, "../design-system/scripts/theme_css.py");
 
 const DEFAULT_THEME = {
   paper: "#FBFAF7", ink: "#1B1B1B", accent: "#0F6E4F", accent_ink: "#FFFFFF",
@@ -42,9 +47,14 @@ const DEFAULT_THEME = {
 // one that drifts. python3 is already what runs the design system's own tests.
 export function themeCss(theme) {
   const t = { ...DEFAULT_THEME, ...(theme || {}) };
+  // Python écrit ses fins de ligne au format de la plateforme, donc CRLF sous
+  // Windows. `plan` relit le fichier en LF pour comparer, si bien qu'un
+  // admin/theme.css écrit là-bas paraissait modifié à la main à chaque
+  // `cms-scaffold --check`, pour toujours. Tous les artefacts sont en LF.
   return execFileSync("python3", [THEME_SCRIPT, "--format", "decap",
     "--bg", t.paper, "--ink", t.ink, "--accent", t.accent, "--accent-ink", t.accent_ink,
-    "--font", t.font, "--radius", String(t.radius)], { encoding: "utf8" });
+    "--font", t.font, "--radius", String(t.radius)], { encoding: "utf8" })
+    .replace(/\r\n/g, "\n");
 }
 
 /* ── CONTENT.md ───────────────────────────────────────────────────────────── */
