@@ -245,6 +245,9 @@ export function artefacts(declared) {
     { path: ".github/workflows/publish-content.yml", body: workflowFor(declared) },
     { path: "admin/index.html", body: admin },
     { path: "admin/nth-backend.js", body: readFileSync(join(HERE, "nth-backend.js"), "utf8") },
+    // The site's own build calls this once its pages are otherwise final: it
+    // resolves the content tokens and writes the copies the editor previews.
+    { path: "nth-content.mjs", body: readFileSync(join(HERE, "content-fill.mjs"), "utf8") },
     { path: "admin/config.yml", body: `${configHeader()}${stringify(configFrom(declared))}\n` },
     { path: "admin/theme.css", body: themeCss(declared.theme) },
     { path: "ATTRIBUTION.md", body: attribution() },
