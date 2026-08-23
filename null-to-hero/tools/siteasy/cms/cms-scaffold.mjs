@@ -219,6 +219,161 @@ export function workflowFor(declared) {
     "on:\n  workflow_dispatch:\n");
 }
 
+// La fiche de mise en service. Tout ce qui suit est hors de portée d'un
+// générateur : un jeton se crée dans une console GitHub, une variable se pose
+// chez l'hébergeur, une branche se pousse. Ce que le plugin peut faire, c'est
+// écrire la consigne exacte avec les vrais noms de ce site plutôt qu'un modèle
+// à trous, et dire à la fin ce qu'aucun contrôle ne pourra constater.
+export function handoverFor(declared) {
+  const repo = declared.repo || "<propriétaire/dépôt>";
+  const site = declared.site || "<le site chez l'hébergeur>";
+  const branch = declared.branch;
+  const production = declared.production_branch || "main";
+  const roles = (declared.roles || ["editor"]).join(", ");
+  return (declared.locale === "fr" ? handoverFr : handoverEn)({ repo, site, branch, production, roles });
+}
+
+const handoverFr = ({ repo, site, branch, production, roles }) => `# Mise en service de l'éditeur
+
+Fichier compilé depuis CONTENT.md par cms-scaffold.mjs. Le modifier à la main
+n'a aucun effet : la prochaine compilation le réécrit.
+
+Le dépôt porte déjà l'éditeur, le pont, la liste blanche et le flux de
+publication. Ce qui suit ne peut pas être écrit par un générateur.
+
+## 1. La branche de contenu
+
+Le pont n'écrit que dans \`${branch}\`, et le flux recopie de là vers
+\`${production}\`. La branche doit exister avant la première connexion.
+
+    git branch ${branch} ${production}
+    git push origin ${branch}
+
+## 2. Les comptes
+
+Un compte par personne. Le mot de passe n'est écrit nulle part : ce qui sort est
+une dérivation, et la perdre oblige à en créer une autre.
+
+    node cms-account.mjs add adresse@exemple.fr --roles ${roles.split(", ")[0]}
+
+Les rôles reconnus par ce site : ${roles}. La sortie est un JSON, c'est la
+valeur de NTH_CMS_ACCOUNTS à l'étape 4.
+
+## 3. Le jeton GitHub
+
+Un jeton d'accès personnel à portée fine, limité au seul dépôt ${repo} :
+
+    Contents    lecture et écriture
+    Workflows   ne pas accorder
+
+Le refus d'accorder Workflows est ce qui met \`.github/workflows/\` hors de
+portée du pont. La garantie vient de GitHub, pas de notre liste blanche, et
+c'est pour cela qu'elle vaut quelque chose. Un jeton ne se colle ni dans une
+conversation ni dans le dépôt.
+
+## 4. Les variables d'environnement
+
+Chez l'hébergeur, sur ${site}, quatre variables, marquées secrètes :
+
+    NTH_CMS_SESSION_SECRET   32 octets aléatoires, par exemple openssl rand -base64 32
+    NTH_CMS_ACCOUNTS         la sortie de l'étape 2
+    NTH_CMS_GITHUB_TOKEN     le jeton de l'étape 3
+    NTH_CMS_REPO             ${repo}
+
+## 5. Le build
+
+La commande de déploiement appelle \`node nth-content.mjs\` une fois les pages
+par ailleurs finies : c'est ce qui remplace les jetons par le contenu et écrit
+les copies que l'aperçu affiche. Sans cet appel, le site publie ses accolades.
+
+## 6. Vérifier ce qui est vérifiable
+
+    node cms-lint.mjs .
+    node cms-scaffold.mjs --check .
+
+## Ce qu'aucun contrôle d'ici ne peut constater
+
+- Les droits réellement accordés au jeton. L'API GitHub ne les expose pas à son
+  porteur, donc un jeton trop large passe tous les contrôles.
+- Que les quatre variables sont posées sur le bon site et le bon contexte de
+  déploiement.
+- Que \`${production}\` est bien la branche que l'hébergeur déploie.
+- Le DNS et le certificat du domaine.
+
+Ces quatre points se constatent en essayant : ouvrir /admin/, se connecter,
+changer un mot, publier, et regarder le site.
+`;
+
+const handoverEn = ({ repo, site, branch, production, roles }) => `# Putting the editor into service
+
+Compiled from CONTENT.md by cms-scaffold.mjs. Editing it by hand has no effect:
+the next compilation writes it again.
+
+The repository already carries the editor, the bridge, the allow-list and the
+publish workflow. What follows cannot be written by a generator.
+
+## 1. The content branch
+
+The bridge writes to \`${branch}\` and nowhere else, and the workflow copies from
+there onto \`${production}\`. The branch has to exist before the first sign-in.
+
+    git branch ${branch} ${production}
+    git push origin ${branch}
+
+## 2. The accounts
+
+One account per person. The password is stored nowhere: what comes out is a
+derivation, and losing it means minting another.
+
+    node cms-account.mjs someone@example.com --roles ${roles.split(", ")[0]}
+
+Roles this site recognises: ${roles}. The output is JSON, and it is the value of
+NTH_CMS_ACCOUNTS in step 4.
+
+## 3. The GitHub token
+
+A fine-grained personal access token, limited to the ${repo} repository alone:
+
+    Contents    read and write
+    Workflows   do not grant
+
+Withholding Workflows is what puts \`.github/workflows/\` beyond the bridge's
+reach. The guarantee comes from GitHub rather than from our own allow-list being
+right, which is why it is worth having. A token belongs in neither a
+conversation nor the repository.
+
+## 4. The environment variables
+
+At the host, on ${site}, four variables, marked secret:
+
+    NTH_CMS_SESSION_SECRET   32 random bytes, for instance openssl rand -base64 32
+    NTH_CMS_ACCOUNTS         the output of step 2
+    NTH_CMS_GITHUB_TOKEN     the token from step 3
+    NTH_CMS_REPO             ${repo}
+
+## 5. The build
+
+The deploy command calls \`node nth-content.mjs\` once the pages are otherwise
+final: that is what turns the tokens into content and writes the copies the
+preview displays. Without the call, the site publishes its braces.
+
+## 6. Check what can be checked
+
+    node cms-lint.mjs .
+    node cms-scaffold.mjs --check .
+
+## What no check here can establish
+
+- The rights the token actually carries. The GitHub API does not expose them to
+  the bearer, so an over-broad token passes every check.
+- That the four variables are set on the right site and the right deploy context.
+- That \`${production}\` is the branch the host actually deploys.
+- The domain's DNS and certificate.
+
+Those four are established by trying: open /admin/, sign in, change a word,
+publish, and look at the site.
+`;
+
 // L'éditeur d'un site se reconnaît à l'icône de ce site, dans l'onglet du
 // navigateur comme en haut à droite de la page. Sans icône déclarée, Decap garde
 // sa silhouette générique : mieux vaut ne rien changer que peindre un carré vide.
@@ -251,6 +406,7 @@ export function artefacts(declared) {
     { path: "admin/config.yml", body: `${configHeader()}${stringify(configFrom(declared))}\n` },
     { path: "admin/theme.css", body: themeCss(declared.theme) },
     { path: "ATTRIBUTION.md", body: attribution() },
+    { path: "CMS.md", body: handoverFor(declared) },
     { path: "_headers", body: `${HEADERS_BLOCK}\n`, appendOnly: true },
   ];
 }

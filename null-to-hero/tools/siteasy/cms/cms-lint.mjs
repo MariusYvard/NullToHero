@@ -332,6 +332,19 @@ export const CHECKS = {
   // A locale Decap does not ship is not an error it reports: the editor renders
   // in English and nothing says why. The list is what decap-cms-locales 3.2.0
   // holds; refresh it when vendor-decap.mjs moves the pinned version.
+  // Le seul appel que le générateur ne peut pas faire à la place du site : le
+  // sien. Sans lui les pages partent avec leurs accolades et l'aperçu n'a rien
+  // à montrer, et ça ne se voit qu'une fois en ligne.
+  "CMS-29": ({ files, build }, add) => {
+    if (!files.has("nth-content.mjs")) {
+      add("nth-content.mjs", "the file is missing, so no token is ever resolved");
+      return;
+    }
+    if (!/nth-content/.test(build)) {
+      add("nth-content.mjs", "no build command calls it, so the pages ship with their tokens and the preview has nothing to show");
+    }
+  },
+
   "CMS-27": ({ config, policy }, add) => {
     for (const [where, locale] of [["admin/config.yml", config.locale],
                                    ["netlify/functions/cms-policy.json", policy.locale]]) {
@@ -429,6 +442,11 @@ export function readProject(root) {
     adminHtml: read("admin/index.html"),
     attribution: read("ATTRIBUTION.md"),
     workflow: read(".github/workflows/publish-content.yml"),
+    // Ce qui décrit le déploiement : la configuration de l'hébergeur, les
+    // scripts du paquet, et les scripts de build posés à la racine.
+    build: [...files].filter(f => f === "netlify.toml" || f === "package.json"
+        || (/^[^/]+\.(js|mjs|cjs|ts|toml|yml|yaml)$/.test(f) && f !== "nth-content.mjs"))
+      .map(f => read(f) || "").join("\n"),
     files, dirs,
   };
 }

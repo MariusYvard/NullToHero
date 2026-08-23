@@ -27,3 +27,4 @@ CMS-25,architecture,error,the vendored bundle does not match the version ATTRIBU
 CMS-26,architecture,error,the admin stylesheet is missing or the admin page does not load it,theme_css.py --format decap
 CMS-27,config,warning,a declared locale is not one Decap ships so the editor stays in English,decap-cms-locales 3.2.0
 CMS-28,architecture,error,the declared publish mode and the workflow triggers disagree,cms-scaffold.mjs workflowFor
+CMS-29,architecture,error,the build never calls nth-content.mjs so the pages ship with their tokens,cms-scaffold.mjs artefacts nth-content.mjs
