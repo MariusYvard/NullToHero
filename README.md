@@ -400,12 +400,12 @@ sheet of manual steps with your site's real values.
 
 ## How NullToHero compares
 
-NullToHero overlaps four kinds of tool. The honest comparison: each column is excellent at what it is for, none of them spans the whole loop of building, auditing, scoring and fixing inside your own files.
+NullToHero overlaps four kinds of tool. The honest comparison: each column is excellent at what it is for, none of them spans the whole loop of building, auditing, scoring, fixing and handing over inside your own files.
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/compare-dark.svg">
-    <img src="docs/compare-light.svg" width="920" alt="Comparison matrix: NullToHero vs AI site builders (v0, Lovable, Bolt), audit tools (Lighthouse, axe), SEO suites (Semrush, Ahrefs) and design skills (ui-ux-pro-max, ux-ui-mastery, Taste) across 12 capabilities. NullToHero is the only column with every capability checked.">
+    <img src="docs/compare-light.svg" width="920" alt="Comparison matrix: NullToHero vs AI site builders (v0, Lovable, Bolt), audit tools (Lighthouse, axe), SEO suites (Semrush, Ahrefs) and design skills (ui-ux-pro-max, ux-ui-mastery, Taste) across 13 capabilities, including handing the finished site to a non-technical owner. NullToHero is the only column with every capability checked.">
   </picture>
 </p>
 
@@ -414,24 +414,25 @@ NullToHero overlaps four kinds of tool. The honest comparison: each column is ex
 
 | Capability | **NullToHero** | AI site builders<br><sub>v0 · Lovable · Bolt</sub> | Audit tools<br><sub>Lighthouse · axe</sub> | SEO suites<br><sub>Semrush · Ahrefs</sub> | Design skills<br><sub>ui-ux-pro-max · ux-ui-mastery · Taste</sub> |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Designs and builds real pages | ✅ | ✅ |, |, | 🟡 |
-| Audits an existing site | ✅ |, | ✅ | ✅ |, |
-| Routes every finding to the command that fixes it | ✅ |, |, |, |, |
-| Deterministic 0-100 score, reproducible in CI | ✅ |, | 🟡 | 🟡 |, |
-| Design taste scored (memorability, motion, Gestalt) | ✅ | 🟡 |, |, | 🟡 |
-| SEO with structured data | ✅ |, | 🟡 | ✅ |, |
-| AI-search visibility (GEO, llms.txt) | ✅ |, |, | 🟡 |, |
-| Accessibility: WCAG 2.2 rules and contrast checks | ✅ | 🟡 | ✅ |, | 🟡 |
-| CI gate on every push | ✅ |, | ✅ |, |, |
-| Runs inside Claude, on your own files | ✅ |, |, |, | ✅ |
-| Free, open source, no account | ✅ |, | ✅ |, | ✅ |
-| Editable knowledge (rules, laws, resources as CSV) | ✅ |, |, |, | 🟡 |
+| Designs and builds real pages | ✅ | ✅ | — | — | 🟡 |
+| Audits an existing site | ✅ | — | ✅ | ✅ | — |
+| Routes every finding to the command that fixes it | ✅ | — | — | — | — |
+| Deterministic 0-100 score, reproducible in CI | ✅ | — | 🟡 | 🟡 | — |
+| Design taste scored (memorability, motion, Gestalt) | ✅ | 🟡 | — | — | 🟡 |
+| SEO with structured data | ✅ | — | 🟡 | ✅ | — |
+| AI-search visibility (GEO, llms.txt) | ✅ | — | — | 🟡 | — |
+| Accessibility: WCAG 2.2 rules and contrast checks | ✅ | 🟡 | ✅ | — | 🟡 |
+| CI gate on every push | ✅ | — | ✅ | — | — |
+| Runs inside Claude, on your own files | ✅ | — | — | — | ✅ |
+| Hands the finished site to a non-technical owner | ✅ | — | — | — | — |
+| Free, open source, no account | ✅ | — | ✅ | — | ✅ |
+| Editable knowledge (rules, laws, resources as CSV) | ✅ | — | — | — | 🟡 |
 
-<sub>✅ yes · 🟡 partial ·, no. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
+<sub>✅ yes · 🟡 partial · — no. The figure above says the same thing with a tick, a half disc and a dash, so it survives greyscale. Both are drawn from `null-to-hero/tools/data/compare-matrix.csv`. Nuances: Lighthouse's deterministic score covers performance, not design or content; Semrush's Site Health score is deterministic but proprietary and not CI-native; builders generate tasteful UI without judging or scoring it.</sub>
 
 </details>
 
-NullToHero is the one that spans build, defects, SEO and a scored whole-site audit in a single plugin, with every finding routed to the command that fixes it. It is not a hosted product or a visual editor: it runs inside Claude and edits the real files in your project, so the output is yours to keep and version.
+NullToHero is the one that spans build, defects, SEO, a scored whole-site audit and the handover in a single plugin, with every finding routed to the command that fixes it. It is not a hosted product or a visual editor: it runs inside Claude and edits the real files in your project, so the output is yours to keep and version.
 
 ---
 
