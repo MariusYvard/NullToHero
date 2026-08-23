@@ -54,6 +54,15 @@ it is the honest answer to "what can I actually get out of this". Nothing on it 
 mockup: it is a scroll-driven story that writes the logo onto a blank sheet, opens a
 terminal, raises a generic template page, then audits that page on screen and corrects it.
 
+<!--
+  No dark twin for this one, and that is not an oversight. Every other figure in
+  this README ships a light and a dark file because it is drawn to sit on the
+  reader's page. This one is a recording of a site that has no light mode:
+  measured under both colour schemes, nulltohero.netlify.app computes the same
+  background and the same ink, and no stylesheet it serves carries a
+  prefers-color-scheme rule. A "showcase-site-dark.gif" would be the same
+  2.4 megabytes twice.
+-->
 <div align="center">
   <a href="https://nulltohero.netlify.app">
     <img src="docs/showcase-site.gif" alt="The nulltohero.netlify.app homepage scrolling through its seven acts: a blank sheet where the logo draws itself, a terminal typing a command, a plain page, a slop page dressed in effects, the audit overlay stamping that page with its defects, the corrected version, and the finished hero" width="860">
