@@ -24,6 +24,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { fetchTarget, warnClientRendered } from "./fetch.mjs";
 import { aggregateChecks } from "./lib/aggregate.mjs";
 import { buildSiteAudit } from "./lib/site-audit.mjs";
+import { ruleChecks } from "./lib/rules-bridge.mjs";
 
 const args = process.argv.slice(2);
 const opt = (n) => args.includes(n);
@@ -67,7 +68,16 @@ const checks = aggregateChecks({
   robotsTxt: fetchResult.robotsTxt || null,
 });
 
-const siteAudit = buildSiteAudit({ fetchResult, checks, mode: "checks" });
+// The rules engine reads the source a developer wrote, so it gets the raw HTML
+// even when a render is available: a pattern the framework erases at runtime is
+// still the pattern in the file, and a rendered tree would hide it.
+const withRules = checks.concat(ruleChecks({
+  html: fetchResult.rawHtml || "",
+  css: fetchResult.linkedCss || "",
+  js: fetchResult.linkedJs || "",
+}));
+
+const siteAudit = buildSiteAudit({ fetchResult, checks: withRules, mode: "checks" });
 const json = JSON.stringify(siteAudit, null, 2);
 if (outFile) { writeFileSync(outFile, json); console.error(`[analyze] wrote ${outFile}`); }
 else process.stdout.write(json + "\n");
@@ -75,3 +85,4 @@ else process.stdout.write(json + "\n");
 // One-line human summary on stderr.
 const d = siteAudit.deterministic;
 console.error(`[analyze] deterministic floor ${d.score}/100 — ${d.fails} FAIL, ${d.warns} WARN, ${d.notMeasured} not measured${d.criticalFails.length ? `, critical: ${d.criticalFails.join(", ")}` : ""}`);
+console.error(`[analyze] rules engine: ${d.rules.ran} rules run, ${d.rules.fails} FAIL, ${d.rules.warns} WARN, ${d.rules.advisories} advisory`);

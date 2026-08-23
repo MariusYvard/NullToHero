@@ -8,6 +8,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { scoreFromChecks } from "./checks.mjs";
+import { ruleSummary } from "./rules-bridge.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -176,9 +177,13 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       // la bascule, gardé pour que le déploiement de 6.4 puisse annoncer l'écart.
       coverage: det.coverage, measured: det.measured, total: det.total,
       provisionalScore: det.provisionalScore,
+      // What the rules engine reached, kept out of the arithmetic above and
+      // reported in its own right. An empty run says so rather than looking
+      // like a clean one.
+      rules: ruleSummary(checks),
     },
     inputs: { hashes: inputHashes(fetchResult), dimensions: DIMENSION_INPUTS },
-    checks: checks.map(c => ({ ...c, source: "analyzer", fixWith: remediationMap()[c.id] || null })),
+    checks: checks.map(c => ({ ...c, source: c.source || "analyzer", fixWith: remediationMap()[c.id] || null })),
     cost: null,
     partialCoverage: fetchResult.clientRendered === true && !fetchResult.renderAvailable
       ? ["Target is client-rendered but was fetched without --render; raw HTML may be a shell."]

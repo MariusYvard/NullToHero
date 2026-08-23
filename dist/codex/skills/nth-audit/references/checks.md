@@ -5,7 +5,8 @@ description: >
   Deterministic pre-pass for /nth-audit. Fetches the target once (optionally
   rendering JavaScript with Playwright), computes the objectively decidable
   checks (contrast, image dimensions, viewport meta, robots.txt, heading order,
-  html lang, title, meta description, 375px overflow, security headers, canonical) and writes a machine
+  html lang, title, meta description, 375px overflow, security headers, canonical),
+  runs the 48 rules of the rules engine over the same source, and writes a machine
   readable SITE-AUDIT.json plus a short summary. No sub-agents run. Backs the
   /nth-audit checks command and the shared fetch phase of every other run mode.
 ---
@@ -21,6 +22,28 @@ to its sub-agents so the model judges only what is genuinely subjective.
 
 The detection logic is code, not prompt. Everything here is owned by the scripts
 under `tools/audit/`; this reference is the playbook for invoking them.
+
+## Two engines, one array
+
+Two things read the page here. The static checks answer questions that need the
+fetched document and sometimes a rendered one: is the contrast met, does the page
+overflow at 375 pixels, does robots.txt allow the crawl. The rules engine reads
+the source a developer wrote and answers a different kind of question: is the
+focus outline removed with nothing put back, is a transition declared on `all`,
+does a touch target fall under the minimum.
+
+Until v6 only the first ran here, and the second needed a separate command. An
+audit could therefore report a clean page while thirty rules the plugin knows how
+to detect had never been executed. Both now run on the same fetch and come back
+in the same `checks` array, told apart by `source`: `analyzer` or `rules`.
+
+The rules do not move the score, and that is deliberate. The deterministic floor
+is `100 - 15 x fails - 7 x warns` with no denominator, so adding forty-eight
+measurements to it would put most real sites at zero and make every earlier score
+incomparable. They are counted under `deterministic.rules` and printed on their
+own line, and the gate reports them without enforcing them. Folding them into the
+score needs a formula that divides, which is a separate change with its own
+calibration.
 
 ## When to use
 

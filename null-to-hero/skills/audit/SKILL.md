@@ -22,7 +22,7 @@ Complete-audit toolkit for websites. One pass that orchestrates the plugin's thr
 | Command | What it does | Reference |
 |---------|-------------|-----------|
 | `full [url] [scope]` | All 15 sub-agents across SEO, defects, and design; unified report + action plan. Optional scope runs one group: `seo` (5 SEO sub-agents), `defects` (4 inspect), `design` (6 siteasy), `quick` (one per group for a fast triage) | [references/full.md](references/full.md) + [references/refine.md](references/refine.md) |
-| `checks [url]` | Deterministic pre-pass only: computed checks plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
+| `checks [url]` | Deterministic pre-pass only: the computed checks and the 48 rules of the rules engine, plus `SITE-AUDIT.json`, no sub-agents | [references/checks.md](references/checks.md) |
 | `verify [url]` | Consensus re-check: re-runs the gating dimensions (a11y, interaction, technical) K times and reconciles them by majority vote | [references/full.md](references/full.md) |
 | `compare [A] [B]` | Diff two targets (before/after a site, or A vs B): per-check verdict changes and score deltas | [references/compare.md](references/compare.md) |
 | `learnings [file]` | Review LEARNINGS.md candidates accumulated by real audits and turn accepted ones into rules, gates, laws or fixtures | [references/learnings.md](references/learnings.md) |

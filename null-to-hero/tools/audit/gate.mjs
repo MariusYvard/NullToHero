@@ -21,6 +21,7 @@ import { fetchTarget } from "./fetch.mjs";
 import { runChecks } from "./lib/checks.mjs";
 import { buildSiteAudit, sha } from "./lib/site-audit.mjs";
 import { provenanceOf } from "./lib/checks.mjs";
+import { ruleChecks } from "./lib/rules-bridge.mjs";
 
 const args = process.argv.slice(2);
 const has = (n) => args.includes(n);
@@ -119,7 +120,12 @@ if (reportPath) {
 } else {
   const fetchResult = await fetchTarget({ target, render: has("--render"), robots: has("--robots"), timeout: parseInt(val("--timeout", "15000"), 10) });
   const checks = runChecks({ rawHtml: fetchResult.rawHtml || "", renderedHtml: fetchResult.renderedHtml || null, robotsTxt: fetchResult.robotsTxt || null, url: fetchResult.url || null, computed: fetchResult.computed || null, headers: fetchResult.headers || null, css: fetchResult.linkedCss || "", js: fetchResult.linkedJs || "", provenance: provenanceOf(fetchResult) });
-  report = buildSiteAudit({ fetchResult, checks, mode: "checks" });
+  // Same layer as analyze.mjs, or the gate would report a rules count of zero on
+  // a page it never asked the engine about.
+  const withRules = checks.concat(ruleChecks({
+    html: fetchResult.rawHtml || "", css: fetchResult.linkedCss || "", js: fetchResult.linkedJs || "",
+  }));
+  report = buildSiteAudit({ fetchResult, checks: withRules, mode: "checks" });
 }
 
 // P5 : auditer la page d'erreur d'un serveur n'est pas auditer la cible.
@@ -131,7 +137,13 @@ if (httpStatus != null && httpStatus > 399) {
   ]);
 }
 
-const checks = (report.checks || []).filter(c => c.verdict !== "NOT_MEASURED");
+// The rules engine rides in the same array since v6, and it is reported rather
+// than enforced: turning forty-eight new measurements into gate failures would
+// break a passing pipeline on the day the plugin updated, which is a change to
+// announce and not to slip in. The count is printed below so that nobody reads
+// this gate as having looked at them.
+const checks = (report.checks || [])
+  .filter(c => c.verdict !== "NOT_MEASURED" && c.source !== "rules");
 const fails = checks.filter(c => c.verdict === "FAIL");
 const warns = checks.filter(c => c.verdict === "WARN");
 const criticalFails = fails.filter(c => c.critical);
@@ -155,6 +167,8 @@ console.log(`  deterministic score: ${score == null ? "n/a" : score}/100   FAIL:
 if (reportPath) console.log(`  report: ${report.pluginVersion} generated ${report.generatedAt}`);
 if (httpStatus != null) console.log(`  target answered HTTP ${httpStatus}`);
 if (coverage != null) console.log(`  coverage: ${(coverage * 100).toFixed(0)}% of ${report.deterministic.total} checks measured (floor ${(policy.minCoverage * 100).toFixed(0)}%)`);
+const ruleStats = report.deterministic && report.deterministic.rules;
+if (ruleStats) console.log(`  rules engine: ${ruleStats.ran} run, ${ruleStats.fails} FAIL, ${ruleStats.warns} WARN (reported, not gated)`);
 if (clientRenderedUnverified) console.log(`  note: target looks client-rendered and was fetched without --render`);
 for (const c of criticalFails) console.log(`  ✗ critical ${c.id}: ${c.detail}`);
 if (passed) console.log(`  RESULT: PASS`);

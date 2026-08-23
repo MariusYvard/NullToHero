@@ -1876,7 +1876,13 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
 
 // Deterministic health floor computed from the objective checks only. This is a
 // SUBSET of each agent's full checklist, so it is a floor, not the agent score.
-export function scoreFromChecks(checks) {
+export function scoreFromChecks(allChecks) {
+  // The rules engine travels in the same array, with the same shape, because
+  // every consumer downstream already speaks it. It stays out of the floor: the
+  // floor subtracts fifteen a failure from a hundred and never divides, so
+  // forty-eight more measurements would price every site at zero. Its own count
+  // is reported beside the floor. See lib/rules-bridge.mjs.
+  const checks = allChecks.filter(c => c.source !== "rules");
   // ADVISORY is excluded alongside NOT_MEASURED, for a different reason: the fact
   // was measured, but the standard behind it is a draft or an early-adoption feature
   // and penalising its absence would price the site against a spec that may not ship.
