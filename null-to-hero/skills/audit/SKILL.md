@@ -1,6 +1,6 @@
 ---
 name: audit
-description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /seo audit; for defect-only use /inspect; for design-only use /siteasy audit."
+description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, or the deterministic scan alone. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code'. For a search-only audit use /seo audit; for a screenshot or a pasted-code review use /inspect; for design-only use /siteasy audit."
 version: 4.0.0
 user-invocable: true
 argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | [report|learnings] [file] | compare [A] [B]"
@@ -67,7 +67,8 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 | Situation | Use instead |
 |-----------|-------------|
 | You only need search visibility | /seo audit |
-| You only need deterministic front-end defects | /inspect detect or /inspect review |
+| You only need the deterministic scan, no sub-agents | /audit checks |
+| You want a screenshot, or a review of pasted code | /inspect |
 | You only need subjective design and UX review | /siteasy audit |
 | You want to build, fix, or redesign the interface | /siteasy build |
 

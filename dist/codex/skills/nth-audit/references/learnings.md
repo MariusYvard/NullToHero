@@ -50,5 +50,5 @@ entry per root cause; never auto-apply anything.
 ## Cross-References
 
 - Check engine and gates: [checks.md](checks.md)
-- Rule data consumed by `/nth-inspect detect`: [../../inspect/references/detect.md](../../inspect/references/detect.md)
+- Rule data consumed by `/nth-audit checks`: [checks.md](checks.md)
 - Report structure the findings come from: [report.md](report.md)

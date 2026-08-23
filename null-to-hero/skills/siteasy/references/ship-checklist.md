@@ -14,7 +14,7 @@ This complements `harden` (production robustness) and `optimize` (performance). 
 
 Quality gates, all of which must pass:
 
-- [ ] `/inspect detect` and `/inspect review` are clean of CRITICAL and HIGH findings, or each remaining one is a conscious, recorded decision.
+- [ ] `/audit checks` and `/inspect review` are clean of CRITICAL and HIGH findings, or each remaining one is a conscious, recorded decision.
 - [ ] `/inspect preview` has been viewed at mobile and desktop widths; nothing is clipped or overflowing at 375px.
 - [ ] Every internal link resolves; no link points to a staging or localhost URL.
 - [ ] A real 404 page exists and is styled, and the host is configured to serve it.

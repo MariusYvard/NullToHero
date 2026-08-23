@@ -214,10 +214,6 @@
       "to": "skills/audit/references/report.md"
     },
     {
-      "from": "skills/audit/references/learnings.md",
-      "to": "skills/inspect/references/detect.md"
-    },
-    {
       "from": "skills/audit/references/refine.md",
       "to": "skills/audit/references/full.md"
     },
@@ -1392,10 +1388,6 @@
     {
       "from": "skills/siteasy/references/journey-ship.md",
       "to": "skills/audit/references/full.md"
-    },
-    {
-      "from": "skills/siteasy/references/journey-ship.md",
-      "to": "skills/inspect/references/detect.md"
     },
     {
       "from": "skills/siteasy/references/journey-ship.md",

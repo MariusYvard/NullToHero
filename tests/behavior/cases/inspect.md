@@ -8,7 +8,7 @@ See [../README.md](../README.md) for the evidence rule.
 ## Command boundaries
 
 ```yaml
-id: inspect-detect-vs-review
+id: inspect-scan-vs-review
 type: routing
 status: simulated
 target_skill: inspect
@@ -16,9 +16,9 @@ scenario: The user pastes a component and asks whether anything is wrong with it
 input_summary: Here is my card component. Is there anything wrong with it before I ship?
 expected_behavior:
   - Routes to `/inspect review` because the input is pasted code and the request is a pre-ship quality gate, which is the documented default for pasted code.
-  - States the boundary: `/inspect detect` runs the deterministic anti-pattern scan over a target on disk, while `/inspect review` is the design engineering code review with a before and after table plus a score.
+  - States the boundary: the deterministic anti-pattern scan now runs in `/audit checks`, over a fetched target and without a model, while `/inspect review` is the design engineering code review with a before and after table plus a score.
   - Names the additional ground `/inspect review` covers, which is code robustness across security, performance and correctness.
-  - Offers `/inspect detect` as the cheaper first pass if the user would rather scan a whole directory.
+  - Offers `/audit checks` as the cheaper first pass if the user would rather scan without a model.
 failure_modes:
   - Runs the anti-pattern scan on pasted code and reports it as a review.
   - Asks which of the three commands to run when the input type already decides it.
@@ -35,7 +35,7 @@ input_summary: Show me what index.html actually looks like on a phone.
 expected_behavior:
   - Routes to `/inspect preview` because the request is about rendered appearance and the input is a file path, which is the documented default.
   - States what preview returns: a real Chromium screenshot on desktop and mobile viewports, read back visually with bugs fixed in a loop.
-  - States the boundary: `/inspect detect` reads code and never renders, so it cannot answer a question about appearance.
+  - States the boundary: the deterministic scan reads code and never renders, so it cannot answer a question about appearance.
   - Offers the documented pre-ship sequence as the follow up rather than running all three unprompted.
 failure_modes:
   - Runs a static scan and describes the appearance from the code.

@@ -73,7 +73,8 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 | Situation | Use instead |
 |-----------|-------------|
 | You only need search visibility | /nth-seo audit |
-| You only need deterministic front-end defects | /nth-inspect detect or /nth-inspect review |
+| You only need the deterministic scan, no sub-agents | /nth-audit checks |
+| You want a screenshot, or a review of pasted code | /nth-inspect |
 | You only need subjective design and UX review | /nth-siteasy audit |
 | You want to build, fix, or redesign the interface | /nth-siteasy build |
 

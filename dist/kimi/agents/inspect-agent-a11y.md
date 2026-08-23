@@ -170,5 +170,5 @@ Quick wins:
 | Need | Skill |
 |------|-------|
 | Full WCAG pass | `/nth-siteasy audit` |
-| Contrast tooling | `/nth-inspect detect` |
+| Contrast tooling | `/nth-audit checks` |
 | Design-time color | `/nth-siteasy amplify` |

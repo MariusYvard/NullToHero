@@ -4,6 +4,13 @@ description: "Run NullToHero's own deterministic detector on local code and pres
 version: 2.0.0
 ---
 
+
+> **Moved.** Since v6 the rules engine runs inside the audit's deterministic
+> pre-pass: `/audit checks` executes these 48 rules on the same fetch as the
+> computed checks, and reports them under `deterministic.rules`. This command
+> still works and stays for one version, for a scan of a directory on disk
+> without fetching anything. New work should call `/audit checks`.
+
 # Anti-Pattern Detector
 
 ```bash

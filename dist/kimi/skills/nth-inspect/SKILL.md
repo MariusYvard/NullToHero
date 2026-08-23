@@ -1,7 +1,7 @@
 ---
 name: nth-inspect
 description: "Scan a frontend for defects before shipping: design anti-patterns (missing focus rings, clipped dropdowns, z-index conflicts, placeholder-as-label, missing reduced-motion), real Chromium screenshots on mobile and desktop, and a design-engineering code review of motion, accessibility and token discipline."
-whenToUse: "Use when the user wants to scan for design anti-patterns, take a browser screenshot, or do a design engineering code review. Covers: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion (detect); real Chromium screenshots, mobile/desktop viewports, visual bug fixing (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, Before/After review table (review). Use when the user says: 'screenshot this', 'check for anti-patterns', 'scan my code', 'review before I ship', 'show me what this looks like', 'are there visual bugs', 'critique my code'. Not for designing or building an interface: that belongs to /nth-siteasy. Not for search visibility: /nth-seo. For all three at once on a whole site: /nth-audit."
+whenToUse: "Use when the user wants a real browser screenshot of a page, or a design engineering code review of code they paste. Covers: Chromium screenshots at mobile and desktop viewports and the fix loop that follows (preview); motion crimes, accessibility violations, forbidden CSS patterns, token misuse, a Before/After table with a score, plus code robustness across security, performance and correctness (review). Use when the user says: 'screenshot this', 'show me what this looks like', 'review before I ship', 'critique my code'. Not for the deterministic anti-pattern scan, which now runs inside /nth-audit checks. Not for designing or building an interface, use /nth-siteasy. Not for search visibility, use /nth-seo. For all three dimensions at once on a whole site, use /nth-audit."
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
@@ -90,7 +90,7 @@ Three more need a live three.js scene and run through `tools/inspect/three.mjs`,
 ## Recommended pre-ship sequence
 
 ```
-/nth-inspect detect index.html     ← catch obvious anti-patterns first
+/nth-audit checks index.html       ← catch obvious anti-patterns first
 /nth-inspect preview index.html    ← see what it looks like in a real browser
 /nth-inspect review index.html     ← final engineering quality gate
 ```

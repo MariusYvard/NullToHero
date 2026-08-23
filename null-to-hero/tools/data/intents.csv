@@ -21,3 +21,4 @@ sell-better,page does not convert; improve conversion; is my offer clear; object
 hand-a-site-over,hand this site over; give my client the keys; let the owner edit the text; make this site editable,/cms entrust,current
 cms-accounts,add an editor account; who can sign into the CMS; remove an editor,/cms accounts,current
 cms-not-working,the client cannot save; the editor stopped working; the preview shows braces,/cms check,current
+deterministic-scan,check for anti-patterns; scan my code; find defects without a model,/audit checks,current

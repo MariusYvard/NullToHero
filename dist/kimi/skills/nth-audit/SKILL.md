@@ -1,7 +1,7 @@
 ---
 name: nth-audit
 description: "Run one whole-site audit that merges search visibility, front-end defects and design quality into a single scored report with a prioritized action plan. Dispatches fifteen specialist sub-agents over a shared fetch, on top of a deterministic pre-pass. Use for 'audit my whole site' or 'review my site end to end'."
-whenToUse: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end'. For a search-only audit use /nth-seo audit; for defect-only use /nth-inspect; for design-only use /nth-siteasy audit."
+whenToUse: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, or the deterministic scan alone. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code'. For a search-only audit use /nth-seo audit; for a screenshot or a pasted-code review use /nth-inspect; for design-only use /nth-siteasy audit."
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
@@ -74,7 +74,8 @@ The overall Site Health Score weights Search Visibility at 35 percent, Front-end
 | Situation | Use instead |
 |-----------|-------------|
 | You only need search visibility | /nth-seo audit |
-| You only need deterministic front-end defects | /nth-inspect detect or /nth-inspect review |
+| You only need the deterministic scan, no sub-agents | /nth-audit checks |
+| You want a screenshot, or a review of pasted code | /nth-inspect |
 | You only need subjective design and UX review | /nth-siteasy audit |
 | You want to build, fix, or redesign the interface | /nth-siteasy build |
 

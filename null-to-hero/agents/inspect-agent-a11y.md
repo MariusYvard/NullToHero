@@ -162,5 +162,5 @@ Quick wins:
 | Need | Skill |
 |------|-------|
 | Full WCAG pass | `/siteasy audit` |
-| Contrast tooling | `/inspect detect` |
+| Contrast tooling | `/audit checks` |
 | Design-time color | `/siteasy amplify` |

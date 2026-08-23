@@ -18,7 +18,7 @@ The zero-to-landing pipeline. Eight stages, each an existing command, each writi
 | 4 | Shape | `/nth-siteasy shape` ([shape.md](shape.md), [landing-patterns.md](landing-patterns.md)) | Shape brief confirmed by the user |
 | 5 | Build | `/nth-siteasy build` ([craft.md](craft.md)) | Landing built to the production bar, direction honored |
 | 6 | Motion | `/nth-siteasy animate` ([animate.md](animate.md)) | The ONE signature moment from `DIRECTION.md`, decorative loops <= 2, reduced-motion guarded |
-| 7 | Checks | `/nth-inspect detect` then `/nth-audit checks` | Zero CRITICAL/HIGH; deterministic floor >= 80 |
+| 7 | Checks | `/nth-audit checks` | Zero CRITICAL/HIGH; deterministic floor >= 80 |
 | 8 | Harden | `/nth-siteasy harden` ([ship-checklist.md](ship-checklist.md)) | Checklist clean, media within budget (video <= 10 MB) |
 
 ## Rules

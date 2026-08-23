@@ -418,7 +418,7 @@ a PDF, defer to [report.md](report.md). Do not re-implement formatting here.
 | Need | Where |
 |------|-------|
 | Deep search-visibility audit | /seo audit |
-| Deterministic front-end defect scan | /inspect detect |
+| Deterministic front-end defect scan | /audit checks |
 | Design engineering code review | /inspect review |
 | Subjective design and UX review | /siteasy audit |
 | Format this audit into a report or PDF | /audit report (see [report.md](report.md)) |
