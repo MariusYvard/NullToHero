@@ -64,7 +64,28 @@ const ratio = (cs) => { const { n, f, w } = counts(cs); return n ? Math.round(10
 // D : un taux de réussite pondéré, l'avertissement valant une demi-réussite.
 const rate = (cs) => { const { n, w, p } = counts(cs); return n ? Math.round(100 * (p + 0.5 * w) / n) : null; };
 
-const A = [], B = [], C = [], D = [], firing = [];
+// E et F : garder la soustraction, changer le poids plutôt que le diviseur.
+//
+// CE QUE LES NOMBRES DISENT
+// -------------------------
+// Sur ces pages, cinq règles en violation suffisent à faire tomber B de 93 à 42.
+// Ce n'est donc pas le nombre de règles qui pose problème, c'est leur prix :
+// une règle du moteur coûte aujourd'hui le même quinze points qu'un contrôle
+// choisi à la main. Or les dix-huit contrôles sont curés et gros, les
+// quarante-huit règles sont fines et nombreuses. Leur donner un prix plus bas
+// garde le mordant du plancher là où il vient, sans diviser par un dénominateur
+// que les réussites gonflent.
+//
+// Le plafond de F répond à la seule objection sérieuse contre E : une page qui
+// déclenche vingt règles ne doit pas tomber à zéro sur des constats fins.
+const RULE_FAIL = 4, RULE_WARN = 2, RULE_CAP = 30;
+const weighted = (base, rules, cap) => {
+  const b = counts(base), r = counts(rules);
+  const rulePenalty = RULE_FAIL * r.f + RULE_WARN * r.w;
+  return Math.max(0, 100 - 15 * b.f - 7 * b.w - (cap ? Math.min(RULE_CAP, rulePenalty) : rulePenalty));
+};
+
+const A = [], B = [], C = [], D = [], E = [], F = [], firing = [];
 for (const page of pages) {
   const html = readFileSync(page, "utf8");
   const base = runChecks({ rawHtml: html, css, js: "" });
@@ -74,6 +95,8 @@ for (const page of pages) {
   B.push(subtraction(all));
   C.push(ratio(all));
   D.push(rate(all));
+  E.push(weighted(base, rules, false));
+  F.push(weighted(base, rules, true));
   firing.push(rules.filter(c => c.verdict === "FAIL" || c.verdict === "WARN").length);
 }
 
@@ -85,5 +108,12 @@ console.log(line("A. subtraction, checks only (today)", A));
 console.log(line("B. subtraction, rules folded in", B));
 console.log(line("C. penalty over the worst possible", C));
 console.log(line("D. weighted pass rate", D));
+console.log(line(`E. subtraction, rules at ${RULE_FAIL}/${RULE_WARN}`, E));
+console.log(line(`F. same, rules capped at ${RULE_CAP}`, F));
 console.log(`\nB puts ${B.filter(x => x === 0).length} of ${pages.length} page(s) at zero.`);
+console.log(`E puts ${E.filter(x => x === 0).length}, F puts ${F.filter(x => x === 0).length}.`);
+// L'étalement est ce qui distingue une note d'une constante. Une formule dont
+// toutes les pages tiennent dans deux points ne classe rien.
+const spread = (a) => q(a, 1) - q(a, 0);
+console.log(`Spread: A ${spread(A)}, B ${spread(B)}, C ${spread(C)}, D ${spread(D)}, E ${spread(E)}, F ${spread(F)}.`);
 console.log(`Rules in violation per page: median ${q(firing, .5)}, max ${q(firing, 1)}.`);

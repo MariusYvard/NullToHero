@@ -27,6 +27,16 @@ goes from 93 to 42 and no page reaches zero. The conclusion held for a different
 reason, that every dividing formula compresses the whole corpus into 93 to 96 and
 loses the bite the floor has.
 
+The bench now answers the question the plan left open, and the answer is that
+the divisor was the wrong lever. Five rules in violation are enough to take a
+page from 93 to 42, so the problem is not how many rules there are, it is that a
+rules-engine result costs the same fifteen points as a hand-curated check. Pricing
+them at 4 and 2 keeps the floor's spread (22 points, the same as today) and puts
+the median at 79. Dividing keeps the median but flattens the spread to 2 points,
+which is a constant rather than a score. **The formula is not changed yet**: one
+site's 33 pages is thin evidence for moving the score every audit reports, and
+the eval baseline and the review's own numbers move with it.
+
 ### Added
 
 - `skills/cms/` and its four references: `entrust`, `carve`, `operate`,
