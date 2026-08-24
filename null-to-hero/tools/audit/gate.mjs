@@ -137,11 +137,13 @@ if (httpStatus != null && httpStatus > 399) {
   ]);
 }
 
-// The rules engine rides in the same array since v6, and it is reported rather
-// than enforced: turning forty-eight new measurements into gate failures would
-// break a passing pipeline on the day the plugin updated, which is a change to
-// announce and not to slip in. The count is printed below so that nobody reads
-// this gate as having looked at them.
+// The rules engine rides in the same array since v6. Since 2026-08-24 it is
+// priced into the deterministic score at 4 points a failure and 2 a warning,
+// capped at 30, so the gate does enforce it, through the score rather than
+// through a violation of its own. `fails` and `warns` below stay the curated
+// checks: they are the counts printed beside the score, and a reader must be
+// able to redo the arithmetic from them, which is why the rules penalty is
+// printed on the same line.
 const checks = (report.checks || [])
   .filter(c => c.verdict !== "NOT_MEASURED" && c.source !== "rules");
 const fails = checks.filter(c => c.verdict === "FAIL");
@@ -163,12 +165,17 @@ if (policy.failOnClientRendered && clientRenderedUnverified) violations.push("ta
 const passed = violations.length === 0;
 const tgt = report.target ? (report.target.url || report.target.file || "?") : "?";
 console.log(`NullToHero audit gate — ${tgt}`);
-console.log(`  deterministic score: ${score == null ? "n/a" : score}/100   FAIL: ${fails.length}   WARN: ${warns.length}   critical FAIL: ${criticalFails.length}`);
+const rulePenalty = report.deterministic && report.deterministic.rulePenalty != null
+  ? report.deterministic.rulePenalty : null;
+console.log(`  deterministic score: ${score == null ? "n/a" : score}/100   FAIL: ${fails.length}   WARN: ${warns.length}`
+  + (rulePenalty ? `   rules: -${rulePenalty}` : "")
+  + `   critical FAIL: ${criticalFails.length}`);
 if (reportPath) console.log(`  report: ${report.pluginVersion} generated ${report.generatedAt}`);
 if (httpStatus != null) console.log(`  target answered HTTP ${httpStatus}`);
 if (coverage != null) console.log(`  coverage: ${(coverage * 100).toFixed(0)}% of ${report.deterministic.total} checks measured (floor ${(policy.minCoverage * 100).toFixed(0)}%)`);
 const ruleStats = report.deterministic && report.deterministic.rules;
-if (ruleStats) console.log(`  rules engine: ${ruleStats.ran} run, ${ruleStats.fails} FAIL, ${ruleStats.warns} WARN (reported, not gated)`);
+if (ruleStats) console.log(`  rules engine: ${ruleStats.ran} run, ${ruleStats.fails} FAIL, ${ruleStats.warns} WARN`
+  + (rulePenalty == null ? " (reported, not priced by this report)" : ` (-${rulePenalty} from the score, capped at 30)`));
 if (clientRenderedUnverified) console.log(`  note: target looks client-rendered and was fetched without --render`);
 for (const c of criticalFails) console.log(`  ✗ critical ${c.id}: ${c.detail}`);
 if (passed) console.log(`  RESULT: PASS`);

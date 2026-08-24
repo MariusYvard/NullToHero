@@ -29,8 +29,14 @@ jobs:
       - name: Analyzer eval (correctness + drift)
         run: node null-to-hero/tools/audit/eval.mjs --strict
 
+      # 85 et non 90 depuis le 24 août 2026. Cette fixture est propre pour les
+      # dix-huit contrôles curés (0 échec, 1 avertissement) mais déclenche une
+      # règle du moteur, rule-11 : son image de tête n'a ni avif ni webp. Depuis
+      # que les règles sont notées à 4 points l'échec, elle vaut 89 et non 93.
+      # Le constat est vrai, donc la fixture n'est pas retouchée et c'est le
+      # seuil qui laisse passer une page à un constat fin près.
       - name: Gate passes a clean fixture
-        run: node null-to-hero/tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 90
+        run: node null-to-hero/tools/audit/gate.mjs tests/eval/fixtures/clean-pass.html --min-score 85
 
       - name: Gate fails a defective fixture (below score threshold)
         run: |
@@ -51,4 +57,4 @@ jobs:
       - name: Gate JSON report round-trips
         run: |
           node null-to-hero/tools/audit/analyze.mjs tests/eval/fixtures/clean-pass.html --out /tmp/sa.json
-          node null-to-hero/tools/audit/gate.mjs --report /tmp/sa.json --min-score 90
+          node null-to-hero/tools/audit/gate.mjs --report /tmp/sa.json --min-score 85
