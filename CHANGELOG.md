@@ -33,9 +33,20 @@ page from 93 to 42, so the problem is not how many rules there are, it is that a
 rules-engine result costs the same fifteen points as a hand-curated check. Pricing
 them at 4 and 2 keeps the floor's spread (22 points, the same as today) and puts
 the median at 79. Dividing keeps the median but flattens the spread to 2 points,
-which is a constant rather than a score. **The formula is not changed yet**: one
-site's 33 pages is thin evidence for moving the score every audit reports, and
-the eval baseline and the review's own numbers move with it.
+which is a constant rather than a score.
+
+A second corpus, the plugin's own showcase site (6 pages, Next.js exported),
+says what the first could not. Today's floor scores all six at 100 out of 100
+with a spread of zero, while the rules engine finds four violations per page: the
+current score is not lenient there, it is blind. Pricing at 4 and 2 puts them at
+90 with a spread of 4. Across both corpora, 39 pages, that shape keeps the
+floor's spread where it existed and creates spread where there was none, which
+is what a score owes.
+
+**The formula is not changed.** It moves the number every audit reports to a
+client, and the eval baseline and the architecture review's own numbers move
+with it, so it is a decision to take deliberately rather than a measurement to
+apply. `tools/audit/score-lab.mjs` carries both corpora in its header.
 
 ### Added
 

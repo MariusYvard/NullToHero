@@ -187,11 +187,13 @@ being true.
 
 Each package was installed and read by a running host, never by a specification
 alone: Codex `0.148.0` and Kimi Code `0.37.2` on 2026-08-19, opencode `1.18.21`
-on 2026-08-23. `dist/VERIFY.md` records what those runs showed, including the
-part that disappoints: opencode loaded two deliberately invalid skills without
-complaint, so a host accepting the package proves it is discovered and says
-nothing about whether it conforms. That is held by `tests/portability.mjs`
-instead. `bash tests/verify-hosts.sh` reproduces the first two runs.
+and Gemini CLI `0.56.0` on 2026-08-23 and 24. `dist/VERIFY.md` records what those
+runs showed, including the part that disappoints: both standard hosts loaded two
+deliberately invalid skills without complaint, one whose declared name does not
+match its folder and one with a 1024-character limit overrun. So a host
+accepting the package proves it is discovered and says nothing about whether it
+conforms; that is held by `tests/portability.mjs` instead.
+`bash tests/verify-hosts.sh` reproduces the first two runs.
 
 ### Updating
 

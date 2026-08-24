@@ -20,6 +20,38 @@
 //   node tools/audit/score-lab.mjs <site-root> [--css path/to/main.css]
 //
 // It writes nothing and decides nothing.
+//
+// DEUX CORPUS, 2026-08-24
+// -----------------------
+// constant-opticien, 33 pages, un site d'opticien écrit à la main :
+//
+//   A. contrôles seuls (aujourd'hui)   min 78   médiane 93   max 100   étalement 22
+//   B. règles à 15/7                   min 27   médiane 42   max  49   étalement 22
+//   C. pénalité sur le pire possible   min 94   médiane 95   max  96   étalement  2
+//   D. taux de réussite pondéré        min 93   médiane 95   max  95   étalement  2
+//   E. règles à 4/2                    min 64   médiane 79   max  86   étalement 22
+//
+// nth-site, 6 pages, la vitrine du greffon, Next.js exporté :
+//
+//   A. contrôles seuls (aujourd'hui)   min 100  médiane 100  max 100   étalement  0
+//   B. règles à 15/7                   min  49  médiane  64  max  64   étalement 15
+//   C. pénalité sur le pire possible   min  95  médiane  97  max  97   étalement  2
+//   D. taux de réussite pondéré        min  95  médiane  96  max  97   étalement  2
+//   E. règles à 4/2                    min  86  médiane  90  max  90   étalement  4
+//
+// Le second corpus dit ce que le premier ne pouvait pas dire : le plancher
+// actuel met ces six pages à 100 sur 100, sans les distinguer d'un iota, pendant
+// que le moteur de règles y trouve quatre violations par page. Un score aveugle
+// n'est pas un score sévère, c'est un score muet.
+//
+// E se comporte bien sur les deux : il garde l'étalement du plancher là où il
+// existait, et il en crée là où il n'y en avait pas. C et D restent plates sur
+// les deux corpus, donc elles classent des pages sans les ordonner. B punit
+// deux sites corrects à 42 et 64.
+//
+// Le plafond de F n'a jamais mordu sur 39 pages, donc E et F sont identiques
+// ici. Il reste pour la page qui déclencherait vingt règles, qu'aucun des deux
+// corpus ne contient.
 
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
