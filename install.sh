@@ -26,11 +26,20 @@ err()    { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 #
 #   bash install.sh                  Claude Code, the default, unchanged below
 #   bash install.sh --target codex   copies dist/codex into ~/.agents/skills
-#   bash install.sh --target kimi    copies dist/kimi into ~/.agents/skills
-#   bash install.sh --target all     both
+#   bash install.sh --target kimi    copies dist/kimi into ~/.kimi-code/skills
+#   bash install.sh --target agents  copies dist/agents into ~/.agents/skills
+#   bash install.sh --target all     codex and kimi
 #
-# Codex and Kimi both read ~/.agents/skills, so one copy serves the two. Only
-# the sub-agent files differ, and they go to each host's own directory.
+# Only the sub-agent files differ between codex and kimi, and they go to each
+# host's own directory.
+#
+# `agents` is the package for every other host that reads the Agent Skills
+# format: Cursor, GitHub Copilot, VS Code, Gemini CLI, opencode and the rest.
+# It carries no sub-agents, because the standard defines none.
+#
+# `codex` and `agents` land in the same directory, so they exclude one another.
+# The installer refuses rather than overwriting: pick Codex if you want the
+# fifteen sub-agents, pick agents if the host is anything else.
 
 TARGET="claude"
 while [ $# -gt 0 ]; do
@@ -71,6 +80,15 @@ install_portable() {
       warn "Skipping ${dest}: it exists and was not installed by NullToHero."
       continue
     fi
+    # `codex` et `agents` visent le meme dossier. Ecraser l'un par l'autre
+    # retirerait les sous-agents sans le dire, ou les remettrait sur un hote qui
+    # ne les lit pas. Le refus nomme les deux cotes.
+    if [ -f "${dest}/SKILL.md" ] && ! grep -q "^  host: ${host}$" "${dest}/SKILL.md"; then
+      local other; other="$(sed -n 's/^  host: //p' "${dest}/SKILL.md" | head -1)"
+      err "${dest} holds the ${other} package. It and ${host} share this directory."
+      err "Remove ~/.agents/skills/nth-* first, or install the other target instead."
+      exit 1
+    fi
     rm -rf "${dest}"
     cp -r "${skill}" "${dest}"
     # Resolve the root token to this checkout. The tools and the asset library
@@ -84,11 +102,16 @@ install_portable() {
     ok "$(basename "${skill}") -> ${dest}"
   done
 
-  local agents_dest
-  if [ "${host}" = "codex" ]; then agents_dest="${HOME}/.codex/agents"; else agents_dest="${KIMI_CODE_HOME}/agents"; fi
-  mkdir -p "${agents_dest}"
-  cp -r "${src}"/agents/. "${agents_dest}/"
-  ok "sub-agents -> ${agents_dest}"
+  # Le paquet neutre n'a pas de sous-agents : le standard n'en definit pas.
+  if [ -d "${src}/agents" ]; then
+    local agents_dest
+    if [ "${host}" = "codex" ]; then agents_dest="${HOME}/.codex/agents"; else agents_dest="${KIMI_CODE_HOME}/agents"; fi
+    mkdir -p "${agents_dest}"
+    cp -r "${src}"/agents/. "${agents_dest}/"
+    ok "sub-agents -> ${agents_dest}"
+  else
+    log "No sub-agents in this package: the Agent Skills standard defines none."
+  fi
 
   echo ""
   log "Read dist/VERIFY.md: three claims about these hosts come from their"
@@ -96,11 +119,12 @@ install_portable() {
 }
 
 case "${TARGET}" in
-  codex) install_portable codex; exit 0 ;;
-  kimi)  install_portable kimi;  exit 0 ;;
-  all)   install_portable codex; install_portable kimi; exit 0 ;;
+  codex)  install_portable codex; exit 0 ;;
+  kimi)   install_portable kimi;  exit 0 ;;
+  agents) install_portable agents; exit 0 ;;
+  all)    install_portable codex; install_portable kimi; exit 0 ;;
   claude) : ;;
-  *) err "Unknown target: ${TARGET}. Use claude, codex, kimi or all."; exit 1 ;;
+  *) err "Unknown target: ${TARGET}. Use claude, codex, kimi, agents or all."; exit 1 ;;
 esac
 
 # ─── Check dependencies ───────────────────────────────────────────────────────

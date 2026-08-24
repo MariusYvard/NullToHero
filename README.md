@@ -133,37 +133,65 @@ NullToHero is a Claude Code plugin and a marketplace in one repository. The mark
 /plugin install null-to-hero@null-to-hero-marketplace
 ```
 
-### Other agents: Codex and Kimi Code
+### Other agents
 
-The four skills also run on OpenAI Codex and on Kimi Code. Both read the
-[Agent Skills](https://agentskills.io/specification) format, so the same source
-serves all three hosts; `null-to-hero/tools/build-dist.mjs` generates each
-package into `dist/`.
+The four skills also run outside Claude Code. They are written in the
+[Agent Skills](https://agentskills.io/specification) format, which around forty
+products now read, so one source serves every host;
+`null-to-hero/tools/build-dist.mjs` generates each package into `dist/`.
 
 ```
 git clone https://github.com/MariusYvard/NullToHero.git
 cd NullToHero
-bash install.sh --target codex     # or --target kimi, or --target all
+bash install.sh --target codex     # or kimi, agents, or all
 ```
 
 On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`.
 
-Codex gets `~/.agents/skills` and `~/.codex/agents`. Kimi Code gets
-`~/.kimi-code/skills` and `~/.kimi-code/agents`, and finds its fifteen
-sub-agents without any launch flag. The skills install as `nth-seo`,
-`nth-siteasy`, `nth-audit` and `nth-cms`, because a skills directory is
-shared with every other pack on the machine and `audit` is a name someone else
-will claim. The deterministic tools and the asset library are read from the
-clone, so keep it where it is.
+Three packages, because two hosts earn a bespoke one and everybody else shares
+the third.
+
+| Package | For | Installs into | Sub-agents |
+|---|---|---|---|
+| `codex` | OpenAI Codex | `~/.agents/skills` and `~/.codex/agents` | 15, as TOML agent files |
+| `kimi` | Kimi Code | `~/.kimi-code/skills` and `~/.kimi-code/agents` | 15, found without a launch flag |
+| `agents` | every other host that reads the standard | `~/.agents/skills` | none: the standard defines none |
+
+The `agents` package is the answer to "what about Cursor". Those hosts differ
+only in the directory they read, and they all read the shared one:
+
+| Host | Reads from | Source |
+|---|---|---|
+| Cursor | `.cursor/skills`, `.agents/skills`, also `.claude/skills` | [cursor.com/docs/skills](https://cursor.com/docs/skills) |
+| GitHub Copilot, VS Code | `.github/skills`, `.claude/skills`, `.agents/skills` | [docs.github.com](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) |
+| Gemini CLI | `.gemini/skills` or `.agents/skills`, the latter winning | [geminicli.com](https://geminicli.com/docs/cli/skills/) |
+| opencode | `.opencode/skills`, `.claude/skills`, `.agents/skills` | [opencode.ai](https://opencode.ai/docs/skills/) |
+
+Amp, Goose, Roo Code, Factory Droid, Kiro, Junie, Letta, OpenHands and the rest
+of the [standard's client list](https://agentskills.io/clients) read the same
+file; check your host's page for the directory it prefers.
+
+`codex` and `agents` land in the same directory, so they exclude one another and
+the installer refuses rather than overwriting. Pick `codex` if you want the
+fifteen sub-agents; pick `agents` for anything else.
+
+The skills install as `nth-seo`, `nth-siteasy`, `nth-audit` and `nth-cms`,
+because a skills directory is shared with every other pack on the machine and
+`audit` is a name someone else will claim. The deterministic tools and the asset
+library are read from the clone, so keep it where it is.
 
 Claude Code is unaffected by any of this. It keeps loading `null-to-hero/`
 directly, the prose keeps naming Claude's tools, and the build substitutes them
 only in the generated packages. `tests/portability.mjs` fails if that stops
 being true.
 
-Both hosts were installed and run against these packages on 2026-08-19, Codex
-`0.148.0` and Kimi Code `0.37.2`. `dist/VERIFY.md` records what that run showed;
-`bash tests/verify-hosts.sh` reproduces it in about three minutes.
+Each package was installed and read by a running host, never by a specification
+alone: Codex `0.148.0` and Kimi Code `0.37.2` on 2026-08-19, opencode `1.18.21`
+on 2026-08-23. `dist/VERIFY.md` records what those runs showed, including the
+part that disappoints: opencode loaded two deliberately invalid skills without
+complaint, so a host accepting the package proves it is discovered and says
+nothing about whether it conforms. That is held by `tests/portability.mjs`
+instead. `bash tests/verify-hosts.sh` reproduces the first two runs.
 
 ### Updating
 

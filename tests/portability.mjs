@@ -15,7 +15,9 @@ import { fileURLToPath } from "node:url";
 const REPO = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const SRC = path.join(REPO, "null-to-hero");
 const DIST = path.join(REPO, "dist");
-const HOSTS = ["codex", "kimi"];
+const HOSTS = ["codex", "kimi", "agents"];
+// La colonne de prose-tokens.csv qui gouverne chaque paquet.
+const COLUMN = { codex: "Codex", kimi: "Kimi Code", agents: "Agent Skills" };
 const SKILLS = ["seo", "siteasy", "audit", "cms"];
 
 // agentskills.io/specification
@@ -199,7 +201,7 @@ section("5b. every Claude tool name is substituted in dist/");
 {
   const tokens = readCsv(path.join(SRC, "tools/data/prose-tokens.csv"));
   for (const host of HOSTS) {
-    const column = host === "codex" ? "Codex" : "Kimi Code";
+    const column = COLUMN[host];
     const leftovers = [];
     for (const f of [...walk(path.join(DIST, host, "skills"), ".md"), ...walk(path.join(DIST, host, "agents"), ".md")]) {
       const text = fs.readFileSync(f, "utf8");
@@ -213,6 +215,48 @@ section("5b. every Claude tool name is substituted in dist/");
       ? fail(`${host}: ${leftovers.length} un-substituted token(s), first ${leftovers[0]}`)
       : pass(`${host}: no Claude-only tool name survives`);
   }
+}
+
+// ─── 5c. the neutral package names no host ───────────────────────────────────
+
+// POURQUOI CE GARDE EXISTE, ET POURQUOI IL NE PEUT PAS ÊTRE DÉLÉGUÉ
+// -----------------------------------------------------------------
+// Mesuré sur opencode 1.18.21 : il charge une compétence dont le nom ne
+// correspond pas à son dossier, et une description de 1200 caractères alors que
+// sa documentation annonce 1 à 1024. Un hôte permissif ne dit donc pas si le
+// paquet est conforme, seulement s'il est découvert. La conformité se tient
+// ici, ou nulle part.
+section("5c. the neutral package is neutral");
+{
+  // Ce qui doit disparaître est ce que la table des jetons promet de
+  // substituer. "Codex" n'y est pas : quatre références de `siteasy` le citent
+  // en exemple d'un harnais qui génère des images nativement, et cet exemple
+  // est écrit dans la source que Claude Code lit. Le retirer du paquet neutre
+  // demanderait de réécrire la source, donc de changer ce que Claude lit, pour
+  // un gain cosmétique sur un autre hôte. L'exemple reste, et il est nommé ici
+  // plutôt que découvert.
+  const brands = ["Claude Code", "Kimi Code", "spawn_agent", "FetchURL", "~/.codex", "~/.kimi-code"];
+  const CODEX_AS_EXAMPLE = ["craft.md", "critique.md", "live.md", "shape.md"];
+  const offenders = [];
+  for (const f of walk(path.join(DIST, "agents", "skills"), ".md")) {
+    const text = fs.readFileSync(f, "utf8");
+    for (const b of brands) if (text.includes(b)) offenders.push(`${path.relative(DIST, f)} (${b})`);
+    if (text.includes("Codex") && !CODEX_AS_EXAMPLE.includes(path.basename(f))) {
+      offenders.push(`${path.relative(DIST, f)} (Codex, outside the four files that cite it as an example)`);
+    }
+  }
+  offenders.length
+    ? fail(`${offenders.length} host name(s) survive in the neutral package, first ${offenders[0]}`)
+    : pass(`no host brand survives in dist/agents/skills`);
+
+  fs.existsSync(path.join(DIST, "agents", "agents"))
+    ? fail("dist/agents ships a sub-agent directory the standard does not define")
+    : pass("dist/agents ships skills only, as the standard defines");
+
+  const note = fs.readFileSync(path.join(DIST, "agents", "skills", "nth-audit", "SKILL.md"), "utf8");
+  /no sub-agents/.test(note)
+    ? pass("the host note says the sub-agents are absent")
+    : fail("the host note does not say the sub-agents are absent");
 }
 
 // ─── 6. the fifteen sub-agents round-trip to both formats ────────────────────

@@ -13,6 +13,12 @@
       "skills": 4,
       "agents": 15,
       "skillsDir": "~/.kimi-code/skills"
+    },
+    {
+      "host": "agents",
+      "skills": 4,
+      "agents": 0,
+      "skillsDir": "~/.agents/skills"
     }
   ]
 }

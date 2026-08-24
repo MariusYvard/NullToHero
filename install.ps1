@@ -1,8 +1,8 @@
 # NullToHero — Manual installer for Windows (PowerShell)
-# Usage: powershell -ExecutionPolicy Bypass -File install.ps1 [-Target claude|codex|kimi|all]
+# Usage: powershell -ExecutionPolicy Bypass -File install.ps1 [-Target claude|codex|kimi|agents|all]
 # Requires: Claude Code CLI, Git
 
-param([ValidateSet("claude","codex","kimi","all")][string]$Target = "claude")
+param([ValidateSet("claude","codex","kimi","agents","all")][string]$Target = "claude")
 
 $ErrorActionPreference = "Stop"
 
@@ -18,12 +18,20 @@ function Err   { param($msg) Write-Host "[ERROR] $msg" -ForegroundColor Red; exi
 
 # ─── Portable targets: Codex and Kimi ─────────────────────────────────────────
 #
-#   -Target codex   copies dist\codex into %USERPROFILE%\.agents\skills
-#   -Target kimi    copies dist\kimi  into %USERPROFILE%\.kimi\skills
-#   -Target all     both
+#   -Target codex   copies dist\codex  into %USERPROFILE%\.agents\skills
+#   -Target kimi    copies dist\kimi   into %USERPROFILE%\.kimi-code\skills
+#   -Target agents  copies dist\agents into %USERPROFILE%\.agents\skills
+#   -Target all     codex and kimi
 #
-# The two directories are kept apart because Codex needs the short descriptions
-# and Kimi carries the long ones; one shared copy would have to lose one.
+# The Codex and Kimi directories are kept apart because Codex needs the short
+# descriptions and Kimi carries the long ones; one shared copy would have to
+# lose one.
+#
+# `agents` is the package for every other host that reads the Agent Skills
+# format: Cursor, GitHub Copilot, VS Code, Gemini CLI, opencode and the rest. It
+# carries no sub-agents, because the standard defines none. It lands in the same
+# directory as `codex`, so the two exclude one another and the installer refuses
+# rather than overwriting.
 
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 $NTH_ROOT_ABS = Join-Path $SCRIPT_DIR "null-to-hero"
@@ -39,7 +47,10 @@ function Install-Portable {
         Err "This script must run from a NullToHero checkout; $NTH_ROOT_ABS is missing."
     }
 
-    $skillsDir = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi\skills" }
+    # `.kimi-code`, pas `.kimi` : c'est le dossier que le lancement observé du
+    # 19 août 2026 a montré, et celui que build-dist.mjs déclare. Ce script
+    # écrivait ailleurs, donc son installation Kimi n'était jamais lue.
+    $skillsDir = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi-code\skills" }
                  else { Join-Path $env:USERPROFILE ".agents\skills" }
     New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
 
@@ -48,6 +59,13 @@ function Install-Portable {
         if ((Test-Path $dest) -and -not (Test-Path (Join-Path $dest ".nth-installed"))) {
             Warn "Skipping $dest : it exists and was not installed by NullToHero."
             continue
+        }
+        # `codex` et `agents` visent le même dossier : refuser plutôt que
+        # d'écraser l'un par l'autre en silence.
+        $skillFile = Join-Path $dest "SKILL.md"
+        if ((Test-Path $skillFile) -and -not (Select-String -Path $skillFile -Pattern "^  host: $HostName$" -Quiet)) {
+            $other = (Select-String -Path $skillFile -Pattern "^  host: (.+)$").Matches[0].Groups[1].Value
+            Err "$dest holds the $other package. It and $HostName share this directory. Remove .agents\skills\nth-* first, or install the other target."
         }
         if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
         Copy-Item $skill.FullName $dest -Recurse
@@ -65,24 +83,25 @@ function Install-Portable {
         Ok "$($skill.Name) -> $dest"
     }
 
-    $agentsDest = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi\agents" }
-                  else { Join-Path $env:USERPROFILE ".codex\agents" }
-    New-Item -ItemType Directory -Path $agentsDest -Force | Out-Null
-    Copy-Item (Join-Path $src "agents\*") $agentsDest -Recurse -Force
-    Ok "sub-agents -> $agentsDest"
-
-    if ($HostName -eq "kimi") {
-        Warn "Kimi loads sub-agents from an agent file, not from a directory scan."
-        Warn "Start it with: kimi --agent-file $agentsDest\null-to-hero.yaml"
+    # Le paquet neutre n'a pas de sous-agents : le standard n'en définit pas.
+    if (Test-Path (Join-Path $src "agents")) {
+        $agentsDest = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi-code\agents" }
+                      else { Join-Path $env:USERPROFILE ".codex\agents" }
+        New-Item -ItemType Directory -Path $agentsDest -Force | Out-Null
+        Copy-Item (Join-Path $src "agents\*") $agentsDest -Recurse -Force
+        Ok "sub-agents -> $agentsDest"
+    } else {
+        Log "No sub-agents in this package: the Agent Skills standard defines none."
     }
     Log "Read dist\VERIFY.md: three claims about these hosts come from their"
     Log "documentation and have never been observed running."
 }
 
 switch ($Target) {
-    "codex" { Install-Portable "codex"; exit 0 }
-    "kimi"  { Install-Portable "kimi";  exit 0 }
-    "all"   { Install-Portable "codex"; Install-Portable "kimi"; exit 0 }
+    "codex"  { Install-Portable "codex"; exit 0 }
+    "kimi"   { Install-Portable "kimi";  exit 0 }
+    "agents" { Install-Portable "agents"; exit 0 }
+    "all"    { Install-Portable "codex"; Install-Portable "kimi"; exit 0 }
 }
 
 # ─── Check dependencies ───────────────────────────────────────────────────────

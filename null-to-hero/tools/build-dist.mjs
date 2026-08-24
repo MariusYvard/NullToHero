@@ -98,6 +98,29 @@ const HOSTS = {
     skillsDir: "~/.kimi-code/skills",
     agentsDir: "~/.kimi-code/agents",
   },
+  // UNE CIBLE NEUTRE PLUTÔT QU'UN GÉNÉRATEUR PAR HÔTE
+  // --------------------------------------------------
+  // Une quarantaine de produits lisent aujourd'hui le format Agent Skills, et
+  // ils convergent sur le même dossier : `.agents/skills/<nom>/SKILL.md`, en
+  // dépôt comme au foyer. Cursor, GitHub Copilot, VS Code, Gemini CLI et
+  // opencode le documentent chacun de leur côté, avec la même disposition. Un
+  // générateur par produit serait quarante copies d'une seule transformation.
+  //
+  // Ce paquet-ci ne nomme donc aucun hôte. Il ne porte que les deux champs que
+  // le standard exige, et sa prose parle de capacités là où celle de Claude
+  // nomme des outils.
+  //
+  // Il ne porte pas les quinze sous-agents : le standard couvre les
+  // compétences et rien d'autre, et il n'existe pas de format commun pour un
+  // sous-agent. `agentsDir` à null est ce qui l'exprime, et la note d'hôte le
+  // dit au lecteur au lieu de le laisser découvrir un dossier manquant.
+  agents: {
+    label: "Agent Skills (open standard)",
+    column: "Agent Skills",
+    invocation: name => `\`${name}\`, or by asking for it by name`,
+    skillsDir: "~/.agents/skills",
+    agentsDir: null,
+  },
 };
 
 // Kimi Code reads these from a sub-agent's frontmatter and enforces them twice:
@@ -183,6 +206,10 @@ function hostNote(host, skillName, sourceSkill) {
       ? `Tools named below are this host's: ${named.join(", ")}.`
       : `This host does not publish tool names to a skill. Where the text names a tool, read it as the capability: ${HOST_TOOLS.map(r => r.Capability).join(", ")}.`,
     "",
+    ...(h.agentsDir ? [] : [
+      "This package carries skills and no sub-agents: the Agent Skills standard covers skills alone, and there is no common format for a sub-agent. Where the text below asks for delegation, run that dimension yourself in this session. The judgement is the same; what is lost is the parallelism and the isolated context each dimension would otherwise get.",
+      "",
+    ]),
   ].join("\n");
 }
 
@@ -288,7 +315,10 @@ function copyTree(from, to, transform) {
 }
 
 function buildHost(host, out) {
-  const agents = agentSources(host);
+  // Un hôte sans dossier de sous-agents n'en lit aucun : les transposer quand
+  // même produirait un dossier que rien n'installe, et la trousse mentirait
+  // sur ce qu'elle livre.
+  const agents = HOSTS[host].agentsDir ? agentSources(host) : [];
 
   for (const skill of SKILLS) {
     copyTree(path.join(ROOT, "skills", skill), path.join(out, "skills", PREFIX + skill),
@@ -300,11 +330,13 @@ function buildHost(host, out) {
       });
   }
 
-  const agentsOut = path.join(out, "agents");
-  fs.mkdirSync(agentsOut, { recursive: true });
-  for (const a of agents) {
-    const [name, render] = host === "codex" ? [`${a.name}.toml`, codexAgent] : [`${a.name}.md`, kimiAgent];
-    fs.writeFileSync(path.join(agentsOut, name), render(a));
+  if (agents.length) {
+    const agentsOut = path.join(out, "agents");
+    fs.mkdirSync(agentsOut, { recursive: true });
+    for (const a of agents) {
+      const [name, render] = host === "codex" ? [`${a.name}.toml`, codexAgent] : [`${a.name}.md`, kimiAgent];
+      fs.writeFileSync(path.join(agentsOut, name), render(a));
+    }
   }
 
   fs.writeFileSync(path.join(out, "README.md"), hostReadme(host, agents.length));
@@ -324,38 +356,68 @@ Generated package, version ${VERSION}. Do not edit these files. Edit
 bash install.sh --target ${host}
 \`\`\`
 
-The installer copies \`skills/\` into \`${h.skillsDir}\`, copies \`agents/\` into
-\`${h.agentsDir}\`, and substitutes \`\${NTH_ROOT}\` with the absolute path of this
+The installer copies \`skills/\` into \`${h.skillsDir}\`, ${h.agentsDir
+  ? `copies \`agents/\` into\n\`${h.agentsDir}\`, and substitutes`
+  : `and substitutes`} \`\${NTH_ROOT}\` with the absolute path of this
 checkout. The deterministic tools under \`null-to-hero/tools/\` and the asset
 library are read from the checkout, not copied, so keep it where it is.
 
 ## What is here
 
-${SKILLS.length} skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`) and ${agentCount} read-only sub-agents.
+${SKILLS.length} skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`)${h.agentsDir
+  ? ` and ${agentCount} read-only sub-agents.`
+  : ` and no sub-agents: the standard covers skills alone.`}
 
 The \`nth-\` prefix exists because a skills directory is shared with every other
 skill pack on the machine, and \`audit\` and \`inspect\` are names a third party
 will claim sooner or later.
-${host === "codex" ? `
+${{
+  codex: `
 ## Concurrency
 
 \`/${PREFIX}audit full\` dispatches fifteen sub-agents. Codex bounds how many run at
 once with \`agents.max_concurrent_threads_per_session\` in \`~/.codex/config.toml\`.
 The default is not documented; raise it if the audit feels serialised.
-` : `
+`,
+  kimi: `
 ## Tool names
 
 Kimi Code's tool names are almost Claude Code's. Two differ, and the generated
 text already uses Kimi's: \`FetchURL\` where Claude says \`WebFetch\`, and \`Agent\`
 where Claude says \`Task\`.
-`}`;
+`,
+  agents: `
+## Which hosts read this
+
+Every product that implements the Agent Skills format. They differ only in the
+directory, and most read more than one. \`~/.agents/skills\` is the one they share,
+which is why the installer writes there.
+
+| Host | Reads from | Source |
+|---|---|---|
+| Cursor | \`.cursor/skills\`, \`.agents/skills\`, also \`.claude/skills\` | cursor.com/docs/skills |
+| GitHub Copilot, VS Code | \`.github/skills\`, \`.claude/skills\`, \`.agents/skills\`; \`~/.copilot/skills\` or \`~/.agents/skills\` | docs.github.com/en/copilot/concepts/agents/about-agent-skills |
+| Gemini CLI | \`.gemini/skills\` or \`.agents/skills\`; \`~/.gemini/skills\` or \`~/.agents/skills\` | geminicli.com/docs/cli/skills |
+| opencode | \`.opencode/skills\`, \`.claude/skills\`, \`.agents/skills\`, and the same three under \`~\` | opencode.ai/docs/skills |
+
+Others on the standard's own client list (Amp, Goose, Roo Code, Factory Droid,
+Kiro, Junie, Letta, Trae, OpenHands and more) read the same file. Check your
+host's own page for the directory it prefers, then copy \`skills/\` there.
+
+## What this package cannot do
+
+It carries no sub-agents. \`/${PREFIX}audit full\` names fifteen dimensions and, on
+Claude Code, runs each in its own context in parallel. Here it names them and you
+run them in one session. The checklists are identical; the isolation is not.
+`,
+}[host]}`;
 }
 
 function verifyDoc(results) {
   return `# What was observed, and what is not covered
 
-Nothing here rests on reading a specification alone. Both hosts were installed
-and run against the generated packages; \`tests/verify-hosts.sh\` reproduces it.
+Nothing here rests on reading a specification alone. Each package was installed
+and read by a running host; \`tests/verify-hosts.sh\` reproduces the first two.
 
 ## Observed on a running host, 2026-08-19
 
@@ -385,6 +447,39 @@ characters when that window is unknown. There is room.
 Kimi Code's read-only allowlist is intersected with what the session actually
 offers: \`ReadMediaFile\` and \`WebSearch\` are declared in the frontmatter and did
 not appear in the request. The read-only contract holds either way.
+
+## Observed on a running host, 2026-08-23: the neutral package
+
+opencode \`1.18.21\`, not logged in. \`opencode debug skill\` prints what the loader
+actually holds, which is the same class of evidence as above: the loader's own
+answer, not a claim about it.
+
+| What | How it was shown |
+|---|---|
+| \`dist/agents\` is discovered from \`~/.agents/skills\` | \`nth-cms\` appears in \`opencode debug skill\` with \`location: ~/.agents/skills/nth-cms/SKILL.md\` |
+| The Claude-compatible path is real too | the same run lists eight skills from \`~/.claude/skills\`, which is how Cursor, Copilot and opencode all document reading \`.claude/skills\` |
+
+The negative control did not do what a negative control should, and that is the
+finding worth writing down. Two deliberately invalid skills were installed
+beside the good one: a folder \`nth-mismatch\` whose frontmatter says
+\`name: nth-other\`, and a folder whose description runs to 1200 characters.
+opencode loaded **both**, the first under the name its frontmatter claims rather
+than its folder's, the second with its 1200 characters intact, although
+opencode's own documentation states 1 to 64 for the name, matching the
+directory, and 1 to 1024 for the description.
+
+So a host accepting this package proves the package is *discovered*. It proves
+nothing about conformance, because this loader does not check. Conformance is
+held by \`tests/portability.mjs\` section 2, which fails on exactly the two files
+opencode accepted.
+
+## Which hosts the neutral package was NOT run against
+
+Cursor, GitHub Copilot, VS Code, Gemini CLI, Amp, Goose, Roo Code, Factory
+Droid, Kiro and the rest of the standard's client list. Their directories are
+taken from their own documentation, cited in \`dist/agents/README.md\`, and the
+format they read is the one opencode read. Neither of those is the same as
+having watched them do it.
 
 ## Not covered
 
