@@ -1,5 +1,5 @@
 Id,Family,Severity,Title,Source
-CMS-01,config,error,public_folder is missing so every image URL points at the repository path,decap-cms-core selectMediaFilePath defaults public_folder to media_folder
+CMS-01,config,error,public_folder is missing or not root-relative so image URLs point at the repository path or at the page's own directory,decap-cms-core selectMediaFilePath defaults public_folder to media_folder
 CMS-02,bridge,error,a collection folder sits outside the bridge allow-list so every save is refused,bridge.mjs checkPath
 CMS-03,bridge,error,a file collection entry sits outside the bridge allow-list,bridge.mjs checkPath
 CMS-04,bridge,error,media_folder sits outside the bridge allow-list so no upload can land,bridge.mjs checkPath
@@ -24,7 +24,7 @@ CMS-22,security,error,the relaxed content security policy is not scoped to /admi
 CMS-23,architecture,error,cms-policy.json is no longer what CONTENT.md compiles to,cms-scaffold.mjs policyFrom
 CMS-24,architecture,error,the publish workflow is missing or watches another branch,publish-content.yml on push branches
 CMS-25,architecture,error,the vendored bundle does not match the version ATTRIBUTION.md declares,NullToHero v5 architecture section 6
-CMS-26,architecture,error,the admin stylesheet is missing or the admin page does not load it,theme_css.py --format decap
+CMS-26,architecture,error,a file the admin page adds is missing or unloaded so the editor wears Decap's colours or never registers its backend,theme_css.py --format decap and nth-backend.js registerBackend nth
 CMS-27,config,warning,a declared locale is not one Decap ships so the editor stays in English,decap-cms-locales 3.2.0
 CMS-28,architecture,error,the declared publish mode and the workflow triggers disagree,cms-scaffold.mjs workflowFor
 CMS-29,architecture,error,the build never calls nth-content.mjs so the pages ship with their tokens,cms-scaffold.mjs artefacts nth-content.mjs

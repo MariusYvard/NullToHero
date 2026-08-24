@@ -183,24 +183,38 @@ test("un projet fraîchement écrit ne dérive de rien, sur n'importe quel syst�
     "un artefact compilé porte des CRLF");
 });
 
-/* ── ce qu'aucun des deux ne voit ─────────────────────────────────────────── */
+/* ── les deux trous, comblés ──────────────────────────────────────────────── */
 
-// CE TEST DOCUMENTE DES TROUS, IL N'EN CÉLÈBRE AUCUN
-// -------------------------------------------------
-// Les deux cas ci-dessous cassent l'éditeur et passent les vingt-neuf contrôles
-// sans un mot. Les écrire ici plutôt que les taire évite que quelqu'un lise le
-// silence du linter comme une garantie. Le jour où un contrôle les couvre, ce
-// test échoue, et c'est le signal qu'il faut le supprimer.
-test("connus et non couverts : nth-backend.js absent, public_folder mal formé", () => {
-  const sans = project();
-  fs.rmSync(join(sans, "admin/nth-backend.js"));
-  assert.deepEqual(findings(sans), [],
-    "un contrôle couvre maintenant nth-backend.js absent : retirer ce cas");
+// Ces deux cas cassaient l'éditeur en passant les vingt-neuf contrôles sans un
+// mot. Ils étaient écrits ici comme trous connus, avec pour consigne que le test
+// échoue le jour où un contrôle les couvrirait. Il a échoué le 24 août 2026, et
+// voici ce qui l'a remplacé. Aucun contrôle neuf : chacun des deux est un cas de
+// plus dans le contrôle dont c'était déjà le sujet, donc le compte reste à 29.
+test("la moitié navigateur absente est vue, sans elle l'éditeur reste blanc", () => {
+  const root = project();
+  fs.rmSync(join(root, "admin/nth-backend.js"));
+  only(root, "CMS-26");
+});
 
-  const mauvais = project();
-  edit(mauvais, "admin/config.yml", t => t.replace("public_folder: /uploads", "public_folder: static/uploads"));
-  assert.deepEqual(findings(mauvais), [],
-    "un contrôle couvre maintenant un public_folder non racine : retirer ce cas");
+test("une page d'administration qui ne charge pas la moitié navigateur est vue", () => {
+  const root = project();
+  edit(root, "admin/index.html", t => t.replace(/<script[^>]*nth-backend\.js[^>]*>\s*<\/script>/, ""));
+  only(root, "CMS-26");
+});
+
+// Posé mais pas racine, l'effet est pire qu'absent : l'image manque sur les
+// pages servies depuis un sous-dossier et s'affiche à la racine, donc le défaut
+// se cache de celui qui vérifie depuis l'accueil.
+test("un dossier public qui n'est pas racine est vu, pas seulement l'absent", () => {
+  const root = project();
+  edit(root, "admin/config.yml", t => t.replace("public_folder: /uploads", "public_folder: static/uploads"));
+  only(root, "CMS-01");
+});
+
+test("un dossier public racine ne déclenche rien", () => {
+  const root = project();
+  edit(root, "admin/config.yml", t => t.replace("public_folder: /uploads", "public_folder: /media"));
+  assert.deepEqual(findings(root), []);
 });
 
 // Le linter lit le dépôt. Un dépôt parfait et un pont éteint se ressemblent

@@ -105,6 +105,18 @@ and the score was incidental to it. The document says so in place.
 
 ### Fixed
 
+- Two ways to break an entrusted editor that passed all 29 CMS checks in
+  silence. `admin/nth-backend.js` missing, or the admin page not loading it:
+  Decap starts, finds no backend under the name `config.yml` asks for, and the
+  page stays blank after the login screen. And a `public_folder` that is set but
+  not root-relative: the image URL then resolves against the page's own
+  directory, so a photo shows on the home page and vanishes on every page served
+  from a subfolder, which hides the defect from whoever checks from the top.
+  Neither is a new check: each is a case added to the check whose subject it
+  already was, CMS-26 and CMS-01, so the count stays at 29. They were written
+  down as known holes in `tests/cms-lint.mjs` with the instruction that the test
+  fail on the day something covered them. It failed, and that is what replaced
+  it.
 - A file reserved to a role was restricted in the editor and open in the bridge.
   `policyFrom` dropped the exact rule of a file already covered by its folder's
   rule, and the declared role went with it; `checkPath` and `allowed` took the

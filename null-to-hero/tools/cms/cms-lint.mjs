@@ -61,6 +61,14 @@ export const CHECKS = {
     if (config.media_folder && !config.public_folder) {
       add("media_folder", `public_folder is not set, so images resolve to ${config.media_folder}/… instead of a URL`);
     }
+    // Posé mais pas racine, l'effet est le même que l'absence : Decap écrit la
+    // valeur telle quelle dans le champ, et `static/uploads/photo.jpg` sur une
+    // page servie depuis `/services/` va chercher `/services/static/uploads/`.
+    // L'image manque sur cette page-là et nulle part ailleurs, donc personne ne
+    // le voit avant le client.
+    if (config.public_folder && !String(config.public_folder).startsWith("/")) {
+      add("public_folder", `"${config.public_folder}" is not root-relative, so an image URL resolves against the page's own directory`);
+    }
   },
 
   "CMS-02": ({ config, rules }, add) => {
@@ -327,6 +335,16 @@ export const CHECKS = {
     if (adminHtml === null) return;   // CMS-25 already said so
     if (!files.has("admin/theme.css")) add("admin/theme.css", "the file is missing, so the editor wears Decap's colours");
     if (!/href="\.\/theme\.css"/.test(adminHtml)) add("admin/index.html", "does not load ./theme.css");
+    // La moitié navigateur enregistre le backend `nth`. Sans elle, Decap charge,
+    // ne trouve pas le backend que config.yml réclame, et la page reste vide
+    // après l'écran de connexion. Le lot vendu est intact, donc CMS-25 ne voit
+    // rien : c'est le fichier que NullToHero ajoute qui manque, pas le sien.
+    if (!files.has("admin/nth-backend.js")) {
+      add("admin/nth-backend.js", "the file is missing, so nothing registers the `nth` backend and the editor stays blank");
+    }
+    if (!/src="\.\/nth-backend\.js"/.test(adminHtml)) {
+      add("admin/index.html", "does not load ./nth-backend.js, so the backend config.yml names is never registered");
+    }
   },
 
   // A locale Decap does not ship is not an error it reports: the editor renders
