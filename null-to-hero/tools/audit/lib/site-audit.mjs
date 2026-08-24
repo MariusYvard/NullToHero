@@ -177,9 +177,14 @@ export function buildSiteAudit({ fetchResult, checks, mode = "checks" }) {
       // la bascule, gardé pour que le déploiement de 6.4 puisse annoncer l'écart.
       coverage: det.coverage, measured: det.measured, total: det.total,
       provisionalScore: det.provisionalScore,
-      // What the rules engine reached, kept out of the arithmetic above and
-      // reported in its own right. An empty run says so rather than looking
-      // like a clean one.
+      // Le score doit pouvoir se reconstituer depuis les nombres posés à côté
+      // de lui. `fails` et `warns` sont les contrôles curés à 15 et 7 ; ces
+      // trois-ci sont les règles du moteur à 4 et 2, plafonnées à 30. Sans eux,
+      // un rapport annoncerait 89 avec zéro échec et un avertissement, ce qui
+      // fait 93 et pas 89.
+      ruleFails: det.ruleFails, ruleWarns: det.ruleWarns, rulePenalty: det.rulePenalty,
+      // What the rules engine reached, reported in its own right. An empty run
+      // says so rather than looking like a clean one.
       rules: ruleSummary(checks),
     },
     inputs: { hashes: inputHashes(fetchResult), dimensions: DIMENSION_INPUTS },

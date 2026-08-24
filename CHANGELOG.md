@@ -43,10 +43,26 @@ current score is not lenient there, it is blind. Pricing at 4 and 2 puts them at
 floor's spread where it existed and creates spread where there was none, which
 is what a score owes.
 
-**The formula is not changed.** It moves the number every audit reports to a
-client, and the eval baseline and the architecture review's own numbers move
-with it, so it is a decision to take deliberately rather than a measurement to
-apply. `tools/audit/score-lab.mjs` carries both corpora in its header.
+**The formula is changed**, deliberately and on Marius's call rather than as a
+side effect of a measurement. A rules-engine failure costs 4 and a warning 2,
+against 15 and 7 for a curated check, and the rules contribution is capped at 30
+points. The cap never bound on any of the 39 measured pages; it exists so a page
+tripping twenty fine-grained rules descends instead of collapsing, which was the
+defect of pricing them at 15.
+
+What deliberately did **not** move: the denominator, the coverage figure, and the
+`fails` and `warns` counts, which still mean curated checks. `ruleFails`,
+`ruleWarns` and `rulePenalty` are reported beside them and are in the JSON
+schema, so the score can be reconstructed from the numbers printed next to it.
+Without them a report would have said 89 with zero failures and one warning,
+which is 93.
+
+Two ripples, both followed rather than papered over. The per-dimension scores
+take the same penalty where `rules-bridge.mjs` filed each rule, so the headline
+and the dimensions cannot disagree. And the architecture review's §5.2 transcript
+used `--min-score 90` on a fixture whose floor moved from 93 to 89; the threshold
+drops to 80 there, because that transcript demonstrates the date being ignored
+and the score was incidental to it. The document says so in place.
 
 ### Added
 

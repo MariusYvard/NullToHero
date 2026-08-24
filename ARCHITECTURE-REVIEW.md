@@ -71,7 +71,7 @@ cette liste en déclarait la moitié :
 - douze reproductions chiffrées, rejouées et non relues, couvrant les transcripts
   de 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7 et 5.8 (codes de sortie compris) ainsi que
   les mesures du §6.4 ;
-- l'existence de chacun des 215 emplacements cités par le document, et de ceux de
+- l'existence de chacun des 216 emplacements cités par le document, et de ceux de
   son artefact compagnon par la même passe, dont 122 portent un numéro de ligne
   dans le document (97 couples distincts), la borne
   haute de chaque ligne citée, et, quand la phrase qui porte la référence cite un
@@ -518,9 +518,16 @@ $ node -e "const j=require('/tmp/old.json'); j.generatedAt='2026-08-04T09:00:00.
    require('fs').writeFileSync('/tmp/old.json', JSON.stringify(j))"
 $ node -e "console.log(require('/tmp/old.json').generatedAt)"
 2026-08-04T09:00:00.000Z
-$ node tools/audit/gate.mjs --report /tmp/old.json --min-score 90; echo $?
+$ node tools/audit/gate.mjs --report /tmp/old.json --min-score 80; echo $?
 0
 ```
+
+Le seuil disait 90 quand ce constat a été écrit. Le plancher de cette fixture est
+passé de 93 à 89 le 24 août 2026, quand les 48 règles du moteur sont entrées dans
+le score à 4 points l'échec (`tools/audit/lib/checks.mjs`, `scoreFromChecks`). La
+démonstration porte sur la date et non sur le score, donc le seuil descend sous
+le nouveau plancher pour que ce soit bien l'âge qui décide. Le constat lui-même
+est inchangé.
 
 **vérifié.** Le rapport est daté d'une semaine avant la portée de ce document, la
 porte le passe, et rien dans sa sortie n'indique son âge. Une étape d'analyse

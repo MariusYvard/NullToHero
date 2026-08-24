@@ -524,11 +524,15 @@ try {
   const j = JSON.parse(rep.out);
   j.generatedAt = "2026-08-04T09:00:00.000Z";        // une semaine avant la portée du document
   (await import("node:fs")).writeFileSync(tmp, JSON.stringify(j));
-  const g2 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "90"]);
+  // 80 et non 90 : le plancher de cette fixture est passé de 93 à 89 quand les
+  // règles du moteur sont entrées dans le score (2026-08-24, une règle en échec
+  // à 4 points). La démonstration porte sur la date, pas sur le score, donc le
+  // seuil descend pour rester sous le plancher et laisser l'âge décider.
+  const g2 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "80"]);
   ok("5.2, code de sortie sur un rapport d'une semaine", g2.code,
-    done("P2") ? 2 : (/--min-score 90; echo \$\?\n(\d+)/.exec(s52) || [, "?"])[1]);
+    done("P2") ? 2 : (/--min-score 80; echo \$\?\n(\d+)/.exec(s52) || [, "?"])[1]);
   if (done("P2")) {
-    const g3 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "90", "--max-age-hours", "999999"]);
+    const g3 = run(["tools/audit/gate.mjs", "--report", tmp, "--min-score", "80", "--max-age-hours", "999999"]);
     ok("5.2, P2 livré : une borne relevée accepte le même rapport", g3.code, 0);
   }
   (await import("node:fs")).unlinkSync(tmp);

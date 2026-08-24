@@ -1876,13 +1876,40 @@ export function runChecks({ rawHtml = "", renderedHtml = null, robotsTxt = null,
 
 // Deterministic health floor computed from the objective checks only. This is a
 // SUBSET of each agent's full checklist, so it is a floor, not the agent score.
+// CE QUE VAUT UNE RÈGLE DU MOTEUR, ET POURQUOI CE N'EST PAS QUINZE
+// -----------------------------------------------------------------
+// Les dix-huit contrôles sont curés à la main et gros ; les quarante-huit
+// règles du moteur sont fines et nombreuses. Leur donner le même prix mettait
+// deux sites corrects à 42 et 64 de médiane. Diviser, à l'inverse, écrasait
+// tout le corpus dans une bande de deux points : une constante, pas une note.
+//
+// Mesuré sur 39 pages de deux sites (voir l'en-tête de tools/audit/score-lab.mjs
+// pour les tableaux complets) :
+//
+//   constant-opticien, 33 pages   93 -> 79, étalement 22 conservé
+//   nth-site, 6 pages            100 -> 90, étalement 0 -> 4
+//
+// Le second corpus est celui qui a tranché : le plancher y mettait six pages à
+// 100 sur 100 sans les distinguer, pendant que le moteur y trouvait quatre
+// violations par page. Un score aveugle n'est pas un score sévère.
+//
+// Le plafond n'a mordu sur aucune des 39 pages. Il existe pour la page qui
+// déclencherait vingt règles fines : elle doit descendre, pas s'effondrer.
+const RULE_FAIL = 4, RULE_WARN = 2, RULE_CAP = 30;
+
+const rulePenaltyOf = (fails, warns) => Math.min(RULE_CAP, RULE_FAIL * fails + RULE_WARN * warns);
+
 export function scoreFromChecks(allChecks) {
   // The rules engine travels in the same array, with the same shape, because
-  // every consumer downstream already speaks it. It stays out of the floor: the
-  // floor subtracts fifteen a failure from a hundred and never divides, so
-  // forty-eight more measurements would price every site at zero. Its own count
-  // is reported beside the floor. See lib/rules-bridge.mjs.
+  // every consumer downstream already speaks it. It is priced apart rather than
+  // filtered out: `checks` stays the curated set, so coverage, the totals and
+  // the not-measured count keep the meaning they had. See lib/rules-bridge.mjs.
   const checks = allChecks.filter(c => c.source !== "rules");
+  const ruleChecks = allChecks.filter(c => c.source === "rules"
+    && c.verdict !== "NOT_MEASURED" && c.verdict !== "ADVISORY");
+  const ruleFails = ruleChecks.filter(c => c.verdict === "FAIL").length;
+  const ruleWarns = ruleChecks.filter(c => c.verdict === "WARN").length;
+  const rulePenalty = rulePenaltyOf(ruleFails, ruleWarns);
   // ADVISORY is excluded alongside NOT_MEASURED, for a different reason: the fact
   // was measured, but the standard behind it is a draft or an early-adoption feature
   // and penalising its absence would price the site against a spec that may not ship.
@@ -1903,7 +1930,7 @@ export function scoreFromChecks(allChecks) {
   const total = checks.length;
   const ran = checks.filter(c => c.verdict !== "NOT_MEASURED").length;
   const coverage = total === 0 ? 0 : ran / total;
-  let score = 100 - 15 * fails.length - 7 * warns.length;
+  let score = 100 - 15 * fails.length - 7 * warns.length - rulePenalty;
   if (score < 0) score = 0;
   if (criticalFails.length) score = Math.min(score, 49);
   // Le mécanisme : un score déduit de rien n'est pas un score. Quarante-deux
@@ -1915,12 +1942,20 @@ export function scoreFromChecks(allChecks) {
 
   const byAgent = {};
   for (const c of measured) {
-    const a = (byAgent[c.agent] ||= { fails: 0, warns: 0, score: 100, criticalFails: [] });
+    const a = (byAgent[c.agent] ||= { fails: 0, warns: 0, ruleFails: 0, ruleWarns: 0, score: 100, criticalFails: [] });
     if (c.verdict === "FAIL") { a.fails++; if (c.critical) a.criticalFails.push(c.id); }
     if (c.verdict === "WARN") a.warns++;
   }
+  // rules-bridge.mjs range chaque règle sous une dimension par sa catégorie. Un
+  // total qui descend pendant que chaque dimension reste haute n'est pas
+  // lisible : la même pénalité s'applique là où la règle a été rangée.
+  for (const c of ruleChecks) {
+    const a = (byAgent[c.agent] ||= { fails: 0, warns: 0, ruleFails: 0, ruleWarns: 0, score: 100, criticalFails: [] });
+    if (c.verdict === "FAIL") a.ruleFails++;
+    if (c.verdict === "WARN") a.ruleWarns++;
+  }
   for (const a of Object.values(byAgent)) {
-    a.score = Math.max(0, 100 - 15 * a.fails - 7 * a.warns);
+    a.score = Math.max(0, 100 - 15 * a.fails - 7 * a.warns - rulePenaltyOf(a.ruleFails, a.ruleWarns));
     if (a.criticalFails.length) a.score = Math.min(a.score, 49);
   }
   return {
@@ -1928,13 +1963,19 @@ export function scoreFromChecks(allChecks) {
     // Le score reste calculable même quand il est refusé : un appelant qui veut
     // l'écart entre l'ancien et le nouveau chiffre (le drapeau de 6.4) en a
     // besoin, et cacher le nombre empêcherait d'annoncer la bascule.
-    provisionalScore: scored ? score : Math.max(0, 100 - 15 * fails.length - 7 * warns.length),
+    provisionalScore: scored ? score : Math.max(0, 100 - 15 * fails.length - 7 * warns.length - rulePenalty),
     coverage: Number(coverage.toFixed(3)),
     measured: ran,
     scoredOn: measured.length,
     total,
     fails: fails.length,
     warns: warns.length,
+    // Comptés à part de `fails` et `warns`, qui restent les contrôles curés :
+    // un rapport qui additionne les deux perdrait la distinction que le prix
+    // différent des deux familles vient précisément d'établir.
+    ruleFails,
+    ruleWarns,
+    rulePenalty,
     notMeasured: checks.filter(c => c.verdict === "NOT_MEASURED").length,
     advisory: checks.filter(c => c.verdict === "ADVISORY").length,
     criticalFails,

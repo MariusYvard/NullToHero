@@ -144,7 +144,7 @@
     },
     "deterministic": {
       "type": "object",
-      "description": "Health floor computed purely from the objective checks. A subset of each agent's checklist, so it is a floor, not the full agent score.",
+      "description": "Health floor computed purely from the objective checks. A subset of each agent's checklist, so it is a floor, not the full agent score. score = 100 - 15*fails - 7*warns - rulePenalty, floored at 0 and capped at 49 when a critical check fails.",
       "properties": {
         "score": {
           "type": "number",
@@ -152,10 +152,26 @@
           "maximum": 100
         },
         "fails": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Curated checks that failed, priced at 15 points each."
         },
         "warns": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Curated checks that warned, priced at 7 points each."
+        },
+        "ruleFails": {
+          "type": "integer",
+          "description": "Rules-engine rules that failed, priced at 4 points each: they are finer-grained and far more numerous than a curated check."
+        },
+        "ruleWarns": {
+          "type": "integer",
+          "description": "Rules-engine rules that warned, priced at 2 points each."
+        },
+        "rulePenalty": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30,
+          "description": "min(30, 4*ruleFails + 2*ruleWarns). The cap keeps a page that trips twenty fine-grained rules descending rather than collapsing."
         },
         "notMeasured": {
           "type": "integer"
