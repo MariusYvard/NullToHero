@@ -1,0 +1,16 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>motion sweep fixture, transient collision</title>
+<style>
+  body { margin: 0; height: 300px; }
+  .a, .b { position: absolute; top: 40px; width: 220px; height: 60px; font: 16px/60px sans-serif; }
+  .a { left: 0; background: #eee; }
+  .b { left: 400px; background: #ddd; }
+  /* They never overlap at rest. Halfway through they sit on top of each other. */
+  @keyframes swapRight { 0% { transform: translateX(0) } 50% { transform: translateX(400px) } 100% { transform: translateX(0) } }
+  @keyframes swapLeft  { 0% { transform: translateX(0) } 50% { transform: translateX(-400px) } 100% { transform: translateX(0) } }
+  .a { animation: swapRight 4s linear forwards; }
+  .b { animation: swapLeft 4s linear forwards; }
+</style>
+<div class="a">first label</div>
+<div class="b">second label</div>

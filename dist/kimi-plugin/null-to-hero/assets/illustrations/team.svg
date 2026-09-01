@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Team collaboration">
+  <rect width="400" height="300" fill="#EEF2FF"/>
+  <ellipse cx="200" cy="240" rx="140" ry="16" fill="#E0E7FF"/>
+  <g>
+    <circle cx="140" cy="120" r="26" fill="#6366F1"/>
+    <path d="M100 220 a40 40 0 0 1 80 0 z" fill="#6366F1"/>
+  </g>
+  <g>
+    <circle cx="260" cy="120" r="26" fill="#818CF8"/>
+    <path d="M220 220 a40 40 0 0 1 80 0 z" fill="#818CF8"/>
+  </g>
+  <g>
+    <circle cx="200" cy="96" r="30" fill="#4338CA"/>
+    <path d="M154 210 a46 46 0 0 1 92 0 z" fill="#4338CA"/>
+  </g>
+</svg>

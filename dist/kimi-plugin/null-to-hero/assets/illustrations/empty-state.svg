@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Empty box">
+  <rect width="400" height="300" fill="#f4f6fb"/>
+  <ellipse cx="200" cy="238" rx="120" ry="18" fill="#dfe4ee"/>
+  <!-- open box back flaps -->
+  <polygon points="140,150 200,120 260,150 200,180" fill="#c3ccdd"/>
+  <!-- box body -->
+  <polygon points="140,150 140,215 200,245 200,180" fill="#9aa7c4"/>
+  <polygon points="260,150 260,215 200,245 200,180" fill="#7f8dae"/>
+  <!-- open flaps -->
+  <polygon points="140,150 200,120 168,104 108,132" fill="#d7deec"/>
+  <polygon points="260,150 200,120 232,104 292,132" fill="#cdd5e7"/>
+  <!-- floating dashed hint above -->
+  <line x1="200" y1="72" x2="200" y2="98" stroke="#6a5cff" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9"/>
+  <circle cx="200" cy="60" r="6" fill="#6a5cff"/>
+</svg>

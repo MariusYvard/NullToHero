@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bouncing ball</title>
+<style>
+  :root { --ball: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .stage { width: 60px; height: 70px; position: relative; }
+  .ball { position: absolute; top: 0; left: 18px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--ball); }
+  .shadow { position: absolute; bottom: 4px; left: 15px; width: 30px; height: 8px; border-radius: 50%;
+    background: rgba(106, 92, 255, 0.2); }
+  @media (prefers-reduced-motion: no-preference) {
+    .ball { animation: nth-bounce 0.7s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite alternate; }
+    .shadow { animation: nth-shadow 0.7s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite alternate; }
+  }
+  @keyframes nth-bounce { from { top: 0; } to { top: 42px; } }
+  @keyframes nth-shadow { from { transform: scale(0.7); opacity: 0.3; } to { transform: scale(1.1); opacity: 0.7; } }
+</style>
+</head>
+<body>
+  <div class="stage" role="status" aria-label="Loading">
+    <div class="shadow"></div><div class="ball"></div>
+  </div>
+</body>
+</html>

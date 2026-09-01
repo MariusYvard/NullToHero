@@ -485,10 +485,17 @@ own documentation, cited in \`dist/agents/README.md\`, and the format they read 
 the one opencode and Gemini CLI read. Neither of those is the same as having
 watched them do it.
 
-## Not covered
+## Kimi Work, since 2026-09-01
 
-Kimi Work. No official source establishes that it reads \`SKILL.md\` from disk, nor
-from which paths, and its installation directory holds no configuration.
+Kimi Work (the desktop app) is covered by \`dist/kimi-plugin/\`, a self-contained
+plugin: the four skills, the fifteen sub-agents and the deterministic runtime
+in one registrable directory. On 2026-09-01 the package passed the Kimi plugin
+validator with zero errors and was registered into a real Kimi Work personal
+plugin market; the registrar reported the entry healthy and recognised all
+fifteen sub-agents. What that run does not establish is how a conversation
+behaves after the install — the same gap as the model-quality paragraph below.
+
+## Not covered
 
 The Python \`kimi-cli\`. Its own README says it is being wound down in favour of
 Kimi Code, and its agent format is unrelated to what is generated here.
@@ -498,6 +505,137 @@ corpus is for, and it needs an account.
 
 Generated ${results.map(r => r.host + " (" + r.skills + " skills, " + r.agents + " sub-agents)").join(", ")}.
 `;
+}
+
+// ─── Kimi Work plugin package ────────────────────────────────────────────────
+
+// UNE QUATRIÈME CIBLE : LE BUREAU, PAS LE TERMINAL
+// ------------------------------------------------
+// Les trois paquets au-dessus visent des hôtes en ligne de commande. Kimi Work
+// (le bureau) n'installe ni skills ni agents dans des dossiers : il enregistre
+// un répertoire de plugin dans un marché personnel, via son CLI. Ce paquet est
+// ce répertoire — manifest, skills, sous-agents, runtime, icône — et setup.sh
+// y substitue ${NTH_ROOT} par le chemin du runtime embarqué, ce qui le rend
+// autonome : le checkout peut ensuite être déplacé ou supprimé.
+
+function kimiPluginManifest() {
+  const claude = JSON.parse(
+    fs.readFileSync(path.join(ROOT, ".claude-plugin/plugin.json"), "utf8"));
+  return JSON.stringify({
+    $schema: "https://catalog.msh.team/misc/kimi.plugin.schema.json",
+    name: "null-to-hero",
+    version: VERSION,
+    description: "From zero knowledge to hero website: design, SEO, whole-site audit and handover skills — 4 skills, 67 commands, 15 audit sub-agents.",
+    keywords: claude.keywords,
+    author: claude.author.name,
+    homepage: claude.homepage,
+    license: "Apache-2.0",
+    skillInstructions: [
+      "NullToHero turns Kimi into a senior web team: a designer, an SEO specialist, a whole-site reviewer and a handover expert. Four skills — nth-siteasy (design and build), nth-seo (search visibility), nth-audit (the whole site in one pass), nth-cms (hand the site to its owner) — with 67 commands and 15 audit sub-agents.",
+      "",
+      "Ask in plain language and Kimi picks the right skill: \u201cbuild a landing page for a coffee shop\u201d (nth-siteasy express), \u201cmake this page feel more premium\u201d (nth-siteasy improve), \u201cwhy is my site not on Google\u201d (nth-seo audit), \u201cis this ready to ship\u201d (nth-audit full), \u201clet the client edit their own text\u201d (nth-cms entrust).",
+      "",
+      "The deterministic runtime (Node.js tools, asset library, skill scripts) is bundled under null-to-hero/ and its paths were substituted at setup time, so the package is self-contained. Requires Node.js 20+; /nth-siteasy preview and the /nth-cms chain also need Playwright and Python 3.",
+      "",
+      "Audit and fix commands read and modify project files: confirm with the user before deleting, overwriting or deploying.",
+    ].join("\n"),
+    interface: {
+      displayName: "NullToHero",
+      shortDescription: "Design, SEO, audit and handover skills for building websites you're proud of",
+      longDescription: claude.description
+        + " The whole loop in one plugin: build, defects, SEO, a scored whole-site audit, and the handover to a non-technical owner — every finding routed to the command that fixes it.",
+      developerName: claude.author.name,
+      websiteURL: claude.homepage,
+      iconUrl: "",
+      category: "DEVELOPER",
+    },
+    skills: "./skills/",
+    agents: ["./agents/"],
+  }, null, 2) + "\n";
+}
+
+function kimiPluginReadme(agentCount) {
+  return `# NullToHero for Kimi Work
+
+Generated package, version ${VERSION}. Do not edit these files. Edit
+\`null-to-hero/\` and run \`node null-to-hero/tools/build-dist.mjs\`.
+
+This is a plugin for the Kimi Work desktop app, registered into its personal
+plugin market. It is self-contained: the four skills, the ${agentCount} sub-agents
+and the deterministic runtime ship in this one directory.
+
+## Install
+
+\`\`\`
+bash setup.sh
+kimi-daimon kimi-plugin register-personal . --json
+\`\`\`
+
+\`setup.sh\` substitutes \`\${NTH_ROOT}\` with the absolute path of the bundled
+runtime (\`null-to-hero/\`), so the package keeps working if the checkout moves
+or is deleted. It is idempotent; re-run it if you move this directory.
+
+Then open Kimi Work, the Plugins page, the Personal (「个人」) tab, and click ＋
+on NullToHero. The daemon hot-reloads active sessions: no restart.
+
+## What is here
+
+${SKILLS.length} skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`) and ${agentCount} read-only
+sub-agents, plus the deterministic tools, the asset library and the skill
+scripts under \`null-to-hero/\`.
+
+Requires Node.js 20+. \`/nth-siteasy preview\` and the \`/nth-cms\` chain also use
+Playwright and Python 3, installed on first use.
+
+## Updating
+
+Edit the source, run \`node null-to-hero/tools/build-dist.mjs\`, re-run
+\`setup.sh\` and register again. Kimi Work offers the update in the Personal tab
+when the version string changes.
+`;
+}
+
+function buildKimiPlugin(target) {
+  const out = path.join(target, "kimi-plugin");
+  fs.mkdirSync(out, { recursive: true });
+
+  // Skills and sub-agents are the Kimi Code host's own output, reused whole:
+  // same frontmatter, same tool-name substitution, same nth- prefix.
+  const tmp = path.join(target, ".kimi-plugin-tmp");
+  const kimi = buildHost("kimi", tmp);
+  for (const dir of ["skills", "agents"]) {
+    fs.cpSync(path.join(tmp, dir), path.join(out, dir), { recursive: true });
+  }
+  fs.rmSync(tmp, { recursive: true, force: true });
+
+  // The runtime the skills drive: deterministic tools, the asset library and
+  // the skill scripts. The source skills' prose stays out — nothing reads it
+  // at runtime, and dist forbids the Claude tool names it carries. The
+  // Markdown that does ship (tools and assets READMEs) is rewritten for Kimi.
+  const runtime = path.join(out, "null-to-hero");
+  const kimiText = text => rewriteBody("kimi", text);
+  copyTree(path.join(ROOT, "tools"), path.join(runtime, "tools"), kimiText);
+  // Build-time tooling stays out: the plugin never rebuilds dist, and the
+  // escaped token literal in build-dist.mjs is dist-illegal (portability §4).
+  for (const f of ["build-dist.mjs", "nth-root.mjs"]) {
+    fs.rmSync(path.join(runtime, "tools", f), { force: true });
+  }
+  fs.rmSync(path.join(runtime, "tools", "kimi-plugin"), { recursive: true, force: true });
+  copyTree(path.join(ROOT, "assets"), path.join(runtime, "assets"), kimiText);
+  for (const skill of SKILLS) {
+    const scripts = path.join(ROOT, "skills", skill, "scripts");
+    if (fs.existsSync(scripts)) {
+      copyTree(scripts, path.join(runtime, "skills", skill, "scripts"), kimiText);
+    }
+  }
+
+  for (const f of ["icon.svg", "setup.sh"]) {
+    fs.copyFileSync(path.join(ROOT, "tools", "kimi-plugin", f), path.join(out, f));
+  }
+
+  fs.writeFileSync(path.join(out, "kimi.plugin.json"), kimiPluginManifest());
+  fs.writeFileSync(path.join(out, "README.md"), kimiPluginReadme(kimi.agents));
+  return { id: "null-to-hero", dir: "kimi-plugin", skills: SKILLS.length, agents: kimi.agents, runtime: true };
 }
 
 // ─── entry point ─────────────────────────────────────────────────────────────
@@ -522,11 +660,13 @@ const target = CHECK
 if (!CHECK) fs.rmSync(target, { recursive: true, force: true });
 
 const results = Object.keys(HOSTS).map(host => buildHost(host, path.join(target, host)));
+const plugin = buildKimiPlugin(target);
 fs.writeFileSync(path.join(target, "VERIFY.md"), verifyDoc(results));
 fs.writeFileSync(path.join(target, "MANIFEST.json"), JSON.stringify({
   version: VERSION,
   generator: "null-to-hero/tools/build-dist.mjs",
   hosts: results,
+  plugin,
 }, null, 2) + "\n");
 
 if (CHECK) {
@@ -540,5 +680,6 @@ if (CHECK) {
   console.log("dist/ matches the source.");
 } else {
   for (const r of results) console.log(`${r.host}: ${r.skills} skills, ${r.agents} sub-agents`);
+  console.log(`kimi-plugin: ${plugin.skills} skills, ${plugin.agents} sub-agents, runtime bundled`);
   console.log(`written to ${target}`);
 }

@@ -1,0 +1,35 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Under maintenance">
+  <rect width="400" height="300" fill="#FEF3C7"/>
+  <ellipse cx="200" cy="252" rx="96" ry="12" fill="#000000" opacity="0.06"/>
+  <circle cx="172" cy="138" r="46" fill="#F59E0B"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(0.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(36.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(72.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(108.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(144.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(180.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(216.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(252.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(288.0 172 138)"/>
+  <rect x="166.0" y="82.0" width="12" height="12" rx="1.5" fill="#F59E0B" transform="rotate(324.0 172 138)"/>
+  <circle cx="172" cy="138" r="19.3" fill="#FEF3C7"/>
+  <circle cx="172" cy="138" r="8.3" fill="#F59E0B"/>
+
+  <circle cx="250" cy="190" r="30" fill="#D97706"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(0.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(40.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(80.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(120.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(160.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(200.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(240.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(280.0 250 190)"/>
+  <rect x="245.5" y="152.0" width="9" height="10" rx="1.5" fill="#D97706" transform="rotate(320.0 250 190)"/>
+  <circle cx="250" cy="190" r="12.6" fill="#FEF3C7"/>
+  <circle cx="250" cy="190" r="5.4" fill="#D97706"/>
+
+  <g transform="rotate(-38 150 175)">
+    <rect x="140" y="150" width="16" height="70" rx="8" fill="#57534E"/>
+    <path d="M132 150 a16 16 0 0 1 32 0 l-8 0 a8 8 0 0 0 -16 0 z" fill="#57534E"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The admin page must never be indexed, and /seo sitemap excludes it too. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Edit this site</title>
+    <link rel="stylesheet" href="./theme.css" />
+    NTH_FAVICON
+  </head>
+  <body>
+    <!--
+      The flag has to be set before the bundle runs: decap-cms calls CMS.init()
+      at load time unless it is present, and a backend registered after init is
+      never seen. nth-backend.js calls init() once it has registered.
+    -->
+    <script>window.CMS_MANUAL_INIT = true;</script>
+    <script src="./decap-cms-VERSION/decap-cms.js"></script>
+    <script src="./nth-backend.js"></script>
+  </body>
+</html>

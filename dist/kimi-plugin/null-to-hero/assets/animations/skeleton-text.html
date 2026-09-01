@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skeleton text</title>
+<style>
+  :root { --base: #e4e8f0; --hi: #f2f4f8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #ffffff;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .para { width: 300px; display: flex; flex-direction: column; gap: 11px; }
+  .sk { height: 12px; border-radius: 6px; background: var(--base); }
+  .w-full { width: 100%; } .w-95 { width: 95%; } .w-85 { width: 85%; } .w-60 { width: 60%; }
+  .title { height: 18px; width: 55%; margin-bottom: 6px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sk { background: linear-gradient(90deg, var(--base) 25%, var(--hi) 37%, var(--base) 63%);
+      background-size: 400% 100%; animation: nth-shimmer 1.4s ease-in-out infinite; }
+  }
+  @keyframes nth-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+</style>
+</head>
+<body>
+  <div class="para" role="status" aria-label="Loading text">
+    <div class="sk title"></div>
+    <div class="sk w-full"></div>
+    <div class="sk w-95"></div>
+    <div class="sk w-full"></div>
+    <div class="sk w-85"></div>
+    <div class="sk w-60"></div>
+  </div>
+</body>
+</html>

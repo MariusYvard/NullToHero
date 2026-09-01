@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>motion sweep fixture, dead air</title>
+<style>
+  body { margin: 0; height: 300px; }
+  .card { position: absolute; top: 40px; left: 0; width: 200px; height: 80px; background: #333; }
+  /* Moves for the first 15% of a 4s sequence, then sits still for 3.4 seconds. */
+  @keyframes creep {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(300px); }
+    100% { transform: translateX(300px); }
+  }
+  .card { animation: creep 4s linear forwards; }
+</style>
+<div class="card">panel</div>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ripple loader</title>
+<style>
+  :root { --ripple: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .ripple { position: relative; width: 64px; height: 64px; }
+  .ripple span { position: absolute; inset: 50% auto auto 50%; border: 3px solid var(--ripple);
+    border-radius: 50%; opacity: 1; transform: translate(-50%, -50%); width: 0; height: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .ripple span { animation: nth-ripple 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
+    .ripple span:nth-child(2) { animation-delay: -0.7s; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ripple span { width: 58px; height: 58px; opacity: 0.4; }
+  }
+  @keyframes nth-ripple {
+    0% { width: 0; height: 0; opacity: 1; }
+    100% { width: 64px; height: 64px; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="ripple" role="status" aria-label="Loading"><span></span><span></span></div>
+</body>
+</html>

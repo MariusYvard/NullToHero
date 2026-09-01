@@ -1,0 +1,2 @@
+.btn:hover { background: #333; }
+.btn:focus-visible { outline: 2px solid currentColor; }

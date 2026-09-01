@@ -1,0 +1,41 @@
+name,org,url,strengths,notes
+Material Design,Google,https://material.io/,tokens;components;theming;a11y,reference for elevation and motion rules
+Ant Design,Ant Group,https://ant.design/,components;patterns;enterprise,"dense data UI patterns, React first"
+Apple Design Resources,Apple,https://developer.apple.com/design/resources/,HIG;templates;platform kits,canonical iOS and macOS conventions
+Primer,GitHub,https://primer.style/,tokens;components;icons,developer-tool UI reference
+Arco.design,ByteDance,https://arco.design/en-US,components;tokens;enterprise,React and Vue implementations
+Alta UI,Oracle,https://www.oracle.com/webfolder/ux/middleware/alta/index.html,patterns;enterprise,older Oracle system from the JET era
+Pulse,Heartbeat,https://pulse.heartbeat.ua/,guides;React components,agency design system
+Bolt,Pegasystems,https://boltdesignsystem.com/,web components;Twig,schema-driven components
+Clarity Design System,VMware,https://clarity.design/,UX guidelines;Angular;a11y,strong form and data grid patterns
+AtlasKit,Atlassian,https://atlaskit.atlassian.com/,React components;guidelines,implements the Atlassian Design System
+Audi Design Resources,Audi,https://www.audi.com/ci/en/guides/user-interface/introduction.html,brand;UI guidelines,automotive brand UI rules
+Carbon Design Systems,IBM,https://www.carbondesignsystem.com/,tokens;components;a11y;data viz,"open source, several framework builds"
+Yelp Style Guide,Yelp,https://www.yelp.com/styleguide,components;style rules,product style reference
+Comet,Discovery Education,https://comet.discoveryeducation.com/,visual language;components,education product system
+ETrade Design System,E*TRADE,https://etrade.design/,finance patterns;guides,finance UI conventions
+Fundamental Library,SAP,https://sap.github.io/fundamental-styles/,styles;Fiori;enterprise,open source styling library
+Infor Design,Infor,https://design.infor.com/,guidelines;resources,enterprise product guidance
+Lexicon,Liferay,https://liferay.design/lexicon/,experience language;patterns,guidelines behind Clay UI
+Marvel Style Guide,Marvel,https://marvelapp.com/styleguide/overview/introduction,principles;components,compact style guide
+Microsoft Fluent UI,Microsoft,https://developer.microsoft.com/en-us/fluentui#/,components;cross-platform;tokens,React and native implementations
+Pluralsight Design System,Pluralsight,https://design-system.pluralsight.com/,components;guides,product design guide
+Polaris,Shopify,https://polaris.shopify.com/,tokens;components;content rules,admin UI and UX writing reference
+Mozilla Protocol,Mozilla,https://protocol.mozilla.org/,CSS system;brand,design system for Mozilla websites
+SendGrid Style Guide,SendGrid,http://styleguide.sendgrid.com/,UI library;style rules,email product UI
+VTEX Styleguide,VTEX,https://styleguide.vtex.com/,patterns;components,commerce platform system
+Rizzo,Lonely Planet,https://rizzo.lonelyplanet.com/styleguide/design-elements,UI components;widgets,early public style guide
+Atomize,Atomize,https://atomizecode.com/,React framework;tokens,atomic-style props API
+StyleGuides.io,community,http://styleguides.io/,directory;examples,index of 500+ public style guides
+Done Design System,UILibrary,https://uilibrary.github.io/done-design-system/,guides;components,open design system
+Skoda Brand System,Skoda,https://skoda-brand.com/explore-our-brand,brand;guidelines,brand-level rules for applications
+Spectrum,Adobe,https://spectrum.adobe.com/,tokens;components;a11y,cross-product Adobe system
+Asphalt,Gojek,https://asphalt.gojek.io/,design language;components,system of the Gojek super-app
+Laws of UX,Jon Yablonski,https://lawsofux.com/,psychology;principles,maxims with research citations
+Checklist Design,community,https://www.checklist.design/,checklists;components;branding,pre-ship completeness checks
+Humane By Design,Jon Yablonski,https://humanebydesign.com/,ethics;patterns,well-being centered patterns
+Pr1mer Guidelines,Pr1mer Tech,https://guidelines.pr1mer.tech,general guidelines,HIG-inspired open guidelines
+PatternFly,Red Hat,https://www.patternfly.org/,components;enterprise;a11y,"open source, React and HTML builds"
+Patterns,community,https://www.patterns.dev,rendering patterns;React;performance,free book-style resource
+Design Principles For Developers,community,https://medium.com/design-bootcamp/the-ultimate-design-principles-guide-for-developers-d4aa58937283,principles;article,"Medium article, quick primer"
+Once UI,Once UI,https://once-ui.com/,Next.js;components;Figma,design system for Next.js apps

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Error">
+  <style>
+    .nth-ring {
+      stroke: #e5484d; fill: none; stroke-width: 5;
+      stroke-dasharray: 176; stroke-dashoffset: 0;
+    }
+    .nth-x {
+      stroke: #e5484d; fill: none; stroke-width: 6; stroke-linecap: round;
+      stroke-dasharray: 24; stroke-dashoffset: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-ring { stroke-dashoffset: 176; animation: nth-ring 0.5s ease-out forwards; }
+      .nth-x1 { stroke-dashoffset: 24; animation: nth-draw 0.3s 0.4s ease-out forwards; }
+      .nth-x2 { stroke-dashoffset: 24; animation: nth-draw 0.3s 0.6s ease-out forwards; }
+    }
+    @keyframes nth-ring { to { stroke-dashoffset: 0; } }
+    @keyframes nth-draw { to { stroke-dashoffset: 0; } }
+  </style>
+  <circle class="nth-ring" cx="32" cy="32" r="28"/>
+  <line class="nth-x nth-x1" x1="23" y1="23" x2="41" y2="41"/>
+  <line class="nth-x nth-x2" x1="41" y1="23" x2="23" y2="41"/>
+</svg>

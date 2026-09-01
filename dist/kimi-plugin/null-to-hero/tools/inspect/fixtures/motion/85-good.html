@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>motion sweep fixture, continuous</title>
+<style>
+  body { margin: 0; height: 300px; }
+  .card { position: absolute; top: 40px; left: 0; width: 200px; height: 80px; background: #333; }
+  @keyframes glide {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(300px); }
+  }
+  .card { animation: glide 4s linear forwards; }
+</style>
+<div class="card">panel</div>

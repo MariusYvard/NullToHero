@@ -1,0 +1,6 @@
+@keyframes fadeOut { to { opacity: 0; } }
+.toast--out { animation: fadeOut 300ms both; }
+@media (prefers-reduced-motion: reduce) {
+  .toast--out { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+  [class*="--out"] { opacity: 0; }
+}

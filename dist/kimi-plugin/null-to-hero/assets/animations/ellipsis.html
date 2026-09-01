@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ellipsis loader</title>
+<style>
+  :root { --dot: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .ell { position: relative; width: 60px; height: 16px; }
+  .ell span { position: absolute; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--dot); }
+  .ell span:nth-child(1) { left: 4px; }
+  .ell span:nth-child(2) { left: 4px; }
+  .ell span:nth-child(3) { left: 26px; }
+  .ell span:nth-child(4) { left: 48px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .ell span:nth-child(1) { animation: nth-in 0.6s infinite; }
+    .ell span:nth-child(2) { animation: nth-move 0.6s infinite; }
+    .ell span:nth-child(3) { animation: nth-move 0.6s infinite; }
+    .ell span:nth-child(4) { animation: nth-out 0.6s infinite; }
+  }
+  @keyframes nth-in { from { transform: scale(0); } to { transform: scale(1); } }
+  @keyframes nth-out { from { transform: scale(1); } to { transform: scale(0); } }
+  @keyframes nth-move { from { transform: translateX(0); } to { transform: translateX(22px); } }
+</style>
+</head>
+<body>
+  <div class="ell" role="status" aria-label="Loading"><span></span><span></span><span></span><span></span></div>
+</body>
+</html>

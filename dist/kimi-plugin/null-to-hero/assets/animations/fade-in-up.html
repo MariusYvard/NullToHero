@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fade in up</title>
+<style>
+  :root { --card: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .card { width: 220px; padding: 22px; border-radius: 12px; background: #fff;
+    box-shadow: 0 8px 24px rgba(60, 60, 90, 0.12); }
+  .card .bar { height: 12px; border-radius: 6px; background: var(--card); width: 60%; margin-bottom: 12px; }
+  .card .line { height: 9px; border-radius: 5px; background: #e4e8f0; margin-bottom: 8px; }
+  .card .line.short { width: 70%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .card { opacity: 0; transform: translateY(20px); animation: nth-fade 1.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
+  }
+  @keyframes nth-fade {
+    0% { opacity: 0; transform: translateY(20px); }
+    25%, 75% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+  }
+</style>
+</head>
+<body>
+  <div class="card" role="img" aria-label="Content appears">
+    <div class="bar"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line short"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skeleton table</title>
+<style>
+  :root { --base: #e4e8f0; --hi: #f2f4f8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #ffffff;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .tbl { width: 340px; border: 1px solid #eef1f6; border-radius: 10px; overflow: hidden; }
+  .tr { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; padding: 14px 16px;
+    border-bottom: 1px solid #f0f2f7; }
+  .tr:last-child { border-bottom: 0; }
+  .tr.head .sk { height: 12px; }
+  .sk { height: 11px; border-radius: 5px; background: var(--base); }
+  @media (prefers-reduced-motion: no-preference) {
+    .sk { background: linear-gradient(90deg, var(--base) 25%, var(--hi) 37%, var(--base) 63%);
+      background-size: 400% 100%; animation: nth-shimmer 1.4s ease-in-out infinite; }
+  }
+  @keyframes nth-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+</style>
+</head>
+<body>
+  <div class="tbl" role="status" aria-label="Loading table">
+    <div class="tr head"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+    <div class="tr"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+    <div class="tr"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+    <div class="tr"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  </div>
+</body>
+</html>

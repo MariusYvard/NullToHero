@@ -1,0 +1,2587 @@
+{
+  "files": [
+    {
+      "path": "skills/audit/references/checks.md",
+      "lines": 158,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 11,
+        "tableData": 35,
+        "tableJudgment": 13,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 95
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 22.151898734177212,
+        "harden": 1.89873417721519,
+        "keep": 15.822784810126583
+      },
+      "magicDensity": 1.2658227848101267,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/audit/references/compare.md",
+      "lines": 137,
+      "buckets": {
+        "fenceDoc": 9,
+        "fenceValue": 3,
+        "tableData": 4,
+        "tableJudgment": 1,
+        "assertion": 0,
+        "judgment": 7,
+        "prose": 113
+      },
+      "shares": {
+        "cut": 6.569343065693431,
+        "extract": 2.9197080291970803,
+        "harden": 0,
+        "keep": 8.02919708029197
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/audit/references/full.md",
+      "lines": 425,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 18,
+        "tableData": 56,
+        "tableJudgment": 12,
+        "assertion": 6,
+        "judgment": 19,
+        "prose": 314
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 13.176470588235295,
+        "harden": 1.411764705882353,
+        "keep": 11.529411764705882
+      },
+      "magicDensity": 1.647058823529412,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/audit/references/html-report.md",
+      "lines": 90,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 30,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 58
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.2222222222222223,
+        "keep": 33.33333333333333
+      },
+      "magicDensity": 26.666666666666668,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/audit/references/learnings.md",
+      "lines": 55,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 7,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 47
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.8181818181818181,
+        "keep": 12.727272727272727
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/audit/references/refine.md",
+      "lines": 233,
+      "buckets": {
+        "fenceDoc": 42,
+        "fenceValue": 7,
+        "tableData": 14,
+        "tableJudgment": 7,
+        "assertion": 3,
+        "judgment": 7,
+        "prose": 153
+      },
+      "shares": {
+        "cut": 18.025751072961373,
+        "extract": 6.008583690987124,
+        "harden": 1.2875536480686696,
+        "keep": 9.012875536480687
+      },
+      "magicDensity": 2.575107296137339,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/audit/references/report.md",
+      "lines": 199,
+      "buckets": {
+        "fenceDoc": 72,
+        "fenceValue": 0,
+        "tableData": 27,
+        "tableJudgment": 7,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 92
+      },
+      "shares": {
+        "cut": 36.18090452261307,
+        "extract": 13.5678391959799,
+        "harden": 0.5025125628140703,
+        "keep": 3.5175879396984926
+      },
+      "magicDensity": 0,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/inspect/references/code-quality.md",
+      "lines": 79,
+      "buckets": {
+        "fenceDoc": 11,
+        "fenceValue": 4,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 4,
+        "judgment": 2,
+        "prose": 58
+      },
+      "shares": {
+        "cut": 13.924050632911392,
+        "extract": 0,
+        "harden": 5.063291139240507,
+        "keep": 7.59493670886076
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/inspect/references/detect.md",
+      "lines": 136,
+      "buckets": {
+        "fenceDoc": 16,
+        "fenceValue": 8,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 6,
+        "judgment": 2,
+        "prose": 104
+      },
+      "shares": {
+        "cut": 11.76470588235294,
+        "extract": 0,
+        "harden": 4.411764705882353,
+        "keep": 7.352941176470589
+      },
+      "magicDensity": 6.61764705882353,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/inspect/references/preview.md",
+      "lines": 98,
+      "buckets": {
+        "fenceDoc": 13,
+        "fenceValue": 25,
+        "tableData": 8,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 50
+      },
+      "shares": {
+        "cut": 13.26530612244898,
+        "extract": 8.16326530612245,
+        "harden": 2.0408163265306123,
+        "keep": 25.510204081632654
+      },
+      "magicDensity": 4.081632653061225,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/inspect/references/review.md",
+      "lines": 173,
+      "buckets": {
+        "fenceDoc": 19,
+        "fenceValue": 0,
+        "tableData": 6,
+        "tableJudgment": 0,
+        "assertion": 5,
+        "judgment": 3,
+        "prose": 140
+      },
+      "shares": {
+        "cut": 10.982658959537572,
+        "extract": 3.4682080924855487,
+        "harden": 2.8901734104046244,
+        "keep": 1.7341040462427744
+      },
+      "magicDensity": 7.514450867052023,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/action-plan.md",
+      "lines": 142,
+      "buckets": {
+        "fenceDoc": 57,
+        "fenceValue": 0,
+        "tableData": 14,
+        "tableJudgment": 1,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 69
+      },
+      "shares": {
+        "cut": 40.140845070422536,
+        "extract": 9.859154929577464,
+        "harden": 0.7042253521126761,
+        "keep": 0.7042253521126761
+      },
+      "magicDensity": 0,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/seo/references/ai-overview-recovery.md",
+      "lines": 209,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 3,
+        "tableData": 20,
+        "tableJudgment": 14,
+        "assertion": 4,
+        "judgment": 4,
+        "prose": 164
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 9.569377990430622,
+        "harden": 1.9138755980861244,
+        "keep": 10.047846889952153
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/audit.md",
+      "lines": 121,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 8,
+        "tableData": 25,
+        "tableJudgment": 5,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 82
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 20.66115702479339,
+        "harden": 0,
+        "keep": 11.570247933884298
+      },
+      "magicDensity": 1.6528925619834711,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/seo/references/backlinks.md",
+      "lines": 194,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 34,
+        "tableJudgment": 19,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 139
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 17.525773195876287,
+        "harden": 0,
+        "keep": 10.824742268041238
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/seo/references/cluster.md",
+      "lines": 210,
+      "buckets": {
+        "fenceDoc": 68,
+        "fenceValue": 0,
+        "tableData": 31,
+        "tableJudgment": 4,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 106
+      },
+      "shares": {
+        "cut": 32.38095238095238,
+        "extract": 14.761904761904763,
+        "harden": 0,
+        "keep": 2.380952380952381
+      },
+      "magicDensity": 0,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/seo/references/competitor-pages.md",
+      "lines": 272,
+      "buckets": {
+        "fenceDoc": 120,
+        "fenceValue": 0,
+        "tableData": 15,
+        "tableJudgment": 4,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 133
+      },
+      "shares": {
+        "cut": 44.11764705882353,
+        "extract": 5.514705882352941,
+        "harden": 0,
+        "keep": 1.4705882352941175
+      },
+      "magicDensity": 0,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/seo/references/content.md",
+      "lines": 167,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 24,
+        "tableJudgment": 3,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 138
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 14.37125748502994,
+        "harden": 0.5988023952095809,
+        "keep": 2.3952095808383236
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/drift.md",
+      "lines": 200,
+      "buckets": {
+        "fenceDoc": 34,
+        "fenceValue": 8,
+        "tableData": 23,
+        "tableJudgment": 5,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 128
+      },
+      "shares": {
+        "cut": 17,
+        "extract": 11.5,
+        "harden": 1,
+        "keep": 6.5
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/ecommerce.md",
+      "lines": 252,
+      "buckets": {
+        "fenceDoc": 49,
+        "fenceValue": 9,
+        "tableData": 34,
+        "tableJudgment": 23,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 137
+      },
+      "shares": {
+        "cut": 19.444444444444446,
+        "extract": 13.492063492063492,
+        "harden": 0,
+        "keep": 12.698412698412698
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/geo.md",
+      "lines": 610,
+      "buckets": {
+        "fenceDoc": 46,
+        "fenceValue": 0,
+        "tableData": 64,
+        "tableJudgment": 23,
+        "assertion": 1,
+        "judgment": 11,
+        "prose": 465
+      },
+      "shares": {
+        "cut": 7.540983606557377,
+        "extract": 10.491803278688524,
+        "harden": 0.16393442622950818,
+        "keep": 5.573770491803279
+      },
+      "magicDensity": 0.819672131147541,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/head-meta.md",
+      "lines": 59,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 19,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 38
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 3.389830508474576,
+        "keep": 32.20338983050847
+      },
+      "magicDensity": 1.694915254237288,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/hreflang.md",
+      "lines": 221,
+      "buckets": {
+        "fenceDoc": 13,
+        "fenceValue": 37,
+        "tableData": 21,
+        "tableJudgment": 4,
+        "assertion": 6,
+        "judgment": 1,
+        "prose": 139
+      },
+      "shares": {
+        "cut": 5.88235294117647,
+        "extract": 9.502262443438914,
+        "harden": 2.7149321266968327,
+        "keep": 19.004524886877828
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/images.md",
+      "lines": 265,
+      "buckets": {
+        "fenceDoc": 34,
+        "fenceValue": 31,
+        "tableData": 42,
+        "tableJudgment": 15,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 139
+      },
+      "shares": {
+        "cut": 12.830188679245284,
+        "extract": 15.849056603773585,
+        "harden": 1.1320754716981132,
+        "keep": 17.735849056603772
+      },
+      "magicDensity": 5.283018867924529,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/seo/references/indexnow.md",
+      "lines": 58,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 1,
+        "prose": 55
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 3.4482758620689653,
+        "keep": 1.7241379310344827
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/local.md",
+      "lines": 261,
+      "buckets": {
+        "fenceDoc": 28,
+        "fenceValue": 5,
+        "tableData": 25,
+        "tableJudgment": 4,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 199
+      },
+      "shares": {
+        "cut": 10.727969348659004,
+        "extract": 9.578544061302683,
+        "harden": 0,
+        "keep": 3.4482758620689653
+      },
+      "magicDensity": 0.38314176245210724,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/measurement.md",
+      "lines": 197,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 26,
+        "tableJudgment": 25,
+        "assertion": 0,
+        "judgment": 4,
+        "prose": 142
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 13.19796954314721,
+        "harden": 0,
+        "keep": 14.720812182741117
+      },
+      "magicDensity": 0.5076142131979695,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/migration.md",
+      "lines": 192,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 6,
+        "tableData": 20,
+        "tableJudgment": 29,
+        "assertion": 2,
+        "judgment": 5,
+        "prose": 130
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 10.416666666666668,
+        "harden": 1.0416666666666665,
+        "keep": 20.833333333333336
+      },
+      "magicDensity": 0.5208333333333333,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/page.md",
+      "lines": 98,
+      "buckets": {
+        "fenceDoc": 9,
+        "fenceValue": 0,
+        "tableData": 10,
+        "tableJudgment": 3,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 75
+      },
+      "shares": {
+        "cut": 9.183673469387756,
+        "extract": 10.204081632653061,
+        "harden": 0,
+        "keep": 4.081632653061225
+      },
+      "magicDensity": 2.0408163265306123,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/performance.md",
+      "lines": 36,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 35
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 2.7777777777777777
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/plan.md",
+      "lines": 134,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 19,
+        "tableJudgment": 3,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 112
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 14.17910447761194,
+        "harden": 0,
+        "keep": 2.2388059701492535
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/privacy-consent.md",
+      "lines": 45,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 2,
+        "prose": 42
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.2222222222222223,
+        "keep": 4.444444444444445
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/programmatic.md",
+      "lines": 226,
+      "buckets": {
+        "fenceDoc": 10,
+        "fenceValue": 6,
+        "tableData": 19,
+        "tableJudgment": 16,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 174
+      },
+      "shares": {
+        "cut": 4.424778761061947,
+        "extract": 8.4070796460177,
+        "harden": 0.4424778761061947,
+        "keep": 9.734513274336283
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/schema.md",
+      "lines": 211,
+      "buckets": {
+        "fenceDoc": 63,
+        "fenceValue": 6,
+        "tableData": 18,
+        "tableJudgment": 5,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 116
+      },
+      "shares": {
+        "cut": 29.85781990521327,
+        "extract": 8.530805687203792,
+        "harden": 0,
+        "keep": 6.6350710900473935
+      },
+      "magicDensity": 0,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/seo/references/search-console.md",
+      "lines": 261,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 35,
+        "tableJudgment": 26,
+        "assertion": 7,
+        "judgment": 13,
+        "prose": 180
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 13.409961685823754,
+        "harden": 2.681992337164751,
+        "keep": 14.942528735632186
+      },
+      "magicDensity": 0.7662835249042145,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/seo/references/sitemap.md",
+      "lines": 215,
+      "buckets": {
+        "fenceDoc": 34,
+        "fenceValue": 3,
+        "tableData": 35,
+        "tableJudgment": 10,
+        "assertion": 2,
+        "judgment": 1,
+        "prose": 130
+      },
+      "shares": {
+        "cut": 15.813953488372093,
+        "extract": 16.27906976744186,
+        "harden": 0.9302325581395349,
+        "keep": 6.511627906976744
+      },
+      "magicDensity": 1.3953488372093024,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/seo/references/sxo.md",
+      "lines": 213,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 9,
+        "tableData": 35,
+        "tableJudgment": 9,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 159
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 16.431924882629108,
+        "harden": 0.4694835680751174,
+        "keep": 8.450704225352112
+      },
+      "magicDensity": 1.8779342723004695,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/seo/references/technical.md",
+      "lines": 183,
+      "buckets": {
+        "fenceDoc": 15,
+        "fenceValue": 0,
+        "tableData": 31,
+        "tableJudgment": 4,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 131
+      },
+      "shares": {
+        "cut": 8.19672131147541,
+        "extract": 16.939890710382514,
+        "harden": 0.546448087431694,
+        "keep": 2.73224043715847
+      },
+      "magicDensity": 1.639344262295082,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/accessibility-engineering.md",
+      "lines": 435,
+      "buckets": {
+        "fenceDoc": 102,
+        "fenceValue": 82,
+        "tableData": 25,
+        "tableJudgment": 0,
+        "assertion": 8,
+        "judgment": 2,
+        "prose": 216
+      },
+      "shares": {
+        "cut": 23.448275862068964,
+        "extract": 5.747126436781609,
+        "harden": 1.839080459770115,
+        "keep": 19.310344827586206
+      },
+      "magicDensity": 5.057471264367816,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/adapt.md",
+      "lines": 204,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 5,
+        "prose": 196
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.4705882352941175,
+        "keep": 2.450980392156863
+      },
+      "magicDensity": 3.9215686274509802,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/animate.md",
+      "lines": 202,
+      "buckets": {
+        "fenceDoc": 9,
+        "fenceValue": 23,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 2,
+        "prose": 165
+      },
+      "shares": {
+        "cut": 4.455445544554455,
+        "extract": 0,
+        "harden": 1.4851485148514851,
+        "keep": 12.376237623762377
+      },
+      "magicDensity": 12.871287128712872,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/animation-engineering.md",
+      "lines": 419,
+      "buckets": {
+        "fenceDoc": 43,
+        "fenceValue": 119,
+        "tableData": 18,
+        "tableJudgment": 13,
+        "assertion": 10,
+        "judgment": 3,
+        "prose": 213
+      },
+      "shares": {
+        "cut": 10.26252983293556,
+        "extract": 4.295942720763723,
+        "harden": 2.386634844868735,
+        "keep": 32.21957040572792
+      },
+      "magicDensity": 14.319809069212411,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/assets-library.md",
+      "lines": 46,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 44
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 4.3478260869565215
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/audit.md",
+      "lines": 154,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 14,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 5,
+        "prose": 134
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 9.090909090909092,
+        "harden": 0.6493506493506493,
+        "keep": 3.2467532467532463
+      },
+      "magicDensity": 1.948051948051948,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/bolder.md",
+      "lines": 125,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 124
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 0.8
+      },
+      "magicDensity": 2.4,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/brand-identity.md",
+      "lines": 96,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 2,
+        "tableJudgment": 5,
+        "assertion": 0,
+        "judgment": 9,
+        "prose": 80
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 2.083333333333333,
+        "harden": 0,
+        "keep": 14.583333333333334
+      },
+      "magicDensity": 2.083333333333333,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/brand.md",
+      "lines": 111,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 3,
+        "prose": 105
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.7027027027027026,
+        "keep": 2.7027027027027026
+      },
+      "magicDensity": 4.504504504504505,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/clarify.md",
+      "lines": 250,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 2,
+        "tableJudgment": 7,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 241
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0.8,
+        "harden": 0,
+        "keep": 2.8000000000000003
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/cognitive-load.md",
+      "lines": 113,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 113
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 0
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/color-and-contrast.md",
+      "lines": 140,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 7,
+        "tableData": 17,
+        "tableJudgment": 5,
+        "assertion": 3,
+        "judgment": 7,
+        "prose": 101
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 12.142857142857142,
+        "harden": 2.142857142857143,
+        "keep": 13.571428571428571
+      },
+      "magicDensity": 11.428571428571429,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/color-systems.md",
+      "lines": 64,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 13,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 47
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 20.3125,
+        "harden": 4.6875,
+        "keep": 1.5625
+      },
+      "magicDensity": 26.5625,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/colorize.md",
+      "lines": 161,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 3,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 3,
+        "prose": 152
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.8633540372670807,
+        "keep": 3.7267080745341614
+      },
+      "magicDensity": 6.832298136645963,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/component-patterns.md",
+      "lines": 66,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 7,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 5,
+        "prose": 51
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 4.545454545454546,
+        "keep": 18.181818181818183
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/component-recipes.md",
+      "lines": 64,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 16,
+        "tableJudgment": 12,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 36
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 25,
+        "harden": 0,
+        "keep": 18.75
+      },
+      "magicDensity": 12.5,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/concept.md",
+      "lines": 100,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 3,
+        "tableJudgment": 5,
+        "assertion": 0,
+        "judgment": 7,
+        "prose": 85
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 3,
+        "harden": 0,
+        "keep": 12
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/conversion-experiments.md",
+      "lines": 147,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 16,
+        "tableJudgment": 69,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 60
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 10.884353741496598,
+        "harden": 0,
+        "keep": 48.29931972789115
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/conversion-quality.md",
+      "lines": 149,
+      "buckets": {
+        "fenceDoc": 28,
+        "fenceValue": 0,
+        "tableData": 24,
+        "tableJudgment": 23,
+        "assertion": 1,
+        "judgment": 5,
+        "prose": 68
+      },
+      "shares": {
+        "cut": 18.79194630872483,
+        "extract": 16.10738255033557,
+        "harden": 0.6711409395973155,
+        "keep": 18.79194630872483
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/craft.md",
+      "lines": 227,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 3,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 10,
+        "prose": 211
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.3215859030837005,
+        "keep": 5.726872246696035
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/creative-patterns.md",
+      "lines": 212,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 20,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 8,
+        "judgment": 3,
+        "prose": 181
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 3.7735849056603774,
+        "keep": 10.849056603773585
+      },
+      "magicDensity": 6.132075471698113,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/critique.md",
+      "lines": 220,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 18,
+        "tableData": 13,
+        "tableJudgment": 0,
+        "assertion": 4,
+        "judgment": 1,
+        "prose": 184
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 5.909090909090909,
+        "harden": 1.8181818181818181,
+        "keep": 8.636363636363637
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/css-architecture.md",
+      "lines": 135,
+      "buckets": {
+        "fenceDoc": 22,
+        "fenceValue": 22,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 4,
+        "judgment": 8,
+        "prose": 79
+      },
+      "shares": {
+        "cut": 16.296296296296298,
+        "extract": 0,
+        "harden": 2.9629629629629632,
+        "keep": 22.22222222222222
+      },
+      "magicDensity": 2.9629629629629632,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/dark-mode-engineering.md",
+      "lines": 125,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 33,
+        "tableData": 7,
+        "tableJudgment": 1,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 80
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 5.6000000000000005,
+        "harden": 2.4,
+        "keep": 28.000000000000004
+      },
+      "magicDensity": 14.399999999999999,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/data-viz.md",
+      "lines": 100,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 16,
+        "tableJudgment": 3,
+        "assertion": 1,
+        "judgment": 2,
+        "prose": 78
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 16,
+        "harden": 1,
+        "keep": 5
+      },
+      "magicDensity": 3,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/delight.md",
+      "lines": 322,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 45,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 276
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0.3105590062111801,
+        "keep": 13.975155279503104
+      },
+      "magicDensity": 2.484472049689441,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/design-tokens.md",
+      "lines": 130,
+      "buckets": {
+        "fenceDoc": 17,
+        "fenceValue": 46,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 4,
+        "prose": 62
+      },
+      "shares": {
+        "cut": 13.076923076923078,
+        "extract": 0,
+        "harden": 0.7692307692307693,
+        "keep": 38.46153846153847
+      },
+      "magicDensity": 17.692307692307693,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/distill.md",
+      "lines": 118,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 116
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 1.694915254237288
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/document.md",
+      "lines": 434,
+      "buckets": {
+        "fenceDoc": 110,
+        "fenceValue": 79,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 21,
+        "judgment": 6,
+        "prose": 218
+      },
+      "shares": {
+        "cut": 25.34562211981567,
+        "extract": 0,
+        "harden": 4.838709677419355,
+        "keep": 19.5852534562212
+      },
+      "magicDensity": 7.373271889400922,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/elevation.md",
+      "lines": 71,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 12,
+        "tableData": 8,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 4,
+        "prose": 45
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 11.267605633802818,
+        "harden": 2.8169014084507045,
+        "keep": 22.535211267605636
+      },
+      "magicDensity": 43.66197183098591,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/extract.md",
+      "lines": 104,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 3,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 101
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 2.8846153846153846,
+        "harden": 0,
+        "keep": 0
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/fetch-asset.md",
+      "lines": 40,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 3,
+        "tableData": 12,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 4,
+        "prose": 21
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 30,
+        "harden": 0,
+        "keep": 17.5
+      },
+      "magicDensity": 12.5,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/fix.md",
+      "lines": 81,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 4,
+        "tableJudgment": 7,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 67
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 4.938271604938271,
+        "harden": 0,
+        "keep": 12.345679012345679
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/form-patterns.md",
+      "lines": 289,
+      "buckets": {
+        "fenceDoc": 24,
+        "fenceValue": 32,
+        "tableData": 57,
+        "tableJudgment": 7,
+        "assertion": 5,
+        "judgment": 1,
+        "prose": 163
+      },
+      "shares": {
+        "cut": 8.304498269896193,
+        "extract": 19.72318339100346,
+        "harden": 1.7301038062283738,
+        "keep": 13.84083044982699
+      },
+      "magicDensity": 1.7301038062283738,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/gestalt.md",
+      "lines": 126,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 22,
+        "tableData": 3,
+        "tableJudgment": 6,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 93
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 2.380952380952381,
+        "harden": 1.5873015873015872,
+        "keep": 22.22222222222222
+      },
+      "magicDensity": 9.523809523809524,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/handoff.md",
+      "lines": 77,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 77
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 0
+      },
+      "magicDensity": 1.2987012987012987,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/harden.md",
+      "lines": 354,
+      "buckets": {
+        "fenceDoc": 77,
+        "fenceValue": 30,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 246
+      },
+      "shares": {
+        "cut": 21.75141242937853,
+        "extract": 0,
+        "harden": 0.2824858757062147,
+        "keep": 8.47457627118644
+      },
+      "magicDensity": 1.694915254237288,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/heuristics-scoring.md",
+      "lines": 245,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 43,
+        "tableJudgment": 40,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 161
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 17.551020408163264,
+        "harden": 0,
+        "keep": 16.73469387755102
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/image-strategy.md",
+      "lines": 289,
+      "buckets": {
+        "fenceDoc": 59,
+        "fenceValue": 34,
+        "tableData": 28,
+        "tableJudgment": 4,
+        "assertion": 5,
+        "judgment": 1,
+        "prose": 158
+      },
+      "shares": {
+        "cut": 20.415224913494807,
+        "extract": 9.688581314878892,
+        "harden": 1.7301038062283738,
+        "keep": 13.494809688581316
+      },
+      "magicDensity": 15.22491349480969,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/improve.md",
+      "lines": 92,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 14,
+        "tableJudgment": 5,
+        "assertion": 2,
+        "judgment": 2,
+        "prose": 69
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 15.217391304347828,
+        "harden": 2.1739130434782608,
+        "keep": 7.608695652173914
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/information-architecture.md",
+      "lines": 209,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 16,
+        "tableJudgment": 12,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 181
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 7.655502392344498,
+        "harden": 0,
+        "keep": 5.741626794258373
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/inspiration.md",
+      "lines": 146,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 0,
+        "prose": 146
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 0
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/interaction-design.md",
+      "lines": 102,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 23,
+        "tableData": 10,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 65
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 9.803921568627452,
+        "harden": 2.941176470588235,
+        "keep": 23.52941176470588
+      },
+      "magicDensity": 3.9215686274509802,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/journey-express.md",
+      "lines": 37,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 9,
+        "tableJudgment": 1,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 25
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 24.324324324324326,
+        "harden": 0,
+        "keep": 8.108108108108109
+      },
+      "magicDensity": 2.7027027027027026,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/journey-mapping.md",
+      "lines": 159,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 8,
+        "tableData": 13,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 137
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 8.176100628930817,
+        "harden": 0,
+        "keep": 5.660377358490567
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/journey-overhaul.md",
+      "lines": 34,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 5,
+        "tableJudgment": 2,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 25
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 14.705882352941178,
+        "harden": 0,
+        "keep": 11.76470588235294
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/journey-ship.md",
+      "lines": 35,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 4,
+        "tableJudgment": 3,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 26
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 11.428571428571429,
+        "harden": 0,
+        "keep": 14.285714285714285
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/landing-patterns.md",
+      "lines": 81,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 8,
+        "tableJudgment": 18,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 54
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 9.876543209876543,
+        "harden": 1.2345679012345678,
+        "keep": 22.22222222222222
+      },
+      "magicDensity": 1.2345679012345678,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/layout.md",
+      "lines": 148,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 10,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 3,
+        "judgment": 1,
+        "prose": 134
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.027027027027027,
+        "keep": 7.4324324324324325
+      },
+      "magicDensity": 2.7027027027027026,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/live.md",
+      "lines": 556,
+      "buckets": {
+        "fenceDoc": 74,
+        "fenceValue": 31,
+        "tableData": 9,
+        "tableJudgment": 0,
+        "assertion": 25,
+        "judgment": 10,
+        "prose": 407
+      },
+      "shares": {
+        "cut": 13.309352517985612,
+        "extract": 1.618705035971223,
+        "harden": 4.496402877697841,
+        "keep": 7.374100719424461
+      },
+      "magicDensity": 0.7194244604316548,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/memorability.md",
+      "lines": 110,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 2,
+        "tableJudgment": 7,
+        "assertion": 0,
+        "judgment": 13,
+        "prose": 88
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 1.8181818181818181,
+        "harden": 0,
+        "keep": 18.181818181818183
+      },
+      "magicDensity": 1.8181818181818181,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/mobile-ergonomics.md",
+      "lines": 117,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 16,
+        "tableJudgment": 4,
+        "assertion": 2,
+        "judgment": 1,
+        "prose": 94
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 13.675213675213676,
+        "harden": 1.7094017094017095,
+        "keep": 4.273504273504273
+      },
+      "magicDensity": 10.256410256410255,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/motion-choreography.md",
+      "lines": 101,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 7,
+        "tableJudgment": 5,
+        "assertion": 1,
+        "judgment": 14,
+        "prose": 74
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 6.9306930693069315,
+        "harden": 0.9900990099009901,
+        "keep": 18.81188118811881
+      },
+      "magicDensity": 9.900990099009901,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/motion-design.md",
+      "lines": 81,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 12,
+        "tableData": 10,
+        "tableJudgment": 1,
+        "assertion": 2,
+        "judgment": 0,
+        "prose": 56
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 12.345679012345679,
+        "harden": 2.4691358024691357,
+        "keep": 16.049382716049383
+      },
+      "magicDensity": 22.22222222222222,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/objections.md",
+      "lines": 131,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 17,
+        "tableJudgment": 33,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 78
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 12.977099236641221,
+        "harden": 0,
+        "keep": 27.480916030534353
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/offer-diagnostic.md",
+      "lines": 179,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 4,
+        "tableData": 26,
+        "tableJudgment": 32,
+        "assertion": 1,
+        "judgment": 7,
+        "prose": 109
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 14.52513966480447,
+        "harden": 0.5586592178770949,
+        "keep": 24.022346368715084
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/onboard.md",
+      "lines": 241,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 10,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 230
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 4.564315352697095
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/optimize.md",
+      "lines": 271,
+      "buckets": {
+        "fenceDoc": 36,
+        "fenceValue": 27,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 207
+      },
+      "shares": {
+        "cut": 13.284132841328415,
+        "extract": 0,
+        "harden": 0.36900369003690037,
+        "keep": 9.96309963099631
+      },
+      "magicDensity": 4.797047970479705,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/overdrive.md",
+      "lines": 157,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 14,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 4,
+        "judgment": 4,
+        "prose": 135
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.547770700636943,
+        "keep": 11.464968152866243
+      },
+      "magicDensity": 1.2738853503184715,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/parallax.md",
+      "lines": 611,
+      "buckets": {
+        "fenceDoc": 249,
+        "fenceValue": 20,
+        "tableData": 38,
+        "tableJudgment": 16,
+        "assertion": 15,
+        "judgment": 8,
+        "prose": 265
+      },
+      "shares": {
+        "cut": 40.752864157119475,
+        "extract": 6.219312602291326,
+        "harden": 2.454991816693944,
+        "keep": 7.201309328968904
+      },
+      "magicDensity": 7.201309328968904,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/personas.md",
+      "lines": 185,
+      "buckets": {
+        "fenceDoc": 9,
+        "fenceValue": 0,
+        "tableData": 8,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 166
+      },
+      "shares": {
+        "cut": 4.864864864864865,
+        "extract": 4.324324324324325,
+        "harden": 0.5405405405405406,
+        "keep": 0.5405405405405406
+      },
+      "magicDensity": 1.0810810810810811,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/polish.md",
+      "lines": 246,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 243
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 1.2195121951219512
+      },
+      "magicDensity": 1.6260162601626018,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/print-styles.md",
+      "lines": 47,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 18,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 28
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 2.127659574468085,
+        "keep": 38.297872340425535
+      },
+      "magicDensity": 2.127659574468085,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/product.md",
+      "lines": 69,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 68
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.4492753623188406,
+        "keep": 0
+      },
+      "magicDensity": 4.3478260869565215,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/quieter.md",
+      "lines": 108,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 105
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 2.7777777777777777
+      },
+      "magicDensity": 1.8518518518518516,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/resource-recipes.md",
+      "lines": 86,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 28,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 3,
+        "prose": 54
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.1627906976744187,
+        "keep": 36.04651162790697
+      },
+      "magicDensity": 6.976744186046512,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/resource-recommendations.md",
+      "lines": 67,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 6,
+        "tableData": 12,
+        "tableJudgment": 19,
+        "assertion": 2,
+        "judgment": 1,
+        "prose": 27
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 17.91044776119403,
+        "harden": 2.9850746268656714,
+        "keep": 38.80597014925373
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/responsive-design.md",
+      "lines": 217,
+      "buckets": {
+        "fenceDoc": 34,
+        "fenceValue": 34,
+        "tableData": 5,
+        "tableJudgment": 5,
+        "assertion": 4,
+        "judgment": 5,
+        "prose": 130
+      },
+      "shares": {
+        "cut": 15.668202764976957,
+        "extract": 2.3041474654377883,
+        "harden": 1.8433179723502304,
+        "keep": 20.276497695852534
+      },
+      "magicDensity": 9.67741935483871,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/shape.md",
+      "lines": 160,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 6,
+        "prose": 153
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0.625,
+        "keep": 3.75
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/ship-checklist.md",
+      "lines": 68,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 66
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.4705882352941175,
+        "keep": 1.4705882352941175
+      },
+      "magicDensity": 1.4705882352941175,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/signature-moments.md",
+      "lines": 126,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 5,
+        "judgment": 8,
+        "prose": 113
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 3.968253968253968,
+        "keep": 6.349206349206349
+      },
+      "magicDensity": 4.761904761904762,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/slop-patterns.md",
+      "lines": 307,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 3,
+        "tableData": 3,
+        "tableJudgment": 3,
+        "assertion": 3,
+        "judgment": 8,
+        "prose": 287
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0.9771986970684038,
+        "harden": 0.9771986970684038,
+        "keep": 4.5602605863192185
+      },
+      "magicDensity": 2.2801302931596092,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/sourcing-external-code.md",
+      "lines": 98,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 9,
+        "tableData": 7,
+        "tableJudgment": 6,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 75
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 7.142857142857142,
+        "harden": 0,
+        "keep": 16.3265306122449
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/spatial-design.md",
+      "lines": 96,
+      "buckets": {
+        "fenceDoc": 11,
+        "fenceValue": 12,
+        "tableData": 7,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 2,
+        "prose": 62
+      },
+      "shares": {
+        "cut": 11.458333333333332,
+        "extract": 7.291666666666667,
+        "harden": 2.083333333333333,
+        "keep": 14.583333333333334
+      },
+      "magicDensity": 15.625,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/stock-media.md",
+      "lines": 51,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 20,
+        "tableJudgment": 3,
+        "assertion": 0,
+        "judgment": 2,
+        "prose": 26
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 39.21568627450981,
+        "harden": 0,
+        "keep": 9.803921568627452
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/style-systems.md",
+      "lines": 76,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 4,
+        "judgment": 2,
+        "prose": 70
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 5.263157894736842,
+        "keep": 2.631578947368421
+      },
+      "magicDensity": 26.31578947368421,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/teach.md",
+      "lines": 175,
+      "buckets": {
+        "fenceDoc": 25,
+        "fenceValue": 6,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 2,
+        "judgment": 4,
+        "prose": 138
+      },
+      "shares": {
+        "cut": 14.285714285714285,
+        "extract": 0,
+        "harden": 1.1428571428571428,
+        "keep": 5.714285714285714
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/testing-strategy.md",
+      "lines": 38,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 1,
+        "prose": 37
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 0,
+        "keep": 2.631578947368421
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/tokens.md",
+      "lines": 107,
+      "buckets": {
+        "fenceDoc": 28,
+        "fenceValue": 10,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 67
+      },
+      "shares": {
+        "cut": 26.168224299065418,
+        "extract": 0,
+        "harden": 0.9345794392523363,
+        "keep": 10.2803738317757
+      },
+      "magicDensity": 10.2803738317757,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/typeset.md",
+      "lines": 164,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 10,
+        "tableData": 6,
+        "tableJudgment": 0,
+        "assertion": 6,
+        "judgment": 2,
+        "prose": 140
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 3.6585365853658534,
+        "harden": 3.6585365853658534,
+        "keep": 7.317073170731707
+      },
+      "magicDensity": 15.24390243902439,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/typography.md",
+      "lines": 171,
+      "buckets": {
+        "fenceDoc": 45,
+        "fenceValue": 8,
+        "tableData": 7,
+        "tableJudgment": 0,
+        "assertion": 9,
+        "judgment": 3,
+        "prose": 99
+      },
+      "shares": {
+        "cut": 26.31578947368421,
+        "extract": 4.093567251461988,
+        "harden": 5.263157894736842,
+        "keep": 6.432748538011696
+      },
+      "magicDensity": 13.450292397660817,
+      "verdict": "CUT"
+    },
+    {
+      "path": "skills/siteasy/references/ux-research.md",
+      "lines": 190,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 19,
+        "tableJudgment": 0,
+        "assertion": 0,
+        "judgment": 3,
+        "prose": 168
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 10,
+        "harden": 0,
+        "keep": 1.5789473684210527
+      },
+      "magicDensity": 0,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/ux-writing.md",
+      "lines": 114,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 25,
+        "tableJudgment": 7,
+        "assertion": 1,
+        "judgment": 0,
+        "prose": 81
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 21.929824561403507,
+        "harden": 0.8771929824561403,
+        "keep": 6.140350877192982
+      },
+      "magicDensity": 0,
+      "verdict": "EXTRACT"
+    },
+    {
+      "path": "skills/siteasy/references/video.md",
+      "lines": 82,
+      "buckets": {
+        "fenceDoc": 0,
+        "fenceValue": 0,
+        "tableData": 0,
+        "tableJudgment": 0,
+        "assertion": 1,
+        "judgment": 1,
+        "prose": 80
+      },
+      "shares": {
+        "cut": 0,
+        "extract": 0,
+        "harden": 1.2195121951219512,
+        "keep": 1.2195121951219512
+      },
+      "magicDensity": 3.6585365853658534,
+      "verdict": "KEEP"
+    },
+    {
+      "path": "skills/siteasy/references/wcag-2-2.md",
+      "lines": 261,
+      "buckets": {
+        "fenceDoc": 22,
+        "fenceValue": 48,
+        "tableData": 46,
+        "tableJudgment": 13,
+        "assertion": 1,
+        "judgment": 2,
+        "prose": 129
+      },
+      "shares": {
+        "cut": 8.42911877394636,
+        "extract": 17.624521072796934,
+        "harden": 0.38314176245210724,
+        "keep": 24.137931034482758
+      },
+      "magicDensity": 10.727969348659004,
+      "verdict": "EXTRACT"
+    }
+  ]
+}

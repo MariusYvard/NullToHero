@@ -1,0 +1,20 @@
+name,url,media,license,attribution,redistributable,notes
+StockSnap,https://stocksnap.io/,photos,CC0 1.0,no,yes,"Every image dedicated to the public domain, free even commercially."
+The Met Open Access,https://www.metmuseum.org/about-the-met/policies-and-documents/open-access,"photos, art",CC0 1.0,no,yes,"Around 490000 images of public-domain works, API available."
+Smithsonian Open Access,https://www.si.edu/openaccess,"photos, art",CC0 1.0,no,yes,Millions of CC0 images and 2D/3D assets.
+Art Institute of Chicago,https://www.artic.edu/open-access,"photos, art",CC0 1.0,no,yes,Public-domain artworks via a documented API.
+Cleveland Museum of Art,https://www.clevelandart.org/open-access,"photos, art",CC0 1.0,no,yes,Open Access API for public-domain works.
+Rijksmuseum,https://www.rijksmuseum.nl/en/rijksstudio,"photos, art",Public domain,no,yes,"High-resolution public-domain masters, Rijksstudio API."
+NASA Images,https://images.nasa.gov/,"photos, video",Public domain,no,yes,"US government work, mostly public domain. Do not imply NASA endorsement, some partner media may be restricted."
+Library of Congress,https://www.loc.gov/free-to-use/,photos,Public domain,no,yes,"Curated free-to-use sets, confirm the item is public domain."
+Wikimedia Commons,https://commons.wikimedia.org/,"photos, video","Public domain, CC0",varies,yes,"Filter to the public-domain or CC0 subset, each file states its own license."
+Internet Archive,https://archive.org/details/prelinger,video,Public domain,no,yes,"Prelinger and other public-domain film collections, confirm per item."
+Pond5 Public Domain Project,https://www.pond5.com/free,video,Public domain,no,yes,Historical public-domain footage and stills.
+Openverse,https://openverse.org/,photos,CC0 and others,varies,yes,"Aggregator, filter results to CC0 or public domain before reuse."
+Picryl,https://picryl.com/,photos,Public domain,no,yes,"Public-domain aggregator across archives, confirm per item."
+Flickr Commons,https://www.flickr.com/commons,photos,No known copyright,varies,yes,"Institutional sets with no known copyright restrictions, verify per image."
+Unsplash,https://unsplash.com/,photos,Unsplash License,no,no,"Free to use, but compiling or redistributing the files is prohibited. Link or download for a project, never commit to a pack."
+Pexels,https://www.pexels.com/,"photos, video",Pexels License,no,no,"Free to use, standalone redistribution of the files is prohibited."
+Pixabay,https://pixabay.com/,"photos, video",Pixabay License,no,no,"Free to use, redistributing content on a standalone basis is prohibited."
+Coverr,https://coverr.co/,video,Coverr License,no,no,"Free commercial use, the raw footage may not be redistributed as stock."
+Mixkit,https://mixkit.co/,video,Mixkit License,no,no,"Free use, redistributing the raw files or building a competing library is prohibited."

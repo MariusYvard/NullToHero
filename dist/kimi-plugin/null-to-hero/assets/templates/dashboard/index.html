@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <aside class="sidebar" aria-label="Primary">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Console</span>
+      </div>
+      <nav aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="#" aria-current="page">Overview</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="#">Team</a></li>
+          <li><a href="#">Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <button class="menu-btn" type="button" aria-label="Toggle navigation">
+        <span aria-hidden="true"></span>
+      </button>
+      <h1 class="topbar-title">Overview</h1>
+      <div class="topbar-actions">
+        <label class="search" for="q">
+          <span class="visually-hidden">Search</span>
+          <input id="q" type="search" placeholder="Search" autocomplete="off">
+        </label>
+        <span class="avatar" aria-hidden="true">AB</span>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+      <section class="stats" aria-label="Key metrics">
+        <article class="stat-card">
+          <p class="stat-label">Revenue</p>
+          <p class="stat-value">$48,290</p>
+          <p class="stat-trend up">+12.4% this month</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Active users</p>
+          <p class="stat-value">7,842</p>
+          <p class="stat-trend up">+3.1% this week</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Open tickets</p>
+          <p class="stat-value">36</p>
+          <p class="stat-trend down">-8 since Monday</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Conversion</p>
+          <p class="stat-value">4.7%</p>
+          <p class="stat-trend up">+0.4 pts</p>
+        </article>
+      </section>
+
+      <section class="panel" aria-label="Recent orders">
+        <div class="panel-head">
+          <h2>Recent orders</h2>
+          <a class="panel-link" href="#">View all</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption class="visually-hidden">Recent orders with customer, status and amount</caption>
+            <thead>
+              <tr>
+                <th scope="col">Order</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Status</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">#10428</th>
+                <td>Dana Ruiz</td>
+                <td><span class="pill pill-ok">Paid</span></td>
+                <td>$320.00</td>
+              </tr>
+              <tr>
+                <th scope="row">#10427</th>
+                <td>Leo Fischer</td>
+                <td><span class="pill pill-wait">Pending</span></td>
+                <td>$85.50</td>
+              </tr>
+              <tr>
+                <th scope="row">#10426</th>
+                <td>Mira Osei</td>
+                <td><span class="pill pill-ok">Paid</span></td>
+                <td>$1,240.00</td>
+              </tr>
+              <tr>
+                <th scope="row">#10425</th>
+                <td>Sven Larsen</td>
+                <td><span class="pill pill-off">Refunded</span></td>
+                <td>$60.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

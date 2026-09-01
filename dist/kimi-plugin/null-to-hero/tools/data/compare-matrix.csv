@@ -1,0 +1,14 @@
+capability,nulltohero,builders,audit-tools,seo-suites,design-skills
+Designs and builds real pages,yes,yes,no,no,partial
+Audits an existing site,yes,no,yes,yes,no
+Routes every finding to the command that fixes it,yes,no,no,no,no
+"Deterministic 0-100 score, reproducible in CI",yes,no,partial,partial,no
+"Design taste scored (memorability, motion, Gestalt)",yes,partial,no,no,partial
+SEO with structured data,yes,no,partial,yes,no
+"AI-search visibility (GEO, llms.txt)",yes,no,no,partial,no
+Accessibility: WCAG 2.2 rules and contrast checks,yes,partial,yes,no,partial
+CI gate on every push,yes,no,yes,no,no
+"Runs inside Claude, on your own files",yes,no,no,no,yes
+Hands the finished site to a non-technical owner,yes,no,no,no,no
+"Free, open source, no account",yes,no,yes,no,yes
+"Editable knowledge (rules, laws, resources as CSV)",yes,no,no,no,partial

@@ -1,0 +1,4 @@
+@media (pointer: fine) {
+  * { cursor: none; }
+  .cursor-dot { position: fixed; width: 12px; height: 12px; }
+}

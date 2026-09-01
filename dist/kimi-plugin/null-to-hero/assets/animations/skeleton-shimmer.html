@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skeleton shimmer card</title>
+<style>
+  :root {
+    --card-bg: #ffffff; --bone: #e4e9f3; --sheen: #f3f6fc;
+    --radius: 14px; --gap: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-items: center; padding: 24px;
+    background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .card {
+    width: min(320px, 90vw); padding: 18px;
+    background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: 0 6px 20px rgba(40, 50, 80, 0.08);
+    display: grid; gap: var(--gap);
+  }
+  .row { display: flex; gap: var(--gap); align-items: center; }
+  .bone {
+    background: var(--bone); border-radius: 8px; position: relative; overflow: hidden;
+  }
+  .avatar { width: 52px; height: 52px; border-radius: 50%; flex: none; }
+  .stack { flex: 1; display: grid; gap: 8px; }
+  .line { height: 12px; }
+  .line.short { width: 55%; }
+  .thumb { width: 100%; height: 120px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .bone::after {
+      content: ""; position: absolute; inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, var(--sheen), transparent);
+      animation: nth-shimmer 1.4s ease-in-out infinite;
+    }
+  }
+  @keyframes nth-shimmer { 100% { transform: translateX(100%); } }
+</style>
+</head>
+<body>
+  <div class="card" role="status" aria-label="Loading content">
+    <div class="row">
+      <div class="bone avatar"></div>
+      <div class="stack">
+        <div class="bone line"></div>
+        <div class="bone line short"></div>
+      </div>
+    </div>
+    <div class="bone thumb"></div>
+    <div class="bone line"></div>
+    <div class="bone line short"></div>
+  </div>
+</body>
+</html>

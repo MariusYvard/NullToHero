@@ -1,0 +1,186 @@
+stage,category,tier,cost,use,name,url,status,notes
+build,ui-graphics,more,free,"asset or tool, check per item",Humaaans,https://www.humaaans.com,live,Cool illustrations of people with the ability to mix and match |
+build,ui-graphics,more,free,"asset or tool, check per item",Open Peeps,https://www.openpeeps.com,live,Hand drawn illustration library |
+build,ui-graphics,more,freemium,"asset or tool, check per item",Blush,https://blush.design,live,Free customizable illustrations with Figma Plugin |
+build,ui-graphics,top,free,"asset or tool, check per item",Hero Patterns,http://www.heropatterns.com,live,A collection of repeatable SVG background patterns |
+build,ui-graphics,top,free,"asset or tool, check per item",Transparent Textures,https://www.transparenttextures.com,live,A collection of transparent textures background patterns. |
+build,ui-graphics,more,free,"asset or tool, check per item",Dimensions,https://www.dimensions.com,live,Dimensions.com is an ongoing reference database of dimensioned drawings documenting the standard measurements and sizes 
+build,ui-graphics,more,free,"asset or tool, check per item",Pattern Monster,https://pattern.monster,live,A simple online pattern generator to create repeatable SVG patterns|
+build,ui-graphics,more,free,"asset or tool, check per item",Mesh Gradient,https://meshgradient.in,live,Generate & download beautiful mesh gradients. |
+type,fonts,top,free,"asset, respect the font licence (often OFL)",Google Fonts,https://fonts.google.com,live,Library of around 1000 free licensed font families |
+type,fonts,top,free,"asset, respect the font licence (often OFL)",Font Squirrel,https://www.fontsquirrel.com,unverified,"Font Squirrel scours the internet for high quality, legitimately free fonts |"
+type,fonts,top,free,"asset, respect the font licence (often OFL)",FontPair,https://fontpair.co,live,Helps you pair Google Fonts together
+type,fonts,top,free,"asset, respect the font licence (often OFL)",Befonts,https://befonts.com,live,High quality fonts for free |
+type,fonts,top,free,"asset, respect the font licence (often OFL)",Fontshare,https://www.fontshare.com,live,"Fontshare is a free fonts service from the Indian Type Foundry (ITF), making quality fonts accessible to all. |"
+color,color-tools,more,free,"tool, the palette you make is yours",Huetone,https://github.com/ardov/huetone,live,A tool to create accessible color systems. |
+color,color-tools,top,free,"tool, the palette you make is yours",Coolors,https://coolors.co,live,Create the perfect palette or get inspired by thousands of beautiful color schemes |
+color,color-tools,top,free,"tool, the palette you make is yours",Adobe Color,https://color.adobe.com/create,live,"Create color palettes, extract gradients from images, etc. |"
+color,color-tools,top,free,"tool, the palette you make is yours",Color Hunt,https://colorhunt.co,live,A free and open platform for color inspiration with thousands of trendy hand-picked color palettes |
+color,color-tools,more,free,"tool, the palette you make is yours",Palette Generator,https://palettegenerator.colorion.co,live,Generate new color palette with every spacebar press |
+color,color-tools,more,free,"tool, the palette you make is yours",whocanuse,https://whocanuse.com,live,A tool that brings attention and understanding to how color contrast can affect different people with visual impairments
+color,color-tools,more,free,"tool, the palette you make is yours",Colorable,https://colorable.jxnblk.com,live,Color combination contrast tester |
+color,color-tools,top,free,"tool, the palette you make is yours",Paletton,https://paletton.com,live,Paletton.com is a designer color tool designed for creating color combinations that work together well.|
+color,color-tools,top,free,"tool, the palette you make is yours",Huemint,https://huemint.com,live,"Huemint uses machine learning to create unique color schemes for your brand, website or graphic |"
+color,color-tools,more,free,"tool, the palette you make is yours",Volume,https://www.volumecolor.io,live,3D OKLCH color palette generator. |
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Feather Icons,https://feathericons.com,live,"Beautiful, customizable open source icons |"
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Tabler Icons,https://tabler.io/icons,live,"3500+ highly customizable open source SVG icons with React, Preact, Vue, Svelte and SolidJS support |"
+build,icons,more,free,"asset, check the set licence (often MIT or CC)",Simple Icons,https://simpleicons.org,live,1307 Free SVG icons for popular brands |
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Remix Icon,https://remixicon.com,live,Simply Delightful Icon System |
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Heroicons,https://heroicons.dev,live,"Free, open source icons from the creators of Tailwind CSS. |"
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Phosphor Icons,https://phosphoricons.com,live,"Phosphor is a flexible icon family for interfaces, diagrams, presentations |"
+build,icons,top,free,"asset, check the set licence (often MIT or CC)",Lucide,https://lucide.dev,live,"Lucide is an open-source icon library, a fork of Feather Icons. |"
+ship,favicons,top,free,"tool, the output is yours",Favicon.io,https://favicon.io,live,"Generate a favicon from text, from an image, or from an emoji. Download in .ico and .png formats |"
+ship,favicons,top,free,"tool, the output is yours",Favicon Generator,http://tools.dynamicdrive.com/favicon,live,Generate favicon ico files for your website |
+ship,favicons,top,free,"tool, the output is yours",RealFaviconGenerator,https://realfavicongenerator.net,live,"Generate icons for all platforms (Windows, iOS, Android) |"
+ship,favicons,top,free,"tool, the output is yours",Maskable.app Editor,https://maskable.app/editor,live,Generate maskable PWA icons based on your existing icon |
+ship,favicons,top,free,"tool, the output is yours",Favicon Generator,https://favicon.inbrowser.app,live,"Generate website's favicon assets. SVG, maskable, image minified supported. Pure frontend. No privacy risk. Fast.|"
+build,icon-fonts,top,freemium,"asset, open-source font licence",Font Awesome,https://fontawesome.com,live,The web's most popular icon set and toolkit |
+build,icon-fonts,top,free,"asset, open-source font licence",Material Icons,https://fonts.google.com/icons,live,Material design icon library |
+build,icon-fonts,top,free,"asset, open-source font licence",Boxicons,https://boxicons.com,live,Boxicons is a free collection of carefully crafted open source icons |
+build,icon-fonts,more,free,"asset, open-source font licence",Linea,https://linea.io,live,Linea: Featuring 750+ Free Icons |
+imagery,stock-photos,top,free,see stock-media.md for the licence split,Pexels,https://www.pexels.com,live,Free stock photos shared by talented creators |
+imagery,stock-photos,top,free,see stock-media.md for the licence split,Unsplash,https://unsplash.com,live,The internet's source of freely usable images
+imagery,stock-photos,top,free,see stock-media.md for the licence split,Pixabay,https://pixabay.com,live,Over 1.7 million+ high-quality stock images and videos |
+imagery,stock-photos,more,free,see stock-media.md for the licence split,Placeholder,https://placeholder.com,live,A free image placeholder service for the web. You can specify image size and format |
+imagery,stock-photos,more,free,see stock-media.md for the licence split,Lorem Picsum,https://picsum.photos,live,An easy to use API to get beautiful placeholder images. Size and other parameters can be specified. |
+imagery,stock-photos,more,free,see stock-media.md for the licence split,Creative Commons,https://search.creativecommons.org,live,Search for free images to reuse.
+imagery,stock-photos,top,free,see stock-media.md for the licence split,Openverse,https://openverse.org,live,Openverse is a search engine for openly-licensed media |
+imagery,stock-videos,top,free,see stock-media.md for the licence split,Pexels,https://www.pexels.com/videos,live,"Largest library of free to use videos, donated by the community |"
+imagery,stock-videos,top,free,see stock-media.md for the licence split,Pixabay,https://www.pixabay.com/videos,live,"Large library of free to use videos, donated by the community similar to Pexels |"
+imagery,stock-videos,top,free,see stock-media.md for the licence split,Coverr.co,https://coverr.co,live,Beautiful free stock video footage |
+imagery,audio,top,free,check the track licence,Mixkit,https://mixkit.co/free-stock-music,live,Free music for your projects |
+imagery,audio,top,free,check the track licence,Freesound,https://freesound.org,live,Free stock music and sounds |
+imagery,audio,top,free,check the track licence,Pixabay,https://pixabay.com/music,live,"Free music downloads for your project like Youtube videos, Music, Vlog, Film, Podcast etc. |"
+build,illustrations,more,free,"asset, check the pack licence",blob,https://blobs.app,live,Generate Blob shapes for Web and Flutter apps |
+build,illustrations,more,free,"asset, check the pack licence",SVG wave,https://svgwave.in,live,"A free, & customizable gradient 🌈 SVG wave generator for UI designs . |"
+build,illustrations,more,free,"asset, check the pack licence",Haikei,https://app.haikei.app,live,An awesome multishape web app. |
+build,illustrations,more,free,"asset, check the pack licence",Vector,https://vector.ma,live,Awesome website for all kinds of Moroccan vectors. |
+present,mockups,top,free,"tool, the export is yours",Screely,https://www.screely.com,live,Instantly turn your screenshot into a mockup |
+present,mockups,top,free,"tool, the export is yours",Screenshot.rocks,https://screenshot.rocks,live,Create beautiful browser & mobile mockups in seconds |
+present,mockups,top,free,"tool, the export is yours",Mockuphone,https://mockuphone.com,live,"100% free mockups for all devices including IOS, Android, Windows Phone, Laptop & Desktop and TV |"
+present,mockups,top,free,"tool, the export is yours",Device Shots,https://deviceshots.com,live,"Create high-resolution device mockups for social media, for free |"
+present,mockups,top,free,"tool, the export is yours",Pika,https://pika.style,live,"Instantly create browser mockups and beautiful images for marketing, blog post and more |"
+scaffold,templates,top,free,check the template licence,Templatemo,https://templatemo.com,live,"Minimal, resume, gallery themes and more |"
+scaffold,templates,top,free,check the template licence,Start Bootstrap,https://startbootstrap.com,live,Bootstrap starter themes |
+scaffold,templates,top,free,check the template licence,Cruip,https://cruip.com/free-templates,live,Fully coded HTML templates to help you easily build your startup landing page without hassles. |
+scaffold,css-frameworks,top,free,open-source framework,Tailwind CSS,https://tailwindcss.com,live,"Low level, utility-first framework |"
+scaffold,css-frameworks,top,free,open-source framework,Bootstrap,https://getbootstrap.com,live,Popular UI framework with tons of components that use both CSS and JS |
+scaffold,css-frameworks,top,free,open-source framework,Bulma,https://bulma.io,live,Modern CSS framework with no JS |
+scaffold,css-frameworks,more,free,open-source framework,Skeleton,http://getskeleton.com,live,Extremely light framework for basic UI elements |
+scaffold,css-frameworks,more,free,open-source framework,Foundation,https://get.foundation,live,Mobile first framework with clean markup |
+scaffold,css-frameworks,more,free,open-source framework,Pure CSS,https://pure-css.github.io/,live,"A set of small, responsive CSS modules |"
+scaffold,css-frameworks,top,free,open-source framework,Tachyons,https://tachyons.io,live,"Create fast loading, highly readable, and 100% responsive interfaces with as little css as possible. |"
+scaffold,css-frameworks,top,free,open-source framework,Material Bootstrap,https://fezvrasta.github.io/bootstrap-material-design,live,Material Design with Bootstrap |
+scaffold,css-frameworks,top,free,open-source framework,Pico.css,https://picocss.com,live,Elegant styles for all natives HTML elements without .classes and dark mode automatically enabled. |
+motion,css-animation,top,free,open-source library,Animate.css,https://animate.style,live,Just-add-water CSS animations |
+motion,css-animation,top,free,open-source library,Magic Animations,https://www.minimamente.com/project/magic,live,Animations has been one of the most impressive animation libraries available |
+motion,css-animation,top,free,open-source library,Hover.css,http://ianlunn.github.io/Hover,live,Hover.css is a CSS animation library designed for use with buttons and other UI elements in your website |
+motion,css-animation,top,free,open-source library,Animista,http://animista.net,live,CSS Animations On Demand |
+motion,css-animation,more,free,open-source library,Infinite,https://tilomitra.github.io/infinite,live,"These animations, like rotations and pulses, that are specifically designed to run and repeat forever |"
+motion,css-animation,more,free,open-source library,Motion,https://motion.dev,live,"The motion package (Framer Motion and Motion One merged): springs, useInView and the useReducedMotion JS guard |"
+motion,css-animation,top,free,open-source library,AOS,https://michalsnik.github.io/aos,live,Animate On Scroll Library. |
+motion,js-animation,top,free,open-source library,GSAP,https://gsap.com,live,A JavaScript library for building high-performance animations that work in every major browser |
+motion,js-animation,top,free,open-source library,three.js,https://github.com/mrdoob/three.js,live,"An easy to use, lightweight, 3D library with a default WebGL renderer. |"
+motion,js-animation,more,free,open-source library,Popmotion,https://popmotion.io,live,Simple animation libraries for delightful user interfaces. |
+build,charts,top,free,open-source library,Data Driven Documents (D3),https://d3js.org,live,Bind complicated and massive data to interactive graphs. |
+build,charts,top,free,open-source library,ApexCharts.Js,https://apexcharts.com,live,Modern & Interactive Open-source Charts |
+build,charts,top,free,open-source library,Chartist,http://gionkunz.github.io/chartist-js/index.html,live,Simple responsive charts |
+build,charts,top,free,open-source library,Nivo,https://nivo.rocks,unverified,"Nivo provides supercharged React components to easily build dataviz apps, it's built on top of d3. Also comes with serve"
+build,charts,top,free,open-source library,Echarts,https://echarts.apache.org/en/index.html,live,An Open Source JavaScript Visualization Library with declarative syntax for Rapid Construction of Web-based Visualizatio
+build,ui-kits,top,free,"open-source, check the licence",Flowbite,https://flowbite.com,live,Open-source library of Tailwind CSS components |
+build,ui-kits,top,free,"open-source, check the licence",daisyUI,https://daisyui.com,live,Tailwind CSS Components |
+build,ui-kits,more,free,"open-source, check the licence",CSS Grid Generator,https://cssgrid-generator.netlify.app,live,An open-source project that allow users to quickly create dynamic layout based on CSS Grid. |
+build,ui-kits,more,free,"open-source, check the licence",Fast,https://www.fast.design,live,"An interface system that can be used with modern Web Frameworks such as React, Vue and Angular. |"
+build,ui-kits,more,freemium,"open-source, check the licence",LottieFiles,https://lottiefiles.com,live,"Interactive animations in many formats like json,gif and mp4, libraries and plugins for Web & Mobile . |"
+build,ui-kits,top,free,"open-source, check the licence",Headless UI,https://headlessui.com,live,"Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS. |"
+build,ui-kits,top,free,"open-source, check the licence",Flowbite Admin Dashboard,https://github.com/themesberg/flowbite-admin-dashboard,live,"Free and open-source admin dashboard template built with Tailwind CSS and Flowbite featuring 15 examples pages, charts, "
+build,ui-kits,more,free,"open-source, check the licence",Sonner,https://sonner.emilkowal.ski,live,An opinionated toast component for React. |
+build,ui-kits,top,free,"open-source, check the licence",Shadcnui Blocks,https://www.shadcnui-blocks.com,live,Effortless Shadcn UI Component Previews & Code Snippets. |
+build,ui-kits,top,free,"open-source, check the licence",Shadcn studio,https://shadcnstudio.com,live,Preview your theme changes across different components and layouts. |
+build,ui-kits,top,free,"open-source, check the licence",Shadcn Examples,https://shadcnexamples.com,live,"Examples and components built with React and Tailwind CSS, compatible with Shadcn UI. |"
+build,ui-kits,top,free,"open-source, check the licence",Shadcn Admin,https://shadcnadmin.com,live,"A multipurpose admin dashboard template for React, Next.js, and Vue.js. Fully compatible with shadcn/ui."
+build,react-ui,top,free,"open-source, check the licence",Material UI,https://mui.com,live,"React components for faster and easier web development, based on Material Design |"
+build,react-ui,top,free,"open-source, check the licence",Chakra UI,https://chakra-ui.com,live,Build accessible React apps & websites with speed. [Openchakra](https://openchakra.app/) |
+build,react-ui,top,free,"open-source, check the licence",Mantine,https://mantine.dev,live,"React components and hooks library with native dark theme support focused on usability, accessibility and developer expe"
+build,react-ui,top,freemium,"open-source, check the licence",HeroUI - Previously NextUI,https://www.heroui.com,live,"Beautiful, fast and modern React UI library that allows you to create beatiful websites regardless of your design experi"
+build,react-ui,more,free,"open-source, check the licence",Evergreen,https://evergreen.segment.com,live,Design system for React |
+build,react-ui,top,free,"open-source, check the licence",Ant Design,https://ant.design,live,Open source design React UI library. |
+build,react-ui,more,free,"open-source, check the licence",React Spring,https://www.react-spring.io,live,Spring-physics based animation library for React applications. |
+build,react-ui,more,freemium,"open-source, check the licence",Framer Motion,https://motion.dev/,live,A React library to power production-ready animations. |
+build,react-ui,more,free,"open-source, check the licence",Tabler,https://github.com/tabler/tabler-react,live,Tabler is a free React admin dashboard template ideal for any kind of back-end web application. |
+build,react-ui,more,free,"open-source, check the licence",Gestalt,https://github.com/pinterest/gestalt,live,A set of React UI components that supports Pinterest's design language. |
+build,react-ui,more,free,"open-source, check the licence",Base UI,https://github.com/mui/base-ui,live,"Unstyled UI components for building accessible web apps and design systems. From the creators of Radix, Floating UI, and"
+build,react-ui,more,free,"open-source, check the licence",Radix UI,https://www.radix-ui.com,live,"Unstyled, accessible components for building high‑quality design systems and web apps in React |"
+build,react-ui,top,freemium,"open-source, check the licence",Materio MUI React NextJS Admin Template,https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free,live,Most Powerful & Comprehensive Open-source MUI React NextJS Admin Dashboard Template built for developers. |
+build,react-ui,top,free,"open-source, check the licence",Chakra Templates,https://chakra-templates.dev,unverified,A growing collection of hand-crafted & responsive Chakra UI templates ready to drop into your React project. |
+build,react-ui,top,free,"open-source, check the licence",shadcn/ui,https://ui.shadcn.com,live,Beautifully designed components built with Radix UI and Tailwind CSS. |
+build,react-ui,top,free,"MIT registry, install it, then own the code",Magic UI,https://magicui.design,live,"78 animated components (React 19, Tailwind v4, motion) distributed as a shadcn registry plus an MCP server: the code lands in your project and is audited as site code; most components need a reduced-motion guard added |"
+build,react-ui,top,free,"MIT registry, install it, then own the code",Magic UI components,https://magicui.design/docs/components,live,"The component index, grouped (Special Effects, Text Animations, Backgrounds, Device Mocks, Buttons). Fetch a component's own page for its real props before installing: the bundled recipes carry only what canonical demos showed and can go stale between releases |"
+build,react-ui,top,free,"open-source, check the licence",Shadcn Templates,https://shadcntemplates.com,live,"Free collection of Shadcn UI templates, components, blocks, boilerplates, and more. |"
+build,vue-ui,top,free,"open-source, check the licence",Vuetify,https://vuetifyjs.com/en,live,Material design component framework |
+build,vue-ui,more,free,"open-source, check the licence",Grace,https://github.com/Trendyol/grace,live,Design System For Vue Applications. |
+build,vue-ui,top,free,"open-source, check the licence",Quasar,https://quasar.dev,live,"High-performance Material Design component suite with builders for SPA, SSR, PWA, Mobile (Cordova & Capacitor), Desktop "
+build,vue-ui,top,free,"open-source, check the licence",Element,https://element.eleme.io/#/en-US,live,Desktop UI library for Vue |
+build,vue-ui,top,free,"open-source, check the licence",Materio Vuetify Vuejs Admin Template,https://github.com/themeselection/materio-vuetify-vuejs-admin-template-free,live,Open-source & Easy to use Vuetify Vuejs Admin Template with Elegant Design & Unique Layout |
+build,vue-ui,top,free,"open-source, check the licence",Naive UI,https://www.naiveui.com,live,A Vue 3 Component Library. Fairly Complete. Customizable Themes. Uses TypeScript. Not too Slow. |
+build,angular-ui,top,free,"open-source, check the licence",PrimeNG,https://www.primefaces.org/primeng/#,live,Powerful UI component library for Angular |
+build,angular-ui,top,free,"open-source, check the licence",Nebular,https://akveo.github.io/nebular,live,"Customizable UI Kit, Auth & Security for Angular |"
+build,angular-ui,more,free,"open-source, check the licence",Clarity,https://clarity.design,live,CSS based Angular UI framework developed by VMware group |
+build,svelte-ui,top,free,"open-source, check the licence",Svelte Material UI,https://sveltematerialui.com,live,UI library for Svelte based on Material Design |
+build,svelte-ui,top,free,"open-source, check the licence",Carbon Components Svelte,https://carbon-components-svelte.onrender.com,live,"A component library that implements the Carbon Design System, an open source design system by IBM.|"
+build,svelte-ui,top,free,"open-source, check the licence",Skeleton,https://www.skeleton.dev,live,Skeleton is an open source UI toolkit built with Svelte + Tailwind that allows you to create reactive web interfaces usi
+brand,design-inspiration,top,free,"gallery, for reference only",CSS Zen Garden,http://csszengarden.com/,live,One HTML file restyled by hundreds of CSS-only themes
+brand,design-inspiration,top,free,"gallery, for reference only",Behance,https://www.behance.net/,live,Adobe's portfolio network for design projects across disciplines
+brand,design-inspiration,top,free,"gallery, for reference only",Dribbble,https://dribbble.com/,live,"Portfolio network of designer shots, strong on visual and brand work"
+brand,design-inspiration,top,free,"gallery, for reference only",Awwwards,https://www.awwwards.com/,live,Jury-scored awards for website design and development
+brand,design-inspiration,top,free,"gallery, for reference only",Codrops,https://tympanus.net/codrops/,unverified,"UI experiments, patterns and tutorials for web interfaces"
+build,code-examples,top,free,"third-party snippets, read the technique, re-author it",Freefrontend,https://freefrontend.com/,live,"Indexed CSS, HTML, JS and Tailwind demos with source. Aggregator: each demo belongs to its author under its own licence, often unstated, so treat it as reference and write your own implementation |"
+build,code-examples,top,free,"third-party snippets, read the technique, re-author it",Freefrontend CSS examples,https://freefrontend.com/css-code-examples/,live,282 CSS-only collections indexed by pattern. Best source for how an effect is achieved before you build it yourself |
+brand,design-inspiration,more,free,"gallery, for reference only",CSS box-shadow,https://getcssscan.com/css-box-shadow-examples,live,Gallery of CSS box-shadow examples with source code
+brand,design-inspiration,more,free,"gallery, for reference only",Curated,https://craftwork.design/curated/websites,live,"Web design inspiration gallery, editor picked"
+build,design-systems,top,free,"reference, check the licence",Microsoft Fluent UI,https://developer.microsoft.com/en-us/fluentui#/,live,"Microsoft's Fluent UI frameworks for web, React and native platforms"
+build,design-systems,top,free,"reference, check the licence",Laws of UX,https://lawsofux.com/,live,Reference of psychology principles that apply to interface design
+build,design-systems,more,free,"reference, check the licence",Patterns,https://www.patterns.dev,live,Guide to design and component patterns for vanilla JavaScript and React apps
+build,design-tools,top,free,"tool, the export is yours",Penpot,https://penpot.app/,live,"Open source design and prototyping platform based on SVG, self-hostable"
+build,design-tools,top,freemium,"tool, the export is yours",Canva,https://www.canva.com/,live,"Template-driven graphic editor for social, print and presentation formats"
+build,design-tools,more,freemium,"tool, the export is yours",Whimsical,https://whimsical.com/,live,"Wireframes, flowcharts, mind maps and docs in one workspace"
+build,design-tools,more,free,"tool, the export is yours",Personas,https://personas.draftbit.com/,live,Avatar generator with mix-and-match facial features
+build,design-tools,top,freemium,"tool, the export is yours",Photopea,https://www.photopea.com,live,"Browser image editor that opens PSD, XD, Sketch and RAW files"
+build,design-tools,top,free,"tool, the export is yours",Excalidraw,https://excalidraw.com/,live,"Whiteboard editor for hand-drawn style diagrams, supports collaboration"
+build,design-tools,top,free,"tool, the export is yours",Diagrams,https://www.drawio.com/,live,"Diagram and flowchart editor, runs in the browser or as desktop app"
+build,design-tools,top,free,"tool, the export is yours",Mermaid,https://github.com/mermaid-js/mermaid,live,"Renders flowcharts, sequence and Gantt diagrams from text definitions"
+build,design-tools,top,freemium,"tool, the export is yours",Webflow,https://webflow.com/,live,"Visual site builder with CMS and hosting, outputs production HTML and CSS"
+build,design-tools,more,free,"tool, the export is yours",Trace,https://stickermule.com/trace,live,Automatic photo background removal by Sticker Mule
+build,design-tools,more,freemium,"tool, the export is yours",GTmetrix,https://gtmetrix.com/,live,Page speed testing with Lighthouse metrics and history
+build,design-tools,more,free,"tool, the export is yours",Carbon,https://carbon.now.sh,live,Code snippet images with syntax themes
+build,desktop-apps,top,free,"tool, the output is yours",Gimp,https://www.gimp.org/,live,"Open source raster image editor, closest free equivalent to Photoshop"
+build,desktop-apps,top,free,"tool, the output is yours",Blender,https://www.blender.org/download/,live,"Open source 3D suite for modeling, animation and rendering"
+build,desktop-apps,top,free,"tool, the output is yours",Krita,https://krita.org/en/download/krita-desktop/,live,Open source painting program aimed at digital artists
+build,desktop-apps,top,free,"tool, the output is yours",Inkscape,https://inkscape.org/,live,Open source vector graphics editor using the SVG format
+build,react-native-ui,top,free,"open-source, check the licence",React Native Paper,https://reactnativepaper.com/,live,Material Design component library for React Native
+build,react-native-ui,more,free,"open-source, check the licence",Moti,https://moti.fyi/,live,"Animation library for React Native built on Reanimated, works on web"
+build,react-native-ui,top,free,"open-source, check the licence",Tamagui,https://tamagui.dev/,live,Style system and UI kit shared across React web and native targets
+build,browser-extensions,top,free,"tool, install in your browser",Web Developer,https://chromewebstore.google.com/detail/web-developer/bfbameneiokkgbdmiekhjnmfkcnldhhm,live,Toolbar of utilities to inspect and toggle page features
+build,browser-extensions,top,free,"tool, install in your browser",React Developer Tool,https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi,live,Inspects React component trees inside DevTools
+scaffold,dev-resources,top,free,"asset or tool, check per item",css-tricks,https://css-tricks.com/,live,Long-running reference site of CSS techniques and guides
+scaffold,dev-resources,top,freemium,"asset or tool, check per item",Codepen,https://codepen.io/,live,"Front-end playground for building and sharing HTML, CSS and JS demos"
+scaffold,dev-resources,top,free,"asset or tool, check per item",DevDocs,https://devdocs.io/,live,Combined searchable API documentation for many languages and tools
+scaffold,dev-resources,top,free,"asset or tool, check per item",Shields,https://shields.io,live,Generates status badges for READMEs with custom styling
+scaffold,dev-resources,top,free,"asset or tool, check per item",tldraw,https://www.tldraw.com,live,Open source whiteboard with an embeddable canvas SDK
+scaffold,dev-resources,more,free,"asset or tool, check per item",DebugBear Speed Test,https://www.debugbear.com/test/website-speed,live,Page speed test with Core Web Vitals breakdown
+scaffold,dev-resources,top,free,"asset or tool, check per item",PageSpeed Insights,https://pagespeed.web.dev/,live,"Core Web Vitals field data from CrUX plus a Lighthouse lab run for one URL; field and lab disagree by design"
+scaffold,dev-resources,top,freemium,"asset or tool, check per item",WebPageTest,https://www.webpagetest.org/,live,"Load waterfall, filmstrip and multi-location timing runs; the free public instance is rate-limited"
+motion,scrollytelling,top,free,open-source library,Lenis,https://github.com/darkroomengineering/lenis,live,Lightweight smooth scroll; drive ScrollTrigger.update from its rAF and destroy it under prefers-reduced-motion |
+motion,scrollytelling,top,free,open-source library,Scrollama,https://github.com/russellsamora/scrollama,live,"Step-based scrollytelling on IntersectionObserver, the data-journalism standard |"
+motion,scrollytelling,more,free,open-source library,Closeread,https://closeread.dev,live,"Quarto extension for declarative scrollytelling (sticky visuals, focus-on steps, pan and zoom), MIT |"
+motion,scrollytelling,top,free,open-source library,GSAP ScrollTrigger,https://gsap.com/docs/v3/Plugins/ScrollTrigger/,live,"Scroll-driven animation reference (scrub, pin, toggleActions); the whole GSAP plugin set is free since 3.13 |"
+motion,webgl,more,free,open-source library,detect-gpu,https://github.com/pmndrs/detect-gpu,live,GPU tier detection to gate WebGL effects behind measured capability instead of user-agent guesses |
+motion,webgl,more,free,open-source library,React Three Fiber,https://r3f.docs.pmnd.rs,live,React renderer for three.js |
+motion,webgl,more,free,open-source library,webgl-noise,https://github.com/stegu/webgl-noise,live,MIT simplex and classic noise in GLSL; the canonical source to take noise shaders from |
+motion,webgl,more,free,open-source library,lil-gui,https://lil-gui.georgealways.com,live,Bounded tuning panel for dialing subjective parameters during design; never ships to production |
+motion,webgl,more,free,open-source library,@react-spring/three,https://www.npmjs.com/package/@react-spring/three,live,"Spring animation with its own loop outside React, the documented way to animate R3F without setState |"
+motion,webgl,more,free,open-source library,cobe,https://cobe.vercel.app,live,Lightweight WebGL dotted globe |
+imagery,svg,more,free,open-source library,svg-dotted-map,https://www.npmjs.com/package/svg-dotted-map,live,Dotted world maps as pure SVG |
+ship,seo,more,free,open protocol,IndexNow,https://www.indexnow.org,live,"Instant-indexing pings shared by Bing, Yandex, Naver, Seznam and Yep; Google abstains — keep sitemaps |"
+build,react-ui,more,free,"open-source, check the licence",Recharts,https://recharts.org/,live,A composable charting library built on React components. |
+build,react-ui,more,free,"open-source, check the licence",React Aria,https://react-spectrum.adobe.com/react-aria/,live,A library of React Hooks that provides accessible UI primitives for your design system. |
