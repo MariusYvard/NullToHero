@@ -19,6 +19,12 @@
       "skills": 4,
       "agents": 0,
       "skillsDir": "~/.agents/skills"
+    },
+    {
+      "host": "hermes",
+      "skills": 4,
+      "agents": 0,
+      "skillsDir": "~/.hermes/skills (or the active profile's skills directory)"
     }
   ],
   "plugin": {

@@ -1,8 +1,8 @@
 # NullToHero — Manual installer for Windows (PowerShell)
-# Usage: powershell -ExecutionPolicy Bypass -File install.ps1 [-Target claude|codex|kimi|agents|all]
+# Usage: powershell -ExecutionPolicy Bypass -File install.ps1 [-Target claude|codex|kimi|agents|hermes|all]
 # Requires: Claude Code CLI, Git
 
-param([ValidateSet("claude","codex","kimi","agents","all")][string]$Target = "claude")
+param([ValidateSet("claude","codex","kimi","agents","hermes","all")][string]$Target = "claude")
 
 $ErrorActionPreference = "Stop"
 
@@ -50,7 +50,12 @@ function Install-Portable {
     # `.kimi-code`, pas `.kimi` : c'est le dossier que le lancement observé du
     # 19 août 2026 a montré, et celui que build-dist.mjs déclare. Ce script
     # écrivait ailleurs, donc son installation Kimi n'était jamais lue.
+    # Hermes lit $env:HERMES_HOME\skills, défaut %USERPROFILE%\.hermes\skills.
     $skillsDir = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi-code\skills" }
+                 elseif ($HostName -eq "hermes") {
+                     if ($env:HERMES_HOME) { Join-Path $env:HERMES_HOME "skills" }
+                     else { Join-Path $env:LOCALAPPDATA "hermes\skills" }
+                 }
                  else { Join-Path $env:USERPROFILE ".agents\skills" }
     New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
 
@@ -84,12 +89,25 @@ function Install-Portable {
     }
 
     # Le paquet neutre n'a pas de sous-agents : le standard n'en définit pas.
+    # Hermes non plus, dans dist\hermes\, mais ses 15 sous-agents existent à
+    # part en Agent Skills (hermes-agent\skills\), installés dans le même
+    # dossier de compétences plutôt que dans un répertoire que Hermes ne lit
+    # pas au démarrage.
     if (Test-Path (Join-Path $src "agents")) {
         $agentsDest = if ($HostName -eq "kimi") { Join-Path $env:USERPROFILE ".kimi-code\agents" }
                       else { Join-Path $env:USERPROFILE ".codex\agents" }
         New-Item -ItemType Directory -Path $agentsDest -Force | Out-Null
         Copy-Item (Join-Path $src "agents\*") $agentsDest -Recurse -Force
         Ok "sub-agents -> $agentsDest"
+    } elseif ($HostName -eq "hermes" -and (Test-Path (Join-Path $SCRIPT_DIR "hermes-agent\skills"))) {
+        foreach ($sub in Get-ChildItem (Join-Path $SCRIPT_DIR "hermes-agent\skills") -Directory) {
+            $dest = Join-Path $skillsDir $sub.Name
+            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
+            Copy-Item $sub.FullName $dest -Recurse
+            Set-Content -Path (Join-Path $dest ".nth-installed") -Value (Get-Date -Format o) -Encoding utf8
+            Ok "$($sub.Name) -> $dest"
+        }
+        Log "15 audit sub-agents installed as skills. Dispatch them with delegate_task."
     } else {
         Log "No sub-agents in this package: the Agent Skills standard defines none."
     }
@@ -101,6 +119,7 @@ switch ($Target) {
     "codex"  { Install-Portable "codex"; exit 0 }
     "kimi"   { Install-Portable "kimi";  exit 0 }
     "agents" { Install-Portable "agents"; exit 0 }
+    "hermes" { Install-Portable "hermes"; exit 0 }
     "all"    { Install-Portable "codex"; Install-Portable "kimi"; exit 0 }
 }
 

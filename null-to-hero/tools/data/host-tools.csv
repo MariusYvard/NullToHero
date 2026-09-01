@@ -1,12 +1,12 @@
-Capability,Claude Code,Kimi Code,Codex,Source
-read a file,Read,Read,,moonshotai.github.io/kimi-code/en/reference/tools.html
-read a media file,Read,ReadMediaFile,,moonshotai.github.io/kimi-code/en/reference/tools.html
-write a file,Write,Write,,moonshotai.github.io/kimi-code/en/reference/tools.html
-edit a file,Edit,Edit,,moonshotai.github.io/kimi-code/en/reference/tools.html
-match paths by pattern,Glob,Glob,,moonshotai.github.io/kimi-code/en/reference/tools.html
-search file contents,Grep,Grep,,moonshotai.github.io/kimi-code/en/reference/tools.html
-fetch a URL,WebFetch,FetchURL,,moonshotai.github.io/kimi-code/en/reference/tools.html
-search the web,WebSearch,WebSearch,,moonshotai.github.io/kimi-code/en/reference/tools.html
-run a shell command,Bash,Bash,,moonshotai.github.io/kimi-code/en/reference/tools.html
-ask the user a clarifying question,AskUserQuestion,AskUserQuestion,,moonshotai.github.io/kimi-code/en/reference/tools.html
-delegate to a sub-agent,Task,Agent,,moonshotai.github.io/kimi-code/en/reference/tools.html
+Capability,Claude Code,Kimi Code,Codex,Hermes,Source
+read a file,Read,Read,,read_file,moonshotai.github.io/kimi-code/en/reference/tools.html
+read a media file,Read,ReadMediaFile,,vision_analyze,moonshotai.github.io/kimi-code/en/reference/tools.html
+write a file,Write,Write,,write_file,moonshotai.github.io/kimi-code/en/reference/tools.html
+edit a file,Edit,Edit,,patch,moonshotai.github.io/kimi-code/en/reference/tools.html
+match paths by pattern,Glob,Glob,,search_files,moonshotai.github.io/kimi-code/en/reference/tools.html
+search file contents,Grep,Grep,,search_files,moonshotai.github.io/kimi-code/en/reference/tools.html
+fetch a URL,WebFetch,FetchURL,,web_extract,moonshotai.github.io/kimi-code/en/reference/tools.html
+search the web,WebSearch,WebSearch,,web_search,moonshotai.github.io/kimi-code/en/reference/tools.html
+run a shell command,Bash,Bash,,terminal,moonshotai.github.io/kimi-code/en/reference/tools.html
+ask the user a clarifying question,AskUserQuestion,AskUserQuestion,,clarify,moonshotai.github.io/kimi-code/en/reference/tools.html
+delegate to a sub-agent,Task,Agent,,delegate_task,moonshotai.github.io/kimi-code/en/reference/tools.html
