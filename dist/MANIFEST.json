@@ -20,5 +20,12 @@
       "agents": 0,
       "skillsDir": "~/.agents/skills"
     }
-  ]
+  ],
+  "plugin": {
+    "id": "null-to-hero",
+    "dir": "kimi-plugin",
+    "skills": 4,
+    "agents": 15,
+    "runtime": true
+  }
 }

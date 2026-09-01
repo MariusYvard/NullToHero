@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>three.js probe fixture, clean</title>
+<canvas id="c" data-engine="three.js r186"></canvas>
+<script>
+  const info = {
+    memory: { geometries: 6, textures: 4 },
+    render: { frame: 0, calls: 0, triangles: 0 },
+    programs: [{}, {}],
+    autoReset: true,
+    reset() { this.render.calls = 0; this.render.triangles = 0; },
+  };
+  const renderer = { info, getPixelRatio: () => 2 };
+  (function frame() {
+    if (info.autoReset) info.reset();
+    info.render.frame++;
+    info.render.calls += 120;
+    requestAnimationFrame(frame);
+  })();
+
+  const material = { uuid: "m-1", type: "MeshStandardMaterial",
+    map: { colorSpace: "srgb" }, normalMap: { colorSpace: "" } };
+  const meshes = [];
+  for (let i = 0; i < 6; i++) meshes.push({ isMesh: true, geometry: { uuid: "g-" + i }, material });
+  window.scene = { isScene: true, traverse(fn) { fn(this); meshes.forEach(fn); } };
+
+  if (window.__THREE_DEVTOOLS__) {
+    window.__THREE_DEVTOOLS__.dispatchEvent(new CustomEvent("observe", { detail: renderer }));
+  }
+</script>

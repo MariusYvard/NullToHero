@@ -1,0 +1,30 @@
+Id,Family,Severity,Title,Source
+CMS-01,config,error,public_folder is missing or not root-relative so image URLs point at the repository path or at the page's own directory,decap-cms-core selectMediaFilePath defaults public_folder to media_folder
+CMS-02,bridge,error,a collection folder sits outside the bridge allow-list so every save is refused,bridge.mjs checkPath
+CMS-03,bridge,error,a file collection entry sits outside the bridge allow-list,bridge.mjs checkPath
+CMS-04,bridge,error,media_folder sits outside the bridge allow-list so no upload can land,bridge.mjs checkPath
+CMS-05,config,error,a collection folder does not exist in the repository so the list stays empty,decap-cms-core entriesByFolder returns what the backend finds
+CMS-06,config,warning,a file collection entry names a file that does not exist yet,decap-cms-core entriesByFiles returns data null
+CMS-07,config,error,a collection has neither identifier_field nor a title field so no slug can be built,decap-cms-core reducers/collections IDENTIFIER_FIELDS
+CMS-08,config,error,a slug template names a field the collection does not have,decap-cms-core lib/formatters slugFormatter
+CMS-09,config,error,a relation widget names a collection that does not exist,decap-cms-widget-relation queries the named collection
+CMS-10,config,error,a relation widget names a value_field the target collection does not have,decap-cms-widget-relation value_field
+CMS-11,config,error,a widget media_folder override sits outside the bridge allow-list,bridge.mjs checkPath
+CMS-12,config,error,extension and format disagree so entries parse as the wrong shape,decap-cms-core formats/formats extensionFormatters
+CMS-13,config,error,two collection folders nest so the outer one lists the inner one's entries,decap-cms-core entriesByFolder walks by prefix
+CMS-14,config,error,the collection extension does not match the files on disk so the list stays empty,decap-cms-core entriesByFolder filters on extension
+CMS-15,backend,error,the backend name is not the one nth-backend.js registers,nth-backend.js registerBackend nth
+CMS-16,backend,error,proxy_url is not root-relative so the session cookie is not sent,decap-cms-backend-proxy request uses the same-origin default
+CMS-17,backend,error,the config branch and the policy branch disagree,cms-policy.json branch
+CMS-18,backend,error,publish_mode is editorial_workflow but the bridge implements the simple flow only,decap-cms-backend-proxy unpublishedEntries
+CMS-19,backend,error,local_backend is declared which routes the editor at a localhost server,decap-cms-core actions/config detectProxyServer
+CMS-20,security,error,an allow-list rule accepts .svg which runs script at the site origin,bridge.mjs cms-policy.json
+CMS-21,security,error,an allow-list rule reaches .github so the publish workflow is not out of reach,GitHub fine-grained token Workflows permission
+CMS-22,security,error,the relaxed content security policy is not scoped to /admin/,Netlify _headers path scoping
+CMS-23,architecture,error,cms-policy.json is no longer what CONTENT.md compiles to,cms-scaffold.mjs policyFrom
+CMS-24,architecture,error,the publish workflow is missing or watches another branch,publish-content.yml on push branches
+CMS-25,architecture,error,the vendored bundle does not match the version ATTRIBUTION.md declares,NullToHero v5 architecture section 6
+CMS-26,architecture,error,a file the admin page adds is missing or unloaded so the editor wears Decap's colours or never registers its backend,theme_css.py --format decap and nth-backend.js registerBackend nth
+CMS-27,config,warning,a declared locale is not one Decap ships so the editor stays in English,decap-cms-locales 3.2.0
+CMS-28,architecture,error,the declared publish mode and the workflow triggers disagree,cms-scaffold.mjs workflowFor
+CMS-29,architecture,error,the build never calls nth-content.mjs so the pages ship with their tokens,cms-scaffold.mjs artefacts nth-content.mjs

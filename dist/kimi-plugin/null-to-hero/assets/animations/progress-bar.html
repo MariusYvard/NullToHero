@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indeterminate progress bar</title>
+<style>
+  :root { --track: #dbe1ee; --fill: #6a5cff; --bar-h: 8px; --radius: 999px; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-items: center;
+    background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .track {
+    width: min(340px, 80vw); height: var(--bar-h);
+    background: var(--track); border-radius: var(--radius);
+    overflow: hidden; position: relative;
+  }
+  .track::after {
+    content: ""; position: absolute; top: 0; left: 0;
+    height: 100%; width: 40%;
+    background: var(--fill); border-radius: var(--radius);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .track::after { animation: nth-slide 1.3s ease-in-out infinite; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* steady partial fill instead of motion */
+    .track::after { width: 55%; }
+  }
+  @keyframes nth-slide {
+    0% { left: -40%; width: 40%; }
+    50% { left: 30%; width: 55%; }
+    100% { left: 100%; width: 40%; }
+  }
+</style>
+</head>
+<body>
+  <div class="track" role="progressbar" aria-label="Loading" aria-valuetext="Working"></div>
+</body>
+</html>

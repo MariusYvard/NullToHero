@@ -1,0 +1,10 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Message sent">
+  <rect width="400" height="300" fill="#EFF6FF"/>
+  <path d="M96 150 L300 84 L244 236 L196 190 L156 214 L160 172 Z" fill="#3B82F6"/>
+  <path d="M300 84 L196 190 L160 172 Z" fill="#1D4ED8"/>
+  <path d="M300 84 L156 214 L196 190 Z" fill="#60A5FA"/>
+  <g stroke="#93C5FD" stroke-width="5" stroke-linecap="round">
+    <line x1="70" y1="100" x2="110" y2="100"/>
+    <line x1="60" y1="128" x2="92" y2="128"/>
+  </g>
+</svg>

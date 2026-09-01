@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Checked">
+  <style>
+    .nth-box { fill: none; stroke: #6a5cff; stroke-width: 3; }
+    .nth-fill { fill: #6a5cff; opacity: 1; }
+    .nth-tick {
+      stroke: #ffffff; fill: none; stroke-width: 4;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 26; stroke-dashoffset: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .nth-fill { opacity: 0; animation: nth-pop 0.3s 0.1s ease-out forwards; transform-origin: 24px 24px; }
+      .nth-tick { stroke-dashoffset: 26; animation: nth-draw 0.3s 0.35s ease-out forwards; }
+    }
+    @keyframes nth-pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+    @keyframes nth-draw { to { stroke-dashoffset: 0; } }
+  </style>
+  <rect class="nth-fill" x="8" y="8" width="32" height="32" rx="7"/>
+  <rect class="nth-box" x="8" y="8" width="32" height="32" rx="7"/>
+  <polyline class="nth-tick" points="16,24 22,30 33,18"/>
+</svg>

@@ -148,14 +148,25 @@ bash install.sh --target codex     # or kimi, agents, or all
 
 On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`.
 
-Three packages, because two hosts earn a bespoke one and everybody else shares
-the third.
+Four packages, because two hosts earn a bespoke one, the Kimi Work desktop gets
+a registrable plugin, and everybody else shares the fourth.
 
 | Package | For | Installs into | Sub-agents |
 |---|---|---|---|
 | `codex` | OpenAI Codex | `~/.agents/skills` and `~/.codex/agents` | 15, as TOML agent files |
 | `kimi` | Kimi Code | `~/.kimi-code/skills` and `~/.kimi-code/agents` | 15, found without a launch flag |
+| `kimi-plugin` | Kimi Work (desktop) | the personal plugin market, ＋ install | 15, runtime bundled |
 | `agents` | every other host that reads the standard | `~/.agents/skills` | none: the standard defines none |
+
+The `kimi-plugin` package is one self-contained directory — skills, sub-agents,
+deterministic tools and asset library — registered with the Kimi Work CLI, then
+installed from the Plugins page without a restart:
+
+```
+bash dist/kimi-plugin/setup.sh
+kimi-daimon kimi-plugin register-personal dist/kimi-plugin --json
+# then: Kimi Work → Plugins → Personal (「个人」) tab → ＋ on NullToHero
+```
 
 The `agents` package is the answer to "what about Cursor". Those hosts differ
 only in the directory they read, and they all read the shared one:

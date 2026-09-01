@@ -1,0 +1,23 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Celebration">
+  <rect width="400" height="300" fill="#FDF2F8"/>
+  <!-- confetti -->
+  <rect x="96" y="70" width="14" height="14" rx="2" fill="#EC4899" transform="rotate(20 103 77)"/>
+  <rect x="292" y="86" width="13" height="13" rx="2" fill="#8B5CF6" transform="rotate(-15 298 92)"/>
+  <rect x="300" y="180" width="12" height="12" rx="2" fill="#F59E0B" transform="rotate(25 306 186)"/>
+  <circle cx="120" cy="150" r="6" fill="#6366F1"/>
+  <circle cx="286" cy="140" r="6" fill="#EC4899"/>
+  <circle cx="112" cy="196" r="6" fill="#22C55E"/>
+  <path d="M150 118 l8 -8 8 8 -8 8 z" fill="#22C55E"/>
+  <path d="M262 176 l8 -8 8 8 -8 8 z" fill="#6366F1"/>
+  <!-- handles -->
+  <path d="M156 118 q-34 0 -34 26 q0 22 30 24" fill="none" stroke="#D97706" stroke-width="9"/>
+  <path d="M244 118 q34 0 34 26 q0 22 -30 24" fill="none" stroke="#D97706" stroke-width="9"/>
+  <!-- cup -->
+  <path d="M150 108 H250 L242 156 Q200 188 158 156 Z" fill="#F59E0B"/>
+  <!-- star -->
+  <path d="M200 122 l5.9 12 13.2 1.9 -9.5 9.3 2.2 13.1 -11.8 -6.2 -11.8 6.2 2.2 -13.1 -9.5 -9.3 13.2 -1.9 z" fill="#FDE68A"/>
+  <!-- stem + base -->
+  <rect x="192" y="178" width="16" height="26" fill="#D97706"/>
+  <path d="M164 214 H236 L226 232 H174 Z" fill="#D97706"/>
+  <rect x="160" y="232" width="80" height="10" rx="3" fill="#B45309"/>
+</svg>

@@ -1,0 +1,335 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/MariusYvard/NullToHero/blob/main/tools/audit/schema/site-audit.schema.json",
+  "title": "NullToHero SITE-AUDIT.json",
+  "description": "Machine-readable audit result: scores plus per-check verdicts plus a cost ledger. Produced alongside SITE-AUDIT-REPORT.md so compare, CI gating and score-over-time read structured data instead of re-parsing markdown.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "tool",
+    "mode",
+    "target",
+    "checks"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "tool": {
+      "type": "string",
+      "description": "Always 'NullToHero /audit'."
+    },
+    "pluginVersion": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "full",
+        "seo",
+        "defects",
+        "design",
+        "quick",
+        "verify",
+        "compare",
+        "checks"
+      ]
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pagesFetched": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "render": {
+          "type": "string",
+          "enum": [
+            "playwright",
+            "none"
+          ]
+        },
+        "clientRendered": {
+          "enum": [
+            true,
+            false,
+            "unknown"
+          ]
+        },
+        "previewHost": {
+          "type": "boolean",
+          "description": "True when the fetched host is a known preview host (netlify.app, vercel.app, pages.dev, ...)."
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "description": "0-100 scores. null where a group did not run. Deterministic floor scores live under 'deterministic'.",
+      "properties": {
+        "overall": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "groups": {
+          "type": "object",
+          "properties": {
+            "searchVisibility": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "frontEndDefects": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "designQuality": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        },
+        "agents": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "band": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Excellent",
+            "Good",
+            "Needs work",
+            "Critical",
+            null
+          ]
+        }
+      }
+    },
+    "deterministic": {
+      "type": "object",
+      "description": "Health floor computed purely from the objective checks. A subset of each agent's checklist, so it is a floor, not the full agent score. score = 100 - 15*fails - 7*warns - rulePenalty, floored at 0 and capped at 49 when a critical check fails.",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "fails": {
+          "type": "integer",
+          "description": "Curated checks that failed, priced at 15 points each."
+        },
+        "warns": {
+          "type": "integer",
+          "description": "Curated checks that warned, priced at 7 points each."
+        },
+        "ruleFails": {
+          "type": "integer",
+          "description": "Rules-engine rules that failed, priced at 4 points each: they are finer-grained and far more numerous than a curated check."
+        },
+        "ruleWarns": {
+          "type": "integer",
+          "description": "Rules-engine rules that warned, priced at 2 points each."
+        },
+        "rulePenalty": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30,
+          "description": "min(30, 4*ruleFails + 2*ruleWarns). The cap keeps a page that trips twenty fine-grained rules descending rather than collapsing."
+        },
+        "notMeasured": {
+          "type": "integer"
+        },
+        "criticalFails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "object",
+          "description": "What the rules engine reached on this run. Carried beside the floor rather than inside it: the floor subtracts without a denominator, so adding forty-eight measurements to it would put most sites at zero.",
+          "properties": {
+            "ran": {
+              "type": "integer"
+            },
+            "fails": {
+              "type": "integer"
+            },
+            "warns": {
+              "type": "integer"
+            },
+            "advisories": {
+              "type": "integer"
+            },
+            "criticalFails": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Short content hashes of each fetched artifact and which artifacts feed each dimension, so a later run can re-audit only the dimensions whose inputs changed (see reaudit.mjs).",
+      "properties": {
+        "hashes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "agent",
+          "verdict",
+          "method"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "agent": {
+            "type": "string"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "WARN",
+              "FAIL",
+              "NOT_MEASURED",
+              "ADVISORY"
+            ]
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "computed",
+              "static",
+              "not-measured",
+              "agent"
+            ]
+          },
+          "value": {},
+          "detail": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "analyzer",
+              "agent",
+              "rules"
+            ],
+            "description": "analyzer = deterministic ground truth from the static checks; rules = the rules engine over the source; agent = model verdict."
+          }
+        }
+      }
+    },
+    "cost": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "End-of-run ledger so cost is empirical, not guessed.",
+      "properties": {
+        "agentsLaunched": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approxInputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approxOutputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approxTotalTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elapsedMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "partialCoverage": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

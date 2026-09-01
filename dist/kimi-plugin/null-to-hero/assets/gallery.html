@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NullToHero assets gallery</title>
+<style>
+  :root { --bg:#0f172a; --panel:#ffffff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0; --accent:#6366f1; --radius:12px; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--ink); background:#f8fafc; }
+  header { background:var(--bg); color:#fff; padding:32px 24px; }
+  header h1 { margin:0 0 6px; font-size:1.6rem; }
+  header p { margin:0; color:#cbd5e1; }
+  nav { position:sticky; top:0; z-index:10; background:var(--panel); border-bottom:1px solid var(--line); padding:10px 24px; display:flex; gap:14px; flex-wrap:wrap; }
+  nav a { color:var(--muted); text-decoration:none; font-size:.92rem; font-weight:600; padding:4px 10px; border-radius:999px; }
+  nav a:hover, nav a:focus-visible { color:var(--accent); background:#eef2ff; outline:none; }
+  main { max-width:1120px; margin:0 auto; padding:24px; }
+  section { margin:0 0 40px; }
+  h2 { font-size:1.15rem; border-bottom:2px solid var(--line); padding-bottom:8px; }
+  .count { color:var(--muted); font-weight:500; font-size:.85rem; }
+  .grid { display:grid; gap:14px; }
+  .icons { grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); }
+  .tiles { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+  .illus { grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
+  .card, .icard { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px; }
+  figcaption { font-size:.75rem; color:var(--muted); word-break:break-word; }
+  .icard img { color:var(--ink); }
+  .swatch { width:100%; height:80px; border-radius:8px; background-repeat:repeat; color:var(--accent); border:1px solid var(--line); }
+  .illus img { width:100%; height:auto; border-radius:8px; border:1px solid var(--line); }
+  .card iframe { width:100%; height:120px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+  .animsvg { height:120px; display:flex; align-items:center; justify-content:center; }
+  .tpl { text-align:left; align-items:stretch; }
+  .tplbody { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+  .tplbody span { font-size:.72rem; color:var(--muted); }
+  .tpl a { align-self:flex-start; background:var(--accent); color:#fff; text-decoration:none; font-size:.82rem; font-weight:600; padding:6px 12px; border-radius:8px; }
+  footer { text-align:center; color:var(--muted); font-size:.82rem; padding:24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>NullToHero assets</h1>
+  <p>139 icons, 20 patterns, 18 illustrations, 34 animations, 6 templates. Original work, CC0 and MIT.</p>
+</header>
+<nav>
+  <a href="#icons">Icons</a>
+  <a href="#patterns">Patterns</a>
+  <a href="#illustrations">Illustrations</a>
+  <a href="#animations">Animations</a>
+  <a href="#templates">Templates</a>
+</nav>
+<main>
+  <section id="icons"><h2>Icons <span class="count">139, 24 by 24, currentColor</span></h2><div class="grid icons">
+<figure class="icard"><img loading="lazy" src="icons/activity.svg" width="24" height="24" alt="activity"><figcaption>activity</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/alert-triangle.svg" width="24" height="24" alt="alert-triangle"><figcaption>alert-triangle</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/align-center.svg" width="24" height="24" alt="align-center"><figcaption>align-center</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/align-left.svg" width="24" height="24" alt="align-left"><figcaption>align-left</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/align-right.svg" width="24" height="24" alt="align-right"><figcaption>align-right</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/arrow-down.svg" width="24" height="24" alt="arrow-down"><figcaption>arrow-down</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/arrow-left.svg" width="24" height="24" alt="arrow-left"><figcaption>arrow-left</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/arrow-right.svg" width="24" height="24" alt="arrow-right"><figcaption>arrow-right</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/arrow-up.svg" width="24" height="24" alt="arrow-up"><figcaption>arrow-up</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/at-sign.svg" width="24" height="24" alt="at-sign"><figcaption>at-sign</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/award.svg" width="24" height="24" alt="award"><figcaption>award</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/bar-chart.svg" width="24" height="24" alt="bar-chart"><figcaption>bar-chart</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/battery.svg" width="24" height="24" alt="battery"><figcaption>battery</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/bell.svg" width="24" height="24" alt="bell"><figcaption>bell</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/bluetooth.svg" width="24" height="24" alt="bluetooth"><figcaption>bluetooth</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/bold.svg" width="24" height="24" alt="bold"><figcaption>bold</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/book.svg" width="24" height="24" alt="book"><figcaption>book</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/bookmark.svg" width="24" height="24" alt="bookmark"><figcaption>bookmark</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/briefcase.svg" width="24" height="24" alt="briefcase"><figcaption>briefcase</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/calendar.svg" width="24" height="24" alt="calendar"><figcaption>calendar</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/camera.svg" width="24" height="24" alt="camera"><figcaption>camera</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/check-circle.svg" width="24" height="24" alt="check-circle"><figcaption>check-circle</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/check.svg" width="24" height="24" alt="check"><figcaption>check</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevron-down.svg" width="24" height="24" alt="chevron-down"><figcaption>chevron-down</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevron-left.svg" width="24" height="24" alt="chevron-left"><figcaption>chevron-left</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevron-right.svg" width="24" height="24" alt="chevron-right"><figcaption>chevron-right</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevron-up.svg" width="24" height="24" alt="chevron-up"><figcaption>chevron-up</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevrons-down.svg" width="24" height="24" alt="chevrons-down"><figcaption>chevrons-down</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevrons-left.svg" width="24" height="24" alt="chevrons-left"><figcaption>chevrons-left</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevrons-right.svg" width="24" height="24" alt="chevrons-right"><figcaption>chevrons-right</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/chevrons-up.svg" width="24" height="24" alt="chevrons-up"><figcaption>chevrons-up</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/clipboard.svg" width="24" height="24" alt="clipboard"><figcaption>clipboard</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/clock.svg" width="24" height="24" alt="clock"><figcaption>clock</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/cloud-off.svg" width="24" height="24" alt="cloud-off"><figcaption>cloud-off</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/cloud.svg" width="24" height="24" alt="cloud"><figcaption>cloud</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/code.svg" width="24" height="24" alt="code"><figcaption>code</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/columns.svg" width="24" height="24" alt="columns"><figcaption>columns</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/command.svg" width="24" height="24" alt="command"><figcaption>command</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/compass.svg" width="24" height="24" alt="compass"><figcaption>compass</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/copy.svg" width="24" height="24" alt="copy"><figcaption>copy</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/cpu.svg" width="24" height="24" alt="cpu"><figcaption>cpu</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/credit-card.svg" width="24" height="24" alt="credit-card"><figcaption>credit-card</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/database.svg" width="24" height="24" alt="database"><figcaption>database</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/dollar-sign.svg" width="24" height="24" alt="dollar-sign"><figcaption>dollar-sign</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/download.svg" width="24" height="24" alt="download"><figcaption>download</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/edit.svg" width="24" height="24" alt="edit"><figcaption>edit</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/external-link.svg" width="24" height="24" alt="external-link"><figcaption>external-link</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/eye.svg" width="24" height="24" alt="eye"><figcaption>eye</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/file.svg" width="24" height="24" alt="file"><figcaption>file</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/filter.svg" width="24" height="24" alt="filter"><figcaption>filter</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/flag.svg" width="24" height="24" alt="flag"><figcaption>flag</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/folder.svg" width="24" height="24" alt="folder"><figcaption>folder</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/gift.svg" width="24" height="24" alt="gift"><figcaption>gift</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/git-branch.svg" width="24" height="24" alt="git-branch"><figcaption>git-branch</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/globe.svg" width="24" height="24" alt="globe"><figcaption>globe</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/grid.svg" width="24" height="24" alt="grid"><figcaption>grid</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/hard-drive.svg" width="24" height="24" alt="hard-drive"><figcaption>hard-drive</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/hash.svg" width="24" height="24" alt="hash"><figcaption>hash</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/headphones.svg" width="24" height="24" alt="headphones"><figcaption>headphones</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/heart.svg" width="24" height="24" alt="heart"><figcaption>heart</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/help-circle.svg" width="24" height="24" alt="help-circle"><figcaption>help-circle</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/home.svg" width="24" height="24" alt="home"><figcaption>home</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/image.svg" width="24" height="24" alt="image"><figcaption>image</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/info.svg" width="24" height="24" alt="info"><figcaption>info</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/italic.svg" width="24" height="24" alt="italic"><figcaption>italic</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/key.svg" width="24" height="24" alt="key"><figcaption>key</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/layout.svg" width="24" height="24" alt="layout"><figcaption>layout</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/life-buoy.svg" width="24" height="24" alt="life-buoy"><figcaption>life-buoy</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/link.svg" width="24" height="24" alt="link"><figcaption>link</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/list.svg" width="24" height="24" alt="list"><figcaption>list</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/lock.svg" width="24" height="24" alt="lock"><figcaption>lock</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/log-in.svg" width="24" height="24" alt="log-in"><figcaption>log-in</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/log-out.svg" width="24" height="24" alt="log-out"><figcaption>log-out</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/mail.svg" width="24" height="24" alt="mail"><figcaption>mail</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/map-pin.svg" width="24" height="24" alt="map-pin"><figcaption>map-pin</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/map.svg" width="24" height="24" alt="map"><figcaption>map</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/maximize.svg" width="24" height="24" alt="maximize"><figcaption>maximize</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/menu.svg" width="24" height="24" alt="menu"><figcaption>menu</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/message-circle.svg" width="24" height="24" alt="message-circle"><figcaption>message-circle</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/message-square.svg" width="24" height="24" alt="message-square"><figcaption>message-square</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/mic-off.svg" width="24" height="24" alt="mic-off"><figcaption>mic-off</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/mic.svg" width="24" height="24" alt="mic"><figcaption>mic</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/minimize.svg" width="24" height="24" alt="minimize"><figcaption>minimize</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/minus.svg" width="24" height="24" alt="minus"><figcaption>minus</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/moon.svg" width="24" height="24" alt="moon"><figcaption>moon</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/more-horizontal.svg" width="24" height="24" alt="more-horizontal"><figcaption>more-horizontal</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/more-vertical.svg" width="24" height="24" alt="more-vertical"><figcaption>more-vertical</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/move.svg" width="24" height="24" alt="move"><figcaption>move</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/music.svg" width="24" height="24" alt="music"><figcaption>music</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/navigation.svg" width="24" height="24" alt="navigation"><figcaption>navigation</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/package.svg" width="24" height="24" alt="package"><figcaption>package</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/paperclip.svg" width="24" height="24" alt="paperclip"><figcaption>paperclip</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/pause.svg" width="24" height="24" alt="pause"><figcaption>pause</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/percent.svg" width="24" height="24" alt="percent"><figcaption>percent</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/phone-call.svg" width="24" height="24" alt="phone-call"><figcaption>phone-call</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/phone.svg" width="24" height="24" alt="phone"><figcaption>phone</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/pie-chart.svg" width="24" height="24" alt="pie-chart"><figcaption>pie-chart</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/play.svg" width="24" height="24" alt="play"><figcaption>play</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/plus.svg" width="24" height="24" alt="plus"><figcaption>plus</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/printer.svg" width="24" height="24" alt="printer"><figcaption>printer</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/refresh-cw.svg" width="24" height="24" alt="refresh-cw"><figcaption>refresh-cw</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/rotate-ccw.svg" width="24" height="24" alt="rotate-ccw"><figcaption>rotate-ccw</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/save.svg" width="24" height="24" alt="save"><figcaption>save</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/search.svg" width="24" height="24" alt="search"><figcaption>search</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/send.svg" width="24" height="24" alt="send"><figcaption>send</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/server.svg" width="24" height="24" alt="server"><figcaption>server</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/settings.svg" width="24" height="24" alt="settings"><figcaption>settings</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/share.svg" width="24" height="24" alt="share"><figcaption>share</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/shield.svg" width="24" height="24" alt="shield"><figcaption>shield</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/shopping-cart.svg" width="24" height="24" alt="shopping-cart"><figcaption>shopping-cart</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/sidebar.svg" width="24" height="24" alt="sidebar"><figcaption>sidebar</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/skip-back.svg" width="24" height="24" alt="skip-back"><figcaption>skip-back</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/skip-forward.svg" width="24" height="24" alt="skip-forward"><figcaption>skip-forward</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/sliders.svg" width="24" height="24" alt="sliders"><figcaption>sliders</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/smile.svg" width="24" height="24" alt="smile"><figcaption>smile</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/star.svg" width="24" height="24" alt="star"><figcaption>star</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/stop.svg" width="24" height="24" alt="stop"><figcaption>stop</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/sun.svg" width="24" height="24" alt="sun"><figcaption>sun</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/tag.svg" width="24" height="24" alt="tag"><figcaption>tag</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/terminal.svg" width="24" height="24" alt="terminal"><figcaption>terminal</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/thumbs-down.svg" width="24" height="24" alt="thumbs-down"><figcaption>thumbs-down</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/thumbs-up.svg" width="24" height="24" alt="thumbs-up"><figcaption>thumbs-up</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/toggle-left.svg" width="24" height="24" alt="toggle-left"><figcaption>toggle-left</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/toggle-right.svg" width="24" height="24" alt="toggle-right"><figcaption>toggle-right</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/trash.svg" width="24" height="24" alt="trash"><figcaption>trash</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/trending-down.svg" width="24" height="24" alt="trending-down"><figcaption>trending-down</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/trending-up.svg" width="24" height="24" alt="trending-up"><figcaption>trending-up</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/truck.svg" width="24" height="24" alt="truck"><figcaption>truck</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/type.svg" width="24" height="24" alt="type"><figcaption>type</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/upload.svg" width="24" height="24" alt="upload"><figcaption>upload</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/user.svg" width="24" height="24" alt="user"><figcaption>user</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/users.svg" width="24" height="24" alt="users"><figcaption>users</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/video.svg" width="24" height="24" alt="video"><figcaption>video</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/volume-x.svg" width="24" height="24" alt="volume-x"><figcaption>volume-x</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/volume.svg" width="24" height="24" alt="volume"><figcaption>volume</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/wifi.svg" width="24" height="24" alt="wifi"><figcaption>wifi</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/x-circle.svg" width="24" height="24" alt="x-circle"><figcaption>x-circle</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/x.svg" width="24" height="24" alt="x"><figcaption>x</figcaption></figure>
+<figure class="icard"><img loading="lazy" src="icons/zap.svg" width="24" height="24" alt="zap"><figcaption>zap</figcaption></figure>
+  </div></section>
+  <section id="patterns"><h2>Patterns <span class="count">20, tileable, tinted with color</span></h2><div class="grid tiles">
+<figure class="card"><div class="swatch" style="background-image:url(patterns/bricks.svg)"></div><figcaption>bricks</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/chevrons.svg)"></div><figcaption>chevrons</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/circles.svg)"></div><figcaption>circles</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/cross-hatch.svg)"></div><figcaption>cross-hatch</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/diagonal-lines.svg)"></div><figcaption>diagonal-lines</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/diamonds.svg)"></div><figcaption>diamonds</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/dots.svg)"></div><figcaption>dots</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/grid.svg)"></div><figcaption>grid</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/hexagons.svg)"></div><figcaption>hexagons</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/plus-signs.svg)"></div><figcaption>plus-signs</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/polka-large.svg)"></div><figcaption>polka-large</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/scales.svg)"></div><figcaption>scales</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/squares.svg)"></div><figcaption>squares</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/stars.svg)"></div><figcaption>stars</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/stripes-horizontal.svg)"></div><figcaption>stripes-horizontal</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/stripes-vertical.svg)"></div><figcaption>stripes-vertical</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/triangles.svg)"></div><figcaption>triangles</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/waves.svg)"></div><figcaption>waves</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/wavy.svg)"></div><figcaption>wavy</figcaption></figure>
+<figure class="card"><div class="swatch" style="background-image:url(patterns/zigzag.svg)"></div><figcaption>zigzag</figcaption></figure>
+  </div></section>
+  <section id="illustrations"><h2>Illustrations <span class="count">18, 400 by 300</span></h2><div class="grid illus">
+<figure class="card"><img loading="lazy" src="illustrations/celebration.svg" width="200" alt="celebration"><figcaption>celebration</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/coming-soon.svg" width="200" alt="coming-soon"><figcaption>coming-soon</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/empty-state.svg" width="200" alt="empty-state"><figcaption>empty-state</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/error.svg" width="200" alt="error"><figcaption>error</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/feedback.svg" width="200" alt="feedback"><figcaption>feedback</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/location.svg" width="200" alt="location"><figcaption>location</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/maintenance.svg" width="200" alt="maintenance"><figcaption>maintenance</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/message-sent.svg" width="200" alt="message-sent"><figcaption>message-sent</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/no-data.svg" width="200" alt="no-data"><figcaption>no-data</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/not-found-404.svg" width="200" alt="not-found-404"><figcaption>not-found-404</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/notification.svg" width="200" alt="notification"><figcaption>notification</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/offline.svg" width="200" alt="offline"><figcaption>offline</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/payment.svg" width="200" alt="payment"><figcaption>payment</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/search-empty.svg" width="200" alt="search-empty"><figcaption>search-empty</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/secure-login.svg" width="200" alt="secure-login"><figcaption>secure-login</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/success.svg" width="200" alt="success"><figcaption>success</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/team.svg" width="200" alt="team"><figcaption>team</figcaption></figure>
+<figure class="card"><img loading="lazy" src="illustrations/welcome.svg" width="200" alt="welcome"><figcaption>welcome</figcaption></figure>
+  </div></section>
+  <section id="animations"><h2>Animations <span class="count">34, reduced-motion aware</span></h2><div class="grid tiles">
+<figure class="card"><iframe loading="lazy" src="animations/bars-equalizer.html" title="bars-equalizer"></iframe><figcaption>bars-equalizer</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/bell-shake.html" title="bell-shake"></iframe><figcaption>bell-shake</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/bouncing-ball.html" title="bouncing-ball"></iframe><figcaption>bouncing-ball</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/dots.html" title="dots"></iframe><figcaption>dots</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/ellipsis.html" title="ellipsis"></iframe><figcaption>ellipsis</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/fade-in-up.html" title="fade-in-up"></iframe><figcaption>fade-in-up</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/heart-beat.html" title="heart-beat"></iframe><figcaption>heart-beat</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/like-burst.html" title="like-burst"></iframe><figcaption>like-burst</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/orbit.html" title="orbit"></iframe><figcaption>orbit</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/pop-in.html" title="pop-in"></iframe><figcaption>pop-in</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/progress-bar.html" title="progress-bar"></iframe><figcaption>progress-bar</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/pulse-circle.html" title="pulse-circle"></iframe><figcaption>pulse-circle</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/pulse-dot.html" title="pulse-dot"></iframe><figcaption>pulse-dot</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/ripple.html" title="ripple"></iframe><figcaption>ripple</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/scroll-hint.html" title="scroll-hint"></iframe><figcaption>scroll-hint</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/skeleton-avatar.html" title="skeleton-avatar"></iframe><figcaption>skeleton-avatar</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/skeleton-list.html" title="skeleton-list"></iframe><figcaption>skeleton-list</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/skeleton-shimmer.html" title="skeleton-shimmer"></iframe><figcaption>skeleton-shimmer</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/skeleton-table.html" title="skeleton-table"></iframe><figcaption>skeleton-table</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/skeleton-text.html" title="skeleton-text"></iframe><figcaption>skeleton-text</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/square-flip.html" title="square-flip"></iframe><figcaption>square-flip</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/step-progress.html" title="step-progress"></iframe><figcaption>step-progress</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/toggle-switch.html" title="toggle-switch"></iframe><figcaption>toggle-switch</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/typing-indicator.html" title="typing-indicator"></iframe><figcaption>typing-indicator</figcaption></figure>
+<figure class="card"><iframe loading="lazy" src="animations/warning-pulse.html" title="warning-pulse"></iframe><figcaption>warning-pulse</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/checkbox-tick.svg" width="72" alt="checkbox-tick"></div><figcaption>checkbox-tick</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/circular-progress.svg" width="72" alt="circular-progress"></div><figcaption>circular-progress</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/clock-spinner.svg" width="72" alt="clock-spinner"></div><figcaption>clock-spinner</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/dual-ring.svg" width="72" alt="dual-ring"></div><figcaption>dual-ring</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/error-cross.svg" width="72" alt="error-cross"></div><figcaption>error-cross</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/gradient-ring.svg" width="72" alt="gradient-ring"></div><figcaption>gradient-ring</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/spinner.svg" width="72" alt="spinner"></div><figcaption>spinner</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/success-check.svg" width="72" alt="success-check"></div><figcaption>success-check</figcaption></figure>
+<figure class="card"><div class="animsvg"><img loading="lazy" src="animations/wave-hand.svg" width="72" alt="wave-hand"></div><figcaption>wave-hand</figcaption></figure>
+  </div></section>
+  <section id="templates"><h2>Templates <span class="count">6</span></h2><div class="grid tiles">
+<figure class="card tpl"><div class="tplbody"><strong>contact</strong><span>index.html, styles.css</span></div><a href="templates/contact/index.html">Open page</a></figure>
+<figure class="card tpl"><div class="tplbody"><strong>dashboard</strong><span>index.html, styles.css</span></div><a href="templates/dashboard/index.html">Open page</a></figure>
+<figure class="card tpl"><div class="tplbody"><strong>landing</strong><span>index.html, styles.css</span></div><a href="templates/landing/index.html">Open page</a></figure>
+<figure class="card tpl"><div class="tplbody"><strong>pricing</strong><span>index.html, styles.css</span></div><a href="templates/pricing/index.html">Open page</a></figure>
+<figure class="card tpl"><div class="tplbody"><strong>react-card</strong><span>Card.css, Card.jsx</span></div><a href="templates/react-card/">View files</a></figure>
+<figure class="card tpl"><div class="tplbody"><strong>react-modal</strong><span>Modal.css, Modal.jsx</span></div><a href="templates/react-modal/">View files</a></figure>
+  </div></section>
+</main>
+<footer>Open this file in a browser to browse the library. Every asset is original: CC0 for icons, patterns, illustrations and animations, MIT for templates.</footer>
+</body>
+</html>

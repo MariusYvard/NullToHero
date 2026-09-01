@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scroll hint</title>
+<style>
+  :root { --hint: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .hint { display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--hint); }
+  .hint .chev { width: 18px; height: 18px; border-right: 3px solid currentColor;
+    border-bottom: 3px solid currentColor; transform: rotate(45deg); }
+  .hint .chev:nth-child(2) { opacity: 0.55; }
+  @media (prefers-reduced-motion: no-preference) {
+    .hint { animation: nth-hop 1.4s ease-in-out infinite; }
+  }
+  @keyframes nth-hop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+</style>
+</head>
+<body>
+  <div class="hint" role="img" aria-label="Scroll down">
+    <span class="chev"></span><span class="chev"></span>
+  </div>
+</body>
+</html>

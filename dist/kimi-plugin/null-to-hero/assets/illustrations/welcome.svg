@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Friendly welcome rocket">
+  <rect width="400" height="300" fill="#f4f6fb"/>
+  <ellipse cx="200" cy="256" rx="96" ry="14" fill="#dfe4ee"/>
+  <!-- exhaust -->
+  <polygon points="186,214 214,214 200,262" fill="#f0a63c"/>
+  <polygon points="192,214 208,214 200,244" fill="#f6bd68"/>
+  <!-- rocket body -->
+  <path d="M200 52 C232 84 240 140 232 190 L168 190 C160 140 168 84 200 52 Z" fill="#6a5cff"/>
+  <!-- window -->
+  <circle cx="200" cy="120" r="20" fill="#ffffff"/>
+  <circle cx="200" cy="120" r="20" fill="none" stroke="#4a3fd6" stroke-width="4"/>
+  <!-- fins -->
+  <path d="M168 168 L142 200 L168 190 Z" fill="#4a3fd6"/>
+  <path d="M232 168 L258 200 L232 190 Z" fill="#4a3fd6"/>
+  <!-- greeting sparkles -->
+  <g fill="#5ac48a">
+    <circle cx="112" cy="96" r="6"/>
+    <circle cx="292" cy="128" r="5"/>
+    <circle cx="128" cy="150" r="4"/>
+  </g>
+</svg>

@@ -1,0 +1,2 @@
+.skip { position: absolute; left: -9999px; }
+.skip:focus { position: static; left: auto; }

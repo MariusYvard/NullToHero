@@ -1,0 +1,178 @@
+{
+  "$comment": "Divergence cases for the corpus evaluation harness. Each case pairs one reference file with an open question a beginner would actually ask, and lists the markers that show the file changed what the model reached for. Markers are the point: a case whose markers a bare model produces on its own is a case that proves nothing, and the file it tests is a file that earns nothing.",
+  "version": 1,
+  "cases": [
+    {
+      "id": "css-architecture-important",
+      "file": "skills/siteasy/references/css-architecture.md",
+      "question": "Ma règle CSS est ignorée alors je mets !important partout. Comment je m'en sors ?",
+      "markers": [
+        "cascade layer",
+        "@layer",
+        "legacy",
+        "migration"
+      ],
+      "rationale": "A bare model explains specificity and stops. Reaching for cascade layers and a gradual migration path is the architectural answer.",
+      "origin": "v2.6.0, the case that decided the cut kept the prescriptions and dropped the syntax"
+    },
+    {
+      "id": "local-city-pages",
+      "file": "skills/seo/references/local.md",
+      "question": "Je suis plombier et j'interviens dans une soixantaine de communes. Je voudrais créer une page par commune. Comment je fais ça correctement ?",
+      "markers": [
+        "50",
+        "doorway",
+        "service area",
+        "GBP",
+        "cid"
+      ],
+      "rationale": "A bare model gives generic advice about unique content. It does not refuse at a numbered threshold, does not know a service-area business should hide its address, and does not produce the maps.google.com/?cid= form of sameAs.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "ecommerce-facets",
+      "file": "skills/seo/references/ecommerce.md",
+      "question": "Ma boutique a des filtres par couleur, taille et prix. Google m'indexe des milliers d'URL avec paramètres. Qu'est-ce que je dois faire ?",
+      "markers": [
+        "per-facet",
+        "brand",
+        "sort",
+        "robots.txt",
+        "never fetched"
+      ],
+      "rationale": "A bare model sorts parameters into broad families. The per-facet matrix and the trap where robots.txt prevents the canonical on that URL from ever being read are what the file adds.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "technical-react-invisible",
+      "file": "skills/seo/references/technical.md",
+      "question": "Mon site est en React et il ne remonte pas dans Google. Par quoi je commence pour diagnostiquer ?",
+      "markers": [
+        "December 2025",
+        "non-200",
+        "Googlebot Smartphone",
+        "canonical"
+      ],
+      "rationale": "A bare model gives good generic React SEO advice and produces none of the four documented pitfalls, in particular that Google does not execute JavaScript on a non-200 response.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "competitor-vs-page",
+      "file": "skills/seo/references/competitor-pages.md",
+      "question": "Je veux écrire une page qui compare mon produit à un concurrent. Comment je m'y prends pour que ça marche en SEO ?",
+      "markers": [
+        "AggregateRating",
+        "aggregate",
+        "FAQ",
+        "SERP"
+      ],
+      "rationale": "Narrow case, recorded as such. A bare model already produces two pages, an honest section on when the competitor wins, and the legal caveat. What only the file gives is the FAQ sizing, the dated FAQ rich-result removal and the prohibition on marking up third-party ratings.",
+      "origin": "v3 stage 3 gate, passed narrowly"
+    },
+    {
+      "id": "harden-real-clients",
+      "file": "skills/siteasy/references/harden.md",
+      "question": "Mon application marche en démo mais casse chez les vrais clients. Noms très longs, listes de 3000 lignes, un client en allemand. Comment je rends ça solide ?",
+      "markers": [
+        "30",
+        "expansion",
+        "hostile",
+        "collator"
+      ],
+      "rationale": "The narrowest pass in the set, recorded honestly. The bare answer was richer in places and produced min-width: 0 on flex children, which the cut had removed as capacity, confirming that removal. The expansion budget and the hostile seed practice are what the file now carries.",
+      "origin": "v3 stage 3 gate, passed narrowly, gaps filled from the control"
+    },
+    {
+      "id": "clarify-confusing-copy",
+      "file": "skills/siteasy/references/clarify.md",
+      "question": "Les textes de mon application sont confus, les gens ne comprennent pas les messages d'erreur et les boutons. Par où je commence ?",
+      "markers": [
+        "named editing passes in a fixed order, clarity then voice then so-what then prove-it then specificity then emotion then risk",
+        "return to the earlier passes after each one, because specificity added late breaks the voice set earlier",
+        "help text must add what the label cannot say, and restating the label in a tooltip trains readers to skip every tooltip",
+        "establish the audience and the reader's mental state before rewriting anything"
+      ],
+      "rationale": "A bare model produces inventory, triage, button formula, error formula and a style guide, all of which this file now also carries. What remains its own is the ordered set of editing passes, the rule that a later pass breaks an earlier one so you go back, the help-text rule and the audience precondition. Markers redeclared 2026-08-06 because the previous single words matched by accident.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "a11y-axe-is-green",
+      "file": "skills/siteasy/references/accessibility-engineering.md",
+      "question": "On me demande de rendre mon site accessible. J'ai lancé axe DevTools, tout est vert. C'est bon ?",
+      "markers": [
+        "57",
+        "Deque",
+        "title",
+        "activedescendant",
+        "adjacent"
+      ],
+      "rationale": "Both answers say no. The difference is that the bare one invents a 30 to 40 percent figure while the file carries the measured 57.38 percent with its source, and only the file produces the title-as-accessible-name trap, the combobox aria-activedescendant bug and the focus ring measured against adjacent colours rather than the page background.",
+      "origin": "v3 stage 3 gate"
+    },
+    {
+      "id": "geo-worth-it",
+      "file": "skills/seo/references/geo.md",
+      "question": "Tout le monde me dit d'optimiser mon site pour ChatGPT et les AI Overviews. Est-ce que ça vaut vraiment le coup, et par quoi je commence ?",
+      "markers": [
+        "the AI Overviews coverage figure is a spread from roughly 9.5 to 60 percent depending on the sample, so any single number is wrong",
+        "the +527 percent AI traffic growth is Previsible and not SparkToro, and it is off a base of about 17,000 sessions",
+        "4.4x as valuable is modelled value and not a 4.4x conversion rate",
+        "brand mentions against backlinks is a correlation whose own author warns against reading causally"
+      ],
+      "rationale": "A bare model gives confident single figures for AI Overview coverage and repeats the widely copied misattributions. The file refuses a single number, names the sample behind each one, and corrects the attribution and the causal reading.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "parallax-hero",
+      "file": "skills/siteasy/references/parallax.md",
+      "question": "Je veux un effet parallaxe sur la page d'accueil de mon site. Comment je fais ça bien ?",
+      "markers": [
+        "a numbered go/no-go check that refuses parallax outright when a row fails, including product UIs which never get it",
+        "the scale compensation formula for a translateZ layer, 1 plus the absolute translateZ over the perspective",
+        "the reduced-motion override must kill animation, transform and opacity together or the layer stays stuck on its first keyframe",
+        "smooth scrolling stays off on touch, smoothTouch false"
+      ],
+      "rationale": "A bare model produces transform-only animation, will-change hygiene and a reduced-motion media query. It does not refuse the effect on a numbered check, does not know the scale compensation formula, and does not know that killing only animation leaves the layer stuck on its first keyframe.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "slop-detection",
+      "file": "skills/siteasy/references/slop-patterns.md",
+      "question": "Comment je sais si un texte a été écrit par une IA, et comment je le corrige sans le dénaturer ?",
+      "markers": [
+        "a numeric score from 100 down with a fixed penalty per pattern and a cap per pattern",
+        "the long dash is judged by density against word count, around one per 200 words, and not by presence",
+        "each pattern ships a greppable regular expression rather than a description",
+        "a before and after rewrite for each pattern rather than a prohibition"
+      ],
+      "rationale": "A bare model lists tells and bans them. The file scores them, caps each pattern, judges the long dash by density rather than presence, and ships a rewrite instead of a prohibition.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "domain-migration",
+      "file": "skills/seo/references/migration.md",
+      "question": "Je change le nom de domaine de mon site. Comment je fais pour ne pas perdre mon référencement ?",
+      "markers": [
+        "numbered thresholds for a priority URL, 1 percent of organic traffic and 10 referring domains, stated as dials to set against the size of the site",
+        "an expected traffic loss and a recovery window per migration type, for instance 20 to 40 percent over 2 to 12 weeks for a URL structure change",
+        "where no equivalent page exists, a real 404 rather than a redirect to the homepage, which is a soft 404",
+        "measure at T+1, T+7 and T+30 against a baseline captured before the move"
+      ],
+      "rationale": "A bare model produces a 301 map, a sitemap update and Search Console monitoring. The file adds numbered thresholds for what is worth protecting, states them as dials against the size of the site, gives a recovery window per migration type, and refuses the homepage redirect that becomes a soft 404.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    },
+    {
+      "id": "hreflang-three-languages",
+      "file": "skills/seo/references/hreflang.md",
+      "question": "Mon site existe en français, en anglais et en espagnol. Comment je dis à Google quelle version montrer à qui ?",
+      "markers": [
+        "return tags: every page in the set links to all the others including itself, or the set is ignored",
+        "each page must be self-canonical, and canonicalising to the default language makes Google index only that one",
+        "the region subtag is uppercase, so en-uk is invalid and en-GB is correct",
+        "every URL referenced in an hreflang annotation must return 200 or it is ignored"
+      ],
+      "rationale": "The narrowest of the five, recorded as such before the draws. A bare model knows hreflang and x-default and may produce return tags unprompted. The self-canonical trap and the non-200 rule are what only the file gives.",
+      "origin": "v3.5.0, bench widened past the eight files that v3.0.0 had cut"
+    }
+  ]
+}

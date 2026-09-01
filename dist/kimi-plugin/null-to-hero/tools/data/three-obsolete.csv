@@ -1,0 +1,7 @@
+pattern,since,rule,detected,replacement,why
+outputEncoding,r152,81,yes,renderer.outputColorSpace = THREE.SRGBColorSpace,The colour pipeline moved to colour spaces and the encoding setters became no-ops
+sRGBEncoding,r152,81,yes,THREE.SRGBColorSpace,Same change; the encoding constants were removed with the setters
+LinearEncoding,r152,81,yes,THREE.LinearSRGBColorSpace,Same change
+texture.encoding,r152,81,yes,texture.colorSpace,Textures carry a colour space rather than an encoding
+gammaFactor,r112,81,no,outputColorSpace,Removed; the probe reads the revision and not this setter so a page pinned above r112 that still sets it is not reported
+WebGL1Renderer,r163,79,no,WebGLRenderer,WebGL 1 support was removed; the probe reads backend and revision and does not name this constructor

@@ -1,0 +1,65 @@
+/*
+  Styles for Card.jsx. MIT licensed.
+  Plain className hooks, themed with CSS custom properties.
+*/
+
+.nth-card {
+  --card-bg: #ffffff;
+  --card-border: #dbe1ee;
+  --card-text: #1f2430;
+  --card-muted: #5b6472;
+  --card-accent: #4a3fd6;
+  --card-radius: 12px;
+
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  max-width: 22rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--card-text);
+}
+
+.nth-card__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nth-card--link {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.nth-card--link:hover {
+  box-shadow: 0 8px 24px rgba(40, 50, 80, 0.12);
+}
+
+.nth-card__link:focus-visible {
+  outline: 3px solid var(--card-accent);
+  outline-offset: 2px;
+}
+
+.nth-card__image {
+  display: block;
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.nth-card__body { padding: 1rem; }
+
+.nth-card__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.nth-card__text {
+  margin: 0;
+  color: var(--card-muted);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nth-card--link { transition: none; }
+}

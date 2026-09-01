@@ -1,0 +1,36 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>three.js probe fixture, defects</title>
+<canvas id="c" data-engine="three.js r186"></canvas>
+<script>
+  // A renderer that never capped its pixel ratio, on a scene of 400 identical
+  // meshes drawn one at a time, with an albedo map nobody tagged.
+  const info = {
+    memory: { geometries: 402, textures: 12 },
+    render: { frame: 0, calls: 0, triangles: 0 },
+    programs: [{}, {}, {}],
+    autoReset: true,
+    reset() { this.render.calls = 0; this.render.triangles = 0; },
+  };
+  const renderer = {
+    info,
+    getPixelRatio: () => 3,
+  };
+  // The site's own loop, which is what makes autoReset matter.
+  (function frame() {
+    if (info.autoReset) info.reset();
+    info.render.frame++;
+    info.render.calls += 1400;
+    requestAnimationFrame(frame);
+  })();
+
+  const geometry = { uuid: "g-1" };
+  const material = { uuid: "m-1", type: "MeshStandardMaterial", map: { colorSpace: "" }, normalMap: { colorSpace: "srgb" } };
+  const meshes = [];
+  for (let i = 0; i < 400; i++) meshes.push({ isMesh: true, geometry, material });
+  window.scene = { isScene: true, traverse(fn) { fn(this); meshes.forEach(fn); } };
+
+  if (window.__THREE_DEVTOOLS__) {
+    window.__THREE_DEVTOOLS__.dispatchEvent(new CustomEvent("observe", { detail: renderer }));
+  }
+</script>

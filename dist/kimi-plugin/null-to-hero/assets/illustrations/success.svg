@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Success check">
+  <rect width="400" height="300" fill="#f4f6fb"/>
+  <!-- subtle burst rays -->
+  <g stroke="#5ac48a" stroke-width="5" stroke-linecap="round">
+    <line x1="200" y1="58" x2="200" y2="82"/>
+    <line x1="296" y1="70" x2="282" y2="90"/>
+    <line x1="104" y1="70" x2="118" y2="90"/>
+    <line x1="330" y1="150" x2="306" y2="150"/>
+    <line x1="70" y1="150" x2="94" y2="150"/>
+    <line x1="300" y1="230" x2="284" y2="214"/>
+    <line x1="100" y1="230" x2="116" y2="214"/>
+  </g>
+  <circle cx="200" cy="150" r="68" fill="#5ac48a"/>
+  <circle cx="200" cy="150" r="68" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.35"/>
+  <polyline points="168,152 190,176 234,124" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

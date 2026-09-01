@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.15">
+  <path d="M14 1 L21 5 V13 L14 17 L7 13 V5 Z"/>
+  <path d="M0 5 L0 13 M28 5 L28 13"/>
+  <path d="M0 -11 L0 -3 M28 -11 L28 -3"/>
+  <path d="M14 17 L21 21 V29 M14 17 L7 21 V29"/>
+  <path d="M0 21 L0 29 M28 21 L28 29"/>
+</svg>

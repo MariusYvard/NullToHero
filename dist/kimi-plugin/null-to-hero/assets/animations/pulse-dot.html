@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse notification dot</title>
+<style>
+  :root { --dot: #e5484d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .badge { position: relative; width: 18px; height: 18px; }
+  .badge .core { position: absolute; inset: 0; border-radius: 50%; background: var(--dot); z-index: 1; }
+  .badge .ring { position: absolute; inset: 0; border-radius: 50%; background: var(--dot); }
+  @media (prefers-reduced-motion: no-preference) {
+    .badge .ring { animation: nth-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
+  }
+  @media (prefers-reduced-motion: reduce) { .badge .ring { display: none; } }
+  @keyframes nth-ping {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="badge" role="status" aria-label="New notification">
+    <span class="ring"></span><span class="core"></span>
+  </div>
+</body>
+</html>

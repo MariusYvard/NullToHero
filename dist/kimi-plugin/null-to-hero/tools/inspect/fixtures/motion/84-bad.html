@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>reduced-motion fixture, ignored</title>
+<style>
+  /* The sheet mentions the query, which is all rule 21 asks for. It guards one
+     decorative element and leaves the marquee running, which is the shape this
+     probe exists to catch. */
+  @keyframes drift { from { transform: translateX(0) } to { transform: translateX(40px) } }
+  @keyframes scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  .badge { animation: drift 2s ease-in-out infinite alternate; }
+  .marquee { animation: scroll 20s linear infinite; }
+  @media (prefers-reduced-motion: reduce) { .badge { animation-duration: 1ms } }
+</style>
+<div class="badge">new</div>
+<div class="marquee">shipping worldwide · shipping worldwide</div>

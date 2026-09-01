@@ -1,0 +1,87 @@
+id,class,executor,note
+1,static-check,contrast-ratio,Needs the cascade resolved; the check refuses to judge rather than guessing when a token's selector is unresolvable
+2,rules-engine,rules.mjs,
+3,rules-engine,rules.mjs,
+4,rules-engine,rules.mjs,
+5,rendered-probe,rendered.mjs,Decides the half a rendered page answers: this element carries a state and says nothing else
+6,static-check,heading-order,
+7,rules-engine,rules.mjs,
+8,static-check,tap-target-size,Static half only; the rendered box is measured in the Playwright pass
+9,static-check,tap-target-spacing,Static half only; the rendered box is measured in the Playwright pass
+10,rules-engine,rules.mjs,
+11,rules-engine,rules.mjs,
+12,static-check,img-dimensions,
+13,rules-engine,rules.mjs,
+14,static-check,horizontal-overflow-375,Static half only; the real overflow is measured at 375px in the Playwright pass
+15,static-check,viewport-meta,
+16,static-check,body-font-size,
+17,static-check,line-measure,
+18,convention,,A convention and not a defect; the project decides and /siteasy carries the guidance
+19,convention,,A design call and not a defect; pure black on a small surface is fine and the rule is about large ones
+20,static-check,ui-motion-duration,
+21,rules-engine,rules.mjs,Scoped to keyframe animations; a transition fires because the reader acted
+22,rules-engine,rules.mjs,
+23,rendered-probe,rendered.mjs,Message geometry against the field is a laid-out fact
+24,rules-engine,rules.mjs,
+25,judgment,,A subset of rule 5 applied to charts; whether a series stays distinguishable depends on what is encoded
+26,rules-engine,rules.mjs,
+27,rendered-probe,rendered.mjs,Judges what is still on screen once the page has settled; the 300ms boundary needs the load instrumented and is not claimed
+28,rules-engine,rules.mjs,
+29,rules-engine,rules.mjs,
+30,rules-engine,rules.mjs,Key shapes only; entropy heuristics flag every hash and get muted
+31,rules-engine,rules.mjs,
+32,rules-engine,rules.mjs,
+33,rules-engine,rules.mjs,Fires only when the file has no error path at all
+34,build-time,,Nothing observes a missing empty state on a populated page; /siteasy asks while the interface is being built
+35,tooling,,TypeScript strict plus no-unnecessary-condition does this better than any regex could
+36,rules-engine,rules.mjs,
+37,rules-engine,rules.mjs,
+38,rules-engine,rules.mjs,
+39,rules-engine,rules.mjs,
+40,rules-engine,rules.mjs,
+41,rules-engine,rules.mjs,
+42,rules-engine,rules.mjs,Scoped to lifecycle hooks; a module-scope listener for the life of the page is fine
+43,rules-engine,rules.mjs,Fires only on a sheet of 25 blocks or more
+44,rules-engine,rules.mjs,Fires on a skip link parked off-screen with no focus rule; a missing skip link is the audit's landmark pass
+45,rules-engine,rules.mjs,Fires only once the sheet actually carries a dark scheme
+46,rules-engine,rules.mjs,Fires on an empty mount point plus a script that fills it; a server-rendered page does not match
+47,static-check,motion-reduced-guard,
+48,rules-engine,rules.mjs,
+49,static-check,scrollbar-hidden,
+50,rules-engine,rules.mjs,
+51,rendered-probe,rendered.mjs,The track height resolves against the viewport; scoped to stages and not to sticky headers
+52,rendered-probe,rendered.mjs,Walks the rendered ancestor chain for transform / filter / perspective / will-change / contain
+53,static-check,video-embed-hygiene,
+54,static-check,frame-sequence-preload,
+55,rules-engine,rules.mjs,
+56,judgment,,Whether a fallback is adequate is a product decision
+57,rules-engine,rules.mjs,
+58,static-check,frame-loop-alloc,
+59,rules-engine,rules.mjs,
+60,rules-engine,rules.mjs,
+61,rules-engine,rules.mjs,
+62,rendered-probe,rendered.mjs,The clones are injected at runtime so source text could never see them
+63,static-check,decorative-loop-budget,
+64,rules-engine,rules.mjs,
+65,rules-engine,rules.mjs,
+66,rules-engine,rules.mjs,
+67,rules-engine,rules.mjs,
+68,rendered-probe,rendered.mjs,Decides whether the hero is actually paused after settle rather than whether a canvas decoder was the right architecture
+69,rules-engine,rules.mjs,
+70,static-check,scrub-easing-linear,
+71,judgment,,Whether a handwriting animation should be scrubbed is a directorial call about the piece
+72,static-check,viewport-unit-consistency,
+73,rules-engine,rules.mjs,
+74,rules-engine,rules.mjs,
+75,rules-engine,rules.mjs,
+76,rules-engine,rules.mjs,
+77,rules-engine,rules.mjs,
+78,rules-engine,rules.mjs,
+79,three-probe,three.mjs,
+80,three-probe,three.mjs,
+81,three-probe,three.mjs,
+82,rules-engine,rules.mjs,
+83,rules-engine,rules.mjs,
+84,motion-probe,motion.mjs,
+85,motion-probe,motion.mjs,
+86,motion-probe,motion.mjs,

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bell shake</title>
+<style>
+  :root { --bell: #6a5cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fb;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  .bell { width: 44px; height: 44px; color: var(--bell); transform-origin: top center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .bell { animation: nth-shake 1.8s ease-in-out infinite; }
+  }
+  @keyframes nth-shake {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    5% { transform: rotate(14deg); }
+    10% { transform: rotate(-12deg); }
+    15% { transform: rotate(10deg); }
+    20% { transform: rotate(-8deg); }
+    25% { transform: rotate(6deg); }
+    30% { transform: rotate(0deg); }
+  }
+</style>
+</head>
+<body>
+  <svg class="bell" viewBox="0 0 32 32" role="img" aria-label="Notifications" fill="currentColor">
+    <path d="M16 4 a2 2 0 0 1 2 2 v0.6 a7 7 0 0 1 5 6.7 V18 l2 3 v1 H7 v-1 l2-3 v-4.7 a7 7 0 0 1 5-6.7 V6 a2 2 0 0 1 2-2 Z"/>
+    <path d="M13 24 a3 3 0 0 0 6 0 Z"/>
+  </svg>
+</body>
+</html>

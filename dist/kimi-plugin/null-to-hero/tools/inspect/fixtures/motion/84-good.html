@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>reduced-motion fixture, honoured</title>
+<style>
+  @keyframes drift { from { transform: translateX(0) } to { transform: translateX(40px) } }
+  @keyframes scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  .badge { animation: drift 2s ease-in-out infinite alternate; }
+  .marquee { animation: scroll 20s linear infinite; }
+  /* Duration neutralised, iteration count capped: both animations complete
+     instantly and stop, so animationend still fires. */
+  @media (prefers-reduced-motion: reduce) {
+    .badge, .marquee {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+</style>
+<div class="badge">new</div>
+<div class="marquee">shipping worldwide · shipping worldwide</div>

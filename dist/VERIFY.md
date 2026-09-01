@@ -69,10 +69,17 @@ own documentation, cited in `dist/agents/README.md`, and the format they read is
 the one opencode and Gemini CLI read. Neither of those is the same as having
 watched them do it.
 
-## Not covered
+## Kimi Work, since 2026-09-01
 
-Kimi Work. No official source establishes that it reads `SKILL.md` from disk, nor
-from which paths, and its installation directory holds no configuration.
+Kimi Work (the desktop app) is covered by `dist/kimi-plugin/`, a self-contained
+plugin: the four skills, the fifteen sub-agents and the deterministic runtime
+in one registrable directory. On 2026-09-01 the package passed the Kimi plugin
+validator with zero errors and was registered into a real Kimi Work personal
+plugin market; the registrar reported the entry healthy and recognised all
+fifteen sub-agents. What that run does not establish is how a conversation
+behaves after the install — the same gap as the model-quality paragraph below.
+
+## Not covered
 
 The Python `kimi-cli`. Its own README says it is being wound down in favour of
 Kimi Code, and its agent format is unrelated to what is generated here.
