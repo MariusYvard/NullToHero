@@ -206,6 +206,23 @@ accepting the package proves it is discovered and says nothing about whether it
 conforms; that is held by `tests/portability.mjs` instead.
 `bash tests/verify-hosts.sh` reproduces the first two runs.
 
+### Hermes Agent
+
+NullToHero also runs on [Hermes Agent](https://github.com/NousResearch/hermes-agent),
+which shares the same `dist/agents/skills` package as the `agents` target above
+but additionally gets the 15 audit sub-agents, ported to standalone Agent Skills
+in [`hermes-agent/`](hermes-agent/) (Hermes has no native sub-agent dispatch tied
+to a plugin's `Task` tool). Install and keep updated with:
+
+```
+bash update-hermes-skills.sh
+```
+
+installs into `~/.hermes/skills/null-to-hero/` (or `%LOCALAPPDATA%\hermes\skills\null-to-hero\`
+on Windows). Details, and the differences from the Claude Code sub-agent
+dispatch, in [`hermes-agent/README.md`](hermes-agent/README.md). As with every
+other host, `null-to-hero/` and `dist/` are unaffected.
+
 ### Updating
 
 Updating never requires uninstalling. Refresh the marketplace, then update the plugin:
