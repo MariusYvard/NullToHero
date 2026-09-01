@@ -1,0 +1,160 @@
+---
+name: teach
+description: "Interactive teaching mode: inspects a project, writes PRODUCT.md at the project root and delegates DESIGN.md to /nth-siteasy document, so the two files explain the design system together."
+version: 1.9.1
+---
+
+# Teach Flow
+
+Gathers design context for a project and produces two complementary files at the project root (PRODUCT.md directly; DESIGN.md via [document.md](document.md), see Step 5):
+
+- **PRODUCT.md** (strategic): register, target users, product purpose, brand personality, anti-references, strategic design principles. Answers "who/what/why".
+- **DESIGN.md** (visual): visual theme, color palette, typography, components. Follows the [Google Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format/). Answers "how it looks".
+
+Every other siteasy command reads these files before doing any work.
+
+## Step 1: Load current state
+
+Run the shared loader first so you know what already exists:
+
+```bash
+node "${NTH_ROOT}/skills/siteasy/scripts/load-context.mjs"
+```
+
+The output tells you whether PRODUCT.md and/or DESIGN.md already exist. If `migrated: true`, legacy `.impeccable.md` was auto-renamed to `PRODUCT.md`. Mention this once to the user.
+
+Decision tree:
+- **Neither file exists (empty project or no context yet)**: do Steps 2-4 (write PRODUCT.md), then decide on DESIGN.md based on whether there's code to analyze.
+- **PRODUCT.md exists, DESIGN.md missing**: skip to Step 5, offer to run `/nth-siteasy document` for DESIGN.md.
+- **PRODUCT.md exists but has no `## Register` section (legacy)**: add it. Infer a hypothesis from the codebase (see Step 2), confirm with the user, write the field.
+- **Both exist**: STOP and call the clarify tool to clarify. Ask which file to refresh. Skip the one the user doesn't want changed.
+- **Just DESIGN.md exists (unusual)**: do Steps 2-4 to produce PRODUCT.md.
+
+Never silently overwrite an existing file. Always confirm first.
+
+If teach was invoked as a setup blocker by another command, such as `/nth-siteasy build landing page`, pause that command here. Complete teach, re-run the loader, then resume the original command with the freshly loaded context. For craft, resume into shape next; teach creates project context, but it is not a substitute for the task-specific shape interview and confirmed design brief.
+
+## Step 2: Explore the codebase
+
+Before asking questions, thoroughly scan the project to discover what you can:
+
+README and docs, package and config files, existing components, brand assets (logos, favicons, committed color values), design tokens and CSS variables, and any style guide or brand documentation.
+
+Also form a **register hypothesis** from what you find:
+
+- Brand signals: `/`, `/about`, `/pricing`, `/blog/*`, `/docs/*`, hero sections, big typography, scroll-driven sections, landing-page-shaped content.
+- Product signals: `/app/*`, `/dashboard`, `/settings`, `/(auth)`, forms, data tables, side/top nav, app-shell components.
+
+Register is a hypothesis at this point, not a decision, Step 3 confirms it.
+
+Note what you've learned and what remains unclear. This exploration feeds both PRODUCT.md and DESIGN.md.
+
+## Step 3: Ask strategic questions (for PRODUCT.md)
+
+STOP and call the clarify tool to clarify. Ask only about what you couldn't infer from the codebase.
+
+If the tool is unavailable or the user cannot answer, do not stall the setup. Apply the parent skill's rule: pick the most reasonable option, state it in one line, mark it `[ASSUMED]` in PRODUCT.md, continue, and say which fields are assumed when you present the file. A beginner rarely knows their brand personality on demand, and a PRODUCT.md carrying three marked assumptions is worth more to them than no PRODUCT.md at all.
+
+### Interview mode, not confirmation mode
+
+If the repo is empty or the user's brief is sparse, run a short interview before proposing PRODUCT.md. Do **not** turn a one-sentence request into a complete inferred PRODUCT.md and ask for blanket confirmation.
+
+- Ask **2-3 questions per round**, then wait for answers.
+- Round 1 establishes register, users/purpose, and desired outcome. Round 2 establishes brand personality or references, anti-references, and accessibility needs.
+- Complete at least one real user-answer round before drafting PRODUCT.md, unless every required answer is directly discoverable from repo docs.
+- After that round you may propose inferred answers, as hypotheses or options rather than finished facts, but the user confirms them before you write the file.
+- Never synthesize PRODUCT.md from the original task prompt alone.
+
+### Register (ask first, it shapes everything below)
+
+Every design task is either **brand** (marketing, landing, campaign, long-form content, portfolio, design IS the product) or **product** (app UI, admin, dashboards, tools, design SERVES the product).
+
+If Step 2 produced a clear hypothesis, lead with it: *"From the codebase, this looks like a [brand / product] surface, does that match your intent, or should we treat it differently?"*
+
+If the signal is genuinely split (e.g. a product with a big marketing landing), STOP and call the clarify tool to clarify. Ask which register describes the **primary** surface. The register can be overridden per task later, but PRODUCT.md carries one default.
+
+### Users & Purpose
+
+Who uses this, in what context, for what job. Then split by register: for brand, what emotions the interface should evoke (confidence, delight, calm, urgency); for product, what workflow they are in and the primary task on any given screen.
+
+### Brand & Personality
+
+Brand personality in 3 words, plus references and anti-references. Push for real examples, never generic "modern" adjectives:
+- For brand, references in a named lane (tech-minimal, editorial-magazine, consumer-warm, brutalist-grid).
+- For product, category best-tool references (Linear, Figma, Notion, Raycast, Stripe).
+- Ask what this should explicitly NOT look like. The anti-reference constrains more than the reference does.
+
+### Accessibility & Inclusion
+
+WCAG level, known user needs, reduced motion, color blindness, other accommodations.
+
+Skip questions where the answer is already clear. **Do NOT ask about colors, fonts, radii, or visual styling here**: those belong in DESIGN.md, not PRODUCT.md.
+
+## Step 4: Write PRODUCT.md
+
+Synthesize the confirmed answers into a strategic document:
+
+```markdown
+# Product
+
+## Register
+
+product
+
+## Users
+[Who they are, their context, the job to be done]
+
+## Product Purpose
+[What this product does, why it exists, what success looks like]
+
+## Brand Personality
+[Voice, tone, 3-word personality, emotional goals]
+
+## Anti-references
+[What this should NOT look like. Specific bad-example sites or patterns to avoid.]
+
+## Design Principles
+[3-5 strategic principles derived from the conversation. Principles like "practice what you preach", "show, don't tell", "expert confidence", NOT visual rules like "use OKLCH" or "magenta accent".]
+
+## Accessibility & Inclusion
+[WCAG level, known user needs, considerations]
+```
+
+Register is either `brand` or `product` as a bare value. No prose, no commentary.
+
+Write to `PROJECT_ROOT/PRODUCT.md`. If `.impeccable.md` existed, the loader already renamed it, merge into that content rather than starting from scratch.
+
+## Step 5: Decide on DESIGN.md
+
+Offer `/nth-siteasy document` either way. Two paths:
+
+- **Code exists** (CSS tokens, components, a running site): "I can generate a DESIGN.md that captures your visual system (colors, typography, components) so variants stay on-brand. Want to do that now?"
+- **Pre-implementation** (empty project): "I can seed a starter DESIGN.md from five quick questions about color strategy, type direction, motion energy, and references. You can re-run once there's code, to capture the real tokens. Want to do that now?"
+
+If the user agrees, delegate to `/nth-siteasy document` (it auto-detects scan vs seed). Load its reference and follow that flow.
+
+### Optional: stack-aware starting point
+
+For a pre-implementation project, you can seed the visual direction from the bundled design-system knowledge base (16 stacks, curated color, typography, landing and chart guidance) instead of starting from a blank page. Run:
+
+```bash
+python3 "${NTH_ROOT}/tools/design-system/scripts/search.py" "<product or style description>" --design-system --stack <react|nextjs|vue|svelte|astro|nuxtjs|angular|laravel|html-tailwind|shadcn|swiftui|react-native|flutter|jetpack-compose|threejs|nuxt-ui> --format markdown
+```
+
+It prints a stack-specific recommendation (style, color roles, type pairing, key effects, anti-patterns). Treat the output as a proposal: confirm or adjust it with the user, then fold the chosen values into DESIGN.md through `/nth-siteasy document` (seed mode). Add `--persist -p "Project Name"` to also write a `design-system/<project>/MASTER.md` scaffold the user can keep. The generator never overwrites DESIGN.md itself; you stay in control of the final file.
+
+If the user prefers to skip, mention they can run `/nth-siteasy document` any time later.
+
+## Step 6: Confirm and wrap up
+
+Summarize:
+- Register captured (brand / product)
+- What was written (PRODUCT.md, DESIGN.md, or both)
+- The 3-5 strategic principles from PRODUCT.md that will guide future work
+- If DESIGN.md is pending, remind the user how to generate it later
+
+**Critical: re-run the loader to refresh session context.** After writing PRODUCT.md, run `node "${NTH_ROOT}/skills/siteasy/scripts/load-context.mjs"` one final time and let its full JSON output land in conversation. This ensures subsequent commands in this session use the freshly-written PRODUCT.md, not a stale earlier version.
+
+If teach was invoked as a blocker by another siteasy command (e.g. the user ran `/nth-siteasy polish` with no PRODUCT.md), resume that original task now with the fresh context.
+
+Optionally STOP and call the clarify tool to clarify. Ask whether they'd like a brief summary of PRODUCT.md appended to CLAUDE.md for easier agent reference. If yes, append a short **Design Context** pointer section there.

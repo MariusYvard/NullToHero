@@ -121,6 +121,33 @@ const HOSTS = {
     skillsDir: "~/.agents/skills",
     agentsDir: null,
   },
+  // HERMES AGENT : DÉLÉGATION RÉELLE, PAS DE FICHIER DE SOUS-AGENT
+  // ----------------------------------------------------------------
+  // Hermes Agent (github.com/NousResearch/hermes-agent) lit le format Agent
+  // Skills comme la cible neutre ci-dessus, mais il n'est pas sans délégation
+  // pour autant : son outil `delegate_task` fait tourner de vrais sous-agents
+  // en parallèle (un appel, un tableau `tasks`, chaque tâche isolée dans son
+  // propre contexte), ce qui est la même capacité que le `Task` tool de
+  // Claude Code plutôt que son absence.
+  //
+  // Il n'existe pas pour autant de format de fichier de sous-agent nommé côté
+  // Hermes (pas d'équivalent au `.codex/agents/*.toml` ou `.kimi-code/agents/
+  // *.md`) : `delegate_task` prend un `goal` en texte libre par tâche, pas un
+  // `subagent_type` résolu depuis un répertoire. Les quinze sous-agents sont
+  // donc portés à part, en compétences Agent Skills classiques, par
+  // `hermes-agent/tools/convert-agents-to-skills.py` (voir `hermes-agent/` à
+  // la racine du dépôt) plutôt que générés ici. `agentsDir` reste donc `null`
+  // comme pour la cible neutre, mais `delegates` à `true` distingue les deux
+  // dans `hostNote()` : la neutre dit "fais-le toi-même", Hermes dit
+  // "délègue avec delegate_task".
+  hermes: {
+    label: "Hermes Agent",
+    column: "Hermes",
+    invocation: name => `the \`${name}\` skill (say what you want and Hermes picks it, or load it explicitly with \`skill_view\`)`,
+    skillsDir: "~/.hermes/skills (or the active profile's skills directory)",
+    agentsDir: null,
+    delegates: true,
+  },
 };
 
 // Kimi Code reads these from a sub-agent's frontmatter and enforces them twice:
@@ -206,7 +233,10 @@ function hostNote(host, skillName, sourceSkill) {
       ? `Tools named below are this host's: ${named.join(", ")}.`
       : `This host does not publish tool names to a skill. Where the text names a tool, read it as the capability: ${HOST_TOOLS.map(r => r.Capability).join(", ")}.`,
     "",
-    ...(h.agentsDir ? [] : [
+    ...(h.agentsDir ? [] : h.delegates ? [
+      "This package carries skills and no separate sub-agent files: there is no Hermes equivalent of a named sub-agent directory. Where the text below asks for delegation, use the delegate_task tool: one call, one task per sub-agent in the same tasks array, so they run as real parallel sub-agents in isolated contexts — the same capability the text describes, reached a different way. The 15 audit sub-agents this skill can delegate to are themselves installed as Agent Skills (see hermes-agent/ in the repository) rather than resolved by name from a directory; delegate_task takes a free-text goal per task, not a named agent type, so describe each sub-agent's job in the goal instead of naming it.",
+      "",
+    ] : [
       "This package carries skills and no sub-agents: the Agent Skills standard covers skills alone, and there is no common format for a sub-agent. Where the text below asks for delegation, run that dimension yourself in this session. The judgement is the same; what is lost is the parallelism and the isolated context each dimension would otherwise get.",
       "",
     ]),
@@ -366,7 +396,9 @@ library are read from the checkout, not copied, so keep it where it is.
 
 ${SKILLS.length} skills (\`${SKILLS.map(s => PREFIX + s).join("`, `")}\`)${h.agentsDir
   ? ` and ${agentCount} read-only sub-agents.`
-  : ` and no sub-agents: the standard covers skills alone.`}
+  : h.delegates
+    ? ` and no bundled sub-agent files: the 15 audit sub-agents install separately as their own Agent Skills, dispatched with delegate_task. See the "Delegation" section below.`
+    : ` and no sub-agents: the standard covers skills alone.`}
 
 The \`nth-\` prefix exists because a skills directory is shared with every other
 skill pack on the machine, and \`audit\` and \`inspect\` are names a third party
@@ -409,6 +441,25 @@ host's own page for the directory it prefers, then copy \`skills/\` there.
 It carries no sub-agents. \`/${PREFIX}audit full\` names fifteen dimensions and, on
 Claude Code, runs each in its own context in parallel. Here it names them and you
 run them in one session. The checklists are identical; the isolation is not.
+`,
+  hermes: `
+## Delegation
+
+\`${PREFIX}audit full\` (and the other agent-run scopes) name fifteen sub-agents by
+\`subagent_type\` in Claude's own text. On Hermes, dispatch them with
+\`delegate_task\`: one call, one task per sub-agent in the same \`tasks\` array, so
+they run in parallel in isolated contexts — real sub-agents, not a simulated
+loop. \`delegate_task\` takes a free-text \`goal\` per task rather than a named
+\`subagent_type\`, so describe the sub-agent's job in the goal (its SKILL.md, from
+\`hermes-agent/\` in the source repository, is the description to paraphrase into
+that goal). This is not a fallback: it is the same parallel-and-isolated
+capability the source text asks for, reached through Hermes's own delegation
+tool instead of a subagent_type lookup.
+
+This package (\`dist/agents/skills\`) does not itself carry the fifteen sub-agent
+prompts; they are generated separately as their own Agent Skills by
+\`hermes-agent/tools/convert-agents-to-skills.py\` and installed alongside these
+four. See \`hermes-agent/README.md\` in the source repository.
 `,
 }[host]}`;
 }

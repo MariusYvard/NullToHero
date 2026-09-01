@@ -22,12 +22,14 @@ ok()     { echo -e "${GREEN}[OK]${NC} $1"; }
 warn()   { echo -e "${YELLOW}[WARN]${NC} $1"; }
 err()    { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 
-# ─── Portable targets: Codex and Kimi ─────────────────────────────────────────
+# ─── Portable targets: Codex, Kimi and Hermes ─────────────────────────────────
 #
 #   bash install.sh                  Claude Code, the default, unchanged below
 #   bash install.sh --target codex   copies dist/codex into ~/.agents/skills
 #   bash install.sh --target kimi    copies dist/kimi into ~/.kimi-code/skills
 #   bash install.sh --target agents  copies dist/agents into ~/.agents/skills
+#   bash install.sh --target hermes  copies dist/hermes into ~/.hermes/skills,
+#                                     plus the 15 audit sub-agents (hermes-agent/)
 #   bash install.sh --target all     codex and kimi
 #
 # Only the sub-agent files differ between codex and kimi, and they go to each
@@ -36,6 +38,14 @@ err()    { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 # `agents` is the package for every other host that reads the Agent Skills
 # format: Cursor, GitHub Copilot, VS Code, Gemini CLI, opencode and the rest.
 # It carries no sub-agents, because the standard defines none.
+#
+# `hermes` reads the same Agent Skills format as `agents`, in its own
+# directory (~/.hermes/skills, kept apart so the two packages, which carry
+# different frontmatter, cannot overwrite one another), and additionally
+# installs the 15 audit sub-agents from hermes-agent/skills/ (ported to
+# Agent Skills, since Hermes has no named sub-agent directory format):
+# dispatch them at runtime with delegate_task, not from a file Hermes reads
+# at startup.
 #
 # `codex` and `agents` land in the same directory, so they exclude one another.
 # The installer refuses rather than overwriting: pick Codex if you want the
@@ -53,10 +63,19 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NTH_ROOT_ABS="${SCRIPT_DIR}/null-to-hero"
 # Codex reads ~/.agents/skills. Kimi Code reads $KIMI_CODE_HOME/skills, default
-# ~/.kimi-code/skills. They are kept apart so the two packages, which carry
-# different frontmatter and different tool names, cannot overwrite one another.
+# ~/.kimi-code/skills. Hermes reads $HERMES_HOME/skills, default ~/.hermes/skills
+# (or the active profile's own skills directory). They are kept apart so the
+# packages, which carry different frontmatter and different tool names, cannot
+# overwrite one another.
 KIMI_CODE_HOME="${KIMI_CODE_HOME:-${HOME}/.kimi-code}"
-skills_dir_for() { [ "$1" = "kimi" ] && echo "${KIMI_CODE_HOME}/skills" || echo "${HOME}/.agents/skills"; }
+HERMES_HOME="${HERMES_HOME:-${HOME}/.hermes}"
+skills_dir_for() {
+  case "$1" in
+    kimi)   echo "${KIMI_CODE_HOME}/skills" ;;
+    hermes) echo "${HERMES_HOME}/skills" ;;
+    *)      echo "${HOME}/.agents/skills" ;;
+  esac
+}
 
 install_portable() {
   local host="$1"
@@ -103,12 +122,26 @@ install_portable() {
   done
 
   # Le paquet neutre n'a pas de sous-agents : le standard n'en definit pas.
+  # Hermes non plus, dans dist/hermes/, mais ses 15 sous-agents existent a
+  # part en Agent Skills (hermes-agent/skills/), installes dans le meme
+  # dossier de competences plutot que dans un repertoire de sous-agents que
+  # Hermes ne lit pas.
   if [ -d "${src}/agents" ]; then
     local agents_dest
     if [ "${host}" = "codex" ]; then agents_dest="${HOME}/.codex/agents"; else agents_dest="${KIMI_CODE_HOME}/agents"; fi
     mkdir -p "${agents_dest}"
     cp -r "${src}"/agents/. "${agents_dest}/"
     ok "sub-agents -> ${agents_dest}"
+  elif [ "${host}" = "hermes" ] && [ -d "${SCRIPT_DIR}/hermes-agent/skills" ]; then
+    local hermes_agent
+    for hermes_agent in "${SCRIPT_DIR}"/hermes-agent/skills/*/; do
+      dest="${target_skills}/$(basename "${hermes_agent}")"
+      rm -rf "${dest}"
+      cp -r "${hermes_agent}" "${dest}"
+      date -u +%Y-%m-%dT%H:%M:%SZ > "${dest}/.nth-installed"
+      ok "$(basename "${hermes_agent}") -> ${dest}"
+    done
+    log "15 audit sub-agents installed as skills. Dispatch them with delegate_task."
   else
     log "No sub-agents in this package: the Agent Skills standard defines none."
   fi
@@ -122,9 +155,10 @@ case "${TARGET}" in
   codex)  install_portable codex; exit 0 ;;
   kimi)   install_portable kimi;  exit 0 ;;
   agents) install_portable agents; exit 0 ;;
+  hermes) install_portable hermes; exit 0 ;;
   all)    install_portable codex; install_portable kimi; exit 0 ;;
   claude) : ;;
-  *) err "Unknown target: ${TARGET}. Use claude, codex, kimi, agents or all."; exit 1 ;;
+  *) err "Unknown target: ${TARGET}. Use claude, codex, kimi, agents, hermes or all."; exit 1 ;;
 esac
 
 # ─── Check dependencies ───────────────────────────────────────────────────────

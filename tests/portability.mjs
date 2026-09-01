@@ -15,9 +15,9 @@ import { fileURLToPath } from "node:url";
 const REPO = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const SRC = path.join(REPO, "null-to-hero");
 const DIST = path.join(REPO, "dist");
-const HOSTS = ["codex", "kimi", "agents"];
+const HOSTS = ["codex", "kimi", "agents", "hermes"];
 // La colonne de prose-tokens.csv qui gouverne chaque paquet.
-const COLUMN = { codex: "Codex", kimi: "Kimi Code", agents: "Agent Skills" };
+const COLUMN = { codex: "Codex", kimi: "Kimi Code", agents: "Agent Skills", hermes: "Hermes" };
 const SKILLS = ["seo", "siteasy", "audit", "cms"];
 
 // agentskills.io/specification
