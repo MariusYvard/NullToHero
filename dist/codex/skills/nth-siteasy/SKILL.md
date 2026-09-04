@@ -8,7 +8,7 @@ metadata:
   host: codex
   source-skill: siteasy
   short-description: "Design, build, critique and polish a frontend interface: landing pages, dashboards, product UI, components, forms, onboarding, empty states. Covers UX and information architecture, WCAG 2.2 accessibility, typography, color, spacing, motion and micro-interactions, responsive and mobile ergonomics, UX copy, design systems and design tokens."
-  argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · preview|live] [target]"
+  argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|art-direction|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · preview|live] [target]"
 ---
 <!-- Generated for OpenAI Codex from null-to-hero/skills/siteasy/.
      Do not edit here. Edit the source and run tools/build-dist.mjs. -->
@@ -194,6 +194,7 @@ whole-site check use `/nth-audit [url]`; to be found on Google and in AI answers
 | `mobile [target]` | Enhance | Phone-specific ergonomics, thumb zone, touch targets, mobile navigation, virtual keyboards, mobile audit | [references/mobile-ergonomics.md](references/mobile-ergonomics.md) |
 | `delight [target]` | Enhance | Micro-interactions, personality in copy, satisfying feedback | [references/delight.md](references/delight.md) + [references/creative-patterns.md](references/creative-patterns.md) |
 | `overdrive [target]` | Advanced | View Transitions API, WebGL, scroll-driven animations | [references/overdrive.md](references/overdrive.md) + [references/creative-patterns.md](references/creative-patterns.md) + [references/inspiration.md](references/inspiration.md) + [references/signature-moments.md](references/signature-moments.md) |
+| `art-direction [scope]` | Advanced | Awwwards-level art direction: signature moments, static composition test, three slop categories, submission strategy | [references/art-direction.md](references/art-direction.md) + [references/signature-moments.md](references/signature-moments.md) |
 | `video [target]` | Advanced | Guaranteed-play decorative video: classify, transcode to a canvas-decodable asset (WASM decoder), emit the drop-in component | [references/video.md](references/video.md) |
 | `parallax [target]` | Advanced | Multi-layer depth, scrollytelling, AI-adaptive motion governance, WCAG 2.2.2 compliance | [references/parallax.md](references/parallax.md) |
 | `preview [target]` | Evaluate | Real Chromium screenshot at mobile and desktop viewports, read back visually, fix the bugs in a loop | [references/preview.md](references/preview.md) |

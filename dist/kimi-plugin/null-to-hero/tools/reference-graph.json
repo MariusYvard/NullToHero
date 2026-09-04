@@ -53,6 +53,7 @@
     "skills/siteasy/references/adapt.md",
     "skills/siteasy/references/animate.md",
     "skills/siteasy/references/animation-engineering.md",
+    "skills/siteasy/references/art-direction.md",
     "skills/siteasy/references/assets-library.md",
     "skills/siteasy/references/audit.md",
     "skills/siteasy/references/bolder.md",
@@ -571,6 +572,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/art-direction.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/assets-library.md"
     },
     {
@@ -902,6 +907,38 @@
       "to": "skills/siteasy/references/parallax.md"
     },
     {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/brand.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/color-and-contrast.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/creative-patterns.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/inspiration.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/layout.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/motion-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/signature-moments.md"
+    },
+    {
+      "from": "skills/siteasy/references/art-direction.md",
+      "to": "skills/siteasy/references/typography.md"
+    },
+    {
       "from": "skills/siteasy/references/assets-library.md",
       "to": "skills/siteasy/references/resource-recommendations.md"
     },
@@ -920,6 +957,10 @@
     {
       "from": "skills/siteasy/references/bolder.md",
       "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/brand.md",
+      "to": "skills/siteasy/references/art-direction.md"
     },
     {
       "from": "skills/siteasy/references/clarify.md",
@@ -1288,6 +1329,10 @@
     {
       "from": "skills/siteasy/references/information-architecture.md",
       "to": "skills/siteasy/references/ux-research.md"
+    },
+    {
+      "from": "skills/siteasy/references/inspiration.md",
+      "to": "skills/siteasy/references/art-direction.md"
     },
     {
       "from": "skills/siteasy/references/journey-express.md",

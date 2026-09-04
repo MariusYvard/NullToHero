@@ -555,6 +555,18 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/art-direction.md",
+    "title": "Art Direction — Awwwards-Level Design",
+    "keywords": [
+      "art",
+      "direction",
+      "awwwards",
+      "level",
+      "design"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/assets-library.md",
     "title": "Assets library",
     "keywords": [

@@ -149,3 +149,5 @@ Brand can afford things product can't. Take them.
 - Typographic risk. Enormous display type, unexpected italic cuts, mixed cases, hand-drawn headlines, a single oversize word as a hero.
 - Unexpected color strategies. Palette IS voice — a calm brand and a restless brand should not share palette mechanics.
 - Art direction per section. Different sections can have different visual worlds if the narrative demands it. Consistency of voice beats consistency of treatment.
+
+For award-level art direction principles (Awwwards criteria, signature moments, submission strategy), see [art-direction.md](art-direction.md).

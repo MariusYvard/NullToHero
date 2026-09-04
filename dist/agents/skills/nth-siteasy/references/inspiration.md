@@ -96,7 +96,7 @@ Don't just look at good interfaces. Dissect them.
 
 **[Dribbble](https://dribbble.com)** — use it to study visual craft, not to copy. Search specifically: "dashboard dark mode", "form design", "empty state", "settings page". Filter by "Designers you follow" once you've curated your follows.
 
-**[Awwwards](https://awwwards.com)** — higher signal-to-noise than Dribbble for web. Study the SOTD (Site of the Day) archives. Filter by category: "Portfolios" and "Apps" are most useful.
+**[Awwwards](https://awwwards.com)** — higher signal-to-noise than Dribbble for web. Study the SOTD (Site of the Day) archives. Filter by category: "Portfolios" and "Apps" are most useful. For art-direction principles behind winning sites, see [art-direction.md](art-direction.md).
 
 **[Godly](https://godly.website)** — curated collection of exceptional websites. Higher quality curation than Awwwards for web craft.
 

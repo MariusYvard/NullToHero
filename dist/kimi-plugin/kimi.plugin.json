@@ -2,7 +2,7 @@
   "$schema": "https://catalog.msh.team/misc/kimi.plugin.schema.json",
   "name": "null-to-hero",
   "version": "4.0.0",
-  "description": "From zero knowledge to hero website: design, SEO, whole-site audit and handover skills — 4 skills, 67 commands, 15 audit sub-agents.",
+  "description": "From zero knowledge to hero website: design, SEO, whole-site audit and handover skills — 4 skills, 68 commands, 15 audit sub-agents.",
   "keywords": [
     "design",
     "seo",
@@ -44,7 +44,7 @@
   "author": "Marius Yvard",
   "homepage": "https://nulltohero.netlify.app/",
   "license": "Apache-2.0",
-  "skillInstructions": "NullToHero turns Kimi into a senior web team: a designer, an SEO specialist, a whole-site reviewer and a handover expert. Four skills — nth-siteasy (design and build), nth-seo (search visibility), nth-audit (the whole site in one pass), nth-cms (hand the site to its owner) — with 67 commands and 15 audit sub-agents.\n\nAsk in plain language and Kimi picks the right skill: “build a landing page for a coffee shop” (nth-siteasy express), “make this page feel more premium” (nth-siteasy improve), “why is my site not on Google” (nth-seo audit), “is this ready to ship” (nth-audit full), “let the client edit their own text” (nth-cms entrust).\n\nThe deterministic runtime (Node.js tools, asset library, skill scripts) is bundled under null-to-hero/ and its paths were substituted at setup time, so the package is self-contained. Requires Node.js 20+; /nth-siteasy preview and the /nth-cms chain also need Playwright and Python 3.\n\nAudit and fix commands read and modify project files: confirm with the user before deleting, overwriting or deploying.",
+  "skillInstructions": "NullToHero turns Kimi into a senior web team: a designer, an SEO specialist, a whole-site reviewer and a handover expert. Four skills — nth-siteasy (design and build), nth-seo (search visibility), nth-audit (the whole site in one pass), nth-cms (hand the site to its owner) — with 68 commands and 15 audit sub-agents.\n\nAsk in plain language and Kimi picks the right skill: “build a landing page for a coffee shop” (nth-siteasy express), “make this page feel more premium” (nth-siteasy improve), “why is my site not on Google” (nth-seo audit), “is this ready to ship” (nth-audit full), “let the client edit their own text” (nth-cms entrust).\n\nThe deterministic runtime (Node.js tools, asset library, skill scripts) is bundled under null-to-hero/ and its paths were substituted at setup time, so the package is self-contained. Requires Node.js 20+; /nth-siteasy preview and the /nth-cms chain also need Playwright and Python 3.\n\nAudit and fix commands read and modify project files: confirm with the user before deleting, overwriting or deploying.",
   "interface": {
     "displayName": "NullToHero",
     "shortDescription": "Design, SEO, audit and handover skills for building websites you're proud of",

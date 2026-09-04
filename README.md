@@ -14,7 +14,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v4.0.0** · 4 skills · 67 commands · 135 reference docs · 15 audit sub-agents
+**v4.0.0** · 4 skills · 68 commands · 136 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -310,7 +310,7 @@ The doors above are the way in. The skills below are the full reference behind t
 Your design partner. It plans the look, builds the pages, fixes spacing and type, makes everything responsive, and adds tasteful motion. You describe the goal, it produces real, production-ready front-end.
 
 <details>
-<summary><b>All 34 commands</b></summary>
+<summary><b>All 35 commands</b></summary>
 
 | Command | What it does |
 |---------|-------------|
@@ -633,7 +633,7 @@ The `null-to-hero/assets/` folder ships an original, license-clean starter libra
 
 ## What is inside
 
-NullToHero ships **135 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **136 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>
