@@ -538,7 +538,7 @@ watched them do it.
 
 ## Kimi Work, since 2026-09-01
 
-Kimi Work (the desktop app) is covered by \`dist/kimi-plugin/\`, a self-contained
+Kimi Work (the desktop app) is covered by \`dist/kimi-work/\`, a self-contained
 plugin: the four skills, the fifteen sub-agents and the deterministic runtime
 in one registrable directory. On 2026-09-01 the package passed the Kimi plugin
 validator with zero errors and was registered into a real Kimi Work personal
@@ -647,7 +647,7 @@ when the version string changes.
 }
 
 function buildKimiPlugin(target) {
-  const out = path.join(target, "kimi-plugin");
+  const out = path.join(target, "kimi-work");
   fs.mkdirSync(out, { recursive: true });
 
   // Skills and sub-agents are the Kimi Code host's own output, reused whole:
@@ -686,7 +686,7 @@ function buildKimiPlugin(target) {
 
   fs.writeFileSync(path.join(out, "kimi.plugin.json"), kimiPluginManifest());
   fs.writeFileSync(path.join(out, "README.md"), kimiPluginReadme(kimi.agents));
-  return { id: "null-to-hero", dir: "kimi-plugin", skills: SKILLS.length, agents: kimi.agents, runtime: true };
+  return { id: "null-to-hero", dir: "kimi-work", skills: SKILLS.length, agents: kimi.agents, runtime: true };
 }
 
 // ─── entry point ─────────────────────────────────────────────────────────────
@@ -731,6 +731,6 @@ if (CHECK) {
   console.log("dist/ matches the source.");
 } else {
   for (const r of results) console.log(`${r.host}: ${r.skills} skills, ${r.agents} sub-agents`);
-  console.log(`kimi-plugin: ${plugin.skills} skills, ${plugin.agents} sub-agents, runtime bundled`);
+  console.log(`kimi-work: ${plugin.skills} skills, ${plugin.agents} sub-agents, runtime bundled`);
   console.log(`written to ${target}`);
 }

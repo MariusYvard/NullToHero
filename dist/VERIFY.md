@@ -71,7 +71,7 @@ watched them do it.
 
 ## Kimi Work, since 2026-09-01
 
-Kimi Work (the desktop app) is covered by `dist/kimi-plugin/`, a self-contained
+Kimi Work (the desktop app) is covered by `dist/kimi-work/`, a self-contained
 plugin: the four skills, the fifteen sub-agents and the deterministic runtime
 in one registrable directory. On 2026-09-01 the package passed the Kimi plugin
 validator with zero errors and was registered into a real Kimi Work personal

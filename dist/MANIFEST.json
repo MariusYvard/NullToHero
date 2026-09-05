@@ -29,7 +29,7 @@
   ],
   "plugin": {
     "id": "null-to-hero",
-    "dir": "kimi-plugin",
+    "dir": "kimi-work",
     "skills": 4,
     "agents": 15,
     "runtime": true

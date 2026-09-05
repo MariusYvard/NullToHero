@@ -155,17 +155,17 @@ a registrable plugin, and everybody else shares the fourth.
 |---|---|---|---|
 | `codex` | OpenAI Codex | `~/.agents/skills` and `~/.codex/agents` | 15, as TOML agent files |
 | `kimi` | Kimi Code | `~/.kimi-code/skills` and `~/.kimi-code/agents` | 15, found without a launch flag |
-| `kimi-plugin` | Kimi Work (desktop) | the personal plugin market, ＋ install | 15, runtime bundled |
+| `kimi-work` | Kimi Work (desktop) | the personal plugin market, ＋ install | 15, runtime bundled |
 | `agents` | every other host that reads the standard | `~/.agents/skills` | none: the standard defines none |
 | `hermes` | Hermes Agent | `~/.hermes/skills` | 15, ported as skills, dispatched with `delegate_task` |
 
-The `kimi-plugin` package is one self-contained directory — skills, sub-agents,
+The `kimi-work` package is one self-contained directory — skills, sub-agents,
 deterministic tools and asset library — registered with the Kimi Work CLI, then
 installed from the Plugins page without a restart:
 
 ```
-bash dist/kimi-plugin/setup.sh
-kimi-daimon kimi-plugin register-personal dist/kimi-plugin --json
+bash dist/kimi-work/setup.sh
+kimi-daimon kimi-plugin register-personal dist/kimi-work --json
 # then: Kimi Work → Plugins → Personal (「个人」) tab → ＋ on NullToHero
 ```
 
