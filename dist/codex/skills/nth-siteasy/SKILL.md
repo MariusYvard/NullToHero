@@ -4,7 +4,7 @@ description: "Design, build, critique and polish a frontend interface: landing p
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   host: codex
   source-skill: siteasy
   short-description: "Design, build, critique and polish a frontend interface: landing pages, dashboards, product UI, components, forms, onboarding, empty states. Covers UX and information architecture, WCAG 2.2 accessibility, typography, color, spacing, motion and micro-interactions, responsive and mobile ergonomics, UX copy, design systems and design tokens."

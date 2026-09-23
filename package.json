@@ -1,7 +1,7 @@
 {
   "name": "null-to-hero",
-  "version": "4.0.0",
-  "description": "From zero knowledge to hero website. Design + SEO skills for Claude Cowork.",
+  "version": "4.1.0",
+  "description": "Portable Agent Skills toolkit for web design, SEO/GEO, audits, handover and deterministic mobile validation.",
   "scripts": {
     "build": "node null-to-hero/tools/build-index.mjs",
     "build:dist": "node null-to-hero/tools/build-dist.mjs",

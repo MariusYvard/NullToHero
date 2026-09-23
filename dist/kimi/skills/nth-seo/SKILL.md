@@ -5,7 +5,7 @@ whenToUse: "Use when the user wants to audit a website, analyze a page, plan an 
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   host: kimi
   source-skill: seo
   short-description: "Audit and fix a website for search engines and AI answer engines: full-site audits, page analysis, technical SEO, JSON-LD schema, content quality, GEO and llms.txt, sitemaps, local, hreflang, programmatic, backlinks, ecommerce, client reports. Use for any request mentioning SEO, ranking, Google, schema, robots.txt, keywords or AI search visibility."

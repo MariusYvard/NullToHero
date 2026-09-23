@@ -1,6 +1,6 @@
 # NullToHero for Kimi Code
 
-Generated package, version 4.0.0. Do not edit these files. Edit
+Generated package, version 4.1.0. Do not edit these files. Edit
 `null-to-hero/` and run `node null-to-hero/tools/build-dist.mjs`.
 
 ## Install

@@ -1,7 +1,7 @@
 {
   "$schema": "https://catalog.msh.team/misc/kimi.plugin.schema.json",
   "name": "null-to-hero",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "From zero knowledge to hero website: design, SEO, whole-site audit and handover skills — 4 skills, 68 commands, 15 audit sub-agents.",
   "keywords": [
     "design",

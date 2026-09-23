@@ -7,6 +7,10 @@ Format: [Keep a Changelog](https://keepachangelog.com); versioning follows [Sema
 
 ## [Unreleased]
 
+---
+
+## [4.1.0] - 2026-09-23
+
 ### The headline
 
 Two things. `/inspect` is gone and its three commands went home: the deterministic
@@ -66,6 +70,8 @@ and the score was incidental to it. The document says so in place.
 
 ### Added
 
+- A three-layer mobile and iOS validation protocol: deterministic Chromium and desktop WebKit proxies, Safari in Xcode Simulator, and physical iOS evidence. The new `mobile-validate.mjs` CLI emits honest machine-readable reports, fails closed when a requested browser or page load is unavailable, confines local fixture serving after real-path resolution, and never promotes desktop WebKit to Safari iOS proof.
+- Mobile validation contracts and browser fixtures cover orientation, reduced motion, short viewports, safe-area structure, manifest handling, missing browsers, copied-package execution and hostile or hanging targets. CI names the job as desktop proxy validation rather than iOS validation.
 - `skills/cms/` and its four references: `entrust`, `carve`, `operate`,
   `architecture`. Six commands, from `entrust` to `handover`.
 - `tools/cms/`, moved out of `tools/siteasy/cms/`: the bridge, the browser half,
@@ -144,6 +150,7 @@ and the score was incidental to it. The document says so in place.
 
 ### Changed
 
+- The repository README and package metadata now present the canonical skill set and all five generated host packages consistently: Codex, Kimi Code, Kimi Work, standard Agent Skills hosts and Hermes.
 - `/inspect` is removed rather than kept as an alias. A permanent alias preserves
   exactly the problem the refactor fixes, two descriptions claiming the same
   trigger phrases, and `/inspect detect` and `/audit checks` were the most

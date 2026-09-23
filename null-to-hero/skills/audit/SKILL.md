@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Use when the user wants a complete, whole-site audit that combines search visibility, front-end defects, and design quality in one pass, the deterministic scan alone, or a design engineering review of code they paste. Runs all 15 specialist sub-agents across SEO, accessibility/interaction/layout/code defects, and UX/visual/motion/content design, then merges them into one scored report with a prioritized action plan. Its pre-pass computes the objective checks and runs the 48 rules of the rules engine, with no sub-agent and no model: missing focus rings, clipped dropdowns, bad z-index, placeholder-as-label, missing reduced-motion. Use for: 'audit my whole site', 'complete site audit', 'full website review', 'audit everything', 'is my site good', 'review my site end to end', 'check for anti-patterns', 'scan my code', 'review before I ship', 'critique my code'. For a search-only audit use /seo audit; to see the page in a browser use /siteasy preview; for design-only use /siteasy audit."
-version: 4.0.0
+version: 4.1.0
 user-invocable: true
 argument-hint: "[url] | full [url] [seo|defects|design|quick] | [verify|checks] [url] | review [target] | [report|learnings] [file] | compare [A] [B]"
 allowed-tools:

@@ -45,10 +45,10 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out the production branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: NTH_PRODUCTION_BRANCH
           path: prod
@@ -58,7 +58,7 @@ jobs:
       # not left in its checkout. Nothing runs from that directory today; this
       # keeps that true if a step is ever added.
       - name: Check out the content branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: NTH_CONTENT_BRANCH
           path: incoming

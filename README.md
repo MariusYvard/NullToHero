@@ -2,23 +2,23 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.svg">
-  <img src="docs/banner.svg" alt="NullToHero: design, SEO, quality audit and handover skills for Claude" width="860">
+  <img src="docs/banner.svg" alt="NullToHero: design, SEO, quality audit and handover skills for AI coding agents" width="860">
 </picture>
 
 # NullToHero
 
 **Build a website you are proud of, even if you have never written a line of code.**
 
-[![version](https://img.shields.io/badge/version-4.0.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
+[![version](https://img.shields.io/badge/version-4.1.0-4f46e5)](https://github.com/MariusYvard/NullToHero/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-0ea5e9)](LICENSE)
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
-[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Kimi%20%C2%B7%20Hermes-7c3aed)](https://agentskills.io/specification)
 
-**v4.0.0** · 4 skills · 68 commands · 137 reference docs · 15 audit sub-agents
+**v4.1.0** · 4 skills · 68 commands · 137 reference docs · 15 audit sub-agents
 
 </div>
 
-NullToHero is an add-on for Claude. Install it once, then ask Claude in plain language to design your pages, get them ranking on Google, judge the whole site before you publish, and hand the finished thing to the person who owns it. Claude does the expert work, you stay in control.
+NullToHero is a portable Agent Skills toolkit for Claude Code, OpenAI Codex, Kimi, Hermes and other compatible hosts. Install it once, then ask your agent in plain language to design pages, rank them on Google and in AI answers, judge the whole site before publication, and hand the finished site to its owner. The agent does the specialist work; you keep control.
 
 <div align="center">
   <picture>
@@ -37,13 +37,13 @@ NullToHero is an add-on for Claude. Install it once, then ask Claude in plain la
 
 ## What is NullToHero
 
-Claude already writes code. NullToHero gives it the taste and the checklists of a senior web team: a designer, an SEO specialist, a reviewer who judges the whole site at once, and the person who hands the keys to its owner.
+AI coding agents already write code. NullToHero gives them the taste and checklists of a senior web team: a designer, an SEO specialist, a reviewer who judges the whole site at once, and the person who hands the keys to its owner.
 
 <p align="center">
-  <img src="docs/overview.svg" alt="NullToHero overview: the skills siteasy, seo, audit and cms inside Claude" width="860">
+  <img src="docs/overview.svg" alt="NullToHero overview: the siteasy, seo, audit and cms skills available across supported AI coding agents" width="860">
 </p>
 
-You do not learn commands by heart. You say what you want ("make this landing page look more premium", "why am I not on Google", "is this ready to ship"), and Claude picks the right tool. The sections below show what each tool produces so you know what to expect.
+You do not learn commands by heart. You say what you want ("make this landing page look more premium", "why am I not on Google", "is this ready to ship"), and the host loads the right skill. The sections below show what each skill produces so you know what to expect.
 
 ---
 
@@ -124,7 +124,7 @@ the point of doing them first.
 
 ## Install
 
-NullToHero is a Claude Code plugin and a marketplace in one repository. The marketplace manifest sits at the repository root; the plugin itself lives in the `null-to-hero/` folder.
+NullToHero ships as a Claude Code plugin and as generated packages for Codex, Kimi Code, Kimi Work, Hermes and hosts that implement the Agent Skills standard. The canonical sources live in `null-to-hero/`; every portable package is generated from them.
 
 **A. From the marketplace (recommended, auto-updates)**
 
@@ -148,8 +148,7 @@ bash install.sh --target codex     # or kimi, agents, or all
 
 On Windows: `powershell -ExecutionPolicy Bypass -File install.ps1 -Target codex`.
 
-Four packages, because two hosts earn a bespoke one, the Kimi Work desktop gets
-a registrable plugin, and everybody else shares the fourth.
+Five generated packages cover the supported host families: Codex and Kimi receive native sub-agent formats, Kimi Work gets a registrable desktop plugin, standard Agent Skills hosts share one package, and Hermes receives its own skill frontmatter plus portable audit agents.
 
 | Package | For | Installs into | Sub-agents |
 |---|---|---|---|
@@ -209,9 +208,7 @@ conforms; that is held by `tests/portability.mjs` instead.
 
 ### Hermes Agent
 
-NullToHero also runs on [Hermes Agent](https://github.com/NousResearch/hermes-agent)
-as a fifth build target, generated by the same `null-to-hero/tools/build-dist.mjs`
-that produces the four packages above. Its skills say `delegate_task` wherever
+The [Hermes Agent](https://github.com/NousResearch/hermes-agent) target is generated by the same `null-to-hero/tools/build-dist.mjs` as every other portable package. Its skills say `delegate_task` wherever
 Claude's text asks for sub-agent delegation — Hermes's own tool for running real
 parallel sub-agents in isolated contexts, not a fallback. The 15 audit sub-agents
 have no Hermes equivalent of a named sub-agent directory, so they are ported to

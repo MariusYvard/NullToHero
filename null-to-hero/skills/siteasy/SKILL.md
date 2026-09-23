@@ -1,7 +1,7 @@
 ---
 name: siteasy
 description: "Use when the user wants to design, build, plan, critique, polish, simplify, amplify, animate, typeset, adapt, harden, or improve a frontend interface: websites, landing pages, dashboards, product UI, components, forms, onboarding, empty states. Covers UX review and research, information architecture, cognitive load, WCAG 2.2 accessibility, image strategy, form patterns, responsive design and mobile ergonomics, theming, typography, color, spacing, motion and micro-interactions, parallax and scroll-driven animation, art direction, Awwwards-level craft, modern CSS, UX copy, i18n, and design systems. For bland designs that need to be bolder and loud ones that should be quieter. Takes the screenshot too: 'screenshot this', 'show me what this looks like', a real Chromium capture at both viewports and the fix loop that follows. Not for judging a finished site, use /audit. Not for search visibility, use /seo. Not for backend-only tasks."
-version: 4.0.0
+version: 4.1.0
 user-invocable: true
 argument-hint: "[express|build|improve|fix|ship|overhaul · shape|concept|research|ia · audit|critique · animate|amplify|simplify|delight|layout|charts|overdrive|art-direction|parallax|typeset|video · adapt|mobile|clarify · harden|onboard|polish · setup|document|extract|tokens · preview|live] [target]"
 allowed-tools:

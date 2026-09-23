@@ -4,7 +4,7 @@ description: "Hand a finished site to the person who owns it: turn its hardcoded
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   host: agents
   source-skill: cms
   short-description: "Hand a finished site to the person who owns it: turn its hardcoded prose into editable fields, vendor an editor with its own accounts, put a server-side allow-list between the browser and the repository, and write the sheet of manual steps. Use for handing a site over, letting a client change their own text and pictures, or adding an admin panel. Not for designing the interface, use siteasy."

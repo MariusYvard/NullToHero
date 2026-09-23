@@ -5,7 +5,7 @@ whenToUse: "Use when the user wants a complete, whole-site audit that combines s
 license: Apache-2.0
 compatibility: Requires Node.js 20+ and Python 3 for the deterministic tools, plus network access for page fetches. NTH_ROOT must point at the NullToHero checkout.
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   host: kimi
   source-skill: audit
   short-description: "Run one whole-site audit that merges search visibility, front-end defects and design quality into a single scored report with a prioritized action plan. Dispatches fifteen specialist sub-agents over a shared fetch, on top of a deterministic pre-pass. Use for 'audit my whole site' or 'review my site end to end'."
