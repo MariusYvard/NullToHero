@@ -1,7 +1,7 @@
 ---
 name: mobile-ergonomics
 description: "Phone-specific UI/UX: thumb-zone placement, touch-target sizing, mobile navigation, virtual keyboards, perceived performance on cellular networks, and a mobile audit protocol."
-version: 1.10.0
+version: 1.11.0
 ---
 
 # Mobile Ergonomics
@@ -49,6 +49,7 @@ Swipe, pinch, and long-press are fast for experts, invisible to everyone else, a
 - Every gesture shows a visual affordance: a card edge peeking past the screen border, pagination dots, a grab handle.
 - Every gesture has a visible control equivalent (arrows, buttons, menu entry). WCAG 2.5.7 makes dragging alternatives a legal requirement, not a courtesy.
 - On rotation, primary controls reposition to stay within thumb reach — video players and dashboards are the usual offenders.
+- Keep custom horizontal gestures away from the system edge where possible. Left-edge Back, bottom Home, pull-to-refresh and carousel or drawer gestures can only be accepted on physical hardware; synthetic touch does not reproduce the conflict.
 
 ## The Keyboard Is the Friction
 
@@ -76,6 +77,8 @@ Run this as a five-step loop, not a one-off:
 3. **Heuristic pass.** Score every screen of the journey against the checklist below plus the relevant WCAG criteria.
 4. **Watch real users in motion.** Five participants on their own devices, ideally standing or walking, surface what desk-based review cannot: sun glare, regrips, fat-finger errors.
 5. **Prioritize by severity x effort.** Classify findings Critical (blocks the task), High (severe friction), Medium (slows the flow), Low (polish); order the roadmap by impact over effort.
+
+Attach an evidence layer to every mobile result: `desktop-proxy`, `ios-simulator` or `physical-ios`. Run the deterministic proxy first, then escalate keyboard, Safari chrome, safe-area, gesture, GPU and installed-PWA claims according to [mobile-ios-validation.md](mobile-ios-validation.md). A Playwright WebKit result is `desktop-proxy`, never Safari iOS.
 
 ### Mobile audit checklist
 
@@ -114,3 +117,4 @@ Run this as a five-step loop, not a one-off:
 - Cross-device adaptation workflow: [adapt.md](adapt.md)
 - Image weight and formats: [image-strategy.md](image-strategy.md)
 - Dark mode implementation: [dark-mode-engineering.md](dark-mode-engineering.md)
+- Three-layer iOS validation and evidence records: [mobile-ios-validation.md](mobile-ios-validation.md)

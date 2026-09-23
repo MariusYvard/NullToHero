@@ -297,15 +297,15 @@ premier des deux travaux que le §8 laisse à un successeur.
 
 ### 2.4 La taille du corpus : ce que j'ai mesuré et ce que je n'établis pas
 
-`skills/siteasy/references/` contient 86 fichiers, contre 27 pour `seo`, 12 pour
+`skills/siteasy/references/` contient 88 fichiers, contre 27 pour `seo`, 12 pour
 `audit` et 4 pour `cms`. Ces comptes sont ceux de la refonte v6, qui a reparti
 les references d'`inspect` entre `siteasy` et `audit` et supprime la competence. Le garde `tools/check-context-budget.mjs` borne la
 taille de chaque fichier, rien ne borne leur nombre.
 
 Mesure, depuis `tools/reference-graph.json` : la médiane des citations entrantes
-d'une référence siteasy est de 3, le 90e centile de 6, le maximum de 14, et 17 des
-86 sont citées exactement une fois, le graphe interdisant les orphelins. Près d'un
-cinquième du corpus n'a donc qu'un seul point d'entrée.
+d'une référence siteasy est de 3, le 90e centile de 6, le maximum de 14, et 13 des
+88 sont citées exactement une fois, le graphe interdisant les orphelins. Environ
+quinze pour cent du corpus n'a donc qu'un seul point d'entrée.
 
 Ce que je n'établis pas : que ce soit un défaut. Un corpus large et bien indexé
 est une force, `tools/search-references.mjs` existe et le graphe interdit les
@@ -424,7 +424,7 @@ Deux d'entre eux ont été ajoutés après une relecture qui les a trouvés hors
 ils sortent 2 et sont appelés par `skills/audit/references/`, donc la phrase qui
 autorise le nombre du recensement les omettait.
 
-`skills/siteasy/scripts/` contient douze fichiers et n'entre pas en bloc. Six
+`skills/siteasy/scripts/` contient treize fichiers et n'entre pas en bloc. Six
 rendent un verdict ou un objet de résultat positif : `parallax-audit.mjs`,
 `video-guardplay.mjs`, `live-inject.mjs` et `detect-csp.mjs`, qui fournissent six
 entrées de l'annexe, plus `live-poll.mjs` et `live-server.mjs`, dont le `ok: true`

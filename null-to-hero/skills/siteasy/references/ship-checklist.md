@@ -1,7 +1,7 @@
 ---
 name: ship-checklist
 description: "A pre-launch checklist for a static site. The quality gates to clear before deploy, the deploy steps themselves, and the post-launch verification and rollback trigger."
-version: 1.28.0
+version: 1.29.0
 ---
 
 # Ship Checklist
@@ -25,6 +25,7 @@ Quality gates, all of which must pass:
 - [ ] Forms submit to the right endpoint, validate, and show success and error states. No `John Doe` or `Acme` placeholder content remains.
 - [ ] Analytics or consent banners, if used, fire only after consent and do not block render.
 - [ ] No credit line to the toolkit or its author sits on the site unless the owner asked for one (see craft.md). It is off by default; shipping one they did not request is the defect this line checks for.
+- [ ] Mobile evidence names its layer. If the release depends on Safari chrome, keyboard overlays, real safe areas, Dynamic Island, edge gestures, WebGL performance or an installed PWA, the required Simulator or physical-device row from [mobile-ios-validation.md](mobile-ios-validation.md) is attached and green.
 
 ## Deploy
 

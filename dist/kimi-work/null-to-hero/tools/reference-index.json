@@ -1007,6 +1007,16 @@
   },
   {
     "skill": "siteasy",
+    "path": "skills/siteasy/references/mobile-ios-validation.md",
+    "title": "Mobile and iOS Validation",
+    "keywords": [
+      "mobile",
+      "ios",
+      "validation"
+    ]
+  },
+  {
+    "skill": "siteasy",
     "path": "skills/siteasy/references/motion-choreography.md",
     "title": "Motion Choreography",
     "keywords": [
@@ -1098,9 +1108,10 @@
   {
     "skill": "siteasy",
     "path": "skills/siteasy/references/preview.md",
-    "title": "Browser Visual Testing",
+    "title": "Desktop Browser Visual Testing",
     "keywords": [
       "preview",
+      "desktop",
       "browser",
       "visual",
       "testing"

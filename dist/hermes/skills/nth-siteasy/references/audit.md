@@ -1,7 +1,7 @@
 ---
 name: audit
 description: "Run systematic technical quality checks and generate a comprehensive report. Don't fix issues - document them for other commands to address."
-version: 1.9.1
+version: 1.10.0
 ---
 
 Run systematic **technical** quality checks and generate a comprehensive report. Don't fix issues — document them for other commands to address.
@@ -68,6 +68,8 @@ Run comprehensive checks across 5 dimensions. Score each dimension 0-4 using the
 - **Missing breakpoints**: No mobile/tablet variants
 
 **Score 0-4**: 0=Desktop-only (breaks on mobile), 1=Major issues (some breakpoints, many failures), 2=Partial (works on mobile, rough edges), 3=Good (responsive, minor touch target or overflow issues), 4=Excellent (fluid, all viewports, proper touch targets)
+
+Every mobile finding names its evidence layer from [mobile-ios-validation.md](mobile-ios-validation.md): `desktop-proxy`, `ios-simulator` or `physical-ios`. Unsupported hardware behavior remains `not-tested`; it cannot contribute a PASS or an "Excellent" claim. In particular, desktop WebKit cannot pass Safari chrome, real safe-area, Dynamic Island, iOS keyboard, system gesture, mobile GPU or installed-PWA checks.
 
 ### 5. Anti-Patterns (CRITICAL)
 

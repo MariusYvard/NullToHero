@@ -1,12 +1,12 @@
 ---
 name: preview
 description: "Take real browser screenshots using Playwright, read them back visually, and fix what's wrong."
-version: 1.6.0
+version: 1.7.0
 ---
 
-# Browser Visual Testing
+# Desktop Browser Visual Testing
 
-Take real browser screenshots using Playwright, read them back visually, and fix what's wrong.
+Take real desktop-browser screenshots using Playwright, read them back visually, and fix what's wrong. A mobile-sized desktop context is a layout proxy, not an iPhone or Safari iOS result.
 
 ## Workflow
 
@@ -23,9 +23,10 @@ sleep 1
 
 ### 3. Install Playwright (first run)
 ```bash
-npx playwright install chromium 2>&1 | tail -5
+npm install --no-save --package-lock=false playwright@1.63.0
+npx playwright install chromium webkit 2>&1 | tail -5
 # On Linux if that fails:
-npx playwright install chromium --with-deps 2>&1 | tail -5
+npx playwright install chromium webkit --with-deps 2>&1 | tail -5
 ```
 
 ### 4. Take screenshots
@@ -34,7 +35,7 @@ npx playwright install chromium --with-deps 2>&1 | tail -5
 npx playwright screenshot --browser chromium --full-page \
   --viewport-size "1280,800" "http://localhost:7331/index.html" /tmp/pw-desktop.png
 
-# Mobile (always)
+# 390 x 844 desktop Chromium layout proxy (always)
 npx playwright screenshot --browser chromium --full-page \
   --viewport-size "390,844" "http://localhost:7331/index.html" /tmp/pw-mobile.png
 
@@ -42,6 +43,18 @@ npx playwright screenshot --browser chromium --full-page \
 npx playwright screenshot --browser chromium --full-page \
   --viewport-size "768,1024" "http://localhost:7331/index.html" /tmp/pw-tablet.png
 ```
+
+Run the repeatable Chromium plus desktop WebKit matrix when mobile behavior matters:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/skills/siteasy/scripts/mobile-validate.mjs" \
+  "http://localhost:7331/index.html" \
+  --engines chromium,webkit --require-engines \
+  --json mobile-validation.json \
+  --artifacts mobile-validation-artifacts
+```
+
+The report deliberately leaves Safari chrome, physical safe areas, Dynamic Island, the iOS keyboard, edge gestures, mobile GPU and installed-PWA behavior as `manual-required`. Escalate those scenarios through [mobile-ios-validation.md](mobile-ios-validation.md). `--browser webkit` means Playwright desktop WebKit, never Safari iOS.
 
 ### 5. Read and analyze
 ```

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Mobile validation fixture</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-width: 0; }
+    body {
+      min-height: 100dvh;
+      padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+      font-family: system-ui, sans-serif;
+    }
+    main { width: min(100%, 40rem); margin-inline: auto; }
+    label { display: grid; gap: .5rem; }
+    input, button { min-width: 44px; min-height: 44px; font: inherit; }
+    @media (prefers-reduced-motion: no-preference) {
+      button { transition: transform 120ms ease-out; }
+      button:active { transform: scale(.98); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Mobile validation fixture</h1>
+    <p>Read the <a href="#details">inline details</a> before continuing.</p>
+    <label>Email <input type="email" inputmode="email" autocomplete="email"></label>
+    <button type="button">Continue</button>
+  </main>
+</body>
+</html>

@@ -35,8 +35,9 @@ const SHORT_DESC_MAX = 400;
 // The count Claude Code has always substituted. A change here means the loaded
 // tree moved, which is exactly what must not happen silently. It did drift
 // silently, from 43 to 45, while this file was not called by `npm test`: a guard
-// nobody runs is a comment. It is called now.
-const CLAUDE_ROOT_TOKENS = 46;
+// nobody runs is a comment. It is called now. The mobile validator adds two
+// explicit source entrypoints, one in preview and one in its canonical protocol.
+const CLAUDE_ROOT_TOKENS = 48;
 
 let passed = 0, failed = 0;
 const pass = m => { passed++; console.log(`  ok    ${m}`); };

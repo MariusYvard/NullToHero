@@ -1,7 +1,7 @@
 ---
 name: harden
 description: "Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs."
-version: 1.6.1
+version: 1.7.0
 ---
 
 Strengthen interfaces against edge cases, errors, internationalization issues, and real-world usage scenarios that break idealized designs.
@@ -160,6 +160,10 @@ Systematically improve resilience:
 - Cancel subscriptions
 - Clear timers/intervals
 - Abort pending requests on unmount
+
+### Installed web apps on iOS
+
+Treat browser Safari and an installed Home Screen web app as different contexts. Manifest and service-worker checks are structural evidence only. When installation is in scope, test cold launch, standalone safe areas, offline navigation, interrupted requests, stale-worker update, process termination, relaunch and preserved form state on physical iOS. The required evidence and release gate are in [mobile-ios-validation.md](mobile-ios-validation.md).
 
 **Throttling & Debouncing**: debounce search input at 300ms, throttle scroll handlers at 100ms.
 

@@ -4,7 +4,11 @@
   "description": "From zero knowledge to hero website. Design + SEO skills for Claude Cowork.",
   "scripts": {
     "build": "node null-to-hero/tools/build-index.mjs",
-    "test": "node null-to-hero/tools/build-index.mjs && node tests/validate.js && node tests/unit.mjs && node --test tests/cms-frames.mjs tests/cms-fill.mjs tests/cms-carve.mjs tests/cms-setup.mjs tests/cms-bridge.mjs tests/cms-bridge-core.mjs tests/cms-publish.mjs tests/cms-lint.mjs tests/cms-map.mjs tests/cms-editor.mjs tests/audit-rules.mjs && node tests/inspect-rules.mjs && node tests/rendered-rules.mjs && node null-to-hero/tools/rule.mjs --audit && node null-to-hero/tools/sync-counts.mjs --check && node null-to-hero/tools/build-figures.mjs --check && node null-to-hero/tools/check-review-numbers.mjs && node null-to-hero/tools/eval-corpus/run.mjs && python3 tests/test_design_system.py && node tests/portability.mjs && node null-to-hero/tools/audit/eval.mjs --strict",
+    "build:dist": "node null-to-hero/tools/build-dist.mjs",
+    "check:dist": "node null-to-hero/tools/build-dist.mjs --check",
+    "test": "node null-to-hero/tools/build-index.mjs && node tests/validate.js && node tests/unit.mjs && node --test tests/mobile-validation.mjs tests/mobile-validation-browser.mjs && node --test tests/cms-frames.mjs tests/cms-fill.mjs tests/cms-carve.mjs tests/cms-setup.mjs tests/cms-bridge.mjs tests/cms-bridge-core.mjs tests/cms-publish.mjs tests/cms-lint.mjs tests/cms-map.mjs tests/cms-editor.mjs tests/audit-rules.mjs && node tests/inspect-rules.mjs && node tests/rendered-rules.mjs && node null-to-hero/tools/rule.mjs --audit && node null-to-hero/tools/sync-counts.mjs --check && node null-to-hero/tools/build-figures.mjs --check && node null-to-hero/tools/check-review-numbers.mjs && node null-to-hero/tools/eval-corpus/run.mjs && python3 tests/test_design_system.py && node tests/portability.mjs && node null-to-hero/tools/audit/eval.mjs --strict",
+    "test:mobile": "node --test tests/mobile-validation.mjs tests/mobile-validation-browser.mjs",
+    "validate:mobile": "node null-to-hero/skills/siteasy/scripts/mobile-validate.mjs",
     "eval": "node null-to-hero/tools/audit/eval.mjs",
     "audit": "node null-to-hero/tools/audit/analyze.mjs",
     "audit:gate": "node null-to-hero/tools/audit/gate.mjs",
@@ -17,9 +21,9 @@
   "author": "Marius Yvard <mariusyvard72@gmail.com>",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "devDependencies": {
-    "playwright": "^1.62.1"
+    "playwright": "1.63.0"
   }
 }

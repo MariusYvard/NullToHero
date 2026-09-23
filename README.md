@@ -14,7 +14,7 @@
 [![validate](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml/badge.svg)](https://github.com/MariusYvard/NullToHero/actions/workflows/validate.yml)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7c3aed)](https://github.com/MariusYvard/NullToHero)
 
-**v4.0.0** · 4 skills · 68 commands · 136 reference docs · 15 audit sub-agents
+**v4.0.0** · 4 skills · 68 commands · 137 reference docs · 15 audit sub-agents
 
 </div>
 
@@ -633,7 +633,7 @@ The `null-to-hero/assets/` folder ships an original, license-clean starter libra
 
 ## What is inside
 
-NullToHero ships **136 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
+NullToHero ships **137 reference docs** that Claude loads only when it needs them, so a large project does not eat your context budget.
 
 <details>
 <summary>See the full knowledge base</summary>

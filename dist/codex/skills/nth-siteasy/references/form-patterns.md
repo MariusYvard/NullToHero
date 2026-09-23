@@ -1,7 +1,7 @@
 ---
 name: form-patterns
 description: "Forms are the highest-friction surface of most products. Every additional field, every ambiguous label, every late-fire validation message increases drop-off. This reference."
-version: 1.10.1
+version: 1.11.0
 ---
 
 # Form Patterns
@@ -148,6 +148,12 @@ Always use `inputmode` to control the mobile keyboard: `type="text" inputmode="n
 | Amount, decimal | `text` | `decimal` | not applicable |
 | URL | `url` | `url` | `url` |
 
+### Keyboard occlusion and VisualViewport
+
+The right keyboard is not enough if it hides the field or submit action. For keyboard-critical flows, the focused control, label, validation message and primary action remain reachable while the keyboard is open. Position overlays from `window.visualViewport` resize and scroll data when they must follow the visible area, then restore the layout after dismissal and rotation.
+
+A short scripted viewport is only a desktop geometry proxy. Verify the actual keyboard, autofill, OTP, paste, dismissal and rotation in Mobile Safari on Xcode Simulator, then on physical hardware when the flow is release-critical. Use [mobile-ios-validation.md](mobile-ios-validation.md) for the evidence record and escalation rules.
+
 ### File upload
 
 Native file inputs are ugly but accessible. Style by visually hiding the input inside its own `<label>` (never `display: none`, which removes it from the tab order), constrain with `accept`, and echo the chosen filename into an `<output aria-live="polite">`: the native control announces the selection, a styled one does not.
@@ -202,6 +208,7 @@ See [wcag-2-2.md](wcag-2-2.md) for the full 3.3.8 spec. Operational rules:
 | Password manager | Works (test with 1Password, Bitwarden) |
 | Browser autofill | Works (test in fresh profile) |
 | Mobile keyboards | `inputmode` set where applicable |
+| Keyboard occlusion | Focused field, error and primary action stay reachable; layout restores after dismissal and rotation |
 | Multi-step persistence | Values survive back navigation |
 
 ## Anti-Patterns
@@ -224,3 +231,4 @@ See [wcag-2-2.md](wcag-2-2.md) for the full 3.3.8 spec. Operational rules:
 - Keyboard interaction and focus management: [interaction-design.md](interaction-design.md)
 - Validation copy and error tone: [ux-writing.md](ux-writing.md)
 - Cognitive load across multi-step flows: [cognitive-load.md](cognitive-load.md)
+- iOS keyboard and VisualViewport validation: [mobile-ios-validation.md](mobile-ios-validation.md)

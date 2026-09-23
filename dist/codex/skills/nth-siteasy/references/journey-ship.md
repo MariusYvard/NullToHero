@@ -1,7 +1,7 @@
 ---
 name: journey-ship
 description: "Orchestrated finish-and-ship pipeline: polish, defect scan, deterministic audit, hardening, final audit. Chains existing commands around the shared project state."
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Journey: Ship
@@ -15,7 +15,7 @@ The pipeline that takes a built feature or site from "works" to "shipped". It cr
 | 1 | Polish | `/nth-siteasy polish` ([polish.md](polish.md)) | No open build TODOs; states and edge cases covered |
 | 2 | Defect scan | `/nth-audit checks` ([../../audit/references/checks.md](../../audit/references/checks.md)) | Zero CRITICAL and zero HIGH findings |
 | 3 | Deterministic audit | `/nth-audit checks` ([../../audit/references/checks.md](../../audit/references/checks.md)) | Floor >= 80, no critical FAIL; every FAIL routed through its remediation entry (`tools/data/remediation-map.csv`) and fixed |
-| 4 | Hardening | `/nth-siteasy harden` ([harden.md](harden.md), [optimize.md](optimize.md), [ship-checklist.md](ship-checklist.md)) | Ship checklist clean, Core Web Vitals within budget; changed URLs pinged via [/nth-seo indexnow](../../seo/references/indexnow.md) on content and brand sites |
+| 4 | Hardening | `/nth-siteasy harden` ([harden.md](harden.md), [optimize.md](optimize.md), [ship-checklist.md](ship-checklist.md)) | Ship checklist clean, Core Web Vitals within budget; iOS-sensitive features carry the required evidence from [mobile-ios-validation.md](mobile-ios-validation.md); changed URLs pinged via [/nth-seo indexnow](../../seo/references/indexnow.md) on content and brand sites |
 | 5 | Full audit (brand register only) | `/nth-audit full` ([../../audit/references/full.md](../../audit/references/full.md)) | Band Good or better; memorability not the weakest dimension |
 
 ## Rules

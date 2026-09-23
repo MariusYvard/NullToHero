@@ -102,6 +102,7 @@
     "skills/siteasy/references/live.md",
     "skills/siteasy/references/memorability.md",
     "skills/siteasy/references/mobile-ergonomics.md",
+    "skills/siteasy/references/mobile-ios-validation.md",
     "skills/siteasy/references/motion-choreography.md",
     "skills/siteasy/references/motion-design.md",
     "skills/siteasy/references/objections.md",
@@ -740,6 +741,10 @@
     },
     {
       "from": "skills/siteasy/SKILL.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/SKILL.md",
       "to": "skills/siteasy/references/motion-choreography.md"
     },
     {
@@ -880,6 +885,10 @@
     },
     {
       "from": "skills/siteasy/references/adapt.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/adapt.md",
       "to": "skills/siteasy/references/print-styles.md"
     },
     {
@@ -945,6 +954,10 @@
     {
       "from": "skills/siteasy/references/audit.md",
       "to": "skills/siteasy/references/critique.md"
+    },
+    {
+      "from": "skills/siteasy/references/audit.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
     },
     {
       "from": "skills/siteasy/references/bolder.md",
@@ -1212,6 +1225,10 @@
     },
     {
       "from": "skills/siteasy/references/form-patterns.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/form-patterns.md",
       "to": "skills/siteasy/references/ux-writing.md"
     },
     {
@@ -1249,6 +1266,10 @@
     {
       "from": "skills/siteasy/references/gestalt.md",
       "to": "skills/siteasy/references/typography.md"
+    },
+    {
+      "from": "skills/siteasy/references/harden.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
     },
     {
       "from": "skills/siteasy/references/image-strategy.md",
@@ -1444,6 +1465,10 @@
     },
     {
       "from": "skills/siteasy/references/journey-ship.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/journey-ship.md",
       "to": "skills/siteasy/references/optimize.md"
     },
     {
@@ -1512,11 +1537,35 @@
     },
     {
       "from": "skills/siteasy/references/mobile-ergonomics.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ergonomics.md",
       "to": "skills/siteasy/references/responsive-design.md"
     },
     {
       "from": "skills/siteasy/references/mobile-ergonomics.md",
       "to": "skills/siteasy/references/wcag-2-2.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ios-validation.md",
+      "to": "skills/siteasy/references/mobile-ergonomics.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ios-validation.md",
+      "to": "skills/siteasy/references/preview.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ios-validation.md",
+      "to": "skills/siteasy/references/responsive-design.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ios-validation.md",
+      "to": "skills/siteasy/references/ship-checklist.md"
+    },
+    {
+      "from": "skills/siteasy/references/mobile-ios-validation.md",
+      "to": "skills/siteasy/references/testing-strategy.md"
     },
     {
       "from": "skills/siteasy/references/motion-design.md",
@@ -1576,6 +1625,10 @@
     },
     {
       "from": "skills/siteasy/references/overdrive.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/overdrive.md",
       "to": "skills/siteasy/references/parallax.md"
     },
     {
@@ -1619,6 +1672,10 @@
       "to": "skills/siteasy/references/optimize.md"
     },
     {
+      "from": "skills/siteasy/references/preview.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
       "from": "skills/siteasy/references/quieter.md",
       "to": "skills/siteasy/references/distill.md"
     },
@@ -1648,6 +1705,10 @@
     },
     {
       "from": "skills/siteasy/references/responsive-design.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
+    },
+    {
+      "from": "skills/siteasy/references/responsive-design.md",
       "to": "skills/siteasy/references/parallax.md"
     },
     {
@@ -1673,6 +1734,10 @@
     {
       "from": "skills/siteasy/references/ship-checklist.md",
       "to": "skills/siteasy/references/craft.md"
+    },
+    {
+      "from": "skills/siteasy/references/ship-checklist.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
     },
     {
       "from": "skills/siteasy/references/signature-moments.md",
@@ -1705,6 +1770,10 @@
     {
       "from": "skills/siteasy/references/teach.md",
       "to": "skills/siteasy/references/document.md"
+    },
+    {
+      "from": "skills/siteasy/references/testing-strategy.md",
+      "to": "skills/siteasy/references/mobile-ios-validation.md"
     },
     {
       "from": "skills/siteasy/references/tokens.md",

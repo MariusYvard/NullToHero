@@ -1,0 +1,7 @@
+{
+  "name": "Mobile validation fixture",
+  "short_name": "Fixture",
+  "start_url": ".",
+  "display": "standalone",
+  "icons": []
+}

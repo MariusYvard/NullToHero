@@ -1,7 +1,7 @@
 ---
 name: testing-strategy
 description: "Test posture for a shipped front-end: unit, end-to-end, visual regression, cross-browser, accessibility and contract testing."
-version: 1.22.0
+version: 1.23.0
 ---
 
 # Testing strategy
@@ -22,7 +22,13 @@ Snapshot key screens and diff them on each change so an unintended layout or col
 
 ## Cross-browser and device
 
-Verify the layout and interactions on the browser and device mix your analytics show, not just the one on the developer machine. Safari, Chrome, Firefox and one real mobile is a sensible floor.
+Verify the layout and interactions on the browser and device mix your analytics show, not just the one on the developer machine. Use three evidence layers rather than collapsing every narrow viewport into "mobile":
+
+1. deterministic desktop Chromium and desktop WebKit proxies on every material change;
+2. Mobile Safari in a named Xcode Simulator device and runtime for iOS-facing release candidates;
+3. physical devices for real safe areas, Dynamic Island clearance, edge gestures, keyboard-critical flows, mobile GPU behavior and installed PWAs.
+
+Safari, Chrome, Firefox, one real iPhone and one real Android are a sensible release floor. Desktop Playwright WebKit is useful engine coverage, but is not Safari on iOS. Procedures and report statuses live in [mobile-ios-validation.md](mobile-ios-validation.md).
 
 ## Accessibility testing
 

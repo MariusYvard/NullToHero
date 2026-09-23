@@ -1,7 +1,7 @@
 ---
 name: responsive-design
 description: "Start with base styles for mobile, use min-width queries to layer complexity. Desktop-first (max-width) means mobile loads unnecessary styles first."
-version: 1.10.1
+version: 1.11.0
 ---
 
 # Responsive Design
@@ -75,6 +75,8 @@ The insets are all zero until the meta tag opts in:
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 ```
 
+Dynamic Island is not a web-detectable feature. Do not branch on an iPhone model or claim to detect it from JavaScript. Validate content clearance through safe-area behavior and screenshots on a named Simulator profile, then on physical hardware when the release makes a real-device claim. The complete evidence ladder is in [mobile-ios-validation.md](mobile-ios-validation.md).
+
 ## Responsive Images: Get It Right
 
 Use `srcset` with `w` descriptors plus `sizes` for resolution switching, and `<picture>` with `media` sources only when the crop itself changes (a wide hero that becomes a tall one), not when only the resolution changes. The two are not interchangeable: `<picture>` overrides the browser's own choice, so using it for plain resolution switching throws away the device-pixel-ratio and network heuristics `srcset` would have applied.
@@ -122,7 +124,7 @@ DevTools device emulation is useful for layout but misses:
 - Font rendering differences
 - Browser chrome/keyboard appearances
 
-**Test on at least**: One real iPhone, one real Android, a tablet if relevant. Cheap Android phones reveal performance issues you'll never see on simulators.
+**Test on at least**: deterministic Chromium and desktop WebKit proxies, Mobile Safari in a named Xcode Simulator runtime for iOS-facing releases, one real iPhone, one real Android, and a tablet if relevant. Cheap Android phones reveal performance issues you'll never see on simulators. Follow [mobile-ios-validation.md](mobile-ios-validation.md), and never label desktop Playwright WebKit as Safari iOS.
 
 ---
 

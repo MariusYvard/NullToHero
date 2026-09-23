@@ -1,7 +1,7 @@
 ---
 name: overdrive
 description: "Advanced visual effects for high-impact interfaces: the View Transitions API, WebGL, and scroll-driven animations."
-version: 1.11.1
+version: 1.12.0
 ---
 
 Start your response with:
@@ -83,6 +83,8 @@ Every technique must degrade gracefully, behind `@supports` or a capability prob
 - Cap `setPixelRatio` at 2 (L-WEBGL-2), uncapped DPR quadruples the pixels for an invisible gain.
 - Give continuous scenes an idle state (a slow drift) instead of freezing when input stops.
 - Test on real mid-range devices, not just your development machine.
+
+Desktop and Simulator GPU results verify logic, not iPhone performance. Any mobile GPU claim requires physical-iOS evidence for sustained frame pacing, DPR, context loss and restoration, background and foreground recovery, memory pressure and thermal degradation. Record those checks through [mobile-ios-validation.md](mobile-ios-validation.md); keep the static fallback when hardware evidence is unavailable.
 
 ### WebGL scene budgets
 

@@ -6,7 +6,6 @@ desktop.ini
 # Node
 node_modules/
 npm-debug.log*
-package-lock.json
 
 # Python
 __pycache__/
@@ -21,3 +20,5 @@ __pycache__/
 # Playwright
 test-results/
 playwright-report/
+mobile-validation-artifacts/
+mobile-validation.json

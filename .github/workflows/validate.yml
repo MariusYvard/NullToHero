@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
+          cache: npm
+
+      - name: Install locked Node dependencies
+        run: npm ci
 
       - name: Build reference index
         run: node null-to-hero/tools/build-index.mjs
@@ -65,9 +69,13 @@ jobs:
       # non-blocking (continue-on-error) until it has run twenty consecutive times
       # green on the same revision. Flip continue-on-error to false then, and not
       # before. Remove this comment in the same commit.
-      - name: Install Playwright Chromium
+      - name: Install Playwright desktop engines
         if: always()
-        run: npx --yes playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Mobile proxy contract and fixture tests (not iOS)
+        if: always()
+        run: npm run test:mobile
 
       - name: Browser-verified rules (rendered, three.js, motion probes)
         if: always()

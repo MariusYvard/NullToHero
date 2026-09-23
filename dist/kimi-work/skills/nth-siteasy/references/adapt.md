@@ -1,7 +1,7 @@
 ---
 name: adapt
 description: "Adapt existing designs to work effectively across different contexts - different screen sizes, devices, platforms, or use cases."
-version: 1.10.1
+version: 1.11.0
 ---
 
 > **Additional context needed**: target platforms/devices and usage contexts.
@@ -118,6 +118,8 @@ The stylesheet work (ink reset, exposed link URLs, page breaks, hidden chrome) i
 Test on real phones, tablets and desktops in both orientations, across browser engines and
 operating systems, with every input method the target supports. Then push the extremes:
 320px, 4K, and a throttled connection. Emulation misses sun glare, regrips and fat fingers.
+For iOS, record deterministic desktop proxies, Xcode Simulator evidence and physical-device
+evidence separately using [mobile-ios-validation.md](mobile-ios-validation.md).
 
 Remember: You're a cross-platform design expert. Make experiences that feel native to each context while maintaining brand and functionality consistency. Adapt intentionally, test thoroughly.
 
