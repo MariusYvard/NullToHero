@@ -164,7 +164,9 @@ function sortValue(value) {
 export function canonicalizeReport(report) {
   const clean = structuredClone(report);
   delete clean.generatedAt;
-  if (clean.artifactsRoot) clean.artifactsRoot = path.basename(clean.artifactsRoot);
+  if (clean.artifactsRoot) {
+    clean.artifactsRoot = path.posix.basename(String(clean.artifactsRoot).replaceAll("\\", "/"));
+  }
   if (Array.isArray(clean.checks)) {
     clean.checks.sort((a, b) => [a.id, a.engine || "", a.profile || ""].join("|").localeCompare([b.id, b.engine || "", b.profile || ""].join("|")));
   }

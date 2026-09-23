@@ -102,6 +102,10 @@ test("canonical reports are stable and strip volatile absolute paths and timesta
   const canonical = canonicalizeReport(report);
   assert.equal(canonical.generatedAt, undefined);
   assert.equal(canonical.artifactsRoot, "mobile-evidence");
+  assert.equal(
+    canonicalizeReport({ artifactsRoot: "/private/mobile-evidence" }).artifactsRoot,
+    "mobile-evidence",
+  );
   assert.deepEqual(canonical.checks.map((c) => c.id), ["a", "z"]);
   assert.equal(JSON.stringify(canonical), JSON.stringify(canonicalizeReport(report)));
 });
